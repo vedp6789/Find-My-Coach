@@ -1,4 +1,4 @@
-package com.fmc.mentor.findmycoach.fragment;
+package com.findmycoach.mentor.fragment;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -12,15 +12,15 @@ import com.fmc.mentor.findmycoach.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
+ * Activities that contain this com.findmycoach.mentor.fragment must implement the
  * {@link SigninFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link SigninFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * create an instance of this com.findmycoach.mentor.fragment.
  */
 public class SigninFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    // the com.findmycoach.mentor.fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -32,11 +32,11 @@ public class SigninFragment extends Fragment {
 
     /**
      * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * this com.findmycoach.mentor.fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SigninFragment.
+     * @return A new instance of com.findmycoach.mentor.fragment SigninFragment.
      */
     // TODO: Rename and change types and number of parameters
     public static SigninFragment newInstance(String param1, String param2) {
@@ -64,7 +64,7 @@ public class SigninFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate the layout for this com.findmycoach.mentor.fragment
         return inflater.inflate(R.layout.fragment_signin, container, false);
     }
 
@@ -94,9 +94,9 @@ public class SigninFragment extends Fragment {
 
     /**
      * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
+     * com.findmycoach.mentor.fragment to allow an interaction in this com.findmycoach.mentor.fragment to be communicated
+     * to the com.findmycoach.mentor.activity and potentially other fragments contained in that
+     * com.findmycoach.mentor.activity.
      * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
