@@ -186,16 +186,27 @@
             android:layout_marginTop="8dp"
             android:weightSum="2">
 
-            <Button
+            <com.facebook.widget.LoginButton
+                xmlns:fb="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/facebook_login_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginRight="4dp"
                 android:layout_weight="1"
                 android:background="#3257A7"
-                android:text="@string/facebook"
+                fb:login_text="@string/facebook"
+                fb:logout_text="@string/action_logout"
                 android:textColor="#FFFFFF"
                 android:textAllCaps="false"/>
+
+            <!--<com.facebook.widget.LoginButton-->
+                <!--android:id="@+id/authButton"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:layout_marginTop="30dp"-->
+                <!--/>-->
+
 
             <Button
                 android:id="@+id/google_login_button"

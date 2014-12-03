@@ -7,12 +7,19 @@ import android.database.Cursor;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.model.GraphUser;
+import com.facebook.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
 
 import com.fmc.mentor.findmycoach.R;
@@ -52,7 +59,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     private EditText inputUserName;
     private EditText inputPassword;
     private Button actionLogin;
-    private Button actionFacebook;
+    private LoginButton actionFacebook;
     private Button actionGooglePlus;
     private TextView forgotAction;
 
@@ -72,8 +79,9 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         inputPassword = (EditText) findViewById(R.id.input_login_password);
         actionLogin = (Button) findViewById(R.id.email_sign_in_button);
         actionLogin.setOnClickListener(this);
-        actionFacebook = (Button) findViewById(R.id.facebook_login_button);
-        actionFacebook.setOnClickListener(this);
+        actionFacebook = (LoginButton) findViewById(R.id.facebook_login_button);
+        actionFacebook.setReadPermissions("email","public_profile","user_birthday","user_phone","user_address");
+//        actionFacebook.setOnClickListener(this);
         actionGooglePlus = (Button) findViewById(R.id.google_login_button);
         actionGooglePlus.setOnClickListener(this);
         forgotAction = (TextView) findViewById(R.id.action_forgot_password);
@@ -180,6 +188,48 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         Intent signUpIntent = new Intent(this, SignUpActivity.class);
         startActivity(signUpIntent);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Session session = Session.getActiveSession();
+        session.onActivityResult(this, requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            getSession();
+        }
+    }
+
+
+
+    private void getSession() {
+        Session.openActiveSession(this, true, new Session.StatusCallback() {
+            @Override
+            public void call(Session session, SessionState state, Exception exception) {
+                if (!session.isOpened())
+                    session = new Session(getApplicationContext());
+                if (session.isOpened()) {
+                    Log.d("test:", "session opened");
+                    Log.d("test: Permissions:", session.getPermissions().toString());
+
+                    Request.newMeRequest(session, new Request.GraphUserCallback() {
+                        // callback after Graph API response with user object
+                        @Override
+                        public void onCompleted(GraphUser user, Response response) {
+                            if (user != null) {
+                                Log.d("test:", "user not null");
+                                Log.d("email", (String) user.getProperty("email"));
+                            } else {
+                                Log.d("test:", "user null");
+                            }
+                        }
+                    }).executeAsync();
+                } else {
+                    Log.d("test:", "session not opened");
+                }
+            }
+        });
+    }
+
 
 //        // Find the Google+ sign in button.
 ////        mPlusSignInButton = (SignInButton) findViewById(R.id.plus_sign_in_button);
