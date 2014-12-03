@@ -114,7 +114,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/register"
+                android:id="@+id/action_register"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -123,12 +123,12 @@
                 android:drawablePadding="6dp"
                 android:gravity="center"
                 android:padding="4dp"
-                android:text="@string/register"
+                android:text="@string/action_register"
                 android:textColor="#FFFFFE"
                 android:textSize="18sp" />
 
             <EditText
-                android:id="@+id/email"
+                android:id="@+id/input_login_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -141,7 +141,7 @@
                 android:singleLine="true" />
 
             <EditText
-                android:id="@+id/password"
+                android:id="@+id/input_login_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -159,12 +159,13 @@
                 android:id="@+id/email_sign_in_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="16dp"
                 android:background="#3257A7"
                 android:text="@string/action_sign_in"
                 android:textColor="#FFFFFF"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textAllCaps="false"/>
         </LinearLayout>
 
         <TextView
@@ -186,24 +187,26 @@
             android:weightSum="2">
 
             <Button
-                android:id="@+id/facebook_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/facebook_login_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginRight="4dp"
                 android:layout_weight="1"
                 android:background="#3257A7"
                 android:text="@string/facebook"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false"/>
 
             <Button
-                android:id="@+id/google_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/google_login_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="4dp"
                 android:layout_weight="1"
                 android:background="#E66158"
                 android:text="@string/google_plus"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -211,6 +214,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/action_forgot_password"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
@@ -218,7 +222,7 @@
         android:drawableLeft="@drawable/forget_password"
         android:drawablePadding="6dp"
         android:gravity="center_horizontal"
-        android:text="@string/forgot_password"
+        android:text="@string/action_forgot_password"
         android:textAlignment="center"
         android:textColor="#AEDAFF"
         android:textSize="18sp" />

@@ -1,37 +1,19 @@
 package com.findmycoach.mentor.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
-import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.text.TextUtils;
-import android.view.KeyEvent;
+import android.os.Handler;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import com.fmc.mentor.findmycoach.R;
 
@@ -43,7 +25,7 @@ import com.fmc.mentor.findmycoach.R;
  * https://developers.google.com/+/mobile/android/getting-started#step_1_enable_the_google_api
  * and follow the steps in "Step 1" to create an OAuth 2.0 client for your package.
  */
-public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<Cursor>, View.OnClickListener{
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -64,6 +46,40 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     private View mEmailLoginFormView;
     private SignInButton mPlusSignInButton;
     private View mSignOutButtons;
+
+
+    private TextView registerAction;
+    private EditText inputUserName;
+    private EditText inputPassword;
+    private Button actionLogin;
+    private Button actionFacebook;
+    private Button actionGooglePlus;
+    private TextView forgotAction;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        getWidgetReferences();
+    }
+
+    /* This method get all views references */
+    private void getWidgetReferences() {
+        registerAction = (TextView) findViewById(R.id.action_register);
+        registerAction.setOnClickListener(this);
+        inputUserName = (EditText) findViewById(R.id.input_login_id);
+        inputPassword = (EditText) findViewById(R.id.input_login_password);
+        actionLogin = (Button) findViewById(R.id.email_sign_in_button);
+        actionLogin.setOnClickListener(this);
+        actionFacebook = (Button) findViewById(R.id.facebook_login_button);
+        actionFacebook.setOnClickListener(this);
+        actionGooglePlus = (Button) findViewById(R.id.google_login_button);
+        actionGooglePlus.setOnClickListener(this);
+        forgotAction = (TextView) findViewById(R.id.action_forgot_password);
+        forgotAction.setOnClickListener(this);
+    }
+
     private View mLoginFormView;
 
     @Override
@@ -92,12 +108,6 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-    }
-
-    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return null;
     }
@@ -110,6 +120,65 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        int actionId = v.getId();
+        switch (actionId) {
+            case R.id.action_register:
+                callSignUpActivity();
+                break;
+            case R.id.email_sign_in_button:
+                logIn();
+                break;
+            case R.id.facebook_login_button:
+                //TODO: Implement Facebook Authentication
+                break;
+            case R.id.google_login_button:
+                //TODO: Implement Google Authentication
+                break;
+            case R.id.action_forgot_password:
+                //TODO: callForgotPasswordActivity();
+                break;
+        }
+
+    }
+
+    private void logIn() {
+        boolean isFormValid = validateLoginForm();
+        if (isFormValid) {
+            //TODO: Call Webservice to Authenticate User
+        }
+    }
+
+    private boolean validateLoginForm() {
+        boolean isValid = true;
+        String userId = inputUserName.getText().toString();
+        String userPassword = inputPassword.getText().toString();
+        if (userPassword.equals("")) {
+            isValid = false;
+            showErrorMessage(inputUserName);
+        }else if(userPassword.equals("")){
+            isValid=false;
+            showErrorMessage(inputPassword);
+        }
+        return isValid;
+    }
+
+    private void showErrorMessage(final EditText editText) {
+        editText.setError(getResources().getString(R.string.error_field_required));
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                editText.setError(null);
+            }
+        },2500);
+    }
+
+    private void callSignUpActivity() {
+        Intent signUpIntent = new Intent(this, SignUpActivity.class);
+        startActivity(signUpIntent);
     }
 
 //        // Find the Google+ sign in button.
