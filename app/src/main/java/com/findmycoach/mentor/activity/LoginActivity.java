@@ -24,8 +24,6 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
 
@@ -113,9 +111,9 @@ public class LoginActivity extends Activity implements
                 //TODO: Implement Facebook Authentication
                 break;
             case R.id.google_login_button:
-                Log.d("test:","Google + clicked");
+                Log.d("test:", "Google + clicked");
                 if (supportsGooglePlayServices()) {
-                    Log.d("test:","Google Play Support");
+                    Log.d("test:", "Google Play Support");
                     connectGoogle();
                 } else {
                     actionGooglePlus.setVisibility(View.GONE);
@@ -129,8 +127,8 @@ public class LoginActivity extends Activity implements
     }
 
     private void connectGoogle() {
-        Log.d("test:","connect Google");
-            mPlusClient.connect();
+        Log.d("test:", "connect Google");
+        mPlusClient.connect();
     }
 
     private void logIn() {
@@ -234,7 +232,7 @@ public class LoginActivity extends Activity implements
 
     /* A helper method to resolve the current ConnectionResult error. */
     private void resolveSignInError() {
-        Log.d("test:","resolve SignIn Error");
+        Log.d("test:", "resolve SignIn Error");
 
         if (mConnectionResult.hasResolution()) {
             try {
@@ -270,9 +268,6 @@ public class LoginActivity extends Activity implements
 
     }
 
-    public void onConnectionSuspended(int cause) {
-        mPlusClient.connect();
-    }
 
     public void onConnectionFailed(ConnectionResult result) {
         if (!mIntentInProgress) {
