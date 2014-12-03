@@ -1,17 +1,15 @@
 package com.findmycoach.mentor.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
-
-import android.app.Activity;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.plus.PlusClient;
-import com.fmc.mentor.findmycoach.R;
 
 /**
  * A base class to wrap communication with the Google Play Services PlusClient.
@@ -24,13 +22,10 @@ public abstract class PlusBaseActivity extends Activity
 
     // A magic number we will use to know that our sign-in error resolution activity has completed
     private static final int OUR_REQUEST_CODE = 49404;
-
-    // A flag to stop multiple dialogues appearing for the user
-    private boolean mAutoResolveOnFail;
-
     // A flag to track when a connection is already in progress
     public boolean mPlusClientIsConnecting = false;
-
+    // A flag to stop multiple dialogues appearing for the user
+    private boolean mAutoResolveOnFail;
     // This is the helper object that connects to Google Play Services.
     private PlusClient mPlusClient;
 

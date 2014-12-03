@@ -45,21 +45,21 @@
     <!--android:visibility="gone"-->
     <!--android:weightSum="2">-->
 
-    <!--<Button-->
-    <!--android:id="@+id/plus_sign_out_button"-->
-    <!--style="?android:textAppearanceSmall"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_weight="1"-->
-    <!--android:text="@string/plus_sign_out" />-->
+    <!--<Button
+    android:id="@+id/plus_sign_out_button"
+    style="?android:textAppearanceSmall"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:text="@string/plus_sign_out" />
 
-    <!--<Button-->
-    <!--android:id="@+id/plus_disconnect_button"-->
-    <!--style="?android:textAppearanceSmall"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_weight="1"-->
-    <!--android:text="@string/plus_disconnect" />-->
+    <Button
+    android:id="@+id/plus_disconnect_button"
+    style="?android:textAppearanceSmall"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:text="@string/plus_disconnect" />-->
 
     <LinearLayout
         android:id="@+id/heading"
@@ -199,16 +199,7 @@
                 android:textColor="#FFFFFF"
                 android:textAllCaps="false"/>
 
-            <!--<com.facebook.widget.LoginButton-->
-                <!--android:id="@+id/authButton"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center_horizontal"-->
-                <!--android:layout_marginTop="30dp"-->
-                <!--/>-->
-
-
-            <Button
+            <com.google.android.gms.common.SignInButton
                 android:id="@+id/google_login_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
