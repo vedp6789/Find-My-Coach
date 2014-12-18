@@ -159,6 +159,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
             requestParams.add("firstname", firstName);
             requestParams.add("lastname", lastName);
             requestParams.add("email", email);
+            requestParams.add("password", password);
             requestParams.add("phonenumber", phone);
             requestParams.add("address", address);
             requestParams.add("city", city);

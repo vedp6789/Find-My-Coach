@@ -1,6 +1,7 @@
 package com.findmycoach.mentor.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+import com.findmycoach.mentor.util.Callback;
+import com.findmycoach.mentor.util.NetworkClient;
 import com.fmc.mentor.findmycoach.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -26,12 +29,13 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
+import com.loopj.android.http.RequestParams;
 
 /**
  * A login screen that offers login via email/password, Facebook and Google+ sign in.
  */
 public class LoginActivity extends Activity implements
-        GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, View.OnClickListener {
+        GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, View.OnClickListener, Callback {
 
     /* Request code used to invoke sign in user interactions. */
     private static final int RC_SIGN_IN = 0;
@@ -53,12 +57,13 @@ public class LoginActivity extends Activity implements
     private boolean mIntentInProgress;
     private boolean mSignInClicked;
     private ConnectionResult mConnectionResult;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        getWidgetReferences();
+        initialize();
         initializeGoogleClient();
     }
 
@@ -82,7 +87,7 @@ public class LoginActivity extends Activity implements
     }
 
     /* This method get all views references */
-    private void getWidgetReferences() {
+    private void initialize() {
         registerAction = (TextView) findViewById(R.id.action_register);
         registerAction.setOnClickListener(this);
         inputUserName = (EditText) findViewById(R.id.input_login_id);
@@ -95,6 +100,8 @@ public class LoginActivity extends Activity implements
         actionGooglePlus.setOnClickListener(this);
         forgotAction = (TextView) findViewById(R.id.action_forgot_password);
         forgotAction.setOnClickListener(this);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Logging In...");
     }
 
     @Override
@@ -137,16 +144,20 @@ public class LoginActivity extends Activity implements
     }
 
     private void logIn() {
-        boolean isFormValid = validateLoginForm();
+        String userId = inputUserName.getText().toString();
+        String userPassword = inputPassword.getText().toString();
+        boolean isFormValid = validateLoginForm(userId, userPassword);
         if (isFormValid) {
-            //TODO: Call Webservice to Authenticate User
+            progressDialog.show();
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("email", userId);
+            requestParams.add("password", userPassword);
+            NetworkClient.login(this, requestParams, this);
         }
     }
 
-    private boolean validateLoginForm() {
+    private boolean validateLoginForm(String userId, String userPassword) {
         boolean isValid = true;
-        String userId = inputUserName.getText().toString();
-        String userPassword = inputPassword.getText().toString();
         if (userId.equals("")) {
             isValid = false;
             showErrorMessage(inputUserName);
@@ -286,6 +297,19 @@ public class LoginActivity extends Activity implements
                 resolveSignInError();
             }
         }
+    }
+
+    @Override
+    public void successOperation() {
+        progressDialog.dismiss();
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void failureOperation() {
+        progressDialog.dismiss();
+        Toast.makeText(this, "Login Failed", Toast.LENGTH_LONG).show();
     }
 
 
