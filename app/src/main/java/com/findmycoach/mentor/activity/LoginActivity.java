@@ -120,10 +120,15 @@ public class LoginActivity extends Activity implements
                 }
                 break;
             case R.id.action_forgot_password:
-                //TODO: callForgotPasswordActivity();
+                callForgotPasswordActivity();
                 break;
         }
 
+    }
+
+    private void callForgotPasswordActivity() {
+        Intent intent = new Intent(this, ForgotPasswordActivity.class);
+        startActivity(intent);
     }
 
     private void connectGoogle() {

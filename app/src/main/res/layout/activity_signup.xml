@@ -87,7 +87,7 @@
                     android:prompt="@string/prompt_gender"
                     android:spinnerMode="dropdown" />
 
-                <EditText
+                <TextView
                     android:id="@+id/input_date_of_birth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

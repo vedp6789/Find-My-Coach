@@ -45,6 +45,7 @@
     <string name="error_field_required">This field is required</string>
     <string name="error_field_not_match">Password not matched</string>
     <string name="error_phone_number_invalid">Invalid Phone Number</string>
+    <string name="error_invalid_date">Date should less than current date</string>
     <!-- Errors -->
 
     <!-- String s related to Static Text -->

@@ -19,10 +19,10 @@ import com.fmc.mentor.findmycoach.R;
 
 import java.util.Calendar;
 
-public class SignUpActivity extends Activity implements View.OnClickListener {
+public class SignUpActivity extends Activity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
 
-    private int year = 1980, month = 1, day = 1;
+    private int year = 1990, month = 1, day = 1;
     private TextView dateOfBirthInput;
     private EditText firstNameInput;
     private EditText lastNameInput;
@@ -37,13 +37,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
     private EditText stateInput;
     private EditText countryInput;
     private EditText pinInput;
-    private DatePickerDialog.OnDateSetListener myDateListener
-            = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-            showDate(year, month + 1, date);
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +77,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
     @Override
     protected Dialog onCreateDialog(int id) {
         if (id == 999) {
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, myDateListener, year, month, day);
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
             datePickerDialog.setTitle("Date of Birth");
             return datePickerDialog;
         }
@@ -94,14 +87,14 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
     private void showDate(int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
         if (year > calendar.get(Calendar.YEAR)) {
-            showErrorMessage(dateOfBirthInput, "Date of birth should less than current date");
+            showErrorMessage(dateOfBirthInput, getResources().getString(R.string.error_invalid_date));
             return;
         } else if (year == calendar.get(Calendar.YEAR) && month > (calendar.get(Calendar.MONTH) + 1)) {
-            showErrorMessage(dateOfBirthInput, "Date of birth should less than current date");
+            showErrorMessage(dateOfBirthInput, getResources().getString(R.string.error_invalid_date));
             return;
         } else if (year == calendar.get(Calendar.YEAR) && month == (calendar.get(Calendar.MONTH) + 1) &&
                 day >= calendar.get(Calendar.DATE)) {
-            showErrorMessage(dateOfBirthInput, "Date of birth should less than current date");
+            showErrorMessage(dateOfBirthInput, getResources().getString(R.string.error_invalid_date));
             return;
         }
         dateOfBirthInput.setText(new StringBuilder().append(day).append("/")
@@ -133,7 +126,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
         if (id == R.id.button_signup) {
             registerUser();
         }
-
     }
 
     private void registerUser() {
@@ -154,10 +146,11 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
         boolean isValid = validate(firstName, lastName, gender, dateOfBirth, phone, email,
                 password, confirmPassword, address, city, state, country, pin);
         if (isValid) {
-//            callApiToRegister();
+            callApiToRegister();
         }
+    }
 
-
+    private void callApiToRegister() {
     }
 
     private boolean validate(String firstName, String lastName, String gender, String dateOfBirth,
@@ -228,5 +221,10 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
                 view.setError(null);
             }
         }, 3500);
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+        showDate(year, month + 1, date);
     }
 }
