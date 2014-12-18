@@ -11,6 +11,10 @@
     <string name="prompt_first_name">First Name</string>
     <string name="prompt_last_name">Last Name</string>
     <string name="prompt_date_of_birth">Date Of Birth</string>
+    <string name="prompt_gender">Gender</string>
+    <string name="prompt_male">Male</string>
+    <string name="prompt_female">Female</string>
+    <string name="prompt_phone">Mobile Number</string>
 
     <!-- Prompting -->
 
@@ -40,5 +44,11 @@
     <string name="find_my_coach">Find My Coach</string>
     <string name="or">OR</string>
     <!-- Static Text -->
+
+
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
 
 </resources>
