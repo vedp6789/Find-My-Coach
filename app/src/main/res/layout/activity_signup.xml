@@ -3,122 +3,165 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
+    android:background="#3D3D3D"
     android:gravity="center_horizontal"
-    android:background="#09819E"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="8dp"
     tools:context="com.findmycoach.mentor.activity.SignUpActivity">
+
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="48dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/input_first_name"
+            <LinearLayout
+                android:id="@+id/heading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/custom_edittext"
-                android:hint="@string/prompt_first_name"
-                android:padding="4dp" />
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/input_last_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/custom_edittext"
-                android:hint="@string/prompt_last_name"
-                android:padding="4dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/welcome_to"
+                    android:textColor="#B1D9FF"
+                    android:textSize="24sp" />
 
-            <Spinner
-                android:id="@+id/input_gender"
-                style="@android:style/Widget.Spinner.DropDown"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:entries="@array/gender"
-                android:prompt="@string/prompt_gender"
-                android:spinnerMode="dropdown" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/find_my_coach"
+                    android:textColor="#E6F3FD"
+                    android:textSize="26sp" />
 
-            <TextView
-                android:id="@+id/input_date_of_birth"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/custom_edittext"
-                android:hint="@string/prompt_date_of_birth"
-                android:inputType="date"
-                android:onClick="setDate"
-                android:padding="4dp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="4">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="8dp"
-                    android:layout_weight="3"
-                    android:background="@drawable/custom_edittext"
-                    android:gravity="center"
-                    android:inputType="textEmailAddress"
-                    android:padding="4dp"
-                    android:text="+91" />
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
                 <EditText
-                    android:id="@+id/input_phone"
+                    android:id="@+id/input_first_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:layout_weight="1"
                     android:background="@drawable/custom_edittext"
-                    android:hint="@string/prompt_phone"
-                    android:inputType="number"
+                    android:hint="@string/prompt_first_name"
+                    android:padding="4dp"
+                    android:singleLine="true" />
+
+                <EditText
+                    android:id="@+id/input_last_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/custom_edittext"
+                    android:hint="@string/prompt_last_name"
+                    android:padding="4dp"
+                    android:singleLine="true" />
+
+                <Spinner
+                    android:id="@+id/input_gender"
+                    style="@android:style/Widget.Spinner.DropDown"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:entries="@array/gender"
+                    android:prompt="@string/prompt_gender"
+                    android:spinnerMode="dropdown" />
+
+                <EditText
+                    android:id="@+id/input_date_of_birth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/custom_edittext"
+                    android:editable="false"
+                    android:hint="@string/prompt_date_of_birth"
+                    android:inputType="date"
+                    android:onClick="setDate"
                     android:padding="4dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:layout_weight="3"
+                        android:background="@drawable/custom_edittext"
+                        android:editable="false"
+                        android:gravity="center"
+                        android:inputType="textEmailAddress"
+                        android:padding="4dp"
+                        android:text="+91" />
+
+                    <EditText
+                        android:id="@+id/input_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/custom_edittext"
+                        android:hint="@string/prompt_phone"
+                        android:inputType="number"
+                        android:padding="4dp"
+                        android:singleLine="true" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/input_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/custom_edittext"
+                    android:hint="@string/prompt_email_id"
+                    android:inputType="textEmailAddress"
+                    android:padding="4dp"
+                    android:singleLine="true" />
+
+                <EditText
+                    android:id="@+id/input_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/custom_edittext"
+                    android:hint="@string/prompt_password"
+                    android:inputType="textPassword"
+                    android:padding="4dp"
+                    android:singleLine="true" />
+
+                <EditText
+                    android:id="@+id/input_confirm_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/custom_edittext"
+                    android:hint="@string/prompt_confirm_password"
+                    android:inputType="textPassword"
+                    android:padding="4dp"
+                    android:singleLine="true" />
+
             </LinearLayout>
-
-            <EditText
-                android:id="@+id/input_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/custom_edittext"
-                android:hint="@string/prompt_email_id"
-                android:inputType="textEmailAddress"
-                android:padding="4dp" />
-
-            <EditText
-                android:id="@+id/input_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/custom_edittext"
-                android:hint="@string/prompt_password"
-                android:inputType="textPassword"
-                android:padding="4dp" />
-
-            <EditText
-                android:id="@+id/input_confirm_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/custom_edittext"
-                android:hint="@string/prompt_confirm_password"
-                android:inputType="textPassword"
-                android:padding="4dp" />
-
         </LinearLayout>
 
     </ScrollView>

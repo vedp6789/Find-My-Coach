@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -122,10 +123,57 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
         String confirmPassword = confirmPasswordInput.getText().toString();
 
         boolean isValid = validate(firstName, lastName, gender, dateOfBirth, phone, email, password, confirmPassword);
-        if(isValid){
+        if (isValid) {
 //            callApiToRegister();
         }
 
 
+    }
+
+    private boolean validate(String firstName, String lastName, String gender, String dateOfBirth, String phone, String email, String password, String confirmPassword) {
+
+        if (firstName.equals("")) {
+            showErrorMessage(firstNameInput, getResources().getString(R.string.error_field_required));
+            return false;
+        }
+        if (dateOfBirth.equals("")) {
+            showErrorMessage(dateOfBirthInput, getResources().getString(R.string.error_field_required));
+            return false;
+        }
+        if (phone.equals("")) {
+            showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_field_required));
+            return false;
+        }
+        if (password.equals("")) {
+            showErrorMessage(passwordInput, getResources().getString(R.string.error_field_required));
+            return false;
+        }
+        if (confirmPassword.equals("")) {
+            showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_required));
+            return false;
+        }
+        if (email.equals("")) {
+            showErrorMessage(emailInput, getResources().getString(R.string.error_field_required));
+            return false;
+        }
+        if (password.equals(confirmPassword)) {
+            showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_not_match));
+            return false;
+        }
+        if (phone.length() < 10) {
+            showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_phone_number_invalid));
+            return false;
+        }
+        return true;
+    }
+
+    private void showErrorMessage(final TextView view, String string) {
+        view.setError(string);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.setError(null);
+            }
+        }, 2500);
     }
 }
