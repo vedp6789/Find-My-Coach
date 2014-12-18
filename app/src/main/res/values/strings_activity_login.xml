@@ -16,6 +16,11 @@
     <string name="prompt_female">Female</string>
     <string name="prompt_phone">Mobile Number</string>
     <string name="prompt_submit">Submit</string>
+    <string name="prompt_address">Address</string>
+    <string name="prompt_city">City</string>
+    <string name="prompt_state">State</string>
+    <string name="prompt_country">Country</string>
+    <string name="prompt_pin">Pin Code</string>
 
     <!-- Prompting -->
 

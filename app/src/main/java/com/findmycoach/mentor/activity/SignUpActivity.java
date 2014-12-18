@@ -17,10 +17,12 @@ import android.widget.TextView;
 
 import com.fmc.mentor.findmycoach.R;
 
+import java.util.Calendar;
+
 public class SignUpActivity extends Activity implements View.OnClickListener {
 
 
-    private int year, month, day;
+    private int year = 1980, month = 1, day = 1;
     private TextView dateOfBirthInput;
     private EditText firstNameInput;
     private EditText lastNameInput;
@@ -30,6 +32,11 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
     private EditText phoneNumberInput;
     private Button signUpButton;
     private Spinner genderInput;
+    private EditText addressInput;
+    private EditText cityInput;
+    private EditText stateInput;
+    private EditText countryInput;
+    private EditText pinInput;
     private DatePickerDialog.OnDateSetListener myDateListener
             = new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -59,6 +66,11 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
         confirmPasswordInput = (EditText) findViewById(R.id.input_confirm_password);
         dateOfBirthInput = (TextView) findViewById(R.id.input_date_of_birth);
         phoneNumberInput = (EditText) findViewById(R.id.input_phone);
+        addressInput = (EditText) findViewById(R.id.input_address);
+        cityInput = (EditText) findViewById(R.id.input_city);
+        stateInput = (EditText) findViewById(R.id.input_state);
+        countryInput = (EditText) findViewById(R.id.input_country);
+        pinInput = (EditText) findViewById(R.id.input_pin);
         genderInput = (Spinner) findViewById(R.id.input_gender);
         signUpButton = (Button) findViewById(R.id.button_signup);
         signUpButton.setOnClickListener(this);
@@ -73,13 +85,25 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
     protected Dialog onCreateDialog(int id) {
         if (id == 999) {
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, myDateListener, year, month, day);
-            datePickerDialog.setTitle("Date od Birth");
+            datePickerDialog.setTitle("Date of Birth");
             return datePickerDialog;
         }
         return null;
     }
 
     private void showDate(int year, int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        if (year > calendar.get(Calendar.YEAR)) {
+            showErrorMessage(dateOfBirthInput, "Date of birth should less than current date");
+            return;
+        } else if (year == calendar.get(Calendar.YEAR) && month > (calendar.get(Calendar.MONTH) + 1)) {
+            showErrorMessage(dateOfBirthInput, "Date of birth should less than current date");
+            return;
+        } else if (year == calendar.get(Calendar.YEAR) && month == (calendar.get(Calendar.MONTH) + 1) &&
+                day >= calendar.get(Calendar.DATE)) {
+            showErrorMessage(dateOfBirthInput, "Date of birth should less than current date");
+            return;
+        }
         dateOfBirthInput.setText(new StringBuilder().append(day).append("/")
                 .append(month).append("/").append(year));
     }
@@ -121,8 +145,14 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
         String confirmPassword = confirmPasswordInput.getText().toString();
+        String address = addressInput.getText().toString();
+        String city = cityInput.getText().toString();
+        String state = stateInput.getText().toString();
+        String country = countryInput.getText().toString();
+        String pin = countryInput.getText().toString();
 
-        boolean isValid = validate(firstName, lastName, gender, dateOfBirth, phone, email, password, confirmPassword);
+        boolean isValid = validate(firstName, lastName, gender, dateOfBirth, phone, email,
+                password, confirmPassword, address, city, state, country, pin);
         if (isValid) {
 //            callApiToRegister();
         }
@@ -130,7 +160,9 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
 
     }
 
-    private boolean validate(String firstName, String lastName, String gender, String dateOfBirth, String phone, String email, String password, String confirmPassword) {
+    private boolean validate(String firstName, String lastName, String gender, String dateOfBirth,
+                             String phone, String email, String password, String confirmPassword,
+                             String address, String city, String state, String country, String pin) {
 
         if (firstName.equals("")) {
             showErrorMessage(firstNameInput, getResources().getString(R.string.error_field_required));
@@ -142,6 +174,26 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
         }
         if (phone.equals("")) {
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_field_required));
+            return false;
+        }
+        if (address.equals("")) {
+            showErrorMessage(addressInput, getResources().getString(R.string.error_field_required));
+            return false;
+        }
+        if (city.equals("")) {
+            showErrorMessage(cityInput, getResources().getString(R.string.error_field_required));
+            return false;
+        }
+        if (state.equals("")) {
+            showErrorMessage(stateInput, getResources().getString(R.string.error_field_required));
+            return false;
+        }
+        if (country.equals("")) {
+            showErrorMessage(countryInput, getResources().getString(R.string.error_field_required));
+            return false;
+        }
+        if (pin.equals("")) {
+            showErrorMessage(pinInput, getResources().getString(R.string.error_field_required));
             return false;
         }
         if (password.equals("")) {
@@ -164,6 +216,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_phone_number_invalid));
             return false;
         }
+
         return true;
     }
 
@@ -174,6 +227,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener {
             public void run() {
                 view.setError(null);
             }
-        }, 2500);
+        }, 3500);
     }
 }

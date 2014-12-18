@@ -159,7 +159,7 @@ public class LoginActivity extends Activity implements
             public void run() {
                 editText.setError(null);
             }
-        }, 2500);
+        }, 3500);
     }
 
     private void callSignUpActivity() {
