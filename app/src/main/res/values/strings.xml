@@ -7,12 +7,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_signup">SignupActivity</string>
 
-
     <!-- Facebook Credentials -->
 
-    <!--<string name="facebook_app_id">835344249849377</string>-->
+
+    <!-- <string name="facebook_app_id">835344249849377</string> -->
     <string name="facebook_app_id">1428925007356558</string>
 
     <!-- Facebook -->
+
+    <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
 
 </resources>
