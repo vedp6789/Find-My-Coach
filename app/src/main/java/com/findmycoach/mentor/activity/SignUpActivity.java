@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -14,12 +16,16 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.findmycoach.mentor.util.Callback;
+import com.findmycoach.mentor.util.NetworkClient;
 import com.fmc.mentor.findmycoach.R;
+import com.loopj.android.http.RequestParams;
 
 import java.util.Calendar;
 
-public class SignUpActivity extends Activity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
+public class SignUpActivity extends Activity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, Callback {
 
 
     private int year = 1990, month = 1, day = 1;
@@ -37,6 +43,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
     private EditText stateInput;
     private EditText countryInput;
     private EditText pinInput;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +74,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
         genderInput = (Spinner) findViewById(R.id.input_gender);
         signUpButton = (Button) findViewById(R.id.button_signup);
         signUpButton.setOnClickListener(this);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Please wait...");
     }
 
     @SuppressWarnings("deprecation")
@@ -146,11 +155,24 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
         boolean isValid = validate(firstName, lastName, gender, dateOfBirth, phone, email,
                 password, confirmPassword, address, city, state, country, pin);
         if (isValid) {
-            callApiToRegister();
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("firstname", firstName);
+            requestParams.add("lastname", lastName);
+            requestParams.add("email", email);
+            requestParams.add("phonenumber", phone);
+            requestParams.add("address", address);
+            requestParams.add("city", city);
+            requestParams.add("state", state);
+            requestParams.add("country", country);
+            requestParams.add("zipcode", pin);
+            requestParams.add("usergroup", 3 + "");
+            callApiToRegister(requestParams);
         }
     }
 
-    private void callApiToRegister() {
+    private void callApiToRegister(RequestParams requestParams) {
+        progressDialog.show();
+        NetworkClient.register(this, requestParams, this);
     }
 
     private boolean validate(String firstName, String lastName, String gender, String dateOfBirth,
@@ -193,6 +215,10 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
             showErrorMessage(passwordInput, getResources().getString(R.string.error_field_required));
             return false;
         }
+        if (password.length() < 5) {
+            showErrorMessage(passwordInput, getResources().getString(R.string.error_password_size));
+            return false;
+        }
         if (confirmPassword.equals("")) {
             showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_required));
             return false;
@@ -201,7 +227,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
             showErrorMessage(emailInput, getResources().getString(R.string.error_field_required));
             return false;
         }
-        if (password.equals(confirmPassword)) {
+        if (!password.equals(confirmPassword)) {
             showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_not_match));
             return false;
         }
@@ -226,5 +252,23 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
         showDate(year, month + 1, date);
+    }
+
+    @Override
+    public void successOperation() {
+        progressDialog.dismiss();
+        callHomeActivity();
+    }
+
+    private void callHomeActivity() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void failureOperation() {
+        progressDialog.dismiss();
+        Toast.makeText(getApplicationContext(), "Registration Failed", Toast.LENGTH_LONG).show();
+
     }
 }

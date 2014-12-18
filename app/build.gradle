@@ -25,6 +25,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.2'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile project(':facebook')
+    compile 'com.loopj.android:android-async-http:1.4.5'
+
 }
 
 
