@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,13 +22,10 @@ import com.findmycoach.mentor.util.NetworkClient;
 import com.fmc.mentor.findmycoach.R;
 import com.loopj.android.http.RequestParams;
 
-import java.util.Calendar;
-
 public class SignUpActivity extends Activity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, Callback {
 
 
     private int year = 1990, month = 1, day = 1;
-    private TextView dateOfBirthInput;
     private EditText firstNameInput;
     private EditText lastNameInput;
     private EditText passwordInput;
@@ -37,12 +33,13 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
     private EditText emailInput;
     private EditText phoneNumberInput;
     private Button signUpButton;
-    private Spinner genderInput;
-    private EditText addressInput;
-    private EditText cityInput;
-    private EditText stateInput;
-    private EditText countryInput;
-    private EditText pinInput;
+    //    private TextView dateOfBirthInput;
+//    private Spinner genderInput;
+//    private EditText addressInput;
+//    private EditText cityInput;
+//    private EditText stateInput;
+//    private EditText countryInput;
+//    private EditText pinInput;
     private ProgressDialog progressDialog;
 
     @Override
@@ -64,14 +61,14 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
         emailInput = (EditText) findViewById(R.id.input_email);
         passwordInput = (EditText) findViewById(R.id.input_password);
         confirmPasswordInput = (EditText) findViewById(R.id.input_confirm_password);
-        dateOfBirthInput = (TextView) findViewById(R.id.input_date_of_birth);
         phoneNumberInput = (EditText) findViewById(R.id.input_phone);
-        addressInput = (EditText) findViewById(R.id.input_address);
-        cityInput = (EditText) findViewById(R.id.input_city);
-        stateInput = (EditText) findViewById(R.id.input_state);
-        countryInput = (EditText) findViewById(R.id.input_country);
-        pinInput = (EditText) findViewById(R.id.input_pin);
-        genderInput = (Spinner) findViewById(R.id.input_gender);
+//        dateOfBirthInput = (TextView) findViewById(R.id.input_date_of_birth);
+//        addressInput = (EditText) findViewById(R.id.input_address);
+//        cityInput = (EditText) findViewById(R.id.input_city);
+//        stateInput = (EditText) findViewById(R.id.input_state);
+//        countryInput = (EditText) findViewById(R.id.input_country);
+//        pinInput = (EditText) findViewById(R.id.input_pin);
+//        genderInput = (Spinner) findViewById(R.id.input_gender);
         signUpButton = (Button) findViewById(R.id.button_signup);
         signUpButton.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
@@ -94,20 +91,20 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
     }
 
     private void showDate(int year, int month, int day) {
-        Calendar calendar = Calendar.getInstance();
-        if (year > calendar.get(Calendar.YEAR)) {
-            showErrorMessage(dateOfBirthInput, getResources().getString(R.string.error_invalid_date));
-            return;
-        } else if (year == calendar.get(Calendar.YEAR) && month > (calendar.get(Calendar.MONTH) + 1)) {
-            showErrorMessage(dateOfBirthInput, getResources().getString(R.string.error_invalid_date));
-            return;
-        } else if (year == calendar.get(Calendar.YEAR) && month == (calendar.get(Calendar.MONTH) + 1) &&
-                day >= calendar.get(Calendar.DATE)) {
-            showErrorMessage(dateOfBirthInput, getResources().getString(R.string.error_invalid_date));
-            return;
-        }
-        dateOfBirthInput.setText(new StringBuilder().append(day).append("/")
-                .append(month).append("/").append(year));
+//        Calendar calendar = Calendar.getInstance();
+//        if (year > calendar.get(Calendar.YEAR)) {
+//            showErrorMessage(dateOfBirthInput, getResources().getString(R.string.error_invalid_date));
+//            return;
+//        } else if (year == calendar.get(Calendar.YEAR) && month > (calendar.get(Calendar.MONTH) + 1)) {
+//            showErrorMessage(dateOfBirthInput, getResources().getString(R.string.error_invalid_date));
+//            return;
+//        } else if (year == calendar.get(Calendar.YEAR) && month == (calendar.get(Calendar.MONTH) + 1) &&
+//                day >= calendar.get(Calendar.DATE)) {
+//            showErrorMessage(dateOfBirthInput, getResources().getString(R.string.error_invalid_date));
+//            return;
+//        }
+//        dateOfBirthInput.setText(new StringBuilder().append(day).append("/")
+//                .append(month).append("/").append(year));
     }
 
 
@@ -140,20 +137,20 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
     private void registerUser() {
         String firstName = firstNameInput.getText().toString();
         String lastName = lastNameInput.getText().toString();
-        String gender = genderInput.getSelectedItem().toString();
-        String dateOfBirth = dateOfBirthInput.getText().toString();
         String phone = phoneNumberInput.getText().toString();
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
         String confirmPassword = confirmPasswordInput.getText().toString();
-        String address = addressInput.getText().toString();
-        String city = cityInput.getText().toString();
-        String state = stateInput.getText().toString();
-        String country = countryInput.getText().toString();
-        String pin = countryInput.getText().toString();
+//        String dateOfBirth = dateOfBirthInput.getText().toString();
+//        String gender = genderInput.getSelectedItem().toString();
+//        String address = addressInput.getText().toString();
+//        String city = cityInput.getText().toString();
+//        String state = stateInput.getText().toString();
+//        String country = countryInput.getText().toString();
+//        String pin = countryInput.getText().toString();
 
-        boolean isValid = validate(firstName, lastName, gender, dateOfBirth, phone, email,
-                password, confirmPassword, address, city, state, country, pin);
+        boolean isValid = validate(firstName, lastName, phone, email,
+                password, confirmPassword);
         if (isValid) {
             RequestParams requestParams = new RequestParams();
             requestParams.add("firstname", firstName);
@@ -161,11 +158,11 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
             requestParams.add("email", email);
             requestParams.add("password", password);
             requestParams.add("phonenumber", phone);
-            requestParams.add("address", address);
-            requestParams.add("city", city);
-            requestParams.add("state", state);
-            requestParams.add("country", country);
-            requestParams.add("zipcode", pin);
+//            requestParams.add("address", address);
+//            requestParams.add("city", city);
+//            requestParams.add("state", state);
+//            requestParams.add("country", country);
+//            requestParams.add("zipcode", pin);
             requestParams.add("usergroup", 3 + "");
             callApiToRegister(requestParams);
         }
@@ -176,42 +173,41 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
         NetworkClient.register(this, requestParams, this);
     }
 
-    private boolean validate(String firstName, String lastName, String gender, String dateOfBirth,
-                             String phone, String email, String password, String confirmPassword,
-                             String address, String city, String state, String country, String pin) {
+    private boolean validate(String firstName, String lastName, String phone,
+                             String email, String password, String confirmPassword) {
 
         if (firstName.equals("")) {
             showErrorMessage(firstNameInput, getResources().getString(R.string.error_field_required));
-            return false;
-        }
-        if (dateOfBirth.equals("")) {
-            showErrorMessage(dateOfBirthInput, getResources().getString(R.string.error_field_required));
             return false;
         }
         if (phone.equals("")) {
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_field_required));
             return false;
         }
-        if (address.equals("")) {
-            showErrorMessage(addressInput, getResources().getString(R.string.error_field_required));
-            return false;
-        }
-        if (city.equals("")) {
-            showErrorMessage(cityInput, getResources().getString(R.string.error_field_required));
-            return false;
-        }
-        if (state.equals("")) {
-            showErrorMessage(stateInput, getResources().getString(R.string.error_field_required));
-            return false;
-        }
-        if (country.equals("")) {
-            showErrorMessage(countryInput, getResources().getString(R.string.error_field_required));
-            return false;
-        }
-        if (pin.equals("")) {
-            showErrorMessage(pinInput, getResources().getString(R.string.error_field_required));
-            return false;
-        }
+//        if (dateOfBirth.equals("")) {
+//            showErrorMessage(dateOfBirthInput, getResources().getString(R.string.error_field_required));
+//            return false;
+//        }
+//        if (address.equals("")) {
+//            showErrorMessage(addressInput, getResources().getString(R.string.error_field_required));
+//            return false;
+//        }
+//        if (city.equals("")) {
+//            showErrorMessage(cityInput, getResources().getString(R.string.error_field_required));
+//            return false;
+//        }
+//        if (state.equals("")) {
+//            showErrorMessage(stateInput, getResources().getString(R.string.error_field_required));
+//            return false;
+//        }
+//        if (country.equals("")) {
+//            showErrorMessage(countryInput, getResources().getString(R.string.error_field_required));
+//            return false;
+//        }
+//        if (pin.equals("")) {
+//            showErrorMessage(pinInput, getResources().getString(R.string.error_field_required));
+//            return false;
+//        }
         if (password.equals("")) {
             showErrorMessage(passwordInput, getResources().getString(R.string.error_field_required));
             return false;
