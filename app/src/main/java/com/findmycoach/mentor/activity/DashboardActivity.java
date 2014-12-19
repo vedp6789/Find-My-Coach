@@ -2,7 +2,6 @@ package com.findmycoach.mentor.activity;
 
 import android.app.ActionBar;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -19,12 +18,9 @@ import com.findmycoach.mentor.fragment.ProfileFragment;
 import com.findmycoach.mentor.fragment.SettingsFragment;
 import com.fmc.mentor.findmycoach.R;
 
-import java.util.ArrayList;
-
 public class DashboardActivity extends FragmentActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    ArrayList<Fragment> fragments = new ArrayList<Fragment>();
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private CharSequence mTitle;
 
@@ -36,18 +32,13 @@ public class DashboardActivity extends FragmentActivity
     }
 
     private void initialize() {
-        fragments.add(0, new HomeFragment());
-        fragments.add(1, new ProfileFragment());
-        fragments.add(2, new NotificationsFragment());
-        fragments.add(3, new MyConnectionsFragment());
-        fragments.add(4, new MyScheduleFragment());
-        fragments.add(5, new SettingsFragment());
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+        onNavigationDrawerItemSelected(0);
     }
 
     @Override

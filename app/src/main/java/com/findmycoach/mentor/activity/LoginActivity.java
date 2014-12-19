@@ -112,9 +112,7 @@ public class LoginActivity extends Activity implements
                 callSignUpActivity();
                 break;
             case R.id.email_sign_in_button:
-//                logIn();
-                Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
-                startActivity(intent);
+                logIn();
                 break;
             case R.id.facebook_login_button:
                 //TODO: Implement Facebook Authentication
