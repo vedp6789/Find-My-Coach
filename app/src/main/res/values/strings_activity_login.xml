@@ -21,6 +21,13 @@
     <string name="prompt_state">State</string>
     <string name="prompt_country">Country</string>
     <string name="prompt_pin">Pin Code</string>
+    <string name="prompt_passion">Passion</string>
+    <string name="prompt_profession">Profession</string>
+    <string name="prompt_accomplishment">Accomplishment</string>
+    <string name="prompt_willing_to_travel">Available to travel trainee location</string>
+    <string name="prompt_charges">Charges</string>
+    <string name="prompt_facebook">Facebook</string>
+    <string name="prompt_google_plus">Google +</string>
 
     <!-- Prompting -->
 
@@ -34,6 +41,7 @@
     <string name="action_register">Register</string>
     <string name="action_forgot_password">Forgot Password</string>
     <string name="action_sign_up">Sign Up</string>
+    <string name="action_save">Save</string>
     <string name="action_logout">Log Out</string>
 
     <!-- Actions -->

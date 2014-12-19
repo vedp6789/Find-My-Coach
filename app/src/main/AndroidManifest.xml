@@ -54,7 +54,11 @@
             android:noHistory="true" />
         <activity
             android:name="com.findmycoach.mentor.activity.DashboardActivity"
-            android:label="@string/title_activity_dashboard"></activity>
+            android:label="@string/title_activity_dashboard" />
+        <activity
+            android:name="com.findmycoach.mentor.activity.EditProfileActivity"
+            android:label="@string/title_activity_edit_profile"
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>
