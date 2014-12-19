@@ -8,15 +8,12 @@
     <string name="title_activity_signup">SignupActivity</string>
 
     <!-- Facebook Credentials -->
-
-
     <!-- <string name="facebook_app_id">835344249849377</string> -->
     <string name="facebook_app_id">1428925007356558</string>
 
     <!-- Facebook -->
 
     <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
-
 
     <string-array name="states_india">
         <item>Andhra Pradesh</item>
@@ -49,5 +46,19 @@
         <item>Uttarakhand</item>
         <item>West Bengal</item>
     </string-array>
+
+    <string-array name="navigation_items">
+        <item>Home</item>
+        <item>Profile</item>
+        <item>Notifications</item>
+        <item>My Connections</item>
+        <item>My Schedule</item>
+        <item>Settings</item>
+    </string-array>
+
+    <string name="title_activity_dashboard">DashboardActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
 
 </resources>

@@ -258,7 +258,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
     }
 
     private void callHomeActivity() {
-        Intent intent = new Intent(this, HomeActivity.class);
+        Intent intent = new Intent(this, DashboardActivity.class);
         startActivity(intent);
     }
 

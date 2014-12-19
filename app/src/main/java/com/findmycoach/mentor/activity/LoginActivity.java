@@ -302,7 +302,7 @@ public class LoginActivity extends Activity implements
     @Override
     public void successOperation() {
         progressDialog.dismiss();
-        Intent intent = new Intent(this, HomeActivity.class);
+        Intent intent = new Intent(this, DashboardActivity.class);
         startActivity(intent);
     }
 
