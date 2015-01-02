@@ -5,8 +5,8 @@ package com.findmycoach.mentor.util;
  */
 public interface Callback {
 
-    public void successOperation();
+    public void successOperation(Object object);
 
-    public void failureOperation();
+    public void failureOperation(Object object);
 
 }

@@ -1,0 +1,39 @@
+package com.findmycoach.mentor.util;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+import com.findmycoach.mentor.beans.registration.Datum;
+import com.google.gson.Gson;
+
+/**
+ * Created by prem on 1/1/15.
+ */
+public class StorageHelper {
+
+    public static void storePreference(Context context, String key, String value) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    public static Datum getStoredUser(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String userJson = preferences.getString("user", null);
+        if (userJson != null) {
+            return new Gson().fromJson(userJson, Datum.class);
+        } else {
+            return null;
+        }
+    }
+
+    public static void clearUser(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove("user");
+        editor.commit();
+    }
+
+}

@@ -17,9 +17,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.findmycoach.mentor.beans.registration.Datum;
+import com.findmycoach.mentor.beans.registration.Response;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
+import com.findmycoach.mentor.util.StorageHelper;
 import com.fmc.mentor.findmycoach.R;
+import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 public class SignUpActivity extends Activity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, Callback {
@@ -33,13 +37,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
     private EditText emailInput;
     private EditText phoneNumberInput;
     private Button signUpButton;
-    //    private TextView dateOfBirthInput;
-//    private Spinner genderInput;
-//    private EditText addressInput;
-//    private EditText cityInput;
-//    private EditText stateInput;
-//    private EditText countryInput;
-//    private EditText pinInput;
     private ProgressDialog progressDialog;
 
     @Override
@@ -62,13 +59,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
         passwordInput = (EditText) findViewById(R.id.input_password);
         confirmPasswordInput = (EditText) findViewById(R.id.input_confirm_password);
         phoneNumberInput = (EditText) findViewById(R.id.input_phone);
-//        dateOfBirthInput = (TextView) findViewById(R.id.input_date_of_birth);
-//        addressInput = (EditText) findViewById(R.id.input_address);
-//        cityInput = (EditText) findViewById(R.id.input_city);
-//        stateInput = (EditText) findViewById(R.id.input_state);
-//        countryInput = (EditText) findViewById(R.id.input_country);
-//        pinInput = (EditText) findViewById(R.id.input_pin);
-//        genderInput = (Spinner) findViewById(R.id.input_gender);
         signUpButton = (Button) findViewById(R.id.button_signup);
         signUpButton.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
@@ -141,13 +131,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
         String confirmPassword = confirmPasswordInput.getText().toString();
-//        String dateOfBirth = dateOfBirthInput.getText().toString();
-//        String gender = genderInput.getSelectedItem().toString();
-//        String address = addressInput.getText().toString();
-//        String city = cityInput.getText().toString();
-//        String state = stateInput.getText().toString();
-//        String country = countryInput.getText().toString();
-//        String pin = countryInput.getText().toString();
 
         boolean isValid = validate(firstName, lastName, phone, email,
                 password, confirmPassword);
@@ -158,11 +141,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
             requestParams.add("email", email);
             requestParams.add("password", password);
             requestParams.add("phonenumber", phone);
-//            requestParams.add("address", address);
-//            requestParams.add("city", city);
-//            requestParams.add("state", state);
-//            requestParams.add("country", country);
-//            requestParams.add("zipcode", pin);
             requestParams.add("usergroup", 3 + "");
             callApiToRegister(requestParams);
         }
@@ -184,30 +162,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_field_required));
             return false;
         }
-//        if (dateOfBirth.equals("")) {
-//            showErrorMessage(dateOfBirthInput, getResources().getString(R.string.error_field_required));
-//            return false;
-//        }
-//        if (address.equals("")) {
-//            showErrorMessage(addressInput, getResources().getString(R.string.error_field_required));
-//            return false;
-//        }
-//        if (city.equals("")) {
-//            showErrorMessage(cityInput, getResources().getString(R.string.error_field_required));
-//            return false;
-//        }
-//        if (state.equals("")) {
-//            showErrorMessage(stateInput, getResources().getString(R.string.error_field_required));
-//            return false;
-//        }
-//        if (country.equals("")) {
-//            showErrorMessage(countryInput, getResources().getString(R.string.error_field_required));
-//            return false;
-//        }
-//        if (pin.equals("")) {
-//            showErrorMessage(pinInput, getResources().getString(R.string.error_field_required));
-//            return false;
-//        }
         if (password.equals("")) {
             showErrorMessage(passwordInput, getResources().getString(R.string.error_field_required));
             return false;
@@ -252,9 +206,15 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
     }
 
     @Override
-    public void successOperation() {
+    public void successOperation(Object object) {
+        Response response = (Response) object;
+        saveUser(response.getData().get(0));
         progressDialog.dismiss();
         callHomeActivity();
+    }
+
+    private void saveUser(Datum user) {
+        StorageHelper.storePreference(this, "user", new Gson().toJson(user));
     }
 
     private void callHomeActivity() {
@@ -263,9 +223,9 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
     }
 
     @Override
-    public void failureOperation() {
+    public void failureOperation(Object message) {
+        String errMessage = (String) message;
         progressDialog.dismiss();
-        Toast.makeText(getApplicationContext(), "Registration Failed", Toast.LENGTH_LONG).show();
-
+        Toast.makeText(getApplicationContext(), errMessage, Toast.LENGTH_LONG).show();
     }
 }

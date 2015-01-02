@@ -19,8 +19,12 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+import com.findmycoach.mentor.beans.authentication.AuthenticationResponse;
+import com.findmycoach.mentor.beans.authentication.Data;
+import com.findmycoach.mentor.beans.registration.Datum;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
+import com.findmycoach.mentor.util.StorageHelper;
 import com.fmc.mentor.findmycoach.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -29,6 +33,7 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
+import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 /**
@@ -62,9 +67,16 @@ public class LoginActivity extends Activity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        initialize();
-        initializeGoogleClient();
+        Datum user = StorageHelper.getStoredUser(this);
+        if (user != null) {
+            Intent intent = new Intent(this, DashboardActivity.class);
+            startActivity(intent);
+            this.finish();
+        } else {
+            setContentView(R.layout.activity_login);
+            initialize();
+            initializeGoogleClient();
+        }
     }
 
     protected void onStart() {
@@ -148,6 +160,7 @@ public class LoginActivity extends Activity implements
         String userPassword = inputPassword.getText().toString();
         boolean isFormValid = validateLoginForm(userId, userPassword);
         if (isFormValid) {
+            Log.d("FMC:", "email:" + userId + "\n Password:" + userPassword);
             progressDialog.show();
             RequestParams requestParams = new RequestParams();
             requestParams.add("email", userId);
@@ -300,14 +313,20 @@ public class LoginActivity extends Activity implements
     }
 
     @Override
-    public void successOperation() {
+    public void successOperation(Object object) {
+        AuthenticationResponse response = (AuthenticationResponse) object;
+        saveUser(response.getData());
         progressDialog.dismiss();
         Intent intent = new Intent(this, DashboardActivity.class);
         startActivity(intent);
     }
 
+    private void saveUser(Data user) {
+        StorageHelper.storePreference(this, "user", new Gson().toJson(user));
+    }
+
     @Override
-    public void failureOperation() {
+    public void failureOperation(Object message) {
         progressDialog.dismiss();
         Toast.makeText(this, "Login Failed", Toast.LENGTH_LONG).show();
     }

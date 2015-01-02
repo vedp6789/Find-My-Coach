@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.findmycoach.mentor.beans.registration.Datum;
 import com.findmycoach.mentor.fragment.HomeFragment;
 import com.findmycoach.mentor.fragment.MyConnectionsFragment;
 import com.findmycoach.mentor.fragment.MyScheduleFragment;
@@ -16,11 +17,13 @@ import com.findmycoach.mentor.fragment.NavigationDrawerFragment;
 import com.findmycoach.mentor.fragment.NotificationsFragment;
 import com.findmycoach.mentor.fragment.ProfileFragment;
 import com.findmycoach.mentor.fragment.SettingsFragment;
+import com.findmycoach.mentor.util.StorageHelper;
 import com.fmc.mentor.findmycoach.R;
 
 public class DashboardActivity extends FragmentActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+    public static Datum user;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private CharSequence mTitle;
 
@@ -39,6 +42,7 @@ public class DashboardActivity extends FragmentActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         onNavigationDrawerItemSelected(0);
+        user = StorageHelper.getStoredUser(this);
     }
 
     @Override
@@ -86,7 +90,10 @@ public class DashboardActivity extends FragmentActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.log_out) {
+            StorageHelper.clearUser(this);
+            user = null;
+            this.finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

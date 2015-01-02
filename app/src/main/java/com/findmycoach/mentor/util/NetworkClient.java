@@ -3,6 +3,9 @@ package com.findmycoach.mentor.util;
 import android.content.Context;
 import android.util.Log;
 
+import com.findmycoach.mentor.beans.authentication.AuthenticationResponse;
+import com.findmycoach.mentor.beans.registration.Response;
+import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -16,7 +19,7 @@ public class NetworkClient {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
-    private static String BASE_URL = "http://10.1.1.110/FMCWeb/www/mobile/";
+    private static String BASE_URL = "http://10.1.1.110/fmcweb/www/mobile/";
 
     public static void register(Context context, RequestParams requestParams, final Callback callback) {
         client.post(context, BASE_URL + "register", requestParams, new AsyncHttpResponseHandler() {
@@ -24,8 +27,14 @@ public class NetworkClient {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 Log.d("FMC", "Success: status code:" + statusCode);
                 Log.d("FMC", "Success: headers:" + headers);
-                Log.d("FMC", "Success: response:" + responseBody);
-                callback.successOperation();
+                Log.d("FMC", "Success: response:" + new String(responseBody));
+                String responseJson = new String(responseBody);
+                Response response = new Gson().fromJson(responseJson, Response.class);
+                if (response.getStatus()) {
+                    callback.successOperation(response);
+                } else {
+                    callback.failureOperation(response.getMessage());
+                }
             }
 
             @Override
@@ -34,19 +43,25 @@ public class NetworkClient {
                 Log.d("FMC", "Failure: headers:" + headers);
                 Log.d("FMC", "Failure: response:" + responseBody);
                 Log.d("FMC", "Failure: Error:" + error.getMessage());
-                callback.failureOperation();
+                callback.failureOperation("Problem connecting to server");
             }
         });
     }
 
     public static void login(Context context, RequestParams requestParams, final Callback callback) {
-        client.get(context, BASE_URL + "login", new AsyncHttpResponseHandler() {
+        client.post(BASE_URL + "login", requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 Log.d("FMC", "Success: status code:" + statusCode);
                 Log.d("FMC", "Success: headers:" + headers);
-                Log.d("FMC", "Success: response:" + responseBody);
-                callback.successOperation();
+                Log.d("FMC", "Success: response:" + new String(responseBody));
+                String responseJson = new String(responseBody);
+                AuthenticationResponse response = new Gson().fromJson(responseJson, AuthenticationResponse.class);
+                if (response.getStatus()) {
+                    callback.successOperation(response);
+                } else {
+                    callback.failureOperation(response.getMessage());
+                }
             }
 
             @Override
@@ -55,9 +70,8 @@ public class NetworkClient {
                 Log.d("FMC", "Failure: headers:" + headers);
                 Log.d("FMC", "Failure: response:" + responseBody);
                 Log.d("FMC", "Failure: Error:" + error.getMessage());
-                callback.failureOperation();
+                callback.failureOperation("Problem connecting to server");
             }
         });
-
     }
 }
