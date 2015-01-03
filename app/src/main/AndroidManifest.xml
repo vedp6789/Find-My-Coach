@@ -17,6 +17,7 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
@@ -58,7 +59,10 @@
         <activity
             android:name="com.findmycoach.mentor.activity.EditProfileActivity"
             android:label="@string/title_activity_edit_profile"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.findmycoach.mentor.activity.ChooseImageActivity"
+            android:label="@string/title_activity_choose_image"></activity>
     </application>
 
 </manifest>

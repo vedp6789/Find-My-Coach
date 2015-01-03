@@ -16,8 +16,7 @@
 
     <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
 
-
-    <!-- Countries-->
+    <!-- Countries -->
 
     <string-array name="countries">
         <item>Afghanistan</item>
@@ -254,7 +253,6 @@
         <item>Zambia</item>
         <item>Zimbabwe</item>
     </string-array>
-
     <string-array name="united_states">
         <item>Alabama</item>
         <item>Alaska</item>
@@ -307,8 +305,6 @@
         <item>Wisconsin</item>
         <item>Wyoming</item>
     </string-array>
-
-
     <string-array name="andhra_pradesh">
         <item>Visakhapatnam</item>
         <item>Vijayawada</item>
@@ -335,7 +331,6 @@
         <item>Narasaraopet</item>
         <item>Tadepalligudem</item>
     </string-array>
-
     <string-array name="karnataka">
         <item>Bengaluru</item>
         <item>Belagavi</item>
@@ -350,8 +345,6 @@
         <item>Shivamogga</item>
         <item>Tumakuru</item>
     </string-array>
-
-
     <string-array name="india">
         <item>Andhra Pradesh</item>
         <item>Arunachal Pradesh</item>
@@ -397,5 +390,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="title_activity_choose_image">ChooseImageActivity</string>
 
 </resources>

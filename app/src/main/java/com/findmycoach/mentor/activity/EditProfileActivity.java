@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fmc.mentor.findmycoach.R;
@@ -18,10 +21,12 @@ import com.fmc.mentor.findmycoach.R;
 public class EditProfileActivity extends Activity implements DatePickerDialog.OnDateSetListener {
 
     int year = 1990, month = 1, day = 1;
+    int REQUEST_CODE = 100;
     private TextView dateOfBirthInput;
     private AutoCompleteTextView countryInput;
     private AutoCompleteTextView stateInput;
     private AutoCompleteTextView cityInput;
+    private ImageView profilePicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +46,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
         countryInput = (AutoCompleteTextView) findViewById(R.id.input_country);
         stateInput = (AutoCompleteTextView) findViewById(R.id.input_state);
         cityInput = (AutoCompleteTextView) findViewById(R.id.input_city);
-
+        profilePicture = (ImageView) findViewById(R.id.profile_image);
         applyAction();
     }
 
@@ -64,7 +69,6 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
         cityInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String state = stateInput.getText().toString().toLowerCase();
                 state = state.replaceAll(" ", "_");
                 ArrayAdapter<String> stateAdapter = new ArrayAdapter<String>(getApplicationContext(),
@@ -73,8 +77,24 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
 
             }
         });
+
+        profilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ChooseImageActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            profilePicture.setImageBitmap((Bitmap) data.getParcelableExtra("image"));
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
