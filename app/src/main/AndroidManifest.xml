@@ -24,6 +24,7 @@
         <activity
             android:name="com.findmycoach.mentor.activity.LoginActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
@@ -44,25 +45,31 @@
             android:name="com.findmycoach.mentor.activity.SignUpActivity"
             android:label="@string/title_activity_signup"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.facebook.LoginActivity"
             android:label="@string/facebook"
-            android:noHistory="true" />
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.findmycoach.mentor.activity.ForgotPasswordActivity"
             android:label="@string/title_activity_forgot_password"
-            android:noHistory="true" />
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.findmycoach.mentor.activity.DashboardActivity"
-            android:label="@string/title_activity_dashboard" />
+            android:label="@string/title_activity_dashboard"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.findmycoach.mentor.activity.EditProfileActivity"
             android:label="@string/title_activity_edit_profile"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.findmycoach.mentor.activity.ChooseImageActivity"
-            android:label="@string/title_activity_choose_image"></activity>
+            android:label="@string/title_activity_choose_image"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
