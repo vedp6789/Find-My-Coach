@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -17,13 +16,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.findmycoach.mentor.beans.registration.Datum;
-import com.findmycoach.mentor.beans.registration.Response;
+import com.findmycoach.mentor.beans.registration.SignUpResponse;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
-import com.findmycoach.mentor.util.StorageHelper;
 import com.fmc.mentor.findmycoach.R;
-import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 public class SignUpActivity extends Activity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, Callback {
@@ -207,20 +203,12 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
 
     @Override
     public void successOperation(Object object) {
-        Response response = (Response) object;
-        saveUser(response.getData().get(0));
+        SignUpResponse response = (SignUpResponse) object;
         progressDialog.dismiss();
-        callHomeActivity();
+        Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
+        this.finish();
     }
 
-    private void saveUser(Datum user) {
-        StorageHelper.storePreference(this, "user", new Gson().toJson(user));
-    }
-
-    private void callHomeActivity() {
-        Intent intent = new Intent(this, DashboardActivity.class);
-        startActivity(intent);
-    }
 
     @Override
     public void failureOperation(Object message) {

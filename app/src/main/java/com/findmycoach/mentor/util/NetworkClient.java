@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.findmycoach.mentor.beans.authentication.AuthenticationResponse;
-import com.findmycoach.mentor.beans.registration.Response;
+import com.findmycoach.mentor.beans.registration.SignUpResponse;
 import com.fmc.mentor.findmycoach.R;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
@@ -51,6 +51,7 @@ public class NetworkClient {
     }
 
     public static void register(Context context, RequestParams requestParams, final Callback callback) {
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.post(context, BASE_URL + "register", requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -58,8 +59,8 @@ public class NetworkClient {
                 Log.d("FMC", "Success: headers:" + headers);
                 Log.d("FMC", "Success: response:" + new String(responseBody));
                 String responseJson = new String(responseBody);
-                Response response = new Gson().fromJson(responseJson, Response.class);
-                if (response.getStatus()) {
+                SignUpResponse response = new Gson().fromJson(responseJson, SignUpResponse.class);
+                if (statusCode == 200) {
                     callback.successOperation(response);
                 } else {
                     callback.failureOperation(response.getMessage());
@@ -72,7 +73,14 @@ public class NetworkClient {
                 Log.d("FMC", "Failure: headers:" + headers);
                 Log.d("FMC", "Failure: response:" + responseBody);
                 Log.d("FMC", "Failure: Error:" + error.getMessage());
-                callback.failureOperation("Problem connecting to server");
+                try {
+                    String responseJson = new String(responseBody);
+                    SignUpResponse response = new Gson().fromJson(responseJson, SignUpResponse.class);
+                    callback.failureOperation(response.getMessage());
+                } catch (Exception e) {
+                    Log.d("FMC", "Failure: Error:" + e.getMessage());
+                    callback.failureOperation("Problem connecting to server");
+                }
             }
         });
     }

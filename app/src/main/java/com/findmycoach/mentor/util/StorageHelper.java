@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.findmycoach.mentor.beans.registration.Datum;
-import com.google.gson.Gson;
-
 /**
  * Created by prem on 1/1/15.
  */
@@ -19,14 +16,10 @@ public class StorageHelper {
         editor.commit();
     }
 
-    public static Datum getStoredUser(Context context) {
+    public static String getUserToken(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String userJson = preferences.getString("user", null);
-        if (userJson != null) {
-            return new Gson().fromJson(userJson, Datum.class);
-        } else {
-            return null;
-        }
+        String userToken = preferences.getString("user", null);
+        return userToken;
     }
 
     public static void clearUser(Context context) {

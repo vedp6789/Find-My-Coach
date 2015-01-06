@@ -9,7 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.findmycoach.mentor.beans.registration.Datum;
 import com.findmycoach.mentor.fragment.HomeFragment;
 import com.findmycoach.mentor.fragment.MyConnectionsFragment;
 import com.findmycoach.mentor.fragment.MyScheduleFragment;
@@ -23,9 +22,9 @@ import com.fmc.mentor.findmycoach.R;
 public class DashboardActivity extends FragmentActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    public static Datum user;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private CharSequence mTitle;
+    private String userToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +41,7 @@ public class DashboardActivity extends FragmentActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         onNavigationDrawerItemSelected(0);
-        user = StorageHelper.getStoredUser(this);
+        userToken = StorageHelper.getUserToken(this);
     }
 
     @Override
@@ -92,7 +91,6 @@ public class DashboardActivity extends FragmentActivity
         int id = item.getItemId();
         if (id == R.id.log_out) {
             StorageHelper.clearUser(this);
-            user = null;
             this.finish();
             return true;
         }

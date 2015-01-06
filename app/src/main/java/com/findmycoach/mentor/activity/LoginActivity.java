@@ -20,7 +20,6 @@ import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.findmycoach.mentor.beans.authentication.AuthenticationResponse;
-import com.findmycoach.mentor.beans.registration.Datum;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.StorageHelper;
@@ -65,8 +64,8 @@ public class LoginActivity extends Activity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Datum user = StorageHelper.getStoredUser(this);
-        if (user != null) {
+        String userToken = StorageHelper.getUserToken(this);
+        if (userToken != null) {
             Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
             this.finish();
