@@ -1,29 +1,17 @@
 package com.findmycoach.mentor.beans.authentication;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class AuthenticationResponse {
 
     @Expose
-    private Boolean status;
-    @Expose
     private String message;
     @Expose
     private Data data;
-
-    /**
-     * @return The status
-     */
-    public Boolean getStatus() {
-        return status;
-    }
-
-    /**
-     * @param status The status
-     */
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
+    @SerializedName("auth_token")
+    @Expose
+    private String authToken;
 
     /**
      * @return The message
@@ -51,6 +39,20 @@ public class AuthenticationResponse {
      */
     public void setData(Data data) {
         this.data = data;
+    }
+
+    /**
+     * @return The authToken
+     */
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    /**
+     * @param authToken The auth_token
+     */
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
     }
 
 }

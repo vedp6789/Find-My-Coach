@@ -11,10 +11,11 @@
     <!-- Facebook Credentials -->
     <!-- <string name="facebook_app_id">835344249849377</string> -->
     <string name="facebook_app_id">1428925007356558</string>
-
     <!-- Facebook -->
 
-    <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
+    <!-- API KEY-->
+    <string name="api_key">FMC-API-KEY</string>
+    <string name="api_key_value">01b0c1d332f6516fdc63d3d3dcf7b79273cdeb58</string>
 
     <!-- Countries -->
 
@@ -391,5 +392,7 @@
     <string name="action_example">Example action</string>
     <string name="title_activity_edit_profile">EditProfileActivity</string>
     <string name="title_activity_choose_image">ChooseImageActivity</string>
+    <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
+
 
 </resources>
