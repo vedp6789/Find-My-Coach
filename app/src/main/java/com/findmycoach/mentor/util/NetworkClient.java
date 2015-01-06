@@ -55,9 +55,6 @@ public class NetworkClient {
         client.post(context, BASE_URL + "register", requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                Log.d("FMC", "Success: status code:" + statusCode);
-                Log.d("FMC", "Success: headers:" + headers);
-                Log.d("FMC", "Success: response:" + new String(responseBody));
                 String responseJson = new String(responseBody);
                 SignUpResponse response = new Gson().fromJson(responseJson, SignUpResponse.class);
                 if (statusCode == 200) {
@@ -69,10 +66,6 @@ public class NetworkClient {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.d("FMC", "Failure: status code:" + statusCode);
-                Log.d("FMC", "Failure: headers:" + headers);
-                Log.d("FMC", "Failure: response:" + responseBody);
-                Log.d("FMC", "Failure: Error:" + error.getMessage());
                 try {
                     String responseJson = new String(responseBody);
                     SignUpResponse response = new Gson().fromJson(responseJson, SignUpResponse.class);

@@ -18,14 +18,14 @@ public class StorageHelper {
 
     public static String getUserToken(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String userToken = preferences.getString("user", null);
+        String userToken = preferences.getString("auth_token", null);
         return userToken;
     }
 
     public static void clearUser(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.remove("user");
+        editor.remove("auth_token");
         editor.commit();
     }
 
