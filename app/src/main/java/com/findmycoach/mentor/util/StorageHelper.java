@@ -16,9 +16,9 @@ public class StorageHelper {
         editor.commit();
     }
 
-    public static String getUserToken(Context context) {
+    public static String getUserDetails(Context context, String key) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String userToken = preferences.getString("auth_token", null);
+        String userToken = preferences.getString(key, null);
         return userToken;
     }
 
@@ -26,6 +26,7 @@ public class StorageHelper {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove("auth_token");
+        editor.remove("user_id");
         editor.commit();
     }
 

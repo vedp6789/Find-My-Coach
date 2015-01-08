@@ -41,7 +41,7 @@ public class DashboardActivity extends FragmentActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         onNavigationDrawerItemSelected(0);
-        userToken = StorageHelper.getUserToken(this);
+        userToken = StorageHelper.getUserDetails(this, "auth_token");
     }
 
     @Override

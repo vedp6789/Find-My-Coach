@@ -16,6 +16,7 @@
     <!-- API KEY-->
     <string name="api_key">FMC-API-KEY</string>
     <string name="api_key_value">01b0c1d332f6516fdc63d3d3dcf7b79273cdeb58</string>
+    <string name="auth_key">FMC-AUTH-TOKEN</string>
 
     <!-- Countries -->
 
@@ -254,6 +255,41 @@
         <item>Zambia</item>
         <item>Zimbabwe</item>
     </string-array>
+
+    <!-- states -->
+
+    <string-array name="india">
+        <item>Andhra Pradesh</item>
+        <item>Arunachal Pradesh</item>
+        <item>Assam</item>
+        <item>Bihar</item>
+        <item>Chhattisgarh</item>
+        <item>Goa</item>
+        <item>Gujarat</item>
+        <item>Haryana</item>
+        <item>Himachal Pradesh</item>
+        <item>Jammu and Kashmir</item>
+        <item>Jharkhand</item>
+        <item>Karnataka</item>
+        <item>Kerala</item>
+        <item>Madhya Pradesh</item>
+        <item>Maharashtra</item>
+        <item>Manipur</item>
+        <item>Meghalaya</item>
+        <item>Mizoram</item>
+        <item>Nagaland</item>
+        <item>Orissa</item>
+        <item>Punjab</item>
+        <item>Rajasthan</item>
+        <item>Sikkim</item>
+        <item>Tamil Nadu</item>
+        <item>Telangana</item>
+        <item>Tripura</item>
+        <item>Uttar Pradesh</item>
+        <item>Uttarakhand</item>
+        <item>West Bengal</item>
+    </string-array>
+
     <string-array name="united_states">
         <item>Alabama</item>
         <item>Alaska</item>
@@ -346,37 +382,7 @@
         <item>Shivamogga</item>
         <item>Tumakuru</item>
     </string-array>
-    <string-array name="india">
-        <item>Andhra Pradesh</item>
-        <item>Arunachal Pradesh</item>
-        <item>Assam</item>
-        <item>Bihar</item>
-        <item>Chhattisgarh</item>
-        <item>Goa</item>
-        <item>Gujarat</item>
-        <item>Haryana</item>
-        <item>Himachal Pradesh</item>
-        <item>Jammu and Kashmir</item>
-        <item>Jharkhand</item>
-        <item>Karnataka</item>
-        <item>Kerala</item>
-        <item>Madhya Pradesh</item>
-        <item>Maharashtra</item>
-        <item>Manipur</item>
-        <item>Meghalaya</item>
-        <item>Mizoram</item>
-        <item>Nagaland</item>
-        <item>Orissa</item>
-        <item>Punjab</item>
-        <item>Rajasthan</item>
-        <item>Sikkim</item>
-        <item>Tamil Nadu</item>
-        <item>Telangana</item>
-        <item>Tripura</item>
-        <item>Uttar Pradesh</item>
-        <item>Uttarakhand</item>
-        <item>West Bengal</item>
-    </string-array>
+
     <string-array name="navigation_items">
         <item>Home</item>
         <item>Profile</item>

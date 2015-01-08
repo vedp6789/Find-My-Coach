@@ -14,12 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Request;
-import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
-import com.findmycoach.mentor.beans.authentication.AuthenticationResponse;
+import com.findmycoach.mentor.beans.authentication.Response;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.StorageHelper;
@@ -64,7 +63,7 @@ public class LoginActivity extends Activity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String userToken = StorageHelper.getUserToken(this);
+        String userToken = StorageHelper.getUserDetails(this, "auth_token");
         if (userToken != null) {
             Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
@@ -227,7 +226,7 @@ public class LoginActivity extends Activity implements
                     Request.newMeRequest(session, new Request.GraphUserCallback() {
                         // callback after Graph API response with user object
                         @Override
-                        public void onCompleted(GraphUser user, Response response) {
+                        public void onCompleted(GraphUser user, com.facebook.Response response) {
                             if (user != null) {
                                 Log.d("test:", "user not null");
                                 Log.d("email", (String) user.getProperty("email"));
@@ -310,15 +309,16 @@ public class LoginActivity extends Activity implements
 
     @Override
     public void successOperation(Object object) {
-        AuthenticationResponse response = (AuthenticationResponse) object;
-        saveUser(response.getAuthToken());
+        Response response = (Response) object;
+        saveUser(response.getAuthToken(), response.getData().getId());
         progressDialog.dismiss();
         Intent intent = new Intent(this, DashboardActivity.class);
         startActivity(intent);
     }
 
-    private void saveUser(String authToken) {
+    private void saveUser(String authToken, String userId) {
         StorageHelper.storePreference(this, "auth_token", authToken);
+        StorageHelper.storePreference(this, "user_id", userId);
     }
 
     @Override

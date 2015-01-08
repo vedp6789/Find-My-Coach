@@ -29,6 +29,7 @@ dependencies {
     compile 'com.android.support:support-v4:21.0.2'
     compile 'com.google.code.gson:gson:2.3.1'
     compile project(':cropper')
+    compile 'com.squareup.picasso:picasso:2.4.0'
 }
 
 

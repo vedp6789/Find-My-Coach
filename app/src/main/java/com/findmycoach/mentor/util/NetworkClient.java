@@ -3,7 +3,7 @@ package com.findmycoach.mentor.util;
 import android.content.Context;
 import android.util.Log;
 
-import com.findmycoach.mentor.beans.authentication.AuthenticationResponse;
+import com.findmycoach.mentor.beans.authentication.Response;
 import com.findmycoach.mentor.beans.registration.SignUpResponse;
 import com.fmc.mentor.findmycoach.R;
 import com.google.gson.Gson;
@@ -21,8 +21,13 @@ public class NetworkClient {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
-    private static String BASE_URL = "http://10.1.1.110/fmcweb/www/api/auth/";
+    private static String BASE_URL_with_auth = "http://10.1.1.110/fmcweb/www/api/auth/";
+    private static String BASE_URL = "http://10.1.1.110/fmcweb/www/api/v1/";
 
+
+    public static String getAuthAbsoluteURL(String relativeUrl) {
+        return BASE_URL_with_auth + relativeUrl;
+    }
 
     public static String getAbsoluteURL(String relativeUrl) {
         return BASE_URL + relativeUrl;
@@ -30,11 +35,12 @@ public class NetworkClient {
 
     public static void login(Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.post(getAbsoluteURL("login"), requestParams, new AsyncHttpResponseHandler() {
+        client.post(getAuthAbsoluteURL("login"), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String responseJson = new String(responseBody);
-                AuthenticationResponse response = new Gson().fromJson(responseJson, AuthenticationResponse.class);
+                Log.d("FMC", "Success: Response:" + responseJson);
+                Response response = new Gson().fromJson(responseJson, Response.class);
                 if (statusCode == 200) {
                     callback.successOperation(response);
                 } else {
@@ -46,7 +52,7 @@ public class NetworkClient {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
                     String responseJson = new String(responseBody);
-                    AuthenticationResponse response = new Gson().fromJson(responseJson, AuthenticationResponse.class);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage());
                 } catch (Exception e) {
                     Log.d("FMC", "Failure: Error:" + e.getMessage());
@@ -58,7 +64,7 @@ public class NetworkClient {
 
     public static void register(Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.post(context, getAbsoluteURL("register"), requestParams, new AsyncHttpResponseHandler() {
+        client.post(context, getAuthAbsoluteURL("register"), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String responseJson = new String(responseBody);
@@ -86,7 +92,7 @@ public class NetworkClient {
 
     public static void forgetPassword(Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.post(getAbsoluteURL("forgot_password"), requestParams, new AsyncHttpResponseHandler() {
+        client.post(getAuthAbsoluteURL("forgot_password"), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
@@ -106,6 +112,39 @@ public class NetworkClient {
                 try {
                     JSONObject jsonObject = new JSONObject(new String(responseBody));
                     callback.failureOperation(jsonObject.get("message"));
+                } catch (Exception e) {
+                    callback.failureOperation("Problem connection to server");
+                }
+            }
+        });
+    }
+
+    public static void getProfile(Context context, RequestParams requestParams, String authToken, final Callback callback) {
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.get(context, getAbsoluteURL("profile"), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String responseJson = new String(responseBody);
+                Log.d("FMC", "Success: Response:" + responseJson);
+                Log.d("FMC", "Success: Response Code:" + statusCode);
+                try {
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.successOperation(response);
+                } catch (Exception e) {
+                    Log.d("FMC", "Exception: " + e.getMessage());
+                    callback.failureOperation("Problem connection to server");
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                String responseJson = new String(responseBody);
+                Log.d("FMC", "Failure: Response:" + responseJson);
+                Log.d("FMC", "Failure: Response Code:" + statusCode);
+                try {
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage());
                 } catch (Exception e) {
                     callback.failureOperation("Problem connection to server");
                 }

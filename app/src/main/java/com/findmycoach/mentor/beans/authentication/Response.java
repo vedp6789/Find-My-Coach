@@ -3,7 +3,7 @@ package com.findmycoach.mentor.beans.authentication;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class AuthenticationResponse {
+public class Response {
 
     @Expose
     private String message;

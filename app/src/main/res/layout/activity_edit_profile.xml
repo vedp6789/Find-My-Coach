@@ -208,16 +208,25 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <AutoCompleteTextView
+                    <!--<AutoCompleteTextView-->
+                    <!--android:id="@+id/input_country"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_margin="4dp"-->
+                    <!--android:background="@drawable/custom_edittext"-->
+                    <!--android:hint="@string/prompt_country"-->
+                    <!--android:inputType="textAutoComplete"-->
+                    <!--android:padding="4dp"-->
+                    <!--android:singleLine="true" />-->
+
+
+                    <Spinner
                         android:id="@+id/input_country"
+                        style="@android:style/Widget.Spinner.DropDown"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/custom_edittext"
-                        android:hint="@string/prompt_country"
-                        android:inputType="textAutoComplete"
-                        android:padding="4dp"
-                        android:singleLine="true" />
+                        android:layout_height="40dp"
+                        android:prompt="@string/prompt_country"
+                        android:spinnerMode="dropdown" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -233,16 +242,24 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <AutoCompleteTextView
+                    <!--<AutoCompleteTextView-->
+                    <!--android:id="@+id/input_state"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_margin="4dp"-->
+                    <!--android:background="@drawable/custom_edittext"-->
+                    <!--android:hint="@string/prompt_state"-->
+                    <!--android:inputType="textAutoComplete"-->
+                    <!--android:padding="4dp"-->
+                    <!--android:singleLine="true" />-->
+
+                    <Spinner
                         android:id="@+id/input_state"
+                        style="@android:style/Widget.Spinner.DropDown"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/custom_edittext"
-                        android:hint="@string/prompt_state"
-                        android:inputType="textAutoComplete"
-                        android:padding="4dp"
-                        android:singleLine="true" />
+                        android:layout_height="40dp"
+                        android:prompt="@string/prompt_state"
+                        android:spinnerMode="dropdown" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -258,16 +275,26 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <AutoCompleteTextView
+                    <!--<AutoCompleteTextView-->
+                    <!--android:id="@+id/input_city"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_margin="4dp"-->
+                    <!--android:background="@drawable/custom_edittext"-->
+                    <!--android:hint="@string/prompt_city"-->
+                    <!--android:inputType="textAutoComplete"-->
+                    <!--android:padding="4dp"-->
+                    <!--android:singleLine="true" />-->
+
+                    <Spinner
                         android:id="@+id/input_city"
+                        style="@android:style/Widget.Spinner.DropDown"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/custom_edittext"
-                        android:hint="@string/prompt_city"
-                        android:inputType="textAutoComplete"
-                        android:padding="4dp"
-                        android:singleLine="true" />
+                        android:layout_height="40dp"
+                        android:prompt="@string/prompt_city"
+                        android:spinnerMode="dropdown" />
+
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -461,7 +488,7 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/button_signup"
+        android:id="@+id/button_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
