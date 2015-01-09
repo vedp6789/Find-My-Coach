@@ -32,6 +32,8 @@ import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
 import com.loopj.android.http.RequestParams;
 
+import java.util.Arrays;
+
 /**
  * A login screen that offers login via email/password, Facebook and Google+ sign in.
  */
@@ -102,7 +104,8 @@ public class LoginActivity extends Activity implements
         actionLogin = (Button) findViewById(R.id.email_sign_in_button);
         actionLogin.setOnClickListener(this);
         actionFacebook = (LoginButton) findViewById(R.id.facebook_login_button);
-        actionFacebook.setReadPermissions("email");
+//        actionFacebook.setReadPermissions("email");
+        actionFacebook.setReadPermissions(Arrays.asList("user_location", "user_birthday", "email"));
         actionGooglePlus = (SignInButton) findViewById(R.id.google_login_button);
         actionGooglePlus.setOnClickListener(this);
         forgotAction = (TextView) findViewById(R.id.action_forgot_password);
@@ -125,9 +128,9 @@ public class LoginActivity extends Activity implements
                 //TODO: Implement Facebook Authentication
                 break;
             case R.id.google_login_button:
-                Log.d("test:", "Google + clicked");
+                Log.d("FMC1:", "Google + clicked");
                 if (supportsGooglePlayServices()) {
-                    Log.d("test:", "Google Play Support");
+                    Log.d("FMC1:", "Google Play Support");
                     connectGoogle();
                 } else {
                     actionGooglePlus.setVisibility(View.GONE);
@@ -146,7 +149,7 @@ public class LoginActivity extends Activity implements
     }
 
     private void connectGoogle() {
-        Log.d("test:", "connect Google");
+        Log.d("FMC1:", "connect Google");
         mPlusClient.connect();
     }
 
@@ -155,7 +158,7 @@ public class LoginActivity extends Activity implements
         String userPassword = inputPassword.getText().toString();
         boolean isFormValid = validateLoginForm(userId, userPassword);
         if (isFormValid) {
-            Log.d("FMC:", "email:" + userId + "\n Password:" + userPassword);
+            Log.d("FMC1:", "email:" + userId + "\n Password:" + userPassword);
             progressDialog.show();
             RequestParams requestParams = new RequestParams();
             requestParams.add("email", userId);
@@ -220,26 +223,49 @@ public class LoginActivity extends Activity implements
                 if (!session.isOpened())
                     session = new Session(getApplicationContext());
                 if (session.isOpened()) {
-                    Log.d("test:", "session opened");
-                    Log.d("test: Permissions:", session.getPermissions().toString());
+                    Log.d("FMC1:", "session opened");
+                    Log.d("FMC1: Permissions:", session.getPermissions().toString());
 
                     Request.newMeRequest(session, new Request.GraphUserCallback() {
                         // callback after Graph API response with user object
                         @Override
                         public void onCompleted(GraphUser user, com.facebook.Response response) {
                             if (user != null) {
-                                Log.d("test:", "user not null");
-                                Log.d("email", (String) user.getProperty("email"));
+                                Log.d("FMC1:", "user not null");
+                                Log.d("FMC1", (String) user.getProperty("email"));
+                                Log.d("FMC1", (String) user.getFirstName());
+                                Log.d("FMC1", (String) user.getLastName());
+                                Log.d("FMC1", (String) user.getLink());
+                                Log.d("FMC1", (String) user.getBirthday());
+                                Log.d("FMC1", user.getLocation() + "");
+                                Log.d("FMC1", user.asMap() + "");
+
+//                                String userImage = "http://graph.facebook.com/" + user.getId() + "/picture?type=large";
+                                callWebservice(user);
                             } else {
-                                Log.d("test:", "user null");
+                                Log.d("FMC1:", "user null");
                             }
                         }
                     }).executeAsync();
                 } else {
-                    Log.d("test:", "session not opened");
+                    Log.d("FMC1:", "session not opened");
                 }
             }
         });
+    }
+
+    private void callWebservice(GraphUser user) {
+        progressDialog.show();
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("first_name", user.getFirstName());
+        requestParams.add("last_name", user.getLastName());
+        requestParams.add("dob", user.getBirthday());
+        requestParams.add("facebook_link", user.getLink());
+        requestParams.add("email", (String) user.getProperty("email"));
+        requestParams.add("address", user.getLocation().getName());
+        requestParams.add("gender", (String) user.getProperty("gender"));
+        requestParams.add("photograph", "http://graph.facebook.com/" + user.getId() + "/picture?type=large");
+        NetworkClient.registerThroughSocialMedia(this, requestParams, this);
     }
 
 
@@ -256,7 +282,7 @@ public class LoginActivity extends Activity implements
 
     /* A helper method to resolve the current ConnectionResult error. */
     private void resolveSignInError() {
-        Log.d("test:", "resolve SignIn Error");
+        Log.d("FMC1:", "resolve SignIn Error");
 
         if (mConnectionResult.hasResolution()) {
             try {
@@ -319,7 +345,7 @@ public class LoginActivity extends Activity implements
     private void saveUser(String authToken, String userId) {
         StorageHelper.storePreference(this, "auth_token", authToken);
         StorageHelper.storePreference(this, "user_id", userId);
-        Log.d("FMC:", "User Id:" + userId);
+        Log.d("FMC1:", "User Id:" + userId);
     }
 
     @Override

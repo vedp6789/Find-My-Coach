@@ -197,4 +197,20 @@ public class NetworkClient {
         });
 
     }
+
+    public static void registerThroughSocialMedia(Context context, RequestParams requestParams, Callback callback) {
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.post(context, getAbsoluteURL("/socialRegister"), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
+
+    }
 }
