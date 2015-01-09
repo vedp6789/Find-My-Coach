@@ -23,6 +23,7 @@ import com.findmycoach.mentor.beans.authentication.Data;
 import com.findmycoach.mentor.beans.authentication.Response;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
+import com.findmycoach.mentor.util.NetworkManager;
 import com.findmycoach.mentor.util.StorageHelper;
 import com.fmc.mentor.findmycoach.R;
 import com.google.gson.Gson;
@@ -148,8 +149,12 @@ public class ProfileFragment extends Fragment implements Callback {
         profileAddress.setText(userInfo.getAddress() + ", " + userInfo.getCity() + ", " + userInfo.getState() + ", " + userInfo.getZip());
         profileCharges.setText(userInfo.getCharges());
         profileRatting.setText(userInfo.getRating());
-        profileTravelAvailable.setText(userInfo.getAvailabilityYn());
-        profileLocation.setText(userInfo.getLocation());
+        profileLocation.setText(NetworkManager.getCurrentLocation(getActivity()));
+        if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {
+            profileTravelAvailable.setText("YES");
+        } else {
+            profileTravelAvailable.setText("No");
+        }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
             Picasso.with(getActivity())
                     .load((String) userInfo.getPhotograph())

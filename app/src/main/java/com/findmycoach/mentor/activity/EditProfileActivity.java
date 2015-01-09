@@ -54,21 +54,12 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     private EditText accomplishment;
     private EditText chargeInput;
     private EditText experienceInput;
-
     private EditText facebookLink;
     private EditText googlePlusLink;
     private CheckBox isReadyToTravel;
     private Button updateAction;
     private ProgressDialog progressDialog;
-
-
     private Data userInfo;
-
-
-    private String currentCountry;
-    private String currentState;
-    private String currentCity;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,9 +83,11 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
         profileAddress.setText((String) userInfo.getAddress());
         profileDOB.setText((String) userInfo.getDob());
         pinCode.setText((String) userInfo.getZip());
+        chargeInput.setText(userInfo.getCharges());
+        experienceInput.setText(userInfo.getExperience());
         facebookLink.setText(userInfo.getFacebookLink());
         googlePlusLink.setText(userInfo.getGoogleLink());
-        if (userInfo.getAvailabilityYn().equals("Y")) {
+        if (userInfo.getAvailabilityYn().equals("1")) {
             isReadyToTravel.setChecked(true);
         } else {
             isReadyToTravel.setChecked(false);
@@ -211,9 +204,9 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
             requestParams.add("google_link", googlePlusLink.getText().toString());
             requestParams.add("facebook_link", facebookLink.getText().toString());
             if (isReadyToTravel.isChecked())
-                requestParams.add("availability_yn", "Y");
+                requestParams.add("availability_yn", "1");
             else
-                requestParams.add("availability_yn", "N");
+                requestParams.add("availability_yn", "0");
 
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
@@ -268,8 +261,8 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     }
 
     private void showDate(int year, int month, int day) {
-        dateOfBirthInput.setText(new StringBuilder().append(day).append("/")
-                .append(month).append("/").append(year));
+        dateOfBirthInput.setText(new StringBuilder().append(year).append("-")
+                .append(month).append("-").append(day));
     }
 
 
@@ -283,7 +276,6 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
         progressDialog.dismiss();
         Response response = (Response) object;
         userInfo = response.getData();
-//        populateUserData();
         Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
         Intent intent = new Intent();
         intent.putExtra("user_info", new Gson().toJson(userInfo));

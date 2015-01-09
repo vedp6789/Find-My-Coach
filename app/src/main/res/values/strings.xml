@@ -21,6 +21,7 @@
     <!-- Countries -->
 
     <string-array name="countries">
+        <item>India</item>
         <item>Afghanistan</item>
         <item>Albania</item>
         <item>Algeria</item>
@@ -113,7 +114,6 @@
         <item>Hong Kong</item>
         <item>Hungary</item>
         <item>Iceland</item>
-        <item>India</item>
         <item>Indonesia</item>
         <item>Iran</item>
         <item>Iraq</item>
