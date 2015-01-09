@@ -21,8 +21,8 @@ public class NetworkClient {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
-    private static String BASE_URL_with_auth = "http://10.1.1.110/fmcweb/www/api/auth/";
-    private static String BASE_URL = "http://10.1.1.110/fmcweb/www/api/v1/";
+    private static String BASE_URL_with_auth = "http://demo.iglulabs.com/fmcweb/www/api/auth/";
+    private static String BASE_URL = "http://demo.iglulabs.com/fmcweb/www/api/v1/";
 
 
     public static String getAuthAbsoluteURL(String relativeUrl) {
@@ -40,6 +40,7 @@ public class NetworkClient {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String responseJson = new String(responseBody);
                 Log.d("FMC", "Success: Response:" + responseJson);
+                Log.d("FMC", "Success: Response Code:" + statusCode);
                 Response response = new Gson().fromJson(responseJson, Response.class);
                 if (statusCode == 200) {
                     callback.successOperation(response);
@@ -52,6 +53,8 @@ public class NetworkClient {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
                     String responseJson = new String(responseBody);
+                    Log.d("FMC", "Failure: Response:" + responseJson);
+                    Log.d("FMC", "Failure: Response Code:" + statusCode);
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage());
                 } catch (Exception e) {
@@ -68,6 +71,8 @@ public class NetworkClient {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String responseJson = new String(responseBody);
+                Log.d("FMC", "Success: Response:" + responseJson);
+                Log.d("FMC", "Success: Response Code:" + statusCode);
                 SignUpResponse response = new Gson().fromJson(responseJson, SignUpResponse.class);
                 if (statusCode == 200) {
                     callback.successOperation(response);
@@ -80,6 +85,8 @@ public class NetworkClient {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
                     String responseJson = new String(responseBody);
+                    Log.d("FMC", "Failure: Response:" + responseJson);
+                    Log.d("FMC", "Failure: Response Code:" + statusCode);
                     SignUpResponse response = new Gson().fromJson(responseJson, SignUpResponse.class);
                     callback.failureOperation(response.getMessage());
                 } catch (Exception e) {
@@ -96,6 +103,8 @@ public class NetworkClient {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
+                    Log.d("FMC", "Success: Response:" + new String(responseBody));
+                    Log.d("FMC", "Success: Response Code:" + statusCode);
                     JSONObject jsonObject = new JSONObject(new String(responseBody));
                     if (statusCode == 200) {
                         callback.successOperation(jsonObject.get("message"));
@@ -110,6 +119,8 @@ public class NetworkClient {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
+                    Log.d("FMC", "Failure: Response:" + new String(responseBody));
+                    Log.d("FMC", "Failure: Response Code:" + statusCode);
                     JSONObject jsonObject = new JSONObject(new String(responseBody));
                     callback.failureOperation(jsonObject.get("message"));
                 } catch (Exception e) {
@@ -150,5 +161,40 @@ public class NetworkClient {
                 }
             }
         });
+    }
+
+    public static void updateProfile(Context context, RequestParams requestParams, String authToken, final Callback callback) {
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+
+        client.post(context, getAbsoluteURL("profile"), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String responseJson = new String(responseBody);
+                Log.d("FMC", "Success: Response:" + responseJson);
+                Log.d("FMC", "Success: Response Code:" + statusCode);
+                try {
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.successOperation(response);
+                } catch (Exception e) {
+                    Log.d("FMC", "Exception: " + e.getMessage());
+                    callback.failureOperation("Problem connection to server");
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                String responseJson = new String(responseBody);
+                Log.d("FMC", "Failure: Response:" + responseJson);
+                Log.d("FMC", "Failure: Response Code:" + statusCode);
+                try {
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage());
+                } catch (Exception e) {
+                    callback.failureOperation("Problem connection to server");
+                }
+            }
+        });
+
     }
 }

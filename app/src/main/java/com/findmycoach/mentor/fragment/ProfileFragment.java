@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +31,7 @@ import com.squareup.picasso.Picasso;
 
 public class ProfileFragment extends Fragment implements Callback {
 
+    private final int REQUEST_CODE = 102;
     private ProgressDialog progressDialog;
     private ImageView profileImage;
     private TextView profileName;
@@ -72,12 +74,14 @@ public class ProfileFragment extends Fragment implements Callback {
         progressDialog.show();
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
         RequestParams requestParams = new RequestParams();
+        Log.d("FMC:", "Stored User Id:" + StorageHelper.getUserDetails(getActivity(), "user_id"));
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         NetworkClient.getProfile(getActivity(), requestParams, authToken, this);
     }
 
     private void initialize(View view) {
         progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Please wait...");
         profileImage = (ImageView) view.findViewById(R.id.profile_image);
         profileName = (TextView) view.findViewById(R.id.profile_name);
         profileAddress = (TextView) view.findViewById(R.id.profile_address);
@@ -104,10 +108,21 @@ public class ProfileFragment extends Fragment implements Callback {
             if (userInfo != null) {
                 Intent intent = new Intent(getActivity(), EditProfileActivity.class);
                 intent.putExtra("user_info", new Gson().toJson(userInfo));
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE);
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("FMC:", "IN onActivity Result" + requestCode + "   " + requestCode);
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            String updatedUserJson = data.getStringExtra("user_info");
+            userInfo = new Gson().fromJson(updatedUserJson, Data.class);
+            populateFields();
+        }
     }
 
     @Override
@@ -155,7 +170,7 @@ public class ProfileFragment extends Fragment implements Callback {
             });
         }
         if (userInfo.getFacebookLink() != null && !userInfo.getFacebookLink().equals("")) {
-            googleLink.setOnClickListener(new View.OnClickListener() {
+            facebookLink.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);

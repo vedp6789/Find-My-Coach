@@ -21,13 +21,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.findmycoach.mentor.beans.authentication.Data;
+import com.findmycoach.mentor.beans.authentication.Response;
+import com.findmycoach.mentor.util.Callback;
+import com.findmycoach.mentor.util.NetworkClient;
+import com.findmycoach.mentor.util.StorageHelper;
 import com.fmc.mentor.findmycoach.R;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
-public class EditProfileActivity extends Activity implements DatePickerDialog.OnDateSetListener {
+public class EditProfileActivity extends Activity implements DatePickerDialog.OnDateSetListener, Callback {
 
     int year = 1990, month = 1, day = 1;
     int REQUEST_CODE = 100;
@@ -47,7 +52,9 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     private EditText profession;
     private EditText passion;
     private EditText accomplishment;
-    private EditText charge;
+    private EditText chargeInput;
+    private EditText experienceInput;
+
     private EditText facebookLink;
     private EditText googlePlusLink;
     private CheckBox isReadyToTravel;
@@ -102,6 +109,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     private void initialize() {
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
         dateOfBirthInput = (TextView) findViewById(R.id.input_date_of_birth);
+        profileGender = (Spinner) findViewById(R.id.input_gender);
         countryInput = (Spinner) findViewById(R.id.input_country);
         stateInput = (Spinner) findViewById(R.id.input_state);
         cityInput = (Spinner) findViewById(R.id.input_city);
@@ -115,10 +123,12 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
         pinCode = (EditText) findViewById(R.id.input_pin);
         facebookLink = (EditText) findViewById(R.id.input_facebook);
         googlePlusLink = (EditText) findViewById(R.id.input_google_plus);
-        charge = (EditText) findViewById(R.id.input_charges);
+        chargeInput = (EditText) findViewById(R.id.input_charges);
+        experienceInput = (EditText) findViewById(R.id.input_experience);
         isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
         updateAction = (Button) findViewById(R.id.button_update);
         progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait...");
         applyAction();
     }
 
@@ -185,9 +195,34 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
 
     private void callUpdateService() {
         progressDialog.show();
-        RequestParams requestParams = new RequestParams();
-        requestParams.add("", profileFirstName.getText().toString());
+        try {
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("first_name", profileFirstName.getText().toString());
+            requestParams.add("last_name", profileLastName.getText().toString());
+            requestParams.add("gender", profileGender.getSelectedItem().toString());
+            requestParams.add("dob", profileDOB.getText().toString());
+            requestParams.add("address", profileAddress.getText().toString());
+            requestParams.add("city", cityInput.getSelectedItem().toString());
+            requestParams.add("state", stateInput.getSelectedItem().toString());
+            requestParams.add("country", countryInput.getSelectedItem().toString());
+            requestParams.add("zip", pinCode.getText().toString());
+            requestParams.add("charges", chargeInput.getText().toString());
+            requestParams.add("experience", experienceInput.getText().toString());
+            requestParams.add("google_link", googlePlusLink.getText().toString());
+            requestParams.add("facebook_link", facebookLink.getText().toString());
+            if (isReadyToTravel.isChecked())
+                requestParams.add("availability_yn", "Y");
+            else
+                requestParams.add("availability_yn", "N");
 
+            String authToken = StorageHelper.getUserDetails(this, "auth_token");
+            requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
+
+            NetworkClient.updateProfile(this, requestParams, authToken, this);
+        } catch (Exception e) {
+            progressDialog.dismiss();
+            Toast.makeText(this, "Please enter necessary details", Toast.LENGTH_LONG).show();
+        }
     }
 
 
@@ -241,5 +276,25 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         showDate(year, monthOfYear + 1, dayOfMonth);
+    }
+
+    @Override
+    public void successOperation(Object object) {
+        progressDialog.dismiss();
+        Response response = (Response) object;
+        userInfo = response.getData();
+//        populateUserData();
+        Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
+        Intent intent = new Intent();
+        intent.putExtra("user_info", new Gson().toJson(userInfo));
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
+    public void failureOperation(Object object) {
+        String message = (String) object;
+        progressDialog.dismiss();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

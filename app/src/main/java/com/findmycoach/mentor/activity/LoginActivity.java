@@ -108,7 +108,7 @@ public class LoginActivity extends Activity implements
         forgotAction = (TextView) findViewById(R.id.action_forgot_password);
         forgotAction.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Logging In...");
+        progressDialog.setMessage("Logging In...");
     }
 
     @Override
@@ -319,6 +319,7 @@ public class LoginActivity extends Activity implements
     private void saveUser(String authToken, String userId) {
         StorageHelper.storePreference(this, "auth_token", authToken);
         StorageHelper.storePreference(this, "user_id", userId);
+        Log.d("FMC:", "User Id:" + userId);
     }
 
     @Override
