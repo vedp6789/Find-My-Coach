@@ -136,7 +136,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
                 Log.d("FMC:", "Selected Item:" + country);
                 country = country.replaceAll(" ", "_");
                 try {
-                    ArrayAdapter<String> stateAdapter = new ArrayAdapter<String>(getApplicationContext(),
+                    ArrayAdapter<String> stateAdapter = new ArrayAdapter<String>(getBaseContext(),
                             android.R.layout.simple_list_item_1, getResources().getStringArray(getResources().getIdentifier(country, "array", getPackageName())));
                     stateInput.setAdapter(stateAdapter);
                 } catch (Exception e) {
@@ -156,7 +156,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
                 String state = stateInput.getSelectedItem().toString().toLowerCase();
                 state = state.replaceAll(" ", "_");
                 try {
-                    ArrayAdapter<String> stateAdapter = new ArrayAdapter<String>(getApplicationContext(),
+                    ArrayAdapter<String> stateAdapter = new ArrayAdapter<String>(getBaseContext(),
                             android.R.layout.simple_list_item_1, getResources().getStringArray(getResources().getIdentifier(state, "array", getPackageName())));
                     cityInput.setAdapter(stateAdapter);
                 } catch (Exception e) {
