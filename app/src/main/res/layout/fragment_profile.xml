@@ -38,7 +38,6 @@
                     android:layout_margin="8dp"
                     android:layout_weight="2"
                     android:gravity="center_vertical"
-                    android:text="William James"
                     android:textColor="@android:color/black"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -49,8 +48,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="80 Feet Main Road, Koramangala 1A Block, Koramangala Bengaluru,
-Karnataka 080 4935 0000"
                 android:textColor="@android:color/black" />
 
             <LinearLayout
@@ -77,7 +74,6 @@ Karnataka 080 4935 0000"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
                     android:gravity="center_vertical"
-                    android:text="4.5/5"
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />
             </LinearLayout>
@@ -164,7 +160,6 @@ Karnataka 080 4935 0000"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
                     android:gravity="center_vertical"
-                    android:text="\u20B9 100/hr"
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />
             </LinearLayout>
@@ -193,7 +188,6 @@ Karnataka 080 4935 0000"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
                     android:gravity="center_vertical"
-                    android:text="4.5/5"
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />
             </LinearLayout>
@@ -222,7 +216,6 @@ Karnataka 080 4935 0000"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
                     android:gravity="center_vertical"
-                    android:text="4.5/5"
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />
             </LinearLayout>

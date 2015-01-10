@@ -146,8 +146,23 @@ public class ProfileFragment extends Fragment implements Callback {
 
     private void populateFields() {
         profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
-        profileAddress.setText(userInfo.getAddress() + ", " + userInfo.getCity() + ", " + userInfo.getState() + ", " + userInfo.getZip());
-        profileCharges.setText(userInfo.getCharges());
+        String address = "";
+        if (userInfo.getAddress() != null) {
+            address = address + userInfo.getAddress() + ", ";
+        }
+        if (userInfo.getCity() != null) {
+            address = address + userInfo.getCity() + ", ";
+        }
+        if (userInfo.getState() != null) {
+            address = address + userInfo.getState() + ", ";
+        }
+        if (userInfo.getZip() != null) {
+            address = address + userInfo.getZip();
+        }
+        profileAddress.setText(address);
+        if (userInfo.getCharges() != null) {
+            profileCharges.setText("\u20B9 " + userInfo.getCharges());
+        }
         profileRatting.setText(userInfo.getRating());
         profileLocation.setText(NetworkManager.getCurrentLocation(getActivity()));
         if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {

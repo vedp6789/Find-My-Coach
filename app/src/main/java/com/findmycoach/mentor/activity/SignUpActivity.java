@@ -58,7 +58,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
         signUpButton = (Button) findViewById(R.id.button_signup);
         signUpButton.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Please wait...");
+        progressDialog.setMessage("Please wait...");
     }
 
     @SuppressWarnings("deprecation")
@@ -132,8 +132,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
                 password, confirmPassword);
         if (isValid) {
             RequestParams requestParams = new RequestParams();
-            requestParams.add("firstname", firstName);
-            requestParams.add("lastname", lastName);
+            requestParams.add("first_name", firstName);
+            requestParams.add("last_name", lastName);
             requestParams.add("email", email);
             requestParams.add("password", password);
             requestParams.add("phonenumber", phone);

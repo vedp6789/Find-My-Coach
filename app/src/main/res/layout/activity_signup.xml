@@ -77,27 +77,27 @@
                     android:singleLine="true" />
 
                 <!--<Spinner-->
-                    <!--android:id="@+id/input_gender"-->
-                    <!--style="@android:style/Widget.Spinner.DropDown"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="40dp"-->
-                    <!--android:layout_marginLeft="4dp"-->
-                    <!--android:layout_marginRight="4dp"-->
-                    <!--android:entries="@array/gender"-->
-                    <!--android:prompt="@string/prompt_gender"-->
-                    <!--android:spinnerMode="dropdown" />-->
+                <!--android:id="@+id/input_gender"-->
+                <!--style="@android:style/Widget.Spinner.DropDown"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:layout_marginLeft="4dp"-->
+                <!--android:layout_marginRight="4dp"-->
+                <!--android:entries="@array/gender"-->
+                <!--android:prompt="@string/prompt_gender"-->
+                <!--android:spinnerMode="dropdown" />-->
 
                 <!--<TextView-->
-                    <!--android:id="@+id/input_date_of_birth"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_margin="8dp"-->
-                    <!--android:background="@drawable/custom_edittext"-->
-                    <!--android:editable="false"-->
-                    <!--android:hint="@string/prompt_date_of_birth"-->
-                    <!--android:inputType="date"-->
-                    <!--android:onClick="setDate"-->
-                    <!--android:padding="4dp" />-->
+                <!--android:id="@+id/input_date_of_birth"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="8dp"-->
+                <!--android:background="@drawable/custom_edittext"-->
+                <!--android:editable="false"-->
+                <!--android:hint="@string/prompt_date_of_birth"-->
+                <!--android:inputType="date"-->
+                <!--android:onClick="setDate"-->
+                <!--android:padding="4dp" />-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -105,7 +105,7 @@
                     android:orientation="horizontal"
                     android:weightSum="4">
 
-                    <EditText
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="8dp"
@@ -131,58 +131,58 @@
                 </LinearLayout>
 
                 <!--<EditText-->
-                    <!--android:id="@+id/input_address"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_margin="8dp"-->
-                    <!--android:background="@drawable/custom_edittext"-->
-                    <!--android:hint="@string/prompt_address"-->
-                    <!--android:inputType="textAutoComplete"-->
-                    <!--android:padding="4dp" />-->
+                <!--android:id="@+id/input_address"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="8dp"-->
+                <!--android:background="@drawable/custom_edittext"-->
+                <!--android:hint="@string/prompt_address"-->
+                <!--android:inputType="textAutoComplete"-->
+                <!--android:padding="4dp" />-->
 
                 <!--<EditText-->
-                    <!--android:id="@+id/input_city"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_margin="8dp"-->
-                    <!--android:background="@drawable/custom_edittext"-->
-                    <!--android:hint="@string/prompt_city"-->
-                    <!--android:inputType="textAutoComplete"-->
-                    <!--android:padding="4dp"-->
-                    <!--android:singleLine="true" />-->
+                <!--android:id="@+id/input_city"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="8dp"-->
+                <!--android:background="@drawable/custom_edittext"-->
+                <!--android:hint="@string/prompt_city"-->
+                <!--android:inputType="textAutoComplete"-->
+                <!--android:padding="4dp"-->
+                <!--android:singleLine="true" />-->
 
                 <!--<EditText-->
-                    <!--android:id="@+id/input_state"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_margin="8dp"-->
-                    <!--android:background="@drawable/custom_edittext"-->
-                    <!--android:hint="@string/prompt_state"-->
-                    <!--android:inputType="textAutoComplete"-->
-                    <!--android:padding="4dp"-->
-                    <!--android:singleLine="true" />-->
+                <!--android:id="@+id/input_state"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="8dp"-->
+                <!--android:background="@drawable/custom_edittext"-->
+                <!--android:hint="@string/prompt_state"-->
+                <!--android:inputType="textAutoComplete"-->
+                <!--android:padding="4dp"-->
+                <!--android:singleLine="true" />-->
 
                 <!--<EditText-->
-                    <!--android:id="@+id/input_country"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_margin="8dp"-->
-                    <!--android:background="@drawable/custom_edittext"-->
-                    <!--android:hint="@string/prompt_country"-->
-                    <!--android:inputType="textAutoComplete"-->
-                    <!--android:padding="4dp"-->
-                    <!--android:singleLine="true" />-->
+                <!--android:id="@+id/input_country"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="8dp"-->
+                <!--android:background="@drawable/custom_edittext"-->
+                <!--android:hint="@string/prompt_country"-->
+                <!--android:inputType="textAutoComplete"-->
+                <!--android:padding="4dp"-->
+                <!--android:singleLine="true" />-->
 
                 <!--<EditText-->
-                    <!--android:id="@+id/input_pin"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_margin="8dp"-->
-                    <!--android:background="@drawable/custom_edittext"-->
-                    <!--android:hint="@string/prompt_pin"-->
-                    <!--android:inputType="number"-->
-                    <!--android:padding="4dp"-->
-                    <!--android:singleLine="true" />-->
+                <!--android:id="@+id/input_pin"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="8dp"-->
+                <!--android:background="@drawable/custom_edittext"-->
+                <!--android:hint="@string/prompt_pin"-->
+                <!--android:inputType="number"-->
+                <!--android:padding="4dp"-->
+                <!--android:singleLine="true" />-->
 
                 <EditText
                     android:id="@+id/input_email"
