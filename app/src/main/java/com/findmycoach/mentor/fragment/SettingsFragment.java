@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fmc.mentor.findmycoach.R;
+import com.fmc.student.findmycoach.R;
 
 public class SettingsFragment extends Fragment {
 

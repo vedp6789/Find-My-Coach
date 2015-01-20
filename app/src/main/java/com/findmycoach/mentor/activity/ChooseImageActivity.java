@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.edmodo.cropper.CropImageView;
-import com.fmc.mentor.findmycoach.R;
+import com.fmc.student.findmycoach.R;
 
 public class ChooseImageActivity extends Activity {
 

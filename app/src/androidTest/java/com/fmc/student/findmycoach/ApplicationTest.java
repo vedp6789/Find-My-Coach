@@ -1,4 +1,4 @@
-package com.fmc.mentor.findmycoach;
+package com.fmc.student.findmycoach;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

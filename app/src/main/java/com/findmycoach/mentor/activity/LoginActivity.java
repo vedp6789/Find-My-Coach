@@ -22,7 +22,7 @@ import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.NetworkManager;
 import com.findmycoach.mentor.util.StorageHelper;
-import com.fmc.mentor.findmycoach.R;
+import com.fmc.student.findmycoach.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;

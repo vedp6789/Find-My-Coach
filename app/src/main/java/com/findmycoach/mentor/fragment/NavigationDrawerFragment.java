@@ -21,7 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.fmc.mentor.findmycoach.R;
+import com.fmc.student.findmycoach.R;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.

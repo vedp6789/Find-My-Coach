@@ -14,7 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import com.fmc.mentor.findmycoach.R;
+import com.fmc.student.findmycoach.R;
 
 public class MyScheduleFragment extends Fragment {
     private GridView timeGrid;

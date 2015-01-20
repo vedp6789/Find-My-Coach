@@ -11,7 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.fmc.mentor.findmycoach.R;
+import com.fmc.student.findmycoach.R;
 
 import java.util.ArrayList;
 

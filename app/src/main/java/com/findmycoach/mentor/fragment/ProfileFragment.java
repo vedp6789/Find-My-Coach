@@ -28,7 +28,7 @@ import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.NetworkManager;
 import com.findmycoach.mentor.util.StorageHelper;
-import com.fmc.mentor.findmycoach.R;
+import com.fmc.student.findmycoach.R;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
