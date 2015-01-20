@@ -1,6 +1,5 @@
 package com.findmycoach.mentor.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -21,14 +20,12 @@ import com.facebook.widget.LoginButton;
 import com.findmycoach.mentor.beans.authentication.Response;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
+import com.findmycoach.mentor.util.NetworkManager;
 import com.findmycoach.mentor.util.StorageHelper;
 import com.fmc.mentor.findmycoach.R;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
 import com.loopj.android.http.RequestParams;
 
@@ -37,30 +34,100 @@ import java.util.Arrays;
 /**
  * A login screen that offers login via email/password, Facebook and Google+ sign in.
  */
-public class LoginActivity extends Activity implements
-        GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, View.OnClickListener, Callback {
+public class LoginActivity extends PlusBaseActivity implements View.OnClickListener, Callback {
 
     /* Request code used to invoke sign in user interactions. */
-    private static final int RC_SIGN_IN = 0;
-
+    public static boolean doLogout = false;
     // UI references.
     private TextView registerAction;
     private EditText inputUserName;
     private EditText inputPassword;
     private Button actionLogin;
     private LoginButton actionFacebook;
-    private SignInButton actionGooglePlus;
+    private SignInButton mPlusSignInButton;
     private TextView forgotAction;
-    /* Client used to interact with Google APIs. */
-    private PlusClient mPlusClient;
-
-    /* A flag indicating that a PendingIntent is in progress and prevents
-     * us from starting further intents.
-     */
     private boolean mIntentInProgress;
-    private boolean mSignInClicked;
     private ConnectionResult mConnectionResult;
     private ProgressDialog progressDialog;
+    private View mProgressView;
+    private View mSignOutButtons;
+    private Button signOutButton;
+    private Button disconnectButton;
+
+    @Override
+    protected void onPlusClientSignIn() {
+        if (doLogout) {
+            signOut();
+            doLogout = false;
+            progressDialog.dismiss();
+        } else {
+            enableDisconnectButtons();
+            getProfileInformation();
+        }
+    }
+
+    @Override
+    protected void onPlusClientBlockingUI(boolean show) {
+        progressDialog.show();
+    }
+
+    @Override
+    protected void updateConnectButtonState() {
+        boolean connected = getPlusClient().isConnected();
+        mSignOutButtons.setVisibility(connected ? View.VISIBLE : View.GONE);
+        mPlusSignInButton.setVisibility(connected ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
+    protected void onPlusClientRevokeAccess() {
+        // TODO: Access to the user's G+ account has been revoked.  Per the developer terms, delete
+        // any stored user data here.
+    }
+
+    @Override
+    protected void onPlusClientSignOut() {
+
+    }
+
+    private void authenticateUser(Person user) {
+        progressDialog.show();
+        if (NetworkManager.isNetworkConnected(this)) {
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("email", mPlusClient.getAccountName());
+            String displayName = user.getDisplayName();
+            String[] names = displayName.split(" ");
+            requestParams.add("first_name", names[0]);
+            requestParams.add("last_name", names[1]);
+            requestParams.add("dob", user.getBirthday());
+            requestParams.add("google_link", user.getUrl());
+            requestParams.add("address", user.getCurrentLocation());
+            requestParams.add("gender", user.getGender() + "");
+            requestParams.add("photograph", user.getImage() + "");
+            NetworkClient.registerThroughSocialMedia(this, requestParams, this);
+        } else {
+            Toast.makeText(this, "Please Check Network Connection", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void enableDisconnectButtons() {
+        //Set up sign out and disconnect buttons.
+
+        signOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signOut();
+                updateConnectButtonState();
+            }
+        });
+
+        disconnectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                revokeAccess();
+                updateConnectButtonState();
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,27 +140,9 @@ public class LoginActivity extends Activity implements
         } else {
             setContentView(R.layout.activity_login);
             initialize();
-            initializeGoogleClient();
         }
     }
 
-    protected void onStart() {
-        super.onStart();
-        mPlusClient.connect();
-    }
-
-    protected void onStop() {
-        super.onStop();
-        if (mPlusClient.isConnected()) {
-            mPlusClient.disconnect();
-        }
-    }
-
-    private void initializeGoogleClient() {
-        mPlusClient =
-                new PlusClient.Builder(this, this, this).setScopes(Scopes.PLUS_LOGIN,
-                        Scopes.PLUS_ME).build();
-    }
 
     /* This method get all views references */
     private void initialize() {
@@ -104,14 +153,17 @@ public class LoginActivity extends Activity implements
         actionLogin = (Button) findViewById(R.id.email_sign_in_button);
         actionLogin.setOnClickListener(this);
         actionFacebook = (LoginButton) findViewById(R.id.facebook_login_button);
-//        actionFacebook.setReadPermissions("email");
         actionFacebook.setReadPermissions(Arrays.asList("user_location", "user_birthday", "email"));
-        actionGooglePlus = (SignInButton) findViewById(R.id.google_login_button);
-        actionGooglePlus.setOnClickListener(this);
+        mPlusSignInButton = (SignInButton) findViewById(R.id.google_login_button);
+        mPlusSignInButton.setOnClickListener(this);
         forgotAction = (TextView) findViewById(R.id.action_forgot_password);
         forgotAction.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Logging In...");
+        mProgressView = findViewById(R.id.login_progress);
+        signOutButton = (Button) findViewById(R.id.plus_sign_out_button);
+        disconnectButton = (Button) findViewById(R.id.plus_disconnect_button);
+        mSignOutButtons = findViewById(R.id.plus_sign_out_buttons);
     }
 
     @Override
@@ -124,34 +176,27 @@ public class LoginActivity extends Activity implements
             case R.id.email_sign_in_button:
                 logIn();
                 break;
-            case R.id.facebook_login_button:
-                //TODO: Implement Facebook Authentication
-                break;
             case R.id.google_login_button:
                 Log.d("FMC1:", "Google + clicked");
                 if (supportsGooglePlayServices()) {
                     Log.d("FMC1:", "Google Play Support");
-                    connectGoogle();
+                    signIn();
                 } else {
-                    actionGooglePlus.setVisibility(View.GONE);
+                    mPlusSignInButton.setVisibility(View.GONE);
                 }
                 break;
             case R.id.action_forgot_password:
                 callForgotPasswordActivity();
                 break;
         }
-
     }
+
 
     private void callForgotPasswordActivity() {
         Intent intent = new Intent(this, ForgotPasswordActivity.class);
         startActivity(intent);
     }
 
-    private void connectGoogle() {
-        Log.d("FMC1:", "connect Google");
-        mPlusClient.connect();
-    }
 
     private void logIn() {
         String userId = inputUserName.getText().toString();
@@ -197,10 +242,8 @@ public class LoginActivity extends Activity implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            if (resultCode != RESULT_OK) {
-                mSignInClicked = false;
-            }
+        progressDialog.dismiss();
+        if (requestCode == OUR_REQUEST_CODE) {
             mIntentInProgress = false;
             if (!mPlusClient.isConnecting()) {
                 mPlusClient.connect();
@@ -225,22 +268,11 @@ public class LoginActivity extends Activity implements
                 if (session.isOpened()) {
                     Log.d("FMC1:", "session opened");
                     Log.d("FMC1: Permissions:", session.getPermissions().toString());
-
                     Request.newMeRequest(session, new Request.GraphUserCallback() {
                         // callback after Graph API response with user object
                         @Override
                         public void onCompleted(GraphUser user, com.facebook.Response response) {
                             if (user != null) {
-                                Log.d("FMC1:", "user not null");
-                                Log.d("FMC1", (String) user.getProperty("email"));
-                                Log.d("FMC1", (String) user.getFirstName());
-                                Log.d("FMC1", (String) user.getLastName());
-                                Log.d("FMC1", (String) user.getLink());
-                                Log.d("FMC1", (String) user.getBirthday());
-                                Log.d("FMC1", user.getLocation() + "");
-                                Log.d("FMC1", user.asMap() + "");
-
-//                                String userImage = "http://graph.facebook.com/" + user.getId() + "/picture?type=large";
                                 callWebservice(user);
                             } else {
                                 Log.d("FMC1:", "user null");
@@ -283,15 +315,12 @@ public class LoginActivity extends Activity implements
     /* A helper method to resolve the current ConnectionResult error. */
     private void resolveSignInError() {
         Log.d("FMC1:", "resolve SignIn Error");
-
         if (mConnectionResult.hasResolution()) {
             try {
                 mIntentInProgress = true;
                 startIntentSenderForResult(mConnectionResult.getResolution().getIntentSender(),
-                        RC_SIGN_IN, null, 0, 0, 0);
+                        OUR_REQUEST_CODE, null, 0, 0, 0);
             } catch (IntentSender.SendIntentException e) {
-                // The intent was canceled before it was sent.  Return to the default
-                // state and attempt to connect to get an updated ConnectionResult.
                 mIntentInProgress = false;
                 mPlusClient.connect();
             }
@@ -299,38 +328,31 @@ public class LoginActivity extends Activity implements
     }
 
 
-    private void getProfileInformation() {
+    /**
+     * Successfully connected (called by PlusClient)
+     */
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        updateConnectButtonState();
+        setProgressBarVisible(false);
+        onPlusClientSignIn();
+    }
+
+    public void getProfileInformation() {
         Person currentPerson = mPlusClient.getCurrentPerson();
         String accountName = mPlusClient.getAccountName();
         Toast.makeText(this, accountName + " is connected.", Toast.LENGTH_LONG).show();
+        authenticateUser(currentPerson);
     }
 
-
-    @Override
-    public void onConnected(Bundle connectionHint) {
-        mSignInClicked = false;
-        Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
-        getProfileInformation();
-    }
-
-    @Override
-    public void onDisconnected() {
-
-    }
-
-
-    public void onConnectionFailed(ConnectionResult result) {
-        if (!mIntentInProgress) {
-            // Store the ConnectionResult so that we can use it later when the user clicks
-            // 'sign-in'.
-            mConnectionResult = result;
-
-            if (mSignInClicked) {
-                // The user has already clicked 'sign-in' so we attempt to resolve all
-                // errors until the user is signed in, or they cancel.
-                resolveSignInError();
-            }
-        }
+    private void populateUserFields(Person currentPerson) {
+        Log.d("User:", "Name:" + currentPerson.getName());
+        Log.d("User:", "Display Name:" + currentPerson.getDisplayName());
+        Log.d("User:", "Nick Name:" + currentPerson.getNickname());
+        Log.d("User:", "Date of Birth:" + currentPerson.getBirthday());
+        Log.d("User:", "Current Location:" + currentPerson.getCurrentLocation());
+        Log.d("User:", "Gender:" + currentPerson.getGender());
+        Log.d("User:", "Gender:" + currentPerson.getImage());
     }
 
     @Override
@@ -353,62 +375,6 @@ public class LoginActivity extends Activity implements
         progressDialog.dismiss();
         Toast.makeText(this, (String) message, Toast.LENGTH_LONG).show();
     }
-
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-//    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-//
-//        private final String mEmail;
-//        private final String mPassword;
-//
-//        UserLoginTask(String email, String password) {
-//            mEmail = email;
-//            mPassword = password;
-//        }
-//
-//        @Override
-//        protected Boolean doInBackground(Void... params) {
-//
-//            try {
-//                // Simulate network access.
-//                Thread.sleep(2000);
-//            } catch (InterruptedException e) {
-//                return false;
-//            }
-//
-//            for (String credential : DUMMY_CREDENTIALS) {
-//                String[] pieces = credential.split(":");
-//                if (pieces[0].equals(mEmail)) {
-//                    // Account exists, return true if the password matches.
-//                    return pieces[1].equals(mPassword);
-//                }
-//            }
-//
-//            return true;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(final Boolean success) {
-//            mAuthTask = null;
-//            showProgress(false);
-//
-//            if (success) {
-//                finish();
-//            } else {
-//                mPasswordView.setError(getString(R.string.error_incorrect_password));
-//                mPasswordView.requestFocus();
-//            }
-//        }
-//
-//        @Override
-//        protected void onCancelled() {
-//            mAuthTask = null;
-//            showProgress(false);
-//        }
-//    }
 }
 
 

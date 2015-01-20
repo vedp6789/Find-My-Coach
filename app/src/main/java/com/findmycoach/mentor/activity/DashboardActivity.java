@@ -91,6 +91,7 @@ public class DashboardActivity extends FragmentActivity
         int id = item.getItemId();
         if (id == R.id.log_out) {
             StorageHelper.clearUser(this);
+            LoginActivity.doLogout = true;
             this.finish();
             return true;
         }

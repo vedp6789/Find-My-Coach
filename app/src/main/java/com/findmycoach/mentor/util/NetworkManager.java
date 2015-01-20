@@ -5,6 +5,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import java.util.List;
@@ -27,5 +29,15 @@ public class NetworkManager {
             Log.d("FMC:", "Exception: " + e.getMessage());
         }
         return "";
+    }
+
+    public static boolean isNetworkConnected(Context context) {
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
     }
 }
