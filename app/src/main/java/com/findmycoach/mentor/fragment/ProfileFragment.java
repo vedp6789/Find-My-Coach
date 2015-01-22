@@ -3,9 +3,12 @@ package com.findmycoach.mentor.fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +24,7 @@ import android.widget.Toast;
 import com.findmycoach.mentor.activity.EditProfileActivity;
 import com.findmycoach.mentor.beans.authentication.Data;
 import com.findmycoach.mentor.beans.authentication.Response;
+import com.findmycoach.mentor.util.BinaryForImage;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.NetworkManager;
@@ -106,11 +110,11 @@ public class ProfileFragment extends Fragment implements Callback {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_edit_profile) {
-            if (userInfo != null) {
+//            if (userInfo != null) {
                 Intent intent = new Intent(getActivity(), EditProfileActivity.class);
                 intent.putExtra("user_info", new Gson().toJson(userInfo));
                 startActivityForResult(intent, REQUEST_CODE);
-            }
+//            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -171,9 +175,10 @@ public class ProfileFragment extends Fragment implements Callback {
             profileTravelAvailable.setText("No");
         }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-            Picasso.with(getActivity())
-                    .load((String) userInfo.getPhotograph())
-                    .into(profileImage);
+//            Picasso.with(getActivity())
+//                    .load((String) userInfo.getPhotograph())
+//                    .into(profileImage);
+            profileImage.setImageBitmap(BinaryForImage.getBitmapFromBinaryString((String) userInfo.getPhotograph()));
         }
         applySocialLinks();
     }

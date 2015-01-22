@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.findmycoach.mentor.beans.authentication.Data;
 import com.findmycoach.mentor.beans.authentication.Response;
+import com.findmycoach.mentor.util.BinaryForImage;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.StorageHelper;
@@ -60,6 +61,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     private Button updateAction;
     private ProgressDialog progressDialog;
     private Data userInfo;
+    private String imageInBinary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,8 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
 //                    .load((String) userInfo.getPhotograph())
 //                    .into(profilePicture);
 //        }
+        if(userInfo == null)
+            return;
         profileEmail.setText(userInfo.getEmail());
         profilePhone.setText(userInfo.getPhonenumber());
         profileFirstName.setText(userInfo.getFirstName());
@@ -203,6 +207,8 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
             requestParams.add("experience", experienceInput.getText().toString());
             requestParams.add("google_link", googlePlusLink.getText().toString());
             requestParams.add("facebook_link", facebookLink.getText().toString());
+            if(imageInBinary != null)
+                requestParams.add("photograph", imageInBinary);
             if (isReadyToTravel.isChecked())
                 requestParams.add("availability_yn", "1");
             else
@@ -223,7 +229,9 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            profilePicture.setImageBitmap((Bitmap) data.getParcelableExtra("image"));
+            Bitmap userPic = (Bitmap) data.getParcelableExtra("image");
+            profilePicture.setImageBitmap(userPic);
+            imageInBinary = BinaryForImage.getBinaryStringFromBitmap(userPic);
         }
     }
 

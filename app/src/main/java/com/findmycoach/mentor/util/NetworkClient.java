@@ -23,7 +23,7 @@ public class NetworkClient {
 
     private static String BASE_URL_with_auth = "http://demo.iglulabs.com/fmcweb/www/api/auth/";
     private static String BASE_URL = "http://demo.iglulabs.com/fmcweb/www/api/v1/";
-
+//    private static String BASE_URL = "http://10.1.1.110/fmcweb/www/api/v1/profile/";
 
     public static String getAuthAbsoluteURL(String relativeUrl) {
         return BASE_URL_with_auth + relativeUrl;
