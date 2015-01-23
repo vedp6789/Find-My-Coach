@@ -3,6 +3,8 @@ package com.findmycoach.mentor.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,7 +12,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.findmycoach.mentor.adapter.ChatWidgetAdapter;
 import com.fmc.mentor.findmycoach.R;
+
+import java.util.ArrayList;
 
 /**
  * Created by IgluLabs on 1/23/2015.
@@ -20,6 +26,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private String mentorName;
     private ListView chatWidgetLv;
     private EditText msgToSend;
+    private ChatWidgetAdapter chatWidgetAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +34,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         setContentView(R.layout.activity_chat_widget);
         initialize();
         applyActionbarProperties();
+        populateData();
     }
 
     private void initialize() {
@@ -36,6 +44,18 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         chatWidgetLv = (ListView) findViewById(R.id.chatWidgetLv);
         msgToSend = (EditText) findViewById(R.id.msgToSendET);
         findViewById(R.id.sendButton).setOnClickListener(this);
+        chatWidgetLv.setDivider(null);
+        chatWidgetLv.setSelector(new ColorDrawable(0));
+    }
+
+    private void populateData() {
+        //Dummy chatting
+        ArrayList<String> dummyList = new ArrayList<String>();
+        for(int i=0; i<5; i++){
+            dummyList.add(i,"This is the dummy contain of message " + i);
+        }
+        chatWidgetAdapter = new ChatWidgetAdapter(this, dummyList);
+        chatWidgetLv.setAdapter(chatWidgetAdapter);
     }
 
     private void applyActionbarProperties() {
@@ -71,7 +91,13 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.sendButton){
-            Toast.makeText(this,"Send button clicked",Toast.LENGTH_SHORT).show();
+            if(chatWidgetAdapter != null && msgToSend.getText().toString().length() > 1) {
+                chatWidgetAdapter.updateMessageList(msgToSend.getText().toString());
+                msgToSend.setText("");
+                chatWidgetAdapter.notifyDataSetChanged();
+            }
+            else
+            Toast.makeText(this,"Type something to send.",Toast.LENGTH_SHORT).show();
         }
     }
 }
