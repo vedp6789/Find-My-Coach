@@ -33,7 +33,7 @@ public class Data {
     @Expose
     private Object country;
     @Expose
-    private Object photograph;
+    private String photograph;
     @Expose
     private String rating;
     @Expose
@@ -225,14 +225,14 @@ public class Data {
     /**
      * @return The photograph
      */
-    public Object getPhotograph() {
+    public String getPhotograph() {
         return photograph;
     }
 
     /**
      * @param photograph The photograph
      */
-    public void setPhotograph(Object photograph) {
+    public void setPhotograph(String photograph) {
         this.photograph = photograph;
     }
 

@@ -44,6 +44,8 @@
     <string name="action_sign_up">Sign Up</string>
     <string name="action_save">Save</string>
     <string name="action_logout">Log Out</string>
+    <string name="action_attach_image">Image</string>
+    <string name="action_attach_video">Video</string>
 
     <!-- Actions -->
 

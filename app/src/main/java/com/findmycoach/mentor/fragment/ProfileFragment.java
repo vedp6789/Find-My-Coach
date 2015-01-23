@@ -178,7 +178,11 @@ public class ProfileFragment extends Fragment implements Callback {
 //            Picasso.with(getActivity())
 //                    .load((String) userInfo.getPhotograph())
 //                    .into(profileImage);
-            profileImage.setImageBitmap(BinaryForImage.getBitmapFromBinaryString((String) userInfo.getPhotograph()));
+//            try{
+//                profileImage.setImageBitmap(BinaryForImage.getBitmapFromBinaryString((String) userInfo.getPhotograph()));
+//            }catch (Exception e){
+//                e.printStackTrace();
+//            }
         }
         applySocialLinks();
     }

@@ -61,7 +61,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     private Button updateAction;
     private ProgressDialog progressDialog;
     private Data userInfo;
-    private String imageInBinary;
+    private String imageInBinary = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,7 +207,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
             requestParams.add("experience", experienceInput.getText().toString());
             requestParams.add("google_link", googlePlusLink.getText().toString());
             requestParams.add("facebook_link", facebookLink.getText().toString());
-            if(imageInBinary != null)
+            if(!imageInBinary.equals(""))
                 requestParams.add("photograph", imageInBinary);
             if (isReadyToTravel.isChecked())
                 requestParams.add("availability_yn", "1");
@@ -231,7 +231,11 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             Bitmap userPic = (Bitmap) data.getParcelableExtra("image");
             profilePicture.setImageBitmap(userPic);
-            imageInBinary = BinaryForImage.getBinaryStringFromBitmap(userPic);
+            try {
+                imageInBinary = BinaryForImage.getBinaryStringFromBitmap(userPic);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
