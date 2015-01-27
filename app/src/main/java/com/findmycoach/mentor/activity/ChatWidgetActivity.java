@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
  */
 public class ChatWidgetActivity extends Activity implements View.OnClickListener {
 
+    private String mentorName;
     private ListView chatWidgetLv;
     private EditText msgToSend;
     private ChatWidgetAdapter chatWidgetAdapter;
@@ -36,6 +38,9 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     }
 
     private void initialize() {
+        Intent getUserIntent = getIntent();
+        if(getUserIntent != null)
+            mentorName = getUserIntent.getStringExtra("mentor_name");
         chatWidgetLv = (ListView) findViewById(R.id.chatWidgetLv);
         msgToSend = (EditText) findViewById(R.id.msgToSendET);
         findViewById(R.id.sendButton).setOnClickListener(this);
@@ -54,10 +59,6 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     }
 
     private void applyActionbarProperties() {
-        Intent getUserIntent = getIntent();
-        String mentorName = null;
-        if(getUserIntent != null)
-            mentorName = getUserIntent.getStringExtra("mentor_name");
         ActionBar actionbar = getActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         if(mentorName != null)
@@ -90,11 +91,10 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.sendButton){
-            if(chatWidgetAdapter != null && msgToSend.getText().toString().replaceAll(" ","").length() > 0) {
+            if(chatWidgetAdapter != null && msgToSend.getText().toString().length() > 1) {
                 chatWidgetAdapter.updateMessageList(msgToSend.getText().toString());
                 msgToSend.setText("");
                 chatWidgetAdapter.notifyDataSetChanged();
-                chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount()-1);
             }
             else
             Toast.makeText(this,"Type something to send.",Toast.LENGTH_SHORT).show();
