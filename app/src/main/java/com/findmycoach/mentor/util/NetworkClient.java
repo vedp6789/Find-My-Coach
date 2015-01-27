@@ -41,11 +41,15 @@ public class NetworkClient {
                 String responseJson = new String(responseBody);
                 Log.d("FMC", "Success: Response:" + responseJson);
                 Log.d("FMC", "Success: Response Code:" + statusCode);
-                Response response = new Gson().fromJson(responseJson, Response.class);
-                if (statusCode == 200) {
-                    callback.successOperation(response);
-                } else {
-                    callback.failureOperation(response.getMessage());
+                try{
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    if (statusCode == 200) {
+                        callback.successOperation(response);
+                    } else {
+                        callback.failureOperation(response.getMessage());
+                    }
+                }catch (Exception e){
+                    callback.failureOperation("Email is not present in database.");
                 }
             }
 

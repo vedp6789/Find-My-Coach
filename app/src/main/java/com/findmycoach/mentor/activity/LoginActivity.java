@@ -204,11 +204,14 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         boolean isFormValid = validateLoginForm(userId, userPassword);
         if (isFormValid) {
             Log.d("FMC1:", "email:" + userId + "\n Password:" + userPassword);
-            progressDialog.show();
-            RequestParams requestParams = new RequestParams();
-            requestParams.add("email", userId);
-            requestParams.add("password", userPassword);
-            NetworkClient.login(this, requestParams, this);
+           if(NetworkManager.isNetworkConnected(this)){
+               progressDialog.show();
+               RequestParams requestParams = new RequestParams();
+               requestParams.add("email", userId);
+               requestParams.add("password", userPassword);
+               NetworkClient.login(this, requestParams, this);
+           }else
+               Toast.makeText(this,"Check internet connection",Toast.LENGTH_LONG).show();
         }
     }
 
