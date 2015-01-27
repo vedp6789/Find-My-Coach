@@ -95,6 +95,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
                 chatWidgetAdapter.updateMessageList(msgToSend.getText().toString());
                 msgToSend.setText("");
                 chatWidgetAdapter.notifyDataSetChanged();
+                chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount()-1);
             }
             else
             Toast.makeText(this,"Type something to send.",Toast.LENGTH_SHORT).show();
