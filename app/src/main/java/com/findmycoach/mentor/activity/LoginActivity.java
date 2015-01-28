@@ -297,7 +297,12 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         requestParams.add("dob", user.getBirthday());
         requestParams.add("facebook_link", user.getLink());
         requestParams.add("email", (String) user.getProperty("email"));
-        requestParams.add("address", user.getLocation().getName());
+        try{
+            requestParams.add("address", user.getLocation().getName());
+        }catch (Exception e){
+            e.printStackTrace();
+            requestParams.add("address", "");
+        }
         requestParams.add("gender", (String) user.getProperty("gender"));
         requestParams.add("photograph", "http://graph.facebook.com/" + user.getId() + "/picture?type=large");
         NetworkClient.registerThroughSocialMedia(this, requestParams, this);

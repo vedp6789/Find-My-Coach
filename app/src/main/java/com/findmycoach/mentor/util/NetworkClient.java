@@ -35,6 +35,7 @@ public class NetworkClient {
 
     public static void login(Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        requestParams.add("usergroup","3");
         client.post(getAuthAbsoluteURL("login"), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -204,6 +205,7 @@ public class NetworkClient {
 
     public static void registerThroughSocialMedia(Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        requestParams.add("usergroup","3");
         client.post(context, getAuthAbsoluteURL("socialAuthentication"), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {

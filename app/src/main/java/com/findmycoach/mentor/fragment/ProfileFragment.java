@@ -1,6 +1,7 @@
 package com.findmycoach.mentor.fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -145,8 +146,22 @@ public class ProfileFragment extends Fragment implements Callback {
         progressDialog.hide();
         Response response = (Response) object;
         userInfo = response.getData();
+        String key = "";
+        if(userInfo.getEmail() == null || userInfo.getEmail().equals(""))
+            key = key + " Email";
+        if(userInfo.getPhonenumber() == null || userInfo.getPhonenumber().equals(""))
+            key = key + " Phn";
+        if(key.length()>1)
+            showDialog(key);
         populateFields();
     }
+
+    private void showDialog(String key) {
+        Dialog dialog = new Dialog(getActivity());
+        dialog.setTitle(key + " is not present");
+        dialog.show();
+    }
+
 
     private void populateFields() {
         profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
@@ -175,14 +190,9 @@ public class ProfileFragment extends Fragment implements Callback {
             profileTravelAvailable.setText("No");
         }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-//            Picasso.with(getActivity())
-//                    .load((String) userInfo.getPhotograph())
-//                    .into(profileImage);
-//            try{
-//                profileImage.setImageBitmap(BinaryForImage.getBitmapFromBinaryString((String) userInfo.getPhotograph()));
-//            }catch (Exception e){
-//                e.printStackTrace();
-//            }
+            Picasso.with(getActivity())
+                    .load(userInfo.getPhotograph())
+                    .into(profileImage);
         }
         applySocialLinks();
     }
