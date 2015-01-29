@@ -1,14 +1,11 @@
 package com.findmycoach.mentor.activity;
 
 import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.findmycoach.mentor.fragment.ProfileFragment;
 import com.fmc.mentor.findmycoach.R;
@@ -44,7 +41,7 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
             case R.id.profileSettings:
                 setContentView(R.layout.profile_edit);
                 getSupportFragmentManager().beginTransaction().add(R.id.profileContainer,new ProfileFragment()).addToBackStack("edit_profile").commit();
-                actionbar.setTitle("Edit Profile");
+                actionbar.setTitle("Profile");
                 getSupportFragmentManager().addOnBackStackChangedListener(this);
                 break;
         }
