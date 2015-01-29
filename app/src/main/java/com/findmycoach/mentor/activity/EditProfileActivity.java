@@ -32,6 +32,7 @@ import com.findmycoach.mentor.util.StorageHelper;
 import com.fmc.mentor.findmycoach.R;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
 
 public class EditProfileActivity extends Activity implements DatePickerDialog.OnDateSetListener, Callback {
 
@@ -73,11 +74,11 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     }
 
     private void populateUserData() {
-//        if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-//            Picasso.with(this)
-//                    .load((String) userInfo.getPhotograph())
-//                    .into(profilePicture);
-//        }
+        if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
+            Picasso.with(this)
+                    .load((String) userInfo.getPhotograph())
+                    .into(profilePicture);
+        }
         if(userInfo == null)
             return;
         profileEmail.setText(userInfo.getEmail());

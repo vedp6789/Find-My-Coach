@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.facebook.Session;
 import com.findmycoach.mentor.fragment.HomeFragment;
 import com.findmycoach.mentor.fragment.MyConnectionsFragment;
 import com.findmycoach.mentor.fragment.MyScheduleFragment;
@@ -102,8 +103,24 @@ public class DashboardActivity extends FragmentActivity
             StorageHelper.clearUser(this);
             LoginActivity.doLogout = true;
             this.finish();
+            fbClearToken();
+            startActivity(new Intent(this,LoginActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void fbClearToken() {
+        Session session = Session.getActiveSession();
+        if (session != null) {
+            if (!session.isClosed()) {
+                session.closeAndClearTokenInformation();
+            }
+        } else {
+            session = new Session(this);
+            Session.setActiveSession(session);
+            session.closeAndClearTokenInformation();
+        }
+
     }
 }

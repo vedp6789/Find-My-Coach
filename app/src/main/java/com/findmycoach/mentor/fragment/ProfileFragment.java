@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +24,6 @@ import android.widget.Toast;
 import com.findmycoach.mentor.activity.EditProfileActivity;
 import com.findmycoach.mentor.beans.authentication.Data;
 import com.findmycoach.mentor.beans.authentication.Response;
-import com.findmycoach.mentor.util.BinaryForImage;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.NetworkManager;
@@ -111,11 +109,11 @@ public class ProfileFragment extends Fragment implements Callback {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_edit_profile) {
-//            if (userInfo != null) {
+            if (userInfo != null) {
                 Intent intent = new Intent(getActivity(), EditProfileActivity.class);
                 intent.putExtra("user_info", new Gson().toJson(userInfo));
                 startActivityForResult(intent, REQUEST_CODE);
-//            }
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -146,19 +144,55 @@ public class ProfileFragment extends Fragment implements Callback {
         progressDialog.hide();
         Response response = (Response) object;
         userInfo = response.getData();
-        String key = "";
+        //default = 0; No_Email = 1; No_Phn = 2; No_Email_Phn = 3;
+        int key = 0;
         if(userInfo.getEmail() == null || userInfo.getEmail().equals(""))
-            key = key + " Email";
+            key++;
         if(userInfo.getPhonenumber() == null || userInfo.getPhonenumber().equals(""))
-            key = key + " Phn";
-        if(key.length()>1)
+            key += 2;
+        if(key > 0)
             showDialog(key);
         populateFields();
     }
 
-    private void showDialog(String key) {
-        Dialog dialog = new Dialog(getActivity());
-        dialog.setTitle(key + " is not present");
+    private void showDialog(int key) {
+        final Dialog dialog = new Dialog(getActivity());
+        switch (key){
+            case 1: dialog.setTitle("Email is not present"); break;
+            case 2:
+                dialog.setTitle("Phone number is not present");
+                dialog.setContentView(R.layout.phone_number_dialog);
+                final EditText phoneEditText = (EditText) dialog.findViewById(R.id.phoneEditText);
+                dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final String phnNum = phoneEditText.getText().toString();
+                        if (phnNum.equals("")){
+                            phoneEditText.setError("Enter phone number");
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    phoneEditText.setError(null);
+                                }
+                            }, 3500);
+                        }
+                        else{
+                           dialog.dismiss();
+                            Toast.makeText(getActivity(),"Please verify phone number.",Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+                dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        Toast.makeText(getActivity(),"Dialog will again appear in next visit.",Toast.LENGTH_LONG).show();
+                    }
+                });
+                break;
+            case 3: dialog.setTitle("Email and phone number is not present"); break;
+        }
         dialog.show();
     }
 
