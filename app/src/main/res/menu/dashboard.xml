@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.findmycoach.mentor.activity.DashboardActivity">
     <item
-        android:id="@+id/log_out"
+        android:id="@+id/action_settings"
         android:showAsAction="never"
-        android:title="@string/action_logout" />
+        android:title="@string/action_settings"/>
 </menu>

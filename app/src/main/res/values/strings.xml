@@ -386,11 +386,9 @@
 
     <string-array name="navigation_items">
         <item>Home</item>
-        <item>Profile</item>
         <item>Notifications</item>
         <item>My Connections</item>
         <item>My Schedule</item>
-        <item>Settings</item>
     </string-array>
 
     <string name="title_activity_dashboard">DashboardActivity</string>

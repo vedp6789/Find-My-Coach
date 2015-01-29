@@ -53,15 +53,11 @@ public class DashboardActivity extends FragmentActivity
         if (position == 0)
             fragmentTransaction.replace(R.id.container, new HomeFragment());
         if (position == 1)
-            fragmentTransaction.replace(R.id.container, new ProfileFragment());
-        if (position == 2)
             fragmentTransaction.replace(R.id.container, new NotificationsFragment());
-        if (position == 3)
+        if (position == 2)
             fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-        if (position == 4)
+        if (position == 3)
             fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
-        if (position == 5)
-            fragmentTransaction.replace(R.id.container, new SettingsFragment());
 
         fragmentTransaction.commit();
         onSectionAttached(position);
@@ -99,28 +95,24 @@ public class DashboardActivity extends FragmentActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.log_out) {
-            StorageHelper.clearUser(this);
-            LoginActivity.doLogout = true;
-            this.finish();
-            fbClearToken();
-            startActivity(new Intent(this,LoginActivity.class));
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this, Settings.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
-    public void fbClearToken() {
-        Session session = Session.getActiveSession();
-        if (session != null) {
-            if (!session.isClosed()) {
-                session.closeAndClearTokenInformation();
-            }
-        } else {
-            session = new Session(this);
-            Session.setActiveSession(session);
-            session.closeAndClearTokenInformation();
-        }
-
-    }
+//
+//    public void fbClearToken() {
+//        Session session = Session.getActiveSession();
+//        if (session != null) {
+//            if (!session.isClosed()) {
+//                session.closeAndClearTokenInformation();
+//            }
+//        } else {
+//            session = new Session(this);
+//            Session.setActiveSession(session);
+//            session.closeAndClearTokenInformation();
+//        }
+//
+//    }
 }
