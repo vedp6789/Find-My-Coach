@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.findmycoach.mentor.beans.authentication.Response;
 import com.findmycoach.mentor.beans.registration.SignUpResponse;
+import com.findmycoach.mentor.beans.suggestion.Suggestion;
 import com.fmc.mentor.findmycoach.R;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
@@ -35,21 +36,21 @@ public class NetworkClient {
 
     public static void login(Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        requestParams.add("usergroup","3");
+        requestParams.add("usergroup", "3");
         client.post(getAuthAbsoluteURL("login"), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String responseJson = new String(responseBody);
                 Log.d("FMC", "Success: Response:" + responseJson);
                 Log.d("FMC", "Success: Response Code:" + statusCode);
-                try{
+                try {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     if (statusCode == 200) {
                         callback.successOperation(response);
                     } else {
                         callback.failureOperation(response.getMessage());
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     callback.failureOperation("Email is not present in database.");
                 }
             }
@@ -205,7 +206,7 @@ public class NetworkClient {
 
     public static void registerThroughSocialMedia(Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        requestParams.add("usergroup","3");
+        requestParams.add("usergroup", "3");
         client.post(context, getAuthAbsoluteURL("socialAuthentication"), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -232,6 +233,26 @@ public class NetworkClient {
                     Log.d("FMC", "Failure: Error:" + e.getMessage());
                     callback.failureOperation("Problem connecting to server");
                 }
+            }
+        });
+    }
+
+    public static void autoComplete(Context context, RequestParams requestParams, final Callback callback) {
+        client.get(context, "https://maps.googleapis.com/maps/api/place/autocomplete/json", requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String responseJson = new String(responseBody);
+                Log.d("FMC::", "Success: Response:" + responseJson);
+                Log.d("FMC::", "Success: Response Code:" + statusCode);
+                Suggestion suggestion = new Gson().fromJson(responseJson, Suggestion.class);
+                callback.successOperation(suggestion);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                String responseJson = new String(responseBody);
+                Log.d("FMC::", "Failure: Response:" + responseJson);
+                Log.d("FMC::", "Failure: Response Code:" + statusCode);
             }
         });
     }

@@ -146,19 +146,21 @@ public class ProfileFragment extends Fragment implements Callback {
         userInfo = response.getData();
         //default = 0; No_Email = 1; No_Phn = 2; No_Email_Phn = 3;
         int key = 0;
-        if(userInfo.getEmail() == null || userInfo.getEmail().equals(""))
+        if (userInfo.getEmail() == null || userInfo.getEmail().equals(""))
             key++;
-        if(userInfo.getPhonenumber() == null || userInfo.getPhonenumber().equals(""))
+        if (userInfo.getPhonenumber() == null || userInfo.getPhonenumber().equals(""))
             key += 2;
-        if(key > 0)
+        if (key > 0)
             showDialog(key);
         populateFields();
     }
 
     private void showDialog(int key) {
         final Dialog dialog = new Dialog(getActivity());
-        switch (key){
-            case 1: dialog.setTitle("Email is not present"); break;
+        switch (key) {
+            case 1:
+                dialog.setTitle("Email is not present");
+                break;
             case 2:
                 dialog.setTitle("Phone number is not present");
                 dialog.setContentView(R.layout.phone_number_dialog);
@@ -167,7 +169,7 @@ public class ProfileFragment extends Fragment implements Callback {
                     @Override
                     public void onClick(View v) {
                         final String phnNum = phoneEditText.getText().toString();
-                        if (phnNum.equals("")){
+                        if (phnNum.equals("")) {
                             phoneEditText.setError("Enter phone number");
                             new Handler().postDelayed(new Runnable() {
                                 @Override
@@ -175,10 +177,9 @@ public class ProfileFragment extends Fragment implements Callback {
                                     phoneEditText.setError(null);
                                 }
                             }, 3500);
-                        }
-                        else{
-                           dialog.dismiss();
-                            Toast.makeText(getActivity(),"Please verify phone number.",Toast.LENGTH_LONG).show();
+                        } else {
+                            dialog.dismiss();
+                            Toast.makeText(getActivity(), "Please verify phone number.", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -187,11 +188,13 @@ public class ProfileFragment extends Fragment implements Callback {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
-                        Toast.makeText(getActivity(),"Dialog will again appear in next visit.",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Dialog will again appear in next visit.", Toast.LENGTH_LONG).show();
                     }
                 });
                 break;
-            case 3: dialog.setTitle("Email and phone number is not present"); break;
+            case 3:
+                dialog.setTitle("Email and phone number is not present");
+                break;
         }
         dialog.show();
     }
@@ -213,6 +216,12 @@ public class ProfileFragment extends Fragment implements Callback {
             address = address + userInfo.getZip();
         }
         profileAddress.setText(address);
+        if (userInfo.getProfession() != null) {
+            profileProfession.setText(userInfo.getProfession());
+        }
+        if (userInfo.getAccomplishments() != null) {
+            profileAccomplishment.setText(userInfo.getAccomplishments());
+        }
         if (userInfo.getCharges() != null) {
             profileCharges.setText("\u20B9 " + userInfo.getCharges());
         }
@@ -225,40 +234,37 @@ public class ProfileFragment extends Fragment implements Callback {
         }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
             Picasso.with(getActivity())
-                    .load(userInfo.getPhotograph()).skipMemoryCache()
+                    .load(userInfo.getPhotograph())
                     .into(profileImage);
         }
         applySocialLinks();
     }
 
     private void applySocialLinks() {
-        if (userInfo.getGoogleLink() != null && !userInfo.getGoogleLink().equals("")) {
-            googleLink.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(userInfo.getGoogleLink()));
-                    try{
+        try {
+            if (userInfo.getGoogleLink() != null && !userInfo.getGoogleLink().equals("")) {
+                googleLink.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(userInfo.getGoogleLink()));
                         startActivity(intent);
-                    }catch (Exception e){
-                        Toast.makeText(getActivity(),"Please add valid Google+ account in Edit Profile",Toast.LENGTH_LONG).show();
                     }
-                }
-            });
-        }
-        if (userInfo.getFacebookLink() != null && !userInfo.getFacebookLink().equals("")) {
-            facebookLink.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(userInfo.getFacebookLink()));
-                    try{
+                });
+            }
+            if (userInfo.getFacebookLink() != null && !userInfo.getFacebookLink().equals("")) {
+                facebookLink.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(userInfo.getFacebookLink()));
                         startActivity(intent);
-                    }catch (Exception e){
-                        Toast.makeText(getActivity(),"Please add valid Facebook account in Edit Profile",Toast.LENGTH_LONG).show();
                     }
-                }
-            });
+                });
+            }
+        } catch (Exception e) {
+            Log.d("FMC:", "Error while redirecting:" + e.getMessage());
+            Toast.makeText(getActivity(), "Please update your profile", Toast.LENGTH_LONG).show();
         }
     }
 

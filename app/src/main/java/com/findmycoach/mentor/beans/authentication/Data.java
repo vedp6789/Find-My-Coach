@@ -53,6 +53,27 @@ public class Data {
     private String facebookLink;
     @Expose
     private String charges;
+    @Expose
+    private String accomplishments;
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
+    }
+
+    public String getAccomplishments() {
+        return accomplishments;
+    }
+
+    public void setAccomplishments(String accomplishments) {
+        this.accomplishments = accomplishments;
+    }
+
+    @Expose
+    private String profession;
 
     /**
      * @return The id
