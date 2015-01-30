@@ -37,6 +37,7 @@ import com.fmc.mentor.findmycoach.R;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.PicassoTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +82,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     private void populateUserData() {
         if (userInfo == null)
             return;
+        PicassoTools.clearCache(Picasso.with(this));
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
             Picasso.with(this)
                     .load((String) userInfo.getPhotograph()).skipMemoryCache()

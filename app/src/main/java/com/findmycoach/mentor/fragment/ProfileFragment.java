@@ -32,6 +32,7 @@ import com.fmc.mentor.findmycoach.R;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.PicassoTools;
 
 public class ProfileFragment extends Fragment implements Callback {
 
@@ -233,8 +234,9 @@ public class ProfileFragment extends Fragment implements Callback {
             profileTravelAvailable.setText("No");
         }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
+            PicassoTools.clearCache(Picasso.with(getActivity()));
             Picasso.with(getActivity())
-                    .load(userInfo.getPhotograph())
+                    .load(userInfo.getPhotograph()).skipMemoryCache()
                     .into(profileImage);
         }
         applySocialLinks();
