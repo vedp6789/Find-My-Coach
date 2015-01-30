@@ -77,7 +77,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     private void populateUserData() {
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
             Picasso.with(this)
-                    .load((String) userInfo.getPhotograph())
+                    .load((String) userInfo.getPhotograph()).skipMemoryCache()
                     .into(profilePicture);
         }
         if(userInfo == null)

@@ -4,8 +4,9 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +16,14 @@ import android.widget.Toast;
 
 import com.findmycoach.mentor.adapter.ChatWidgetAdapter;
 import com.fmc.mentor.findmycoach.R;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 /**
@@ -27,6 +35,21 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private ListView chatWidgetLv;
     private EditText msgToSend;
     private ChatWidgetAdapter chatWidgetAdapter;
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    private static final int REQUEST_LOGIN = 0;
+    private static final int TYPING_TIMER_LENGTH = 600;
+    private Handler mTypingHandler = new Handler();
+    private Socket mSocket;
+    {
+        try {
+//            mSocket = IO.socket("ws://10.1.1.129:3001");
+            mSocket = IO.socket("http://chat.socket.io");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    /////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +69,15 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         findViewById(R.id.sendButton).setOnClickListener(this);
         chatWidgetLv.setDivider(null);
         chatWidgetLv.setSelector(new ColorDrawable(0));
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+        mSocket.on("new message", onNewMessage);
+        mSocket.connect();
+        startConnecting();
+        /////////////////////////////////////////////////////////////////////////////////////
+
     }
 
     private void populateData() {
@@ -91,14 +123,85 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.sendButton){
-            if(chatWidgetAdapter != null && msgToSend.getText().toString().length() > 1) {
-                chatWidgetAdapter.updateMessageList(msgToSend.getText().toString());
-                msgToSend.setText("");
-                chatWidgetAdapter.notifyDataSetChanged();
-                chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount()-1);
-            }
-            else
-            Toast.makeText(this,"Type something to send.",Toast.LENGTH_SHORT).show();
+            attemptSend(msgToSend.getText().toString());
         }
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void onDestroy() {
+        mSocket.disconnect();
+        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+        mSocket.off("new message", onNewMessage);
+    }
+
+
+
+    //add msg to current list shown to user
+    private void addMessage(String username, String message) {
+        if(username.equals("Mentor-Name"))
+            chatWidgetAdapter.updateMessageList(message);
+        else
+            chatWidgetAdapter.updateMessageList(username + " : : " + message);
+        chatWidgetAdapter.notifyDataSetChanged();
+        chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount()-1);
+    }
+
+    //call to send msg
+    private void attemptSend(String message) {
+        if (!mSocket.connected()) return;
+        message = message.trim();
+        if (TextUtils.isEmpty(message)) {
+            msgToSend.requestFocus();
+            return;
+        }
+        msgToSend.setText("");
+        addMessage("Mentor-Name", message);
+        // perform the sending message attempt.
+        mSocket.emit("new message", message);
+    }
+
+    private void startConnecting() {
+        mSocket.connect();
+    }
+
+    //Disconnect socket
+    private void leave() {
+        mSocket.disconnect();
+    }
+
+
+    private Emitter.Listener onConnectError = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            ChatWidgetActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(ChatWidgetActivity.this.getApplicationContext(),"error_connect", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            ChatWidgetActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    String username;
+                    String message;
+                    try {
+                        username = data.getString("username");
+                        message = data.getString("message");
+                    } catch (JSONException e) {
+                        return;
+                    }
+                    addMessage(username, message);
+                }
+            });
+        }
+    };
 }

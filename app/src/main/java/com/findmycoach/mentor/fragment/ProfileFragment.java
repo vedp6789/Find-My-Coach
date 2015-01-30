@@ -225,7 +225,7 @@ public class ProfileFragment extends Fragment implements Callback {
         }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
             Picasso.with(getActivity())
-                    .load(userInfo.getPhotograph())
+                    .load(userInfo.getPhotograph()).skipMemoryCache()
                     .into(profileImage);
         }
         applySocialLinks();
@@ -238,7 +238,11 @@ public class ProfileFragment extends Fragment implements Callback {
                 public void onClick(View v) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(userInfo.getGoogleLink()));
-                    startActivity(intent);
+                    try{
+                        startActivity(intent);
+                    }catch (Exception e){
+                        Toast.makeText(getActivity(),"Please add valid Google+ account in Edit Profile",Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }
@@ -248,7 +252,11 @@ public class ProfileFragment extends Fragment implements Callback {
                 public void onClick(View v) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(userInfo.getFacebookLink()));
-                    startActivity(intent);
+                    try{
+                        startActivity(intent);
+                    }catch (Exception e){
+                        Toast.makeText(getActivity(),"Please add valid Facebook account in Edit Profile",Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }
