@@ -1,6 +1,8 @@
 package com.findmycoach.mentor.activity;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -9,6 +11,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.facebook.Session;
 import com.findmycoach.mentor.fragment.HomeFragment;
@@ -16,8 +21,6 @@ import com.findmycoach.mentor.fragment.MyConnectionsFragment;
 import com.findmycoach.mentor.fragment.MyScheduleFragment;
 import com.findmycoach.mentor.fragment.NavigationDrawerFragment;
 import com.findmycoach.mentor.fragment.NotificationsFragment;
-import com.findmycoach.mentor.fragment.ProfileFragment;
-import com.findmycoach.mentor.fragment.SettingsFragment;
 import com.findmycoach.mentor.util.StorageHelper;
 import com.fmc.mentor.findmycoach.R;
 
@@ -33,6 +36,53 @@ public class DashboardActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         initialize();
+        showTermsAndConditions();
+    }
+
+    private void showTermsAndConditions() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Terms and Conditions");
+        ScrollView scrollView = new ScrollView(this);
+        final TextView contentView = new TextView(this);
+        contentView.setText(getResources().getString(R.string.terms));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(8, 8, 8, 8);
+        scrollView.addView(contentView);
+        scrollView.setLayoutParams(params);
+        alertDialog.setView(scrollView);
+        alertDialog.setCancelable(false);
+        alertDialog.setPositiveButton("Accept",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        updateTermsAndConditionsStatus();
+                    }
+                }
+        );
+        alertDialog.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        logout();
+                    }
+                }
+        );
+        alertDialog.show();
+    }
+
+    private void logout() {
+        StorageHelper.clearUser(this);
+        LoginActivity.doLogout = true;
+        Session facebookSession = Session.getActiveSession();
+        if (facebookSession != null) {
+            facebookSession.close();
+        }
+        this.finish();
+    }
+
+    private void updateTermsAndConditionsStatus() {
+        //TODO: Needs to call update status method of terms and conditions.
     }
 
     private void initialize() {
@@ -75,7 +125,7 @@ public class DashboardActivity extends FragmentActivity
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         Intent startMain = new Intent(Intent.ACTION_MAIN);
         startMain.addCategory(Intent.CATEGORY_HOME);
         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -98,12 +148,8 @@ public class DashboardActivity extends FragmentActivity
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, Settings.class));
             return true;
-        }else if (id == R.id.log_out) {
-            StorageHelper.clearUser(this);
-            LoginActivity.doLogout = true;
-            this.finish();
-            fbClearToken();
-            startActivity(new Intent(this,LoginActivity.class));
+        } else if (id == R.id.log_out) {
+            logout();
             return true;
         }
         return super.onOptionsItemSelected(item);
