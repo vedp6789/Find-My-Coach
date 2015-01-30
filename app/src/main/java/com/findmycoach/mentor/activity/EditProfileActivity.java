@@ -60,6 +60,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     private EditText googlePlusLink;
     private CheckBox isReadyToTravel;
     private Button updateAction;
+    private Spinner chargesPerUnit;
     private ProgressDialog progressDialog;
     private Data userInfo;
     private String imageInBinary = "";
@@ -89,6 +90,8 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
         profileDOB.setText((String) userInfo.getDob());
         pinCode.setText((String) userInfo.getZip());
         chargeInput.setText(userInfo.getCharges());
+        ArrayAdapter<String> chargesAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,new String[]{"hour", "30 mins", "class"});
+        chargesPerUnit.setAdapter(chargesAdapter);
         experienceInput.setText(userInfo.getExperience());
         facebookLink.setText(userInfo.getFacebookLink());
         googlePlusLink.setText(userInfo.getGoogleLink());
@@ -125,6 +128,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
         experienceInput = (EditText) findViewById(R.id.input_experience);
         isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
         updateAction = (Button) findViewById(R.id.button_update);
+        chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please wait...");
         applyAction();
@@ -205,6 +209,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
             requestParams.add("country", countryInput.getSelectedItem().toString());
             requestParams.add("zip", pinCode.getText().toString());
             requestParams.add("charges", chargeInput.getText().toString());
+            requestParams.add("charges_unit",chargesPerUnit.getSelectedItemPosition()+"");
             requestParams.add("experience", experienceInput.getText().toString());
             requestParams.add("google_link", googlePlusLink.getText().toString());
             requestParams.add("facebook_link", facebookLink.getText().toString());
@@ -214,6 +219,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
                 requestParams.add("availability_yn", "1");
             else
                 requestParams.add("availability_yn", "0");
+            Log.d("FMC","charges_unit : "+chargesPerUnit.getSelectedItemPosition());
 
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));

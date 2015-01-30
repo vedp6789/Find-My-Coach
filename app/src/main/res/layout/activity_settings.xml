@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1">
+    android:layout_height="match_parent">
 
 
     <TextView
@@ -26,7 +25,7 @@
         android:gravity="center_vertical"
         android:padding="@dimen/textView_padding_margin"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
+        android:text="Setting option 2"
         android:layout_weight="0.06" />
 
     <TextView
@@ -40,8 +39,8 @@
         android:gravity="center_vertical"
         android:padding="@dimen/textView_padding_margin"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:layout_weight="0.06" />
+        android:text="Setting option 3"
+        android:layout_weight="0.06"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -54,8 +53,8 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/textView_padding_margin"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:layout_weight="0.06" />
+        android:text="Setting option 4"
+        android:layout_weight="0.06"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -68,21 +67,7 @@
         android:gravity="center_vertical"
         android:padding="@dimen/textView_padding_margin"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:layout_weight="0.06" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/black"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="@dimen/textView_padding_margin"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
+        android:text="Setting option 5"
         android:layout_weight="0.06" />
 
     <TextView
@@ -96,7 +81,21 @@
         android:gravity="center_vertical"
         android:padding="@dimen/textView_padding_margin"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
+        android:text="Setting option 6"
+        android:layout_weight="0.06"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/black"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="@dimen/textView_padding_margin"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Setting option 7"
         android:layout_weight="0.06" />
 
     <TextView

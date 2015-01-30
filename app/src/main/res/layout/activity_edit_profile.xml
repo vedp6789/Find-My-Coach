@@ -406,20 +406,38 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Changes:"
+                        android:text="Charges:"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <EditText
-                        android:id="@+id/input_charges"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/custom_edittext"
-                        android:hint="@string/prompt_charges"
-                        android:inputType="number"
-                        android:padding="4dp"
-                        android:singleLine="true" />
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/input_charges"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_toLeftOf="@+id/chargesPerUnit"
+                            android:layout_toStartOf="@+id/chargesPerUnit"
+                            android:layout_margin="4dp"
+                            android:background="@drawable/custom_edittext"
+                            android:hint="@string/prompt_charges"
+                            android:inputType="number"
+                            android:padding="4dp"
+                            android:singleLine="true" />
+
+                        <Spinner
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:id="@+id/chargesPerUnit"
+                            style="@android:style/Widget.Spinner.DropDown"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentRight="true" />
+                    </RelativeLayout>
                 </LinearLayout>
 
 

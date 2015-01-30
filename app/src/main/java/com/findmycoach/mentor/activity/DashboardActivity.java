@@ -98,21 +98,27 @@ public class DashboardActivity extends FragmentActivity
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, Settings.class));
             return true;
+        }else if (id == R.id.log_out) {
+            StorageHelper.clearUser(this);
+            LoginActivity.doLogout = true;
+            this.finish();
+            fbClearToken();
+            startActivity(new Intent(this,LoginActivity.class));
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
-//
-//    public void fbClearToken() {
-//        Session session = Session.getActiveSession();
-//        if (session != null) {
-//            if (!session.isClosed()) {
-//                session.closeAndClearTokenInformation();
-//            }
-//        } else {
-//            session = new Session(this);
-//            Session.setActiveSession(session);
-//            session.closeAndClearTokenInformation();
-//        }
-//
-//    }
+
+    public void fbClearToken() {
+        Session session = Session.getActiveSession();
+        if (session != null) {
+            if (!session.isClosed()) {
+                session.closeAndClearTokenInformation();
+            }
+        } else {
+            session = new Session(this);
+            Session.setActiveSession(session);
+            session.closeAndClearTokenInformation();
+        }
+    }
 }
