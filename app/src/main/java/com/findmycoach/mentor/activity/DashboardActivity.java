@@ -36,7 +36,9 @@ public class DashboardActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         initialize();
-        showTermsAndConditions();
+        if (StorageHelper.getUserDetails(this, "terms") == null) {
+            showTermsAndConditions();
+        }
     }
 
     private void showTermsAndConditions() {
@@ -83,6 +85,7 @@ public class DashboardActivity extends FragmentActivity
 
     private void updateTermsAndConditionsStatus() {
         //TODO: Needs to call update status method of terms and conditions.
+        StorageHelper.storePreference(this, "terms", "yes");
     }
 
     private void initialize() {

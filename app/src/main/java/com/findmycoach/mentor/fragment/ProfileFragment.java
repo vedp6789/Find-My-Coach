@@ -202,6 +202,7 @@ public class ProfileFragment extends Fragment implements Callback {
 
 
     private void populateFields() {
+        PicassoTools.clearCache(Picasso.with(getActivity()));
         profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
         String address = "";
         if (userInfo.getAddress() != null) {
@@ -234,7 +235,6 @@ public class ProfileFragment extends Fragment implements Callback {
             profileTravelAvailable.setText("No");
         }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-            PicassoTools.clearCache(Picasso.with(getActivity()));
             Picasso.with(getActivity())
                     .load(userInfo.getPhotograph()).skipMemoryCache()
                     .into(profileImage);

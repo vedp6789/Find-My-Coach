@@ -80,9 +80,10 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     }
 
     private void populateUserData() {
-        if (userInfo == null)
-            return;
         PicassoTools.clearCache(Picasso.with(this));
+        if (userInfo == null) {
+            return;
+        }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
             Picasso.with(this)
                     .load((String) userInfo.getPhotograph()).skipMemoryCache()

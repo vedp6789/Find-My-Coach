@@ -142,10 +142,10 @@ public class NetworkClient {
         client.get(context, getAbsoluteURL("profile"), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String responseJson = new String(responseBody);
-                Log.d("FMC", "Success: Response:" + responseJson);
-                Log.d("FMC", "Success: Response Code:" + statusCode);
                 try {
+                    String responseJson = new String(responseBody);
+                    Log.d("FMC", "Success: Response:" + responseJson);
+                    Log.d("FMC", "Success: Response Code:" + statusCode);
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.successOperation(response);
                 } catch (Exception e) {
@@ -156,15 +156,14 @@ public class NetworkClient {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                String responseJson = new String(responseBody);
-                Log.d("FMC", "Failure: Response:" + responseJson);
-                Log.d("FMC", "Failure: Response Code:" + statusCode);
                 try {
+                    String responseJson = new String(responseBody);
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage());
                 } catch (Exception e) {
                     callback.failureOperation("Problem connection to server");
                 }
+                Log.d("FMC", "Failure: Response Code:" + statusCode);
             }
         });
     }
@@ -176,10 +175,11 @@ public class NetworkClient {
         client.post(context, getAbsoluteURL("profile"), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String responseJson = new String(responseBody);
-                Log.d("FMC", "Success: Response:" + responseJson);
-                Log.d("FMC", "Success: Response Code:" + statusCode);
                 try {
+                    String responseJson = new String(responseBody);
+                    Log.d("FMC", "Success: Response:" + responseJson);
+                    Log.d("FMC", "Success: Response Code:" + statusCode);
+
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.successOperation(response);
                 } catch (Exception e) {
@@ -190,10 +190,10 @@ public class NetworkClient {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                String responseJson = new String(responseBody);
-                Log.d("FMC", "Failure: Response:" + responseJson);
-                Log.d("FMC", "Failure: Response Code:" + statusCode);
                 try {
+                    String responseJson = new String(responseBody);
+                    Log.d("FMC", "Failure: Response:" + responseJson);
+                    Log.d("FMC", "Failure: Response Code:" + statusCode);
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage());
                 } catch (Exception e) {
@@ -250,9 +250,6 @@ public class NetworkClient {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                String responseJson = new String(responseBody);
-                Log.d("FMC::", "Failure: Response:" + responseJson);
-                Log.d("FMC::", "Failure: Response Code:" + statusCode);
             }
         });
     }
