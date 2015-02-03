@@ -28,7 +28,7 @@ import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.NetworkManager;
 import com.findmycoach.mentor.util.StorageHelper;
-import com.fmc.student.findmycoach.R;
+import com.fmc.mentor.findmycoach.R;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
@@ -145,59 +145,8 @@ public class ProfileFragment extends Fragment implements Callback {
         progressDialog.hide();
         Response response = (Response) object;
         userInfo = response.getData();
-        //default = 0; No_Email = 1; No_Phn = 2; No_Email_Phn = 3;
-        int key = 0;
-        if (userInfo.getEmail() == null || userInfo.getEmail().equals(""))
-            key++;
-        if (userInfo.getPhonenumber() == null || userInfo.getPhonenumber().equals(""))
-            key += 2;
-        if (key > 0)
-            showDialog(key);
+
         populateFields();
-    }
-
-    private void showDialog(int key) {
-        final Dialog dialog = new Dialog(getActivity());
-        switch (key) {
-            case 1:
-                dialog.setTitle("Email is not present");
-                break;
-            case 2:
-                dialog.setTitle("Phone number is not present");
-                dialog.setContentView(R.layout.phone_number_dialog);
-                final EditText phoneEditText = (EditText) dialog.findViewById(R.id.phoneEditText);
-                dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final String phnNum = phoneEditText.getText().toString();
-                        if (phnNum.equals("")) {
-                            phoneEditText.setError("Enter phone number");
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    phoneEditText.setError(null);
-                                }
-                            }, 3500);
-                        } else {
-                            dialog.dismiss();
-                            Toast.makeText(getActivity(), "Please verify phone number.", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
-                dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                        Toast.makeText(getActivity(), "Dialog will again appear in next visit.", Toast.LENGTH_LONG).show();
-                    }
-                });
-                break;
-            case 3:
-                dialog.setTitle("Email and phone number is not present");
-                break;
-        }
-        dialog.show();
     }
 
 

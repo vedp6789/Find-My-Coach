@@ -8,98 +8,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:gravity="center_vertical"
         android:text="Profile"
         android:padding="@dimen/textView_padding_margin"
         android:id="@+id/profileSettings"
         android:layout_weight="0.06" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/black"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="@dimen/textView_padding_margin"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Setting option 2"
-        android:layout_weight="0.06" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/black"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="@dimen/textView_padding_margin"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Setting option 3"
-        android:layout_weight="0.06"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/black"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/textView_padding_margin"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Setting option 4"
-        android:layout_weight="0.06"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/black"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="@dimen/textView_padding_margin"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Setting option 5"
-        android:layout_weight="0.06" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/black"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="@dimen/textView_padding_margin"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Setting option 6"
-        android:layout_weight="0.06"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/black"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="@dimen/textView_padding_margin"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Setting option 7"
-        android:layout_weight="0.06" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@android:color/black"/>
 </LinearLayout>

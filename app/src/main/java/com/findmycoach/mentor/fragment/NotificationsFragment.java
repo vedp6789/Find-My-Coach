@@ -11,7 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.fmc.student.findmycoach.R;
+import com.fmc.mentor.findmycoach.R;
 
 import java.util.ArrayList;
 
@@ -60,7 +60,7 @@ public class NotificationsFragment extends Fragment {
         NotificationModel notfication4 = new NotificationModel("4", "Smite sent connection request", "Yesterday 1 P.M");
         NotificationModel notfication5 = new NotificationModel("5", "Reddy sent a file", "24-Jan 10 A.M");
         NotificationModel notfication6 = new NotificationModel("6", "Teja requested class", "20-Jan 1 P.M");
-        ArrayList<NotificationModel> notifications = new ArrayList<>();
+        ArrayList<NotificationModel> notifications = new ArrayList<NotificationModel>();
         notifications.add(notfication1);
         notifications.add(notfication2);
         notifications.add(notfication3);

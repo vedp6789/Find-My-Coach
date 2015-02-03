@@ -1,5 +1,6 @@
 package com.findmycoach.mentor.activity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -22,10 +23,12 @@ import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.NetworkManager;
 import com.findmycoach.mentor.util.StorageHelper;
-import com.fmc.student.findmycoach.R;
+import com.fmc.mentor.findmycoach.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
 import com.loopj.android.http.RequestParams;
 
@@ -86,7 +89,8 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
 
     @Override
     protected void onPlusClientSignOut() {
-
+        mPlusClient.clearDefaultAccount();
+        mPlusClient.disconnect();
     }
 
     private void authenticateUser(Person user) {
@@ -103,7 +107,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             requestParams.add("address", user.getCurrentLocation());
             requestParams.add("gender", user.getGender() + "");
             requestParams.add("photograph", user.getImage() + "");
-            NetworkClient.registerThroughSocialMedia(this, requestParams, this);
+            NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
         } else {
             Toast.makeText(this, "Please Check Network Connection", Toast.LENGTH_LONG).show();
         }
@@ -304,9 +308,66 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         }
         requestParams.add("gender", (String) user.getProperty("gender"));
         requestParams.add("photograph", "http://graph.facebook.com/" + user.getId() + "/picture?type=large");
-        NetworkClient.registerThroughSocialMedia(this, requestParams, this);
+        NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
     }
 
+    private void getPhoneNumber(final RequestParams requestParams) {
+        progressDialog.dismiss();
+        final Dialog dialog = new Dialog(this);
+        dialog.setTitle("Phone number is must!!!");
+        dialog.setContentView(R.layout.phone_number_dialog);
+        final EditText phoneEditText = (EditText) dialog.findViewById(R.id.phoneEditText);
+        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String phnNum = phoneEditText.getText().toString();
+                if (phnNum.equals("")){
+                    phoneEditText.setError("Enter phone number");
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            phoneEditText.setError(null);
+                        }
+                    }, 3500);
+                }
+                else{
+                    dialog.dismiss();
+                    requestParams.add("phonenumber",phnNum);
+                    NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
+                }
+            }
+        });
+
+        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fbClearToken();
+                if(mPlusClient.isConnected()){
+                    mPlusClient.clearDefaultAccount();
+                    mPlusClient.disconnect();
+                }
+                StorageHelper.clearUser(LoginActivity.this);
+                finish();
+                dialog.dismiss();
+                startActivity(new Intent(LoginActivity.this,LoginActivity.class));
+            }
+        });
+        dialog.show();
+
+    }
+
+    public void fbClearToken() {
+        Session session = Session.getActiveSession();
+        if (session != null) {
+            if (!session.isClosed()) {
+                session.closeAndClearTokenInformation();
+            }
+        } else {
+            session = new Session(this);
+            Session.setActiveSession(session);
+            session.closeAndClearTokenInformation();
+        }
+    }
 
     /**
      * Check if the device supports Google Play Services.  It's best
@@ -333,6 +394,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             }
         }
     }
+
 
 
     /**
@@ -367,8 +429,15 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         Response response = (Response) object;
         saveUser(response.getAuthToken(), response.getData().getId());
         progressDialog.dismiss();
-        Intent intent = new Intent(this, DashboardActivity.class);
-        startActivity(intent);
+        if(response.getData().getPhonenumber() == null) {
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("id", response.getData().getId());
+            getPhoneNumber(requestParams);
+        }
+        else {
+            Intent intent = new Intent(this, DashboardActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void saveUser(String authToken, String userId) {

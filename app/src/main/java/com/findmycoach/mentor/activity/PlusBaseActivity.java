@@ -143,9 +143,6 @@ public abstract class PlusBaseActivity extends Activity
         if (mPlusClient.isConnected()) {
             // Clear the default account as in the Sign Out.
             mPlusClient.clearDefaultAccount();
-            // Revoke access to this entire application. This will call back to
-            // onAccessRevoked when it is complete, as it needs to reach the Google
-            // authentication servers to revoke all tokens.
             mPlusClient.revokeAccessAndDisconnect(new PlusClient.OnAccessRevokedListener() {
                 public void onAccessRevoked(ConnectionResult result) {
                     updateConnectButtonState();

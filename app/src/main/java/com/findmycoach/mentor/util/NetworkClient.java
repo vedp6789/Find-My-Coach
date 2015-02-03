@@ -203,6 +203,39 @@ public class NetworkClient {
 
     }
 
+    public static void updatePhoneForSocialMedia(Context context, RequestParams requestParams, final Callback callback) {
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        requestParams.add("usergroup", "3");
+        client.post(context, getAuthAbsoluteURL("setPhoneNumber"), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String responseJson = new String(responseBody);
+                Log.d("FMC", "Success: Response:" + responseJson);
+                Log.d("FMC", "Success: Response Code:" + statusCode);
+                Response response = new Gson().fromJson(responseJson, Response.class);
+                if (statusCode == 200) {
+                    callback.successOperation(response);
+                } else {
+                    callback.failureOperation(response.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    String responseJson = new String(responseBody);
+                    Log.d("FMC", "Failure: Response:" + responseJson);
+                    Log.d("FMC", "Failure: Response Code:" + statusCode);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage());
+                } catch (Exception e) {
+                    Log.d("FMC", "Failure: Error:" + e.getMessage());
+                    callback.failureOperation("Problem connecting to server");
+                }
+            }
+        });
+    }
+
     public static void registerThroughSocialMedia(Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         requestParams.add("usergroup", "3");

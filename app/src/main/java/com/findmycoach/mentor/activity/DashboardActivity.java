@@ -22,7 +22,7 @@ import com.findmycoach.mentor.fragment.MyScheduleFragment;
 import com.findmycoach.mentor.fragment.NavigationDrawerFragment;
 import com.findmycoach.mentor.fragment.NotificationsFragment;
 import com.findmycoach.mentor.util.StorageHelper;
-import com.fmc.student.findmycoach.R;
+import com.fmc.mentor.findmycoach.R;
 
 public class DashboardActivity extends FragmentActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
