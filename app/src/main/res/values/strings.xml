@@ -9,7 +9,7 @@
     <string name="title_edit_profile_menu">Edit Profile</string>
 
     <!-- Facebook Credentials -->
-    <!-- <string name="facebook_app_id">835344249849377</string> -->
+    <!--<string name="facebook_app_id">835344249849377</string>-->
     <string name="facebook_app_id">1428925007356558</string>
     <!-- Facebook -->
 

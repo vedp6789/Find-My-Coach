@@ -206,14 +206,14 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         boolean isFormValid = validateLoginForm(userId, userPassword);
         if (isFormValid) {
             Log.d("FMC1:", "email:" + userId + "\n Password:" + userPassword);
-           if(NetworkManager.isNetworkConnected(this)){
-               progressDialog.show();
-               RequestParams requestParams = new RequestParams();
-               requestParams.add("email", userId);
-               requestParams.add("password", userPassword);
-               NetworkClient.login(this, requestParams, this);
-           }else
-               Toast.makeText(this,"Check internet connection",Toast.LENGTH_LONG).show();
+            if (NetworkManager.isNetworkConnected(this)) {
+                progressDialog.show();
+                RequestParams requestParams = new RequestParams();
+                requestParams.add("email", userId);
+                requestParams.add("password", userPassword);
+                NetworkClient.login(this, requestParams, this);
+            } else
+                Toast.makeText(this, "Check internet connection", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -299,9 +299,9 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         requestParams.add("dob", user.getBirthday());
         requestParams.add("facebook_link", user.getLink());
         requestParams.add("email", (String) user.getProperty("email"));
-        try{
+        try {
             requestParams.add("address", user.getLocation().getName());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         requestParams.add("gender", (String) user.getProperty("gender"));
@@ -313,13 +313,14 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         progressDialog.dismiss();
         final Dialog dialog = new Dialog(this);
         dialog.setTitle("Phone number is must!!!");
+        dialog.setCancelable(false);
         dialog.setContentView(R.layout.phone_number_dialog);
         final EditText phoneEditText = (EditText) dialog.findViewById(R.id.phoneEditText);
         dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String phnNum = phoneEditText.getText().toString();
-                if (phnNum.equals("")){
+                if (phnNum.equals("")) {
                     phoneEditText.setError("Enter phone number");
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -327,10 +328,9 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                             phoneEditText.setError(null);
                         }
                     }, 3500);
-                }
-                else{
+                } else {
                     dialog.dismiss();
-                    requestParams.add("phonenumber",phnNum);
+                    requestParams.add("phonenumber", phnNum);
                     NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
                 }
             }
@@ -340,14 +340,14 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 fbClearToken();
-                if(mPlusClient.isConnected()){
+                if (mPlusClient.isConnected()) {
                     mPlusClient.clearDefaultAccount();
                     mPlusClient.disconnect();
                 }
                 StorageHelper.clearUser(LoginActivity.this);
                 finish();
                 dialog.dismiss();
-                startActivity(new Intent(LoginActivity.this,LoginActivity.class));
+                startActivity(new Intent(LoginActivity.this, LoginActivity.class));
             }
         });
         dialog.show();
@@ -394,7 +394,6 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     }
 
 
-
     /**
      * Successfully connected (called by PlusClient)
      */
@@ -425,16 +424,16 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     @Override
     public void successOperation(Object object) {
         Response response = (Response) object;
-        if(response.getAuthToken() != null && response.getData().getId() != null)
+        if (response.getAuthToken() != null && response.getData().getId() != null)
             saveUser(response.getAuthToken(), response.getData().getId());
         progressDialog.dismiss();
-        if(response.getData().getPhonenumber() == null) {
+        if (response.getData().getPhonenumber() == null) {
             RequestParams requestParams = new RequestParams();
             requestParams.add("id", response.getData().getId());
             getPhoneNumber(requestParams);
-        }
-        else {
+        } else {
             Intent intent = new Intent(this, DashboardActivity.class);
+            finish();
             startActivity(intent);
         }
     }
@@ -450,13 +449,13 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         progressDialog.dismiss();
         Toast.makeText(this, (String) message, Toast.LENGTH_LONG).show();
         fbClearToken();
-        if(mPlusClient.isConnected()){
+        if (mPlusClient.isConnected()) {
             mPlusClient.clearDefaultAccount();
             mPlusClient.disconnect();
         }
         StorageHelper.clearUser(LoginActivity.this);
         finish();
-        startActivity(new Intent(LoginActivity.this,LoginActivity.class));
+        startActivity(new Intent(LoginActivity.this, LoginActivity.class));
     }
 }
 
