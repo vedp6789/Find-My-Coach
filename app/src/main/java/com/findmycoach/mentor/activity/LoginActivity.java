@@ -320,8 +320,8 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 final String phnNum = phoneEditText.getText().toString();
-                if (phnNum.equals("")) {
-                    phoneEditText.setError("Enter phone number");
+                if (phnNum.equals("") || phnNum.length()<10){
+                    phoneEditText.setError("Enter valid phone number");
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {

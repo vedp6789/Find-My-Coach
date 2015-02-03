@@ -89,13 +89,17 @@ public class ChooseImageActivity extends Activity {
     }
 
     private void passImage() {
-        croppedImage = cropImageView.getCroppedCircleImage();
-        croppedImage = Bitmap.createScaledBitmap(croppedImage, 72, 72, false);
-        Intent intent = new Intent();
-        intent.putExtra("image", croppedImage);
-        setResult(RESULT_OK, intent);
-        finish();
-        onBackPressed();
+        try {
+            croppedImage = cropImageView.getCroppedCircleImage();
+            croppedImage = Bitmap.createScaledBitmap(croppedImage, 200, 200, false);
+            Intent intent = new Intent();
+            intent.putExtra("image", croppedImage);
+            setResult(RESULT_OK, intent);
+            finish();
+            onBackPressed();
+        } catch (Exception exception) {
+            Toast.makeText(this, "Image is too big, Please choose smaller one", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

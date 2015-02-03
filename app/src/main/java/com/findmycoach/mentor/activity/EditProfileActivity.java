@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -178,6 +179,17 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
         updateAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(profileAddress1.getText().toString().trim().equals("")){
+                    Toast.makeText(EditProfileActivity.this,"Choose a suggested city",Toast.LENGTH_LONG).show();
+                    profileAddress1.setError("Choose a suggested city");
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            profileAddress1.setError(null);
+                        }
+                    }, 3500);
+                    return;
+                }
                 callUpdateService();
             }
         });

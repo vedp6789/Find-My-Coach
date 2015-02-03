@@ -407,7 +407,7 @@
     <!-- Strings related to login -->
 
     <!-- String s related to Prompting -->
-    <string name="prompt_email">User Name</string>
+    <string name="prompt_email">User Id</string>
     <string name="prompt_email_id">Email Id</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_confirm_password">Confirm Password</string>
