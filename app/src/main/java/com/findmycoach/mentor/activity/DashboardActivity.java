@@ -76,10 +76,7 @@ public class DashboardActivity extends FragmentActivity
     private void logout() {
         StorageHelper.clearUser(this);
         LoginActivity.doLogout = true;
-        Session facebookSession = Session.getActiveSession();
-        if (facebookSession != null) {
-            facebookSession.close();
-        }
+        fbClearToken();
         this.finish();
     }
 
