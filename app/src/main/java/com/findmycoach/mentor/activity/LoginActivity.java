@@ -27,8 +27,6 @@ import com.fmc.mentor.findmycoach.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
 import com.loopj.android.http.RequestParams;
 
@@ -106,7 +104,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             requestParams.add("google_link", user.getUrl());
             requestParams.add("address", user.getCurrentLocation());
             requestParams.add("gender", user.getGender() + "");
-            requestParams.add("photograph", user.getImage() + "");
+            requestParams.add("photograph", (user.getImage().getUrl()));
             NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
         } else {
             Toast.makeText(this, "Please Check Network Connection", Toast.LENGTH_LONG).show();
@@ -410,7 +408,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     public void getProfileInformation() {
         Person currentPerson = mPlusClient.getCurrentPerson();
         String accountName = mPlusClient.getAccountName();
-        Toast.makeText(this, accountName + " is connected.", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, accountName + " is connected.", Toast.LENGTH_LONG).show();
         authenticateUser(currentPerson);
     }
 
@@ -427,7 +425,8 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     @Override
     public void successOperation(Object object) {
         Response response = (Response) object;
-        saveUser(response.getAuthToken(), response.getData().getId());
+        if(response.getAuthToken() != null && response.getData().getId() != null)
+            saveUser(response.getAuthToken(), response.getData().getId());
         progressDialog.dismiss();
         if(response.getData().getPhonenumber() == null) {
             RequestParams requestParams = new RequestParams();
@@ -450,6 +449,14 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     public void failureOperation(Object message) {
         progressDialog.dismiss();
         Toast.makeText(this, (String) message, Toast.LENGTH_LONG).show();
+        fbClearToken();
+        if(mPlusClient.isConnected()){
+            mPlusClient.clearDefaultAccount();
+            mPlusClient.disconnect();
+        }
+        StorageHelper.clearUser(LoginActivity.this);
+        finish();
+        startActivity(new Intent(LoginActivity.this,LoginActivity.class));
     }
 }
 

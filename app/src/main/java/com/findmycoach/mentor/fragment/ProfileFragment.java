@@ -80,6 +80,7 @@ public class ProfileFragment extends Fragment implements Callback {
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
         RequestParams requestParams = new RequestParams();
         Log.d("FMC:", "Stored User Id:" + StorageHelper.getUserDetails(getActivity(), "user_id"));
+        Log.d("FMC:", "auth_token" + authToken);
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         NetworkClient.getProfile(getActivity(), requestParams, authToken, this);
     }

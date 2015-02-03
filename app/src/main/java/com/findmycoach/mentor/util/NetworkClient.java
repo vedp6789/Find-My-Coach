@@ -246,7 +246,7 @@ public class NetworkClient {
                 Log.d("FMC", "Success: Response:" + responseJson);
                 Log.d("FMC", "Success: Response Code:" + statusCode);
                 Response response = new Gson().fromJson(responseJson, Response.class);
-                if (statusCode == 200) {
+                if (statusCode == 200 || statusCode == 206) {
                     callback.successOperation(response);
                 } else {
                     callback.failureOperation(response.getMessage());

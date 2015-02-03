@@ -37,18 +37,18 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private ChatWidgetAdapter chatWidgetAdapter;
 
     /////////////////////////////////////////////////////////////////////////////////////
-    private static final int REQUEST_LOGIN = 0;
-    private static final int TYPING_TIMER_LENGTH = 600;
-    private Handler mTypingHandler = new Handler();
-    private Socket mSocket;
-    {
-        try {
-//            mSocket = IO.socket("ws://10.1.1.129:3001");
-            mSocket = IO.socket("http://chat.socket.io");
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    private static final int REQUEST_LOGIN = 0;
+//    private static final int TYPING_TIMER_LENGTH = 600;
+//    private Handler mTypingHandler = new Handler();
+//    private Socket mSocket;
+//    {
+//        try {
+////            mSocket = IO.socket("ws://10.1.1.129:3001");
+//            mSocket = IO.socket("http://chat.socket.io");
+//        } catch (URISyntaxException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
     /////////////////////////////////////////////////////////////////////////////////////
 
     @Override
@@ -71,11 +71,11 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         chatWidgetLv.setSelector(new ColorDrawable(0));
 
         /////////////////////////////////////////////////////////////////////////////////////
-        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-        mSocket.on("new message", onNewMessage);
-        mSocket.connect();
-        startConnecting();
+//        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+//        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+//        mSocket.on("new message", onNewMessage);
+//        mSocket.connect();
+//        startConnecting();
         /////////////////////////////////////////////////////////////////////////////////////
 
     }
@@ -123,85 +123,98 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.sendButton){
-            attemptSend(msgToSend.getText().toString());
+//            attemptSend(msgToSend.getText().toString());
+        sendMsg();
         }
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public void onDestroy() {
-        mSocket.disconnect();
-        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
-        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-        mSocket.off("new message", onNewMessage);
-    }
-
-
-
-    //add msg to current list shown to user
-    private void addMessage(String username, String message) {
-        if(username.equals("Mentor-Name"))
-            chatWidgetAdapter.updateMessageList(message);
-        else
-            chatWidgetAdapter.updateMessageList(username + " : : " + message);
-        chatWidgetAdapter.notifyDataSetChanged();
-        chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount()-1);
-    }
-
-    //call to send msg
-    private void attemptSend(String message) {
-        if (!mSocket.connected()) return;
-        message = message.trim();
-        if (TextUtils.isEmpty(message)) {
+    private void sendMsg() {
+        String msg =msgToSend.getText().toString().trim();
+        if (TextUtils.isEmpty(msg)) {
             msgToSend.requestFocus();
             return;
         }
         msgToSend.setText("");
-        addMessage("Mentor-Name", message);
-        // perform the sending message attempt.
-        mSocket.emit("new message", message);
+        chatWidgetAdapter.updateMessageList(msg);
+        chatWidgetAdapter.notifyDataSetChanged();
+        chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount()-1);
     }
 
-    private void startConnecting() {
-        mSocket.connect();
-    }
+    //////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //Disconnect socket
-    private void leave() {
-        mSocket.disconnect();
-    }
-
-
-    private Emitter.Listener onConnectError = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            ChatWidgetActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(ChatWidgetActivity.this.getApplicationContext(),"error_connect", Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-    };
-
-    private Emitter.Listener onNewMessage = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            ChatWidgetActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    String username;
-                    String message;
-                    try {
-                        username = data.getString("username");
-                        message = data.getString("message");
-                    } catch (JSONException e) {
-                        return;
-                    }
-                    addMessage(username, message);
-                }
-            });
-        }
-    };
+//    public void onDestroy() {
+//        mSocket.disconnect();
+//        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
+//        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+//        mSocket.off("new message", onNewMessage);
+//    }
+//
+//
+//
+//    //add msg to current list shown to user
+//    private void addMessage(String username, String message) {
+//        if(username.equals("Mentor-Name"))
+//            chatWidgetAdapter.updateMessageList(message);
+//        else
+//            chatWidgetAdapter.updateMessageList(username + " : : " + message);
+//        chatWidgetAdapter.notifyDataSetChanged();
+//        chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount()-1);
+//    }
+//
+//    //call to send msg
+//    private void attemptSend(String message) {
+//        if (!mSocket.connected()) return;
+//        message = message.trim();
+//        if (TextUtils.isEmpty(message)) {
+//            msgToSend.requestFocus();
+//            return;
+//        }
+//        msgToSend.setText("");
+//        addMessage("Mentor-Name", message);
+//        // perform the sending message attempt.
+//        mSocket.emit("new message", message);
+//    }
+//
+//    private void startConnecting() {
+//        mSocket.connect();
+//    }
+//
+//    //Disconnect socket
+//    private void leave() {
+//        mSocket.disconnect();
+//    }
+//
+//
+//    private Emitter.Listener onConnectError = new Emitter.Listener() {
+//        @Override
+//        public void call(Object... args) {
+//            ChatWidgetActivity.this.runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Toast.makeText(ChatWidgetActivity.this.getApplicationContext(),"error_connect", Toast.LENGTH_LONG).show();
+//                }
+//            });
+//        }
+//    };
+//
+//    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+//        @Override
+//        public void call(final Object... args) {
+//            ChatWidgetActivity.this.runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    JSONObject data = (JSONObject) args[0];
+//                    String username;
+//                    String message;
+//                    try {
+//                        username = data.getString("username");
+//                        message = data.getString("message");
+//                    } catch (JSONException e) {
+//                        return;
+//                    }
+//                    addMessage(username, message);
+//                }
+//            });
+//        }
+//    };
 }
