@@ -2,11 +2,13 @@ package com.findmycoach.mentor.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,15 +18,17 @@ import android.widget.Toast;
 
 import com.findmycoach.mentor.adapter.ChatWidgetAdapter;
 import com.fmc.mentor.findmycoach.R;
-import com.github.nkzawa.emitter.Emitter;
-import com.github.nkzawa.socketio.client.IO;
-import com.github.nkzawa.socketio.client.Socket;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URISyntaxException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
+
+import io.socket.IOAcknowledge;
+import io.socket.IOCallback;
+import io.socket.SocketIO;
+import io.socket.SocketIOException;
 
 /**
  * Created by IgluLabs on 1/23/2015.
@@ -35,21 +39,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private ListView chatWidgetLv;
     private EditText msgToSend;
     private ChatWidgetAdapter chatWidgetAdapter;
+    private SocketIO socket;
 
-    /////////////////////////////////////////////////////////////////////////////////////
-//    private static final int REQUEST_LOGIN = 0;
-//    private static final int TYPING_TIMER_LENGTH = 600;
-//    private Handler mTypingHandler = new Handler();
-//    private Socket mSocket;
-//    {
-//        try {
-////            mSocket = IO.socket("ws://10.1.1.129:3001");
-//            mSocket = IO.socket("http://chat.socket.io");
-//        } catch (URISyntaxException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-    /////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,34 +48,25 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         setContentView(R.layout.activity_chat_widget);
         initialize();
         applyActionbarProperties();
-        populateData();
+        new SocketTask().execute("http://10.1.1.129:3700");
     }
 
     private void initialize() {
         Intent getUserIntent = getIntent();
-        if(getUserIntent != null)
+        if (getUserIntent != null)
             mentorName = getUserIntent.getStringExtra("mentor_name");
         chatWidgetLv = (ListView) findViewById(R.id.chatWidgetLv);
         msgToSend = (EditText) findViewById(R.id.msgToSendET);
         findViewById(R.id.sendButton).setOnClickListener(this);
         chatWidgetLv.setDivider(null);
         chatWidgetLv.setSelector(new ColorDrawable(0));
-
-        /////////////////////////////////////////////////////////////////////////////////////
-//        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-//        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-//        mSocket.on("new message", onNewMessage);
-//        mSocket.connect();
-//        startConnecting();
-        /////////////////////////////////////////////////////////////////////////////////////
-
     }
 
     private void populateData() {
         //Dummy chatting
         ArrayList<String> dummyList = new ArrayList<String>();
-        for(int i=0; i<5; i++){
-            dummyList.add(i,"This is the dummy contain of message " + i);
+        for (int i = 0; i < 5; i++) {
+            dummyList.add(i, "This is the dummy contain of message " + i);
         }
         chatWidgetAdapter = new ChatWidgetAdapter(this, dummyList);
         chatWidgetLv.setAdapter(chatWidgetAdapter);
@@ -93,7 +75,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private void applyActionbarProperties() {
         ActionBar actionbar = getActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
-        if(mentorName != null)
+        if (mentorName != null)
             actionbar.setTitle(mentorName);
     }
 
@@ -106,15 +88,19 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case android.R.id.home:
                 finish();
+//                if(socket != null){
+//                    Log.d("FMC","Socket-isConnected : " + socket.isConnected());
+//                }else
+//                    Log.d("FMC","Socket-Null");
                 break;
             case R.id.attach_image:
-                Toast.makeText(this,"Attach Image is clicked",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Attach Image is clicked", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.attach_video:
-                Toast.makeText(this,"Attach Video is clicked",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Attach Video is clicked", Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -122,14 +108,13 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.sendButton){
-//            attemptSend(msgToSend.getText().toString());
-        sendMsg();
+        if (v.getId() == R.id.sendButton) {
+            sendMsg();
         }
     }
 
     private void sendMsg() {
-        String msg =msgToSend.getText().toString().trim();
+        String msg = msgToSend.getText().toString().trim();
         if (TextUtils.isEmpty(msg)) {
             msgToSend.requestFocus();
             return;
@@ -137,84 +122,81 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         msgToSend.setText("");
         chatWidgetAdapter.updateMessageList(msg);
         chatWidgetAdapter.notifyDataSetChanged();
-        chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount()-1);
+        chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////
+    private class SocketTask extends AsyncTask<String, String, String> {
 
-//    public void onDestroy() {
-//        mSocket.disconnect();
-//        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
-//        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-//        mSocket.off("new message", onNewMessage);
-//    }
-//
-//
-//
-//    //add msg to current list shown to user
-//    private void addMessage(String username, String message) {
-//        if(username.equals("Mentor-Name"))
-//            chatWidgetAdapter.updateMessageList(message);
-//        else
-//            chatWidgetAdapter.updateMessageList(username + " : : " + message);
-//        chatWidgetAdapter.notifyDataSetChanged();
-//        chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount()-1);
-//    }
-//
-//    //call to send msg
-//    private void attemptSend(String message) {
-//        if (!mSocket.connected()) return;
-//        message = message.trim();
-//        if (TextUtils.isEmpty(message)) {
-//            msgToSend.requestFocus();
-//            return;
-//        }
-//        msgToSend.setText("");
-//        addMessage("Mentor-Name", message);
-//        // perform the sending message attempt.
-//        mSocket.emit("new message", message);
-//    }
-//
-//    private void startConnecting() {
-//        mSocket.connect();
-//    }
-//
-//    //Disconnect socket
-//    private void leave() {
-//        mSocket.disconnect();
-//    }
-//
-//
-//    private Emitter.Listener onConnectError = new Emitter.Listener() {
-//        @Override
-//        public void call(Object... args) {
-//            ChatWidgetActivity.this.runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    Toast.makeText(ChatWidgetActivity.this.getApplicationContext(),"error_connect", Toast.LENGTH_LONG).show();
-//                }
-//            });
-//        }
-//    };
-//
-//    private Emitter.Listener onNewMessage = new Emitter.Listener() {
-//        @Override
-//        public void call(final Object... args) {
-//            ChatWidgetActivity.this.runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    JSONObject data = (JSONObject) args[0];
-//                    String username;
-//                    String message;
-//                    try {
-//                        username = data.getString("username");
-//                        message = data.getString("message");
-//                    } catch (JSONException e) {
-//                        return;
-//                    }
-//                    addMessage(username, message);
-//                }
-//            });
-//        }
-//    };
+        ProgressDialog progressDialog;
+            @Override
+            protected void onProgressUpdate(String... progress) {
+                Log.d("FMC", progress[0]);
+                progressDialog = new ProgressDialog(ChatWidgetActivity.this);
+                progressDialog.setMessage("Connecting...");
+                progressDialog.show();
+            }
+
+        @Override
+        protected String doInBackground(String... params) {
+            publishProgress("Trying to connect to " + params[0] + '\n');
+            try {
+                if(socket == null)
+                    socket = new SocketIO(params[0].trim());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+                if(!socket.isConnected()){
+
+                    socket.connect(new IOCallback() {
+                        @Override
+                        public void onMessage(JSONObject json, IOAcknowledge ack) {
+                            try {
+                                Log.d("FMC","Socket-Connected : Server said:" + json.toString(2));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onMessage(String data, IOAcknowledge ack) {
+                            Log.d("FMC","Socket-Message-Received : " + data);
+                        }
+
+                        @Override
+                        public void onError(SocketIOException socketIOException) {
+                            Log.d("FMC","Socket-Error");
+                            socketIOException.printStackTrace();
+                        }
+
+                        @Override
+                        public void onDisconnect() {
+                            Log.d("FMC","Socket-Disconnected");
+                        }
+
+                        @Override
+                        public void onConnect() {
+                            Log.d("FMC","Socket-Connected");
+                            populateData();
+                        }
+
+                        @Override
+                        public void on(String event, IOAcknowledge ack, Object... args) {
+                            System.out.println("Server triggered event '" + event + "'");
+                        }
+                    });
+                }
+            return null;
+        }
+
+        @Override
+            protected void onPostExecute(String result) {
+                try{
+                    Log.d("FMC", result);
+                }catch (NullPointerException e){
+                    Log.d("FMC", "result is null");
+                }
+            }
+
+    }
+
 }
