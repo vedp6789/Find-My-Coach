@@ -150,6 +150,7 @@ public class DashboardActivity extends FragmentActivity
             return true;
         } else if (id == R.id.log_out) {
             logout();
+            startActivity(new Intent(this, LoginActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
