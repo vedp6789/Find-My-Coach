@@ -18,9 +18,9 @@ import android.widget.TextView;
 import com.facebook.Session;
 import com.findmycoach.mentor.fragment.HomeFragment;
 import com.findmycoach.mentor.fragment.MyConnectionsFragment;
-import com.findmycoach.mentor.fragment.MyScheduleFragment;
 import com.findmycoach.mentor.fragment.NavigationDrawerFragment;
 import com.findmycoach.mentor.fragment.NotificationsFragment;
+import com.findmycoach.mentor.fragment.Schedule;
 import com.findmycoach.mentor.util.StorageHelper;
 import com.fmc.mentor.findmycoach.R;
 
@@ -107,7 +107,7 @@ public class DashboardActivity extends FragmentActivity
         if (position == 2)
             fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
         if (position == 3)
-            fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
+            fragmentTransaction.replace(R.id.container, new Schedule(this).initCalendar());
 
         fragmentTransaction.commit();
         onSectionAttached(position);

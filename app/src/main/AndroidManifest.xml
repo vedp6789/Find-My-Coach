@@ -84,6 +84,10 @@
             android:name="com.findmycoach.mentor.activity.Settings"
             android:label="@string/action_settings"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.findmycoach.mentor.activity.SetScheduleActivity"
+            android:label="@string/set_schedule"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
