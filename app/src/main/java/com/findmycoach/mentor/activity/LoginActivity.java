@@ -429,7 +429,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         progressDialog.dismiss();
         if (response.getData().getPhonenumber() == null) {
             RequestParams requestParams = new RequestParams();
-            requestParams.add("id", response.getData().getId());
+            requestParams.add("email", response.getData().getEmail());
             getPhoneNumber(requestParams);
         } else {
             Intent intent = new Intent(this, DashboardActivity.class);

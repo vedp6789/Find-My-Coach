@@ -8,6 +8,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_signup">SignupActivity</string>
     <string name="title_edit_profile_menu">Edit Profile</string>
+    <string name="title_validate_phone">Verify phone number</string>
+    <string name="hint_enter_code">Enter 6 character code here.</string>
 
     <!-- Facebook Credentials -->
     <!--<string name="facebook_app_id">835344249849377</string>-->

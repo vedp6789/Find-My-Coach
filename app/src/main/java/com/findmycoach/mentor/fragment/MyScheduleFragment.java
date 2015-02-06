@@ -11,7 +11,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.findmycoach.mentor.adapter.GridCellAdapter;
+import com.findmycoach.mentor.adapter.CalendarGridAdapter;
 import com.fmc.mentor.findmycoach.R;
 
 import java.util.Calendar;
@@ -24,7 +24,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     private ImageView prevMonth;
     private ImageView nextMonth;
     private GridView calendarView;
-    private GridCellAdapter adapter;
+    private CalendarGridAdapter adapter;
     private Calendar _calendar;
     private int month, year;
     private static final String dateTemplate = "MMMM yyyy";
@@ -76,7 +76,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         calendarView = (GridView) view.findViewById(R.id.calendar);
 
         // Initialised
-        adapter = new GridCellAdapter(getActivity().getApplicationContext(), month, year);
+        adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year);
         adapter.notifyDataSetChanged();
         calendarView.setAdapter(adapter);
     }
@@ -120,7 +120,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     }
 
     private void setGridCellAdapterToDate(int month, int year) {
-        adapter = new GridCellAdapter(getActivity().getApplicationContext(), month, year);
+        adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year);
         _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
         currentMonth.setText(DateFormat.format(dateTemplate,
                 _calendar.getTime()));

@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by prem on 6/2/15.
  */
-public class GridCellAdapter extends BaseAdapter implements View.OnClickListener {
+public class CalendarGridAdapter extends BaseAdapter implements View.OnClickListener {
 
     private final Context context;
 
@@ -39,7 +39,7 @@ public class GridCellAdapter extends BaseAdapter implements View.OnClickListener
     private final HashMap<String, Integer> eventsPerMonthMap;
 
     // Days in Current Month
-    public GridCellAdapter(Context context, int month, int year) {
+    public CalendarGridAdapter(Context context, int month, int year) {
         super();
         this.context = context;
         this.list = new ArrayList<String>();
@@ -131,14 +131,11 @@ public class GridCellAdapter extends BaseAdapter implements View.OnClickListener
 
         // Current Month Days
         for (int i = 1; i <= daysInMonth; i++) {
-            Log.d(currentMonthName, String.valueOf(i) + " "
-                    + getMonthAsString(currentMonth) + " " + yy);
+            Log.d(currentMonthName, String.valueOf(i) + " " + getMonthAsString(currentMonth) + " " + yy);
             if (i == getCurrentDayOfMonth()) {
-                list.add(String.valueOf(i) + "-BLUE" + "-"
-                        + getMonthAsString(currentMonth) + "-" + yy);
+                list.add(String.valueOf(i) + "-BLUE" + "-" + getMonthAsString(currentMonth) + "-" + yy);
             } else {
-                list.add(String.valueOf(i) + "-WHITE" + "-"
-                        + getMonthAsString(currentMonth) + "-" + yy);
+                list.add(String.valueOf(i) + "-WHITE" + "-" + getMonthAsString(currentMonth) + "-" + yy);
             }
         }
 
@@ -150,10 +147,8 @@ public class GridCellAdapter extends BaseAdapter implements View.OnClickListener
     }
 
 
-    private HashMap<String, Integer> findNumberOfEventsPerMonth(int year,
-                                                                int month) {
+    private HashMap<String, Integer> findNumberOfEventsPerMonth(int year, int month) {
         HashMap<String, Integer> map = new HashMap<String, Integer>();
-
         return map;
     }
 

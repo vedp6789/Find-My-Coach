@@ -88,6 +88,10 @@
             android:name="com.findmycoach.mentor.activity.SetScheduleActivity"
             android:label="@string/set_schedule"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.findmycoach.mentor.activity.ValidatePhoneActivity"
+            android:label="@string/title_validate_phone"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
