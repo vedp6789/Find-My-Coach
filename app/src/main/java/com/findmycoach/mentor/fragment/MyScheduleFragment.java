@@ -1,25 +1,33 @@
 package com.findmycoach.mentor.fragment;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.findmycoach.mentor.adapter.GridCellAdapter;
 import com.fmc.mentor.findmycoach.R;
 
+import java.util.Calendar;
+import java.util.Locale;
 
-public class MyScheduleFragment extends Fragment {
-    private GridView timeGrid;
-    private GridView eventGrid;
+
+public class MyScheduleFragment extends Fragment implements View.OnClickListener {
+
+    private TextView currentMonth;
+    private ImageView prevMonth;
+    private ImageView nextMonth;
+    private GridView calendarView;
+    private GridCellAdapter adapter;
+    private Calendar _calendar;
+    private int month, year;
+    private static final String dateTemplate = "MMMM yyyy";
 
     public MyScheduleFragment() {
         // Required empty public constructor
@@ -38,31 +46,39 @@ public class MyScheduleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my_schedule, container, false);
+        View view = inflater.inflate(R.layout.my_calendar_view, container, false);
         initialize(view);
         applyListeners();
         return view;
     }
 
     private void applyListeners() {
-        timeGrid.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-            }
 
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-            }
-        });
     }
 
     private void initialize(View view) {
-        timeGrid = (GridView) view.findViewById(R.id.list_time);
-        eventGrid = (GridView) view.findViewById(R.id.event_grid);
-        timeGrid.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.calender_time, getResources().getStringArray(R.array.time)));
-        eventGrid.setAdapter(new EventGridAdapter());
+        _calendar = Calendar.getInstance(Locale.getDefault());
+        month = _calendar.get(Calendar.MONTH) + 1;
+        year = _calendar.get(Calendar.YEAR);
+
+
+        prevMonth = (ImageView) view.findViewById(R.id.prevMonth);
+        prevMonth.setOnClickListener(this);
+
+        currentMonth = (TextView) view.findViewById(R.id.currentMonth);
+        currentMonth.setText(DateFormat.format(dateTemplate,
+                _calendar.getTime()));
+
+        nextMonth = (ImageView) view.findViewById(R.id.nextMonth);
+        nextMonth.setOnClickListener(this);
+
+        calendarView = (GridView) view.findViewById(R.id.calendar);
+
+        // Initialised
+        adapter = new GridCellAdapter(getActivity().getApplicationContext(), month, year);
+        adapter.notifyDataSetChanged();
+        calendarView.setAdapter(adapter);
     }
 
 
@@ -76,52 +92,40 @@ public class MyScheduleFragment extends Fragment {
         super.onDetach();
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
 
-    private class EventGridAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return 7 * 24;
+    @Override
+    public void onClick(View v) {
+        if (v == prevMonth) {
+            if (month <= 1) {
+                month = 12;
+                year--;
+            } else {
+                month--;
+            }
+            setGridCellAdapterToDate(month, year);
         }
-
-        @Override
-        public Object getItem(int position) {
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = convertView;
-            if (view == null) {
-                LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(R.layout.calender_event, null);
+        if (v == nextMonth) {
+            if (month > 11) {
+                month = 1;
+                year++;
+            } else {
+                month++;
             }
-            TextView event = (TextView) view.findViewById(R.id.event_message);
-            if (position == 100) {
-                event.setText("Physic Class");
-                view.setBackgroundColor(Color.WHITE);
-            }
-            if (position == 28) {
-                event.setText("Swimming Class");
-                view.setBackgroundColor(Color.YELLOW);
-            }
-            if (position == 75) {
-                event.setText("Iglulabs");
-                view.setBackgroundColor(Color.CYAN);
-            }
-            if (position == 76) {
-                view.setBackgroundColor(Color.CYAN);
-            }
-            if (position == 120) {
-                event.setText("Java");
-                view.setBackgroundColor(Color.GREEN);
-            }
-            return view;
+            setGridCellAdapterToDate(month, year);
         }
     }
+
+    private void setGridCellAdapterToDate(int month, int year) {
+        adapter = new GridCellAdapter(getActivity().getApplicationContext(), month, year);
+        _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
+        currentMonth.setText(DateFormat.format(dateTemplate,
+                _calendar.getTime()));
+        adapter.notifyDataSetChanged();
+        calendarView.setAdapter(adapter);
+    }
+
 }
