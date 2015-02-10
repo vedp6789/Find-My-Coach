@@ -94,18 +94,23 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     private void authenticateUser(Person user) {
         progressDialog.show();
         if (NetworkManager.isNetworkConnected(this)) {
-            RequestParams requestParams = new RequestParams();
-            requestParams.add("email", mPlusClient.getAccountName());
-            String displayName = user.getDisplayName();
-            String[] names = displayName.split(" ");
-            requestParams.add("first_name", names[0]);
-            requestParams.add("last_name", names[1]);
-            requestParams.add("dob", user.getBirthday());
-            requestParams.add("google_link", user.getUrl());
-            requestParams.add("address", user.getCurrentLocation());
-            requestParams.add("gender", user.getGender() + "");
-            requestParams.add("photograph", (user.getImage().getUrl()));
-            NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
+            try{
+                RequestParams requestParams = new RequestParams();
+                requestParams.add("email", mPlusClient.getAccountName());
+                String displayName = user.getDisplayName();
+                String[] names = displayName.split(" ");
+                requestParams.add("first_name", names[0]);
+                requestParams.add("last_name", names[1]);
+                requestParams.add("dob", user.getBirthday());
+                requestParams.add("google_link", user.getUrl());
+                requestParams.add("address", user.getCurrentLocation());
+                requestParams.add("gender", user.getGender() + "");
+                requestParams.add("photograph", (user.getImage().getUrl()));
+                saveUserEmail(mPlusClient.getAccountName());
+                NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
+            }catch (Exception ex){
+                Toast.makeText(this, "Please Check Network Connection", Toast.LENGTH_LONG).show();
+            }
         } else {
             Toast.makeText(this, "Please Check Network Connection", Toast.LENGTH_LONG).show();
         }
@@ -135,7 +140,8 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String userToken = StorageHelper.getUserDetails(this, "auth_token");
-        if (userToken != null) {
+        String phnVerified = StorageHelper.getUserDetails(this, "phone_verified");
+        if (userToken != null && phnVerified != null) {
             Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
             this.finish();
@@ -211,6 +217,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("email", userId);
                 requestParams.add("password", userPassword);
+                saveUserEmail(userId);
                 NetworkClient.login(this, requestParams, this);
             } else
                 Toast.makeText(this, "Check internet connection", Toast.LENGTH_LONG).show();
@@ -306,6 +313,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         }
         requestParams.add("gender", (String) user.getProperty("gender"));
         requestParams.add("photograph", "http://graph.facebook.com/" + user.getId() + "/picture?type=large");
+        saveUserEmail((String) user.getProperty("email"));
         NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
     }
 
@@ -331,6 +339,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 } else {
                     dialog.dismiss();
                     requestParams.add("phonenumber", phnNum);
+                    saveUserPhoneNumber(phnNum);
                     NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
                 }
             }
@@ -344,7 +353,6 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                     mPlusClient.clearDefaultAccount();
                     mPlusClient.disconnect();
                 }
-                StorageHelper.clearUser(LoginActivity.this);
                 finish();
                 dialog.dismiss();
                 startActivity(new Intent(LoginActivity.this, LoginActivity.class));
@@ -424,8 +432,23 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     @Override
     public void successOperation(Object object) {
         Response response = (Response) object;
+
+        if(response.getMessage().equals("Successfully Updated Please Validate your profile to use it ")){
+            if(StorageHelper.getUserDetails(this,"phone_number") == null){
+                RequestParams requestParams = new RequestParams();
+                requestParams.add("email", response.getData().getEmail());
+                getPhoneNumber(requestParams);
+                return;
+            }
+            startActivity(new Intent(this, ValidatePhoneActivity.class));
+            finish();
+            return;
+        }
+
         if (response.getAuthToken() != null && response.getData().getId() != null)
             saveUser(response.getAuthToken(), response.getData().getId());
+        if(response.getMessage().equals("Success"))
+            saveUserPhn("True");
         progressDialog.dismiss();
         if (response.getData().getPhonenumber() == null) {
             RequestParams requestParams = new RequestParams();
@@ -441,19 +464,49 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     private void saveUser(String authToken, String userId) {
         StorageHelper.storePreference(this, "auth_token", authToken);
         StorageHelper.storePreference(this, "user_id", userId);
-        Log.d("FMC1:", "User Id:" + userId);
+    }
+
+    private void saveUserPhn(String isPhnVerified) {
+        StorageHelper.storePreference(this, "phone_verified", isPhnVerified);
+    }
+
+    private void saveUserEmail(String emailId) {
+        StorageHelper.storePreference(this, "user_email", emailId);
+    }
+
+    private void saveUserPhoneNumber(String phoneNumber) {
+        StorageHelper.storePreference(this, "phone_number", phoneNumber);
+    }
+
+    void showSharedPreferences(String from){
+        Log.d("FMC",from + " auth_token : " + StorageHelper.getUserDetails(this,"auth_token"));
+        Log.d("FMC",from + " user_id : " + StorageHelper.getUserDetails(this,"user_id"));
+        Log.d("FMC",from + " phone_verified : " + StorageHelper.getUserDetails(this,"phone_verified"));
+        Log.d("FMC",from + " user_email : " + StorageHelper.getUserDetails(this,"user_email"));
+        Log.d("FMC",from + " phone_number : " + StorageHelper.getUserDetails(this,"phone_number"));
     }
 
     @Override
     public void failureOperation(Object message) {
         progressDialog.dismiss();
-        Toast.makeText(this, (String) message, Toast.LENGTH_LONG).show();
+        String msg = (String) message;
+        if(msg.equals("Validate Phone number to login") || msg.equals("Successfully Updated Please Validate your profile to use it ")){
+            if(StorageHelper.getUserDetails(this,"phone_number") == null){
+                RequestParams requestParams = new RequestParams();
+                requestParams.add("email", StorageHelper.getUserDetails(this,"user_email"));
+                getPhoneNumber(requestParams);
+                return;
+            }
+            startActivity(new Intent(this, ValidatePhoneActivity.class));
+            finish();
+            return;
+        }
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         fbClearToken();
         if (mPlusClient.isConnected()) {
             mPlusClient.clearDefaultAccount();
             mPlusClient.disconnect();
         }
-        StorageHelper.clearUser(LoginActivity.this);
         finish();
         startActivity(new Intent(LoginActivity.this, LoginActivity.class));
     }

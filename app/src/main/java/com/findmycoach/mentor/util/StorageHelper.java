@@ -27,6 +27,15 @@ public class StorageHelper {
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove("auth_token");
         editor.remove("user_id");
+        editor.remove("user_email");
+        editor.remove("phone_verified");
+        editor.commit();
+    }
+
+    public static void clearUserPhone(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove("phone_number");
         editor.commit();
     }
 

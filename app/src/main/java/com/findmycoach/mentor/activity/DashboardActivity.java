@@ -75,6 +75,7 @@ public class DashboardActivity extends FragmentActivity
 
     private void logout() {
         StorageHelper.clearUser(this);
+        StorageHelper.clearUserPhone(this);
         LoginActivity.doLogout = true;
         fbClearToken();
         this.finish();
