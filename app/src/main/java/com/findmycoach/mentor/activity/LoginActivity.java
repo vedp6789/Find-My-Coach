@@ -341,6 +341,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                     requestParams.add("phonenumber", phnNum);
                     saveUserPhoneNumber(phnNum);
                     NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
+                    progressDialog.show();
                 }
             }
         });
@@ -431,6 +432,13 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
 
     @Override
     public void successOperation(Object object) {
+        progressDialog.dismiss();
+        if(object == null) {
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
+            getPhoneNumber(requestParams);
+            return;
+        }
         Response response = (Response) object;
 
         if(response.getMessage().equals("Successfully Updated Please Validate your profile to use it ")){
@@ -455,6 +463,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             requestParams.add("email", response.getData().getEmail());
             getPhoneNumber(requestParams);
         } else {
+            saveUserPhn(response.getData().getPhonenumber());
             Intent intent = new Intent(this, DashboardActivity.class);
             finish();
             startActivity(intent);
@@ -491,12 +500,6 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         progressDialog.dismiss();
         String msg = (String) message;
         if(msg.equals("Validate Phone number to login") || msg.equals("Successfully Updated Please Validate your profile to use it ")){
-            if(StorageHelper.getUserDetails(this,"phone_number") == null){
-                RequestParams requestParams = new RequestParams();
-                requestParams.add("email", StorageHelper.getUserDetails(this,"user_email"));
-                getPhoneNumber(requestParams);
-                return;
-            }
             startActivity(new Intent(this, ValidatePhoneActivity.class));
             finish();
             return;

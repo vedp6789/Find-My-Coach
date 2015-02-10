@@ -1,6 +1,7 @@
 package com.findmycoach.mentor.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,7 +41,6 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     private void initView() {
         email = StorageHelper.getUserDetails(this,"user_email");
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Verifying...");
         verificationCode = (EditText) findViewById(R.id.verificationCodeET);
         findViewById(R.id.btnVerify).setOnClickListener(this);
         findViewById(R.id.btnResend).setOnClickListener(this);
@@ -50,7 +50,11 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     public void onClick(View v) {
         int id = v.getId();
         if(id == R.id.btnResend){
-            Toast.makeText(this,"Resend Click",Toast.LENGTH_LONG).show();
+            if(email != null){
+                RequestParams requestParams = new RequestParams();
+                requestParams.add("email", email);
+                getPhoneNumber(requestParams);
+            }
         }else if(id == R.id.btnVerify){
             sendVerificationCode();
         }
@@ -68,6 +72,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
             }, 3500);
         }else{
             if(email != null && NetworkManager.isNetworkConnected(this)){
+                progressDialog.setMessage("Verifying...");
                 progressDialog.show();
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("email",email);
@@ -84,12 +89,23 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     public void successOperation(Object object) {
         progressDialog.dismiss();
         Response response = (Response) object;
+        if(response.getMessage().equals("Successfully Updated Please Validate your profile to use it ")){
+            if(response.getData() != null){
+                if(response.getData().getPhonenumber() != null)
+                    StorageHelper.storePreference(ValidatePhoneActivity.this, "phone_number", response.getData().getPhonenumber());
+            }
+            Toast.makeText(this,"Please enter code sent to your registered number.",Toast.LENGTH_LONG).show();
+        }else if(response.getMessage().equals("Success , please login")){
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
+        }
+
 
 //        saveUser(response.getAuthToken(), response.getData().getId());
 //        finish();
 //        startActivity(new Intent(this, DashboardActivity.class));
 
-        Toast.makeText(this,response.getMessage() ,Toast.LENGTH_LONG).show();
+
     }
 
     @Override
@@ -138,5 +154,52 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
             Session.setActiveSession(session);
             session.closeAndClearTokenInformation();
         }
+    }
+
+    private void getPhoneNumber(final RequestParams requestParams) {
+        final String lastPhoneNumber = StorageHelper.getUserDetails(this,"phone_number");
+        final Dialog dialog = new Dialog(this);
+        dialog.setTitle("Phone number is must!!!");
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.phone_number_dialog);
+        final EditText phoneEditText = (EditText) dialog.findViewById(R.id.phoneEditText);
+        phoneEditText.setText(lastPhoneNumber);
+        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String phnNum = phoneEditText.getText().toString();
+                if (phnNum.equals("") || phnNum.length()<10){
+                    phoneEditText.setError("Enter valid phone number");
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            phoneEditText.setError(null);
+                        }
+                    }, 3500);
+                } else {
+                    dialog.dismiss();
+                    requestParams.add("phonenumber", phnNum);
+                    progressDialog.setMessage("Sending code...");
+                    if(lastPhoneNumber.equals(phnNum)){
+                        progressDialog.show();
+                        NetworkClient.repostOtp(ValidatePhoneActivity.this, requestParams, ValidatePhoneActivity.this);
+                    }else{
+                        StorageHelper.storePreference(ValidatePhoneActivity.this, "phone_number", phnNum);
+                        requestParams.add("phonenumber", phnNum);
+                        progressDialog.show();
+                        NetworkClient.updatePhoneForSocialMedia(ValidatePhoneActivity.this, requestParams, ValidatePhoneActivity.this);
+                    }
+                }
+            }
+        });
+
+        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
     }
 }

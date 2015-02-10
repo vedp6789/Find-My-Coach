@@ -213,7 +213,35 @@ public class NetworkClient {
                 Log.d("FMC", "Success: Response:" + responseJson);
                 Log.d("FMC", "Success: Response Code:" + statusCode);
                 Response response = new Gson().fromJson(responseJson, Response.class);
-                callback.failureOperation(response.getMessage());
+                callback.successOperation(response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    String responseJson = new String(responseBody);
+                    Log.d("FMC", "Failure: Response:" + responseJson);
+                    Log.d("FMC", "Failure: Response Code:" + statusCode);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage());
+                } catch (Exception e) {
+                    Log.d("FMC", "Failure: Error:" + e.getMessage());
+                    callback.failureOperation("Problem connecting to server");
+                }
+            }
+        });
+    }
+
+    public static void repostOtp(Context context, RequestParams requestParams, final Callback callback) {
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.post(context, getAuthAbsoluteURL("repostOtp"), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String responseJson = new String(responseBody);
+                Log.d("FMC", "Success: Response:" + responseJson);
+                Log.d("FMC", "Success: Response Code:" + statusCode);
+                Response response = new Gson().fromJson(responseJson, Response.class);
+                callback.successOperation(response);
             }
 
             @Override
@@ -238,9 +266,13 @@ public class NetworkClient {
         client.post(context, getAuthAbsoluteURL("socialAuthentication"), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String responseJson = new String(responseBody);
-                Log.d("FMC", "Success: Response:" + responseJson);
+                Log.d("FMC", "Success: Response:" + responseBody);
                 Log.d("FMC", "Success: Response Code:" + statusCode);
+                if(statusCode == 204){
+                    callback.successOperation(null);
+                    return;
+                }
+                String responseJson = new String(responseBody);
                 Response response = new Gson().fromJson(responseJson, Response.class);
                 if (statusCode == 200 || statusCode == 206) {
                     callback.successOperation(response);
@@ -267,7 +299,7 @@ public class NetworkClient {
 
     public static void verifyPhoneNumber(Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.post(context, "http://demo.iglulabs.com/fmcweb/www/api/auth/validateOtp", requestParams, new AsyncHttpResponseHandler() {
+        client.post(context, getAuthAbsoluteURL("validateOtp"), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String responseJson = new String(responseBody);
