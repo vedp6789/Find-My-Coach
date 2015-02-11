@@ -463,7 +463,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             requestParams.add("email", response.getData().getEmail());
             getPhoneNumber(requestParams);
         } else {
-            saveUserPhn(response.getData().getPhonenumber());
+            saveUserPhoneNumber(response.getData().getPhonenumber());
             Intent intent = new Intent(this, DashboardActivity.class);
             finish();
             startActivity(intent);

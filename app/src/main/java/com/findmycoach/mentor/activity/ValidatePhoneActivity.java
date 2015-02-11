@@ -96,6 +96,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
             }
             Toast.makeText(this,"Please enter code sent to your registered number.",Toast.LENGTH_LONG).show();
         }else if(response.getMessage().equals("Success , please login")){
+            StorageHelper.storePreference(this, "phone_verified", "True");
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
