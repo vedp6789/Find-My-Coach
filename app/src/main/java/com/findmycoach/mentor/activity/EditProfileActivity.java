@@ -99,8 +99,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
         profileDOB.setText((String) userInfo.getDob());
         pinCode.setText((String) userInfo.getZip());
         chargeInput.setText(userInfo.getCharges());
-        ArrayAdapter<String> chargesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"hour", "30 mins", "class"});
-        chargesPerUnit.setAdapter(chargesAdapter);
+        chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"hour", "30 mins", "class"}));
         experienceInput.setText(userInfo.getExperience());
         facebookLink.setText(userInfo.getFacebookLink());
         googlePlusLink.setText(userInfo.getGoogleLink());
@@ -227,7 +226,6 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
                 requestParams.add("availability_yn", "1");
             else
                 requestParams.add("availability_yn", "0");
-            Log.d("FMC", "charges_unit : " + chargesPerUnit.getSelectedItemPosition());
 
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
