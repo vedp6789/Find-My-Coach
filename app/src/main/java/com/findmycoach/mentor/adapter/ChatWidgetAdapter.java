@@ -17,18 +17,20 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
 
     private Context context;
     private ArrayList<String> messageList;
+    private ArrayList<Integer> senderList;
 
-    public ChatWidgetAdapter(Context context, ArrayList<String> messageList) {
+    public ChatWidgetAdapter(Context context, ArrayList<String> messageList, ArrayList<Integer> sender ) {
         super(context, R.layout.signle_chat_cointainer_sent, messageList);
         this.context = context;
         this.messageList = messageList;
+        this.senderList = sender;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = null;
-        if(position == 0 || position == 2 || position == 4)
+        if(senderList.get(position) == 1)
            rowView = inflater.inflate(R.layout.signle_chat_cointainer_received, parent, false);
         else
             rowView = inflater.inflate(R.layout.signle_chat_cointainer_sent, parent, false);
@@ -38,7 +40,8 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
         return rowView;
     }
 
-    public void updateMessageList(String msg){
+    public void updateMessageList(String msg, int sender){
         this.messageList.add(messageList.size(),msg);
+        this.senderList.add(sender);
     }
 }

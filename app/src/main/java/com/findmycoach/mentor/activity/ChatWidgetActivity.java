@@ -5,7 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,16 +19,12 @@ import android.widget.Toast;
 import com.findmycoach.mentor.adapter.ChatWidgetAdapter;
 import com.fmc.mentor.findmycoach.R;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
 
-import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
-
-import io.socket.IOAcknowledge;
-import io.socket.IOCallback;
-import io.socket.SocketIO;
-import io.socket.SocketIOException;
 
 /**
  * Created by IgluLabs on 1/23/2015.
@@ -39,7 +35,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private ListView chatWidgetLv;
     private EditText msgToSend;
     private ChatWidgetAdapter chatWidgetAdapter;
-    private SocketIO socket;
+    private WebSocketClient mWebSocketClient;
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -48,7 +45,9 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         setContentView(R.layout.activity_chat_widget);
         initialize();
         applyActionbarProperties();
-        new SocketTask().execute("http://10.1.1.129:3700");
+        progressDialog.show();
+        populateData();
+        connectWebSocket();
     }
 
     private void initialize() {
@@ -60,15 +59,18 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         findViewById(R.id.sendButton).setOnClickListener(this);
         chatWidgetLv.setDivider(null);
         chatWidgetLv.setSelector(new ColorDrawable(0));
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Connecting...");
     }
 
     private void populateData() {
-        //Dummy chatting
         ArrayList<String> dummyList = new ArrayList<String>();
+        ArrayList<Integer> senderListList = new ArrayList<Integer>();
         for (int i = 0; i < 5; i++) {
             dummyList.add(i, "This is the dummy contain of message " + i);
+            senderListList.add(0);
         }
-        chatWidgetAdapter = new ChatWidgetAdapter(this, dummyList);
+        chatWidgetAdapter = new ChatWidgetAdapter(this, dummyList, senderListList);
         chatWidgetLv.setAdapter(chatWidgetAdapter);
     }
 
@@ -91,10 +93,6 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         switch (id) {
             case android.R.id.home:
                 finish();
-//                if(socket != null){
-//                    Log.d("FMC","Socket-isConnected : " + socket.isConnected());
-//                }else
-//                    Log.d("FMC","Socket-Null");
                 break;
             case R.id.attach_image:
                 Toast.makeText(this, "Attach Image is clicked", Toast.LENGTH_SHORT).show();
@@ -113,90 +111,74 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mWebSocketClient.close();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        connectWebSocket();
+    }
+
     private void sendMsg() {
         String msg = msgToSend.getText().toString().trim();
         if (TextUtils.isEmpty(msg)) {
             msgToSend.requestFocus();
             return;
         }
+        mWebSocketClient.send(msg);
         msgToSend.setText("");
-        chatWidgetAdapter.updateMessageList(msg);
+        chatWidgetAdapter.updateMessageList(msg, 0);
         chatWidgetAdapter.notifyDataSetChanged();
         chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
     }
 
-    private class SocketTask extends AsyncTask<String, String, String> {
-
-        ProgressDialog progressDialog;
-            @Override
-            protected void onProgressUpdate(String... progress) {
-                Log.d("FMC", progress[0]);
-                progressDialog = new ProgressDialog(ChatWidgetActivity.this);
-                progressDialog.setMessage("Connecting...");
-                progressDialog.show();
-            }
-
-        @Override
-        protected String doInBackground(String... params) {
-            publishProgress("Trying to connect to " + params[0] + '\n');
-            try {
-                if(socket == null)
-                    socket = new SocketIO(params[0].trim());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-                if(!socket.isConnected()){
-
-                    socket.connect(new IOCallback() {
-                        @Override
-                        public void onMessage(JSONObject json, IOAcknowledge ack) {
-                            try {
-                                Log.d("FMC","Socket-Connected : Server said:" + json.toString(2));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onMessage(String data, IOAcknowledge ack) {
-                            Log.d("FMC","Socket-Message-Received : " + data);
-                        }
-
-                        @Override
-                        public void onError(SocketIOException socketIOException) {
-                            Log.d("FMC","Socket-Error");
-                            socketIOException.printStackTrace();
-                        }
-
-                        @Override
-                        public void onDisconnect() {
-                            Log.d("FMC","Socket-Disconnected");
-                        }
-
-                        @Override
-                        public void onConnect() {
-                            Log.d("FMC","Socket-Connected");
-                            populateData();
-                        }
-
-                        @Override
-                        public void on(String event, IOAcknowledge ack, Object... args) {
-                            System.out.println("Server triggered event '" + event + "'");
-                        }
-                    });
-                }
-            return null;
+    private void connectWebSocket() {
+        URI uri;
+        try {
+            uri = new URI("ws://10.1.1.129:9302");
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return;
         }
 
-        @Override
-            protected void onPostExecute(String result) {
-                try{
-                    Log.d("FMC", result);
-                }catch (NullPointerException e){
-                    Log.d("FMC", "result is null");
-                }
+        mWebSocketClient = new WebSocketClient(uri) {
+            @Override
+            public void onOpen(ServerHandshake serverHandshake) {
+                Log.i("FMC-Websocket", "Opened");
+                mWebSocketClient.send("Hello from " + Build.MANUFACTURER + " " + Build.MODEL);
+                progressDialog.dismiss();
             }
 
+            @Override
+            public void onMessage(String s) {
+                final String message = s;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("FMC-Websocket", message);
+                        chatWidgetAdapter.updateMessageList(message, 1);
+                        chatWidgetAdapter.notifyDataSetChanged();
+                        chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+                    }
+                });
+            }
+
+            @Override
+            public void onClose(int i, String s, boolean b) {
+                Log.d("FMC-Websocket", "Closed " + s);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.d("FMC-Websocket", "Error " + e.getMessage());
+                progressDialog.dismiss();
+            }
+        };
+        mWebSocketClient.connect();
     }
 
 }
