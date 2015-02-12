@@ -17,10 +17,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.findmycoach.mentor.adapter.ChatWidgetAdapter;
+import com.findmycoach.mentor.util.StorageHelper;
 import com.fmc.mentor.findmycoach.R;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -129,7 +132,18 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             msgToSend.requestFocus();
             return;
         }
-        mWebSocketClient.send(msg);
+
+        JSONObject messageObject=new JSONObject();
+        try {
+            messageObject.put("receiver_id","187");// receiver_id in place of 187
+            messageObject.put("type", "text");
+            messageObject.put("data", msg);
+            String msgJson = messageObject.toString();
+            mWebSocketClient.send(msgJson);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         msgToSend.setText("");
         chatWidgetAdapter.updateMessageList(msg, 0);
         chatWidgetAdapter.notifyDataSetChanged();
@@ -139,7 +153,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private void connectWebSocket() {
         URI uri;
         try {
-            uri = new URI("ws://10.1.1.129:9302");
+            uri = new URI("ws://192.241.196.244:9302");
         } catch (URISyntaxException e) {
             e.printStackTrace();
             return;
@@ -149,7 +163,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
                 Log.i("FMC-Websocket", "Opened");
-                mWebSocketClient.send("Hello from " + Build.MANUFACTURER + " " + Build.MODEL);
+                mWebSocketClient.send(StorageHelper.getUserDetails(ChatWidgetActivity.this, "auth_token"));
                 progressDialog.dismiss();
             }
 
