@@ -422,8 +422,13 @@ public class NetworkClient {
                 String responseJson = new String(responseBody);
                 Log.d("FMC", "Success: Response:" + responseJson);
                 Log.d("FMC", "Success: Response Code:" + statusCode);
-                ConnectionRequestsResponse connectionRequestsResponse = new Gson().fromJson(responseJson,ConnectionRequestsResponse.class);
-                callback.successOperation(connectionRequestsResponse);
+                if(statusCode == 200){
+                    ConnectionRequestsResponse connectionRequestsResponse = new Gson().fromJson(responseJson,ConnectionRequestsResponse.class);
+                    callback.successOperation(connectionRequestsResponse);
+                }else if(statusCode == 401){
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage());
+                }
             }
 
             @Override
@@ -432,6 +437,10 @@ public class NetworkClient {
                     String responseJson = new String(responseBody);
                     Log.d("FMC", "Failure: Response:" + responseJson);
                     Log.d("FMC", "Failure: Response Code:" + statusCode);
+                    if(responseJson.contains("\"message\":\"Success\",")){
+                        callback.failureOperation("Success");
+                        return;
+                    }
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage());
                 } catch (Exception e) {

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -108,6 +109,10 @@ public class MyConnectionsFragment extends Fragment implements AdapterView.OnIte
     @Override
     public void failureOperation(Object object) {
         progressDialog.dismiss();
-        Toast.makeText(getActivity(),(String) object, Toast.LENGTH_LONG).show();
+        String msg = (String) object;
+        if(msg.equals("Success"))
+            connectionListView.setAdapter(new ArrayAdapter<String>(getActivity(),R.layout.no_data_found, new String[]{"Not connected to anyone."}));
+        else
+            Toast.makeText(getActivity(),msg , Toast.LENGTH_LONG).show();
     }
 }
