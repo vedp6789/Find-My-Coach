@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.findmycoach.mentor.beans.authentication.Response;
 import com.findmycoach.mentor.beans.registration.SignUpResponse;
+import com.findmycoach.mentor.beans.requests.ConnectionRequestsResponse;
 import com.findmycoach.mentor.beans.suggestion.Suggestion;
 import com.fmc.mentor.findmycoach.R;
 import com.google.gson.Gson;
@@ -355,6 +356,45 @@ public class NetworkClient {
                 String responseJson = new String(responseBody);
                 Log.d("FMC", "Success: Response:" + responseJson);
                 Log.d("FMC", "Success: Response Code:" + statusCode);
+                ConnectionRequestsResponse connectionRequestsResponse = new Gson().fromJson(responseJson,ConnectionRequestsResponse.class);
+                callback.successOperation(connectionRequestsResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    String responseJson = new String(responseBody);
+                    Log.d("FMC", "Failure: Response:" + responseJson);
+                    Log.d("FMC", "Failure: Response Code:" + statusCode);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage());
+                } catch (Exception e) {
+                    Log.d("FMC", "Failure: Error:" + e.getMessage());
+                    callback.failureOperation("Problem connecting to server");
+                }
+            }
+        });
+    }
+
+    public static void respondToConnectionRequest(Context context, RequestParams requestParams, final Callback callback) {
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.post(context, getAbsoluteURL("respondToConnectionRequest"), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String responseJson = new String(responseBody);
+                Log.d("FMC", "Success: Response:" + responseJson);
+                Log.d("FMC", "Success: Response Code:" + statusCode);
+                if(statusCode == 200)
+                    callback.successOperation(null);
+                else{
+                    try{
+                        Response response = new Gson().fromJson(responseJson, Response.class);
+                        callback.failureOperation(response.getMessage());
+                    }catch (Exception e) {
+                        Log.d("FMC", "Failure: Error:" + e.getMessage());
+                        callback.failureOperation("Problem connecting to server");
+                    }
+                }
             }
 
             @Override

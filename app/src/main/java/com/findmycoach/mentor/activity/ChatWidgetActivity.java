@@ -135,7 +135,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
         JSONObject messageObject=new JSONObject();
         try {
-            messageObject.put("receiver_id","187");// receiver_id in place of 187
+            messageObject.put("receiver_id","1");
             messageObject.put("type", "text");
             messageObject.put("data", msg);
             String msgJson = messageObject.toString();
