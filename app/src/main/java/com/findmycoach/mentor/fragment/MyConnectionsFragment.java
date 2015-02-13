@@ -1,9 +1,9 @@
 package com.findmycoach.mentor.fragment;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +15,21 @@ import android.widget.Toast;
 
 import com.findmycoach.mentor.activity.ChatWidgetActivity;
 import com.findmycoach.mentor.adapter.ConnectionAdapter;
+import com.findmycoach.mentor.beans.requests.ConnectionRequestsResponse;
+import com.findmycoach.mentor.beans.requests.Data;
+import com.findmycoach.mentor.util.Callback;
+import com.findmycoach.mentor.util.NetworkClient;
+import com.findmycoach.mentor.util.StorageHelper;
 import com.fmc.mentor.findmycoach.R;
+import com.loopj.android.http.RequestParams;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class MyConnectionsFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class MyConnectionsFragment extends Fragment implements AdapterView.OnItemClickListener, Callback {
 
     private ListView connectionListView;
+    private ProgressDialog progressDialog;
+    private ConnectionRequestsResponse connectionRequestsResponse;
 
     public MyConnectionsFragment() {
         // Required empty public constructor
@@ -47,23 +55,27 @@ public class MyConnectionsFragment extends Fragment implements AdapterView.OnIte
 
     private void initializeView(View rootView) {
         connectionListView = (ListView) rootView.findViewById(R.id.connectionListView);
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Please wait...");
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //Make Network call and populate list of connection within ListView
-        populateData();
+        getConnectionList();
     }
 
-    private void populateData() {
-        // Dummy Data
-        ArrayList<String> dummyData = new ArrayList<String>();
-        for(int i=0; i<25; i++)
-            dummyData.add(i,"User " + (i+1) );
-        ConnectionAdapter connectionAdapter = new ConnectionAdapter(getActivity(),dummyData);
+    private void getConnectionList(){
+        //connections
+        progressDialog.show();
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("user_id", StorageHelper.getUserDetails(getActivity(),"user_id"));
+        NetworkClient.getAllConnectionRequest(getActivity(), requestParams, this);
+    }
+
+    private void populateData(List<Data> data) {
+        ConnectionAdapter connectionAdapter = new ConnectionAdapter(getActivity(), data);
         connectionListView.setAdapter(connectionAdapter);
-        connectionListView.setOnItemClickListener(this);
     }
 
     @Override
@@ -79,8 +91,23 @@ public class MyConnectionsFragment extends Fragment implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent chatWidgetIntent = new Intent(getActivity(), ChatWidgetActivity.class);
-        TextView textView = (TextView) view.findViewById(R.id.studentNameTV);
+        TextView textView = (TextView) view.findViewById(R.id.nameTV);
         chatWidgetIntent.putExtra("mentor_name", textView.getText());
         startActivity(chatWidgetIntent);
+    }
+
+    @Override
+    public void successOperation(Object object) {
+        progressDialog.dismiss();
+        connectionRequestsResponse = (ConnectionRequestsResponse) object;
+        if(connectionRequestsResponse.getData() != null && connectionRequestsResponse.getData().size() > 0) {
+                populateData(connectionRequestsResponse.getData());
+        }
+    }
+
+    @Override
+    public void failureOperation(Object object) {
+        progressDialog.dismiss();
+        Toast.makeText(getActivity(),(String) object, Toast.LENGTH_LONG).show();
     }
 }

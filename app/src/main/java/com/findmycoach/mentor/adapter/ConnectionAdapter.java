@@ -1,72 +1,61 @@
 package com.findmycoach.mentor.adapter;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.findmycoach.mentor.beans.requests.Data;
 import com.fmc.mentor.findmycoach.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by IgluLabs on 1/22/2015.
  */
-public class ConnectionAdapter extends ArrayAdapter<String> {
+public class ConnectionAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<String> connectionList;
+    private List<Data> connectionList;
 
-    public ConnectionAdapter(Context context, ArrayList<String> connectionList) {
-        super(context, R.layout.connection_single_row, connectionList);
+    public ConnectionAdapter(Context context, List<Data> connectionList) {
         this.context = context;
         this.connectionList = connectionList;
     }
 
     @Override
+    public int getCount() {
+        return connectionList.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        View rowView = convertView;
-        ViewHolder holder = null;
-
-        if (rowView == null) {
+        Data singleConnection = connectionList.get(position);
+        View view = convertView;
+        if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            rowView = inflater.inflate(R.layout.connection_single_row, parent, false);
-            holder = new ViewHolder();
-            holder.studentIv = (ImageView) rowView.findViewById(R.id.studentImageView);
-            holder.studentNameTv = (TextView) rowView.findViewById(R.id.studentNameTV);
-            holder.studentMsgTv = (TextView) rowView.findViewById(R.id.lastMsgTV);
-            holder.studentDetailsTv = (TextView) rowView.findViewById(R.id.detailsTV);
-            rowView.setTag(holder);
-        } else {
-            holder = (ViewHolder) rowView.getTag();
+            view = inflater.inflate(R.layout.connection_single_row, null);
         }
+        TextView nameTV = (TextView) view.findViewById(R.id.nameTV);
+        TextView lastMsgTV = (TextView) view.findViewById(R.id.lastMsgTV);
+        TextView detailsTV = (TextView) view.findViewById(R.id.detailsTV);
 
-        populateData(holder, position);
+        nameTV.setText("     User id : " + singleConnection.getId());
+        lastMsgTV.setText("  Created on : " + singleConnection.getCreatedOn());
+        detailsTV.setText(singleConnection.getStatus());
 
-        return rowView;
-    }
-
-    private void populateData(ViewHolder holder, int position) {
-        holder.studentNameTv.setText(connectionList.get(position));
-        holder.studentMsgTv.setText("Last message sent by " + connectionList.get(position));
-        if(position%3 == 0){
-            holder.studentDetailsTv.setText("Online");
-            holder.studentDetailsTv.setTextColor(context.getResources().getColor(android.R.color.holo_green_dark));
-        }else{
-            holder.studentDetailsTv.setText("Offline");
-            holder.studentDetailsTv.setTextColor(context.getResources().getColor(android.R.color.holo_red_dark));
-        }
-    }
-
-    private class ViewHolder{
-        private ImageView studentIv;
-        private TextView studentNameTv;
-        private TextView studentMsgTv;
-        private TextView studentDetailsTv;
+        return view;
     }
 }

@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Name of User"
-        android:id="@+id/studentNameTV"
+        android:id="@+id/nameTV"
         android:gravity="center_vertical"
         android:layout_alignTop="@+id/studentImageView"
         android:layout_toRightOf="@+id/studentImageView"
@@ -32,10 +32,10 @@
         android:text="Details"
         android:gravity="center_vertical"
         android:id="@+id/detailsTV"
-        android:layout_alignTop="@+id/studentNameTV"
+        android:layout_alignTop="@+id/nameTV"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@+id/studentNameTV" />
+        android:layout_alignBottom="@+id/nameTV" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -106,6 +106,7 @@ public class NotificationsFragment extends Fragment implements Callback{
 
     @Override
     public void failureOperation(Object object) {
-
+        progressDialog.dismiss();
+       Toast.makeText(getActivity(),(String) object, Toast.LENGTH_LONG).show();
     }
 }
