@@ -34,7 +34,7 @@ import java.util.ArrayList;
  */
 public class ChatWidgetActivity extends Activity implements View.OnClickListener {
 
-    private String mentorName;
+    private String studentId;
     private ListView chatWidgetLv;
     private EditText msgToSend;
     private ChatWidgetAdapter chatWidgetAdapter;
@@ -56,7 +56,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private void initialize() {
         Intent getUserIntent = getIntent();
         if (getUserIntent != null)
-            mentorName = getUserIntent.getStringExtra("mentor_name");
+            studentId = getUserIntent.getStringExtra("student_id");
         chatWidgetLv = (ListView) findViewById(R.id.chatWidgetLv);
         msgToSend = (EditText) findViewById(R.id.msgToSendET);
         findViewById(R.id.sendButton).setOnClickListener(this);
@@ -80,8 +80,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private void applyActionbarProperties() {
         ActionBar actionbar = getActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
-        if (mentorName != null)
-            actionbar.setTitle(mentorName);
+        if (studentId != null)
+            actionbar.setTitle(studentId);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
         JSONObject messageObject=new JSONObject();
         try {
-            messageObject.put("receiver_id","1");
+            messageObject.put("receiver_id", studentId);
             messageObject.put("type", "text");
             messageObject.put("data", msg);
             String msgJson = messageObject.toString();
@@ -143,7 +143,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        Log.d("FMC", studentId.trim());
         msgToSend.setText("");
         chatWidgetAdapter.updateMessageList(msg, 0);
         chatWidgetAdapter.notifyDataSetChanged();

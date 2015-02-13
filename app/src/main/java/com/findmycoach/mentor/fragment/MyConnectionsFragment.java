@@ -26,7 +26,7 @@ import com.loopj.android.http.RequestParams;
 
 import java.util.List;
 
-public class MyConnectionsFragment extends Fragment implements AdapterView.OnItemClickListener, Callback {
+public class MyConnectionsFragment extends Fragment implements Callback {
 
     private ListView connectionListView;
     private ProgressDialog progressDialog;
@@ -74,9 +74,17 @@ public class MyConnectionsFragment extends Fragment implements AdapterView.OnIte
         NetworkClient.getAllConnectionRequest(getActivity(), requestParams, this);
     }
 
-    private void populateData(List<Data> data) {
+    private void populateData(final List<Data> data) {
         ConnectionAdapter connectionAdapter = new ConnectionAdapter(getActivity(), data);
         connectionListView.setAdapter(connectionAdapter);
+        connectionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent chatWidgetIntent = new Intent(getActivity(), ChatWidgetActivity.class);
+                chatWidgetIntent.putExtra("student_id", data.get(position).getOwnerId()+"");
+                startActivity(chatWidgetIntent);
+            }
+        });
     }
 
     @Override
@@ -87,14 +95,6 @@ public class MyConnectionsFragment extends Fragment implements AdapterView.OnIte
     @Override
     public void onDetach() {
         super.onDetach();
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent chatWidgetIntent = new Intent(getActivity(), ChatWidgetActivity.class);
-        TextView textView = (TextView) view.findViewById(R.id.nameTV);
-        chatWidgetIntent.putExtra("mentor_name", textView.getText());
-        startActivity(chatWidgetIntent);
     }
 
     @Override
