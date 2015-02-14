@@ -28,27 +28,31 @@ import com.findmycoach.mentor.fragment.MyConnectionsFragment;
 import com.findmycoach.mentor.fragment.MyScheduleFragment;
 import com.findmycoach.mentor.fragment.NavigationDrawerFragment;
 import com.findmycoach.mentor.fragment.NotificationsFragment;
+import com.findmycoach.mentor.util.Callback;
+import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.StorageHelper;
 import com.fmc.mentor.findmycoach.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.loopj.android.http.RequestParams;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DashboardActivity extends FragmentActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, Callback {
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private CharSequence mTitle;
     private String userToken;
 
-    /* Below class variables are mainly for GCM Client registration and Google Play Services device compatability check*/
+    /* Below are the class variables which are mainly used GCM Client registration and Google Play Services device configuration check*/
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String EXTRA_MESSAGE = "message";
-    public static final String PROPERTY_REG_ID = "registration_id_1";
+    public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
+    private static final String GCM_SHARED_PREFERENCE=" gcm_preference";
     /**
      * This is the project number we got
      * from the API Console,
@@ -105,6 +109,8 @@ public class DashboardActivity extends FragmentActivity
     private String getRegistrationId(Context context) {
         final SharedPreferences prefs = getGCMPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
+        Log.d("GCM Registration previously saved:",registrationId);
+        //Toast.makeText(DashboardActivity.this,"GCM Registration previously saved:"+registrationId,Toast.LENGTH_LONG).show();
         if (registrationId.isEmpty()) {
             Log.i(TAG1, "Registration not found.");
             return "";
@@ -126,7 +132,9 @@ public class DashboardActivity extends FragmentActivity
      */
     private SharedPreferences getGCMPreferences(Context context) {
 
-        return getSharedPreferences(DashboardActivity.class.getSimpleName(),
+        /*return getSharedPreferences(DashboardActivity.class.getSimpleName(),
+                Context.MODE_PRIVATE);*/
+        return getSharedPreferences(GCM_SHARED_PREFERENCE,
                 Context.MODE_PRIVATE);
     }
 
@@ -155,6 +163,17 @@ public class DashboardActivity extends FragmentActivity
         new StoreGcmRegistrationId().execute();
     }
 
+    @Override
+    public void successOperation(Object object) {
+
+    }
+
+    @Override
+    public void failureOperation(Object object) {
+
+    }
+
+
     class StoreGcmRegistrationId extends AsyncTask{
 
         @Override
@@ -172,7 +191,7 @@ public class DashboardActivity extends FragmentActivity
                 // so it can use GCM/HTTP or CCS to send messages to your app.
                 // The request to your server should be authenticated if your app
                 // is using accounts.
-                sendRegistrationIdToBackend();
+                // sendRegistrationIdToBackend();
 
                 // For this demo: we don't need to send it because the device
                 // will send upstream messages to a server that echo back the
@@ -190,6 +209,13 @@ public class DashboardActivity extends FragmentActivity
 
         }
 
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+
+            sendRegistrationIdToBackend();
+        }
+
         /**
          * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP
          * or CCS to send messages to your app. Not needed for this demo since the
@@ -198,6 +224,26 @@ public class DashboardActivity extends FragmentActivity
          */
         private void sendRegistrationIdToBackend() {
             // Your implementation here.
+            String user_id=StorageHelper.getUserDetails(DashboardActivity.this,"user_id");
+            String authToken = StorageHelper.getUserDetails(DashboardActivity.this, "auth_token");
+            RequestParams requestParams = new RequestParams();
+            Log.d("user_id:",user_id);
+            Log.d("registration_id:",regid);
+            requestParams.add("user_id", user_id);
+            requestParams.add("registration_id", regid);
+
+
+            NetworkClient.registerGcmRegistrationId(DashboardActivity.this,requestParams,authToken,new Callback() {
+                @Override
+                public void successOperation(Object object) {
+                     Log.d("Inside sendRegistrationIdToBackend callback successOperation method",object.toString());
+                }
+
+                @Override
+                public void failureOperation(Object object) {
+                    Log.d("Inside sendRegistrationIdToBackend callback failureOperation method",object.toString());
+                }
+            });
         }
 
         /**
@@ -228,6 +274,15 @@ public class DashboardActivity extends FragmentActivity
         super.onResume();
         if(checkPlayServices()){
 
+           /* gcm = GoogleCloudMessaging.getInstance(this);
+            regid = getRegistrationId(context);
+
+            if (regid.isEmpty()) {
+                registerInBackground();
+            }*/
+        }else{
+            Toast.makeText(DashboardActivity.this, "Your device is not Google Play Services supported.", Toast.LENGTH_LONG).show();
+            Log.i(TAG, "No valid Google Play Services APK found.");
         }
 
     }
@@ -282,7 +337,7 @@ public class DashboardActivity extends FragmentActivity
                     }
                 }
         );
-        alertDialog.show();
+       // alertDialog.show();
     }
 
     private void logout() {

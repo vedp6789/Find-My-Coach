@@ -182,9 +182,9 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 callSignUpActivity();
                 break;
             case R.id.email_sign_in_button:
-                //logIn();
-                Intent intent=new Intent(this,DashboardActivity.class);
-                startActivity(intent);
+                logIn();
+                //Intent intent=new Intent(this,DashboardActivity.class);
+                //startActivity(intent);
                 break;
             case R.id.google_login_button:
                 Log.d("FMC1:", "Google + clicked");
