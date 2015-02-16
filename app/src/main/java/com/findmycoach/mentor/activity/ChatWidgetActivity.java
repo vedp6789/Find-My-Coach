@@ -75,6 +75,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         }
         chatWidgetAdapter = new ChatWidgetAdapter(this, dummyList, senderListList);
         chatWidgetLv.setAdapter(chatWidgetAdapter);
+        
     }
 
     private void applyActionbarProperties() {
