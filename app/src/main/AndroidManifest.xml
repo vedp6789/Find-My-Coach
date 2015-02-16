@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fmc.mentor.findmycoach" >
+    package="com.fmc.mentor.findmycoach">
 
     <!-- To access Google+ APIs: -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -19,20 +19,31 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <!-- To access image from Storage -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- To complete message transfer between GCM to FMC-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- To receive message from GCM-->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <!-- To allow only GCM server to send message to only this application-->
+    <permission
+        android:name="com.fmc.mentor.findmycoach.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.fmc.mentor.findmycoach.permission.C2D_MESSAGE" />
+
 
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name="com.findmycoach.mentor.activity.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
-            android:windowSoftInputMode="adjustNothing" >
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -79,7 +90,7 @@
         <activity
             android:name="com.findmycoach.mentor.activity.ChatWidgetActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"  />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.findmycoach.mentor.activity.Settings"
             android:label="@string/action_settings"
@@ -92,6 +103,21 @@
             android:name="com.findmycoach.mentor.activity.ValidatePhoneActivity"
             android:label="@string/title_validate_phone"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.findmycoach.mentor.activity.AddNewSlotActivity"
+            android:label="@string/add_new_slot"></activity>
+
+        <receiver
+            android:name="com.findmycoach.mentor.receiver.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.fmc.findmycoach.mentor" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.findmycoach.mentor.service.GcmFmcService"></service>
+
+
     </application>
 
 </manifest>

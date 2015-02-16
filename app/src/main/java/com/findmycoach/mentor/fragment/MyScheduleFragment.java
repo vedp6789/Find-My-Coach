@@ -1,6 +1,8 @@
 package com.findmycoach.mentor.fragment;
 
 import android.app.Activity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
@@ -10,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.findmycoach.mentor.activity.AddNewSlotActivity;
 import com.findmycoach.mentor.adapter.CalendarGridAdapter;
 import com.fmc.mentor.findmycoach.R;
 
@@ -20,7 +24,7 @@ import java.util.Locale;
 
 public class MyScheduleFragment extends Fragment implements View.OnClickListener {
 
-    private TextView currentMonth;
+    private TextView currentMonth,add_slot;
     private ImageView prevMonth;
     private ImageView nextMonth;
     private GridView calendarView;
@@ -62,6 +66,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         month = _calendar.get(Calendar.MONTH) + 1;
         year = _calendar.get(Calendar.YEAR);
 
+        add_slot= (TextView) view.findViewById(R.id.tv_add_new_slot);
+        add_slot.setOnClickListener(this);
+
 
         prevMonth = (ImageView) view.findViewById(R.id.prevMonth);
         prevMonth.setOnClickListener(this);
@@ -99,6 +106,15 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        if(v == add_slot){
+            //Toast.makeText(getActivity(),"Add available slot clicked !",Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(getActivity(),AddNewSlotActivity.class);
+            startActivity(intent);
+
+
+
+
+        }
         if (v == prevMonth) {
             if (month <= 1) {
                 month = 12;
@@ -124,6 +140,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
         currentMonth.setText(DateFormat.format(dateTemplate,
                 _calendar.getTime()));
+
+
         adapter.notifyDataSetChanged();
         calendarView.setAdapter(adapter);
     }

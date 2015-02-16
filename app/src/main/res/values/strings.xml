@@ -436,6 +436,11 @@
     <string name="prompt_experience">Experience</string>
     <string name="prompt_facebook">Facebook</string>
     <string name="prompt_google_plus">Google +</string>
+    <string name="days">Days</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
+    <string name="starting_from">Starting from:</string>
+    <string name="till">Till:</string>
 
     <!-- Prompting -->
 
@@ -453,6 +458,8 @@
     <string name="action_logout">Log Out</string>
     <string name="action_attach_image">Image</string>
     <string name="action_attach_video">Video</string>
+    <string name="add_available_slots">Add available slots</string>
+    <string name="create_slot">Create Slot</string>
 
     <!-- Actions -->
 
@@ -471,8 +478,18 @@
     <string name="welcome_to">Welcome to</string>
     <string name="find_my_coach">Find My Coach</string>
     <string name="or">OR</string>
+    <string name="add_new_slot">Add new slot</string>
     <!-- Static Text -->
 
+    <!-- String s related to week days -->
+    <string name="mon">Monday</string>
+    <string name="tue">Tuesday</string>
+    <string name="wed">Wednesday</string>
+    <string name="thur">Thursday</string>
+    <string name="fri">Friday</string>
+    <string name="sat">Saturday</string>
+    <string name="sun">Sunday</string>
+    <!-- -->
 
     <string-array name="gender">
         <item>Male</item>
@@ -508,5 +525,34 @@
         <item>11 PM</item>
         <item>12 AM</item>
     </string-array>
+    <string-array name="time1">
+        <item>Select</item>
+        <item>1 AM</item>
+        <item>2 AM</item>
+        <item>3 AM</item>
+        <item>4 AM</item>
+        <item>5 AM</item>
+        <item>6 AM</item>
+        <item>7 AM</item>
+        <item>8 AM</item>
+        <item>9 AM</item>
+        <item>10 AM</item>
+        <item>11 AM</item>
+        <item>12 AM</item>
+        <item>1 PM</item>
+        <item>2 PM</item>
+        <item>3 PM</item>
+        <item>4 PM</item>
+        <item>5 PM</item>
+        <item>6 PM</item>
+        <item>7 PM</item>
+        <item>8 PM</item>
+        <item>9 PM</item>
+        <item>10 PM</item>
+        <item>11 PM</item>
+        <item>12 PM</item>
+    </string-array>
+
+
 
 </resources>
