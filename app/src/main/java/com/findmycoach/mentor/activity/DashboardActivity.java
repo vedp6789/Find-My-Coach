@@ -112,7 +112,7 @@ public class DashboardActivity extends FragmentActivity
         Log.d("GCM Registration previously saved:",registrationId);
         //Toast.makeText(DashboardActivity.this,"GCM Registration previously saved:"+registrationId,Toast.LENGTH_LONG).show();
         if (registrationId.isEmpty()) {
-            Log.i(TAG1, "Registration not found.");
+            Log.i(TAG1, "Registration not found for GCM client");
             return "";
         }
         // Check if app was updated; if so, it must clear the registration ID

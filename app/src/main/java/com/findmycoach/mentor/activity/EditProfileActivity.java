@@ -144,7 +144,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
         updateAction = (Button) findViewById(R.id.button_update);
         chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Please wait...");
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
         applyAction();
     }
 
@@ -179,8 +179,8 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
             @Override
             public void onClick(View v) {
                 if(profileAddress1.getText().toString().trim().equals("")){
-                    Toast.makeText(EditProfileActivity.this,"Choose a suggested city",Toast.LENGTH_LONG).show();
-                    profileAddress1.setError("Choose a suggested city");
+                    Toast.makeText(EditProfileActivity.this,getResources().getString(R.string.choose_suggested_copy),Toast.LENGTH_LONG).show();
+                    profileAddress1.setError(getResources().getString(R.string.choose_suggested_copy));
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -233,7 +233,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
             NetworkClient.updateProfile(this, requestParams, authToken, this);
         } catch (Exception e) {
             progressDialog.dismiss();
-            Toast.makeText(this, "Please enter necessary details", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.enter_necessary_details), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -275,7 +275,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     protected Dialog onCreateDialog(int id) {
         if (id == 999) {
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
-            datePickerDialog.setTitle("Date of Birth");
+            datePickerDialog.setTitle(getResources().getString(R.string.dob));
             return datePickerDialog;
         }
         return null;

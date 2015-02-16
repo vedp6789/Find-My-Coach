@@ -55,6 +55,9 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     private Button signOutButton;
     private Button disconnectButton;
 
+    private static final String TAG="FMC1";
+    private static final String TAG1="FMC1: Permissions:";
+
     @Override
     protected void onPlusClientSignIn() {
         if (doLogout) {
@@ -109,10 +112,10 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 saveUserEmail(mPlusClient.getAccountName());
                 NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
             }catch (Exception ex){
-                Toast.makeText(this, "Please Check Network Connection", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getResources().getString(R.string.check_network_connection), Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(this, "Please Check Network Connection", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.check_network_connection), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -187,9 +190,9 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 //startActivity(intent);
                 break;
             case R.id.google_login_button:
-                Log.d("FMC1:", "Google + clicked");
+                Log.d(TAG, "Google + clicked");
                 if (supportsGooglePlayServices()) {
-                    Log.d("FMC1:", "Google Play Support");
+                    Log.d(TAG, "Google Play Support");
                     signIn();
                 } else {
                     mPlusSignInButton.setVisibility(View.GONE);
@@ -213,7 +216,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         String userPassword = inputPassword.getText().toString();
         boolean isFormValid = validateLoginForm(userId, userPassword);
         if (isFormValid) {
-            Log.d("FMC1:", "email:" + userId + "\n Password:" + userPassword);
+            Log.d(TAG, "email:" + userId + "\n Password:" + userPassword);
             if (NetworkManager.isNetworkConnected(this)) {
                 progressDialog.show();
                 RequestParams requestParams = new RequestParams();
@@ -280,8 +283,8 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 if (!session.isOpened())
                     session = new Session(getApplicationContext());
                 if (session.isOpened()) {
-                    Log.d("FMC1:", "session opened");
-                    Log.d("FMC1: Permissions:", session.getPermissions().toString());
+                    Log.d(TAG, "session opened");
+                    Log.d(TAG1, session.getPermissions().toString());
                     Request.newMeRequest(session, new Request.GraphUserCallback() {
                         // callback after Graph API response with user object
                         @Override
@@ -289,12 +292,12 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                             if (user != null) {
                                 callWebservice(user);
                             } else {
-                                Log.d("FMC1:", "user null");
+                                Log.d(TAG, "user null");
                             }
                         }
                     }).executeAsync();
                 } else {
-                    Log.d("FMC1:", "session not opened");
+                    Log.d(TAG, "session not opened");
                 }
             }
         });
@@ -322,7 +325,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     private void getPhoneNumber(final RequestParams requestParams) {
         progressDialog.dismiss();
         final Dialog dialog = new Dialog(this);
-        dialog.setTitle("Phone number is must!!!");
+        dialog.setTitle(getResources().getString(R.string.phone_no_must));
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.phone_number_dialog);
         final EditText phoneEditText = (EditText) dialog.findViewById(R.id.phoneEditText);
@@ -331,7 +334,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             public void onClick(View v) {
                 final String phnNum = phoneEditText.getText().toString();
                 if (phnNum.equals("") || phnNum.length()<10){
-                    phoneEditText.setError("Enter valid phone number");
+                    phoneEditText.setError(getResources().getString(R.string.enter_valid_phone_no));
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -391,7 +394,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
 
     /* A helper method to resolve the current ConnectionResult error. */
     private void resolveSignInError() {
-        Log.d("FMC1:", "resolve SignIn Error");
+        Log.d(TAG, "resolve SignIn Error");
         if (mConnectionResult.hasResolution()) {
             try {
                 mIntentInProgress = true;
@@ -490,11 +493,11 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     }
 
     void showSharedPreferences(String from){
-        Log.d("FMC",from + " auth_token : " + StorageHelper.getUserDetails(this,"auth_token"));
-        Log.d("FMC",from + " user_id : " + StorageHelper.getUserDetails(this,"user_id"));
-        Log.d("FMC",from + " phone_verified : " + StorageHelper.getUserDetails(this,"phone_verified"));
-        Log.d("FMC",from + " user_email : " + StorageHelper.getUserDetails(this,"user_email"));
-        Log.d("FMC",from + " phone_number : " + StorageHelper.getUserDetails(this,"phone_number"));
+        Log.d(TAG,from + " auth_token : " + StorageHelper.getUserDetails(this,"auth_token"));
+        Log.d(TAG,from + " user_id : " + StorageHelper.getUserDetails(this,"user_id"));
+        Log.d(TAG,from + " phone_verified : " + StorageHelper.getUserDetails(this,"phone_verified"));
+        Log.d(TAG,from + " user_email : " + StorageHelper.getUserDetails(this,"user_email"));
+        Log.d(TAG,from + " phone_number : " + StorageHelper.getUserDetails(this,"phone_number"));
     }
 
     @Override

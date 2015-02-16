@@ -1,30 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">Find My Coach</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="set_schedule">Schedule</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_signup">SignupActivity</string>
-    <string name="title_edit_profile_menu">Edit Profile</string>
-    <string name="title_validate_phone">Verify phone number</string>
-    <string name="hint_enter_code">Enter 6 character code here.</string>
-
-    <!-- Facebook Credentials -->
-    <!--<string name="facebook_app_id">835344249849377</string>-->
-    <string name="facebook_app_id">1428925007356558</string>
-    <!-- Facebook -->
-
-    <!-- Google Location Api Key -->
-    <string name="google_location_api_key">AIzaSyBEXECi4hIR7axoaQiJQiRHvJN_ZIK3ORM</string>
-    <!-- Facebook -->
-
-    <!-- API KEY-->
-    <string name="api_key">FMC-API-KEY</string>
-    <string name="api_key_value">01b0c1d332f6516fdc63d3d3dcf7b79273cdeb58</string>
-    <string name="auth_key">FMC-AUTH-TOKEN</string>
-
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ String array block ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
     <!-- Countries -->
 
     <string-array name="countries">
@@ -296,7 +272,6 @@
         <item>Uttarakhand</item>
         <item>West Bengal</item>
     </string-array>
-
     <string-array name="united_states">
         <item>Alabama</item>
         <item>Alaska</item>
@@ -389,115 +364,16 @@
         <item>Shivamogga</item>
         <item>Tumakuru</item>
     </string-array>
-
     <string-array name="navigation_items">
         <item>Home</item>
         <item>Notifications</item>
         <item>My Connections</item>
         <item>My Schedule</item>
     </string-array>
-
-    <string name="title_activity_dashboard">DashboardActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_example">Example action</string>
-    <string name="title_activity_edit_profile">Edit Profile</string>
-    <string name="title_activity_choose_image">ChooseImageActivity</string>
-    <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
-
-    <string name="title_activity_login">Sign in</string>
-
-    <!-- Strings related to login -->
-
-    <!-- String s related to Prompting -->
-    <string name="prompt_email">User Id</string>
-    <string name="prompt_email_id">Email Id</string>
-    <string name="prompt_password">Password</string>
-    <string name="prompt_confirm_password">Confirm Password</string>
-    <string name="prompt_first_name">First Name</string>
-    <string name="prompt_last_name">Last Name</string>
-    <string name="prompt_date_of_birth">Date Of Birth</string>
-    <string name="prompt_gender">Gender</string>
-    <string name="prompt_male">Male</string>
-    <string name="prompt_female">Female</string>
-    <string name="prompt_phone">Mobile Number</string>
-    <string name="prompt_submit">Submit</string>
-    <string name="prompt_address">Address</string>
-    <string name="prompt_address1">City State Country</string>
-    <string name="prompt_city">City</string>
-    <string name="prompt_state">State</string>
-    <string name="prompt_country">Country</string>
-    <string name="prompt_pin">Pin Code</string>
-    <string name="prompt_passion">Passion</string>
-    <string name="prompt_profession">Profession</string>
-    <string name="prompt_accomplishment">Accomplishment</string>
-    <string name="prompt_willing_to_travel">Available to travel trainee location</string>
-    <string name="prompt_charges">Charges</string>
-    <string name="prompt_experience">Experience</string>
-    <string name="prompt_facebook">Facebook</string>
-    <string name="prompt_google_plus">Google +</string>
-    <string name="days">Days</string>
-    <string name="from">From:</string>
-    <string name="to">To:</string>
-    <string name="starting_from">Starting from:</string>
-    <string name="till">Till:</string>
-
-    <!-- Prompting -->
-
-    <!-- String s related to Actions -->
-    <string name="action_sign_in">Login</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="plus_sign_out">Switch Google+ account</string>
-    <string name="plus_disconnect">Disconnect from Google+</string>
-    <string name="facebook">Facebook</string>
-    <string name="google_plus">Google +</string>
-    <string name="action_register">Register</string>
-    <string name="action_forgot_password">Forgot Password</string>
-    <string name="action_sign_up">Sign Up</string>
-    <string name="action_save">Save</string>
-    <string name="action_logout">Log Out</string>
-    <string name="action_attach_image">Image</string>
-    <string name="action_attach_video">Video</string>
-    <string name="add_available_slots">Add available slots</string>
-    <string name="create_slot">Create Slot</string>
-
-    <!-- Actions -->
-
-    <!-- String s related to Errors -->
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="error_field_not_match">Password not matched</string>
-    <string name="error_phone_number_invalid">Invalid Phone Number</string>
-    <string name="error_invalid_date">Date should less than current date</string>
-    <string name="error_password_size">Minimum 5 characters</string>
-    <!-- Errors -->
-
-    <!-- String s related to Static Text -->
-    <string name="welcome_to">Welcome to</string>
-    <string name="find_my_coach">Find My Coach</string>
-    <string name="or">OR</string>
-    <string name="add_new_slot">Add new slot</string>
-    <!-- Static Text -->
-
-    <!-- String s related to week days -->
-    <string name="mon">Monday</string>
-    <string name="tue">Tuesday</string>
-    <string name="wed">Wednesday</string>
-    <string name="thur">Thursday</string>
-    <string name="fri">Friday</string>
-    <string name="sat">Saturday</string>
-    <string name="sun">Sunday</string>
-    <!-- -->
-
     <string-array name="gender">
         <item>Male</item>
         <item>Female</item>
     </string-array>
-
-    <string name="terms">Welcome to Find My Coach. If you continue to use this app you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern ANI Technologies Private Limited relationship with you in relation to this website and the Service .The term FMC or us or we refers to the owner of the website whose registered office is ANI TECHNOLOGIES PRIVATE LIMITED.</string>
-
     <string-array name="time">
         <item>12 AM</item>
         <item>1 AM</item>
@@ -553,6 +429,152 @@
         <item>12 PM</item>
     </string-array>
 
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String array block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    <!-- Unique strings block-->
+    <string name="app_name">Find My Coach</string>
+    <string name="action_settings">Settings</string>
+    <string name="set_schedule">Schedule</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_enter_code">Enter 6 character code here.</string>
+    <string name="terms">Welcome to Find My Coach. If you continue to use this app you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern ANI Technologies Private Limited relationship with you in relation to this website and the Service .The term FMC or us or we refers to the owner of the website whose registered office is ANI TECHNOLOGIES PRIVATE LIMITED.</string>
+    <string name="dummy_contain_of_message">This is the dummy contain of message </string>
+    <string name="enter_valid_email">Please enter valid email</string>
+    <string name="enter_valid_phone_no">Enter valid phone number</string>
+    <!-- end of unique strings block-->
+
+    <!-- Toast message strings-->
+    <string name="attach_image_clicked">Attach Image is clicked</string>
+    <string name="attach_video_clicked">Attach Video is clicked</string>
+    <string name="too_big_image">Image is too big, Please choose smaller one</string>
+    <string name="image_not_picked">You have not picked image</string>
+    <string name="choose_suggested_copy">Choose a suggested city</string>
+    <string name="enter_necessary_details">Please enter necessary details</string>
+    <string name="check_network_connection">Please Check Network Connection</string>
+
+
+
+    <!-- Dialog message strings-->
+    <string name="connecting">Connecting...</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="dob">Date of Birth</string>
+    <string name="phone_no_must">Phone number is must!!!</string>
+
+
+    <!-- Facebook Credentials -->
+    <!--<string name="facebook_app_id">835344249849377</string>-->
+    <string name="facebook_app_id">1428925007356558</string>
+    <!-- Facebook -->
+
+
+    <!-- Google Location Api Key -->
+    <string name="google_location_api_key">AIzaSyBEXECi4hIR7axoaQiJQiRHvJN_ZIK3ORM</string>
+
+
+    <!-- API KEY-->
+    <string name="api_key">FMC-API-KEY</string>
+    <string name="api_key_value">01b0c1d332f6516fdc63d3d3dcf7b79273cdeb58</string>
+    <string name="auth_key">FMC-AUTH-TOKEN</string>
+
+
+    <!-- Strings related to different title-->
+    <string name="title_activity_dashboard">DashboardActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="title_activity_edit_profile">Edit Profile</string>
+    <string name="title_activity_choose_image">ChooseImageActivity</string>
+    <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_signup">SignupActivity</string>
+    <string name="title_edit_profile_menu">Edit Profile</string>
+    <string name="title_validate_phone">Verify phone number</string>
+
+    <!-- Strings related to login -->
+
+    <!-- String s related to Prompting -->
+    <string name="prompt_email">User Id</string>
+    <string name="prompt_email_id">Email Id</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_confirm_password">Confirm Password</string>
+    <string name="prompt_first_name">First Name</string>
+    <string name="prompt_last_name">Last Name</string>
+    <string name="prompt_date_of_birth">Date Of Birth</string>
+    <string name="prompt_gender">Gender</string>
+    <string name="prompt_male">Male</string>
+    <string name="prompt_female">Female</string>
+    <string name="prompt_phone">Mobile Number</string>
+    <string name="prompt_submit">Submit</string>
+    <string name="prompt_address">Address</string>
+    <string name="prompt_address1">City State Country</string>
+    <string name="prompt_city">City</string>
+    <string name="prompt_state">State</string>
+    <string name="prompt_country">Country</string>
+    <string name="prompt_pin">Pin Code</string>
+    <string name="prompt_passion">Passion</string>
+    <string name="prompt_profession">Profession</string>
+    <string name="prompt_accomplishment">Accomplishment</string>
+    <string name="prompt_willing_to_travel">Available to travel trainee location</string>
+    <string name="prompt_charges">Charges</string>
+    <string name="prompt_experience">Experience</string>
+    <string name="prompt_facebook">Facebook</string>
+    <string name="prompt_google_plus">Google +</string>
+    <string name="days">Days</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
+    <string name="starting_from">Starting from:</string>
+    <string name="till">Till:</string>
+    <!-- Prompting -->
+
+    <!-- String s related to Actions -->
+    <string name="action_sign_in">Login</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="plus_sign_out">Switch Google+ account</string>
+    <string name="plus_disconnect">Disconnect from Google+</string>
+    <string name="facebook">Facebook</string>
+    <string name="google_plus">Google +</string>
+    <string name="action_register">Register</string>
+    <string name="action_forgot_password">Forgot Password</string>
+    <string name="action_sign_up">Sign Up</string>
+    <string name="action_save">Save</string>
+    <string name="action_logout">Log Out</string>
+    <string name="action_attach_image">Image</string>
+    <string name="action_attach_video">Video</string>
+    <string name="add_available_slots">Add available slots</string>
+    <string name="create_slot">Create Slot</string>
+    <!-- Actions -->
+
+    <!-- String s related to Errors -->
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="error_field_not_match">Password not matched</string>
+    <string name="error_phone_number_invalid">Invalid Phone Number</string>
+    <string name="error_invalid_date">Date should less than current date</string>
+    <string name="error_password_size">Minimum 5 characters</string>
+    <!-- Errors -->
+
+    <!-- String s related to Static Text -->
+    <string name="welcome_to">Welcome to</string>
+    <string name="find_my_coach">Find My Coach</string>
+    <string name="or">OR</string>
+    <string name="add_new_slot">Add new slot</string>
+    <!-- Static Text -->
+
+    <!-- String s related to week days -->
+    <string name="mon">Monday</string>
+    <string name="tue">Tuesday</string>
+    <string name="wed">Wednesday</string>
+    <string name="thur">Thursday</string>
+    <string name="fri">Friday</string>
+    <string name="sat">Saturday</string>
+    <string name="sun">Sunday</string>
+    <!-- -->
+
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
 
 </resources>

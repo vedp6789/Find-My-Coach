@@ -98,7 +98,7 @@ public class ChooseImageActivity extends Activity {
             finish();
             onBackPressed();
         } catch (Exception exception) {
-            Toast.makeText(this, "Image is too big, Please choose smaller one", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.too_big_image), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -119,7 +119,7 @@ public class ChooseImageActivity extends Activity {
             cropImageView.setImageBitmap(BitmapFactory
                     .decodeFile(imgDecodableString));
         } else {
-            Toast.makeText(this, "You haven't picked Image",
+            Toast.makeText(this, getResources().getString(R.string.image_not_picked),
                     Toast.LENGTH_LONG).show();
         }
     }

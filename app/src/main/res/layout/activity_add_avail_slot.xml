@@ -192,51 +192,13 @@
 
     </LinearLayout>
 
-
-    <LinearLayout
-        android:id="@+id/ll_date_from"
-        android:layout_width="match_parent"
+    <DatePicker
+        android:id="@+id/datePicker1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_time_from"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/starting_from"
-                android:textColor="#000000" />
-
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_date_till"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_date_from"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/till"
-                android:textColor="#000000" />
-
-
-        </LinearLayout>
-    </LinearLayout>
-
+        android:layout_above="@+id/b_create_slot"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="2dp" />
 
     <Button
         android:id="@+id/b_create_slot"

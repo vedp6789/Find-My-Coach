@@ -41,6 +41,9 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private WebSocketClient mWebSocketClient;
     private ProgressDialog progressDialog;
 
+    private static final String TAG="FMC";
+    private static final String TAG1="FMC-Websocket";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,14 +66,14 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         chatWidgetLv.setDivider(null);
         chatWidgetLv.setSelector(new ColorDrawable(0));
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Connecting...");
+        progressDialog.setMessage(getResources().getString(R.string.connecting));
     }
 
     private void populateData() {
         ArrayList<String> dummyList = new ArrayList<String>();
         ArrayList<Integer> senderListList = new ArrayList<Integer>();
         for (int i = 0; i < 5; i++) {
-            dummyList.add(i, "This is the dummy contain of message " + i);
+            dummyList.add(i, getResources().getString(R.string.dummy_contain_of_message) + i);
             senderListList.add(0);
         }
         chatWidgetAdapter = new ChatWidgetAdapter(this, dummyList, senderListList);
@@ -99,10 +102,10 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
                 finish();
                 break;
             case R.id.attach_image:
-                Toast.makeText(this, "Attach Image is clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.attach_image_clicked), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.attach_video:
-                Toast.makeText(this, "Attach Video is clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.attach_video_clicked), Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -144,7 +147,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d("FMC", studentId.trim());
+        Log.d(TAG, studentId.trim());
         msgToSend.setText("");
         chatWidgetAdapter.updateMessageList(msg, 0);
         chatWidgetAdapter.notifyDataSetChanged();
@@ -163,7 +166,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         mWebSocketClient = new WebSocketClient(uri) {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
-                Log.i("FMC-Websocket", "Opened");
+                Log.i(TAG, "Opened");
                 mWebSocketClient.send(StorageHelper.getUserDetails(ChatWidgetActivity.this, "auth_token"));
                 progressDialog.dismiss();
             }
@@ -174,7 +177,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d("FMC-Websocket", message);
+                        Log.d(TAG1, message);
                         chatWidgetAdapter.updateMessageList(message, 1);
                         chatWidgetAdapter.notifyDataSetChanged();
                         chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
@@ -184,12 +187,12 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
             @Override
             public void onClose(int i, String s, boolean b) {
-                Log.d("FMC-Websocket", "Closed " + s);
+                Log.d(TAG1, "Closed " + s);
             }
 
             @Override
             public void onError(Exception e) {
-                Log.d("FMC-Websocket", "Error " + e.getMessage());
+                Log.d(TAG1, "Error " + e.getMessage());
                 progressDialog.dismiss();
             }
         };

@@ -53,7 +53,7 @@ public class ForgotPasswordActivity extends Activity implements Callback {
     private boolean isInputValid() {
         String inputEmail = emailInput.getText().toString();
         if (inputEmail.isEmpty()) {
-            emailInput.setError("Please enter valid email");
+            emailInput.setError(getResources().getString(R.string.enter_valid_email));
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -70,7 +70,7 @@ public class ForgotPasswordActivity extends Activity implements Callback {
         emailInput = (EditText) findViewById(R.id.input_email);
         submitButton = (Button) findViewById(R.id.action_submit);
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Please wait...");
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
     }
 
     private void applyActionbarProperties() {
