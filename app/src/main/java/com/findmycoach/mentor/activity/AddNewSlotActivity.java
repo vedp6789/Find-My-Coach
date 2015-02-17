@@ -2,21 +2,28 @@ package com.findmycoach.mentor.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.app.FragmentManager;
+import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.findmycoach.mentor.fragment.StartDateDialogFragment;
+import com.findmycoach.mentor.util.SetDate;
 import com.fmc.mentor.findmycoach.R;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by praka_000 on 2/12/2015.
  */
-public class AddNewSlotActivity extends Activity{
+public class AddNewSlotActivity extends Activity implements SetDate {
     CheckBox cb_mon, cb_tue,
             cb_wed, cb_thur,
             cb_fri, cb_sat,
@@ -24,18 +31,38 @@ public class AddNewSlotActivity extends Activity{
     Spinner sp_time_from, sp_time_half1,
             sp_time_to, sp_time_half2;
 
-
+    EditText et_start_date,et_till_date;
 
     Button b_create_slot;
-    static String time_from="Select";
-    static String time_to="Select";
+    private static String time_from;
+    private static String time_to;
+    private static String date_from;
+    private static String date_to;
+
+    private static final String TAG="FMC";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_avail_slot);
+        time_from=getResources().getString(R.string.select);
+        time_to=getResources().getString(R.string.select);
+        date_to=getResources().getString(R.string.forever);
         initialize();
+        /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Current date ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("ddMMyyyy");
+        String current_date=simpleDateFormat.format(new Date());
+        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+
+        date_from=current_date.substring(0,2)+"/"+current_date.substring(2,4)+"/"+current_date.substring(4,8);
+        date_to=getResources().getString(R.string.forever);
+
+        et_start_date.setInputType(InputType.TYPE_NULL);
+        et_till_date.setInputType(InputType.TYPE_NULL);
+        et_start_date.setText(date_from);
+        et_till_date.setText(date_to);
 
         ArrayAdapter<String> arrayAdapter=new ArrayAdapter(AddNewSlotActivity.this,android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.time1));
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -75,6 +102,25 @@ public class AddNewSlotActivity extends Activity{
 
             }
         });
+
+
+        et_start_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager=getFragmentManager();
+                StartDateDialogFragment dateDialogFragment=new StartDateDialogFragment();
+                dateDialogFragment.show(fragmentManager,null);
+            }
+        });
+
+        et_till_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager=getFragmentManager();
+                StartDateDialogFragment dateDialogFragment=new StartDateDialogFragment();
+                dateDialogFragment.show(fragmentManager,null);
+            }
+        });
     }
 
     void initialize() {
@@ -87,6 +133,8 @@ public class AddNewSlotActivity extends Activity{
         cb_sun = (CheckBox) findViewById(R.id.cb_sun);
         sp_time_from= (Spinner) findViewById(R.id.sp_time_from);
         sp_time_to=(Spinner) findViewById(R.id.sp_time_to);
+        et_start_date= (EditText) findViewById(R.id.et_slot_start_date);
+        et_till_date= (EditText) findViewById(R.id.et_slot_till_date);
 
         b_create_slot= (Button) findViewById(R.id.b_create_slot);
 
@@ -105,5 +153,19 @@ public class AddNewSlotActivity extends Activity{
     }
 
 
+    @Override
+    public void setSelectedStartDate(Object o1,Object o2, Object o3) {
+        Log.d(TAG, o1.toString()+"/"+o2.toString()+"/"+o3.toString());
+        int day=Integer.parseInt(o1.toString());
+        int month=Integer.parseInt(o2.toString());
+        int year=Integer.parseInt(o3.toString());
+    }
 
+    @Override
+    public void setSelectedTillDate(Object o1,Object o2, Object o3) {
+        Log.d(TAG, o1.toString()+"/"+o2.toString()+"/"+o3.toString());
+        int day=Integer.parseInt(o1.toString());
+        int month=Integer.parseInt(o2.toString());
+        int year=Integer.parseInt(o3.toString());
+    }
 }

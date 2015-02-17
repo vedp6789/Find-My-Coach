@@ -451,6 +451,7 @@
     <string name="gcm_notification">GCM Notification</string>
     <string name="email_not_present_in_db">Email is not present in database.</string>
     <string name="problem_in_connection_server">Problem connecting to server.</string>
+
     <!-- end of unique strings block-->
 
     <!-- Toast message strings-->
@@ -548,6 +549,9 @@
     <string name="to">To:</string>
     <string name="starting_from">Starting from:</string>
     <string name="till">Till:</string>
+    <string name="select">Select</string>
+    <string name="forever">Forever</string>
+    <string name="date_picker">Date Picker</string>
     <!-- Prompting -->
 
     <!-- String s related to Actions -->
@@ -566,6 +570,8 @@
     <string name="action_attach_video">Video</string>
     <string name="add_available_slots">Add available slots</string>
     <string name="create_slot">Create Slot</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
     <!-- Actions -->
 
     <!-- String s related to Errors -->
