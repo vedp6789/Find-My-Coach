@@ -41,7 +41,7 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
             case R.id.profileSettings:
                 setContentView(R.layout.profile_edit);
                 getSupportFragmentManager().beginTransaction().add(R.id.profileContainer,new ProfileFragment()).addToBackStack("edit_profile").commit();
-                actionbar.setTitle("Profile");
+                actionbar.setTitle(getResources().getString(R.string.profile));
                 getSupportFragmentManager().addOnBackStackChangedListener(this);
                 break;
         }

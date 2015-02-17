@@ -17,6 +17,8 @@ import java.util.Locale;
  */
 public class NetworkManager {
 
+    private static final String TAG="FMC:";
+
     public static String getCurrentLocation(Context context) {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         Location currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -26,7 +28,7 @@ public class NetworkManager {
             Address currentAddress = addresses.get(0);
             return currentAddress.getAddressLine(0) + ", " + currentAddress.getLocality() + ", " + currentAddress.getAdminArea();
         } catch (Exception e) {
-            Log.d("FMC:", "Exception: " + e.getMessage());
+            Log.d(TAG, "Exception: " + e.getMessage());
         }
         return "";
     }

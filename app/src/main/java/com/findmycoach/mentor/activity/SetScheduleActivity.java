@@ -172,11 +172,11 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        Toast.makeText(SetScheduleActivity.this, "Clicked " + event.getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(SetScheduleActivity.this, getResources().getString(R.string.clicked) + event.getName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
-        Toast.makeText(SetScheduleActivity.this, "Long pressed event: " + event.getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(SetScheduleActivity.this, getResources().getString(R.string.long_pressed_event) + event.getName(), Toast.LENGTH_SHORT).show();
     }
 }

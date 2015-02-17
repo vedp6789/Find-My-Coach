@@ -14,6 +14,7 @@ public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
 
     private String url;
     private ImageView imageView;
+    private static final String TAG="FMC:";
 
     public ImageLoadTask(String url, ImageView imageView) {
         this.url = url;
@@ -23,7 +24,7 @@ public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(Void... params) {
         try {
-            Log.d("FMC:", "Image URL:" + url);
+            Log.d(TAG, "Image URL:" + url);
             URL urlConnection = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) urlConnection
                     .openConnection();

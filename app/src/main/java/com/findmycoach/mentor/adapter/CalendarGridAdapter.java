@@ -38,6 +38,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private TextView num_events_per_day;
     private final HashMap<String, Integer> eventsPerMonthMap;
 
+    private static final String TAG="FMC:";
+
     // Days in Current Month
     public CalendarGridAdapter(Context context, int month, int year) {
         super();
@@ -131,7 +133,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
         // Current Month Days
         for (int i = 1; i <= daysInMonth; i++) {
-            Log.d(currentMonthName, String.valueOf(i) + " " + getMonthAsString(currentMonth) + " " + yy);
+            Log.d(TAG,currentMonthName+": "+ String.valueOf(i) + " " + getMonthAsString(currentMonth) + " " + yy);
             if (i == getCurrentDayOfMonth()) {
                 list.add(String.valueOf(i) + "-BLUE" + "-" + getMonthAsString(currentMonth) + "-" + yy);
             } else {
@@ -219,6 +221,6 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
     public void setCurrentWeekDay(int currentWeekDay) {
         this.currentWeekDay = currentWeekDay;
-        Log.d("Day",currentWeekDay+"");
+        Log.d(TAG,"Day:"+currentWeekDay+"");
     }
 }

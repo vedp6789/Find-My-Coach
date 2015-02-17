@@ -57,6 +57,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
 
     private static final String TAG="FMC1";
     private static final String TAG1="FMC1: Permissions:";
+    private static final String TAG2="FMC1: User:";
 
     @Override
     protected void onPlusClientSignIn() {
@@ -170,7 +171,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         forgotAction = (TextView) findViewById(R.id.action_forgot_password);
         forgotAction.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Logging In...");
+        progressDialog.setMessage(getResources().getString(R.string.logging_in));
         mProgressView = findViewById(R.id.login_progress);
         signOutButton = (Button) findViewById(R.id.plus_sign_out_button);
         disconnectButton = (Button) findViewById(R.id.plus_disconnect_button);
@@ -426,13 +427,13 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     }
 
     private void populateUserFields(Person currentPerson) {
-        Log.d("User:", "Name:" + currentPerson.getName());
-        Log.d("User:", "Display Name:" + currentPerson.getDisplayName());
-        Log.d("User:", "Nick Name:" + currentPerson.getNickname());
-        Log.d("User:", "Date of Birth:" + currentPerson.getBirthday());
-        Log.d("User:", "Current Location:" + currentPerson.getCurrentLocation());
-        Log.d("User:", "Gender:" + currentPerson.getGender());
-        Log.d("User:", "Gender:" + currentPerson.getImage());
+        Log.d(TAG2, "Name:" + currentPerson.getName());
+        Log.d(TAG2, "Display Name:" + currentPerson.getDisplayName());
+        Log.d(TAG2, "Nick Name:" + currentPerson.getNickname());
+        Log.d(TAG2, "Date of Birth:" + currentPerson.getBirthday());
+        Log.d(TAG2, "Current Location:" + currentPerson.getCurrentLocation());
+        Log.d(TAG2, "Gender:" + currentPerson.getGender());
+        Log.d(TAG2, "Gender:" + currentPerson.getImage());
     }
 
     @Override

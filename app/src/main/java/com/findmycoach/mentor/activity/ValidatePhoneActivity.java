@@ -31,6 +31,8 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     private String email;
     private ProgressDialog progressDialog;
 
+    private static final String TAG="FMC";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +65,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     private void sendVerificationCode() {
         String code = verificationCode.getText().toString();
         if (code.equals("") || code.length() != 6){
-            verificationCode.setError("Enter 6 character code here.");
+            verificationCode.setError(getResources().getString(R.string.hint_enter_code));
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -72,15 +74,15 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
             }, 3500);
         }else{
             if(email != null && NetworkManager.isNetworkConnected(this)){
-                progressDialog.setMessage("Verifying...");
+                progressDialog.setMessage(getResources().getString(R.string.verifying));
                 progressDialog.show();
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("email",email);
                 requestParams.add("otp", code);
                 NetworkClient.verifyPhoneNumber(this, requestParams, this);
-                Log.d("FMC", "Sent code for verification \n Email : " + email + "\n OTP : " + code);
+                Log.d(TAG, "Sent code for verification \n Email : " + email + "\n OTP : " + code);
             }else{
-                Toast.makeText(this, "Check connection.",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getResources().getString(R.string.check_connection),Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -94,7 +96,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                 if(response.getData().getPhonenumber() != null)
                     StorageHelper.storePreference(ValidatePhoneActivity.this, "phone_number", response.getData().getPhonenumber());
             }
-            Toast.makeText(this,"Please enter code sent to your registered number.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,getResources().getString(R.string.enter_otp),Toast.LENGTH_LONG).show();
         }else if(response.getMessage().equals("Success , please login")){
             StorageHelper.storePreference(this, "phone_verified", "True");
             finish();
@@ -160,7 +162,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     private void getPhoneNumber(final RequestParams requestParams) {
         final String lastPhoneNumber = StorageHelper.getUserDetails(this,"phone_number");
         final Dialog dialog = new Dialog(this);
-        dialog.setTitle("Phone number is must!!!");
+        dialog.setTitle(getResources().getString(R.string.phone_no_must));
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.phone_number_dialog);
         final EditText phoneEditText = (EditText) dialog.findViewById(R.id.phoneEditText);
@@ -170,7 +172,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
             public void onClick(View v) {
                 final String phnNum = phoneEditText.getText().toString();
                 if (phnNum.equals("") || phnNum.length()<10){
-                    phoneEditText.setError("Enter valid phone number");
+                    phoneEditText.setError(getResources().getString(R.string.enter_valid_phone_no));
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -180,7 +182,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                 } else {
                     dialog.dismiss();
                     requestParams.add("phonenumber", phnNum);
-                    progressDialog.setMessage("Sending code...");
+                    progressDialog.setMessage(getResources().getString(R.string.sending_code));
                     if(lastPhoneNumber.equals(phnNum)){
                         progressDialog.show();
                         NetworkClient.repostOtp(ValidatePhoneActivity.this, requestParams, ValidatePhoneActivity.this);

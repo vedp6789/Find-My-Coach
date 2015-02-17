@@ -26,6 +26,8 @@ public class NotificationsFragment extends Fragment implements Callback{
     private NotificationAdapter notificationAdapter;
     private ConnectionRequestsResponse connectionRequestsResponse;
 
+    private static final String TAG="FMC";
+
     public NotificationsFragment() {
         // Required empty public constructor
     }
@@ -51,7 +53,7 @@ public class NotificationsFragment extends Fragment implements Callback{
     private void initialize(View view) {
         notificationListView = (ListView) view.findViewById(R.id.notification_list);
         progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Please wait...");
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
     }
 
     @Override
@@ -75,7 +77,7 @@ public class NotificationsFragment extends Fragment implements Callback{
         progressDialog.show();
         String userId = StorageHelper.getUserDetails(getActivity(), "user_id");
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-        Log.d("FMC","Auth Token : " + authToken + "\nUser ID : " + userId);
+        Log.d(TAG,"Auth Token : " + authToken + "\nUser ID : " + userId);
         RequestParams requestParams = new RequestParams();
         requestParams.add("invitee", userId);
         NetworkClient.getConnectionRequests(getActivity(), requestParams, authToken, this);
@@ -88,7 +90,7 @@ public class NotificationsFragment extends Fragment implements Callback{
             if(notificationAdapter != null && notificationAdapter.positionToRemove != -1 && connectionRequestsResponse != null){
                 connectionRequestsResponse.getData().remove(notificationAdapter.positionToRemove);
                 notificationAdapter.notifyDataSetChanged();
-                Toast.makeText(getActivity(),"Success",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),getResources().getString(R.string.success),Toast.LENGTH_LONG).show();
                 return;
             }
         }

@@ -442,6 +442,15 @@
     <string name="dummy_contain_of_message">This is the dummy contain of message </string>
     <string name="enter_valid_email">Please enter valid email</string>
     <string name="enter_valid_phone_no">Enter valid phone number</string>
+    <string name="error">Error :</string>
+    <string name="profile">Profile</string>
+    <string name="no_new_request">No new request for you.</string>
+    <string name="not_connected">Not connected to anyone.</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="gcm_notification">GCM Notification</string>
+    <string name="email_not_present_in_db">Email is not present in database.</string>
+    <string name="problem_in_connection_server">Problem connecting to server.</string>
     <!-- end of unique strings block-->
 
     <!-- Toast message strings-->
@@ -452,6 +461,13 @@
     <string name="choose_suggested_copy">Choose a suggested city</string>
     <string name="enter_necessary_details">Please enter necessary details</string>
     <string name="check_network_connection">Please Check Network Connection</string>
+    <string name="google_play_services_not_supported">Your device is not Google Play Services supported.</string>
+    <string name="clicked">Clicked </string>
+    <string name="long_pressed_event">Long pressed event: </string>
+    <string name="check_connection">Check connection</string>
+    <string name="enter_otp">Please enter code sent to your registered number.</string>
+    <string name="success">Success</string>
+    <string name="update_profile">Please update your profile</string>
 
 
 
@@ -460,7 +476,14 @@
     <string name="please_wait">Please wait...</string>
     <string name="dob">Date of Birth</string>
     <string name="phone_no_must">Phone number is must!!!</string>
+    <string name="t_and_c">Terms and Conditions</string>
+    <string name="logging_in">Logging in...</string>
+    <string name="verifying">Verifying...</string>
+<string name="sending_code">Sending code...</string>
 
+    <!--Exception message-->
+    <string name="must_implement_navigation_drawer_callbacks">Activity must implement NavigationDrawerCallbacks.</string>
+    <string name="implement_fragment_interaction_listener"> must implement OnFragmentInteractionListener</string>
 
     <!-- Facebook Credentials -->
     <!--<string name="facebook_app_id">835344249849377</string>-->

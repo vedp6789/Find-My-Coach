@@ -51,6 +51,8 @@ public class ProfileFragment extends Fragment implements Callback {
     private Button facebookLink;
     private Data userInfo = null;
 
+    private static final String TAG="FMC:";
+
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -79,15 +81,15 @@ public class ProfileFragment extends Fragment implements Callback {
         progressDialog.show();
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
         RequestParams requestParams = new RequestParams();
-        Log.d("FMC:", "Stored User Id:" + StorageHelper.getUserDetails(getActivity(), "user_id"));
-        Log.d("FMC:", "auth_token" + authToken);
+        Log.d(TAG, "Stored User Id:" + StorageHelper.getUserDetails(getActivity(), "user_id"));
+        Log.d(TAG, "auth_token" + authToken);
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         NetworkClient.getProfile(getActivity(), requestParams, authToken, this);
     }
 
     private void initialize(View view) {
         progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Please wait...");
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
         profileImage = (ImageView) view.findViewById(R.id.profile_image);
         profileName = (TextView) view.findViewById(R.id.profile_name);
         profileAddress = (TextView) view.findViewById(R.id.profile_address);
@@ -122,7 +124,7 @@ public class ProfileFragment extends Fragment implements Callback {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("FMC:", "IN onActivity Result" + requestCode + "   " + requestCode);
+        Log.d(TAG, "IN onActivity Result" + requestCode + "   " + requestCode);
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             String updatedUserJson = data.getStringExtra("user_info");
@@ -180,9 +182,9 @@ public class ProfileFragment extends Fragment implements Callback {
         profileRatting.setText(userInfo.getRating());
         profileLocation.setText(NetworkManager.getCurrentLocation(getActivity()));
         if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {
-            profileTravelAvailable.setText("YES");
+            profileTravelAvailable.setText(getResources().getString(R.string.yes));
         } else {
-            profileTravelAvailable.setText("No");
+            profileTravelAvailable.setText(getResources().getString(R.string.no));
         }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
             Picasso.with(getActivity())
@@ -215,8 +217,8 @@ public class ProfileFragment extends Fragment implements Callback {
                 });
             }
         } catch (Exception e) {
-            Log.d("FMC:", "Error while redirecting:" + e.getMessage());
-            Toast.makeText(getActivity(), "Please update your profile", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "Error while redirecting:" + e.getMessage());
+            Toast.makeText(getActivity(), getResources().getString(R.string.update_profile), Toast.LENGTH_LONG).show();
         }
     }
 

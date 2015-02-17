@@ -63,6 +63,7 @@ public class DashboardActivity extends FragmentActivity
      */
     static final String TAG="Google Play Services status:";
     static final String TAG1 = "GCMCommunication";
+    static final String TAG2="FMC-GCM";
     TextView mDisplay;
     GoogleCloudMessaging gcm;
     AtomicInteger msgId = new AtomicInteger();
@@ -93,7 +94,7 @@ public class DashboardActivity extends FragmentActivity
                 showTermsAndConditions();
             }
         }else{
-            Toast.makeText(DashboardActivity.this,"Your device is not Google Play Services supported.",Toast.LENGTH_LONG).show();
+            Toast.makeText(DashboardActivity.this,getResources().getString(R.string.google_play_services_not_supported),Toast.LENGTH_LONG).show();
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
 }
@@ -109,7 +110,7 @@ public class DashboardActivity extends FragmentActivity
     private String getRegistrationId(Context context) {
         final SharedPreferences prefs = getGCMPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
-        Log.d("GCM Registration previously saved:",registrationId);
+        Log.d(TAG2,"GCM Registration previously saved:"+registrationId);
         //Toast.makeText(DashboardActivity.this,"GCM Registration previously saved:"+registrationId,Toast.LENGTH_LONG).show();
         if (registrationId.isEmpty()) {
             Log.i(TAG1, "Registration not found for GCM client");
@@ -200,7 +201,7 @@ public class DashboardActivity extends FragmentActivity
                 // Persist the regID - no need to register again.
                 storeRegistrationId(context, regid);
             } catch (IOException ex) {
-                msg = "Error :" + ex.getMessage();
+                msg = getResources().getString(R.string.error) + ex.getMessage();
                 // If there is an error, don't just keep trying to register.
                 // Require the user to click a button again, or perform
                 // exponential back-off.
@@ -236,12 +237,12 @@ public class DashboardActivity extends FragmentActivity
             NetworkClient.registerGcmRegistrationId(DashboardActivity.this,requestParams,authToken,new Callback() {
                 @Override
                 public void successOperation(Object object) {
-                     Log.d("Inside sendRegistrationIdToBackend callback successOperation method",object.toString());
+                     Log.d(TAG2,"Inside sendRegistrationIdToBackend callback successOperation method:"+object.toString());
                 }
 
                 @Override
                 public void failureOperation(Object object) {
-                    Log.d("Inside sendRegistrationIdToBackend callback failureOperation method",object.toString());
+                    Log.d(TAG2,"Inside sendRegistrationIdToBackend callback failureOperation method:"+object.toString());
                 }
             });
         }
@@ -281,7 +282,7 @@ public class DashboardActivity extends FragmentActivity
                 registerInBackground();
             }*/
         }else{
-            Toast.makeText(DashboardActivity.this, "Your device is not Google Play Services supported.", Toast.LENGTH_LONG).show();
+            Toast.makeText(DashboardActivity.this, getResources().getString(R.string.google_play_services_not_supported), Toast.LENGTH_LONG).show();
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
 
@@ -299,7 +300,7 @@ public class DashboardActivity extends FragmentActivity
                 GooglePlayServicesUtil.getErrorDialog(resultCode, this,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
-                Log.i(TAG, "This device is not supported.");
+                Log.i(TAG, "This device is not google play services supported.");
                 //finish();
             }
             return false;
@@ -310,7 +311,7 @@ public class DashboardActivity extends FragmentActivity
 
     private void showTermsAndConditions() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle("Terms and Conditions");
+        alertDialog.setTitle(getResources().getString(R.string.t_and_c));
         ScrollView scrollView = new ScrollView(this);
         final TextView contentView = new TextView(this);
         contentView.setText(getResources().getString(R.string.terms));

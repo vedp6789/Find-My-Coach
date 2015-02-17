@@ -57,7 +57,7 @@ public class MyConnectionsFragment extends Fragment implements Callback {
     private void initializeView(View rootView) {
         connectionListView = (ListView) rootView.findViewById(R.id.connectionListView);
         progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Please wait...");
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
     }
 
     @Override
@@ -111,7 +111,7 @@ public class MyConnectionsFragment extends Fragment implements Callback {
         progressDialog.dismiss();
         String msg = (String) object;
         if(msg.equals("Success"))
-            connectionListView.setAdapter(new ArrayAdapter<String>(getActivity(),R.layout.no_data_found, new String[]{"Not connected to anyone."}));
+            connectionListView.setAdapter(new ArrayAdapter<String>(getActivity(),R.layout.no_data_found, new String[]{getResources().getString(R.string.not_connected)}));
         else
             Toast.makeText(getActivity(),msg , Toast.LENGTH_LONG).show();
     }

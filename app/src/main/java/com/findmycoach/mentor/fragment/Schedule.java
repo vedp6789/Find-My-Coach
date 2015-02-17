@@ -27,6 +27,8 @@ public class Schedule {
     private HashMap<Date, Integer> backgroundForDateMap;
     private Context context;
 
+    private static final String TAG="FMC";
+
     public Schedule(Context context){
         this.context = context;
     }
@@ -46,7 +48,7 @@ public class Schedule {
         caldroidFragment.setCaldroidListener(new CaldroidListener() {
             @Override
             public void onSelectDate(Date date, View view) {
-                Log.d("FMC", date.toString());
+                Log.d(TAG, date.toString());
                 Intent intent = new Intent(context, SetScheduleActivity.class);
                 intent.putExtra("DATE",date.toString());
                 context.startActivity(intent);

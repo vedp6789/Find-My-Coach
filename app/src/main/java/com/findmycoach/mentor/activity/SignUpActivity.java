@@ -59,7 +59,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
         signUpButton = (Button) findViewById(R.id.button_signup);
         signUpButton.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Please wait...");
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
     }
 
     @SuppressWarnings("deprecation")
@@ -71,7 +71,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
     protected Dialog onCreateDialog(int id) {
         if (id == 999) {
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
-            datePickerDialog.setTitle("Date of Birth");
+            datePickerDialog.setTitle(getResources().getString(R.string.dob));
             return datePickerDialog;
         }
         return null;

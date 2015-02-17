@@ -61,7 +61,7 @@ public class NotificationAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.no_data_found, null);
             TextView textView = (TextView) view.findViewById(R.id.noDataTV);
-            textView.setText("No new request for you.");
+            textView.setText(context.getResources().getString(R.string.no_new_request));
             return view;
         }
 
