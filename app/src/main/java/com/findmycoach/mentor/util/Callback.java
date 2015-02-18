@@ -9,4 +9,6 @@ public interface Callback {
 
     public void failureOperation(Object object);
 
+
+
 }

@@ -37,6 +37,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private Button gridcell;
     private TextView num_events_per_day;
     private final HashMap<String, Integer> eventsPerMonthMap;
+    private static int CURRENT_MONTH_OF_CALENDAR;
+    private static int CURRENT_YEAR_OF_CALENDAR;
 
     private static final String TAG="FMC:";
 
@@ -48,6 +50,16 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         Calendar calendar = Calendar.getInstance();
         setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
         setCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
+
+
+        CURRENT_MONTH_OF_CALENDAR=calendar.get(Calendar.MONTH);
+        CURRENT_YEAR_OF_CALENDAR=calendar.get(Calendar.YEAR);
+
+        Log.d(TAG,"Current Month of Calendar:"+CURRENT_MONTH_OF_CALENDAR);
+        Log.d(TAG,"Current Year of Calendar:"+CURRENT_YEAR_OF_CALENDAR);
+        Log.d(TAG,"Current day of month"+currentDayOfMonth);
+        Log.d(TAG,"Current week day"+currentWeekDay);
+
 
         // Print Month
         printMonth(month, year);
@@ -110,6 +122,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         }
 
         int currentWeekDay = cal.get(Calendar.DAY_OF_WEEK) - 1;
+
         trailingSpaces = currentWeekDay;
 
 
@@ -134,7 +147,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         // Current Month Days
         for (int i = 1; i <= daysInMonth; i++) {
             Log.d(TAG,currentMonthName+": "+ String.valueOf(i) + " " + getMonthAsString(currentMonth) + " " + yy);
-            if (i == getCurrentDayOfMonth()) {
+            if (i == getCurrentDayOfMonth() && currentMonth == CURRENT_MONTH_OF_CALENDAR && yy == CURRENT_YEAR_OF_CALENDAR ) {
+
                 list.add(String.valueOf(i) + "-BLUE" + "-" + getMonthAsString(currentMonth) + "-" + yy);
             } else {
                 list.add(String.valueOf(i) + "-WHITE" + "-" + getMonthAsString(currentMonth) + "-" + yy);

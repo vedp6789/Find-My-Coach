@@ -451,6 +451,7 @@
     <string name="gcm_notification">GCM Notification</string>
     <string name="email_not_present_in_db">Email is not present in database.</string>
     <string name="problem_in_connection_server">Problem connecting to server.</string>
+    <string name="pick_date">Pick date</string>
 
     <!-- end of unique strings block-->
 
@@ -469,6 +470,7 @@
     <string name="enter_otp">Please enter code sent to your registered number.</string>
     <string name="success">Success</string>
     <string name="update_profile">Please update your profile</string>
+    <string name="from_date_first">Pick start date for this slot.</string>
 
 
 
@@ -552,6 +554,7 @@
     <string name="select">Select</string>
     <string name="forever">Forever</string>
     <string name="date_picker">Date Picker</string>
+
     <!-- Prompting -->
 
     <!-- String s related to Actions -->
