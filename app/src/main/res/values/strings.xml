@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ String array block ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+    <string name="app_name">Find My Coach</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="set_schedule">Schedule</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_signup">SignupActivity</string>
+    <string name="title_edit_profile_menu">Edit Profile</string>
+    <string name="title_validate_phone">Verify phone number</string>
+    <string name="hint_enter_code">Enter 6 character code here.</string>
+
+
     <!-- Countries -->
 
     <string-array name="countries">
@@ -272,6 +283,7 @@
         <item>Uttarakhand</item>
         <item>West Bengal</item>
     </string-array>
+
     <string-array name="united_states">
         <item>Alabama</item>
         <item>Alaska</item>
@@ -364,6 +376,7 @@
         <item>Shivamogga</item>
         <item>Tumakuru</item>
     </string-array>
+
     <string-array name="navigation_items">
         <item>Home</item>
         <item>Notifications</item>
