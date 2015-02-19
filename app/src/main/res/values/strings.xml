@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ String array block ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
     <!-- Countries -->
 
     <string-array name="countries">
@@ -272,6 +272,7 @@
         <item>Uttarakhand</item>
         <item>West Bengal</item>
     </string-array>
+
     <string-array name="united_states">
         <item>Alabama</item>
         <item>Alaska</item>
@@ -364,6 +365,7 @@
         <item>Shivamogga</item>
         <item>Tumakuru</item>
     </string-array>
+
     <string-array name="navigation_items">
         <item>Home</item>
         <item>Notifications</item>
@@ -489,21 +491,6 @@
     <!--Exception message-->
     <string name="must_implement_navigation_drawer_callbacks">Activity must implement NavigationDrawerCallbacks.</string>
     <string name="implement_fragment_interaction_listener"> must implement OnFragmentInteractionListener</string>
-
-    <!-- Facebook Credentials -->
-    <!--<string name="facebook_app_id">835344249849377</string>-->
-    <string name="facebook_app_id">879635545420247</string>
-    <!-- Facebook -->
-
-
-    <!-- Google Location Api Key -->
-    <string name="google_location_api_key">AIzaSyBEXECi4hIR7axoaQiJQiRHvJN_ZIK3ORM</string>
-
-
-    <!-- API KEY-->
-    <string name="api_key">FMC-API-KEY</string>
-    <string name="api_key_value">01b0c1d332f6516fdc63d3d3dcf7b79273cdeb58</string>
-    <string name="auth_key">FMC-AUTH-TOKEN</string>
 
 
     <!-- Strings related to different title-->

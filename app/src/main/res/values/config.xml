@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Facebook Credentials -->
+    <!-- <string name="facebook_app_id">835344249849377</string> -->
+    <!--<string name="facebook_app_id">1428925007356558</string>-->
+    <string name="facebook_app_id">787953461258771</string>
+
+    <!-- Google Location Api Key -->
+    <string name="google_location_api_key">AIzaSyBEXECi4hIR7axoaQiJQiRHvJN_ZIK3ORM</string>
+
+    <!-- FMC API KEY -->
+    <string name="api_key">FMC-API-KEY</string>
+    <string name="auth_key">FMC-AUTH-TOKEN</string>
+    <string name="api_key_value">01b0c1d332f6516fdc63d3d3dcf7b79273cdeb58</string>
+
+    <!-- GCM API DETAILS -->
+    <string name="gcm_project_number">944443780210</string>
+
+    <!--api urls-->
+    <string name="BASE_URL_WITH_AUTH">http://demo.iglulabs.com/fmcweb/www/api/auth/</string>
+    <string name="BASE_URL">http://demo.iglulabs.com/fmcweb/www/api/v1/</string>
+
+</resources>

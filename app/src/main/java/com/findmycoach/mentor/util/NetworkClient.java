@@ -25,22 +25,20 @@ public class NetworkClient {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
-    private static String BASE_URL_with_auth = "http://demo.iglulabs.com/fmcweb/www/api/auth/";
-    private static String BASE_URL = "http://demo.iglulabs.com/fmcweb/www/api/v1/";
-
     private static final String TAG="FMC";
-    public static String getAuthAbsoluteURL(String relativeUrl) {
-        return BASE_URL_with_auth + relativeUrl;
+
+    public static String getAuthAbsoluteURL(String relativeUrl, Context context) {
+        return context.getResources().getString(R.string.BASE_URL_WITH_AUTH) + relativeUrl;
     }
 
-    public static String getAbsoluteURL(String relativeUrl) {
-        return BASE_URL + relativeUrl;
+    public static String getAbsoluteURL(String relativeUrl, Context context) {
+        return context.getResources().getString(R.string.BASE_URL) + relativeUrl;
     }
 
     public static void login(final Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         requestParams.add("usergroup", "3");
-        client.post(getAuthAbsoluteURL("login"), requestParams, new AsyncHttpResponseHandler() {
+        client.post(getAuthAbsoluteURL("login", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String responseJson = new String(responseBody);
@@ -76,7 +74,7 @@ public class NetworkClient {
 
     public static void register(final Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.post(context, getAuthAbsoluteURL("register"), requestParams, new AsyncHttpResponseHandler() {
+        client.post(context, getAuthAbsoluteURL("register", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String responseJson = new String(responseBody);
@@ -109,7 +107,7 @@ public class NetworkClient {
     public static void registerGcmRegistrationId(final Context context, RequestParams requestParams,String authToken, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.post(context, getAbsoluteURL("deviceRegistration"), requestParams, new AsyncHttpResponseHandler() {
+        client.post(context, getAbsoluteURL("deviceRegistration", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String responseJson = new String(responseBody);
@@ -148,7 +146,7 @@ public class NetworkClient {
 
     public static void forgetPassword(final Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.post(getAuthAbsoluteURL("forgot_password"), requestParams, new AsyncHttpResponseHandler() {
+        client.post(getAuthAbsoluteURL("forgot_password", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
@@ -182,7 +180,7 @@ public class NetworkClient {
     public static void getProfile(final Context context, RequestParams requestParams, String authToken, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.get(context, getAbsoluteURL("profile"), requestParams, new AsyncHttpResponseHandler() {
+        client.get(context, getAbsoluteURL("profile", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
@@ -215,7 +213,7 @@ public class NetworkClient {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
 
-        client.post(context, getAbsoluteURL("profile"), requestParams, new AsyncHttpResponseHandler() {
+        client.post(context, getAbsoluteURL("profile", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
@@ -250,7 +248,7 @@ public class NetworkClient {
     public static void updatePhoneForSocialMedia(final Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         requestParams.add("usergroup", "3");
-        client.post(context, getAuthAbsoluteURL("setPhoneNumber"), requestParams, new AsyncHttpResponseHandler() {
+        client.post(context, getAuthAbsoluteURL("setPhoneNumber", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String responseJson = new String(responseBody);
@@ -278,7 +276,7 @@ public class NetworkClient {
 
     public static void repostOtp(final Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.post(context, getAuthAbsoluteURL("repostOtp"), requestParams, new AsyncHttpResponseHandler() {
+        client.post(context, getAuthAbsoluteURL("repostOtp", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String responseJson = new String(responseBody);
@@ -307,7 +305,7 @@ public class NetworkClient {
     public static void registerThroughSocialMedia(final Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         requestParams.add("usergroup", "3");
-        client.post(context, getAuthAbsoluteURL("socialAuthentication"), requestParams, new AsyncHttpResponseHandler() {
+        client.post(context, getAuthAbsoluteURL("socialAuthentication", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 Log.d(TAG, "Success: Response:" + responseBody);
@@ -343,7 +341,7 @@ public class NetworkClient {
 
     public static void verifyPhoneNumber(final Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.post(context, getAuthAbsoluteURL("validateOtp"), requestParams, new AsyncHttpResponseHandler() {
+        client.post(context, getAuthAbsoluteURL("validateOtp", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String responseJson = new String(responseBody);
@@ -393,7 +391,7 @@ public class NetworkClient {
     public static void getConnectionRequests(final Context context, RequestParams requestParams, String authToken, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.get(context, getAbsoluteURL("connectionRequest"), requestParams, new AsyncHttpResponseHandler() {
+        client.get(context, getAbsoluteURL("connectionRequest", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String responseJson = new String(responseBody);
@@ -421,7 +419,7 @@ public class NetworkClient {
 
     public static void respondToConnectionRequest(final Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.post(context, getAbsoluteURL("respondToConnectionRequest"), requestParams, new AsyncHttpResponseHandler() {
+        client.post(context, getAbsoluteURL("respondToConnectionRequest", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String responseJson = new String(responseBody);
@@ -459,7 +457,7 @@ public class NetworkClient {
     public static void getAllConnectionRequest(final Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context,"auth_token"));
-        client.get(context, getAbsoluteURL("connections"), requestParams, new AsyncHttpResponseHandler() {
+        client.get(context, getAbsoluteURL("connections", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String responseJson = new String(responseBody);
