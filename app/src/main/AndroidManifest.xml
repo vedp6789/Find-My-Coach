@@ -29,6 +29,7 @@
     <permission
         android:name="com.fmc.mentor.findmycoach.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="com.fmc.mentor.findmycoach.permission.C2D_MESSAGE" />
 
 
@@ -108,10 +109,12 @@
             android:label="@string/add_new_slot"></activity>
 
         <receiver
+
             android:name="com.findmycoach.mentor.receiver.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
                 <category android:name="com.fmc.findmycoach.mentor" />
             </intent-filter>
         </receiver>
