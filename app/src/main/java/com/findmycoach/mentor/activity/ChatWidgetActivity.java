@@ -157,7 +157,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private void connectWebSocket() {
         URI uri;
         try {
-            uri = new URI("ws://192.241.196.244:9302");
+            uri = new URI(getResources().getString(R.string.CHAT_SOCKET_URL));
         } catch (URISyntaxException e) {
             e.printStackTrace();
             return;

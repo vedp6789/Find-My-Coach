@@ -113,19 +113,17 @@ public class NetworkClient {
                 String responseJson = new String(responseBody);
                 Log.d(TAG, "Success: Response:" + responseJson);
                 Log.d(TAG, "Success: Response Code:" + statusCode);
-                /*SignUpResponse response = new Gson().fromJson(responseJson, SignUpResponse.class);
-                if (statusCode == 200) {
-                    callback.successOperation(response);
-                } else {
-                    callback.failureOperation(response.getMessage());
-                }*/
-
-                //SignUpResponse response = new Gson().fromJson(responseJson, SignUpResponse.class);
-                if (statusCode == 200) {
-                    callback.successOperation(responseJson);
-                } else {
-                    callback.failureOperation(responseJson);
-                }
+//                if (statusCode == 200) {
+//                    callback.successOperation(response);
+//                } else {
+//                    callback.failureOperation(response.getMessage());
+//                }
+//
+//                if (statusCode == 200) {
+//                    callback.successOperation(responseJson);
+//                } else {
+//                    callback.failureOperation(responseJson);
+//                }
             }
 
             @Override
