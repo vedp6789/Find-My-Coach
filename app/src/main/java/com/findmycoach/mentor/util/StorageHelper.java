@@ -16,6 +16,19 @@ public class StorageHelper {
         editor.commit();
     }
 
+    public static void checkGcmRegIdSentToSever(Context context, String key, boolean value){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(key, value);
+        editor.commit();
+    }
+
+    public static boolean getGcmRegIfSentToServer(Context context, String key){
+        SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(context);
+        boolean reg_saved= preferences.getBoolean(key , false);
+        return reg_saved;
+    }
+
     public static String getUserDetails(Context context, String key) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String userToken = preferences.getString(key, null);

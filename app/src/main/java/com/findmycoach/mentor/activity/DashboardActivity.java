@@ -53,6 +53,9 @@ public class DashboardActivity extends FragmentActivity
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private static final String GCM_SHARED_PREFERENCE=" gcm_preference";
+    private static String REG_ID_SAVED_TO_SERVER;
+    String regid;
+    boolean regid_saved_to_server=false;
     /**
      * This is the project number we got
      * from the API Console,
@@ -70,13 +73,14 @@ public class DashboardActivity extends FragmentActivity
     SharedPreferences prefs;
     Context context;
 
-    String regid;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         context=getApplicationContext();
+        REG_ID_SAVED_TO_SERVER=getResources().getString(R.string.reg_id_saved_to_server);
 
 
         // Check device for Play Services APK.
@@ -86,7 +90,9 @@ public class DashboardActivity extends FragmentActivity
             gcm = GoogleCloudMessaging.getInstance(this);
             regid = getRegistrationId(context);
 
-            if (regid.isEmpty()) {
+            regid_saved_to_server = getRegistrationSaveStat(context);
+
+            if (regid.isEmpty() || !regid_saved_to_server) {
                 registerInBackground();
             }
             initialize();
@@ -128,6 +134,14 @@ public class DashboardActivity extends FragmentActivity
         }
         return registrationId;
     }
+  /**
+  * this method is checking whether reg_id is previously saved to server or not
+  */
+   private boolean getRegistrationSaveStat(Context context){
+        boolean b=StorageHelper.getGcmRegIfSentToServer(context,REG_ID_SAVED_TO_SERVER);
+        Log.d(TAG2,"Registration id available to app server or not :"+b);
+        return b;
+   }
 
     /**
      * @return Application's {@code SharedPreferences}.

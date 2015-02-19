@@ -116,6 +116,7 @@ public class NetworkClient {
                 String responseJson = new String(responseBody);
                 Log.d(TAG, "Success: Response:" + responseJson);
                 Log.d(TAG, "Success: Response Code:" + statusCode);
+                StorageHelper.checkGcmRegIdSentToSever(context,context.getResources().getString(R.string.reg_id_saved_to_server),true);
 //                if (statusCode == 200) {
 //                    callback.successOperation(response);
 //                } else {
@@ -131,6 +132,7 @@ public class NetworkClient {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                StorageHelper.checkGcmRegIdSentToSever(context,context.getResources().getString(R.string.reg_id_saved_to_server),false);
                 try {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Failure: Response:" + responseJson);
