@@ -107,7 +107,6 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 requestParams.add("last_name", names[1]);
                 requestParams.add("dob", user.getBirthday());
                 requestParams.add("google_link", user.getUrl());
-                requestParams.add("address", user.getCurrentLocation());
                 requestParams.add("gender", user.getGender() + "");
                 requestParams.add("photograph", (user.getImage().getUrl()));
                 saveUserEmail(mPlusClient.getAccountName());
@@ -312,11 +311,6 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         requestParams.add("dob", user.getBirthday());
         requestParams.add("facebook_link", user.getLink());
         requestParams.add("email", (String) user.getProperty("email"));
-        try {
-            requestParams.add("address", user.getLocation().getName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         requestParams.add("gender", (String) user.getProperty("gender"));
         requestParams.add("photograph", "http://graph.facebook.com/" + user.getId() + "/picture?type=large");
         saveUserEmail((String) user.getProperty("email"));
@@ -344,7 +338,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                     }, 3500);
                 } else {
                     dialog.dismiss();
-                    requestParams.add("phonenumber", phnNum);
+                    requestParams.add("phone_number", phnNum);
                     saveUserPhoneNumber(phnNum);
                     NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
                     progressDialog.show();

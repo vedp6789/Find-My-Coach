@@ -4,9 +4,12 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -17,14 +20,19 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.findmycoach.mentor.adapter.ChatWidgetAdapter;
+import com.findmycoach.mentor.util.Callback;
+import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.StorageHelper;
 import com.fmc.mentor.findmycoach.R;
+import com.loopj.android.http.RequestParams;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -32,7 +40,7 @@ import java.util.ArrayList;
 /**
  * Created by IgluLabs on 1/23/2015.
  */
-public class ChatWidgetActivity extends Activity implements View.OnClickListener {
+public class ChatWidgetActivity extends Activity implements View.OnClickListener, Callback {
 
     private String studentId;
     private ListView chatWidgetLv;
@@ -40,6 +48,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private ChatWidgetAdapter chatWidgetAdapter;
     private WebSocketClient mWebSocketClient;
     private ProgressDialog progressDialog;
+    private final int STORAGE_GALLERY_IMAGE_REQUEST_CODE = 100;
+    private final int STORAGE_GALLERY_VIDEO_REQUEST_CODE = 101;
 
     private static final String TAG="FMC";
     private static final String TAG1="FMC-Websocket";
@@ -102,13 +112,60 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
                 finish();
                 break;
             case R.id.attach_image:
-                Toast.makeText(this, getResources().getString(R.string.attach_image_clicked), Toast.LENGTH_SHORT).show();
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, STORAGE_GALLERY_IMAGE_REQUEST_CODE);
                 break;
             case R.id.attach_video:
-                Toast.makeText(this, getResources().getString(R.string.attach_video_clicked), Toast.LENGTH_SHORT).show();
+                Intent videoPickerIntent = new Intent(Intent.ACTION_PICK);
+                videoPickerIntent.setType("video/*");
+                startActivityForResult(videoPickerIntent, STORAGE_GALLERY_VIDEO_REQUEST_CODE);
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        String path = null;
+        // Image selected
+        if (resultCode == RESULT_OK && requestCode == STORAGE_GALLERY_IMAGE_REQUEST_CODE){
+            path = getRealPathFromURI(data.getData());
+            Toast.makeText(this,"Image " + path,Toast.LENGTH_LONG).show();
+            Log.d(TAG, path);
+            sendAttachment(path);
+        }
+
+        //Video selected
+        else if (resultCode == RESULT_OK && requestCode == STORAGE_GALLERY_VIDEO_REQUEST_CODE){
+            path = getRealPathFromURI(data.getData());
+            Toast.makeText(this,"Video " + path,Toast.LENGTH_LONG).show();
+            Log.d(TAG, path);
+            sendAttachment(path);
+        }
+    }
+
+    private void sendAttachment(String filePath) {
+        progressDialog.show();
+        try {
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("sender_id", StorageHelper.getUserDetails(this, "user_id"));
+            requestParams.add("receiver_id", studentId.trim());
+            requestParams.put("file", new File(filePath));
+            NetworkClient.sendAttachment(this, requestParams, this);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // And to convert the image URI to the direct file system path of the image file
+    public String getRealPathFromURI(Uri contentUri) {
+        String [] proj={MediaStore.Images.Media.DATA};
+        Cursor cursor = managedQuery( contentUri,  proj, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
 
     @Override
@@ -199,4 +256,13 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         mWebSocketClient.connect();
     }
 
+    @Override
+    public void successOperation(Object object) {
+
+    }
+
+    @Override
+    public void failureOperation(Object object) {
+
+    }
 }
