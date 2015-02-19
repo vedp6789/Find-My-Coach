@@ -20,6 +20,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.findmycoach.mentor.adapter.ChatWidgetAdapter;
+import com.findmycoach.mentor.beans.attachment.Attachment;
+import com.findmycoach.mentor.beans.chats.Chats;
+import com.findmycoach.mentor.beans.chats.Data;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.StorageHelper;
@@ -36,13 +39,14 @@ import java.io.FileNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by IgluLabs on 1/23/2015.
  */
 public class ChatWidgetActivity extends Activity implements View.OnClickListener, Callback {
 
-    private String studentId;
+    private String studentId, mentorId;
     private ListView chatWidgetLv;
     private EditText msgToSend;
     private ChatWidgetAdapter chatWidgetAdapter;
@@ -62,8 +66,16 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         initialize();
         applyActionbarProperties();
         progressDialog.show();
-        populateData();
-        connectWebSocket();
+//        populateData();
+//        connectWebSocket();
+        getChatHistory();
+    }
+
+    public void getChatHistory() {
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("sender_id", mentorId);
+        requestParams.add("receiver_id",studentId);
+        NetworkClient.getChatHistory(this, requestParams, this);
     }
 
     private void initialize() {
@@ -72,6 +84,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             studentId = getUserIntent.getStringExtra("student_id");
         chatWidgetLv = (ListView) findViewById(R.id.chatWidgetLv);
         msgToSend = (EditText) findViewById(R.id.msgToSendET);
+        mentorId = StorageHelper.getUserDetails(this, "user_id");
         findViewById(R.id.sendButton).setOnClickListener(this);
         chatWidgetLv.setDivider(null);
         chatWidgetLv.setSelector(new ColorDrawable(0));
@@ -79,16 +92,29 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         progressDialog.setMessage(getResources().getString(R.string.connecting));
     }
 
-    private void populateData() {
-        ArrayList<String> dummyList = new ArrayList<String>();
-        ArrayList<Integer> senderListList = new ArrayList<Integer>();
-        for (int i = 0; i < 5; i++) {
-            dummyList.add(i, getResources().getString(R.string.dummy_contain_of_message) + i);
-            senderListList.add(0);
+    private void populateData(List<Data> chats) {
+        ArrayList<String> messageList = new ArrayList<String>();
+        ArrayList<Integer> senderList = new ArrayList<Integer>();
+        ArrayList<Integer> messageTypeList = new ArrayList<Integer>();
+        for(int i=0; i<chats.size(); i++){
+            Data data = chats.get(i);
+            messageList.add(data.getMessage());
+
+            if(data.getSender_id().equals(studentId))
+                senderList.add(0);
+            else
+                senderList.add(1);
+
+            if(data.getMessage_type().equals("text"))
+                messageTypeList.add(0);
+            else if(data.getMessage_type().equals("image"))
+                messageTypeList.add(1);
+            else if(data.getMessage_type().equals("video"))
+                messageTypeList.add(2);
+
         }
-        chatWidgetAdapter = new ChatWidgetAdapter(this, dummyList, senderListList);
+        chatWidgetAdapter = new ChatWidgetAdapter(this, messageList, senderList, messageTypeList);
         chatWidgetLv.setAdapter(chatWidgetAdapter);
-        
     }
 
     private void applyActionbarProperties() {
@@ -132,7 +158,6 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         // Image selected
         if (resultCode == RESULT_OK && requestCode == STORAGE_GALLERY_IMAGE_REQUEST_CODE){
             path = getRealPathFromURI(data.getData());
-            Toast.makeText(this,"Image " + path,Toast.LENGTH_LONG).show();
             Log.d(TAG, path);
             sendAttachment(path);
         }
@@ -140,7 +165,6 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         //Video selected
         else if (resultCode == RESULT_OK && requestCode == STORAGE_GALLERY_VIDEO_REQUEST_CODE){
             path = getRealPathFromURI(data.getData());
-            Toast.makeText(this,"Video " + path,Toast.LENGTH_LONG).show();
             Log.d(TAG, path);
             sendAttachment(path);
         }
@@ -150,7 +174,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         progressDialog.show();
         try {
             RequestParams requestParams = new RequestParams();
-            requestParams.add("sender_id", StorageHelper.getUserDetails(this, "user_id"));
+            requestParams.add("sender_id", mentorId);
             requestParams.add("receiver_id", studentId.trim());
             requestParams.put("file", new File(filePath));
             NetworkClient.sendAttachment(this, requestParams, this);
@@ -206,7 +230,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         }
         Log.d(TAG, studentId.trim());
         msgToSend.setText("");
-        chatWidgetAdapter.updateMessageList(msg, 0);
+        chatWidgetAdapter.updateMessageList(msg, 0, 0);
         chatWidgetAdapter.notifyDataSetChanged();
         chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
     }
@@ -235,7 +259,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
                     @Override
                     public void run() {
                         Log.d(TAG1, message);
-                        chatWidgetAdapter.updateMessageList(message, 1);
+                        chatWidgetAdapter.updateMessageList(message, 1, 0);
                         chatWidgetAdapter.notifyDataSetChanged();
                         chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
                     }
@@ -258,11 +282,29 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
     @Override
     public void successOperation(Object object) {
-
+        if(object instanceof Chats){
+            Chats chats = (Chats) object;
+            if(chats.getData() != null && chats.getData().size() > 0){
+                populateData(chats.getData());
+            }else{
+                chatWidgetAdapter = new ChatWidgetAdapter(this, new ArrayList<String>(), new ArrayList<Integer>(), new ArrayList<Integer>());
+                chatWidgetLv.setAdapter(chatWidgetAdapter);
+            }
+            connectWebSocket();
+        }
+        else if(object instanceof Attachment){
+            progressDialog.dismiss();
+            Attachment attachment = (Attachment) object;
+            Log.d(TAG,attachment.getData().getPath());
+            chatWidgetAdapter.updateMessageList(attachment.getData().getPath(), 0, 1);
+            chatWidgetAdapter.notifyDataSetChanged();
+            chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+        }
     }
 
     @Override
     public void failureOperation(Object object) {
-
+        progressDialog.dismiss();
+        Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
     }
 }

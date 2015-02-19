@@ -5,7 +5,9 @@ import android.os.AsyncTask;
 import android.os.Looper;
 import android.util.Log;
 
+import com.findmycoach.mentor.beans.attachment.Attachment;
 import com.findmycoach.mentor.beans.authentication.Response;
+import com.findmycoach.mentor.beans.chats.Chats;
 import com.findmycoach.mentor.beans.registration.SignUpResponse;
 import com.findmycoach.mentor.beans.requests.ConnectionRequestsResponse;
 import com.findmycoach.mentor.beans.suggestion.Suggestion;
@@ -192,7 +194,7 @@ public class NetworkClient {
                 try {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Success: Response:" + responseJson);
-                    Log.d(TAG,"Success: Response Code:" + statusCode);
+                    Log.d(TAG, "Success: Response Code:" + statusCode);
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.successOperation(response);
                 } catch (Exception e) {
@@ -436,13 +438,13 @@ public class NetworkClient {
                 String responseJson = new String(responseBody);
                 Log.d(TAG, "Success: Response:" + responseJson);
                 Log.d(TAG, "Success: Response Code:" + statusCode);
-                if(statusCode == 200)
+                if (statusCode == 200)
                     callback.successOperation(null);
-                else{
-                    try{
+                else {
+                    try {
                         Response response = new Gson().fromJson(responseJson, Response.class);
                         callback.failureOperation(response.getMessage());
-                    }catch (Exception e) {
+                    } catch (Exception e) {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
                     }
@@ -467,7 +469,7 @@ public class NetworkClient {
 
     public static void getAllConnectionRequest(final Context context, RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context,"auth_token"));
+        client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, "auth_token"));
         requestParams.add(userGroup, "3");
         client.get(context, getAbsoluteURL("connections", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -475,10 +477,10 @@ public class NetworkClient {
                 String responseJson = new String(responseBody);
                 Log.d(TAG, "Success: Response:" + responseJson);
                 Log.d(TAG, "Success: Response Code:" + statusCode);
-                if(statusCode == 200){
-                    ConnectionRequestsResponse connectionRequestsResponse = new Gson().fromJson(responseJson,ConnectionRequestsResponse.class);
+                if (statusCode == 200) {
+                    ConnectionRequestsResponse connectionRequestsResponse = new Gson().fromJson(responseJson, ConnectionRequestsResponse.class);
                     callback.successOperation(connectionRequestsResponse);
-                }else if(statusCode == 401){
+                } else if (statusCode == 401) {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage());
                 }
@@ -490,7 +492,7 @@ public class NetworkClient {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Failure: Response:" + responseJson);
                     Log.d(TAG, "Failure: Response Code:" + statusCode);
-                    if(responseJson.contains("\"message\":\"Success\",")){
+                    if (responseJson.contains("\"message\":\"Success\",")) {
                         callback.failureOperation("Success");
                         return;
                     }
@@ -504,16 +506,54 @@ public class NetworkClient {
         });
     }
 
-    public static void sendAttachment(final Context context, RequestParams requestParams, final Callback callback) {
+    public static void sendAttachment(final Context context, final RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, "auth_token"));
-        requestParams.add(userGroup, "3");
+        requestParams.add(userGroup, "2");
         client.post(context, getAbsoluteURL("attachment", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 Log.d(TAG, "Success: Response Code:" + statusCode);
-                if (responseBody != null)
-                    Log.d(TAG, "Success: Response:" + new String(responseBody));
+                String responseJson = new String(responseBody);
+                Log.d(TAG, "Success: Response:" + responseJson);
+                Attachment attachment = new Gson().fromJson(responseJson, Attachment.class);
+                if (statusCode == 200) {
+                    callback.successOperation(attachment);
+                } else {
+                    callback.failureOperation(attachment.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    Log.d(TAG, "Failure: Response:" + new String(responseBody));
+                    Log.d(TAG, "Failure: Response Code:" + statusCode);
+
+                } catch (Exception e) {
+                    Log.d(TAG, "Failure: Error:" + e.getMessage());
+                    callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
+                }
+            }
+        });
+    }
+
+    public static void getChatHistory(final Context context, final RequestParams requestParams, final Callback callback) {
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, "auth_token"));
+        requestParams.add(userGroup, "2");
+        client.get(context, getAbsoluteURL("chats", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String responseJson = new String(responseBody);
+                Log.d(TAG, "Success: Response Code:" + statusCode);
+                Log.d(TAG, "Success: Response:" + responseJson);
+                Chats chats = new Gson().fromJson(responseJson, Chats.class);
+                if (statusCode == 200) {
+                    callback.successOperation(chats);
+                } else {
+                    callback.failureOperation(chats.getMessage());
+                }
             }
 
             @Override
