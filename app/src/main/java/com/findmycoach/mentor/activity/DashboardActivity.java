@@ -78,6 +78,7 @@ public class DashboardActivity extends FragmentActivity
         setContentView(R.layout.activity_dashboard);
         context=getApplicationContext();
 
+
         // Check device for Play Services APK.
         if (checkPlayServices()) {
             // If this check succeeds, proceed with normal processing.

@@ -452,6 +452,8 @@
     <string name="email_not_present_in_db">Email is not present in database.</string>
     <string name="problem_in_connection_server">Problem connecting to server.</string>
     <string name="pick_date">Pick date</string>
+    <string name="fmc_service">FMC Service</string>
+    <string name="fmc_service_description">FMC running in service to allow push notification.</string>
 
     <!-- end of unique strings block-->
 
