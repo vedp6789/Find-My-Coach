@@ -116,12 +116,13 @@ public class NetworkClient {
                 String responseJson = new String(responseBody);
                 Log.d(TAG, "Success: Response:" + responseJson);
                 Log.d(TAG, "Success: Response Code:" + statusCode);
-                StorageHelper.checkGcmRegIdSentToSever(context,context.getResources().getString(R.string.reg_id_saved_to_server),true);
-//                if (statusCode == 200) {
-//                    callback.successOperation(response);
-//                } else {
-//                    callback.failureOperation(response.getMessage());
-//                }
+
+                if (statusCode == 200) {
+                    StorageHelper.checkGcmRegIdSentToSever(context,context.getResources().getString(R.string.reg_id_saved_to_server),true);
+                    //callback.successOperation(response);
+                } else {
+                   // callback.failureOperation(response.getMessage());
+                }
 //
 //                if (statusCode == 200) {
 //                    callback.successOperation(responseJson);
