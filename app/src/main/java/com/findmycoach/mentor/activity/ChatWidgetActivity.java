@@ -54,6 +54,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private ProgressDialog progressDialog;
     private final int STORAGE_GALLERY_IMAGE_REQUEST_CODE = 100;
     private final int STORAGE_GALLERY_VIDEO_REQUEST_CODE = 101;
+    private boolean isSocketConnected;
 
     private static final String TAG="FMC";
     private static final String TAG1="FMC-Websocket";
@@ -90,6 +91,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         chatWidgetLv.setSelector(new ColorDrawable(0));
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.connecting));
+        progressDialog.setCancelable(false);
+        isSocketConnected = false;
     }
 
     private void populateData(List<Data> chats) {
@@ -199,18 +202,6 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mWebSocketClient.close();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        connectWebSocket();
-    }
-
     private void sendMsg() {
         String msg = msgToSend.getText().toString().trim();
         if (TextUtils.isEmpty(msg)) {
@@ -224,7 +215,12 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             messageObject.put("type", "text");
             messageObject.put("data", msg);
             String msgJson = messageObject.toString();
-            mWebSocketClient.send(msgJson);
+            if(isChangingConfigurations())
+                mWebSocketClient.send(msgJson);
+            else {
+                mWebSocketClient.connect();
+                return;
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -233,6 +229,12 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         chatWidgetAdapter.updateMessageList(msg, 0, 0);
         chatWidgetAdapter.notifyDataSetChanged();
         chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mWebSocketClient.close();
     }
 
     private void connectWebSocket() {
@@ -248,6 +250,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
                 Log.i(TAG, "Opened");
+                isSocketConnected = true;
                 mWebSocketClient.send(StorageHelper.getUserDetails(ChatWidgetActivity.this, "auth_token"));
                 progressDialog.dismiss();
             }
@@ -269,11 +272,13 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             @Override
             public void onClose(int i, String s, boolean b) {
                 Log.d(TAG1, "Closed " + s);
+                isSocketConnected = false;
             }
 
             @Override
             public void onError(Exception e) {
                 Log.d(TAG1, "Error " + e.getMessage());
+                isSocketConnected = false;
                 progressDialog.dismiss();
             }
         };
