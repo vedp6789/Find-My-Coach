@@ -104,9 +104,9 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             messageList.add(data.getMessage());
 
             if(data.getSender_id().equals(studentId))
-                senderList.add(0);
-            else
                 senderList.add(1);
+            else
+                senderList.add(0);
 
             if(data.getMessage_type().equals("text"))
                 messageTypeList.add(0);
