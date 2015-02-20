@@ -211,8 +211,10 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         }
 
         String msgJson = getMsgInJson("text", msg).toString();
-        if(isSocketConnected)
+        if(isSocketConnected) {
             mWebSocketClient.send(msgJson);
+            Log.d(TAG, msgJson);
+        }
         else {
             connectWebSocket();
             return;
@@ -311,8 +313,10 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             String imagePath = attachment.getData().getPath();
 
             String msgJson = getMsgInJson("image", imagePath).toString();
-            if(isSocketConnected)
+            if(isSocketConnected) {
                 mWebSocketClient.send(msgJson);
+                Log.d(TAG, msgJson);
+            }
             else {
                 mWebSocketClient.connect();
                 return;

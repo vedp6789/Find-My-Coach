@@ -514,13 +514,18 @@ public class NetworkClient {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 Log.d(TAG, "Success: Response Code:" + statusCode);
-                String responseJson = new String(responseBody);
-                Log.d(TAG, "Success: Response:" + responseJson);
-                Attachment attachment = new Gson().fromJson(responseJson, Attachment.class);
-                if (statusCode == 200) {
-                    callback.successOperation(attachment);
-                } else {
-                    callback.failureOperation(attachment.getMessage());
+                try{
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success: Response:" + responseJson);
+                    Attachment attachment = new Gson().fromJson(responseJson, Attachment.class);
+                    if (statusCode == 200) {
+                        callback.successOperation(attachment);
+                    } else {
+                        callback.failureOperation(attachment.getMessage());
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    callback.failureOperation("Unable to send attachment.");
                 }
             }
 
