@@ -104,7 +104,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.findmycoach.mentor.activity.AddNewSlotActivity"
-            android:label="@string/add_new_slot"/>
+            android:label="@string/add_new_slot" />
 
         <receiver
             android:name="com.findmycoach.mentor.push.GcmBroadcastReceiver"
@@ -116,9 +116,7 @@
 
         </receiver>
 
-        <service android:name="com.findmycoach.mentor.push.GcmFmcService"/>
-
-
+        <service android:name="com.findmycoach.mentor.push.GcmFmcService" />
 
     </application>
 
