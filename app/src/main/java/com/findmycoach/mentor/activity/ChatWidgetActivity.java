@@ -57,7 +57,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private boolean isSocketConnected;
 
     private static final String TAG="FMC";
-    private static final String TAG1="FMC-Websocket";
+    private static final String TAG1="FMC-WebSocket";
 
 
     @Override
@@ -82,7 +82,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private void initialize() {
         Intent getUserIntent = getIntent();
         if (getUserIntent != null)
-            studentId = getUserIntent.getStringExtra("student_id");
+            studentId = getUserIntent.getStringExtra("student_id").trim();
         chatWidgetLv = (ListView) findViewById(R.id.chatWidgetLv);
         msgToSend = (EditText) findViewById(R.id.msgToSendET);
         mentorId = StorageHelper.getUserDetails(this, "user_id");
@@ -99,7 +99,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         ArrayList<String> messageList = new ArrayList<String>();
         ArrayList<Integer> senderList = new ArrayList<Integer>();
         ArrayList<Integer> messageTypeList = new ArrayList<Integer>();
-        for(int i=0; i<chats.size(); i++){
+        for(int i=chats.size()-1; i>=0; i--){
             Data data = chats.get(i);
             messageList.add(data.getMessage());
 
@@ -174,11 +174,12 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     }
 
     private void sendAttachment(String filePath) {
+        progressDialog.setMessage(getResources().getString(R.string.sending));
         progressDialog.show();
         try {
             RequestParams requestParams = new RequestParams();
             requestParams.add("sender_id", mentorId);
-            requestParams.add("receiver_id", studentId.trim());
+            requestParams.add("receiver_id", studentId);
             requestParams.put("file", new File(filePath));
             NetworkClient.sendAttachment(this, requestParams, this);
         } catch (FileNotFoundException e) {
@@ -209,26 +210,31 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             return;
         }
 
-        JSONObject messageObject=new JSONObject();
-        try {
-            messageObject.put("receiver_id", studentId);
-            messageObject.put("type", "text");
-            messageObject.put("data", msg);
-            String msgJson = messageObject.toString();
-            if(isChangingConfigurations())
-                mWebSocketClient.send(msgJson);
-            else {
-                mWebSocketClient.connect();
-                return;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        String msgJson = getMsgInJson("text", msg).toString();
+        if(isSocketConnected)
+            mWebSocketClient.send(msgJson);
+        else {
+            connectWebSocket();
+            return;
         }
-        Log.d(TAG, studentId.trim());
+
         msgToSend.setText("");
         chatWidgetAdapter.updateMessageList(msg, 0, 0);
         chatWidgetAdapter.notifyDataSetChanged();
         chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+    }
+
+    private JSONObject getMsgInJson(String type, String msg) {
+        JSONObject messageObject = new JSONObject();
+        try {
+            messageObject.put("receiver_id", studentId);
+            messageObject.put("type", type);
+            messageObject.put("data", msg);
+            messageObject.put("receiver_group_id", "2");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return messageObject;
     }
 
     @Override
@@ -238,6 +244,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     }
 
     private void connectWebSocket() {
+        progressDialog.setMessage(getResources().getString(R.string.connecting));
         URI uri;
         try {
             uri = new URI(getResources().getString(R.string.CHAT_SOCKET_URL));
@@ -301,7 +308,17 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             progressDialog.dismiss();
             Attachment attachment = (Attachment) object;
             Log.d(TAG,attachment.getData().getPath());
-            chatWidgetAdapter.updateMessageList(attachment.getData().getPath(), 0, 1);
+            String imagePath = attachment.getData().getPath();
+
+            String msgJson = getMsgInJson("image", imagePath).toString();
+            if(isSocketConnected)
+                mWebSocketClient.send(msgJson);
+            else {
+                mWebSocketClient.connect();
+                return;
+            }
+
+            chatWidgetAdapter.updateMessageList(imagePath, 0, 1);
             chatWidgetAdapter.notifyDataSetChanged();
             chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
         }

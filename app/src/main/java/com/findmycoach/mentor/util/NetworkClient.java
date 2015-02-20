@@ -509,7 +509,7 @@ public class NetworkClient {
     public static void sendAttachment(final Context context, final RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, "auth_token"));
-        requestParams.add(userGroup, "2");
+        requestParams.add(userGroup, "3");
         client.post(context, getAbsoluteURL("attachment", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -541,7 +541,7 @@ public class NetworkClient {
     public static void getChatHistory(final Context context, final RequestParams requestParams, final Callback callback) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, "auth_token"));
-        requestParams.add(userGroup, "2");
+        requestParams.add(userGroup, "3");
         client.get(context, getAbsoluteURL("chats", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
