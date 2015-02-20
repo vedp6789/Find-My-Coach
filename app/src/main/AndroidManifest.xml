@@ -107,7 +107,7 @@
             android:label="@string/add_new_slot"/>
 
         <receiver
-            android:name="com.findmycoach.mentor.receiver.GcmBroadcastReceiver"
+            android:name="com.findmycoach.mentor.push.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -116,7 +116,7 @@
 
         </receiver>
 
-        <service android:name="com.findmycoach.mentor.service.GcmFmcService"/>
+        <service android:name="com.findmycoach.mentor.push.GcmFmcService"/>
 
 
 

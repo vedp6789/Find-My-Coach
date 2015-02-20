@@ -1,4 +1,4 @@
-package com.findmycoach.mentor.service;
+package com.findmycoach.mentor.push;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -11,7 +11,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.findmycoach.mentor.activity.DashboardActivity;
-import com.findmycoach.mentor.receiver.GcmBroadcastReceiver;
 import com.fmc.mentor.findmycoach.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
