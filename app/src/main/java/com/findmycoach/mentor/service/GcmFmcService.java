@@ -61,7 +61,7 @@ public class GcmFmcService extends IntentService {
                 Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
                 // Post notification of received message.
                 //sendNotification("Received: " + extras.toString());
-                sendNotification("FMC Mentor: " + extras.get("message"));
+                sendNotification("FMC Mentor: " + extras.get("data"));
                 Log.i(TAG, "Received: " + extras.toString());
             }
         }
