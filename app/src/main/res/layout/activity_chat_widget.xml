@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <ListView
+        android:id="@+id/chatWidgetLv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:stackFromBottom="true"
         android:layout_gravity="bottom"
-        android:id="@+id/chatWidgetLv" />
+        android:layout_marginBottom="50dp"
+        android:stackFromBottom="true" />
 
     <ImageButton
+        android:id="@+id/sendButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/sendButton"
-        android:src="@android:drawable/ic_menu_send"
+        android:layout_gravity="right|bottom"
         android:background="@android:color/transparent"
-        android:layout_gravity="right|bottom" />
+        android:src="@android:drawable/ic_menu_send" />
 
     <EditText
+        android:id="@+id/msgToSendET"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/msgToSendET"
-        android:hint="Type here to send"
+        android:layout_gravity="left|bottom"
         android:layout_marginRight="50dp"
-        android:layout_gravity="left|bottom" />
+        android:hint="Type here to send" />
 </FrameLayout>
