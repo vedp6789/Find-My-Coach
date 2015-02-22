@@ -215,11 +215,14 @@ public class DashboardActivity extends FragmentActivity
 
                 // Persist the regID - no need to register again.
                 storeRegistrationId(context, regid);
-            } catch (IOException ex) {
+            }
+            catch (IOException ex) {
                 msg = getResources().getString(R.string.error) + ex.getMessage();
                 // If there is an error, don't just keep trying to register.
                 // Require the user to click a button again, or perform
                 // exponential back-off.
+            }catch(Exception e){
+                Log.d(TAG,"Exeception occured while doing GCM registration:"+e);
             }
             return msg;
 
@@ -418,7 +421,7 @@ public class DashboardActivity extends FragmentActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        if (mNavigationDrawerFragment!=null && !mNavigationDrawerFragment.isDrawerOpen()) {
             getMenuInflater().inflate(R.menu.dashboard, menu);
             restoreActionBar();
             return true;

@@ -480,6 +480,7 @@
 
     <!-- Dialog message strings-->
     <string name="connecting">Connecting...</string>
+    <string name="sending">Sending...</string>
     <string name="please_wait">Please wait...</string>
     <string name="dob">Date of Birth</string>
     <string name="phone_no_must">Phone number is must!!!</string>
@@ -502,6 +503,7 @@
     <string name="title_activity_choose_image">ChooseImageActivity</string>
     <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_chat_widget">Chat Widget</string>
     <string name="title_activity_signup">SignupActivity</string>
     <string name="title_edit_profile_menu">Edit Profile</string>
     <string name="title_validate_phone">Verify phone number</string>
