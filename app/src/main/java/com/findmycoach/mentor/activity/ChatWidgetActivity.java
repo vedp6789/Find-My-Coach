@@ -162,24 +162,25 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         if (resultCode == RESULT_OK && requestCode == STORAGE_GALLERY_IMAGE_REQUEST_CODE){
             path = getRealPathFromURI(data.getData());
             Log.d(TAG, path);
-            sendAttachment(path);
+            sendAttachment(path, "image");
         }
 
         //Video selected
         else if (resultCode == RESULT_OK && requestCode == STORAGE_GALLERY_VIDEO_REQUEST_CODE){
             path = getRealPathFromURI(data.getData());
             Log.d(TAG, path);
-            sendAttachment(path);
+            sendAttachment(path, "video");
         }
     }
 
-    private void sendAttachment(String filePath) {
+    private void sendAttachment(String filePath, String type) {
         progressDialog.setMessage(getResources().getString(R.string.sending));
         progressDialog.show();
         try {
             RequestParams requestParams = new RequestParams();
             requestParams.add("sender_id", mentorId);
             requestParams.add("receiver_id", studentId);
+            requestParams.add("type", type);
             requestParams.put("file", new File(filePath));
             NetworkClient.sendAttachment(this, requestParams, this);
         } catch (FileNotFoundException e) {
@@ -239,6 +240,29 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         return messageObject;
     }
 
+    private void showReceivedMessage(String message) {
+        try {
+            JSONObject jsonMessage = new JSONObject(message);
+            String msg = jsonMessage.getString("message");
+            String messageType = jsonMessage.getString("message_type");
+            if(messageType.equals("text")){
+                chatWidgetAdapter.updateMessageList(msg, 1, 0);
+                chatWidgetAdapter.notifyDataSetChanged();
+                chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+            }else if(messageType.equals("image")){
+                chatWidgetAdapter.updateMessageList(msg, 1, 1);
+                chatWidgetAdapter.notifyDataSetChanged();
+                chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+            }else if(messageType.equals("video")){
+                chatWidgetAdapter.updateMessageList(msg, 1, 2);
+                chatWidgetAdapter.notifyDataSetChanged();
+                chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -271,9 +295,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
                     @Override
                     public void run() {
                         Log.d(TAG1, message);
-                        chatWidgetAdapter.updateMessageList(message, 1, 0);
-                        chatWidgetAdapter.notifyDataSetChanged();
-                        chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+                        showReceivedMessage(message);
                     }
                 });
             }
@@ -312,7 +334,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             Log.d(TAG,attachment.getData().getPath());
             String imagePath = attachment.getData().getPath();
 
-            String msgJson = getMsgInJson("image", imagePath).toString();
+            String msgJson = getMsgInJson(attachment.getData().getFile_type().contains("image") ? "image" : "video", imagePath).toString();
+            Log.d(TAG,"Sending to socket : " + msgJson);
             if(isSocketConnected) {
                 mWebSocketClient.send(msgJson);
                 Log.d(TAG, msgJson);

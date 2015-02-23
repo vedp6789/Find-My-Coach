@@ -1,8 +1,6 @@
 package com.findmycoach.mentor.util;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Looper;
 import android.util.Log;
 
 import com.findmycoach.mentor.beans.attachment.Attachment;
@@ -532,8 +530,8 @@ public class NetworkClient {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
-                    Log.d(TAG, "Failure: Response:" + new String(responseBody));
                     Log.d(TAG, "Failure: Response Code:" + statusCode);
+                    Log.d(TAG, "Failure: Response:" + new String(responseBody));
 
                 } catch (Exception e) {
                     Log.d(TAG, "Failure: Error:" + e.getMessage());
