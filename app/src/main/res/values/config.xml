@@ -18,8 +18,8 @@
     <string name="gcm_project_number">944443780210</string>
 
     <!--api urls-->
-    <string name="BASE_URL_WITH_AUTH">http://192.168.0.10/fmcweb/www/api/auth/</string>
-    <string name="BASE_URL">http://192.168.0.10/fmcweb/www/api/v1/</string>
+    <string name="BASE_URL_WITH_AUTH">http://demo.iglulabs.com/fmcweb/www/api/auth/</string>
+    <string name="BASE_URL">http://demo.iglulabs.com/fmcweb/www/api/v1/</string>
 
     <!--WEB SOCKET URL-->
     <string name="CHAT_SOCKET_URL">ws://192.168.0.10:9302</string>

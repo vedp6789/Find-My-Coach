@@ -31,6 +31,8 @@ import com.google.android.gms.plus.model.people.Person;
 import com.loopj.android.http.RequestParams;
 
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A login screen that offers login via email/password, Facebook and Google+ sign in.
@@ -231,18 +233,35 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
 
     private boolean validateLoginForm(String userId, String userPassword) {
         boolean isValid = true;
-        if (userId.equals("")) {
+        if (!isEmailValid(userId)) {
             isValid = false;
-            showErrorMessage(inputUserName);
+            showErrorMessage(inputUserName, getResources().getString(R.string.error_invalid_email));
         } else if (userPassword.equals("")) {
             isValid = false;
-            showErrorMessage(inputPassword);
+            showErrorMessage(inputPassword, getResources().getString(R.string.error_field_required));
+        }else if (userPassword.length() < 5) {
+            isValid = false;
+            showErrorMessage(inputPassword, getResources().getString(R.string.error_password_size));
         }
         return isValid;
     }
 
-    private void showErrorMessage(final EditText editText) {
-        editText.setError(getResources().getString(R.string.error_field_required));
+
+    /*Checking entered email is valid email or not*/
+    public boolean isEmailValid(String email) {
+        boolean isValid = false;
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        CharSequence inputStr = email;
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+        if (matcher.matches()) {
+            isValid = true;
+        }
+        return isValid;
+    }
+
+    private void showErrorMessage(final EditText editText, String errorMessage) {
+        editText.setError(errorMessage);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

@@ -23,6 +23,9 @@ import com.findmycoach.mentor.util.StorageHelper;
 import com.fmc.mentor.findmycoach.R;
 import com.loopj.android.http.RequestParams;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SignUpActivity extends Activity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, Callback {
 
 
@@ -104,9 +107,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id == android.R.id.home) {
             finish();
         }
@@ -137,8 +137,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
             requestParams.add("last_name", lastName);
             requestParams.add("email", email);
             requestParams.add("password", password);
-            requestParams.add("phonenumber", phone);
-            requestParams.add("usergroup", 3 + "");
+            requestParams.add("phone_number", phone);
             StorageHelper.storePreference(this, "phone_number", phone);
             callApiToRegister(requestParams);
         }
@@ -155,37 +154,71 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
         if (firstName.equals("")) {
             showErrorMessage(firstNameInput, getResources().getString(R.string.error_field_required));
             return false;
+        }else{
+            for (int i = 0; i < firstName.length()-1; i++) {
+                if (!Character.isLetter(firstName.charAt(i))) {
+                    showErrorMessage(firstNameInput, getResources().getString(R.string.error_not_a_name));
+                    return false;
+                }
+            }
         }
+
+        if (lastName.equals("")) {
+            showErrorMessage(lastNameInput, getResources().getString(R.string.error_field_required));
+            return false;
+        }else{
+            for (int i = 0; i < lastName.length()-1; i++) {
+                if (!Character.isLetter(lastName.charAt(i))) {
+                    showErrorMessage(lastNameInput, getResources().getString(R.string.error_not_a_name));
+                    return false;
+                }
+            }
+        }
+
         if (phone.equals("")) {
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_field_required));
             return false;
-        }
-        if (password.equals("")) {
-            showErrorMessage(passwordInput, getResources().getString(R.string.error_field_required));
-            return false;
-        }
-        if (password.length() < 5) {
-            showErrorMessage(passwordInput, getResources().getString(R.string.error_password_size));
-            return false;
-        }
-        if (confirmPassword.equals("")) {
-            showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_required));
-            return false;
-        }
-        if (email.equals("")) {
-            showErrorMessage(emailInput, getResources().getString(R.string.error_field_required));
-            return false;
-        }
-        if (!password.equals(confirmPassword)) {
-            showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_not_match));
-            return false;
-        }
-        if (phone.length() < 10) {
+        }else if (phone.length() < 10) {
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_phone_number_invalid));
             return false;
         }
 
+        if (!isEmailValid(email)) {
+            showErrorMessage(emailInput, getResources().getString(R.string.enter_valid_email));
+            return false;
+        }
+
+        if (password.equals("")) {
+            showErrorMessage(passwordInput, getResources().getString(R.string.error_field_required));
+            return false;
+        }else if (password.length() < 5) {
+            showErrorMessage(passwordInput, getResources().getString(R.string.error_password_size));
+            return false;
+        }
+
+        if (confirmPassword.equals("")) {
+            showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_required));
+            return false;
+        }else if (!password.equals(confirmPassword)) {
+            showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_not_match));
+            return false;
+        }
+
+
         return true;
+    }
+
+    /*Checking entered email is valid email or not*/
+    public boolean isEmailValid(String email) {
+        boolean isValid = false;
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        CharSequence inputStr = email;
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+        if (matcher.matches()) {
+            isValid = true;
+        }
+        return isValid;
     }
 
     private void showErrorMessage(final TextView view, String string) {

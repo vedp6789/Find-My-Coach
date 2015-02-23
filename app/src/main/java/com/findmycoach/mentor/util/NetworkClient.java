@@ -60,9 +60,9 @@ public class NetworkClient {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
+                    Log.d(TAG, "Failure: Response Code:" + statusCode);
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Failure: Response:" + responseJson);
-                    Log.d(TAG, "Failure: Response Code:" + statusCode);
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage());
                 } catch (Exception e) {

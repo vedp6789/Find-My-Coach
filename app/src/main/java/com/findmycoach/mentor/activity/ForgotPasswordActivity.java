@@ -17,6 +17,9 @@ import com.findmycoach.mentor.util.NetworkClient;
 import com.fmc.mentor.findmycoach.R;
 import com.loopj.android.http.RequestParams;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ForgotPasswordActivity extends Activity implements Callback {
 
     private EditText emailInput;
@@ -52,7 +55,7 @@ public class ForgotPasswordActivity extends Activity implements Callback {
 
     private boolean isInputValid() {
         String inputEmail = emailInput.getText().toString();
-        if (inputEmail.isEmpty()) {
+        if (!isEmailValid(inputEmail)) {
             emailInput.setError(getResources().getString(R.string.enter_valid_email));
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -64,6 +67,19 @@ public class ForgotPasswordActivity extends Activity implements Callback {
             return false;
         }
         return true;
+    }
+
+    /*Checking entered email is valid email or not*/
+    public boolean isEmailValid(String email) {
+        boolean isValid = false;
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        CharSequence inputStr = email;
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+        if (matcher.matches()) {
+            isValid = true;
+        }
+        return isValid;
     }
 
     private void initialize() {
@@ -89,9 +105,6 @@ public class ForgotPasswordActivity extends Activity implements Callback {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id == android.R.id.home) {
             finish();
         }
