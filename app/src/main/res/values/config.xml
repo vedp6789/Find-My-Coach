@@ -24,4 +24,8 @@
     <!--WEB SOCKET URL-->
     <string name="CHAT_SOCKET_URL">ws://192.168.0.10:9302</string>
 
+
+    <!--Root path of media storage-->
+    <string name="stored_path">FindMyCoach</string>
+
 </resources>

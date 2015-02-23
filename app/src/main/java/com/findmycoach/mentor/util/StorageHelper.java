@@ -2,7 +2,12 @@ package com.findmycoach.mentor.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+
+import com.fmc.mentor.findmycoach.R;
+
+import java.io.File;
 
 /**
  * Created by prem on 1/1/15.
@@ -50,6 +55,30 @@ public class StorageHelper {
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove("phone_number");
         editor.commit();
+    }
+
+    public static void createAppMediaFolders(Context context) {
+        final File path = Environment.getExternalStoragePublicDirectory(context.getString(R.string.stored_path));
+        if (!path.isDirectory()) {
+            path.mkdir();
+        }
+
+        final File pathMedia = new File(path.getPath() + "/media");
+        if (!pathMedia.isDirectory()) {
+            pathMedia.mkdir();
+        }
+
+        final File pathImages = new File(pathMedia.getPath() + "/images");
+        if (!pathImages.isDirectory()) {
+            pathImages.mkdir();
+            storePreference(context,"image_path", pathImages.getPath());
+        }
+
+        final File pathVideos = new File(pathMedia.getPath() + "/videos");
+        if (!pathVideos.isDirectory()) {
+            pathVideos.mkdir();
+            storePreference(context,"video_path", pathVideos.getPath());
+        }
     }
 
 }

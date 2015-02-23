@@ -18,8 +18,9 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-    <!-- To access image from Storage -->
+    <!-- To access image from Storage and store media files -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- To complete message transfer between GCM to FMC-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />

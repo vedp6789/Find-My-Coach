@@ -82,6 +82,8 @@ public class DashboardActivity extends FragmentActivity
         context=getApplicationContext();
         REG_ID_SAVED_TO_SERVER=getResources().getString(R.string.reg_id_saved_to_server);
 
+        /*Creating folder for media storage*/
+        StorageHelper.createAppMediaFolders(this);
 
         // Check device for Play Services APK.
         if (checkPlayServices()) {
