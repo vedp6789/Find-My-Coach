@@ -340,7 +340,6 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             String attachmentPath = attachment.getData().getPath();
 
             String msgJson = getMsgInJson(attachment.getData().getFile_type().contains("image") ? "image" : "video", attachmentPath).toString();
-            Log.d(TAG,"Sending to socket : " + msgJson);
             if(isSocketConnected) {
                 mWebSocketClient.send(msgJson);
                 Log.d(TAG, msgJson);
@@ -349,7 +348,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
                 mWebSocketClient.connect();
                 return;
             }
-            chatWidgetAdapter.updateMessageList(attachmentPath, 0, 1);
+            chatWidgetAdapter.updateMessageList(attachmentPath, 0, msgJson.contains("image") ? 1 : 2);
             chatWidgetAdapter.notifyDataSetChanged();
             chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
         }
