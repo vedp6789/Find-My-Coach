@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.fmc.mentor.findmycoach.R;
 
@@ -59,26 +60,29 @@ public class StorageHelper {
 
     public static void createAppMediaFolders(Context context) {
         final File path = Environment.getExternalStoragePublicDirectory(context.getString(R.string.stored_path));
-        if (!path.isDirectory()) {
-            path.mkdir();
+        if (!path.mkdirs()) {
+            Log.e("FMC", "Directory not created");
         }
 
         final File pathMedia = new File(path.getPath() + "/media");
-        if (!pathMedia.isDirectory()) {
-            pathMedia.mkdir();
+        if (!pathMedia.mkdirs()) {
+            Log.e("FMC", "Directory not created");
         }
 
         final File pathImages = new File(pathMedia.getPath() + "/images");
-        if (!pathImages.isDirectory()) {
-            pathImages.mkdir();
-            storePreference(context,"image_path", pathImages.getPath());
+        if (!pathImages.mkdirs()) {
+            Log.e("FMC", "Directory not created");
         }
 
         final File pathVideos = new File(pathMedia.getPath() + "/videos");
-        if (!pathVideos.isDirectory()) {
-            pathVideos.mkdir();
-            storePreference(context,"video_path", pathVideos.getPath());
+        if (!pathVideos.mkdirs()) {
+            Log.e("FMC", "Directory not created");
         }
+
+        storePreference(context,"image_path", pathImages.getPath());
+        Log.e("FMC", "StorageHelper : " + pathImages.getPath());
+        storePreference(context,"video_path", pathVideos.getPath());
+        Log.e("FMC", "StorageHelper : " + pathVideos.getPath());
     }
 
 }
