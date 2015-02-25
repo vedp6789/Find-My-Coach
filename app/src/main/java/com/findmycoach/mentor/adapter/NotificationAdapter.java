@@ -2,6 +2,8 @@ package com.findmycoach.mentor.adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.nfc.Tag;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ public class NotificationAdapter extends BaseAdapter {
     private Callback callback;
     private ProgressDialog progressDialog;
     public int positionToRemove = -1;
+    private final String TAG = "FMC";
 
     public NotificationAdapter(Context context, List<Data> notifications, Callback callback, ProgressDialog progressDialog) {
         this.context = context;
@@ -79,8 +82,10 @@ public class NotificationAdapter extends BaseAdapter {
                 progressDialog.show();
                 positionToRemove = position;
                 RequestParams requestParams = new RequestParams();
-                requestParams.add("id", senderData.getConnectionId());
+                requestParams.add("id", senderData.getId()+"");
                 requestParams.add("status", "accepted");
+                Log.d(TAG,senderData.getId()+"");
+                Log.d(TAG,"accepted");
                 NetworkClient.respondToConnectionRequest(context, requestParams, callback);
             }
         });
@@ -90,14 +95,16 @@ public class NotificationAdapter extends BaseAdapter {
                 progressDialog.show();
                 positionToRemove = position;
                 RequestParams requestParams = new RequestParams();
-                requestParams.add("id", senderData.getConnectionId());
+                requestParams.add("id", senderData.getId()+"");
                 requestParams.add("status", "rejected");
+                Log.d(TAG,senderData.getId()+"");
+                Log.d(TAG,"rejected");
                 NetworkClient.respondToConnectionRequest(context, requestParams, callback);
             }
         });
 
 
-        sender.setText(senderData.getOwnerId()+"");
+        sender.setText(senderData.getOwnerName());
         message.setText(senderData.getConnectionMessage());
         return view;
     }

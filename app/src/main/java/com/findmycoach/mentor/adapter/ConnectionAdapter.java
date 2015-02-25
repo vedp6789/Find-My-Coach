@@ -52,7 +52,7 @@ public class ConnectionAdapter extends BaseAdapter {
         TextView lastMsgTV = (TextView) view.findViewById(R.id.lastMsgTV);
         TextView detailsTV = (TextView) view.findViewById(R.id.detailsTV);
 
-        nameTV.setText("     User id : " + singleConnection.getOwnerId());
+        nameTV.setText(singleConnection.getOwnerName());
         lastMsgTV.setText("  Created on : " + singleConnection.getCreatedOn());
         detailsTV.setText(singleConnection.getStatus());
 
