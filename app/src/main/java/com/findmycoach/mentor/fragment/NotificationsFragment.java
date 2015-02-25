@@ -16,7 +16,7 @@ import com.findmycoach.mentor.beans.requests.ConnectionRequestsResponse;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.StorageHelper;
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 import com.loopj.android.http.RequestParams;
 
 public class NotificationsFragment extends Fragment implements Callback{

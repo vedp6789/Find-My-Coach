@@ -1,38 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fmc.mentor.findmycoach">
+    package="com.findmycoach.mentor">
 
-    <!-- To access Google+ APIs: -->
+
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!--
- To retrieve OAuth 2.0 tokens or invalidate tokens to disconnect a user. This disconnect
-     option is required to comply with the Google+ Sign-In developer policies
-    -->
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    <!-- To retrieve the account name (email) as part of sign-in: -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
-    <!-- To access image from Storage -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <!-- To complete message transfer between GCM to FMC-->
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!-- To receive message from GCM-->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <!-- To allow only GCM server to send message to only this application-->
     <permission
-        android:name="com.fmc.mentor.findmycoach.permission.C2D_MESSAGE"
+        android:name="com.findmycoach.mentor.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="com.fmc.mentor.findmycoach.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.findmycoach.mentor.permission.C2D_MESSAGE" />
 
-
-    <application
+<application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@drawable/ic_launcher"
@@ -106,17 +95,26 @@
             android:name="com.findmycoach.mentor.activity.AddNewSlotActivity"
             android:label="@string/add_new_slot" />
 
+
+
         <receiver
-            android:name="com.findmycoach.mentor.push.GcmBroadcastReceiver"
+            android:name=".GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.fmc.mentor.findmycoach" />
+                <category android:name="com.findmycoach.mentor" />
             </intent-filter>
 
         </receiver>
 
-        <service android:name="com.findmycoach.mentor.push.GcmFmcService" />
+        <receiver android:name=".AutoStart">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".GcmFmcService" />
+    <service android:name=".BackgroundService"/>
 
     </application>
 

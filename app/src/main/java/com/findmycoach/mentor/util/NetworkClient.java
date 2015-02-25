@@ -9,7 +9,7 @@ import com.findmycoach.mentor.beans.chats.Chats;
 import com.findmycoach.mentor.beans.registration.SignUpResponse;
 import com.findmycoach.mentor.beans.requests.ConnectionRequestsResponse;
 import com.findmycoach.mentor.beans.suggestion.Suggestion;
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;

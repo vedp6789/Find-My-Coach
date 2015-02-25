@@ -2,12 +2,13 @@ package com.findmycoach.mentor.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 
 
 public class HomeFragment extends Fragment {
@@ -42,4 +43,6 @@ public class HomeFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
     }
+
+
 }

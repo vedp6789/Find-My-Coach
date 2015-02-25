@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 import com.loopj.android.http.RequestParams;
 
 import java.util.regex.Matcher;

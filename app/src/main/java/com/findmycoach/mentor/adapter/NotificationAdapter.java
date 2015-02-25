@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.findmycoach.mentor.beans.requests.Data;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 import com.loopj.android.http.RequestParams;
 
 import java.util.List;

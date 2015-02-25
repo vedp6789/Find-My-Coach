@@ -31,7 +31,7 @@ import com.findmycoach.mentor.fragment.NotificationsFragment;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.StorageHelper;
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -52,10 +52,10 @@ public class DashboardActivity extends FragmentActivity
     public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
-    private static final String GCM_SHARED_PREFERENCE=" gcm_preference";
+    private static final String GCM_SHARED_PREFERENCE = " gcm_preference";
     private static String REG_ID_SAVED_TO_SERVER;
     String regid;
-    boolean regid_saved_to_server=false;
+    boolean regid_saved_to_server = false;
     /**
      * This is the project number we got
      * from the API Console,
@@ -64,60 +64,102 @@ public class DashboardActivity extends FragmentActivity
     /**
      * Tag used on log messages.
      */
-    static final String TAG="Google Play Services status:";
+    static final String TAG = "Google Play Services status:";
     static final String TAG1 = "GCMCommunication";
-    static final String TAG2="FMC-GCM";
+    static final String TAG2 = "FMC-GCM";
     TextView mDisplay;
     GoogleCloudMessaging gcm;
     AtomicInteger msgId = new AtomicInteger();
     SharedPreferences prefs;
     Context context;
 
+    int fragment_to_launch_from_notification = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        context=getApplicationContext();
-        REG_ID_SAVED_TO_SERVER=getResources().getString(R.string.reg_id_saved_to_server);
+        context = getApplicationContext();
+        REG_ID_SAVED_TO_SERVER = getResources().getString(R.string.reg_id_saved_to_server);
 
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("fragment")) {
+            int fragment_to_start_val = getIntent().getExtras().getInt("fragment");
+            Log.d(TAG, "Inside Dashboard activity2, intent extra for fragment" + fragment_to_start_val);
+        } else {
+            Log.d(TAG, "Inside Dashboard activity2, no intent extra delivered");
+        }
 
-        // Check device for Play Services APK.
-        if (checkPlayServices()) {
-            // If this check succeeds, proceed with normal processing.
-            // Otherwise, prompt user to get valid Play Services APK.
-            gcm = GoogleCloudMessaging.getInstance(this);
-            regid = getRegistrationId(context);
+        fragment_to_launch_from_notification = getIntent().getIntExtra("fragment", 0);
 
-            regid_saved_to_server = getRegistrationSaveStat(context);
+        if (fragment_to_launch_from_notification == 0) {
+            // Check device for Play Services APK.
+            if (checkPlayServices()) {
+                // If this check succeeds, proceed with normal processing.
+                // Otherwise, prompt user to get valid Play Services APK.
+                gcm = GoogleCloudMessaging.getInstance(this);
+                regid = getRegistrationId(context);
 
-            if (regid.isEmpty() || !regid_saved_to_server) {
-                registerInBackground();
+                regid_saved_to_server = getRegistrationSaveStat(context);
+
+                if (regid.isEmpty() || !regid_saved_to_server) {
+                    registerInBackground();
+                }
+                initialize();
+
+                if (StorageHelper.getUserDetails(this, "terms") == null) {
+                    showTermsAndConditions();
+                }
+            } else {
+                Toast.makeText(DashboardActivity.this, getResources().getString(R.string.google_play_services_not_supported), Toast.LENGTH_LONG).show();
+                Log.i(TAG, "No valid Google Play Services APK found.");
             }
+
+        } else {
             initialize();
 
-            if (StorageHelper.getUserDetails(this, "terms") == null) {
-                showTermsAndConditions();
+            /*if(fragment_to_launch_from_notification == 1){
+               Log.d(TAG,"Inside DashboardActivity of Mentor, going to start Notification fragment");
+                initialize();
+                fragmentTransaction.replace(R.id.container, new NotificationsFragment());
             }
-        }else{
-            Toast.makeText(DashboardActivity.this,getResources().getString(R.string.google_play_services_not_supported),Toast.LENGTH_LONG).show();
-            Log.i(TAG, "No valid Google Play Services APK found.");
+            if(fragment_to_launch_from_notification == 2){
+                Log.d(TAG,"Inside DashboardActivity of Mentor, going to start MySchedule fragment");
+                initialize();
+                fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
+            }
+            if(fragment_to_launch_from_notification == 3){
+                Log.d(TAG,"Inside DashboardActivity of Mentor,going to start MyConnection Fragment");
+                initialize();
+                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+            }
+            if(fragment_to_launch_from_notification == 4){
+                Log.d(TAG,"Inside DashboardActivity of Mentor,going to start My Connection Fragment ");
+                initialize();
+                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+            }
+            if(fragment_to_launch_from_notification == 5){
+                Log.d(TAG,"Inside DashboardActivity of Mentor,going to start My Connection fragment ");
+                initialize();
+                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+            }*/
         }
-}
+
+
+    }
 
     /**
      * Gets the current registration ID for application on GCM service.
-     * <p>
+     * <p/>
      * If result is empty, the app needs to register.
      *
      * @return registration ID, or empty string if there is no existing
-     *         registration ID.
+     * registration ID.
      */
     private String getRegistrationId(Context context) {
         final SharedPreferences prefs = getGCMPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
-        Log.d(TAG2,"GCM Registration previously saved:"+registrationId);
+        Log.d(TAG2, "GCM Registration previously saved:" + registrationId);
         //Toast.makeText(DashboardActivity.this,"GCM Registration previously saved:"+registrationId,Toast.LENGTH_LONG).show();
         if (registrationId.isEmpty()) {
             Log.i(TAG1, "Registration not found for GCM client");
@@ -134,14 +176,15 @@ public class DashboardActivity extends FragmentActivity
         }
         return registrationId;
     }
-  /**
-  * this method is checking whether reg_id is previously saved to server or not
-  */
-   private boolean getRegistrationSaveStat(Context context){
-        boolean b=StorageHelper.getGcmRegIfSentToServer(context,REG_ID_SAVED_TO_SERVER);
-        Log.d(TAG2,"Registration id available to app server or not :"+b);
+
+    /**
+     * this method is checking whether reg_id is previously saved to server or not
+     */
+    private boolean getRegistrationSaveStat(Context context) {
+        boolean b = StorageHelper.getGcmRegIfSentToServer(context, REG_ID_SAVED_TO_SERVER);
+        Log.d(TAG2, "Registration id available to app server or not :" + b);
         return b;
-   }
+    }
 
     /**
      * @return Application's {@code SharedPreferences}.
@@ -171,7 +214,7 @@ public class DashboardActivity extends FragmentActivity
 
     /**
      * Registers the application with GCM servers asynchronously.
-     * <p>
+     * <p/>
      * Stores the registration ID and app versionCode in the application's
      * shared preferences.
      */
@@ -190,7 +233,7 @@ public class DashboardActivity extends FragmentActivity
     }
 
 
-    class StoreGcmRegistrationId extends AsyncTask{
+    class StoreGcmRegistrationId extends AsyncTask {
 
         @Override
         protected Object doInBackground(Object[] params) {
@@ -201,7 +244,7 @@ public class DashboardActivity extends FragmentActivity
                 }
                 regid = gcm.register(SENDER_ID);
                 msg = "Device registered, registration ID=" + regid;
-                Log.d(TAG,"Registration Id:"+regid);
+                Log.d(TAG, "Registration Id:" + regid);
 
                 // You should send the registration ID to your server over HTTP,
                 // so it can use GCM/HTTP or CCS to send messages to your app.
@@ -215,14 +258,13 @@ public class DashboardActivity extends FragmentActivity
 
                 // Persist the regID - no need to register again.
                 storeRegistrationId(context, regid);
-            }
-            catch (IOException ex) {
+            } catch (IOException ex) {
                 msg = getResources().getString(R.string.error) + ex.getMessage();
                 // If there is an error, don't just keep trying to register.
                 // Require the user to click a button again, or perform
                 // exponential back-off.
-            }catch(Exception e){
-                Log.d(TAG,"Exeception occured while doing GCM registration:"+e);
+            } catch (Exception e) {
+                Log.d(TAG, "Exeception occured while doing GCM registration:" + e);
             }
             return msg;
 
@@ -243,24 +285,24 @@ public class DashboardActivity extends FragmentActivity
          */
         private void sendRegistrationIdToBackend() {
             // Your implementation here.
-            String user_id=StorageHelper.getUserDetails(DashboardActivity.this,"user_id");
+            String user_id = StorageHelper.getUserDetails(DashboardActivity.this, "user_id");
             String authToken = StorageHelper.getUserDetails(DashboardActivity.this, "auth_token");
             RequestParams requestParams = new RequestParams();
-            Log.d("user_id:",user_id);
-            Log.d("registration_id:",regid);
+            Log.d("user_id:", user_id);
+            Log.d("registration_id:", regid);
             requestParams.add("user_id", user_id);
             requestParams.add("registration_id", regid);
 
 
-            NetworkClient.registerGcmRegistrationId(DashboardActivity.this,requestParams,authToken,new Callback() {
+            NetworkClient.registerGcmRegistrationId(DashboardActivity.this, requestParams, authToken, new Callback() {
                 @Override
                 public void successOperation(Object object) {
-                     Log.d(TAG2,"Inside sendRegistrationIdToBackend callback successOperation method:"+object.toString());
+                    Log.d(TAG2, "Inside sendRegistrationIdToBackend callback successOperation method:" + object.toString());
                 }
 
                 @Override
                 public void failureOperation(Object object) {
-                    Log.d(TAG2,"Inside sendRegistrationIdToBackend callback failureOperation method:"+object.toString());
+                    Log.d(TAG2, "Inside sendRegistrationIdToBackend callback failureOperation method:" + object.toString());
                 }
             });
         }
@@ -270,7 +312,7 @@ public class DashboardActivity extends FragmentActivity
          * {@code SharedPreferences}.
          *
          * @param context application's context.
-         * @param regId registration ID
+         * @param regId   registration ID
          */
         private void storeRegistrationId(Context context, String regId) {
             final SharedPreferences prefs = getGCMPreferences(context);
@@ -284,14 +326,11 @@ public class DashboardActivity extends FragmentActivity
     }
 
 
-
-
-
-
     @Override
     protected void onResume() {
         super.onResume();
-        if(checkPlayServices()){
+        if (fragment_to_launch_from_notification == 0){
+            if (checkPlayServices()) {
 
            /* gcm = GoogleCloudMessaging.getInstance(this);
             regid = getRegistrationId(context);
@@ -299,10 +338,65 @@ public class DashboardActivity extends FragmentActivity
             if (regid.isEmpty()) {
                 registerInBackground();
             }*/
+            } else {
+                Toast.makeText(DashboardActivity.this, getResources().getString(R.string.google_play_services_not_supported), Toast.LENGTH_LONG).show();
+                Log.i(TAG, "No valid Google Play Services APK found.");
+            }
         }else{
-            Toast.makeText(DashboardActivity.this, getResources().getString(R.string.google_play_services_not_supported), Toast.LENGTH_LONG).show();
-            Log.i(TAG, "No valid Google Play Services APK found.");
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            switch (fragment_to_launch_from_notification) {
+
+
+                case 1: {
+                    Log.d(TAG, "Inside DashboardActivity of Mentor, going to start Notification fragment");
+                   // initialize();
+                    //NotificationsFragment notificationsFragment=new NotificationsFragment();
+                    //fragmentTransaction.add(R.id.container,notificationsFragment);
+                    fragmentTransaction.replace(R.id.container, new NotificationsFragment());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    break;
+                }
+                case 2: {
+                    Log.d(TAG, "Inside DashboardActivity of Mentor, going to start MySchedule fragment");
+                    //initialize();
+                    fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    break;
+                }
+                case 3: {
+                    Log.d(TAG, "Inside DashboardActivity of Mentor,going to start MyConnection Fragment");
+                   // initialize();
+                    fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    break;
+                }
+                case 4: {
+                    Log.d(TAG, "Inside DashboardActivity of Mentor,going to start My Connection Fragment ");
+                   // initialize();
+                    fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    break;
+                }
+                case 5: {
+                    Log.d(TAG, "Inside DashboardActivity of Mentor,going to start My Connection fragment ");
+                   // initialize();
+                    fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    break;
+                }
+
+            }
+
         }
+
+
+
 
     }
 
@@ -356,7 +450,7 @@ public class DashboardActivity extends FragmentActivity
                     }
                 }
         );
-       // alertDialog.show();
+        // alertDialog.show();
     }
 
     private void logout() {
@@ -421,7 +515,7 @@ public class DashboardActivity extends FragmentActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (mNavigationDrawerFragment!=null && !mNavigationDrawerFragment.isDrawerOpen()) {
+        if (mNavigationDrawerFragment != null && !mNavigationDrawerFragment.isDrawerOpen()) {
             getMenuInflater().inflate(R.menu.dashboard, menu);
             restoreActionBar();
             return true;

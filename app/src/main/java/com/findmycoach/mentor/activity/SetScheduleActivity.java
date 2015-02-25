@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;

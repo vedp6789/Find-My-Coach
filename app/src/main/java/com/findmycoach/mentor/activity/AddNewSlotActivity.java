@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.findmycoach.mentor.fragment.StartDateDialogFragment;
 import com.findmycoach.mentor.fragment.TillDateDialogFragment;
 import com.findmycoach.mentor.util.SetDate;
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

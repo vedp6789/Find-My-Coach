@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.facebook.android.DialogError;
 import com.findmycoach.mentor.activity.AddNewSlotActivity;
 import com.findmycoach.mentor.util.SetDate;
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

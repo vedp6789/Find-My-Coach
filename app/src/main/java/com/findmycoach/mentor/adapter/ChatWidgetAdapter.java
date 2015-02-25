@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

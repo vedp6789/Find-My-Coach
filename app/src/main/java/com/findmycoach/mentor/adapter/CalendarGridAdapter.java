@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.findmycoach.mentor.activity.SetScheduleActivity;
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.findmycoach.mentor.fragment.ProfileFragment;
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 
 /**
  * Created by prem on 29/1/15.

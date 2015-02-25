@@ -20,7 +20,7 @@ import com.findmycoach.mentor.beans.registration.SignUpResponse;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.StorageHelper;
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 import com.loopj.android.http.RequestParams;
 
 import java.util.regex.Matcher;

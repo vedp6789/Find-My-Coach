@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.findmycoach.mentor.beans.requests.Data;
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 
 import java.util.List;
 

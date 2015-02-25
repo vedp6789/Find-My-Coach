@@ -13,7 +13,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 
 import com.findmycoach.mentor.activity.AddNewSlotActivity;
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 
 import java.util.Calendar;
 

@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.findmycoach.mentor.activity.AddNewSlotActivity;
 import com.findmycoach.mentor.adapter.CalendarGridAdapter;
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 
 import java.util.Calendar;
 import java.util.Locale;

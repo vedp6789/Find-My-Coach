@@ -1,9 +1,13 @@
 package com.findmycoach.mentor.activity;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -18,12 +22,15 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+
+import com.findmycoach.mentor.BackgroundService;
+import com.findmycoach.mentor.GcmBroadcastReceiver;
 import com.findmycoach.mentor.beans.authentication.Response;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.NetworkManager;
 import com.findmycoach.mentor.util.StorageHelper;
-import com.fmc.mentor.findmycoach.R;
+import com.findmycoach.mentor.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -56,6 +63,8 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     private View mSignOutButtons;
     private Button signOutButton;
     private Button disconnectButton;
+    PendingIntent pendingIntent;
+    Context context;
 
     private static final String TAG="FMC1";
     private static final String TAG1="FMC1: Permissions:";
@@ -141,9 +150,33 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         });
     }
 
+
+public  void startAlarm(){
+    Log.d(TAG,"inside startAlarm method of LoginActivity in mentor app");
+    Intent intentAlarm = new Intent(LoginActivity.this, GcmBroadcastReceiver.class);
+    AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+    pendingIntent = PendingIntent.getBroadcast(context,0,intentAlarm,0);
+    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 10000L , pendingIntent);
+}
+
+    public void CancelAlarm()
+    {
+        Intent intent = new Intent(LoginActivity.this,GcmBroadcastReceiver.class);
+        PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(sender);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context=this;
+
+        startAlarm();
+
+        Intent intent_service=new Intent(LoginActivity.this, BackgroundService.class);
+        startService(intent_service);
+
         String userToken = StorageHelper.getUserDetails(this, "auth_token");
         String phnVerified = StorageHelper.getUserDetails(this, "phone_verified");
         if (userToken != null && phnVerified != null) {
