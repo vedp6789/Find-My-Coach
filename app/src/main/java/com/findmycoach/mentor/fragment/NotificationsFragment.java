@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -19,7 +20,7 @@ import com.findmycoach.mentor.util.StorageHelper;
 import com.findmycoach.mentor.R;
 import com.loopj.android.http.RequestParams;
 
-public class NotificationsFragment extends Fragment implements Callback{
+public class NotificationsFragment extends Fragment implements Callback {
 
     private ListView notificationListView;
     private ProgressDialog progressDialog;
@@ -99,6 +100,12 @@ public class NotificationsFragment extends Fragment implements Callback{
         if(connectionRequestsResponse.getData() != null && connectionRequestsResponse.getData().size() > 0) {
             notificationAdapter = new NotificationAdapter(getActivity(), connectionRequestsResponse.getData(), this, progressDialog);
             notificationListView.setAdapter(notificationAdapter);
+            notificationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(getActivity(),position+"",Toast.LENGTH_SHORT).show();
+                }
+            });
         }else {
             notificationAdapter = new NotificationAdapter(getActivity());
             notificationListView.setAdapter(notificationAdapter);

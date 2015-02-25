@@ -273,7 +273,11 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mWebSocketClient.close();
+        try{
+            mWebSocketClient.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void connectWebSocket() {

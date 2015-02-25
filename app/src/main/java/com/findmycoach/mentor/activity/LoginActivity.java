@@ -107,17 +107,20 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     private void authenticateUser(Person user) {
         progressDialog.show();
         if (NetworkManager.isNetworkConnected(this)) {
-
             RequestParams requestParams = new RequestParams();
             requestParams.add("email", mPlusClient.getAccountName());
-            String displayName = user.getDisplayName();
-            String[] names = displayName.split(" ");
-            requestParams.add("first_name", names[0]);
-            requestParams.add("last_name", names[1]);
-            requestParams.add("dob", user.getBirthday());
-            requestParams.add("google_link", user.getUrl());
-            requestParams.add("gender", user.getGender() + "");
-            requestParams.add("photograph", (user.getImage().getUrl()));
+            try{
+                String displayName = user.getDisplayName();
+                String[] names = displayName.split(" ");
+                requestParams.add("first_name", names[0]);
+                requestParams.add("last_name", names[1]);
+                requestParams.add("dob", user.getBirthday());
+                requestParams.add("google_link", user.getUrl());
+                requestParams.add("gender", user.getGender() + "");
+                requestParams.add("photograph", (user.getImage().getUrl()));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             saveUserEmail(mPlusClient.getAccountName());
             NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
         } else {
