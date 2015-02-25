@@ -2,7 +2,6 @@ package com.findmycoach.mentor.util;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.findmycoach.mentor.beans.attachment.Attachment;
 import com.findmycoach.mentor.beans.authentication.Response;
@@ -630,6 +629,39 @@ public class NetworkClient {
                     Log.d(TAG, "Failure: Error:" + e.getMessage());
                     callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
                 }
+            }
+        });
+    }
+
+    public static void getStudentDetails(final Context context, RequestParams requestParams, String authToken, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        requestParams.add(userGroup, "2");
+        client.get(context, getAbsoluteURL("studentDetails", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                Log.d(TAG, "Success: Response Code:" + statusCode);
+                if (responseBody != null) {
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success: Response:" + responseJson);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                String responseJson = new String(responseBody);
+                Log.d(TAG, "Failure: Response:" + responseJson);
+                Log.d(TAG, "Failure: Response Code:" + statusCode);
+//                try {
+//                    com.findmycoach.student.beans.mentor.Response response = new Gson().fromJson(responseJson, com.findmycoach.student.beans.mentor.Response.class);
+//                    callback.failureOperation(response.getMessage());
+//                } catch (Exception e) {
+//                    callback.failureOperation(context.getResources().getString(R.string.problem_in_server_connection));
+//                }
             }
         });
     }
