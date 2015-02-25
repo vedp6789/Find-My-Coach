@@ -99,6 +99,9 @@
         <activity
             android:name="com.findmycoach.mentor.activity.AddNewSlotActivity"
             android:label="@string/add_new_slot" />
+    <activity
+        android:name="com.findmycoach.mentor.activity.StudentDetailActivity"
+        android:screenOrientation="portrait"/>
 
 
 

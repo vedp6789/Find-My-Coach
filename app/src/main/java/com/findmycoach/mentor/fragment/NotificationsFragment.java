@@ -2,16 +2,17 @@ package com.findmycoach.mentor.fragment;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.findmycoach.mentor.activity.StudentDetailActivity;
 import com.findmycoach.mentor.adapter.NotificationAdapter;
 import com.findmycoach.mentor.beans.requests.ConnectionRequestsResponse;
 import com.findmycoach.mentor.util.Callback;
@@ -87,28 +88,27 @@ public class NotificationsFragment extends Fragment implements Callback {
     @Override
     public void successOperation(Object object) {
         progressDialog.dismiss();
-        if(object == null){
+        if(object instanceof ConnectionRequestsResponse){
             if(notificationAdapter != null && notificationAdapter.positionToRemove != -1 && connectionRequestsResponse != null){
                 connectionRequestsResponse.getData().remove(notificationAdapter.positionToRemove);
                 notificationAdapter.notifyDataSetChanged();
                 Toast.makeText(getActivity(),getResources().getString(R.string.success),Toast.LENGTH_LONG).show();
                 return;
             }
-        }
 
-        connectionRequestsResponse = (ConnectionRequestsResponse) object;
-        if(connectionRequestsResponse.getData() != null && connectionRequestsResponse.getData().size() > 0) {
-            notificationAdapter = new NotificationAdapter(getActivity(), connectionRequestsResponse.getData(), this, progressDialog);
-            notificationListView.setAdapter(notificationAdapter);
-            notificationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(getActivity(),position+"",Toast.LENGTH_SHORT).show();
-                }
-            });
+            connectionRequestsResponse = (ConnectionRequestsResponse) object;
+            if(connectionRequestsResponse.getData() != null && connectionRequestsResponse.getData().size() > 0) {
+                notificationAdapter = new NotificationAdapter(getActivity(), connectionRequestsResponse.getData(), this, progressDialog);
+                notificationListView.setAdapter(notificationAdapter);
+            }else {
+                notificationAdapter = new NotificationAdapter(getActivity());
+                notificationListView.setAdapter(notificationAdapter);
+            }
+
         }else {
-            notificationAdapter = new NotificationAdapter(getActivity());
-            notificationListView.setAdapter(notificationAdapter);
+            Intent intent = new Intent(getActivity(), StudentDetailActivity.class);
+            intent.putExtra("student_detail",(String) object);
+            startActivity(intent);
         }
 
     }

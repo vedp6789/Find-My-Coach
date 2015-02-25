@@ -2,19 +2,21 @@ package com.findmycoach.mentor.adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.nfc.Tag;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.findmycoach.mentor.beans.requests.Data;
 import com.findmycoach.mentor.util.Callback;
 import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.R;
+import com.findmycoach.mentor.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
 import java.util.List;
@@ -30,6 +32,7 @@ public class NotificationAdapter extends BaseAdapter {
     private ProgressDialog progressDialog;
     public int positionToRemove = -1;
     private final String TAG = "FMC";
+    public static int connection_id;
 
     public NotificationAdapter(Context context, List<Data> notifications, Callback callback, ProgressDialog progressDialog) {
         this.context = context;
@@ -75,6 +78,19 @@ public class NotificationAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.notification_list_view, null);
         }
+        RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.singleRow);
+        relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressDialog.show();
+                connection_id = senderData.getId();
+                RequestParams requestParams = new RequestParams();
+                requestParams.add("id",senderData.getOwnerId()+"");
+                String authToken = StorageHelper.getUserDetails(context, "auth_token");
+                NetworkClient.getStudentDetails(context, requestParams, authToken, callback);
+            }
+        });
+
         TextView sender = (TextView) view.findViewById(R.id.senderTV);
         TextView message = (TextView) view.findViewById(R.id.messageTV);
         ImageButton acceptButton = (ImageButton) view.findViewById(R.id.acceptButton);
@@ -98,10 +114,10 @@ public class NotificationAdapter extends BaseAdapter {
                 progressDialog.show();
                 positionToRemove = position;
                 RequestParams requestParams = new RequestParams();
-                requestParams.add("id", senderData.getId()+"");
+                requestParams.add("id", senderData.getId() + "");
                 requestParams.add("status", "rejected");
                 Log.d(TAG, senderData.getId() + "");
-                Log.d(TAG,"rejected");
+                Log.d(TAG, "rejected");
                 NetworkClient.respondToConnectionRequest(context, requestParams, callback);
             }
         });
