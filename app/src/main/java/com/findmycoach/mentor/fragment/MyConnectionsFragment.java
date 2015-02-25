@@ -63,6 +63,10 @@ public class MyConnectionsFragment extends Fragment implements Callback {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        /*Creating/Checking folder for media storage*/
+        StorageHelper.createAppMediaFolders(getActivity());
+
         getConnectionList();
     }
 

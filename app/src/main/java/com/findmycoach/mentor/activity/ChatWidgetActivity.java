@@ -2,12 +2,12 @@ package com.findmycoach.mentor.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.findmycoach.mentor.beans.attachment.Attachment;
 import com.findmycoach.mentor.beans.chats.Chats;
 import com.findmycoach.mentor.beans.chats.Data;
 import com.findmycoach.mentor.util.Callback;
+import com.findmycoach.mentor.util.ImageLoadTask;
 import com.findmycoach.mentor.util.NetworkClient;
 import com.findmycoach.mentor.util.StorageHelper;
 import com.findmycoach.mentor.R;
@@ -67,6 +69,9 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         initialize();
         applyActionbarProperties();
         progressDialog.show();
+
+        /*Creating/Checking folder for media storage*/
+        StorageHelper.createAppMediaFolders(this);
 //        populateData();
 //        connectWebSocket();
         getChatHistory();
@@ -332,10 +337,9 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             progressDialog.dismiss();
             Attachment attachment = (Attachment) object;
             Log.d(TAG,attachment.getData().getPath());
-            String imagePath = attachment.getData().getPath();
+            String attachmentPath = attachment.getData().getPath();
 
-            String msgJson = getMsgInJson(attachment.getData().getFile_type().contains("image") ? "image" : "video", imagePath).toString();
-            Log.d(TAG,"Sending to socket : " + msgJson);
+            String msgJson = getMsgInJson(attachment.getData().getFile_type().contains("image") ? "image" : "video", attachmentPath).toString();
             if(isSocketConnected) {
                 mWebSocketClient.send(msgJson);
                 Log.d(TAG, msgJson);
@@ -344,8 +348,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
                 mWebSocketClient.connect();
                 return;
             }
-
-            chatWidgetAdapter.updateMessageList(imagePath, 0, 1);
+            chatWidgetAdapter.updateMessageList(attachmentPath, 0, msgJson.contains("image") ? 1 : 2);
             chatWidgetAdapter.notifyDataSetChanged();
             chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
         }

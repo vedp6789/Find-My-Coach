@@ -83,6 +83,8 @@ public class DashboardActivity extends FragmentActivity
         context = getApplicationContext();
         REG_ID_SAVED_TO_SERVER = getResources().getString(R.string.reg_id_saved_to_server);
 
+        /*Creating folder for media storage*/
+        StorageHelper.createAppMediaFolders(this);
         if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("fragment")) {
             int fragment_to_start_val = getIntent().getExtras().getInt("fragment");
             Log.d(TAG, "Inside Dashboard activity2, intent extra for fragment" + fragment_to_start_val);
@@ -454,9 +456,12 @@ public class DashboardActivity extends FragmentActivity
     }
 
     private void logout() {
+        String loginWith = StorageHelper.getUserDetails(this,"login_with");
+        if(loginWith == null || loginWith.equals("G+")) {
+            LoginActivity.doLogout = true;
+        }
         StorageHelper.clearUser(this);
         StorageHelper.clearUserPhone(this);
-        LoginActivity.doLogout = true;
         fbClearToken();
         this.finish();
     }

@@ -22,6 +22,10 @@
     <string name="BASE_URL">http://demo.iglulabs.com/fmcweb/www/api/v1/</string>
 
     <!--WEB SOCKET URL-->
-    <string name="CHAT_SOCKET_URL">ws://192.168.0.10:9302</string>
+    <string name="CHAT_SOCKET_URL">ws://192.241.196.244:9302</string>
+
+
+    <!--Root path of media storage-->
+    <string name="stored_path">FindMyCoach</string>
 
 </resources>
