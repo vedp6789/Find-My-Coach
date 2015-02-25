@@ -93,29 +93,24 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
 
     @Override
     protected void onPlusClientSignOut() {
-        mPlusClient.clearDefaultAccount();
-        mPlusClient.disconnect();
     }
 
     private void authenticateUser(Person user) {
         progressDialog.show();
         if (NetworkManager.isNetworkConnected(this)) {
-            try{
-                RequestParams requestParams = new RequestParams();
-                requestParams.add("email", mPlusClient.getAccountName());
-                String displayName = user.getDisplayName();
-                String[] names = displayName.split(" ");
-                requestParams.add("first_name", names[0]);
-                requestParams.add("last_name", names[1]);
-                requestParams.add("dob", user.getBirthday());
-                requestParams.add("google_link", user.getUrl());
-                requestParams.add("gender", user.getGender() + "");
-                requestParams.add("photograph", (user.getImage().getUrl()));
-                saveUserEmail(mPlusClient.getAccountName());
-                NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
-            }catch (Exception ex){
-                Toast.makeText(this, getResources().getString(R.string.check_network_connection), Toast.LENGTH_LONG).show();
-            }
+
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("email", mPlusClient.getAccountName());
+            String displayName = user.getDisplayName();
+            String[] names = displayName.split(" ");
+            requestParams.add("first_name", names[0]);
+            requestParams.add("last_name", names[1]);
+            requestParams.add("dob", user.getBirthday());
+            requestParams.add("google_link", user.getUrl());
+            requestParams.add("gender", user.getGender() + "");
+            requestParams.add("photograph", (user.getImage().getUrl()));
+            saveUserEmail(mPlusClient.getAccountName());
+            NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
         } else {
             Toast.makeText(this, getResources().getString(R.string.check_network_connection), Toast.LENGTH_LONG).show();
         }
@@ -229,6 +224,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             } else
                 Toast.makeText(this, "Check internet connection", Toast.LENGTH_LONG).show();
         }
+        StorageHelper.storePreference(this, "login_with", "Login");
     }
 
     private boolean validateLoginForm(String userId, String userPassword) {
@@ -284,12 +280,14 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             if (!mPlusClient.isConnecting()) {
                 mPlusClient.connect();
             }
+            StorageHelper.storePreference(this, "login_with", "G+");
         } else { // If Result from Facebook
             Session session = Session.getActiveSession();
             session.onActivityResult(this, requestCode, resultCode, data);
             if (resultCode == RESULT_OK) {
                 getSession();
             }
+            StorageHelper.storePreference(this, "login_with", "fb");
         }
     }
 
@@ -369,10 +367,6 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 fbClearToken();
-                if (mPlusClient.isConnected()) {
-                    mPlusClient.clearDefaultAccount();
-                    mPlusClient.disconnect();
-                }
                 finish();
                 dialog.dismiss();
                 startActivity(new Intent(LoginActivity.this, LoginActivity.class));

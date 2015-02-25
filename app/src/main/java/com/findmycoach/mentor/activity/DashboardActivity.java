@@ -362,9 +362,12 @@ public class DashboardActivity extends FragmentActivity
     }
 
     private void logout() {
+        String loginWith = StorageHelper.getUserDetails(this,"login_with");
+        if(loginWith == null || loginWith.equals("G+")) {
+            LoginActivity.doLogout = true;
+        }
         StorageHelper.clearUser(this);
         StorageHelper.clearUserPhone(this);
-        LoginActivity.doLogout = true;
         fbClearToken();
         this.finish();
     }

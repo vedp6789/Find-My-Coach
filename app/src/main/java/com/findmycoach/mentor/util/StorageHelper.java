@@ -60,24 +60,16 @@ public class StorageHelper {
 
     public static void createAppMediaFolders(Context context) {
         final File path = Environment.getExternalStoragePublicDirectory(context.getString(R.string.stored_path));
-        if (!path.mkdirs()) {
-            Log.e("FMC", "Directory not created");
-        }
+        path.mkdirs();
 
         final File pathMedia = new File(path.getPath() + "/media");
-        if (!pathMedia.mkdirs()) {
-            Log.e("FMC", "Directory not created");
-        }
+        pathMedia.mkdirs();
 
         final File pathImages = new File(pathMedia.getPath() + "/images");
-        if (!pathImages.mkdirs()) {
-            Log.e("FMC", "Directory not created");
-        }
+        pathImages.mkdirs();
 
         final File pathVideos = new File(pathMedia.getPath() + "/videos");
-        if (!pathVideos.mkdirs()) {
-            Log.e("FMC", "Directory not created");
-        }
+        pathVideos.mkdirs();
 
         storePreference(context,"image_path", pathImages.getPath());
         Log.e("FMC", "StorageHelper : " + pathImages.getPath());
