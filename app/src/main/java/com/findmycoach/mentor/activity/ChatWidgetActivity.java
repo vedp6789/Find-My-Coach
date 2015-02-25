@@ -48,7 +48,7 @@ import java.util.List;
  */
 public class ChatWidgetActivity extends Activity implements View.OnClickListener, Callback {
 
-    private String studentId, mentorId;
+    private String studentName, studentId, mentorId;
     private ListView chatWidgetLv;
     private EditText msgToSend;
     private ChatWidgetAdapter chatWidgetAdapter;
@@ -86,8 +86,10 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
     private void initialize() {
         Intent getUserIntent = getIntent();
-        if (getUserIntent != null)
+        if (getUserIntent != null) {
             studentId = getUserIntent.getStringExtra("student_id").trim();
+            studentName = getUserIntent.getStringExtra("student_name").trim();
+        }
         chatWidgetLv = (ListView) findViewById(R.id.chatWidgetLv);
         msgToSend = (EditText) findViewById(R.id.msgToSendET);
         mentorId = StorageHelper.getUserDetails(this, "user_id");
@@ -129,7 +131,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         ActionBar actionbar = getActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         if (studentId != null)
-            actionbar.setTitle(studentId);
+            actionbar.setTitle(studentName);
     }
 
     @Override

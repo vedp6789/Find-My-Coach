@@ -2,6 +2,7 @@ package com.findmycoach.mentor.util;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.findmycoach.mentor.beans.attachment.Attachment;
 import com.findmycoach.mentor.beans.authentication.Response;
@@ -37,6 +38,10 @@ public class NetworkClient {
     }
 
     public static void login(final Context context, RequestParams requestParams, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         requestParams.add(userGroup, "3");
         client.post(getAuthAbsoluteURL("login", context), requestParams, new AsyncHttpResponseHandler() {
@@ -74,6 +79,10 @@ public class NetworkClient {
     }
 
     public static void register(final Context context, RequestParams requestParams, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         requestParams.add(userGroup, "3");
         client.post(context, getAuthAbsoluteURL("register", context), requestParams, new AsyncHttpResponseHandler() {
@@ -107,6 +116,10 @@ public class NetworkClient {
     }
 
     public static void registerGcmRegistrationId(final Context context, RequestParams requestParams,String authToken, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
         requestParams.add(userGroup, "3");
@@ -149,6 +162,10 @@ public class NetworkClient {
     }
 
     public static void forgetPassword(final Context context, RequestParams requestParams, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         requestParams.add(userGroup, "3");
         client.post(getAuthAbsoluteURL("forgot_password", context), requestParams, new AsyncHttpResponseHandler() {
@@ -183,6 +200,10 @@ public class NetworkClient {
     }
 
     public static void getProfile(final Context context, RequestParams requestParams, String authToken, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
         requestParams.add(userGroup, "3");
@@ -216,6 +237,10 @@ public class NetworkClient {
     }
 
     public static void updateProfile(final Context context, RequestParams requestParams, String authToken, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
         requestParams.add(userGroup, "3");
@@ -252,6 +277,10 @@ public class NetworkClient {
     }
 
     public static void updatePhoneForSocialMedia(final Context context, RequestParams requestParams, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         requestParams.add(userGroup, "3");
         client.post(context, getAuthAbsoluteURL("setPhoneNumber", context), requestParams, new AsyncHttpResponseHandler() {
@@ -281,6 +310,10 @@ public class NetworkClient {
     }
 
     public static void repostOtp(final Context context, RequestParams requestParams, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         requestParams.add(userGroup, "3");
         client.post(context, getAuthAbsoluteURL("repostOtp", context), requestParams, new AsyncHttpResponseHandler() {
@@ -310,6 +343,10 @@ public class NetworkClient {
     }
 
     public static void registerThroughSocialMedia(final Context context, RequestParams requestParams, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         requestParams.add(userGroup, "3");
         client.post(context, getAuthAbsoluteURL("socialAuthentication", context), requestParams, new AsyncHttpResponseHandler() {
@@ -348,6 +385,10 @@ public class NetworkClient {
     }
 
     public static void verifyPhoneNumber(final Context context, RequestParams requestParams, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         requestParams.add(userGroup, "3");
         client.post(context, getAuthAbsoluteURL("validateOtp", context), requestParams, new AsyncHttpResponseHandler() {
@@ -398,6 +439,10 @@ public class NetworkClient {
     }
 
     public static void getConnectionRequests(final Context context, RequestParams requestParams, String authToken, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
         requestParams.add(userGroup, "3");
@@ -428,6 +473,10 @@ public class NetworkClient {
     }
 
     public static void respondToConnectionRequest(final Context context, RequestParams requestParams, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         requestParams.add(userGroup, "3");
         client.post(context, getAbsoluteURL("respondToConnectionRequest", context), requestParams, new AsyncHttpResponseHandler() {
@@ -466,6 +515,10 @@ public class NetworkClient {
     }
 
     public static void getAllConnectionRequest(final Context context, RequestParams requestParams, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, "auth_token"));
         requestParams.add(userGroup, "3");
@@ -505,6 +558,10 @@ public class NetworkClient {
     }
 
     public static void sendAttachment(final Context context, final RequestParams requestParams, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, "auth_token"));
         requestParams.add(userGroup, "3");
@@ -542,6 +599,10 @@ public class NetworkClient {
     }
 
     public static void getChatHistory(final Context context, final RequestParams requestParams, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, "auth_token"));
         requestParams.add(userGroup, "3");

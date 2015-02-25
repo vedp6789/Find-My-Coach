@@ -25,41 +25,17 @@ public class Data {
     @Expose
     private String status;
 
-    @SerializedName("connection_id")
-    @Expose
-    private String connectionId;
-
     @SerializedName("connection_message")
     @Expose
     private String connectionMessage;
 
-    public Integer getId() {
-        return id;
-    }
+    @SerializedName("owner_name")
+    @Expose
+    private String ownerName;
 
-    public Integer getOwnerId() {
-        return ownerId;
-    }
-
-    public Integer getInviteeId() {
-        return inviteeId;
-    }
-
-    public String getCreatedOn() {
-        return createdOn;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public String getConnectionId() {
-        return connectionId;
-    }
-
-    public String getConnectionMessage() {
-        return connectionMessage;
-    }
+    @SerializedName("invitee_name")
+    @Expose
+    private String inviteeName;
 
     public void setId(Integer id) {
         this.id = id;
@@ -81,11 +57,47 @@ public class Data {
         this.status = status;
     }
 
-    public void setConnectionId(String connectionId) {
-        this.connectionId = connectionId;
-    }
-
     public void setConnectionMessage(String connectionMessage) {
         this.connectionMessage = connectionMessage;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public void setInviteeName(String inviteeName) {
+        this.inviteeName = inviteeName;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Integer getOwnerId() {
+        return ownerId;
+    }
+
+    public Integer getInviteeId() {
+        return inviteeId;
+    }
+
+    public String getCreatedOn() {
+        return createdOn;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getConnectionMessage() {
+        return connectionMessage;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public String getInviteeName() {
+        return inviteeName;
     }
 }
