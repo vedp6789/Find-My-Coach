@@ -22,7 +22,7 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver{
 
         if(x!=null && x.length() > 0){
             if(x.equals("true")){
-                Log.d(TAG,"GcmBroadcastReceiver started from inside application");
+               // Log.d(TAG,"GcmBroadcastReceiver started from inside application");
             }
         }else{
             Log.d(TAG, "Inside GCM Broadcast receiver");
