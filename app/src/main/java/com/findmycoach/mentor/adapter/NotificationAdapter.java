@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.findmycoach.mentor.beans.requests.Data;
@@ -76,20 +77,22 @@ public class NotificationAdapter extends BaseAdapter {
         }
         TextView sender = (TextView) view.findViewById(R.id.senderTV);
         TextView message = (TextView) view.findViewById(R.id.messageTV);
-        view.findViewById(R.id.acceptButton).setOnClickListener(new View.OnClickListener() {
+        ImageButton acceptButton = (ImageButton) view.findViewById(R.id.acceptButton);
+        acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 progressDialog.show();
                 positionToRemove = position;
                 RequestParams requestParams = new RequestParams();
-                requestParams.add("id", senderData.getId()+"");
+                requestParams.add("id", senderData.getId() + "");
                 requestParams.add("status", "accepted");
-                Log.d(TAG,senderData.getId()+"");
-                Log.d(TAG,"accepted");
+                Log.d(TAG, senderData.getId() + "");
+                Log.d(TAG, "accepted");
                 NetworkClient.respondToConnectionRequest(context, requestParams, callback);
             }
         });
-        view.findViewById(R.id.declineButton).setOnClickListener(new View.OnClickListener() {
+        ImageButton declineButton = (ImageButton) view.findViewById(R.id.declineButton);
+        declineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 progressDialog.show();
@@ -97,13 +100,11 @@ public class NotificationAdapter extends BaseAdapter {
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("id", senderData.getId()+"");
                 requestParams.add("status", "rejected");
-                Log.d(TAG,senderData.getId()+"");
+                Log.d(TAG, senderData.getId() + "");
                 Log.d(TAG,"rejected");
                 NetworkClient.respondToConnectionRequest(context, requestParams, callback);
             }
         });
-
-
         sender.setText(senderData.getOwnerName());
         message.setText(senderData.getConnectionMessage());
         return view;

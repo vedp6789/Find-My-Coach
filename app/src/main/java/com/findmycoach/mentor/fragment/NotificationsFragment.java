@@ -119,8 +119,3 @@ public class NotificationsFragment extends Fragment implements Callback {
        Toast.makeText(getActivity(),(String) object, Toast.LENGTH_LONG).show();
     }
 }
-
-//RequestParams requestParams = new RequestParams();
-//requestParams.add("id", connectionRequestsResponse.getData().get(position).getInviteeId()+"");
-//        String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-//        NetworkClient.getStudentDetails(getActivity(), requestParams, authToken, this);
