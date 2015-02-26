@@ -149,28 +149,13 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     }
 
 
-public  void startAlarm(){
-    Log.d(TAG,"inside startAlarm method of LoginActivity in mentor app");
-    Intent intentAlarm = new Intent(LoginActivity.this, GcmBroadcastReceiver.class);
-    AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-    pendingIntent = PendingIntent.getBroadcast(context,0,intentAlarm,0);
-    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 10000L , pendingIntent);
-}
-
-    public void CancelAlarm()
-    {
-        Intent intent = new Intent(LoginActivity.this,GcmBroadcastReceiver.class);
-        PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(sender);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context=this;
 
-        startAlarm();
+
 
         Intent intent_service=new Intent(LoginActivity.this, BackgroundService.class);
         startService(intent_service);
