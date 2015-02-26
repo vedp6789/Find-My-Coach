@@ -8,6 +8,7 @@ import com.findmycoach.mentor.beans.authentication.Response;
 import com.findmycoach.mentor.beans.chats.Chats;
 import com.findmycoach.mentor.beans.registration.SignUpResponse;
 import com.findmycoach.mentor.beans.requests.ConnectionRequestsResponse;
+import com.findmycoach.mentor.beans.student.ProfileResponse;
 import com.findmycoach.mentor.beans.suggestion.Suggestion;
 import com.findmycoach.mentor.R;
 import com.google.gson.Gson;
@@ -705,6 +706,12 @@ public class NetworkClient {
                     if (responseBody != null) {
                         String responseJson = new String(responseBody);
                         Log.d(TAG, "Success: Response:" + responseJson);
+                        ProfileResponse profileResponse = new Gson().fromJson(responseJson, ProfileResponse.class);
+                        if(statusCode == 200){
+                            callback.successOperation(responseJson);
+                        }else{
+                            callback.failureOperation(profileResponse.getMessage());
+                        }
                     }
                 }catch (Exception e){
                     e.printStackTrace();
