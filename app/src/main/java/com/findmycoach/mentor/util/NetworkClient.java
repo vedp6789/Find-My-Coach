@@ -565,6 +565,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, "auth_token"));
+        Log.d(TAG, StorageHelper.getUserDetails(context, "auth_token"));
         requestParams.add(userGroup, "3");
         client.get(context, getAbsoluteURL("connections", context), requestParams, new AsyncHttpResponseHandler() {
             @Override

@@ -89,13 +89,6 @@ public class NotificationsFragment extends Fragment implements Callback {
     public void successOperation(Object object) {
         progressDialog.dismiss();
         if(object instanceof ConnectionRequestsResponse){
-            if(notificationAdapter != null && notificationAdapter.positionToRemove != -1 && connectionRequestsResponse != null){
-                connectionRequestsResponse.getData().remove(notificationAdapter.positionToRemove);
-                notificationAdapter.notifyDataSetChanged();
-                Toast.makeText(getActivity(),getResources().getString(R.string.success),Toast.LENGTH_LONG).show();
-                return;
-            }
-
             connectionRequestsResponse = (ConnectionRequestsResponse) object;
             if(connectionRequestsResponse.getData() != null && connectionRequestsResponse.getData().size() > 0) {
                 notificationAdapter = new NotificationAdapter(getActivity(), connectionRequestsResponse.getData(), this, progressDialog);
@@ -106,6 +99,14 @@ public class NotificationsFragment extends Fragment implements Callback {
             }
 
         }else {
+            if(notificationAdapter != null && notificationAdapter.positionToRemove != -1 && connectionRequestsResponse != null){
+                connectionRequestsResponse.getData().remove(notificationAdapter.positionToRemove);
+                notificationAdapter.notifyDataSetChanged();
+                notificationAdapter.positionToRemove = -1;
+                Toast.makeText(getActivity(),getResources().getString(R.string.success),Toast.LENGTH_LONG).show();
+                return;
+            }
+
             Intent intent = new Intent(getActivity(), StudentDetailActivity.class);
             intent.putExtra("student_detail",(String) object);
             startActivity(intent);
