@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.findmycoach.mentor.beans.requests.Data;
 import com.findmycoach.mentor.R;
@@ -50,11 +52,25 @@ public class ConnectionAdapter extends BaseAdapter {
         }
         TextView nameTV = (TextView) view.findViewById(R.id.nameTV);
         TextView lastMsgTV = (TextView) view.findViewById(R.id.lastMsgTV);
-        TextView detailsTV = (TextView) view.findViewById(R.id.detailsTV);
-
+        ImageButton connectionButton = (ImageButton) view.findViewById(R.id.detailsTV);
         nameTV.setText(singleConnection.getOwnerName());
         lastMsgTV.setText("  Created on : " + singleConnection.getCreatedOn());
-        detailsTV.setText(singleConnection.getStatus());
+
+        final String status = singleConnection.getStatus();
+        if(status.equals("accepted")){
+            connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_minus));
+        }else if(status.equals("pending")){
+            connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_plus));
+        }else if(status.equals("broken")){
+            connectionButton.setVisibility(View.GONE);
+        }
+
+        connectionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Connection will " + (status.equals("accepted") ? "disconnected" : "accepted"), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return view;
     }

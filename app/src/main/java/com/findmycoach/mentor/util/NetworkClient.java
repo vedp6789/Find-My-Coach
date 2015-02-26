@@ -163,7 +163,6 @@ public class NetworkClient {
                     callback.failureOperation(response.getMessage());
                 } catch (Exception e) {
                     Log.d(TAG, "Failure: Error:" + e.getMessage());
-                    callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
                 }
             }
         });
@@ -244,10 +243,10 @@ public class NetworkClient {
                     String responseJson = new String(responseBody);
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage());
+                    Log.d(TAG, "Failure: Response Code:" + statusCode);
                 } catch (Exception e) {
                     callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
                 }
-                Log.d(TAG, "Failure: Response Code:" + statusCode);
             }
         });
     }
@@ -721,9 +720,15 @@ public class NetworkClient {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                String responseJson = new String(responseBody);
-                Log.d(TAG, "Failure: Response:" + responseJson);
-                Log.d(TAG, "Failure: Response Code:" + statusCode);
+                try{
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure: Response:" + responseJson);
+                    Log.d(TAG, "Failure: Response Code:" + statusCode);
+
+                }catch (Exception e){
+                    Log.d(TAG, "Exception: " + e);
+                    callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
+                }
 //                try {
 //                    com.findmycoach.student.beans.mentor.Response response = new Gson().fromJson(responseJson, com.findmycoach.student.beans.mentor.Response.class);
 //                    callback.failureOperation(response.getMessage());

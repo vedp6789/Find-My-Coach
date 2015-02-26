@@ -31,8 +31,9 @@ public class NotificationAdapter extends BaseAdapter {
     private Callback callback;
     private ProgressDialog progressDialog;
     public int positionToRemove = -1;
+    public int positionToRemoveFromDetails = -1;
     private final String TAG = "FMC";
-    public static int connection_id;
+    public static int connection_id = -1;
 
     public NotificationAdapter(Context context, List<Data> notifications, Callback callback, ProgressDialog progressDialog) {
         this.context = context;
@@ -84,6 +85,7 @@ public class NotificationAdapter extends BaseAdapter {
             public void onClick(View v) {
                 progressDialog.show();
                 connection_id = senderData.getId();
+                positionToRemoveFromDetails = position;
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("id",senderData.getOwnerId()+"");
                 String authToken = StorageHelper.getUserDetails(context, "auth_token");

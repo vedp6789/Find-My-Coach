@@ -3,6 +3,7 @@ package com.findmycoach.mentor.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -30,7 +31,7 @@ import java.util.List;
 /**
  * Created by prem on 25/2/15.
  */
-public class StudentDetailActivity  extends Activity {
+public class StudentDetailActivity  extends Activity implements Callback {
 
     private ImageView profileImage;
     private TextView profileName;
@@ -131,35 +132,38 @@ public class StudentDetailActivity  extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.accept) {
-//            respondToRequest("accepted");
+            respondToRequest("accepted");
         }else if (id == R.id.decline) {
-//            respondToRequest("rejected");
+            respondToRequest("rejected");
         }else if (id == android.R.id.home) {
             finish();
         }
         return true;
     }
 
-//    private void respondToRequest(String response) {
-//        progressDialog.show();
-//        RequestParams requestParams = new RequestParams();
-//        requestParams.add("id", NotificationAdapter.connection_id + "");
-//        requestParams.add("status", response);
-//        Log.d("FMC", NotificationAdapter.connection_id  + "");
-//        Log.d("FMC", response);
-//        NetworkClient.respondToConnectionRequest(this, requestParams, this);
-//    }
-//
-//    @Override
-//    public void successOperation(Object object) {
-//        progressDialog.dismiss();
-//        if(object == null)
-//            finish();
-//        Toast.makeText(this, getResources().getString(R.string.success), Toast.LENGTH_LONG).show();
-//    }
-//
-//    @Override
-//    public void failureOperation(Object object) {
-//        Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
-//    }
+    private void respondToRequest(String response) {
+        progressDialog.show();
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("id", NotificationAdapter.connection_id + "");
+        requestParams.add("status", response);
+        Log.d("FMC", NotificationAdapter.connection_id  + "");
+        Log.d("FMC", response);
+        NetworkClient.respondToConnectionRequest(this, requestParams, this);
+    }
+
+    @Override
+    public void successOperation(Object object) {
+        progressDialog.dismiss();
+        if(object == null) {
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+        Toast.makeText(this, getResources().getString(R.string.success), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void failureOperation(Object object) {
+        Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
+    }
 }

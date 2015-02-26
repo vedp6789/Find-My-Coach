@@ -4,7 +4,9 @@
     <!-- Facebook Credentials -->
     <!-- <string name="facebook_app_id">835344249849377</string> -->
     <!--<string name="facebook_app_id">1428925007356558</string>-->
-    <string name="facebook_app_id">787953461258771</string>
+    <!--<string name="facebook_app_id">787953461258771</string>-->
+    <!--<string name="facebook_app_id">781014171968903</string>-->
+    <string name="facebook_app_id">879635545420247</string>
 
     <!-- Google Location Api Key -->
     <string name="google_location_api_key">AIzaSyBEXECi4hIR7axoaQiJQiRHvJN_ZIK3ORM</string>
@@ -23,7 +25,6 @@
 
     <!--WEB SOCKET URL-->
     <string name="CHAT_SOCKET_URL">ws://192.241.196.244:9302</string>
-
 
     <!--Root path of media storage-->
     <string name="stored_path">FindMyCoach</string>
