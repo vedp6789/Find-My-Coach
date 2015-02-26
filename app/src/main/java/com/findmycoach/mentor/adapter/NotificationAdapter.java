@@ -10,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.findmycoach.mentor.beans.requests.Data;
 import com.findmycoach.mentor.util.Callback;
@@ -77,7 +76,7 @@ public class NotificationAdapter extends BaseAdapter {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.notification_list_view, null);
+            view = inflater.inflate(R.layout.notification_single_row, null);
         }
         RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.singleRow);
         relativeLayout.setOnClickListener(new View.OnClickListener() {

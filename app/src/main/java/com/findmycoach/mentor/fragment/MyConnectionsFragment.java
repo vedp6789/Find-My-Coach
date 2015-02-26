@@ -81,15 +81,6 @@ public class MyConnectionsFragment extends Fragment implements Callback {
     private void populateData(final List<Data> data) {
         ConnectionAdapter connectionAdapter = new ConnectionAdapter(getActivity(), data);
         connectionListView.setAdapter(connectionAdapter);
-        connectionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent chatWidgetIntent = new Intent(getActivity(), ChatWidgetActivity.class);
-                chatWidgetIntent.putExtra("student_id", data.get(position).getOwnerId()+"");
-                chatWidgetIntent.putExtra("student_name", data.get(position).getOwnerName());
-                startActivity(chatWidgetIntent);
-            }
-        });
     }
 
     @Override

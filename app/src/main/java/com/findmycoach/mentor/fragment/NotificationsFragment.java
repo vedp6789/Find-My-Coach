@@ -87,7 +87,6 @@ public class NotificationsFragment extends Fragment implements Callback {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == NotificationAdapter.connection_id && resultCode == Activity.RESULT_OK && connectionRequestsResponse != null){
             connectionRequestsResponse.getData().remove(notificationAdapter.positionToRemoveFromDetails);
             notificationAdapter.notifyDataSetChanged();
