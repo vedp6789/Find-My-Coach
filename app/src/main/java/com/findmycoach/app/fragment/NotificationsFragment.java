@@ -86,6 +86,16 @@ public class NotificationsFragment extends Fragment implements Callback {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == NotificationAdapter.connection_id && resultCode == Activity.RESULT_OK && connectionRequestsResponse != null){
+            connectionRequestsResponse.getData().remove(notificationAdapter.positionToRemoveFromDetails);
+            notificationAdapter.notifyDataSetChanged();
+        }
+        notificationAdapter.positionToRemoveFromDetails = -1;
+        NotificationAdapter.connection_id = -1;
+    }
+
+    @Override
     public void successOperation(Object object) {
         progressDialog.dismiss();
         if(object instanceof ConnectionRequestsResponse){
@@ -97,7 +107,6 @@ public class NotificationsFragment extends Fragment implements Callback {
                 notificationAdapter = new NotificationAdapter(getActivity());
                 notificationListView.setAdapter(notificationAdapter);
             }
-
         }else {
             if(notificationAdapter != null && notificationAdapter.positionToRemove != -1 && connectionRequestsResponse != null){
                 connectionRequestsResponse.getData().remove(notificationAdapter.positionToRemove);
@@ -107,11 +116,12 @@ public class NotificationsFragment extends Fragment implements Callback {
                 return;
             }
 
+            if(NotificationAdapter.connection_id == -1)
+                return;
             Intent intent = new Intent(getActivity(), StudentDetailActivity.class);
             intent.putExtra("student_detail",(String) object);
-            startActivity(intent);
+            startActivityForResult(intent, NotificationAdapter.connection_id);
         }
-
     }
 
     @Override
