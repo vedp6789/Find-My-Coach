@@ -1,25 +1,24 @@
-package com.findmycoach.app.fragment;
+package com.findmycoach.app.fragment_mentee;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.findmycoach.app.R;
 
-
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link android.app.Fragment} subclass.
  * Activities that contain this com.findmycoach.mentor.fragment must implement the
- * {@link SigninFragment.OnFragmentInteractionListener} interface
+ * {@link SignupFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SigninFragment#newInstance} factory method to
+ * Use the {@link SignupFragment#newInstance} factory method to
  * create an instance of this com.findmycoach.mentor.fragment.
  */
-public class SigninFragment extends Fragment {
+public class SignupFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the com.findmycoach.mentor.fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -37,11 +36,11 @@ public class SigninFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of com.findmycoach.mentor.fragment SigninFragment.
+     * @return A new instance of com.findmycoach.mentor.fragment SignupFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SigninFragment newInstance(String param1, String param2) {
-        SigninFragment fragment = new SigninFragment();
+    public static SignupFragment newInstance(String param1, String param2) {
+        SignupFragment fragment = new SignupFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -49,7 +48,7 @@ public class SigninFragment extends Fragment {
         return fragment;
     }
 
-    public SigninFragment() {
+    public SignupFragment() {
         // Required empty public constructor
     }
 
@@ -66,7 +65,7 @@ public class SigninFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this com.findmycoach.mentor.fragment
-        return inflater.inflate(R.layout.fragment_signin, container, false);
+        return inflater.inflate(R.layout.fragment_signup, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -83,7 +82,7 @@ public class SigninFragment extends Fragment {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + getResources().getString(R.string.implement_fragment_interaction_listener));
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 

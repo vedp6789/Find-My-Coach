@@ -366,11 +366,18 @@
         <item>Tumakuru</item>
     </string-array>
 
-    <string-array name="navigation_items">
+    <string-array name="navigation_items_mentor">
         <item>Home</item>
         <item>Notifications</item>
         <item>My Connections</item>
         <item>My Schedule</item>
+    </string-array>
+    <string-array name="navigation_items_mentee">
+        <item>Home</item>
+        <item>Notifications</item>
+        <item>My Connections</item>
+        <item>My Schedule</item>
+        <item>Settings</item>
     </string-array>
     <string-array name="gender">
         <item>Male</item>
@@ -545,6 +552,8 @@
     <string name="select">Select</string>
     <string name="forever">Forever</string>
     <string name="date_picker">Date Picker</string>
+    <string name="created_on">  Created on : </string>
+    <string name="not_connected_to_anyone">Not connected to anyone.</string>
 
     <!-- Prompting -->
 

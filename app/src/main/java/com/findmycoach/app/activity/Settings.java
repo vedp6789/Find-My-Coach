@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.findmycoach.app.fragment.ProfileFragment;
+import com.findmycoach.app.fragment_mentor.ProfileFragment;
 import com.findmycoach.app.R;
 
 /**

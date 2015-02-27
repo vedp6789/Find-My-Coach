@@ -14,8 +14,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.findmycoach.app.fragment.StartDateDialogFragment;
-import com.findmycoach.app.fragment.TillDateDialogFragment;
+import com.findmycoach.app.fragment_mentor.StartDateDialogFragment;
+import com.findmycoach.app.fragment_mentor.TillDateDialogFragment;
 import com.findmycoach.app.util.SetDate;
 import com.findmycoach.app.R;
 

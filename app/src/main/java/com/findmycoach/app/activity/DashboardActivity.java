@@ -23,11 +23,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Session;
-import com.findmycoach.app.fragment.HomeFragment;
-import com.findmycoach.app.fragment.MyConnectionsFragment;
-import com.findmycoach.app.fragment.MyScheduleFragment;
-import com.findmycoach.app.fragment.NavigationDrawerFragment;
-import com.findmycoach.app.fragment.NotificationsFragment;
+import com.findmycoach.app.fragment_mentor.HomeFragment;
+import com.findmycoach.app.fragment_mentor.MyConnectionsFragment;
+import com.findmycoach.app.fragment_mentor.MyScheduleFragment;
+import com.findmycoach.app.fragment_mentor.NavigationDrawerFragment;
+import com.findmycoach.app.fragment_mentor.NotificationsFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -91,9 +91,7 @@ public class DashboardActivity extends FragmentActivity
         StorageHelper.createAppMediaFolders(this);
         if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("fragment")) {
             int fragment_to_start_val = getIntent().getExtras().getInt("fragment");
-            Log.d(TAG, "Inside Dashboard activity2, intent extra for fragment" + fragment_to_start_val);
         } else {
-            Log.d(TAG, "Inside Dashboard activity2, no intent extra delivered");
         }
 
         fragment_to_launch_from_notification = getIntent().getIntExtra("fragment", 0);
@@ -123,32 +121,6 @@ public class DashboardActivity extends FragmentActivity
 
         } else {
             initialize();
-
-            /*if(fragment_to_launch_from_notification == 1){
-               Log.d(TAG,"Inside DashboardActivity of Mentor, going to start Notification fragment");
-                initialize();
-                fragmentTransaction.replace(R.id.container, new NotificationsFragment());
-            }
-            if(fragment_to_launch_from_notification == 2){
-                Log.d(TAG,"Inside DashboardActivity of Mentor, going to start MySchedule fragment");
-                initialize();
-                fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
-            }
-            if(fragment_to_launch_from_notification == 3){
-                Log.d(TAG,"Inside DashboardActivity of Mentor,going to start MyConnection Fragment");
-                initialize();
-                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-            }
-            if(fragment_to_launch_from_notification == 4){
-                Log.d(TAG,"Inside DashboardActivity of Mentor,going to start My Connection Fragment ");
-                initialize();
-                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-            }
-            if(fragment_to_launch_from_notification == 5){
-                Log.d(TAG,"Inside DashboardActivity of Mentor,going to start My Connection fragment ");
-                initialize();
-                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-            }*/
         }
 
 
@@ -188,7 +160,7 @@ public class DashboardActivity extends FragmentActivity
      */
     private boolean getRegistrationSaveStat(Context context) {
         boolean b = StorageHelper.getGcmRegIfSentToServer(context, REG_ID_SAVED_TO_SERVER);
-        Log.d(TAG2, "Registration id available to app server or not :" + b);
+        Log.d(TAG2, "Registration id available to app server: " + b);
         return b;
     }
 
@@ -251,24 +223,9 @@ public class DashboardActivity extends FragmentActivity
                 regid = gcm.register(SENDER_ID);
                 msg = "Device registered, registration ID=" + regid;
                 Log.d(TAG, "Registration Id:" + regid);
-
-                // You should send the registration ID to your server over HTTP,
-                // so it can use GCM/HTTP or CCS to send messages to your app.
-                // The request to your server should be authenticated if your app
-                // is using accounts.
-                // sendRegistrationIdToBackend();
-
-                // For this demo: we don't need to send it because the device
-                // will send upstream messages to a server that echo back the
-                // message using the 'from' address in the message.
-
-                // Persist the regID - no need to register again.
                 storeRegistrationId(context, regid);
             } catch (IOException ex) {
                 msg = getResources().getString(R.string.error) + ex.getMessage();
-                // If there is an error, don't just keep trying to register.
-                // Require the user to click a button again, or perform
-                // exponential back-off.
             } catch (Exception e) {
                 Log.d(TAG, "Exeception occured while doing GCM registration:" + e);
             }
@@ -283,14 +240,7 @@ public class DashboardActivity extends FragmentActivity
             sendRegistrationIdToBackend();
         }
 
-        /**
-         * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP
-         * or CCS to send messages to your app. Not needed for this demo since the
-         * device sends upstream messages to a server that echoes back the message
-         * using the 'from' address in the message.
-         */
         private void sendRegistrationIdToBackend() {
-            // Your implementation here.
             String user_id = StorageHelper.getUserDetails(DashboardActivity.this, "user_id");
             String authToken = StorageHelper.getUserDetails(DashboardActivity.this, "auth_token");
             RequestParams requestParams = new RequestParams();
@@ -339,17 +289,12 @@ public class DashboardActivity extends FragmentActivity
         if (fragment_to_launch_from_notification == 0){
             if (checkPlayServices()) {
 
-           /* gcm = GoogleCloudMessaging.getInstance(this);
-            regid = getRegistrationId(context);
-
-            if (regid.isEmpty()) {
-                registerInBackground();
-            }*/
             } else {
                 Toast.makeText(DashboardActivity.this, getResources().getString(R.string.google_play_services_not_supported), Toast.LENGTH_LONG).show();
                 Log.i(TAG, "No valid Google Play Services APK found.");
             }
         }else{
+
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             switch (fragment_to_launch_from_notification) {
@@ -401,11 +346,7 @@ public class DashboardActivity extends FragmentActivity
             }
 
         }
-
-
-
-
-    }
+}
 
     /**
      * Check the device to make sure it has the Google Play Services APK. If
@@ -491,21 +432,47 @@ public class DashboardActivity extends FragmentActivity
     public void onNavigationDrawerItemSelected(int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (position == 0)
-            fragmentTransaction.replace(R.id.container, new HomeFragment());
-        if (position == 1)
-            fragmentTransaction.replace(R.id.container, new NotificationsFragment());
-        if (position == 2)
-            fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-        if (position == 3)
-            fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
+        if(user_group.equals("3")){
+            if (position == 0)
+                fragmentTransaction.replace(R.id.container, new HomeFragment());
+            if (position == 1)
+                fragmentTransaction.replace(R.id.container, new NotificationsFragment());
+            if (position == 2)
+                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+            if (position == 3)
+                fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
 
-        fragmentTransaction.commit();
-        onSectionAttached(position);
+            fragmentTransaction.commit();
+            onSectionAttached(position);
+        }
+        if(user_group.equals("2")){
+            if (position == 0)
+                fragmentTransaction.replace(R.id.container, new HomeFragment());
+            if (position == 1)
+                fragmentTransaction.replace(R.id.container, new NotificationsFragment());
+            if (position == 2)
+                fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentee.MyConnectionsFragment());
+            if (position == 3)
+                fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
+            if(position == 4){
+                startActivity(new Intent(this, Settings.class));
+                return;
+            }
+
+            fragmentTransaction.commit();
+            onSectionAttached(position);
+        }
+
     }
 
     public void onSectionAttached(int number) {
-        mTitle = getResources().getStringArray(R.array.navigation_items)[number];
+        if (user_group.equals("3")){
+            mTitle = getResources().getStringArray(R.array.navigation_items_mentor)[number];
+        }
+        if (user_group.equals("2")){
+            mTitle = getResources().getStringArray(R.array.navigation_items_mentee)[number];
+        }
+
     }
 
     public void restoreActionBar() {

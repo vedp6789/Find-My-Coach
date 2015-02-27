@@ -24,14 +24,14 @@ import java.util.List;
 /**
  * Created by IgluLabs on 1/22/2015.
  */
-public class ConnectionAdapter extends BaseAdapter implements Callback {
+public class ConnectionAdapterMentor extends BaseAdapter implements Callback {
 
     private Context context;
     private List<Data> connectionList;
     public int connection_clicked = -1;
     private ProgressDialog progressDialog;
 
-    public ConnectionAdapter(Context context, List<Data> connectionList) {
+    public ConnectionAdapterMentor(Context context, List<Data> connectionList) {
         this.context = context;
         this.connectionList = connectionList;
         progressDialog = new ProgressDialog(context);
@@ -60,7 +60,7 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.connection_single_row, null);
+            view = inflater.inflate(R.layout.connection_single_row_mentor, null);
         }
         RelativeLayout singleRow = (RelativeLayout) view.findViewById(R.id.singleRow);
 

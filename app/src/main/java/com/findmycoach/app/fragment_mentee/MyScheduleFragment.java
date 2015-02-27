@@ -1,4 +1,4 @@
-package com.findmycoach.app.fragment;
+package com.findmycoach.app.fragment_mentee;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,17 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.findmycoach.app.R;
+import com.findmycoach.student.R;
 
+public class MyScheduleFragment extends Fragment {
 
-public class HomeFragment extends Fragment {
-
-    public HomeFragment() {
+    public MyScheduleFragment() {
         // Required empty public constructor
     }
 
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
+    public static MyScheduleFragment newInstance(String param1, String param2) {
+        MyScheduleFragment fragment = new MyScheduleFragment();
         return fragment;
     }
 
@@ -29,19 +28,17 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_my_schedule, container, false);
     }
 
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
     }
 
-
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
 }

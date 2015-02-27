@@ -5,7 +5,7 @@
     android:isScrollContainer="true"
     android:orientation="vertical"
     android:padding="8dp"
-    tools:context="com.findmycoach.app.fragment.ProfileFragment">
+    tools:context="com.findmycoach.app.fragment_mentor.ProfileFragment">
 
     <ScrollView
         android:layout_width="match_parent"

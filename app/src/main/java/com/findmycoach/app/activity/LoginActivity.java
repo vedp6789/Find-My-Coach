@@ -120,6 +120,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 requestParams.add("google_link", user.getUrl());
                 requestParams.add("gender", user.getGender() + "");
                 requestParams.add("photograph", (user.getImage().getUrl()));
+                requestParams.add("user_group",String.valueOf(user_group));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -164,12 +165,13 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         if (userToken != null && phnVerified != null) {
             Intent intent = new Intent(this, DashboardActivity.class);
 
-            String user_group_saved=StorageHelper.getUserGroup(LoginActivity.this,"user_group");
+            /*String user_group_saved=StorageHelper.getUserGroup(LoginActivity.this,"user_group");
+            Toast.makeText(LoginActivity.this,"user_group_found_earlier_saved"+user_group_saved,Toast.LENGTH_LONG).show();
             if(user_group_saved !=null && user_group_saved.equals(String.valueOf(user_group))){
 // No need to change the save value of user_group
             }else{
                 StorageHelper.storePreference(LoginActivity.this,"user_group",String.valueOf(user_group));
-            }
+            }*/
             startActivity(intent);
             this.finish();
 
@@ -376,6 +378,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         requestParams.add("email", (String) user.getProperty("email"));
         requestParams.add("gender", (String) user.getProperty("gender"));
         requestParams.add("photograph", "http://graph.facebook.com/" + user.getId() + "/picture?type=large");
+        requestParams.add("user_group",String.valueOf(user_group));
         saveUserEmail((String) user.getProperty("email"));
         NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
     }
@@ -402,6 +405,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 } else {
                     dialog.dismiss();
                     requestParams.add("phone_number", phnNum);
+                    requestParams.add("user_group",String.valueOf(user_group));
                     saveUserPhoneNumber(phnNum);
                     NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
                     progressDialog.show();
