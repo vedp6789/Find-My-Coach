@@ -102,6 +102,12 @@
     <activity
         android:name="com.findmycoach.app.activity.StudentDetailActivity"
         android:screenOrientation="portrait"/>
+    <activity
+        android:name="com.findmycoach.app.activity.MentorDetailsActivity"
+        android:label="@string/title_activity_mentor_details"/>
+    <activity
+        android:name="com.findmycoach.app.activity.UserListActivity"
+        android:label="@string/title_activity_user_list" />
 
 
 

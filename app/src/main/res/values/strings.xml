@@ -514,6 +514,8 @@
     <string name="title_activity_signup">SignupActivity</string>
     <string name="title_edit_profile_menu">Edit Profile</string>
     <string name="title_validate_phone">Verify phone number</string>
+    <string name="title_activity_user_list">Mentors</string>
+    <string name="title_activity_mentor_details">Mentor Details</string>
 
     <!-- Strings related to login -->
 
@@ -552,6 +554,17 @@
     <string name="select">Select</string>
     <string name="forever">Forever</string>
     <string name="date_picker">Date Picker</string>
+    <string name="no_search_result_found">No result found</string>
+    <string name="prompt_category">Category</string>
+    <string name="prompt_sub_category">Sub Category</string>
+    <string name="prompt_ratting">Ratting</string>
+    <string name="prompt_name">Search By Name</string>
+    <string name="prompt_location">Location</string>
+    <string name="connection_request_msg">Hi, I would like to connect with you.</string>
+    <string name="connection_request">Connection Request</string>
+    <string name="enter_msg">Enter Message</string>
+    <string name="send">Send</string>
+    <string name="request_sent_successfully">Request sent successfully.</string>
     <string name="created_on">  Created on : </string>
     <string name="not_connected_to_anyone">Not connected to anyone.</string>
 
@@ -598,6 +611,7 @@
     <string name="add_new_slot">Add new slot</string>
     <string name="mentee">Mentee</string>
     <string name="mentor">Mentor</string>
+    <string name="action_connect">Connect</string>
     <!-- Static Text -->
 
     <!-- String s related to week days -->
@@ -611,6 +625,12 @@
     <!-- -->
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~ String related to SharePreferences ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <string name="terms1">terms</string>
+    <string name="user_id">user_id</string>
+    <string name="auth_token">auth_token</string>
+    <string name="phone_verified">phone_verified</string>
+    <string name="user_email">user_email</string>
+    <string name="phone_number">phone_number</string>
     <string name="reg_id_saved_to_server">reg_id_saved</string>
     <!-- -->
 

@@ -223,9 +223,24 @@ public class DashboardActivity extends FragmentActivity
                 regid = gcm.register(SENDER_ID);
                 msg = "Device registered, registration ID=" + regid;
                 Log.d(TAG, "Registration Id:" + regid);
+
+                // You should send the registration ID to your server over HTTP,
+                // so it can use GCM/HTTP or CCS to send messages to your app.
+                // The request to your server should be authenticated if your app
+                // is using accounts.
+                // sendRegistrationIdToBackend();
+
+                // For this demo: we don't need to send it because the device
+                // will send upstream messages to a server that echo back the
+                // message using the 'from' address in the message.
+
+                // Persist the regID - no need to register again.
                 storeRegistrationId(context, regid);
             } catch (IOException ex) {
                 msg = getResources().getString(R.string.error) + ex.getMessage();
+                // If there is an error, don't just keep trying to register.
+                // Require the user to click a button again, or perform
+                // exponential back-off.
             } catch (Exception e) {
                 Log.d(TAG, "Exeception occured while doing GCM registration:" + e);
             }
@@ -240,7 +255,14 @@ public class DashboardActivity extends FragmentActivity
             sendRegistrationIdToBackend();
         }
 
+        /**
+         * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP
+         * or CCS to send messages to your app. Not needed for this demo since the
+         * device sends upstream messages to a server that echoes back the message
+         * using the 'from' address in the message.
+         */
         private void sendRegistrationIdToBackend() {
+            // Your implementation here.
             String user_id = StorageHelper.getUserDetails(DashboardActivity.this, "user_id");
             String authToken = StorageHelper.getUserDetails(DashboardActivity.this, "auth_token");
             RequestParams requestParams = new RequestParams();
@@ -289,12 +311,17 @@ public class DashboardActivity extends FragmentActivity
         if (fragment_to_launch_from_notification == 0){
             if (checkPlayServices()) {
 
+           /* gcm = GoogleCloudMessaging.getInstance(this);
+            regid = getRegistrationId(context);
+
+            if (regid.isEmpty()) {
+                registerInBackground();
+            }*/
             } else {
                 Toast.makeText(DashboardActivity.this, getResources().getString(R.string.google_play_services_not_supported), Toast.LENGTH_LONG).show();
                 Log.i(TAG, "No valid Google Play Services APK found.");
             }
         }else{
-
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             switch (fragment_to_launch_from_notification) {
@@ -346,7 +373,11 @@ public class DashboardActivity extends FragmentActivity
             }
 
         }
-}
+
+
+
+
+    }
 
     /**
      * Check the device to make sure it has the Google Play Services APK. If

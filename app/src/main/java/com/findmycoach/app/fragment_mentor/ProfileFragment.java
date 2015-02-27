@@ -68,7 +68,7 @@ public class ProfileFragment extends Fragment implements Callback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile_mentor, container, false);
         initialize(view);
         getProfileInfo();
         return view;
