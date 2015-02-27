@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.findmycoach.app.activity.AddNewSlotActivity;
+import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.adapter.CalendarGridAdapter;
 import com.findmycoach.app.R;
 
@@ -47,8 +48,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
+        if(DashboardActivity.dashboardActivity.user_group == 2){
+            View view = inflater.inflate(R.layout.fragment_schedule_mentee, container, false);
+            return view;
+        }
         View view = inflater.inflate(R.layout.my_calendar_view, container, false);
         initialize(view);
         applyListeners();
