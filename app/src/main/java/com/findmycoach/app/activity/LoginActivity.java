@@ -163,13 +163,6 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         String phnVerified = StorageHelper.getUserDetails(this, "phone_verified");
         if (userToken != null && phnVerified != null) {
             Intent intent = new Intent(this, DashboardActivity.class);
-
-            String user_group_saved=StorageHelper.getUserGroup(LoginActivity.this,"user_group");
-            if(user_group_saved !=null && user_group_saved.equals(String.valueOf(user_group))){
-// No need to change the save value of user_group
-            }else{
-                StorageHelper.storePreference(LoginActivity.this,"user_group",String.valueOf(user_group));
-            }
             startActivity(intent);
             this.finish();
 

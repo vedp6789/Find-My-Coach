@@ -5,10 +5,13 @@ import android.util.Log;
 
 import com.findmycoach.app.beans.attachment.Attachment;
 import com.findmycoach.app.beans.authentication.Response;
+import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.chats.Chats;
 import com.findmycoach.app.beans.registration.SignUpResponse;
 import com.findmycoach.app.beans.requests.ConnectionRequestsResponse;
+import com.findmycoach.app.beans.search.SearchResponse;
 import com.findmycoach.app.beans.student.ProfileResponse;
+import com.findmycoach.app.beans.subcategory.SubCategory;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.R;
 import com.google.gson.Gson;
@@ -221,7 +224,7 @@ public class NetworkClient {
         client.get(context, getAbsoluteURL("profile", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try{
+                try {
                     try {
                         String responseJson = new String(responseBody);
                         Log.d(TAG, "Success: Response:" + responseJson);
@@ -232,7 +235,7 @@ public class NetworkClient {
                         Log.d(TAG, "Exception: " + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -421,7 +424,7 @@ public class NetworkClient {
         client.post(context, getAuthAbsoluteURL("validateOtp", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try{
+                try {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Success: Response:" + responseJson);
                     Log.d(TAG, "Success: Response Code:" + statusCode);
@@ -431,7 +434,7 @@ public class NetworkClient {
                     } else {
                         callback.failureOperation(response.getMessage());
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -456,13 +459,13 @@ public class NetworkClient {
         client.get(context, "https://maps.googleapis.com/maps/api/place/autocomplete/json", requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try{
+                try {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Success: Response:" + responseJson);
                     Log.d(TAG, "Success: Response Code:" + statusCode);
                     Suggestion suggestion = new Gson().fromJson(responseJson, Suggestion.class);
                     callback.successOperation(suggestion);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -521,7 +524,7 @@ public class NetworkClient {
         client.post(context, getAbsoluteURL("respondToConnectionRequest", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try{
+                try {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Success: Response:" + responseJson);
                     Log.d(TAG, "Success: Response Code:" + statusCode);
@@ -536,7 +539,7 @@ public class NetworkClient {
                             callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
                         }
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -567,7 +570,7 @@ public class NetworkClient {
         client.post(context, getAbsoluteURL("breakConnection", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try{
+                try {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Success: Response:" + responseJson);
                     Log.d(TAG, "Success: Response Code:" + statusCode);
@@ -582,7 +585,7 @@ public class NetworkClient {
                             callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
                         }
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -662,8 +665,8 @@ public class NetworkClient {
         client.post(context, getAbsoluteURL("attachment", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try{
-                    try{
+                try {
+                    try {
                         Log.d(TAG, "Success: Response Code:" + statusCode);
                         String responseJson = new String(responseBody);
                         Log.d(TAG, "Success: Response:" + responseJson);
@@ -673,11 +676,11 @@ public class NetworkClient {
                         } else {
                             callback.failureOperation(attachment.getMessage());
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                         callback.failureOperation("Unable to send attachment.");
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -747,31 +750,31 @@ public class NetworkClient {
         client.get(context, getAbsoluteURL("studentDetails", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try{
+                try {
                     Log.d(TAG, "Success: Response Code:" + statusCode);
                     if (responseBody != null) {
                         String responseJson = new String(responseBody);
                         Log.d(TAG, "Success: Response:" + responseJson);
                         ProfileResponse profileResponse = new Gson().fromJson(responseJson, ProfileResponse.class);
-                        if(statusCode == 200){
+                        if (statusCode == 200) {
                             callback.successOperation(responseJson);
-                        }else{
+                        } else {
                             callback.failureOperation(profileResponse.getMessage());
                         }
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                try{
+                try {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Failure: Response:" + responseJson);
                     Log.d(TAG, "Failure: Response Code:" + statusCode);
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     Log.d(TAG, "Exception: " + e);
                     callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
                 }
@@ -781,6 +784,199 @@ public class NetworkClient {
 //                } catch (Exception e) {
 //                    callback.failureOperation(context.getResources().getString(R.string.problem_in_server_connection));
 //                }
+            }
+        });
+    }
+
+
+    public static void getSubCategories(Context context, RequestParams requestParams, String authToken, final Callback callback) {
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        requestParams.add(userGroup, "2");
+        client.get(context, getAbsoluteURL("subCategories", context), requestParams, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        try{
+                            if (statusCode != 204) {
+                                String responseJson = new String(responseBody);
+                                Log.d(TAG, "Success: Response:" + responseJson);
+                                Log.d(TAG, "Success: Response Code:" + statusCode);
+                                if (statusCode == 200) {
+                                    SubCategory categories = new Gson().fromJson(responseJson, SubCategory.class);
+                                    callback.successOperation(categories);
+                                }
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers,
+                                          byte[] responseBody, Throwable error) {
+                    }
+                }
+        );
+    }
+
+    public static void search(final Context context, RequestParams requestParams, String authToken, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        requestParams.add(userGroup, "2");
+        client.get(context, getAbsoluteURL("search", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try{
+                    if (statusCode != 204) {
+                        String responseJson = new String(responseBody);
+                        Log.d(TAG, "Success: Response:" + responseJson);
+                        Log.d(TAG, "Success: Response Code:" + statusCode);
+                        if (statusCode == 200) {
+                            callback.successOperation(responseJson);
+                        } else {
+                            SearchResponse searchResponse = new Gson().fromJson(responseJson, SearchResponse.class);
+                            callback.failureOperation(searchResponse.getMessage());
+                        }
+                    } else {
+                        Log.d(TAG, "Success: Response Code:" + statusCode);
+                        callback.failureOperation(context.getResources().getString(R.string.no_search_result_found));
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure: Response:" + responseJson);
+                    Log.d(TAG, "Failure: Response Code:" + statusCode);
+                    SearchResponse searchResponse = new Gson().fromJson(responseJson, SearchResponse.class);
+                    callback.failureOperation(searchResponse.getMessage());
+                } catch (Exception e) {
+                    Log.d(TAG, "Exception: " + e);
+                    callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
+                }
+
+            }
+        });
+
+    }
+
+    public static void getCategories(Context context, RequestParams requestParams, String authToken, final Callback callback) {
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        requestParams.add(userGroup, "2");
+        client.get(context, getAbsoluteURL("categories", context), requestParams, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        try{
+                            if (statusCode != 204) {
+                                String responseJson = new String(responseBody);
+                                Log.d(TAG, "Success: Response:" + responseJson);
+                                Log.d(TAG, "Success: Response Code:" + statusCode);
+                                if (statusCode == 200) {
+                                    try{
+                                        Category categories = new Gson().fromJson(responseJson, Category.class);
+                                        callback.successOperation(categories);
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers,
+                                          byte[] responseBody, Throwable error) {
+                    }
+                }
+
+        );
+
+    }
+
+    public static void sendConnectionRequest(final Context context, RequestParams requestParams, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        requestParams.add(userGroup, "2");
+        client.post(context, getAbsoluteURL("connectionRequest", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try{
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success: Response:" + responseJson);
+                    Log.d(TAG, "Success: Response Code:" + statusCode);
+                    if(statusCode == 200){
+                        callback.failureOperation("success");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure: Response:" + responseJson);
+                    Log.d(TAG, "Failure: Response Code:" + statusCode);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage());
+                } catch (Exception e) {
+                    Log.d(TAG, "Failure: Error:" + e.getMessage());
+                    callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
+                }
+            }
+        });
+    }
+
+    public static void getMentorDetails(final Context context, RequestParams requestParams, String authToken, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        requestParams.add(userGroup, "2");
+        client.get(context, getAbsoluteURL("mentorDetails", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try{
+                    Log.d(TAG, "Success: Response Code:" + statusCode);
+                    if (responseBody != null) {
+                        String responseJson = new String(responseBody);
+                        Log.d(TAG, "Success: Response:" + responseJson);
+                        callback.successOperation(responseJson);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure: Response:" + responseJson);
+                    Log.d(TAG, "Failure: Response Code:" + statusCode);
+                    com.findmycoach.app.beans.mentor.Response response = new Gson().fromJson(responseJson, com.findmycoach.app.beans.mentor.Response.class);
+                    callback.failureOperation(response.getMessage());
+                } catch (Exception e) {
+                    callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
+                }
             }
         });
     }

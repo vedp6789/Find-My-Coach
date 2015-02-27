@@ -23,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Session;
-import com.findmycoach.app.fragment.HomeFragment;
 import com.findmycoach.app.fragment.MyConnectionsFragment;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.fragment.NavigationDrawerFragment;
@@ -491,14 +490,25 @@ public class DashboardActivity extends FragmentActivity
     public void onNavigationDrawerItemSelected(int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (position == 0)
-            fragmentTransaction.replace(R.id.container, new HomeFragment());
-        if (position == 1)
-            fragmentTransaction.replace(R.id.container, new NotificationsFragment());
-        if (position == 2)
-            fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-        if (position == 3)
-            fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
+        if(user_group.equals("3")){
+            if (position == 0)
+                fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentor.HomeFragment());
+            if (position == 1)
+                fragmentTransaction.replace(R.id.container, new NotificationsFragment());
+            if (position == 2)
+                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+            if (position == 3)
+                fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
+        }else if(user_group.equals("2")){
+            if (position == 0)
+                fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentee.HomeFragment());
+            if (position == 1)
+                fragmentTransaction.replace(R.id.container, new NotificationsFragment());
+            if (position == 2)
+                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+            if (position == 3)
+                fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
+        }
 
         fragmentTransaction.commit();
         onSectionAttached(position);
