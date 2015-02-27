@@ -557,6 +557,52 @@ public class NetworkClient {
         });
     }
 
+    public static void breakConnection(final Context context, RequestParams requestParams, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        requestParams.add(userGroup, "3");
+        client.post(context, getAbsoluteURL("breakConnection", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try{
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success: Response:" + responseJson);
+                    Log.d(TAG, "Success: Response Code:" + statusCode);
+                    if (statusCode == 200)
+                        callback.successOperation(null);
+                    else {
+                        try {
+                            Response response = new Gson().fromJson(responseJson, Response.class);
+                            callback.failureOperation(response.getMessage());
+                        } catch (Exception e) {
+                            Log.d(TAG, "Failure: Error:" + e.getMessage());
+                            callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
+                        }
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure: Response:" + responseJson);
+                    Log.d(TAG, "Failure: Response Code:" + statusCode);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage());
+                } catch (Exception e) {
+                    Log.d(TAG, "Failure: Error:" + e.getMessage());
+                    callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
+                }
+            }
+        });
+    }
+
     public static void getAllConnectionRequest(final Context context, RequestParams requestParams, final Callback callback) {
         if(!NetworkManager.isNetworkConnected(context)){
             callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
