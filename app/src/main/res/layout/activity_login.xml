@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.findmycoach.mentor.activity.LoginActivity">
+    tools:context="com.findmycoach.app.activity.LoginActivity">
 
     <LinearLayout
         android:id="@+id/heading"
@@ -76,6 +76,24 @@
                 android:text="@string/action_register"
                 android:textColor="#FFFFFE"
                 android:textSize="18sp" />
+            <RadioGroup
+                android:id="@+id/radio_group_user_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:checkedButton="@+id/radio_button_mentee_login">
+                <RadioButton android:id="@+id/radio_button_mentee_login"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mentee"
+                    android:layout_weight="1"/>
+                <RadioButton android:id="@+id/radio_button_mentor_login"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mentor"
+                    android:layout_weight="1"/>
+            </RadioGroup>
 
             <EditText
                 android:id="@+id/input_login_id"
@@ -104,6 +122,8 @@
                 android:maxLines="1"
                 android:minHeight="@dimen/abc_action_bar_stacked_max_height"
                 android:singleLine="true" />
+
+
 
             <Button
                 android:id="@+id/email_sign_in_button"

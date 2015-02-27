@@ -587,6 +587,8 @@
     <string name="find_my_coach">Find My Coach</string>
     <string name="or">OR</string>
     <string name="add_new_slot">Add new slot</string>
+    <string name="mentee">Mentee</string>
+    <string name="mentor">Mentor</string>
     <!-- Static Text -->
 
     <!-- String s related to week days -->

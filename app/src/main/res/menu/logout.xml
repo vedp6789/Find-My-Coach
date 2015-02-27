@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.findmycoach.mentor.activity.DashboardActivity">
+    tools:context="com.findmycoach.app.activity.DashboardActivity">
 
     <item
         android:id="@+id/log_out"

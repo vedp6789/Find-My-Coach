@@ -8,7 +8,7 @@
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
     android:paddingTop="8dp"
-    tools:context="com.findmycoach.mentor.activity.SignUpActivity">
+    tools:context="com.findmycoach.app.activity.SignUpActivity">
 
 
     <ScrollView
@@ -220,6 +220,24 @@
                     android:singleLine="true" />
 
             </LinearLayout>
+
+            <RadioGroup android:id="@+id/radio_group_user_signup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="8dp"
+                android:layout_gravity="center_horizontal">
+                <RadioButton android:id="@+id/radio_button_mentee_signup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mentee"
+                    android:layout_weight="1"/>
+                <RadioButton android:id="@+id/radio_button_mentor_signup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mentor"
+                    android:layout_weight="1"/>
+            </RadioGroup>
         </LinearLayout>
 
     </ScrollView>
