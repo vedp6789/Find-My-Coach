@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.activity.ChatWidgetActivity;
+import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.beans.requests.Data;
 import com.findmycoach.app.R;
 import com.findmycoach.app.util.Callback;
@@ -69,17 +70,25 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
             public void onClick(View v) {
                 if(status.equals("pending") || status.equals("broken"))
                     return;
-
                 Intent chatWidgetIntent = new Intent(context, ChatWidgetActivity.class);
-                chatWidgetIntent.putExtra("student_id", singleConnection.getOwnerId()+"");
-                chatWidgetIntent.putExtra("student_name", singleConnection.getOwnerName());
-                context.startActivity(chatWidgetIntent);
+                if(DashboardActivity.dashboardActivity.user_group == 3){
+                    chatWidgetIntent.putExtra("receiver_id", singleConnection.getOwnerId()+"");
+                    chatWidgetIntent.putExtra("receiver_name", singleConnection.getOwnerName());
+                    context.startActivity(chatWidgetIntent);
+                }else if(DashboardActivity.dashboardActivity.user_group == 2){
+                    chatWidgetIntent.putExtra("receiver_id", singleConnection.getInviteeId()+"");
+                    chatWidgetIntent.putExtra("receiver_name", singleConnection.getInviteeName());
+                    context.startActivity(chatWidgetIntent);
+                }
             }
         });
         TextView nameTV = (TextView) view.findViewById(R.id.nameTV);
         TextView lastMsgTV = (TextView) view.findViewById(R.id.lastMsgTV);
         ImageButton connectionButton = (ImageButton) view.findViewById(R.id.detailsTV);
-        nameTV.setText(singleConnection.getOwnerName());
+        if(DashboardActivity.dashboardActivity.user_group == 3)
+            nameTV.setText(singleConnection.getOwnerName());
+        else
+            nameTV.setText(singleConnection.getInviteeName());
         lastMsgTV.setText("  Created on : " + singleConnection.getCreatedOn());
         if(status.equals("accepted")){
             connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_minus));

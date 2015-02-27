@@ -45,7 +45,7 @@ import java.util.List;
  */
 public class ChatWidgetActivity extends Activity implements View.OnClickListener, Callback {
 
-    private String studentName, studentId, mentorId;
+    private String receiverName, receiverId, currentUserId;
     private ListView chatWidgetLv;
     private EditText msgToSend;
     private ChatWidgetAdapter chatWidgetAdapter;
@@ -76,20 +76,20 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
     public void getChatHistory() {
         RequestParams requestParams = new RequestParams();
-        requestParams.add("sender_id", mentorId);
-        requestParams.add("receiver_id",studentId);
+        requestParams.add("sender_id", currentUserId);
+        requestParams.add("receiver_id", receiverId);
         NetworkClient.getChatHistory(this, requestParams, this);
     }
 
     private void initialize() {
         Intent getUserIntent = getIntent();
         if (getUserIntent != null) {
-            studentId = getUserIntent.getStringExtra("student_id").trim();
-            studentName = getUserIntent.getStringExtra("student_name").trim();
+            receiverId = getUserIntent.getStringExtra("receiver_id").trim();
+            receiverName = getUserIntent.getStringExtra("receiver_name").trim();
         }
         chatWidgetLv = (ListView) findViewById(R.id.chatWidgetLv);
         msgToSend = (EditText) findViewById(R.id.msgToSendET);
-        mentorId = StorageHelper.getUserDetails(this, "user_id");
+        currentUserId = StorageHelper.getUserDetails(this, "user_id");
         findViewById(R.id.sendButton).setOnClickListener(this);
         chatWidgetLv.setDivider(null);
         chatWidgetLv.setSelector(new ColorDrawable(0));
@@ -107,7 +107,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             Data data = chats.get(i);
             messageList.add(data.getMessage());
 
-            if(data.getSender_id().equals(studentId))
+            if(data.getSender_id().equals(receiverId))
                 senderList.add(1);
             else
                 senderList.add(0);
@@ -127,8 +127,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private void applyActionbarProperties() {
         ActionBar actionbar = getActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
-        if (studentId != null)
-            actionbar.setTitle(studentName);
+        if (receiverId != null)
+            actionbar.setTitle(receiverName);
     }
 
     @Override
@@ -182,8 +182,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         progressDialog.show();
         try {
             RequestParams requestParams = new RequestParams();
-            requestParams.add("sender_id", mentorId);
-            requestParams.add("receiver_id", studentId);
+            requestParams.add("sender_id", currentUserId);
+            requestParams.add("receiver_id", receiverId);
             requestParams.add("type", type);
             requestParams.put("file", new File(filePath));
             NetworkClient.sendAttachment(this, requestParams, this);
@@ -234,7 +234,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private JSONObject getMsgInJson(String type, String msg) {
         JSONObject messageObject = new JSONObject();
         try {
-            messageObject.put("receiver_id", studentId);
+            messageObject.put("receiver_id", receiverId);
             messageObject.put("type", type);
             messageObject.put("data", msg);
             messageObject.put("receiver_group_id", "2");
