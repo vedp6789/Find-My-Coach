@@ -1,4 +1,4 @@
-package com.findmycoach.app.fragment_mentor;
+package com.findmycoach.app.fragment;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

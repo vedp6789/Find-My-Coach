@@ -1,4 +1,4 @@
-package com.findmycoach.app.fragment_mentor;
+package com.findmycoach.app.fragment;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -11,13 +11,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.ConnectionAdapterMentor;
 import com.findmycoach.app.beans.requests.ConnectionRequestsResponse;
 import com.findmycoach.app.beans.requests.Data;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
-import com.findmycoach.app.R;
 import com.loopj.android.http.RequestParams;
 
 import java.util.List;

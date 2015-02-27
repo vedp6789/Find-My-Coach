@@ -23,11 +23,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Session;
-import com.findmycoach.app.fragment_mentor.HomeFragment;
-import com.findmycoach.app.fragment_mentor.MyConnectionsFragment;
-import com.findmycoach.app.fragment_mentor.MyScheduleFragment;
-import com.findmycoach.app.fragment_mentor.NavigationDrawerFragment;
-import com.findmycoach.app.fragment_mentor.NotificationsFragment;
+import com.findmycoach.app.fragment.MyConnectionsFragment;
+import com.findmycoach.app.fragment.MyScheduleFragment;
+import com.findmycoach.app.fragment.NavigationDrawerFragment;
+import com.findmycoach.app.fragment.NotificationsFragment;
+import com.findmycoach.app.fragment_mentee.HomeFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -46,7 +46,8 @@ public class DashboardActivity extends FragmentActivity
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private CharSequence mTitle;
     private String userToken;
-    private String user_group;
+    public int user_group;
+    public static DashboardActivity dashboardActivity;
 
     /* Below are the class variables which are mainly used GCM Client registration and Google Play Services device configuration check*/
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -80,7 +81,10 @@ public class DashboardActivity extends FragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        user_group=StorageHelper.getUserGroup(DashboardActivity.this,"user_group");
+
+        dashboardActivity = this;
+
+        user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
         Toast.makeText(DashboardActivity.this,""+user_group,Toast.LENGTH_LONG).show();
         setContentView(R.layout.activity_dashboard);
 
@@ -270,7 +274,7 @@ public class DashboardActivity extends FragmentActivity
             Log.d("registration_id:", regid);
             requestParams.add("user_id", user_id);
             requestParams.add("registration_id", regid);
-            requestParams.add("user_group",user_group);
+            requestParams.add("user_group",user_group+"");
 
 
             NetworkClient.registerGcmRegistrationId(DashboardActivity.this, requestParams, authToken, new Callback() {
@@ -463,9 +467,9 @@ public class DashboardActivity extends FragmentActivity
     public void onNavigationDrawerItemSelected(int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if(user_group.equals("3")){
+        if(user_group == 3){
             if (position == 0)
-                fragmentTransaction.replace(R.id.container, new HomeFragment());
+                fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentor.HomeFragment());
             if (position == 1)
                 fragmentTransaction.replace(R.id.container, new NotificationsFragment());
             if (position == 2)
@@ -473,10 +477,11 @@ public class DashboardActivity extends FragmentActivity
             if (position == 3)
                 fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
 
+
             fragmentTransaction.commit();
             onSectionAttached(position);
         }
-        if(user_group.equals("2")){
+        if(user_group == 2){
             if (position == 0)
                 fragmentTransaction.replace(R.id.container, new HomeFragment());
             if (position == 1)
@@ -497,10 +502,10 @@ public class DashboardActivity extends FragmentActivity
     }
 
     public void onSectionAttached(int number) {
-        if (user_group.equals("3")){
+        if (user_group == 3){
             mTitle = getResources().getStringArray(R.array.navigation_items_mentor)[number];
         }
-        if (user_group.equals("2")){
+        if (user_group == 2){
             mTitle = getResources().getStringArray(R.array.navigation_items_mentee)[number];
         }
 

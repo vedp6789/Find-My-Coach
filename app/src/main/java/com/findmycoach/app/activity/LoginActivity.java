@@ -268,6 +268,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 requestParams.add("password", userPassword);
                 requestParams.add("user_group",String.valueOf(user_group));
                 saveUserEmail(userId);
+
                 NetworkClient.login(this, requestParams, this);
             } else
                 Toast.makeText(this, "Check internet connection", Toast.LENGTH_LONG).show();
