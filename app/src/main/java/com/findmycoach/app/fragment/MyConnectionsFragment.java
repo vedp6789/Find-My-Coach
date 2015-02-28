@@ -72,6 +72,7 @@ public class MyConnectionsFragment extends Fragment implements Callback {
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
         requestParams.add("user_id", StorageHelper.getUserDetails(getActivity(),"user_id"));
+        requestParams.add("user_group",StorageHelper.getUserGroup(getActivity(),"user_group"));
         NetworkClient.getAllConnectionRequest(getActivity(), requestParams, this);
     }
 

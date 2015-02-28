@@ -79,10 +79,17 @@ public class NotificationsFragment extends Fragment implements Callback {
         progressDialog.show();
         String userId = StorageHelper.getUserDetails(getActivity(), "user_id");
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-        Log.d(TAG,"Auth Token : " + authToken + "\nUser ID : " + userId);
-        RequestParams requestParams = new RequestParams();
-        requestParams.add("invitee", userId);
-        NetworkClient.getConnectionRequests(getActivity(), requestParams, authToken, this);
+        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("3")){
+            Log.d(TAG,"Auth Token : " + authToken + "\nUser ID : " + userId);
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("invitee", userId);
+            NetworkClient.getConnectionRequests(getActivity(), requestParams, authToken, this);
+        }
+        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")){
+
+        }
+
+
     }
 
     @Override
@@ -97,36 +104,48 @@ public class NotificationsFragment extends Fragment implements Callback {
 
     @Override
     public void successOperation(Object object) {
-        progressDialog.dismiss();
-        if(object instanceof ConnectionRequestsResponse){
-            connectionRequestsResponse = (ConnectionRequestsResponse) object;
-            if(connectionRequestsResponse.getData() != null && connectionRequestsResponse.getData().size() > 0) {
-                notificationAdapter = new NotificationAdapter(getActivity(), connectionRequestsResponse.getData(), this, progressDialog);
-                notificationListView.setAdapter(notificationAdapter);
+        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("3")){
+            progressDialog.dismiss();
+            if(object instanceof ConnectionRequestsResponse){
+                connectionRequestsResponse = (ConnectionRequestsResponse) object;
+                if(connectionRequestsResponse.getData() != null && connectionRequestsResponse.getData().size() > 0) {
+                    notificationAdapter = new NotificationAdapter(getActivity(), connectionRequestsResponse.getData(), this, progressDialog);
+                    notificationListView.setAdapter(notificationAdapter);
+                }else {
+                    notificationAdapter = new NotificationAdapter(getActivity());
+                    notificationListView.setAdapter(notificationAdapter);
+                }
             }else {
-                notificationAdapter = new NotificationAdapter(getActivity());
-                notificationListView.setAdapter(notificationAdapter);
-            }
-        }else {
-            if(notificationAdapter != null && notificationAdapter.positionToRemove != -1 && connectionRequestsResponse != null){
-                connectionRequestsResponse.getData().remove(notificationAdapter.positionToRemove);
-                notificationAdapter.notifyDataSetChanged();
-                notificationAdapter.positionToRemove = -1;
-                Toast.makeText(getActivity(),getResources().getString(R.string.success),Toast.LENGTH_LONG).show();
-                return;
-            }
+                if(notificationAdapter != null && notificationAdapter.positionToRemove != -1 && connectionRequestsResponse != null){
+                    connectionRequestsResponse.getData().remove(notificationAdapter.positionToRemove);
+                    notificationAdapter.notifyDataSetChanged();
+                    notificationAdapter.positionToRemove = -1;
+                    Toast.makeText(getActivity(),getResources().getString(R.string.success),Toast.LENGTH_LONG).show();
+                    return;
+                }
 
-            if(NotificationAdapter.connection_id == -1)
-                return;
-            Intent intent = new Intent(getActivity(), StudentDetailActivity.class);
-            intent.putExtra("student_detail",(String) object);
-            startActivityForResult(intent, NotificationAdapter.connection_id);
+                if(NotificationAdapter.connection_id == -1)
+                    return;
+                Intent intent = new Intent(getActivity(), StudentDetailActivity.class);
+                intent.putExtra("student_detail",(String) object);
+                startActivityForResult(intent, NotificationAdapter.connection_id);
+            }
         }
+        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")){
+
+        }
+
     }
 
     @Override
     public void failureOperation(Object object) {
-        progressDialog.dismiss();
-       Toast.makeText(getActivity(),(String) object, Toast.LENGTH_LONG).show();
+        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("3")){
+            progressDialog.dismiss();
+            Toast.makeText(getActivity(),(String) object, Toast.LENGTH_LONG).show();
+        }
+        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")){
+
+        }
+
     }
 }

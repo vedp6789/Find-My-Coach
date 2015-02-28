@@ -184,11 +184,12 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     if (checkedId == R.id.radio_button_mentee_login) {
                          user_group=2;
+                        Toast.makeText(LoginActivity.this,""+user_group,Toast.LENGTH_SHORT).show();
 
                     }
                     if (checkedId == R.id.radio_button_mentor_login){
                          user_group=3;
-
+                        Toast.makeText(LoginActivity.this,""+user_group,Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -420,7 +421,14 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 fbClearToken();
                 finish();
                 dialog.dismiss();
+                String user_group_saved=StorageHelper.getUserGroup(LoginActivity.this,"user_group");
+                if(user_group_saved !=null && user_group_saved.equals(String.valueOf(user_group))){
+                    // No need to change saved value of user_group
+                }else{
+                    StorageHelper.storePreference(LoginActivity.this,"user_group",String.valueOf(user_group));
+                }
                 startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                //////////////////////////////////////////////////////////////////////////////////////////////////////
             }
         });
         dialog.show();

@@ -177,21 +177,59 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
         updateAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(profileAddress1.getText().toString().trim().equals("")){
-                    Toast.makeText(EditProfileActivity.this,getResources().getString(R.string.choose_suggested_copy),Toast.LENGTH_LONG).show();
-                    profileAddress1.setError(getResources().getString(R.string.choose_suggested_copy));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            profileAddress1.setError(null);
-                        }
-                    }, 3500);
-                    return;
+                if(validate(profileFirstName.getText().toString(),profileAddress.getText().toString())){
+                    if(profileAddress1.getText().toString().trim().equals("")){
+                        Toast.makeText(EditProfileActivity.this,getResources().getString(R.string.choose_suggested_copy),Toast.LENGTH_LONG).show();
+                        profileAddress1.setError(getResources().getString(R.string.choose_suggested_copy));
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                profileAddress1.setError(null);
+                            }
+                        }, 3500);
+                        return;
+                    }
+                    callUpdateService();
                 }
-                callUpdateService();
+
             }
         });
 
+    }
+
+
+    private boolean validate(String firstName, String address) {
+
+        if (firstName.equals("")) {
+            showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
+            return false;
+        }else{
+            for (int i = 0; i < firstName.length()-1; i++) {
+                if (!Character.isLetter(firstName.charAt(i))) {
+                    showErrorMessage(profileFirstName, getResources().getString(R.string.error_not_a_name));
+                    return false;
+                }
+            }
+        }
+
+        if (address.equals("")) {
+            showErrorMessage(profileAddress, getResources().getString(R.string.error_field_required));
+            return false;
+        }
+
+
+
+        return true;
+    }
+
+    private void showErrorMessage(final TextView view, String string) {
+        view.setError(string);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.setError(null);
+            }
+        }, 3500);
     }
 
     private void getAutoSuggestions(String input) {

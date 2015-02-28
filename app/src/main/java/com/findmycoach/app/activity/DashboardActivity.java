@@ -75,7 +75,8 @@ public class DashboardActivity extends FragmentActivity
     SharedPreferences prefs;
     Context context;
 
-    int fragment_to_launch_from_notification = 0;
+    int fragment_to_launch_from_notification = 0;  ///  On a tap over Push notification, then it will be used to identify which operation to perform
+    int group_push_notification = 0;      /// it will identify push notification for which type of user.
 
 
     @Override
@@ -99,6 +100,8 @@ public class DashboardActivity extends FragmentActivity
         }
 
         fragment_to_launch_from_notification = getIntent().getIntExtra("fragment", 0);
+        group_push_notification= getIntent().getIntExtra("group",0);
+
 
         if (fragment_to_launch_from_notification == 0) {
             // Check device for Play Services APK.
@@ -228,23 +231,10 @@ public class DashboardActivity extends FragmentActivity
                 msg = "Device registered, registration ID=" + regid;
                 Log.d(TAG, "Registration Id:" + regid);
 
-                // You should send the registration ID to your server over HTTP,
-                // so it can use GCM/HTTP or CCS to send messages to your app.
-                // The request to your server should be authenticated if your app
-                // is using accounts.
-                // sendRegistrationIdToBackend();
-
-                // For this demo: we don't need to send it because the device
-                // will send upstream messages to a server that echo back the
-                // message using the 'from' address in the message.
-
-                // Persist the regID - no need to register again.
                 storeRegistrationId(context, regid);
             } catch (IOException ex) {
                 msg = getResources().getString(R.string.error) + ex.getMessage();
-                // If there is an error, don't just keep trying to register.
-                // Require the user to click a button again, or perform
-                // exponential back-off.
+
             } catch (Exception e) {
                 Log.d(TAG, "Exeception occured while doing GCM registration:" + e);
             }
@@ -259,12 +249,6 @@ public class DashboardActivity extends FragmentActivity
             sendRegistrationIdToBackend();
         }
 
-        /**
-         * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP
-         * or CCS to send messages to your app. Not needed for this demo since the
-         * device sends upstream messages to a server that echoes back the message
-         * using the 'from' address in the message.
-         */
         private void sendRegistrationIdToBackend() {
             // Your implementation here.
             String user_id = StorageHelper.getUserDetails(DashboardActivity.this, "user_id");
@@ -290,13 +274,6 @@ public class DashboardActivity extends FragmentActivity
             });
         }
 
-        /**
-         * Stores the registration ID and app versionCode in the application's
-         * {@code SharedPreferences}.
-         *
-         * @param context application's context.
-         * @param regId   registration ID
-         */
         private void storeRegistrationId(Context context, String regId) {
             final SharedPreferences prefs = getGCMPreferences(context);
             int appVersion = getAppVersion(context);
@@ -326,55 +303,124 @@ public class DashboardActivity extends FragmentActivity
                 Log.i(TAG, "No valid Google Play Services APK found.");
             }
         }else{
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            switch (fragment_to_launch_from_notification) {
+
+            if(Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this,"user_group")) == group_push_notification){
+
+                if(Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this,"user_group")) == 3){
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    switch (fragment_to_launch_from_notification) {
 
 
-                case 1: {
-                    Log.d(TAG, "Inside DashboardActivity of Mentor, going to start Notification fragment");
-                   // initialize();
-                    //NotificationsFragment notificationsFragment=new NotificationsFragment();
-                    //fragmentTransaction.add(R.id.container,notificationsFragment);
-                    fragmentTransaction.replace(R.id.container, new NotificationsFragment());
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                    break;
+                        case 1: {
+                            Log.d(TAG, "Inside DashboardActivity of Mentor, going to start Notification fragment");
+                            // initialize();
+                            //NotificationsFragment notificationsFragment=new NotificationsFragment();
+                            //fragmentTransaction.add(R.id.container,notificationsFragment);
+                            fragmentTransaction.replace(R.id.container, new NotificationsFragment());
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                            break;
+                        }
+                        case 4: {
+                            Log.d(TAG, "Inside DashboardActivity of Mentor, going to start MySchedule fragment");
+                            //initialize();
+                            fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                            break;
+                        }
+                        case 7: {
+                            Log.d(TAG, "Inside DashboardActivity of Mentor,going to start MyConnection Fragment");
+                            // initialize();
+                            fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                            break;
+                        }
+                        case 8: {
+                            Log.d(TAG, "Inside DashboardActivity of Mentor,going to start My Connection Fragment ");
+                            // initialize();
+                            fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                            break;
+                        }
+                        case 9: {
+                            Log.d(TAG, "Inside DashboardActivity of Mentor,going to start My Connection fragment ");
+                            // initialize();
+                            fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                            break;
+                        }
+
+                    }
                 }
-                case 2: {
-                    Log.d(TAG, "Inside DashboardActivity of Mentor, going to start MySchedule fragment");
-                    //initialize();
-                    fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                    break;
-                }
-                case 3: {
-                    Log.d(TAG, "Inside DashboardActivity of Mentor,going to start MyConnection Fragment");
-                   // initialize();
-                    fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                    break;
-                }
-                case 4: {
-                    Log.d(TAG, "Inside DashboardActivity of Mentor,going to start My Connection Fragment ");
-                   // initialize();
-                    fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                    break;
-                }
-                case 5: {
-                    Log.d(TAG, "Inside DashboardActivity of Mentor,going to start My Connection fragment ");
-                   // initialize();
-                    fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                    break;
+                if(Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this,"user_group")) == 2){
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    switch (fragment_to_launch_from_notification) {
+
+
+                        case 2: {
+
+                            fragmentTransaction.replace(R.id.container, new NotificationsFragment());
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                            break;
+                        }
+                        case 3: {
+
+                            fragmentTransaction.replace(R.id.container, new NotificationsFragment());
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                            break;
+                        }
+                        case 5: {
+
+                            fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                            break;
+                        }
+                        case 6: {
+
+                            fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                            break;
+                        }
+                        case 7: {
+
+                            fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                            break;
+                        }
+                        case 8: {
+
+                            fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                            break;
+                        }
+                        case 9: {
+
+                            fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                            break;
+                        }
+                    }
                 }
 
+
+
+            }else{
+                Toast.makeText(getApplicationContext(),"Switch your user login.",Toast.LENGTH_SHORT).show();
             }
+
 
         }
 
@@ -473,7 +519,7 @@ public class DashboardActivity extends FragmentActivity
             if (position == 1)
                 fragmentTransaction.replace(R.id.container, new NotificationsFragment());
             if (position == 2)
-                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+                fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentee.MyConnectionsFragment());
             if (position == 3)
                 fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
 

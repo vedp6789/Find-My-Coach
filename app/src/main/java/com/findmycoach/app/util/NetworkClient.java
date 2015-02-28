@@ -826,7 +826,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        requestParams.add(userGroup, "2");
+        ///////////////////requestParams.add(userGroup, "2");
         client.get(context, getAbsoluteURL("search", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {

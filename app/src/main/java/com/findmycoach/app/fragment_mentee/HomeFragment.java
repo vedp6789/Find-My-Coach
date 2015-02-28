@@ -233,6 +233,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         requestParams.add("timing_from", fromTiming);
         requestParams.add("timing_to", toTiming);
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
+        requestParams.add("user_group",StorageHelper.getUserGroup(getActivity(),"user_group"));
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
         NetworkClient.search(getActivity(), requestParams, authToken, this);
     }
