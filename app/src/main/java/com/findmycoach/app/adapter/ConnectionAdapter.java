@@ -25,14 +25,14 @@ import java.util.List;
 /**
  * Created by IgluLabs on 1/22/2015.
  */
-public class ConnectionAdapterMentor extends BaseAdapter implements Callback {
+public class ConnectionAdapter extends BaseAdapter implements Callback {
 
     private Context context;
     private List<Data> connectionList;
     public int connection_clicked = -1;
     private ProgressDialog progressDialog;
 
-    public ConnectionAdapterMentor(Context context, List<Data> connectionList) {
+    public ConnectionAdapter(Context context, List<Data> connectionList) {
         this.context = context;
         this.connectionList = connectionList;
         progressDialog = new ProgressDialog(context);

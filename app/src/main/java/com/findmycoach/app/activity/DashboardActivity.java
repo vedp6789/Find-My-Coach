@@ -526,7 +526,7 @@ public class DashboardActivity extends FragmentActivity
             if (position == 1)
                 fragmentTransaction.replace(R.id.container, new NotificationsFragment());
             if (position == 2)
-                fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentee.MyConnectionsFragment());
+                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
             if (position == 3)
                 fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
 
@@ -540,7 +540,7 @@ public class DashboardActivity extends FragmentActivity
             if (position == 1)
                 fragmentTransaction.replace(R.id.container, new NotificationsFragment());
             if (position == 2)
-                fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentee.MyConnectionsFragment());
+                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
             if (position == 3)
                 fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
             if(position == 4){
