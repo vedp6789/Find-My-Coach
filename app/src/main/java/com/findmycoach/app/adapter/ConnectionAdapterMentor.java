@@ -85,11 +85,14 @@ public class ConnectionAdapterMentor extends BaseAdapter implements Callback {
         TextView nameTV = (TextView) view.findViewById(R.id.nameTV);
         TextView lastMsgTV = (TextView) view.findViewById(R.id.lastMsgTV);
         ImageButton connectionButton = (ImageButton) view.findViewById(R.id.detailsTV);
-        if(DashboardActivity.dashboardActivity.user_group == 3)
+        if(DashboardActivity.dashboardActivity.user_group == 3) {
             nameTV.setText(singleConnection.getOwnerName());
-        else
+            lastMsgTV.setText("Receiver id : " + singleConnection.getOwnerId() + ", Sender id : " + singleConnection.getInviteeId());
+        }
+        else {
             nameTV.setText(singleConnection.getInviteeName());
-        lastMsgTV.setText("  Created on : " + singleConnection.getCreatedOn());
+            lastMsgTV.setText("Receiver id : " + singleConnection.getInviteeId() + ", Sender id : " + singleConnection.getOwnerId());
+        }
         if(status.equals("accepted")){
             connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_minus));
         }else if(status.equals("pending")){

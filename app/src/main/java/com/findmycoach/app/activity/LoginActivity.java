@@ -116,9 +116,25 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 String[] names = displayName.split(" ");
                 requestParams.add("first_name", names[0]);
                 requestParams.add("last_name", names[1]);
-                requestParams.add("dob", user.getBirthday());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try{
+               requestParams.add("dob", user.getBirthday());
+            }catch (Exception e) {
+                 e.printStackTrace();
+            }
+            try{
                 requestParams.add("google_link", user.getUrl());
+            }catch (Exception e) {
+               e.printStackTrace();
+            }
+            try{
                 requestParams.add("gender", user.getGender() + "");
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+            try{
                 requestParams.add("photograph", (user.getImage().getUrl()));
                 requestParams.add("user_group",String.valueOf(user_group));
             } catch (Exception e) {
@@ -164,14 +180,6 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         String phnVerified = StorageHelper.getUserDetails(this, "phone_verified");
         if (userToken != null && phnVerified != null) {
             Intent intent = new Intent(this, DashboardActivity.class);
-
-            /*String user_group_saved=StorageHelper.getUserGroup(LoginActivity.this,"user_group");
-            Toast.makeText(LoginActivity.this,"user_group_found_earlier_saved"+user_group_saved,Toast.LENGTH_LONG).show();
-            if(user_group_saved !=null && user_group_saved.equals(String.valueOf(user_group))){
-// No need to change the save value of user_group
-            }else{
-                StorageHelper.storePreference(LoginActivity.this,"user_group",String.valueOf(user_group));
-            }*/
             startActivity(intent);
             this.finish();
 
@@ -269,7 +277,6 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 requestParams.add("password", userPassword);
                 requestParams.add("user_group",String.valueOf(user_group));
                 saveUserEmail(userId);
-
                 NetworkClient.login(this, requestParams, this);
             } else
                 Toast.makeText(this, "Check internet connection", Toast.LENGTH_LONG).show();
@@ -428,7 +435,6 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                     StorageHelper.storePreference(LoginActivity.this,"user_group",String.valueOf(user_group));
                 }
                 startActivity(new Intent(LoginActivity.this, LoginActivity.class));
-                //////////////////////////////////////////////////////////////////////////////////////////////////////
             }
         });
         dialog.show();

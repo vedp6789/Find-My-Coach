@@ -9,9 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.StudentDetailActivity;
 import com.findmycoach.app.adapter.NotificationAdapter;
 import com.findmycoach.app.beans.requests.ConnectionRequestsResponse;
@@ -76,6 +78,10 @@ public class NotificationsFragment extends Fragment implements Callback {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if(DashboardActivity.dashboardActivity.user_group == 2){
+            notificationListView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.no_data_found, new String[]{"Not notification for you."}));
+            return;
+        }
         progressDialog.show();
         String userId = StorageHelper.getUserDetails(getActivity(), "user_id");
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
