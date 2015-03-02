@@ -208,13 +208,12 @@ public class NetworkClient {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                try{
-                   String responseJson = new String(responseBody);
-                   Log.d(TAG, "Success: Response:" + responseJson);
-                   Log.d(TAG, "Success: Response Code:" + statusCode);
-
                    if (statusCode == 200) {
                        StorageHelper.checkGcmRegIdSentToSever(context, context.getResources().getString(R.string.reg_id_saved_to_server), true);
                    }
+                   Log.d(TAG, "Success: Response Code:" + statusCode);
+                   String responseJson = new String(responseBody);
+                   Log.d(TAG, "Success: Response:" + responseJson);
                }catch (Exception e){
                    e.printStackTrace();
                }
@@ -224,11 +223,9 @@ public class NetworkClient {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 StorageHelper.checkGcmRegIdSentToSever(context,context.getResources().getString(R.string.reg_id_saved_to_server),false);
                 try {
+                    Log.d(TAG, "Failure: Response Code:" + statusCode);
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Failure: Response:" + responseJson);
-                    Log.d(TAG, "Failure: Response Code:" + statusCode);
-                    SignUpResponse response = new Gson().fromJson(responseJson, SignUpResponse.class);
-                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
                     Log.d(TAG, "Failure: Error:" + e.getMessage());
                 }
@@ -242,7 +239,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.post(getAuthAbsoluteURL("forgot_password", context), requestParams, new AsyncHttpResponseHandler() {
+        client.post(getAuthAbsoluteURL("forgotPassword", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {

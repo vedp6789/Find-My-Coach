@@ -192,12 +192,9 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     if (checkedId == R.id.radio_button_mentee_login) {
                          user_group=2;
-                        Toast.makeText(LoginActivity.this,""+user_group,Toast.LENGTH_SHORT).show();
-
                     }
                     if (checkedId == R.id.radio_button_mentor_login){
                          user_group=3;
-                        Toast.makeText(LoginActivity.this,""+user_group,Toast.LENGTH_SHORT).show();
                     }
                 }
             });

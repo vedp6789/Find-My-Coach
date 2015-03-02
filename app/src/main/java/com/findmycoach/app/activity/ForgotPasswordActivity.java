@@ -50,7 +50,6 @@ public class ForgotPasswordActivity extends Activity implements Callback {
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
         requestParams.add("email", emailInput.getText().toString());
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
         NetworkClient.forgetPassword(this, requestParams, this, 3);
     }
 
