@@ -60,7 +60,8 @@ public class UserListActivity extends Activity implements Callback {
         RequestParams requestParams = new RequestParams();
         requestParams.add("id", id);
         String authToken = StorageHelper.getUserDetails(this, "auth_token");
-        NetworkClient.getMentorDetails(this, requestParams, authToken, this);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.getMentorDetails(this, requestParams, authToken, this, 25);
     }
 
     private void applyActionbarProperties() {
@@ -97,7 +98,7 @@ public class UserListActivity extends Activity implements Callback {
     }
 
     @Override
-    public void successOperation(Object object) {
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Intent intent = new Intent(getApplicationContext(), MentorDetailsActivity.class);
         intent.putExtra("mentorDetails", (String) object);
@@ -105,7 +106,7 @@ public class UserListActivity extends Activity implements Callback {
     }
 
     @Override
-    public void failureOperation(Object object) {
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         String msg = (String) object;
         if (msg.equals("success"))

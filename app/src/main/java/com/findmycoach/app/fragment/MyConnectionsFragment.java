@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.adapter.ConnectionAdapterMentor;
 import com.findmycoach.app.beans.requests.ConnectionRequestsResponse;
 import com.findmycoach.app.beans.requests.Data;
@@ -72,8 +73,8 @@ public class MyConnectionsFragment extends Fragment implements Callback {
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
         requestParams.add("user_id", StorageHelper.getUserDetails(getActivity(),"user_id"));
-        requestParams.add("user_group",StorageHelper.getUserGroup(getActivity(),"user_group"));
-        NetworkClient.getAllConnectionRequest(getActivity(), requestParams, this);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.getAllConnectionRequest(getActivity(), requestParams, this, 22);
     }
 
     private void populateData(final List<Data> data) {
@@ -92,7 +93,7 @@ public class MyConnectionsFragment extends Fragment implements Callback {
     }
 
     @Override
-    public void successOperation(Object object) {
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         connectionRequestsResponse = (ConnectionRequestsResponse) object;
         if(connectionRequestsResponse.getData() != null && connectionRequestsResponse.getData().size() > 0) {
@@ -101,7 +102,7 @@ public class MyConnectionsFragment extends Fragment implements Callback {
     }
 
     @Override
-    public void failureOperation(Object object) {
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         String msg = (String) object;
         if(msg.equals("Success"))

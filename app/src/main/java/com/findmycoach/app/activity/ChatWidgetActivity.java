@@ -78,7 +78,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         RequestParams requestParams = new RequestParams();
         requestParams.add("sender_id", currentUserId);
         requestParams.add("receiver_id", receiverId);
-        NetworkClient.getChatHistory(this, requestParams, this);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.getChatHistory(this, requestParams, this, 29);
     }
 
     private void initialize() {
@@ -186,7 +187,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             requestParams.add("receiver_id", receiverId);
             requestParams.add("type", type);
             requestParams.put("file", new File(filePath));
-            NetworkClient.sendAttachment(this, requestParams, this);
+            requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+            NetworkClient.sendAttachment(this, requestParams, this, 30);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -325,7 +327,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     }
 
     @Override
-    public void successOperation(Object object) {
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
         if(object instanceof Chats){
             Chats chats = (Chats) object;
             if(chats.getData() != null && chats.getData().size() > 0){
@@ -358,7 +360,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     }
 
     @Override
-    public void failureOperation(Object object) {
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
     }

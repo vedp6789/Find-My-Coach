@@ -136,12 +136,12 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             }
             try{
                 requestParams.add("photograph", (user.getImage().getUrl()));
-                requestParams.add("user_group",String.valueOf(user_group));
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            requestParams.add("user_group",String.valueOf(user_group));
             saveUserEmail(mPlusClient.getAccountName());
-            NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
+            NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
         } else {
             Toast.makeText(this, getResources().getString(R.string.check_network_connection), Toast.LENGTH_LONG).show();
         }
@@ -178,7 +178,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
 
         final String userToken = StorageHelper.getUserDetails(this, "auth_token");
         String phnVerified = StorageHelper.getUserDetails(this, "phone_verified");
-        if (userToken != null && phnVerified != null) {
+        if (userToken != null && phnVerified == null) {
             Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
             this.finish();
@@ -277,7 +277,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 requestParams.add("password", userPassword);
                 requestParams.add("user_group",String.valueOf(user_group));
                 saveUserEmail(userId);
-                NetworkClient.login(this, requestParams, this);
+                NetworkClient.login(this, requestParams, this, 1);
             } else
                 Toast.makeText(this, "Check internet connection", Toast.LENGTH_LONG).show();
         }
@@ -389,7 +389,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         requestParams.add("photograph", "http://graph.facebook.com/" + user.getId() + "/picture?type=large");
         requestParams.add("user_group",String.valueOf(user_group));
         saveUserEmail((String) user.getProperty("email"));
-        NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
+        NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
     }
 
     private void getPhoneNumber(final RequestParams requestParams) {
@@ -416,7 +416,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                     requestParams.add("phone_number", phnNum);
                     requestParams.add("user_group",String.valueOf(user_group));
                     saveUserPhoneNumber(phnNum);
-                    NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this);
+                    NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 26);
                     progressDialog.show();
                 }
             }
@@ -508,54 +508,6 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         Log.d(TAG2, "Gender:" + currentPerson.getImage());
     }
 
-    @Override
-    public void successOperation(Object object) {
-        progressDialog.dismiss();
-        if (object == null) {
-            RequestParams requestParams = new RequestParams();
-            requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
-            getPhoneNumber(requestParams);
-            return;
-        }
-        Response response = (Response) object;
-
-        if (response.getMessage().equals("Successfully Updated Please Validate your profile to use it ")) {
-            if (StorageHelper.getUserDetails(this, "phone_number") == null) {
-                RequestParams requestParams = new RequestParams();
-                requestParams.add("email", response.getData().getEmail());
-                getPhoneNumber(requestParams);
-                return;
-            }
-            startActivity(new Intent(this, ValidatePhoneActivity.class));
-            finish();
-            return;
-        }
-
-        if (response.getAuthToken() != null && response.getData().getId() != null)
-            saveUser(response.getAuthToken(), response.getData().getId());
-        if (response.getMessage().equals("Success"))
-            saveUserPhn("True");
-        progressDialog.dismiss();
-
-
-        if (response.getData().getPhonenumber() == null) {
-            RequestParams requestParams = new RequestParams();
-            requestParams.add("email", response.getData().getEmail());
-            getPhoneNumber(requestParams);
-        } else {
-            saveUserPhoneNumber(response.getData().getPhonenumber());
-            Intent intent = new Intent(this, DashboardActivity.class);
-            String user_group_saved=StorageHelper.getUserGroup(LoginActivity.this,"user_group");
-            if(user_group_saved !=null && user_group_saved.equals(String.valueOf(user_group))){
-                // No need to change saved value of user_group
-            }else{
-                StorageHelper.storePreference(LoginActivity.this,"user_group",String.valueOf(user_group));
-            }
-            finish();
-            startActivity(intent);
-        }
-    }
-
     private void saveUser(String authToken, String userId) {
         StorageHelper.storePreference(this, "auth_token", authToken);
         StorageHelper.storePreference(this, "user_id", userId);
@@ -582,20 +534,81 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void failureOperation(Object message) {
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
+        progressDialog.dismiss();
+
+        // Saving user group
+        String user_group_saved = StorageHelper.getUserGroup(LoginActivity.this,"user_group");
+        if(user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group))) {
+            StorageHelper.storePreference(LoginActivity.this, "user_group", String.valueOf(user_group));
+        }
+
+        Response response = (Response) object;
+
+        if(response == null)
+            return;
+
+        // Saving auth token and user id of user for further use
+        if (response.getAuthToken() != null && response.getData().getId() != null) {
+            saveUser(response.getAuthToken(), response.getData().getId());
+        }
+        if (response.getMessage() != null && response.getMessage().equals("Success")) {
+            saveUserPhn("True");
+            finish();
+            startActivity(new Intent(this, DashboardActivity.class));
+        }else{
+            if (response.getData().getPhonenumber() == null) {
+                RequestParams requestParams = new RequestParams();
+                requestParams.add("email", response.getData().getEmail());
+                getPhoneNumber(requestParams);
+                return;
+            }  else {
+                // Saving phone number for validating purpose and starting ValidatePhoneActivity
+                saveUserPhoneNumber(response.getData().getPhonenumber());
+                Intent intent = new Intent(this, ValidatePhoneActivity.class);
+
+                finish();
+                startActivity(intent);
+            }
+
+        }
+    }
+
+    @Override
+    public void failureOperation(Object message, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         String msg = (String) message;
-        if (msg.equals("Validate Phone number to login") || msg.equals("Successfully Updated Please Validate your profile to use it ")) {
+
+        // Saving user group
+        String user_group_saved = StorageHelper.getUserGroup(LoginActivity.this,"user_group");
+        if(user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group)))
+            StorageHelper.storePreference(LoginActivity.this,"user_group",String.valueOf(user_group));
+
+        if(msg.equals("Phone number is not set")) {
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
+            getPhoneNumber(requestParams);
+            return;
+        }
+
+        // If phone number is not verified then starting ValidatePhoneActivity
+        if (msg.equals("Validate Phone number to login") || msg.equals("Validate Phone number and Email to Login ")) {
             startActivity(new Intent(this, ValidatePhoneActivity.class));
             finish();
             return;
         }
+
+        // Displaying error message to user
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+
+        //Clearing facebook token and G+ user if connected
         fbClearToken();
         if (mPlusClient.isConnected()) {
             mPlusClient.clearDefaultAccount();
             mPlusClient.disconnect();
         }
+
+        //Restarting the LoginActivity
         finish();
         startActivity(new Intent(LoginActivity.this, LoginActivity.class));
     }

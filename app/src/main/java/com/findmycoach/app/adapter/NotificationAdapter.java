@@ -88,7 +88,7 @@ public class NotificationAdapter extends BaseAdapter {
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("id",senderData.getOwnerId()+"");
                 String authToken = StorageHelper.getUserDetails(context, "auth_token");
-                NetworkClient.getStudentDetails(context, requestParams, authToken, callback);
+                NetworkClient.getStudentDetails(context, requestParams, authToken, callback, 25);
             }
         });
 
@@ -105,7 +105,7 @@ public class NotificationAdapter extends BaseAdapter {
                 requestParams.add("status", "accepted");
                 Log.d(TAG, senderData.getId() + "");
                 Log.d(TAG, "accepted");
-                NetworkClient.respondToConnectionRequest(context, requestParams, callback);
+                NetworkClient.respondToConnectionRequest(context, requestParams, callback, 18);
             }
         });
         ImageButton declineButton = (ImageButton) view.findViewById(R.id.declineButton);
@@ -119,7 +119,7 @@ public class NotificationAdapter extends BaseAdapter {
                 requestParams.add("status", "rejected");
                 Log.d(TAG, senderData.getId() + "");
                 Log.d(TAG, "rejected");
-                NetworkClient.respondToConnectionRequest(context, requestParams, callback);
+                NetworkClient.respondToConnectionRequest(context, requestParams, callback, 18);
             }
         });
         sender.setText(senderData.getOwnerName());

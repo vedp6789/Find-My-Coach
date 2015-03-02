@@ -85,13 +85,14 @@ public class NotificationsFragment extends Fragment implements Callback {
         progressDialog.show();
         String userId = StorageHelper.getUserDetails(getActivity(), "user_id");
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("3")){
+        if(DashboardActivity.dashboardActivity.user_group == 3){
             Log.d(TAG,"Auth Token : " + authToken + "\nUser ID : " + userId);
             RequestParams requestParams = new RequestParams();
             requestParams.add("invitee", userId);
-            NetworkClient.getConnectionRequests(getActivity(), requestParams, authToken, this);
+            requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+            NetworkClient.getConnectionRequests(getActivity(), requestParams, authToken, this, 22);
         }
-        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")){
+        if(DashboardActivity.dashboardActivity.user_group == 2){
 
         }
 
@@ -109,7 +110,7 @@ public class NotificationsFragment extends Fragment implements Callback {
     }
 
     @Override
-    public void successOperation(Object object) {
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
         if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("3")){
             progressDialog.dismiss();
             if(object instanceof ConnectionRequestsResponse){
@@ -144,7 +145,7 @@ public class NotificationsFragment extends Fragment implements Callback {
     }
 
     @Override
-    public void failureOperation(Object object) {
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
         if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("3")){
             progressDialog.dismiss();
             Toast.makeText(getActivity(),(String) object, Toast.LENGTH_LONG).show();

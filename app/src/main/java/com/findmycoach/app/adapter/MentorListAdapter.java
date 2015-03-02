@@ -16,6 +16,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.UserListActivity;
 import com.findmycoach.app.beans.search.Datum;
 import com.findmycoach.app.util.NetworkClient;
@@ -133,6 +134,7 @@ public class MentorListAdapter extends BaseAdapter {
         requestParams.add("owner", studentId);
         requestParams.add("invitee", userId);
         requestParams.add("message", message);
-        NetworkClient.sendConnectionRequest(context, requestParams, userListActivity);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.sendConnectionRequest(context, requestParams, userListActivity, 17);
     }
 }

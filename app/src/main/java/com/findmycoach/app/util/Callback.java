@@ -5,9 +5,9 @@ package com.findmycoach.app.util;
  */
 public interface Callback {
 
-    public void successOperation(Object object);
+    public void successOperation(Object object, int statusCode, int calledApiValue);
 
-    public void failureOperation(Object object);
+    public void failureOperation(Object object, int statusCode, int calledApiValue);
 
 
 

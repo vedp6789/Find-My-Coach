@@ -123,18 +123,20 @@ public class ConnectionAdapterMentor extends BaseAdapter implements Callback {
         RequestParams requestParams = new RequestParams();
         requestParams.add("id", connectionId);
         requestParams.add("status", "accepted");
-        NetworkClient.respondToConnectionRequest(context, requestParams, this);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.respondToConnectionRequest(context, requestParams, this, 18);
     }
 
     private void disconnect(String connectionId) {
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
         requestParams.add("id", connectionId);
-        NetworkClient.breakConnection(context, requestParams, this);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.breakConnection(context, requestParams, this, 21);
     }
 
     @Override
-    public void successOperation(Object object) {
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         if(object == null && connection_clicked != -1){
             String status = connectionList.get(connection_clicked).getStatus();
@@ -145,7 +147,7 @@ public class ConnectionAdapterMentor extends BaseAdapter implements Callback {
     }
 
     @Override
-    public void failureOperation(Object object) {
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Toast.makeText(context,(String) object,Toast.LENGTH_LONG).show();
 

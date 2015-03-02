@@ -30,12 +30,22 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     private EditText verificationCode;
     private String email;
     private ProgressDialog progressDialog;
+    private int user_group;
 
     private static final String TAG="FMC";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        try{
+            user_group = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
+        }catch (Exception e){
+            e.printStackTrace();
+            logout();
+            return;
+        }
+
         setContentView(R.layout.activity_validate_phone);
         initView();
     }
@@ -46,6 +56,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         verificationCode = (EditText) findViewById(R.id.verificationCodeET);
         findViewById(R.id.btnVerify).setOnClickListener(this);
         findViewById(R.id.btnResend).setOnClickListener(this);
+        Log.e(TAG, email);
     }
 
     @Override
@@ -79,7 +90,8 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("email",email);
                 requestParams.add("otp", code);
-                NetworkClient.verifyPhoneNumber(this, requestParams, this);
+                requestParams.add("user_group", user_group+"");
+                NetworkClient.verifyPhoneNumber(this, requestParams, this, 27);
                 Log.d(TAG, "Sent code for verification \n Email : " + email + "\n OTP : " + code);
             }else{
                 Toast.makeText(this, getResources().getString(R.string.check_connection),Toast.LENGTH_LONG).show();
@@ -88,31 +100,23 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     }
 
     @Override
-    public void successOperation(Object object) {
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Response response = (Response) object;
-        if(response.getMessage().equals("Successfully Updated Please Validate your profile to use it ")){
-            if(response.getData() != null){
-                if(response.getData().getPhonenumber() != null)
-                    StorageHelper.storePreference(ValidatePhoneActivity.this, "phone_number", response.getData().getPhonenumber());
-            }
-            Toast.makeText(this,getResources().getString(R.string.enter_otp),Toast.LENGTH_LONG).show();
-        }else if(response.getMessage().equals("Success , please login")){
-            StorageHelper.storePreference(this, "phone_verified", "True");
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
+
+        if(calledApiValue == 26 || calledApiValue == 28){
+            Toast.makeText(this,response.getMessage(),Toast.LENGTH_LONG).show();
+            return;
+        }else if(calledApiValue == 27){
+        if(response.getAuthToken() != null)
+            saveUser(response.getAuthToken(), response.getData().getId());
         }
-
-
-//        saveUser(response.getAuthToken(), response.getData().getId());
-//        finish();
-//        startActivity(new Intent(this, DashboardActivity.class));
-
-
+        finish();
+        startActivity(new Intent(this, DashboardActivity.class));
     }
 
     @Override
-    public void failureOperation(Object object) {
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Toast.makeText(this,(String) object,Toast.LENGTH_LONG).show();
     }
@@ -181,16 +185,17 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                     }, 3500);
                 } else {
                     dialog.dismiss();
-                    requestParams.add("phonenumber", phnNum);
+                    requestParams.add("phone_number", phnNum);
+                    requestParams.add("user_group", user_group+"");
                     progressDialog.setMessage(getResources().getString(R.string.sending_code));
-                    if(lastPhoneNumber.equals(phnNum)){
+                    if(lastPhoneNumber != null && lastPhoneNumber.equals(phnNum)){
                         progressDialog.show();
-                        NetworkClient.repostOtp(ValidatePhoneActivity.this, requestParams, ValidatePhoneActivity.this);
+                        NetworkClient.repostOtp(ValidatePhoneActivity.this, requestParams, ValidatePhoneActivity.this, 28);
                     }else{
                         StorageHelper.storePreference(ValidatePhoneActivity.this, "phone_number", phnNum);
-                        requestParams.add("phonenumber", phnNum);
+                        requestParams.add("phone_number", phnNum);
                         progressDialog.show();
-                        NetworkClient.updatePhoneForSocialMedia(ValidatePhoneActivity.this, requestParams, ValidatePhoneActivity.this);
+                        NetworkClient.updatePhoneForSocialMedia(ValidatePhoneActivity.this, requestParams, ValidatePhoneActivity.this, 26);
                     }
                 }
             }

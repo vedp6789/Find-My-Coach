@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.EditProfileActivity;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
@@ -81,7 +82,8 @@ public class ProfileFragment extends Fragment implements Callback {
         Log.d(TAG, "Stored User Id:" + StorageHelper.getUserDetails(getActivity(), "user_id"));
         Log.d(TAG, "auth_token" + authToken);
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
-        NetworkClient.getProfile(getActivity(), requestParams, authToken, this);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
     }
 
     private void initialize(View view) {
@@ -141,7 +143,7 @@ public class ProfileFragment extends Fragment implements Callback {
     }
 
     @Override
-    public void successOperation(Object object) {
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.hide();
         Response response = (Response) object;
         userInfo = response.getData();
@@ -220,7 +222,7 @@ public class ProfileFragment extends Fragment implements Callback {
     }
 
     @Override
-    public void failureOperation(Object object) {
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.hide();
         String message = (String) object;
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();

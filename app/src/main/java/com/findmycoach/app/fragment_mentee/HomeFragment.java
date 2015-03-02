@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.UserListActivity;
 import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.subcategory.Datum;
@@ -112,7 +113,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private void getCategories() {
         RequestParams requestParams = new RequestParams();
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-        NetworkClient.getCategories(getActivity(), requestParams, authToken, this);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.getCategories(getActivity(), requestParams, authToken, this, 34);
     }
 
     private void applyActions() {
@@ -203,7 +205,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         RequestParams requestParams = new RequestParams();
         requestParams.add("input", input);
         requestParams.add("key", getResources().getString(R.string.google_location_api_key));
-        NetworkClient.autoComplete(getActivity(), requestParams, this);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.autoComplete(getActivity(), requestParams, this, 32);
     }
 
     @Override
@@ -233,13 +236,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         requestParams.add("timing_from", fromTiming);
         requestParams.add("timing_to", toTiming);
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
-        requestParams.add("user_group",StorageHelper.getUserGroup(getActivity(),"user_group"));
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-        NetworkClient.search(getActivity(), requestParams, authToken, this);
+        NetworkClient.search(getActivity(), requestParams, authToken, this, 6);
     }
 
     @Override
-    public void successOperation(Object object) {
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
         if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
@@ -293,7 +296,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         RequestParams requestParams = new RequestParams();
         requestParams.add("id", selectedCategoryId);
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-        NetworkClient.getSubCategories(getActivity(), requestParams, authToken, this);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.getSubCategories(getActivity(), requestParams, authToken, this, 33);
     }
 
     private void updateAutoSuggestion(Suggestion suggestion) {
@@ -306,7 +310,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     }
 
     @Override
-    public void failureOperation(Object object) {
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Toast.makeText(getActivity(), (String) object, Toast.LENGTH_LONG).show();
     }

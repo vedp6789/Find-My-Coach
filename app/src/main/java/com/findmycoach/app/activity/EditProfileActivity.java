@@ -236,7 +236,8 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
         RequestParams requestParams = new RequestParams();
         requestParams.add("input", input);
         requestParams.add("key", getResources().getString(R.string.google_location_api_key));
-        NetworkClient.autoComplete(getApplicationContext(), requestParams, this);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.autoComplete(getApplicationContext(), requestParams, this, 32);
     }
 
     private void callUpdateService() {
@@ -266,8 +267,9 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
 
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
+            requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
 
-            NetworkClient.updateProfile(this, requestParams, authToken, this);
+            NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
             progressDialog.dismiss();
             Toast.makeText(this, getResources().getString(R.string.enter_necessary_details), Toast.LENGTH_LONG).show();
@@ -339,7 +341,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     }
 
     @Override
-    public void successOperation(Object object) {
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
         if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
@@ -356,7 +358,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     }
 
     @Override
-    public void failureOperation(Object object) {
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
         String message = (String) object;
         progressDialog.dismiss();
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();

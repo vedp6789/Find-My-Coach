@@ -50,7 +50,8 @@ public class ForgotPasswordActivity extends Activity implements Callback {
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
         requestParams.add("email", emailInput.getText().toString());
-        NetworkClient.forgetPassword(this, requestParams, this);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.forgetPassword(this, requestParams, this, 3);
     }
 
     private boolean isInputValid() {
@@ -112,7 +113,7 @@ public class ForgotPasswordActivity extends Activity implements Callback {
     }
 
     @Override
-    public void successOperation(Object object) {
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         String message = (String) object;
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -120,7 +121,7 @@ public class ForgotPasswordActivity extends Activity implements Callback {
     }
 
     @Override
-    public void failureOperation(Object object) {
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         String message = (String) object;
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
