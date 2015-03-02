@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.beans.attachment.Attachment;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.category.Category;
@@ -257,16 +258,18 @@ public class NetworkClient {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    onFailure(statusCode, headers, responseBody, null);
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
-                    Log.d(TAG, "Failure: Response:" + new String(responseBody));
-                    Log.d(TAG, "Failure: Response Code:" + statusCode);
-                    JSONObject jsonObject = new JSONObject(new String(responseBody));
-                    callback.failureOperation(jsonObject.get("message"), statusCode, calledApiValue);
+                    Log.d(TAG,"Failure : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG,"Failure : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
                     callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
                 }
@@ -289,24 +292,33 @@ public class NetworkClient {
                         String responseJson = new String(responseBody);
                         Log.d(TAG, "Success: Response:" + responseJson);
                         Log.d(TAG, "Success: Response Code:" + statusCode);
-                        Response response = new Gson().fromJson(responseJson, Response.class);
-                        callback.successOperation(response, statusCode, calledApiValue);
+
+                        if (DashboardActivity.dashboardActivity.user_group == 3) {
+                            Response response = new Gson().fromJson(responseJson, Response.class);
+                            callback.successOperation(response, statusCode, calledApiValue);
+                        }else if (DashboardActivity.dashboardActivity.user_group == 2){
+                            Log.d(TAG, "getprofile");
+                            ProfileResponse response = new Gson().fromJson(responseJson, ProfileResponse.class);
+                            callback.successOperation(response, statusCode, calledApiValue);
+                        }
                     } catch (Exception e) {
-                        Log.d(TAG, "Exception: " + e.getMessage());
-                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                        e.printStackTrace();
+                        onFailure(statusCode, headers, responseBody, null);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    onFailure(statusCode, headers, responseBody, null);
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
+                    Log.d(TAG,"Failure : Status code : " + statusCode);
                     String responseJson = new String(responseBody);
+                    Log.d(TAG,"Failure : Response : " + responseJson);
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
-                    Log.d(TAG, "Failure: Response Code:" + statusCode);
                 } catch (Exception e) {
                     callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
                 }
@@ -329,9 +341,14 @@ public class NetworkClient {
                         String responseJson = new String(responseBody);
                         Log.d(TAG, "Success: Response:" + responseJson);
                         Log.d(TAG, "Success: Response Code:" + statusCode);
-
-                        Response response = new Gson().fromJson(responseJson, Response.class);
-                        callback.successOperation(response, statusCode, calledApiValue);
+                        if (DashboardActivity.dashboardActivity.user_group == 3) {
+                            Response response = new Gson().fromJson(responseJson, Response.class);
+                            callback.successOperation(response, statusCode, calledApiValue);
+                        }
+                        else if (DashboardActivity.dashboardActivity.user_group == 2){
+                            ProfileResponse response = new Gson().fromJson(responseJson, ProfileResponse.class);
+                            callback.successOperation(response, statusCode, calledApiValue);
+                        }
                     } catch (Exception e) {
                         Log.d(TAG, "Exception: " + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
@@ -344,9 +361,9 @@ public class NetworkClient {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
+                    Log.d(TAG,"Failure : Status code : " + statusCode);
                     String responseJson = new String(responseBody);
-                    Log.d(TAG, "Failure: Response:" + responseJson);
-                    Log.d(TAG, "Failure: Response Code:" + statusCode);
+                    Log.d(TAG,"Failure : Response : " + responseJson);
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {

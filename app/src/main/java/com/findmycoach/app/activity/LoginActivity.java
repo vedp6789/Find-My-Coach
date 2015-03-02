@@ -178,7 +178,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
 
         final String userToken = StorageHelper.getUserDetails(this, "auth_token");
         String phnVerified = StorageHelper.getUserDetails(this, "phone_verified");
-        if (userToken != null && phnVerified == null) {
+        if (userToken != null && phnVerified != null) {
             Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
             this.finish();
