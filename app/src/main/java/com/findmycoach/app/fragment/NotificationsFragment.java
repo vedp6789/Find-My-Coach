@@ -9,9 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.StudentDetailActivity;
 import com.findmycoach.app.adapter.NotificationAdapter;
 import com.findmycoach.app.beans.requests.ConnectionRequestsResponse;
@@ -79,14 +81,14 @@ public class NotificationsFragment extends Fragment implements Callback {
         progressDialog.show();
         String userId = StorageHelper.getUserDetails(getActivity(), "user_id");
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("3")){
+        if(DashboardActivity.dashboardActivity.user_group == 3){
             Log.d(TAG,"Auth Token : " + authToken + "\nUser ID : " + userId);
             RequestParams requestParams = new RequestParams();
             requestParams.add("invitee", userId);
             NetworkClient.getConnectionRequests(getActivity(), requestParams, authToken, this,22);
-        }
-        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")){
-
+        }else if(DashboardActivity.dashboardActivity.user_group == 2){
+         progressDialog.dismiss();
+            notificationListView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.no_data_found, new String[]{"No notification for you."}));
         }
 
 
@@ -106,7 +108,7 @@ public class NotificationsFragment extends Fragment implements Callback {
     public void successOperation(Object object, int statusCode, int calledApiValue) {
 
         progressDialog.dismiss();
-        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("3")){
+        if(DashboardActivity.dashboardActivity.user_group == 3){
             if(object instanceof ConnectionRequestsResponse){
                 connectionRequestsResponse = (ConnectionRequestsResponse) object;
                 if(connectionRequestsResponse.getData() != null && connectionRequestsResponse.getData().size() > 0) {
@@ -131,7 +133,7 @@ public class NotificationsFragment extends Fragment implements Callback {
                 intent.putExtra("student_detail",(String) object);
                 startActivityForResult(intent, NotificationAdapter.connection_id);
             }
-        }else if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")){
+        }else if(DashboardActivity.dashboardActivity.user_group == 2){
             //TODO for student notification
         }
 

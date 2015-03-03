@@ -96,7 +96,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         chatWidgetLv.setSelector(new ColorDrawable(0));
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.connecting));
-        progressDialog.setCancelable(false);
+//        progressDialog.setCancelable(false);
         isSocketConnected = false;
     }
 
@@ -179,8 +179,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     }
 
     private void sendAttachment(String filePath, String type) {
-        progressDialog.setMessage(getResources().getString(R.string.sending));
-        progressDialog.show();
+//        progressDialog.setMessage(getResources().getString(R.string.sending));
+//        progressDialog.show();
         try {
             RequestParams requestParams = new RequestParams();
             requestParams.add("sender_id", currentUserId);
@@ -188,6 +188,15 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             requestParams.add("type", type);
             requestParams.put("file", new File(filePath));
             requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+
+            chatWidgetAdapter.fileNames.add(filePath);
+            if(type.equals("image"))
+                chatWidgetAdapter.updateMessageList(filePath, 0, 1);
+            else
+                chatWidgetAdapter.updateMessageList(filePath, 0, 2);
+            chatWidgetAdapter.notifyDataSetChanged();
+            chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+
             NetworkClient.sendAttachment(this, requestParams, this, 30);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -223,6 +232,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             Log.d(TAG, msgJson);
         }
         else {
+            progressDialog.show();
             connectWebSocket();
             return;
         }
@@ -350,7 +360,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
                 Log.d(TAG, msgJson);
             }
             else {
-                mWebSocketClient.connect();
+                progressDialog.show();
+                connectWebSocket();
                 return;
             }
             chatWidgetAdapter.updateMessageList(attachmentPath, 0, msgJson.contains("image") ? 1 : 2);

@@ -66,11 +66,11 @@ public class ImageLoadTask extends AsyncTask<Void, Void, OutputStream> {
     protected void onPostExecute(OutputStream result) {
         super.onPostExecute(result);
         try{
-            fileNames.add(fileName);
+//            fileNames.add(fileName);
         }catch (Exception e){
             e.printStackTrace();
         }
-        Toast.makeText(context,"Done",Toast.LENGTH_LONG).show();
+        Toast.makeText(context,"Downloaded",Toast.LENGTH_LONG).show();
     }
 
 }
