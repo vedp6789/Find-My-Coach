@@ -83,7 +83,7 @@ public class NotificationsFragment extends Fragment implements Callback {
             Log.d(TAG,"Auth Token : " + authToken + "\nUser ID : " + userId);
             RequestParams requestParams = new RequestParams();
             requestParams.add("invitee", userId);
-            NetworkClient.getConnectionRequests(getActivity(), requestParams, authToken, this);
+            NetworkClient.getConnectionRequests(getActivity(), requestParams, authToken, this,22);
         }
         if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")){
 
@@ -104,7 +104,7 @@ public class NotificationsFragment extends Fragment implements Callback {
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-    public void successOperation(Object object) {
+
         progressDialog.dismiss();
         if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("3")){
 

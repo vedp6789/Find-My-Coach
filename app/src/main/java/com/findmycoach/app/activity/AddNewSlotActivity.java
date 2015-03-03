@@ -385,21 +385,19 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                         String auth_token = StorageHelper.getUserDetails(AddNewSlotActivity.this, "auth_token");
                         progressDialog.show();
                         NetworkClient.createNewSlot(AddNewSlotActivity.this, requestParams, auth_token, new Callback() {
+
                             @Override
-                            public void successOperation(Object object) {
+                            public void successOperation(Object object, int statusCode, int calledApiValue) {
+                                Toast.makeText(AddNewSlotActivity.this,"Hi, you have created a new slot.",Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
-                                Toast.makeText(AddNewSlotActivity.this,"Hi, you have a created a new slot.",Toast.LENGTH_SHORT).show();
-
-
                             }
 
                             @Override
-                            public void failureOperation(Object object) {
-
+                            public void failureOperation(Object object, int statusCode, int calledApiValue) {
+                                Toast.makeText(AddNewSlotActivity.this,"Unfortunately there is some problem during slot creation.",Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
-                                Toast.makeText(AddNewSlotActivity.this,"Unfortunately there is some problem in slot creation.",Toast.LENGTH_SHORT).show();
                             }
-                        });
+                        },35);
 
 
                         //requestParams.add("start_date",)

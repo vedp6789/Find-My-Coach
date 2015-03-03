@@ -27,6 +27,47 @@ import org.json.JSONObject;
 /**
  * Created by prem on 18/12/14.
  */
+
+
+/*
+    *       No internet                     -1
+    *       login                           1
+    *       register                        2
+    *       forgetPassword                  3
+    *       profile                         4
+    *       changePassword                  5
+    *       search                          6
+    *       verifyMobile                    7
+    *       configurations                  8
+    *       myConnections                   9
+    *       schedule                        10
+    *       event                           11
+    *       rate                            12
+    *       breakConnection                 13
+    *       logout                          14
+    *       paymentDetails                  15
+    *       payment                         16
+    *       connectionRequest (post)        17
+    *       respondToConnectionRequest      18
+    *       notification                    19
+    *       connections                     20
+    *       breakConnection                 21
+    *       connectionRequest (get)         22
+    *       socialAuthentication            23
+    *       mentorDetails                   24
+    *       studentDetails                  25
+    *       setPhoneNumber                  26
+    *       validateOTP                     27
+    *       repostOTP                       28
+    *       chats                           29
+    *       attachment                      30
+    *       deviceRegistration              31
+    *       google address api              32
+    *       subCategories                   33
+    *       categories                      34
+    *       availableSlots                  35
+    * */
+
 public class NetworkClient {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
@@ -964,9 +1005,9 @@ public class NetworkClient {
         });
     }
 
-    public static void createNewSlot(final Context context, RequestParams requestParams,String auth_token, final Callback callback) {
+    public static void createNewSlot(final Context context, RequestParams requestParams,String auth_token, final Callback callback, final int calledApiValue) {
         if(!NetworkManager.isNetworkConnected(context)){
-            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection),-1,calledApiValue);
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
@@ -981,12 +1022,12 @@ public class NetworkClient {
                         Log.d(TAG, "Success: Response Code:" + statusCode);
                         JSONObject jsonObject = new JSONObject(new String(responseBody));
                         if (statusCode == 200) {
-                            callback.successOperation(jsonObject.get("message"));
+                            callback.successOperation(jsonObject.get("message"),statusCode,calledApiValue);
                         } else {
-                            callback.failureOperation(jsonObject.get("message"));
+                            callback.failureOperation(jsonObject.get("message"),statusCode,calledApiValue);
                         }
                     } catch (Exception e) {
-                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
+                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server),statusCode,calledApiValue);
                     }
                 }catch (Exception e){
                     e.printStackTrace();
@@ -999,9 +1040,9 @@ public class NetworkClient {
                     Log.d(TAG, "Failure: Response:" + new String(responseBody));
                     Log.d(TAG, "Failure: Response Code:" + statusCode);
                     JSONObject jsonObject = new JSONObject(new String(responseBody));
-                    callback.failureOperation(jsonObject.get("message"));
+                    callback.failureOperation(jsonObject.get("message"),statusCode,calledApiValue);
                 } catch (Exception e) {
-                    callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
+                    callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server),statusCode,calledApiValue);
                 }
             }
         });
