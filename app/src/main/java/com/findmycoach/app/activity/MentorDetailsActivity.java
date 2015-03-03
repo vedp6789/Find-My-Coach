@@ -129,7 +129,12 @@ public class MentorDetailsActivity extends Activity implements Callback {
                 public void onClick(View v) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(userInfo.getGoogleLink()));
-                    startActivity(intent);
+                    try{
+                        startActivity(intent);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        Toast.makeText(MentorDetailsActivity.this,getResources().getString(R.string.problem_in_url),Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }
@@ -139,7 +144,12 @@ public class MentorDetailsActivity extends Activity implements Callback {
                 public void onClick(View v) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(userInfo.getFacebookLink()));
-                    startActivity(intent);
+                    try{
+                        startActivity(intent);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        Toast.makeText(MentorDetailsActivity.this,getResources().getString(R.string.problem_in_url),Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }
@@ -196,6 +206,7 @@ public class MentorDetailsActivity extends Activity implements Callback {
                     }
                 }
         );
+        alertDialog.setCancelable(false);
         alertDialog.show();
     }
 
