@@ -72,13 +72,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         add_slot= (TextView) view.findViewById(R.id.tv_add_new_slot);
         add_slot.setOnClickListener(this);
 
-
         prevMonth = (ImageView) view.findViewById(R.id.prevMonth);
         prevMonth.setOnClickListener(this);
 
         currentMonth = (TextView) view.findViewById(R.id.currentMonth);
-        currentMonth.setText(DateFormat.format(dateTemplate,
-                _calendar.getTime()));
+        currentMonth.setText(DateFormat.format(dateTemplate, _calendar.getTime()));
 
         nextMonth = (ImageView) view.findViewById(R.id.nextMonth);
         nextMonth.setOnClickListener(this);

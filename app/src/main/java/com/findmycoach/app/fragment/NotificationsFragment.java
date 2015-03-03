@@ -104,8 +104,9 @@ public class NotificationsFragment extends Fragment implements Callback {
 
     @Override
     public void successOperation(Object object) {
+        progressDialog.dismiss();
         if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("3")){
-            progressDialog.dismiss();
+
             if(object instanceof ConnectionRequestsResponse){
                 connectionRequestsResponse = (ConnectionRequestsResponse) object;
                 if(connectionRequestsResponse.getData() != null && connectionRequestsResponse.getData().size() > 0) {

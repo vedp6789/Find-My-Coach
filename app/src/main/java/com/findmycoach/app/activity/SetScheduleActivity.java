@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -26,6 +27,8 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     private String date;
     private Calendar cal;
 
+    private static final String TAG="FMC";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +38,8 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         Intent getIntent = getIntent();
         if(getIntent != null)
             date = getIntent.getStringExtra("DATE");
+            Log.d(TAG, "Date on SetScheduleActivity initialization intent call from CalendarGridAdapter: "+date);
         applyProperties();
-
         if(date != null)
             Toast.makeText(this,date,Toast.LENGTH_LONG).show();
     }

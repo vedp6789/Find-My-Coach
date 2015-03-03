@@ -980,4 +980,47 @@ public class NetworkClient {
             }
         });
     }
+
+    public static void createNewSlot(final Context context, RequestParams requestParams,String auth_token, final Callback callback) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection));
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.auth_key), auth_token);
+        //requestParams.add(userGroup, "3");
+        client.post(getAbsoluteURL("availableSlots", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try{
+                    try {
+                        Log.d(TAG, "Success: Response:" + new String(responseBody));
+                        Log.d(TAG, "Success: Response Code:" + statusCode);
+                        JSONObject jsonObject = new JSONObject(new String(responseBody));
+                        if (statusCode == 200) {
+                            callback.successOperation(jsonObject.get("message"));
+                        } else {
+                            callback.failureOperation(jsonObject.get("message"));
+                        }
+                    } catch (Exception e) {
+                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    Log.d(TAG, "Failure: Response:" + new String(responseBody));
+                    Log.d(TAG, "Failure: Response Code:" + statusCode);
+                    JSONObject jsonObject = new JSONObject(new String(responseBody));
+                    callback.failureOperation(jsonObject.get("message"));
+                } catch (Exception e) {
+                    callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server));
+                }
+            }
+        });
+    }
 }

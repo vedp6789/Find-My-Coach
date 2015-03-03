@@ -144,14 +144,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_day7"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
-        android:orientation="horizontal"
-        android:layout_marginLeft="10dp">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -160,18 +161,34 @@
                 android:textColor="#000000"
                 android:textSize="15sp" />
 
-            <Spinner
-                android:id="@+id/sp_time_from"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"></Spinner>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/tv_slot_start_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:hint="@string/start_time" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#000000"></LinearLayout>
+            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_marginRight="5dp">
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -182,67 +199,113 @@
                 android:textColor="#000000"
                 android:textSize="15sp" />
 
-            <Spinner
-                android:id="@+id/sp_time_to"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"></Spinner>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_slot_stop_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="@string/stop_time" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#000000"></LinearLayout>
+            </LinearLayout>
 
 
         </LinearLayout>
 
 
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/ll_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_below="@+id/ll_time_from"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/starting_from"
             android:layout_weight="1"
-            android:textSize="15sp"
-            android:textColor="#000000"/>
-        <EditText
-            android:id="@+id/et_slot_start_date"
+            android:text="@string/starting_from"
+            android:textColor="#000000"
+            android:textSize="15sp" />
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/pick_date"
-            android:gravity="center"
-            />
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/tv_slot_start_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:hint="@string/pick_date" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#000000"></LinearLayout>
         </LinearLayout>
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp"
         android:layout_below="@+id/ll_date"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/till"
-            android:textSize="15sp"
             android:textColor="#000000"
-            android:layout_weight="1"/>
-        <EditText
-            android:id="@+id/et_slot_till_date"
+            android:textSize="15sp" />
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
-            android:hint="@string/forever"
-            />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_slot_till_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:hint="@string/forever" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#000000"></LinearLayout>
+        </LinearLayout>
+
 
     </LinearLayout>
+
+
+
 
 
     <!--<DatePicker
@@ -265,12 +328,12 @@
     android:calendarViewShown="false"
     android:datePickerMode="spinner"/>-->
 
-    <Button
-        android:id="@+id/b_create_slot"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="@string/create_slot" />
+<Button
+android:id="@+id/b_create_slot"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_alignParentBottom="true"
+android:text="@string/create_slot" />
 
 
-</RelativeLayout>
+    </RelativeLayout>

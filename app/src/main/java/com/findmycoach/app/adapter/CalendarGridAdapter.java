@@ -9,11 +9,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.findmycoach.app.activity.SetScheduleActivity;
 import com.findmycoach.app.R;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -28,9 +31,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
     private final List<String> list;
     private static final int DAY_OFFSET = 1;
-    private final String[] weekdays = new String[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
-    private final String[] months = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
-    private final int[] daysOfMonth = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    private final String[] weekdays = new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+    private final String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+    private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     private int daysInMonth;
     private int currentDayOfMonth;
     private int currentWeekDay;
@@ -39,8 +42,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private final HashMap<String, Integer> eventsPerMonthMap;
     private static int CURRENT_MONTH_OF_CALENDAR;
     private static int CURRENT_YEAR_OF_CALENDAR;
-
-    private static final String TAG="FMC:";
+    private static int month_in_foreground;
+    private static final String TAG = "FMC:";
 
     // Days in Current Month
     public CalendarGridAdapter(Context context, int month, int year) {
@@ -52,13 +55,14 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         setCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
 
 
-        CURRENT_MONTH_OF_CALENDAR=calendar.get(Calendar.MONTH);
-        CURRENT_YEAR_OF_CALENDAR=calendar.get(Calendar.YEAR);
+        CURRENT_MONTH_OF_CALENDAR = calendar.get(Calendar.MONTH);
+        CURRENT_YEAR_OF_CALENDAR = calendar.get(Calendar.YEAR);
+        month_in_foreground = month - 1;
 
-        Log.d(TAG,"Current Month of Calendar:"+CURRENT_MONTH_OF_CALENDAR);
-        Log.d(TAG,"Current Year of Calendar:"+CURRENT_YEAR_OF_CALENDAR);
-        Log.d(TAG,"Current day of month"+currentDayOfMonth);
-        Log.d(TAG,"Current week day"+currentWeekDay);
+        Log.d(TAG, "Current Month of Calendar:" + CURRENT_MONTH_OF_CALENDAR);
+        Log.d(TAG, "Current Year of Calendar:" + CURRENT_YEAR_OF_CALENDAR);
+        Log.d(TAG, "Current day of month" + currentDayOfMonth);
+        Log.d(TAG, "Current week day" + currentWeekDay);
 
 
         // Print Month
@@ -122,6 +126,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         }
 
         int currentWeekDay = cal.get(Calendar.DAY_OF_WEEK) - 1;
+        Log.d(TAG, "current Week Day" + cal.get(Calendar.DAY_OF_WEEK));
 
         trailingSpaces = currentWeekDay;
 
@@ -144,11 +149,11 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                     + prevYear);
         }
 
+
         // Current Month Days
         for (int i = 1; i <= daysInMonth; i++) {
-            Log.d(TAG,currentMonthName+": "+ String.valueOf(i) + " " + getMonthAsString(currentMonth) + " " + yy);
-            if (i == getCurrentDayOfMonth() && currentMonth == CURRENT_MONTH_OF_CALENDAR && yy == CURRENT_YEAR_OF_CALENDAR ) {
-
+            Log.d(TAG, currentMonthName + ": " + String.valueOf(i) + " " + getMonthAsString(currentMonth) + " " + yy);
+            if (i == getCurrentDayOfMonth() && currentMonth == CURRENT_MONTH_OF_CALENDAR && yy == CURRENT_YEAR_OF_CALENDAR) {
                 list.add(String.valueOf(i) + "-BLUE" + "-" + getMonthAsString(currentMonth) + "-" + yy);
             } else {
                 list.add(String.valueOf(i) + "-WHITE" + "-" + getMonthAsString(currentMonth) + "-" + yy);
@@ -204,9 +209,11 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         // Set the Day GridCell
         gridcell.setText(theday);
         gridcell.setTag(theday + "-" + themonth + "-" + theyear);
+        Log.d(TAG, "Grid cell view :" + theday + "/" + themonth + "/" + theyear);
 
         if (day_color[1].equals("GREY")) {
             gridcell.setTextColor(context.getResources().getColor(R.color.caldroid_darker_gray));
+            gridcell.setBackgroundResource(R.drawable.abc_btn_check_material);
         }
         if (day_color[1].equals("WHITE")) {
             gridcell.setTextColor(context.getResources().getColor(R.color.caldroid_black));
@@ -220,9 +227,30 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     @Override
     public void onClick(View view) {
         Intent intent = new Intent(context, SetScheduleActivity.class);
-        intent.putExtra("DATE",(String) view.getTag());
+        String s = (String) view.getTag();
+        Log.d(TAG, "Current month index:" + CURRENT_MONTH_OF_CALENDAR);
+        String month = s.split("-", 3)[1];
+        intent.putExtra("DATE", s);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+
+        int month_index_of_grid_clicked = Arrays.asList(months).indexOf(month);
+        Log.d(TAG, "grid clicked month index" + month_index_of_grid_clicked);
+        Log.d(TAG, "Day of the grid clicked :" + (String) view.getTag());
+
+        if (month_in_foreground < month_index_of_grid_clicked) {
+            Log.d(TAG,""+1);
+
+        } else {
+            if (month_in_foreground == month_index_of_grid_clicked) {
+                context.startActivity(intent);
+                Log.d(TAG,""+2);
+            } else {
+                if (month_in_foreground > month_index_of_grid_clicked) {
+                   Log.d(TAG,""+3);
+                }
+            }
+        }
+
     }
 
     public int getCurrentDayOfMonth() {
@@ -235,6 +263,6 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
     public void setCurrentWeekDay(int currentWeekDay) {
         this.currentWeekDay = currentWeekDay;
-        Log.d(TAG,"Day:"+currentWeekDay+"");
+        Log.d(TAG, "Day:" + currentWeekDay + "");
     }
 }

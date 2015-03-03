@@ -481,7 +481,8 @@
     <string name="enter_otp">Please enter code sent to your registered number.</string>
     <string name="success">Success</string>
     <string name="update_profile">Please update your profile</string>
-    <string name="from_date_first">Pick start date for this slot.</string>
+    <string name="from_date_first">Pick start date for this slot</string>
+    <string name="start_time_first">Pick start time for this slot</string>
 
 
 
@@ -590,6 +591,8 @@
     <string name="create_slot">Create Slot</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="start_time">Select</string>
+    <string name="stop_time">Select</string>
     <!-- Actions -->
 
     <!-- String s related to Errors -->
@@ -612,6 +615,7 @@
     <string name="mentee">Mentee</string>
     <string name="mentor">Mentor</string>
     <string name="action_connect">Connect</string>
+    <string name="set_time">Set time</string>
     <!-- Static Text -->
 
     <!-- String s related to week days -->
