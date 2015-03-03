@@ -40,7 +40,7 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
     // For determining message type i.e. text/image/video (0=text, 1=image, 2=video)
     private ArrayList<Integer> messageType;
     // For mapping the downloaded files in storage with received or sent files
-    private ArrayList<String> fileNames;
+    public ArrayList<String> fileNames;
 
     private String storagePathImage, storagePathVideo;
 
@@ -137,8 +137,26 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
                 });
             }
         }else {
+            final File imageFile = new File(messageList.get(position));
+            if(imageFile.exists()){
+                try{
+                    imageView.setImageBitmap(decodeFileImage(imageFile));
+                }catch (Exception e){
+                    imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
+                }
+
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.parse("file://" + imageFile.getAbsolutePath()), "image/*");
+                        context.startActivity(intent);
+                    }
+                });
+            }
             new ImageLoadTask(messageList.get(position), context, imageName, storagePathImage, fileNames).execute();
-            Picasso.with(context).load(messageList.get(position)).into(imageView);
+//            Picasso.with(context).load(messageList.get(position)).into(imageView);
         }
     }
 
@@ -204,6 +222,24 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
             }
 
         }else{
+            final File videoFile = new File(messageList.get(position));
+            if(videoFile.exists()){
+                try{
+                    imageView.setImageBitmap(ThumbnailUtils.createVideoThumbnail(videoFile.getAbsolutePath(), MediaStore.Images.Thumbnails.MINI_KIND));
+
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent();
+                            intent.setAction(Intent.ACTION_VIEW);
+                            intent.setDataAndType(Uri.parse("file://" + videoFile.getAbsolutePath()), "video/*");
+                            context.startActivity(intent);
+                        }
+                    });
+                }catch (Exception e){
+                    imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
+                }
+            }
             new ImageLoadTask(messageList.get(position), context, videoName, storagePathVideo, fileNames).execute();
         }
 
