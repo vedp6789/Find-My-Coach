@@ -268,13 +268,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
         if (month_in_foreground < month_index_of_grid_clicked) {
             Log.d(TAG,""+1);
-            CalendarGridAdapter adapter=new CalendarGridAdapter(context, month_index_of_grid_clicked+1, Integer.parseInt(year));
-                    /*_calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
-                    currentMonth.setText(DateFormat.format(dateTemplate,
-                            _calendar.getTime()));*/
 
-
-            adapter.notifyDataSetChanged();
 
         } else {
             if (month_in_foreground == month_index_of_grid_clicked) {
@@ -285,13 +279,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             } else {
                 if (month_in_foreground > month_index_of_grid_clicked) {
                    Log.d(TAG,""+3);
-                    CalendarGridAdapter adapter=new CalendarGridAdapter(context, month_index_of_grid_clicked+1, Integer.parseInt(year));
-                    /*_calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
-                    currentMonth.setText(DateFormat.format(dateTemplate,
-                            _calendar.getTime()));*/
 
-
-                    adapter.notifyDataSetChanged();
 
                 }
             }
