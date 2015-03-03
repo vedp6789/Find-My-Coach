@@ -31,6 +31,18 @@
         android:layout_below="@+id/mediaIV"
         android:layout_marginTop="15dp"
         android:background="@android:color/black"
-        android:layout_marginRight="50dp"/>
+        android:layout_marginRight="50dp"
+        android:id="@+id/textView" />
+
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/mediaProgressBar"
+        android:layout_marginTop="45dp"
+        android:layout_below="@+id/userPic"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView"
+        android:visibility="gone"
+        android:layout_marginRight="60dp" />
 
 </RelativeLayout>

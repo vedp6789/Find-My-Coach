@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.findmycoach.app.util.ImageLoadTask;
@@ -139,12 +140,13 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
         }else {
             final File imageFile = new File(messageList.get(position));
             if(imageFile.exists()){
+                ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.mediaProgressBar);
+                progressBar.setVisibility(View.VISIBLE);
                 try{
                     imageView.setImageBitmap(decodeFileImage(imageFile));
                 }catch (Exception e){
                     imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
                 }
-
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -225,8 +227,9 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
             final File videoFile = new File(messageList.get(position));
             if(videoFile.exists()){
                 try{
+                    ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.mediaProgressBar);
+                    progressBar.setVisibility(View.VISIBLE);
                     imageView.setImageBitmap(ThumbnailUtils.createVideoThumbnail(videoFile.getAbsolutePath(), MediaStore.Images.Thumbnails.MINI_KIND));
-
                     imageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
