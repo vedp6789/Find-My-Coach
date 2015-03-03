@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.findmycoach.app.activity.SetScheduleActivity;
 import com.findmycoach.app.R;
+import com.findmycoach.app.fragment.MyScheduleFragment;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -45,12 +46,14 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private static int CURRENT_YEAR_OF_CALENDAR;
     private static int month_in_foreground;
     private static final String TAG = "FMC:";
+    private MyScheduleFragment myScheduleFragment;
 
     // Days in Current Month
-    public CalendarGridAdapter(Context context, int month, int year) {
+    public CalendarGridAdapter(Context context, int month, int year, MyScheduleFragment myScheduleFragment) {
         super();
         this.context = context;
         this.list = new ArrayList<String>();
+        this.myScheduleFragment = myScheduleFragment;
         Calendar calendar = Calendar.getInstance();
         setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
         setCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
@@ -259,16 +262,18 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         Log.d(TAG, "Current month index:" + CURRENT_MONTH_OF_CALENDAR);
         String month = s.split("-", 3)[1];
         String year = s.split("-",3)[2];
-        intent.putExtra("DATE", s);
+        intent.putExtra("date",(String)view.getTag());
+        intent.putExtra("day", Integer.parseInt(s.split("-",3)[0]));
+        intent.putExtra("year",Integer.parseInt(year));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
         int month_index_of_grid_clicked = Arrays.asList(months).indexOf(month);
+        intent.putExtra("month",month_index_of_grid_clicked);
         Log.d(TAG, "grid clicked month index" + month_index_of_grid_clicked);
         Log.d(TAG, "Day of the grid clicked :" + (String) view.getTag());
 
         if (month_in_foreground < month_index_of_grid_clicked) {
             Log.d(TAG,""+1);
-
+            myScheduleFragment.showPrevMonth();
 
         } else {
             if (month_in_foreground == month_index_of_grid_clicked) {
@@ -279,7 +284,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             } else {
                 if (month_in_foreground > month_index_of_grid_clicked) {
                    Log.d(TAG,""+3);
-
+                    myScheduleFragment.showNextMonth();
 
                 }
             }

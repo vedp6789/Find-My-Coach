@@ -25,7 +25,7 @@ import java.util.Locale;
 
 public class MyScheduleFragment extends Fragment implements View.OnClickListener {
 
-    private TextView currentMonth,add_slot,add_vacation;
+    private TextView currentMonth, add_slot, add_vacation;
     private ImageView prevMonth;
     private ImageView nextMonth;
     private GridView calendarView;
@@ -33,6 +33,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     private Calendar _calendar;
     private int month, year;
     private static final String dateTemplate = "MMMM yyyy";
+    private MyScheduleFragment myScheduleFragment;
 
     public MyScheduleFragment() {
         // Required empty public constructor
@@ -46,15 +47,16 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        myScheduleFragment = this;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = null;
         // Checking logged in user and return respective view
-        if(DashboardActivity.dashboardActivity.user_group == 2){
+        if (DashboardActivity.dashboardActivity.user_group == 2) {
             view = inflater.inflate(R.layout.fragment_schedule_mentee, container, false);
-        }else if(DashboardActivity.dashboardActivity.user_group == 3) {
+        } else if (DashboardActivity.dashboardActivity.user_group == 3) {
             view = inflater.inflate(R.layout.my_calendar_view, container, false);
             initialize(view);
             applyListeners();
@@ -72,10 +74,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         month = _calendar.get(Calendar.MONTH) + 1;
         year = _calendar.get(Calendar.YEAR);
 
-        add_slot= (TextView) view.findViewById(R.id.tv_add_new_slot);
+        add_slot = (TextView) view.findViewById(R.id.tv_add_new_slot);
         add_slot.setOnClickListener(this);
 
-        add_vacation= (TextView) view.findViewById(R.id.tv_add_vacation);
+        add_vacation = (TextView) view.findViewById(R.id.tv_add_vacation);
         add_vacation.setOnClickListener(this);
 
         prevMonth = (ImageView) view.findViewById(R.id.prevMonth);
@@ -90,7 +92,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         calendarView = (GridView) view.findViewById(R.id.calendar);
 
         // Initialised
-        adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year);
+        adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment);
         adapter.notifyDataSetChanged();
         calendarView.setAdapter(adapter);
     }
@@ -113,47 +115,53 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        if(v == add_slot){
+        if (v == add_slot) {
             //Toast.makeText(getActivity(),"Add available slot clicked !",Toast.LENGTH_LONG).show();
-            Intent intent=new Intent(getActivity(),AddNewSlotActivity.class);
+            Intent intent = new Intent(getActivity(), AddNewSlotActivity.class);
             startActivity(intent);
 
         }
-        if(v == add_vacation){
+        if (v == add_vacation) {
             //Toast.makeText(getActivity(),"Add available slot clicked !",Toast.LENGTH_LONG).show();
-            Intent intent=new Intent(getActivity(),ScheduleYourVacation.class);
+            Intent intent = new Intent(getActivity(), ScheduleYourVacation.class);
             startActivity(intent);
 
         }
 
 
         if (v == prevMonth) {
-            if (month <= 1) {
-                month = 12;
-                year--;
-            } else {
-                month--;
-            }
-            setGridCellAdapterToDate(month, year);
+            showNextMonth();
         }
         if (v == nextMonth) {
-            if (month > 11) {
-                month = 1;
-                year++;
-            } else {
-                month++;
-            }
-            setGridCellAdapterToDate(month, year);
+            showPrevMonth();
         }
     }
 
+    public void showPrevMonth() {
+        if (month > 11) {
+            month = 1;
+            year++;
+        } else {
+            month++;
+        }
+        setGridCellAdapterToDate(month, year);
+    }
+
+    public void showNextMonth() {
+        if (month <= 1) {
+            month = 12;
+            year--;
+        } else {
+            month--;
+        }
+        setGridCellAdapterToDate(month, year);
+    }
+
     private void setGridCellAdapterToDate(int month, int year) {
-        adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year);
+        adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment);
         _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
         currentMonth.setText(DateFormat.format(dateTemplate,
                 _calendar.getTime()));
-
-
         adapter.notifyDataSetChanged();
         calendarView.setAdapter(adapter);
     }

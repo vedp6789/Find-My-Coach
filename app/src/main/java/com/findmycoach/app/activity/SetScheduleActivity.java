@@ -14,9 +14,12 @@ import android.widget.Toast;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.findmycoach.app.R;
+import com.findmycoach.app.beans.connections.Data;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 
@@ -29,19 +32,43 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     private static final String TAG="FMC";
 
+    private int day;
+    private int month;
+    private int year;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_schedule);
 
         mWeekView = (WeekView) findViewById(R.id.weekView);
+
         Intent getIntent = getIntent();
         if(getIntent != null)
-            date = getIntent.getStringExtra("DATE");
-            Log.d(TAG, "Date on SetScheduleActivity initialization intent call from CalendarGridAdapter: "+date);
-        applyProperties();
-        if(date != null)
-            Toast.makeText(this,date,Toast.LENGTH_LONG).show();
+            date = getIntent.getStringExtra("date");
+            day = getIntent.getExtras().getInt("day");
+            month = getIntent.getExtras().getInt("month");
+            year = getIntent.getExtras().getInt("year");
+
+
+         Calendar calendar=GregorianCalendar.getInstance();
+         calendar.set(year,month,day);
+
+        Date date1=calendar.getTime();
+           Log.d(TAG,"date1....."+date1);
+
+
+
+            mWeekView.goToDate(calendar);
+            applyProperties();
+
+            Toast.makeText(this,""+day+"/"+(month+1)+"/"+year,Toast.LENGTH_LONG).show();
+            /*day=Integer.parseInt(date.split("-",3)[0]);
+            month=Integer.parseInt(date.split("-",3)[1]);
+            year=Integer.parseInt(date.split("-",3)[2]);*/
+            Log.d(TAG,"Separate date "+"day"+day+"month"+month+"year"+year);
+
+
     }
 
     private void applyProperties() {
@@ -164,11 +191,11 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         event = new WeekViewEvent(5, getEventTitle(startTime), startTime, endTime);
         event.setColor(getResources().getColor(R.color.event_color_02));
         events.add(event);
-
         return events;
     }
 
     private String getEventTitle(Calendar time) {
+
         return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
     }
 
