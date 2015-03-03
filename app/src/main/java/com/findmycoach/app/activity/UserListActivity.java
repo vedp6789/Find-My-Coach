@@ -100,18 +100,20 @@ public class UserListActivity extends Activity implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        Intent intent = new Intent(getApplicationContext(), MentorDetailsActivity.class);
-        intent.putExtra("mentorDetails", (String) object);
-        startActivity(intent);
+        // If for showing connection request response. Else for displaying selected Mentor details
+        if(calledApiValue == 17){
+            Toast.makeText(this,(String) object, Toast.LENGTH_LONG).show();
+        }else if(calledApiValue == 25){
+            Intent intent = new Intent(getApplicationContext(), MentorDetailsActivity.class);
+            intent.putExtra("mentorDetails", (String) object);
+            startActivity(intent);
+        }
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        String msg = (String) object;
-        if (msg.equals("success"))
-            msg = getResources().getString(R.string.request_sent_successfully);
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
     }
 
 }

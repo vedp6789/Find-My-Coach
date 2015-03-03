@@ -108,21 +108,21 @@
             android:name="com.findmycoach.app.activity.AddNewSlotActivity"
             android:label="@string/add_new_slot"
             android:screenOrientation="portrait"></activity>
+        android:label="@string/add_new_slot" />
+        <activity
+            android:name="com.findmycoach.app.activity.StudentDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MentorDetailsActivity"
+            android:label="@string/title_activity_mentor_details" />
+        <activity
+            android:name="com.findmycoach.app.activity.UserListActivity"
+            android:label="@string/title_activity_user_list" />
 
         <activity
             android:name=".activity.ScheduleYourVacation"
             android:label="@string/schedule_vacation"
             android:screenOrientation="portrait"></activity>
-
-        <activity
-            android:name="com.findmycoach.app.activity.StudentDetailActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.findmycoach.app.activity.MentorDetailsActivity"
-            android:label="@string/title_activity_mentor_details" />
-        <activity
-            android:name="com.findmycoach.app.activity.UserListActivity"
-            android:label="@string/title_activity_user_list" />
 
 
         <receiver

@@ -124,6 +124,7 @@ public class MentorListAdapter extends BaseAdapter {
                     }
                 }
         );
+        alertDialog.setCancelable(false);
         alertDialog.show();
     }
 

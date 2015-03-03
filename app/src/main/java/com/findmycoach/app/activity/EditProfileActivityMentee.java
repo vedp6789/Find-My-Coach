@@ -100,6 +100,12 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             mentorFor.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"Self","Kid"}));
             if(userInfo.getMentorFor().equalsIgnoreCase("kid"))
                 mentorFor.setSelection(1);
+            if(userInfo.getGender() != null){
+                if(userInfo.getGender().equals("M"))
+                    profileGender.setSelection(0);
+                else
+                    profileGender.setSelection(1);
+            }
             trainingLocation.setText((String) userInfo.getTrainingLocation());
             String selectedCoachingType = (String) userInfo.getCoachingType();
             coachingType.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, coachingTypeOptions));
@@ -165,6 +171,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
         RequestParams requestParams = new RequestParams();
         requestParams.add("input", input);
         requestParams.add("key", getResources().getString(R.string.google_location_api_key));
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
         NetworkClient.autoComplete(getApplicationContext(), requestParams, this, 32);
     }
 
@@ -233,7 +240,11 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             RequestParams requestParams = new RequestParams();
             requestParams.add("first_name", profileFirstName.getText().toString());
             requestParams.add("last_name", profileLastName.getText().toString());
-            requestParams.add("gender", profileGender.getSelectedItem().toString());
+            String sex = profileGender.getSelectedItem().toString();
+            if(sex.equals("Male") )
+                requestParams.add("gender", "M");
+            else
+                requestParams.add("gender", "F");
             requestParams.add("dob", profileDOB.getText().toString());
             requestParams.add("address", profileAddress.getText().toString());
             requestParams.add("city", profileAddress1.getText().toString());

@@ -70,6 +70,7 @@ public class MentorDetailsActivity extends Activity implements Callback {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         String jsonData = getIntent().getStringExtra("mentorDetails");
+        Log.d(TAG, jsonData);
         mentorDetails = new Gson().fromJson(jsonData, Response.class);
         userInfo = mentorDetails.getData();
         profileImage = (ImageView) findViewById(R.id.profile_image);
@@ -128,7 +129,12 @@ public class MentorDetailsActivity extends Activity implements Callback {
                 public void onClick(View v) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(userInfo.getGoogleLink()));
-                    startActivity(intent);
+                    try{
+                        startActivity(intent);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        Toast.makeText(MentorDetailsActivity.this,getResources().getString(R.string.problem_in_url),Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }
@@ -138,7 +144,12 @@ public class MentorDetailsActivity extends Activity implements Callback {
                 public void onClick(View v) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(userInfo.getFacebookLink()));
-                    startActivity(intent);
+                    try{
+                        startActivity(intent);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        Toast.makeText(MentorDetailsActivity.this,getResources().getString(R.string.problem_in_url),Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }
@@ -195,6 +206,7 @@ public class MentorDetailsActivity extends Activity implements Callback {
                     }
                 }
         );
+        alertDialog.setCancelable(false);
         alertDialog.show();
     }
 
@@ -212,15 +224,13 @@ public class MentorDetailsActivity extends Activity implements Callback {
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-
+        progressDialog.dismiss();
+        Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        String msg = (String) object;
-        if (msg.equals("success"))
-            msg = getResources().getString(R.string.request_sent_successfully);
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
     }
 }
