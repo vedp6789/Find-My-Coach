@@ -2,32 +2,31 @@ package com.findmycoach.app.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.app.FragmentManager;
-import android.text.InputType;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.Request;
+import com.findmycoach.app.R;
 import com.findmycoach.app.fragment_mentor.StartDateDialogFragment;
+import com.findmycoach.app.fragment_mentor.StartDateForVaccationSchedule;
 import com.findmycoach.app.fragment_mentor.StartTimeDialogFragment;
+import com.findmycoach.app.fragment_mentor.StartTimeForVaccationSchedule;
+import com.findmycoach.app.fragment_mentor.StopDateForVacationSchedule;
 import com.findmycoach.app.fragment_mentor.StopTimeDialogFragment;
+import com.findmycoach.app.fragment_mentor.StopTimeForVaccationSchedule;
 import com.findmycoach.app.fragment_mentor.TillDateDialogFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.SetDate;
-import com.findmycoach.app.R;
 import com.findmycoach.app.util.SetTime;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
@@ -37,9 +36,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by praka_000 on 2/12/2015.
+ * Created by praka_000 on 3/3/2015.
  */
-public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
+public class ScheduleYourVacation extends Activity implements SetDate,SetTime {
     CheckBox cb_mon, cb_tue,
             cb_wed, cb_thur,
             cb_fri, cb_sat,
@@ -50,7 +49,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             boo_wed_checked, boo_thurs_checked,
             boo_fri_checked, boo_sat_checked,
             boo_sun_checked;
-    Button b_create_slot;
+    EditText et_note_vaccation;
+    Button b_schedule_your_vacation;
     private static String time_from;
     private static String time_to;
     private static String date_from;
@@ -79,9 +79,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         ActionBar actionBar = getActionBar();
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(getResources().getString(R.string.add_new_slot));
+            actionBar.setTitle(getResources().getString(R.string.schedule_vacation));
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -91,14 +92,14 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_avail_slot);
+        setContentView(R.layout.activity_schedule_your_vaccation);
         time_from = getResources().getString(R.string.select);
         time_to = getResources().getString(R.string.select);
-        date_to = getResources().getString(R.string.forever);
-        FOREVER = getResources().getString(R.string.forever);
+        date_to = getResources().getString(R.string.select);
         from_day = 0;
         from_month = 0;
         from_year = 0;
@@ -113,7 +114,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
         initialize();
         applyActionbarProperties();
-        progressDialog = new ProgressDialog(AddNewSlotActivity.this);
+
+        progressDialog = new ProgressDialog(ScheduleYourVacation.this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
 
         /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Current date ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -176,8 +178,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
-                StartTimeDialogFragment timeDialogFragment = new StartTimeDialogFragment();
-                timeDialogFragment.show(fragmentManager, null);
+                StartTimeForVaccationSchedule startTimeForVaccationSchedule=new StartTimeForVaccationSchedule();
+                startTimeForVaccationSchedule.show(fragmentManager, null);
             }
         });
 
@@ -186,10 +188,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 if (tv_start_time.getText().length() > 0) {
                     FragmentManager fragmentManager = getFragmentManager();
-                    StopTimeDialogFragment timeDialogFragment = new StopTimeDialogFragment();
-                    timeDialogFragment.show(fragmentManager, null);
+                    StopTimeForVaccationSchedule stopTimeForVaccationSchedule=new StopTimeForVaccationSchedule();
+                    stopTimeForVaccationSchedule.show(fragmentManager, null);
                 } else {
-                    Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.start_time_first), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.start_time_first), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -199,8 +201,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 Log.d(TAG, "On click");
                 FragmentManager fragmentManager = getFragmentManager();
-                StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
-                dateDialogFragment.show(fragmentManager, null);
+                StartDateForVaccationSchedule startDateForVaccationSchedule=new StartDateForVaccationSchedule();
+                startDateForVaccationSchedule.show(fragmentManager, null);
 
                 /*if (tv_start_date.getText().length() > 0) {
 
@@ -218,10 +220,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 if (tv_start_date.getText().length() > 0) {
                     FragmentManager fragmentManager = getFragmentManager();
-                    TillDateDialogFragment dateDialogFragment = new TillDateDialogFragment();
-                    dateDialogFragment.show(fragmentManager, null);
+                    StopDateForVacationSchedule stopDateForVacationSchedule = new StopDateForVacationSchedule();
+                    stopDateForVacationSchedule.show(fragmentManager, null);
                 } else {
-                    Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.from_date_first), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.from_date_first), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -311,15 +313,15 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             }
         });
 
-        b_create_slot.setOnClickListener(new View.OnClickListener() {
+        b_schedule_your_vacation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validate()) {
 
-                    if (StorageHelper.getUserGroup(AddNewSlotActivity.this, "user_group").equals("3")) {
+                    if (StorageHelper.getUserGroup(ScheduleYourVacation.this, "user_group").equals("3")) {
                         Log.d(TAG, "Going to create a new slot for you.");
                         RequestParams requestParams = new RequestParams();
-                        requestParams.add("mentor_id", StorageHelper.getUserDetails(AddNewSlotActivity.this, "user_id"));
+                        requestParams.add("mentor_id", StorageHelper.getUserDetails(ScheduleYourVacation.this, "user_id"));
                         Log.d(TAG, "From date" + tv_start_date.getText().toString());
                         Log.d(TAG, "Till date" + tv_till_date.getText().toString());
 
@@ -377,7 +379,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                         requestParams.add("stop_time", stop_hour + ":" + stop_min + ":" + "00");
                         String[] days = new String[days_array.size()];
 
-                        requestParams.add("name",StorageHelper.getUserDetails(AddNewSlotActivity.this,"user_id")+"_Slot");
+                        requestParams.add("name",StorageHelper.getUserDetails(ScheduleYourVacation.this,"user_id")+"_vacation_schedule");
                         //requestParams.add("dates", String.valueOf(days_array.toArray(days)));
 
                         requestParams.add("dates", String.valueOf(days_array));
@@ -388,7 +390,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                         Log.d(TAG,"days array"+String.valueOf(days_array));
                         //Log.d(TAG,"days array"+String.valueOf(days_array.toArray(days)));
                         //requestParams.add("dates", "M,S,Su");
-                        int start_time = ((start_hour * 60) + start_min) * 60;
+/*                        int start_time = ((start_hour * 60) + start_min) * 60;
                         int stop_time = ((stop_hour * 60) + stop_min) * 60;
                         int intermediate_time = (24 * 60) * 60;
                         int slot_time_value;
@@ -399,23 +401,23 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                             slot_time_value = stop_time - start_time;
                         }
                         Log.d(TAG,"Slot time value from AddNewSlotActivity"+slot_time_value/(60 * 60));
-                        requestParams.add("slot_time_value", String.valueOf(slot_time_value));
-                        String auth_token = StorageHelper.getUserDetails(AddNewSlotActivity.this, "auth_token");
+                        requestParams.add("slot_time_value", String.valueOf(slot_time_value));*/
+                        String auth_token = StorageHelper.getUserDetails(ScheduleYourVacation.this, "auth_token");
                         progressDialog.show();
-                        NetworkClient.createNewSlot(AddNewSlotActivity.this, requestParams, auth_token, new Callback() {
+                        NetworkClient.scheduleVaccation(ScheduleYourVacation.this, requestParams, auth_token, new Callback() {
 
                             @Override
                             public void successOperation(Object object, int statusCode, int calledApiValue) {
-                                Toast.makeText(AddNewSlotActivity.this,"Hi, you have created a new slot.",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ScheduleYourVacation.this, "Hi, your vacation get scheduled.", Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             }
 
                             @Override
                             public void failureOperation(Object object, int statusCode, int calledApiValue) {
-                                Toast.makeText(AddNewSlotActivity.this,"Unfortunately there is some problem during slot creation.",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ScheduleYourVacation.this, "Unfortunately there is some problem during registering your vacation schedule.", Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             }
-                        },35);
+                        }, 36);
 
 
                         //requestParams.add("start_date",)
@@ -431,18 +433,18 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 Log.d(TAG, "check1");
                 if (time_from.equals(getResources().getString(R.string.select)) && time_to.equals(getResources().getString(R.string.select))) {
                     Log.d(TAG, "check2");
-                    Toast.makeText(AddNewSlotActivity.this, "Please select starting time & completion time for this slot.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ScheduleYourVacation.this, "Please select starting time & completion time for this vacation.", Toast.LENGTH_SHORT).show();
                     return false;
                 } else {
                     Log.d(TAG, "check3");
                     if (time_from.equals(getResources().getString(R.string.select))) {
-                        Toast.makeText(AddNewSlotActivity.this, "Please select starting time of this slot.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ScheduleYourVacation.this, "Select starting time of this vacation.", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "check4");
                         return false;
 
                     } else {
                         if (time_to.equals(getResources().getString(R.string.select))) {
-                            Toast.makeText(AddNewSlotActivity.this, "Please select completion time for this slot.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ScheduleYourVacation.this, "Select completion time of this vacation.", Toast.LENGTH_SHORT).show();
                             Log.d(TAG, "check5");
                             return false;
                         }
@@ -468,14 +470,19 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 int minimum_difference = (Integer.parseInt(getResources().getString(R.string.slot_time_difference)) * 60) * 60;
 
                 if (slot_time_value < minimum_difference) {
-                    Toast.makeText(AddNewSlotActivity.this, "Minimum slot duration should be " + getResources().getString(R.string.slot_time_difference) + " hour !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ScheduleYourVacation.this, "Minimum vacation duration should be " + getResources().getString(R.string.slot_time_difference) + " hour !", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "check7");
                     return false;
                 }else{
                     if (tv_start_date.getText().length() > 0) {
-                        return true;
+                        if(tv_till_date.getText().length() > 0 ){
+                            return true;
+                        }else {
+                            Toast.makeText(ScheduleYourVacation.this, "Select completion date of vacation.", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
                     } else {
-                        Toast.makeText(AddNewSlotActivity.this, "Please select start date for this slot.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ScheduleYourVacation.this, "Select starting date of vacation.", Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 }
@@ -483,7 +490,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             }
 
         } else {
-            Toast.makeText(AddNewSlotActivity.this, "Please at least select one day for this slot.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ScheduleYourVacation.this, "Please at least select one day for this schedule.", Toast.LENGTH_SHORT).show();
             return false;
         }
     }
@@ -503,7 +510,9 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         tv_start_time = (TextView) findViewById(R.id.tv_slot_start_time);
         tv_stop_time = (TextView) findViewById(R.id.tv_slot_stop_time);
 
-        b_create_slot = (Button) findViewById(R.id.b_create_slot);
+        et_note_vaccation= (EditText) findViewById(R.id.et_vacation_note);
+
+        b_schedule_your_vacation = (Button) findViewById(R.id.b_schedule_vacation);
 
     }
 
@@ -523,11 +532,11 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     public void setSelectedStartDate(Object o1, Object o2, Object o3) {
         Log.d(TAG, o1.toString() + "/" + o2.toString() + "/" + o3.toString());
         int day = Integer.parseInt(o1.toString());
-        AddNewSlotActivity.from_day = day;
+        ScheduleYourVacation.from_day = day;
         int month = Integer.parseInt(o2.toString());
-        AddNewSlotActivity.from_month = month;
+        ScheduleYourVacation.from_month = month;
         int year = Integer.parseInt(o3.toString());
-        AddNewSlotActivity.from_year = year;
+        ScheduleYourVacation.from_year = year;
         Log.d(TAG, "From date:" + from_day + "/" + from_month + "/" + from_year);
         StringBuilder stringBuilder = new StringBuilder();
         if ((day / 10) > 0) {
@@ -542,10 +551,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         }
         stringBuilder.append("/" + year);
         Log.d(TAG, "start date:" + stringBuilder.toString());
-        AddNewSlotActivity.tv_start_date.setText(stringBuilder.toString());
-        AddNewSlotActivity.date_from = String.valueOf(stringBuilder);
+        ScheduleYourVacation.tv_start_date.setText(stringBuilder.toString());
+        ScheduleYourVacation.date_from = String.valueOf(stringBuilder);
 
-        AddNewSlotActivity.tv_till_date.setText(date_to);
+        ScheduleYourVacation.tv_till_date.setText(date_to);
 
         // et_start_date.setText(stringBuilder.toString());
     }
@@ -553,16 +562,13 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     @Override
     public void setSelectedTillDate(Object o1, Object o2, Object o3, boolean b) {
         Log.d(TAG, o1.toString() + "/" + o2.toString() + "/" + o3.toString());
-        if (b) {
-            AddNewSlotActivity.tv_till_date.setText(FOREVER);
 
-        } else {
             int day = Integer.parseInt(o1.toString());
-            AddNewSlotActivity.till_day = day;
+            ScheduleYourVacation.till_day = day;
             int month = Integer.parseInt(o2.toString());
-            AddNewSlotActivity.till_month = month;
+            ScheduleYourVacation.till_month = month;
             int year = Integer.parseInt(o3.toString());
-            AddNewSlotActivity.till_year = year;
+            ScheduleYourVacation.till_year = year;
             StringBuilder stringBuilder = new StringBuilder();
             if ((day / 10) > 0) {
                 stringBuilder.append(day);
@@ -576,8 +582,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             }
             stringBuilder.append("/" + year);
             Log.d(TAG, "till date:" + stringBuilder.toString());
-            AddNewSlotActivity.tv_till_date.setText(stringBuilder.toString());
-        }
+            ScheduleYourVacation.tv_till_date.setText(stringBuilder.toString());
+
 
     }
 
@@ -607,10 +613,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     @Override
     public void setSelectedStartTime(Object o1, Object o2) {
         String hour = (String) o1;
-        AddNewSlotActivity.start_hour = Integer.parseInt(hour);
+        ScheduleYourVacation.start_hour = Integer.parseInt(hour);
         String minute = (String) o2;
-        AddNewSlotActivity.start_min = Integer.parseInt(minute);
-        AddNewSlotActivity.time_from = hour + ":" + minute;
+        ScheduleYourVacation.start_min = Integer.parseInt(minute);
+        ScheduleYourVacation.time_from = hour + ":" + minute;
         tv_start_time.setText(hour + ":" + minute);
 
     }
@@ -618,10 +624,11 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     @Override
     public void setSelectedTillTime(Object o1, Object o2) {
         String hour = (String) o1;
-        AddNewSlotActivity.stop_hour = Integer.parseInt(hour);
+        ScheduleYourVacation.stop_hour = Integer.parseInt(hour);
         String minute = (String) o2;
-        AddNewSlotActivity.stop_min = Integer.parseInt(minute);
-        AddNewSlotActivity.time_to = hour + ":" + minute;
+        ScheduleYourVacation.stop_min = Integer.parseInt(minute);
+        ScheduleYourVacation.time_to = hour + ":" + minute;
         tv_stop_time.setText(hour + ":" + minute);
     }
+
 }

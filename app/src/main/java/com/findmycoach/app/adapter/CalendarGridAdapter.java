@@ -2,6 +2,7 @@ package com.findmycoach.app.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,6 +72,33 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         // Find Number of Events
         eventsPerMonthMap = findNumberOfEventsPerMonth(year, month);
     }
+    /*public CalendarGridAdapter(int month, int year) {
+        super();
+        //this.context = context;
+        this.list = new ArrayList<String>();
+        Calendar calendar = Calendar.getInstance();
+        setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
+        setCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
+
+
+        CURRENT_MONTH_OF_CALENDAR = calendar.get(Calendar.MONTH);
+        CURRENT_YEAR_OF_CALENDAR = calendar.get(Calendar.YEAR);
+        month_in_foreground = month - 1;
+
+        Log.d(TAG, "Current Month of Calendar:" + CURRENT_MONTH_OF_CALENDAR);
+        Log.d(TAG, "Current Year of Calendar:" + CURRENT_YEAR_OF_CALENDAR);
+        Log.d(TAG, "Current day of month" + currentDayOfMonth);
+        Log.d(TAG, "Current week day" + currentWeekDay);
+
+
+        // Print Month
+        printMonth(month, year);
+
+        // Find Number of Events
+        eventsPerMonthMap = findNumberOfEventsPerMonth(year, month);
+    }
+*/
+
 
     private String getMonthAsString(int i) {
         return months[i];
@@ -230,6 +258,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         String s = (String) view.getTag();
         Log.d(TAG, "Current month index:" + CURRENT_MONTH_OF_CALENDAR);
         String month = s.split("-", 3)[1];
+        String year = s.split("-",3)[2];
         intent.putExtra("DATE", s);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -239,14 +268,31 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
         if (month_in_foreground < month_index_of_grid_clicked) {
             Log.d(TAG,""+1);
+            CalendarGridAdapter adapter=new CalendarGridAdapter(context, month_index_of_grid_clicked+1, Integer.parseInt(year));
+                    /*_calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
+                    currentMonth.setText(DateFormat.format(dateTemplate,
+                            _calendar.getTime()));*/
+
+
+            adapter.notifyDataSetChanged();
 
         } else {
             if (month_in_foreground == month_index_of_grid_clicked) {
                 context.startActivity(intent);
                 Log.d(TAG,""+2);
+
+
             } else {
                 if (month_in_foreground > month_index_of_grid_clicked) {
                    Log.d(TAG,""+3);
+                    CalendarGridAdapter adapter=new CalendarGridAdapter(context, month_index_of_grid_clicked+1, Integer.parseInt(year));
+                    /*_calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
+                    currentMonth.setText(DateFormat.format(dateTemplate,
+                            _calendar.getTime()));*/
+
+
+                    adapter.notifyDataSetChanged();
+
                 }
             }
         }

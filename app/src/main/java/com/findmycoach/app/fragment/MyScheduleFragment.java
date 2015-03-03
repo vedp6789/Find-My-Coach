@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.findmycoach.app.activity.AddNewSlotActivity;
 import com.findmycoach.app.activity.DashboardActivity;
+import com.findmycoach.app.activity.ScheduleYourVacation;
 import com.findmycoach.app.adapter.CalendarGridAdapter;
 import com.findmycoach.app.R;
 
@@ -24,7 +25,7 @@ import java.util.Locale;
 
 public class MyScheduleFragment extends Fragment implements View.OnClickListener {
 
-    private TextView currentMonth,add_slot;
+    private TextView currentMonth,add_slot,add_vacation;
     private ImageView prevMonth;
     private ImageView nextMonth;
     private GridView calendarView;
@@ -72,6 +73,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         add_slot= (TextView) view.findViewById(R.id.tv_add_new_slot);
         add_slot.setOnClickListener(this);
 
+        add_vacation= (TextView) view.findViewById(R.id.tv_add_vacation);
+        add_vacation.setOnClickListener(this);
+
         prevMonth = (ImageView) view.findViewById(R.id.prevMonth);
         prevMonth.setOnClickListener(this);
 
@@ -113,6 +117,14 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             startActivity(intent);
 
         }
+        if(v == add_vacation){
+            //Toast.makeText(getActivity(),"Add available slot clicked !",Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(getActivity(),ScheduleYourVacation.class);
+            startActivity(intent);
+
+        }
+
+
         if (v == prevMonth) {
             if (month <= 1) {
                 month = 12;
