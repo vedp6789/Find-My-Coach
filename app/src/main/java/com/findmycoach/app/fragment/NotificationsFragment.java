@@ -103,6 +103,7 @@ public class NotificationsFragment extends Fragment implements Callback {
     }
 
     @Override
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
     public void successOperation(Object object) {
         progressDialog.dismiss();
         if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("3")){
@@ -139,7 +140,7 @@ public class NotificationsFragment extends Fragment implements Callback {
     }
 
     @Override
-    public void failureOperation(Object object) {
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
         if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("3")){
             progressDialog.dismiss();
             Toast.makeText(getActivity(),(String) object, Toast.LENGTH_LONG).show();

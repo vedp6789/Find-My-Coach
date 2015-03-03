@@ -85,8 +85,14 @@ public class DashboardActivity extends FragmentActivity
 
         dashboardActivity = this;
 
-        user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
-        Toast.makeText(DashboardActivity.this,""+user_group,Toast.LENGTH_LONG).show();
+        try{
+            user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
+        }catch (Exception e){
+            e.printStackTrace();
+            logout();
+            return;
+        }
+        Log.e("FMC - user_group",""+user_group);
         setContentView(R.layout.activity_dashboard);
 
         context = getApplicationContext();
@@ -208,12 +214,12 @@ public class DashboardActivity extends FragmentActivity
     }
 
     @Override
-    public void successOperation(Object object) {
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
 
     }
 
     @Override
-    public void failureOperation(Object object) {
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
 
     }
 
@@ -263,15 +269,15 @@ public class DashboardActivity extends FragmentActivity
 
             NetworkClient.registerGcmRegistrationId(DashboardActivity.this, requestParams, authToken, new Callback() {
                 @Override
-                public void successOperation(Object object) {
+                public void successOperation(Object object, int statusCode, int calledApiValue) {
                     Log.d(TAG2, "Inside sendRegistrationIdToBackend callback successOperation method:" + object.toString());
                 }
 
                 @Override
-                public void failureOperation(Object object) {
+                public void failureOperation(Object object, int statusCode, int calledApiValue) {
                     Log.d(TAG2, "Inside sendRegistrationIdToBackend callback failureOperation method:" + object.toString());
                 }
-            });
+            }, 31);
         }
 
         private void storeRegistrationId(Context context, String regId) {
@@ -491,6 +497,7 @@ public class DashboardActivity extends FragmentActivity
         StorageHelper.clearUserPhone(this);
         fbClearToken();
         this.finish();
+        startActivity(new Intent(this, LoginActivity.class));
     }
 
     private void updateTermsAndConditionsStatus() {
@@ -519,7 +526,7 @@ public class DashboardActivity extends FragmentActivity
             if (position == 1)
                 fragmentTransaction.replace(R.id.container, new NotificationsFragment());
             if (position == 2)
-                fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentee.MyConnectionsFragment());
+                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
             if (position == 3)
                 fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
 
@@ -533,7 +540,7 @@ public class DashboardActivity extends FragmentActivity
             if (position == 1)
                 fragmentTransaction.replace(R.id.container, new NotificationsFragment());
             if (position == 2)
-                fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentee.MyConnectionsFragment());
+                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
             if (position == 3)
                 fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
             if(position == 4){
@@ -590,7 +597,6 @@ public class DashboardActivity extends FragmentActivity
             return true;
         } else if (id == R.id.log_out) {
             logout();
-            startActivity(new Intent(this, LoginActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

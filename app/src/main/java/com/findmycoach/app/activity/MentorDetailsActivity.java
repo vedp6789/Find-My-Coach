@@ -206,16 +206,17 @@ public class MentorDetailsActivity extends Activity implements Callback {
         requestParams.add("owner", studentId);
         requestParams.add("invitee", userInfo.getId());
         requestParams.add("message", message);
-        NetworkClient.sendConnectionRequest(this, requestParams, this);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.sendConnectionRequest(this, requestParams, this, 17);
     }
 
     @Override
-    public void successOperation(Object object) {
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
 
     }
 
     @Override
-    public void failureOperation(Object object) {
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         String msg = (String) object;
         if (msg.equals("success"))

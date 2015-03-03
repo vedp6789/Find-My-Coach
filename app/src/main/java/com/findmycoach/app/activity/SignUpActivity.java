@@ -23,6 +23,7 @@ import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.R;
+import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import java.util.regex.Matcher;
@@ -180,8 +181,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
 
     private void callApiToRegister(RequestParams requestParams) {
         progressDialog.show();
-
-        NetworkClient.register(this, requestParams, this);
+        NetworkClient.register(this, requestParams, this, 2);
     }
 
     private boolean validate(String firstName, String lastName, String phone,
@@ -273,19 +273,16 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
     }
 
     @Override
-    public void successOperation(Object object) {
-        SignUpResponse response = (SignUpResponse) object;
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-
-
-        this.finish();
+        Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
+        finish();
     }
 
 
     @Override
-    public void failureOperation(Object message) {
-        String errMessage = (String) message;
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        Toast.makeText(getApplicationContext(), errMessage, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
     }
 }

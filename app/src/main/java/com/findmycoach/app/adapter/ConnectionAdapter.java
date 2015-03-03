@@ -25,14 +25,14 @@ import java.util.List;
 /**
  * Created by IgluLabs on 1/22/2015.
  */
-public class ConnectionAdapterMentor extends BaseAdapter implements Callback {
+public class ConnectionAdapter extends BaseAdapter implements Callback {
 
     private Context context;
     private List<Data> connectionList;
     public int connection_clicked = -1;
     private ProgressDialog progressDialog;
 
-    public ConnectionAdapterMentor(Context context, List<Data> connectionList) {
+    public ConnectionAdapter(Context context, List<Data> connectionList) {
         this.context = context;
         this.connectionList = connectionList;
         progressDialog = new ProgressDialog(context);
@@ -85,11 +85,14 @@ public class ConnectionAdapterMentor extends BaseAdapter implements Callback {
         TextView nameTV = (TextView) view.findViewById(R.id.nameTV);
         TextView lastMsgTV = (TextView) view.findViewById(R.id.lastMsgTV);
         ImageButton connectionButton = (ImageButton) view.findViewById(R.id.detailsTV);
-        if(DashboardActivity.dashboardActivity.user_group == 3)
+        if(DashboardActivity.dashboardActivity.user_group == 3) {
             nameTV.setText(singleConnection.getOwnerName());
-        else
+            lastMsgTV.setText("Receiver id : " + singleConnection.getOwnerId() + ", Sender id : " + singleConnection.getInviteeId());
+        }
+        else {
             nameTV.setText(singleConnection.getInviteeName());
-        lastMsgTV.setText("  Created on : " + singleConnection.getCreatedOn());
+            lastMsgTV.setText("Receiver id : " + singleConnection.getInviteeId() + ", Sender id : " + singleConnection.getOwnerId());
+        }
         if(status.equals("accepted")){
             connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_minus));
         }else if(status.equals("pending")){
@@ -120,18 +123,20 @@ public class ConnectionAdapterMentor extends BaseAdapter implements Callback {
         RequestParams requestParams = new RequestParams();
         requestParams.add("id", connectionId);
         requestParams.add("status", "accepted");
-        NetworkClient.respondToConnectionRequest(context, requestParams, this);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.respondToConnectionRequest(context, requestParams, this, 18);
     }
 
     private void disconnect(String connectionId) {
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
         requestParams.add("id", connectionId);
-        NetworkClient.breakConnection(context, requestParams, this);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.breakConnection(context, requestParams, this, 21);
     }
 
     @Override
-    public void successOperation(Object object) {
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         if(object == null && connection_clicked != -1){
             String status = connectionList.get(connection_clicked).getStatus();
@@ -142,7 +147,7 @@ public class ConnectionAdapterMentor extends BaseAdapter implements Callback {
     }
 
     @Override
-    public void failureOperation(Object object) {
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Toast.makeText(context,(String) object,Toast.LENGTH_LONG).show();
 

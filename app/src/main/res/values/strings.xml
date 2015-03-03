@@ -517,6 +517,7 @@
     <string name="title_validate_phone">Verify phone number</string>
     <string name="title_activity_user_list">Mentors</string>
     <string name="title_activity_mentor_details">Mentor Details</string>
+    <string name="title_activity_areas_of_interest">AreasOfInterestActivity</string>
 
     <!-- Strings related to login -->
 
@@ -568,6 +569,10 @@
     <string name="request_sent_successfully">Request sent successfully.</string>
     <string name="created_on">  Created on : </string>
     <string name="not_connected_to_anyone">Not connected to anyone.</string>
+    <string name="choose_suggested_city">Choose a suggested city</string>
+    <string name="add_interest">Add Interest</string>
+    <string name="enter_interest">Enter Interest</string>
+    <string name="data_already_exist">Data Already Exist</string>
 
     <!-- Prompting -->
 

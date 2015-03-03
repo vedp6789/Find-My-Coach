@@ -148,11 +148,12 @@ public class StudentDetailActivity  extends Activity implements Callback {
         requestParams.add("status", response);
         Log.d("FMC", NotificationAdapter.connection_id + "");
         Log.d("FMC", response);
-        NetworkClient.respondToConnectionRequest(this, requestParams, this);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.respondToConnectionRequest(this, requestParams, this, 18);
     }
 
     @Override
-    public void successOperation(Object object) {
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         if(object == null) {
             Intent intent = new Intent();
@@ -163,7 +164,7 @@ public class StudentDetailActivity  extends Activity implements Callback {
     }
 
     @Override
-    public void failureOperation(Object object) {
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
         Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
     }
 }

@@ -28,7 +28,7 @@ public class BackgroundService extends Service {
             @Override
             public void run() {
                 while (true) {
-                    Log.d(TAG, "Inside mentor Background Service thread");
+//                    Log.d(TAG, "Inside mentor Background Service thread");
                     IntentFilter intentFilter = new IntentFilter(BROADCAST);
                     registerReceiver( new GcmBroadcastReceiver() , intentFilter);
 

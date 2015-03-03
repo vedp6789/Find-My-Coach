@@ -1,9 +1,8 @@
-package com.findmycoach.app.fragment_mentor;
+package com.findmycoach.app.fragment_mentee;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,24 +12,28 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
+import com.findmycoach.app.activity.EditProfileActivityMentee;
 import com.findmycoach.app.activity.EditProfileActivityMentor;
-import com.findmycoach.app.beans.authentication.Data;
-import com.findmycoach.app.beans.authentication.Response;
+import com.findmycoach.app.beans.student.Data;
+import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
-import com.findmycoach.app.R;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.PicassoTools;
+
+import java.util.List;
 
 public class ProfileFragment extends Fragment implements Callback {
 
@@ -39,17 +42,14 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageView profileImage;
     private TextView profileName;
     private TextView profileAddress;
-    private TextView profileRatting;
-    private TextView profileProfession;
-    private TextView profileAccomplishment;
-    private TextView profileCharges;
-    private TextView profileTravelAvailable;
     private TextView profileLocation;
-    private Button googleLink;
-    private Button facebookLink;
+    private TextView trainingLocation;
+    private TextView mentorFor;
+    private TextView coachingType;
+    private ListView areaOfInterest;
     private Data userInfo = null;
 
-    private static final String TAG="FMC:";
+    private static final String TAG="TAG";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -69,7 +69,7 @@ public class ProfileFragment extends Fragment implements Callback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        View view = inflater.inflate(R.layout.fragment_profile_mentor, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile_mentee, container, false);
         initialize(view);
         getProfileInfo();
         return view;
@@ -79,10 +79,11 @@ public class ProfileFragment extends Fragment implements Callback {
         progressDialog.show();
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
         RequestParams requestParams = new RequestParams();
-        Log.d(TAG, "Stored User Id:" + StorageHelper.getUserDetails(getActivity(), "user_id"));
-        Log.d(TAG, "auth_token" + authToken);
+        Log.d(TAG, "Stored User Id : " + StorageHelper.getUserDetails(getActivity(), "user_id"));
+        Log.d(TAG, "Auth Token : " + authToken);
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        Log.d(TAG, "getprofile");
         NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
     }
 
@@ -92,14 +93,11 @@ public class ProfileFragment extends Fragment implements Callback {
         profileImage = (ImageView) view.findViewById(R.id.profile_image);
         profileName = (TextView) view.findViewById(R.id.profile_name);
         profileAddress = (TextView) view.findViewById(R.id.profile_address);
-        profileRatting = (TextView) view.findViewById(R.id.profile_rating);
-        profileProfession = (TextView) view.findViewById(R.id.profile_profession);
-        profileAccomplishment = (TextView) view.findViewById(R.id.profile_accomplishment);
-        profileCharges = (TextView) view.findViewById(R.id.profile_charges);
-        profileTravelAvailable = (TextView) view.findViewById(R.id.profile_travel_available);
+        trainingLocation = (TextView) view.findViewById(R.id.training_location);
+        mentorFor = (TextView) view.findViewById(R.id.mentor_for);
+        coachingType = (TextView) view.findViewById(R.id.coaching_type);
+        areaOfInterest = (ListView) view.findViewById(R.id.areas_of_interest);
         profileLocation = (TextView) view.findViewById(R.id.profile_location);
-        googleLink = (Button) view.findViewById(R.id.profile_google_button);
-        facebookLink = (Button) view.findViewById(R.id.profile_facebook_button);
     }
 
     @Override
@@ -113,7 +111,7 @@ public class ProfileFragment extends Fragment implements Callback {
         int id = item.getItemId();
         if (id == R.id.action_edit_profile) {
             if (userInfo != null) {
-                Intent intent = new Intent(getActivity(), EditProfileActivityMentor.class);
+                Intent intent = new Intent(getActivity(), EditProfileActivityMentee.class);
                 intent.putExtra("user_info", new Gson().toJson(userInfo));
                 startActivityForResult(intent, REQUEST_CODE);
             }
@@ -124,7 +122,6 @@ public class ProfileFragment extends Fragment implements Callback {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "IN onActivity Result" + requestCode + "   " + requestCode);
-        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             String updatedUserJson = data.getStringExtra("user_info");
             userInfo = new Gson().fromJson(updatedUserJson, Data.class);
@@ -145,16 +142,18 @@ public class ProfileFragment extends Fragment implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.hide();
-        Response response = (Response) object;
+        Log.d(TAG, "show profile");
+        ProfileResponse response = (ProfileResponse) object;
         userInfo = response.getData();
-
         populateFields();
     }
 
-
     private void populateFields() {
-        PicassoTools.clearCache(Picasso.with(getActivity()));
-        profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
+        try{
+            profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         String address = "";
         if (userInfo.getAddress() != null) {
             address = address + userInfo.getAddress() + ", ";
@@ -169,57 +168,23 @@ public class ProfileFragment extends Fragment implements Callback {
             address = address + userInfo.getZip();
         }
         profileAddress.setText(address);
-        if (userInfo.getProfession() != null) {
-            profileProfession.setText(userInfo.getProfession());
-        }
-        if (userInfo.getAccomplishments() != null) {
-            profileAccomplishment.setText(userInfo.getAccomplishments());
-        }
-        if (userInfo.getCharges() != null) {
-            profileCharges.setText("\u20B9 " + userInfo.getCharges());
-        }
-        profileRatting.setText(userInfo.getRating());
         profileLocation.setText(NetworkManager.getCurrentLocation(getActivity()));
-        if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {
-            profileTravelAvailable.setText(getResources().getString(R.string.yes));
-        } else {
-            profileTravelAvailable.setText(getResources().getString(R.string.no));
-        }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
+            PicassoTools.clearCache(Picasso.with(getActivity()));
             Picasso.with(getActivity())
-                    .load(userInfo.getPhotograph()).skipMemoryCache()
+                    .load((String) userInfo.getPhotograph()).skipMemoryCache()
                     .into(profileImage);
         }
-        applySocialLinks();
+        mentorFor.setText(userInfo.getMentorFor());
+        trainingLocation.setText((String) userInfo.getTrainingLocation());
+        coachingType.setText((String) userInfo.getCoachingType());
+        List<String> list = userInfo.getSubCategoryName();
+        if(list.get(0)!=null && !list.get(0).equals(" "))
+            areaOfInterest.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list));
+        else
+            areaOfInterest.setAdapter(null);
     }
 
-    private void applySocialLinks() {
-        try {
-            if (userInfo.getGoogleLink() != null && !userInfo.getGoogleLink().equals("")) {
-                googleLink.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(userInfo.getGoogleLink()));
-                        startActivity(intent);
-                    }
-                });
-            }
-            if (userInfo.getFacebookLink() != null && !userInfo.getFacebookLink().equals("")) {
-                facebookLink.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(userInfo.getFacebookLink()));
-                        startActivity(intent);
-                    }
-                });
-            }
-        } catch (Exception e) {
-            Log.d(TAG, "Error while redirecting:" + e.getMessage());
-            Toast.makeText(getActivity(), getResources().getString(R.string.update_profile), Toast.LENGTH_LONG).show();
-        }
-    }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {

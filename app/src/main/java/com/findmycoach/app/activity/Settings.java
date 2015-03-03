@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.findmycoach.app.fragment_mentor.ProfileFragment;
 import com.findmycoach.app.R;
 
 /**
@@ -40,7 +39,10 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
         switch (id){
             case R.id.profileSettings:
                 setContentView(R.layout.profile_edit);
-                getSupportFragmentManager().beginTransaction().add(R.id.profileContainer,new ProfileFragment()).addToBackStack("edit_profile").commit();
+                if(DashboardActivity.dashboardActivity.user_group == 3)
+                    getSupportFragmentManager().beginTransaction().add(R.id.profileContainer,new com.findmycoach.app.fragment_mentor.ProfileFragment()).addToBackStack("edit_profile").commit();
+                else if(DashboardActivity.dashboardActivity.user_group == 2)
+                    getSupportFragmentManager().beginTransaction().add(R.id.profileContainer,new com.findmycoach.app.fragment_mentee.ProfileFragment()).addToBackStack("edit_profile").commit();
                 actionbar.setTitle(getResources().getString(R.string.profile));
                 getSupportFragmentManager().addOnBackStackChangedListener(this);
                 break;

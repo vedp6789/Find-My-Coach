@@ -55,6 +55,8 @@ public class Data {
     private String charges;
     @Expose
     private String accomplishments;
+    @Expose
+    private String gender;
 
     public String getProfession() {
         return profession;
@@ -74,6 +76,14 @@ public class Data {
 
     @Expose
     private String profession;
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
     /**
      * @return The id

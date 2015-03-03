@@ -11,13 +11,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,15 +25,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.findmycoach.app.beans.authentication.Data;
-import com.findmycoach.app.beans.authentication.Response;
+import com.findmycoach.app.R;
+import com.findmycoach.app.beans.student.Data;
+import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
-import com.findmycoach.app.R;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
@@ -42,7 +42,7 @@ import com.squareup.picasso.PicassoTools;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditProfileActivity extends Activity implements DatePickerDialog.OnDateSetListener, Callback {
+public class EditProfileActivityMentee extends Activity implements DatePickerDialog.OnDateSetListener, Callback {
 
     int year = 1990, month = 1, day = 1;
     int REQUEST_CODE = 100;
@@ -54,64 +54,80 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     private EditText profileLastName;
     private Spinner profileGender;
     private TextView profileDOB;
-    private EditText profileAddress;
+    private AutoCompleteTextView profileAddress;
     private AutoCompleteTextView profileAddress1;
     private EditText pinCode;
-    private EditText profession;
-    private EditText accomplishment;
-    private EditText chargeInput;
-    private EditText experienceInput;
-    private EditText facebookLink;
-    private EditText googlePlusLink;
-    private CheckBox isReadyToTravel;
+    private Spinner mentorFor;
+    private EditText trainingLocation;
+    private Spinner coachingType;
+    private TextView areasOfInterest;
+    //    private EditText facebookLink;
+//    private EditText googlePlusLink;
     private Button updateAction;
-    private Spinner chargesPerUnit;
     private ProgressDialog progressDialog;
     private Data userInfo;
     private String imageInBinary = "";
+    private final String[] coachingTypeOptions = new String[]{"Solo", "Multiple"};
+
+    private static final String TAG="FMC";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile);
+        setContentView(R.layout.activity_edit_profile_mentee);
         initialize();
         applyActionbarProperties();
         populateUserData();
     }
 
-    private void populateUserData() {
-        PicassoTools.clearCache(Picasso.with(this));
-        if (userInfo == null) {
-            return;
-        }
+    private void
+    populateUserData() {
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
+            PicassoTools.clearCache(Picasso.with(this));
             Picasso.with(this)
                     .load((String) userInfo.getPhotograph()).skipMemoryCache()
                     .into(profilePicture);
         }
-        profileEmail.setText(userInfo.getEmail());
-        profilePhone.setText(userInfo.getPhonenumber());
-        profileFirstName.setText(userInfo.getFirstName());
-        profileLastName.setText(userInfo.getLastName());
-        profileAddress.setText((String) userInfo.getAddress());
-        profileAddress1.setText((String) userInfo.getCity());
-        profileDOB.setText((String) userInfo.getDob());
-        pinCode.setText((String) userInfo.getZip());
-        chargeInput.setText(userInfo.getCharges());
-        chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"hour", "30 mins", "class"}));
-        experienceInput.setText(userInfo.getExperience());
-        facebookLink.setText(userInfo.getFacebookLink());
-        googlePlusLink.setText(userInfo.getGoogleLink());
-        if (userInfo.getAccomplishments() != null) {
-            accomplishment.setText(userInfo.getAccomplishments());
-        }
-        if (userInfo.getProfession() != null) {
-            profession.setText(userInfo.getProfession());
-        }
-        if (userInfo.getAvailabilityYn().equals("1")) {
-            isReadyToTravel.setChecked(true);
-        } else {
-            isReadyToTravel.setChecked(false);
+        try {
+            profileEmail.setText(userInfo.getEmail());
+            profilePhone.setText(userInfo.getPhonenumber());
+            profileFirstName.setText(userInfo.getFirstName());
+            profileLastName.setText(userInfo.getLastName());
+            profileAddress.setText((String) userInfo.getAddress());
+            profileAddress1.setText((String) userInfo.getCity());
+            profileDOB.setText((String) userInfo.getDob());
+            pinCode.setText((String) userInfo.getZip());
+            mentorFor.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"Self","Kid"}));
+            if(userInfo.getMentorFor().equalsIgnoreCase("kid"))
+                mentorFor.setSelection(1);
+            trainingLocation.setText((String) userInfo.getTrainingLocation());
+            String selectedCoachingType = (String) userInfo.getCoachingType();
+            coachingType.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, coachingTypeOptions));
+            if(selectedCoachingType.equalsIgnoreCase(coachingTypeOptions[0]))
+                coachingType.setSelection(0);
+            else
+                coachingType.setSelection(1);
+            List<String> areaOfInterests = userInfo.getSubCategoryName();
+            if (areaOfInterests.get(0)!=null && !areaOfInterests.get(0).equals(" ")) {
+                String areaOfInterest = "";
+                for (int index = 0; index < areaOfInterests.size(); index++) {
+                    if (index != 0) {
+                        areaOfInterest = areaOfInterest + ", " + areaOfInterests.get(index);
+                    } else {
+                        areaOfInterest = areaOfInterest + areaOfInterests.get(index);
+                    }
+                }
+                areasOfInterest.setText(areaOfInterest);
+            }
+//            facebookLink.setText(userInfo.getFacebookLink());
+//            googlePlusLink.setText(userInfo.getGoogleLink());
+//            if (userInfo.getAvailabilityYn().equals("1")) {
+//                isReadyToTravel.setChecked(true);
+//            } else {
+//                isReadyToTravel.setChecked(false);
+//            }
+        } catch (Exception e) {
+
         }
     }
 
@@ -129,22 +145,27 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
         profilePhone = (TextView) findViewById(R.id.profile_phone);
         profileFirstName = (EditText) findViewById(R.id.input_first_name);
         profileLastName = (EditText) findViewById(R.id.input_last_name);
-        profileAddress = (EditText) findViewById(R.id.input_address);
+        profileAddress = (AutoCompleteTextView) findViewById(R.id.input_address);
         profileAddress1 = (AutoCompleteTextView) findViewById(R.id.input_address1);
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         pinCode = (EditText) findViewById(R.id.input_pin);
-        facebookLink = (EditText) findViewById(R.id.input_facebook);
-        googlePlusLink = (EditText) findViewById(R.id.input_google_plus);
-        chargeInput = (EditText) findViewById(R.id.input_charges);
-        profession = (EditText) findViewById(R.id.input_profession);
-        accomplishment = (EditText) findViewById(R.id.input_accomplishment);
-        experienceInput = (EditText) findViewById(R.id.input_experience);
-        isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
+//        facebookLink = (EditText) findViewById(R.id.input_facebook);
+//        googlePlusLink = (EditText) findViewById(R.id.input_google_plus);
+        mentorFor = (Spinner) findViewById(R.id.input_mentor_for);
+        trainingLocation = (EditText) findViewById(R.id.input_training_location);
+        coachingType = (Spinner) findViewById(R.id.input_coaching_type);
+        areasOfInterest = (TextView) findViewById(R.id.input_areas_of_interest);
         updateAction = (Button) findViewById(R.id.button_update);
-        chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getResources().getString(R.string.please_wait));
+        progressDialog.setMessage("Please wait...");
         applyAction();
+    }
+
+    private void getAutoSuggestions(String input) {
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("input", input);
+        requestParams.add("key", getResources().getString(R.string.google_location_api_key));
+        NetworkClient.autoComplete(getApplicationContext(), requestParams, this, 32);
     }
 
     private void applyAction() {
@@ -177,66 +198,33 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
         updateAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(validate(profileFirstName.getText().toString(),profileAddress.getText().toString())){
-                    if(profileAddress1.getText().toString().trim().equals("")){
-                        Toast.makeText(EditProfileActivity.this,getResources().getString(R.string.choose_suggested_copy),Toast.LENGTH_LONG).show();
-                        profileAddress1.setError(getResources().getString(R.string.choose_suggested_copy));
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                profileAddress1.setError(null);
-                            }
-                        }, 3500);
-                        return;
-                    }
-                    callUpdateService();
+                if(profileAddress1.getText().toString().trim().equals("")){
+                    Toast.makeText(EditProfileActivityMentee.this,getResources().getString(R.string.choose_suggested_city),Toast.LENGTH_LONG).show();
+                    profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            profileAddress1.setError(null);
+                        }
+                    }, 3500);
+                    return;
                 }
-
+                callUpdateService();
             }
         });
 
-    }
-
-
-    private boolean validate(String firstName, String address) {
-
-        if (firstName.equals("")) {
-            showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
-            return false;
-        }else{
-            for (int i = 0; i < firstName.length()-1; i++) {
-                if (!Character.isLetter(firstName.charAt(i))) {
-                    showErrorMessage(profileFirstName, getResources().getString(R.string.error_not_a_name));
-                    return false;
-                }
-            }
-        }
-
-        if (address.equals("")) {
-            showErrorMessage(profileAddress, getResources().getString(R.string.error_field_required));
-            return false;
-        }
-
-
-
-        return true;
-    }
-
-    private void showErrorMessage(final TextView view, String string) {
-        view.setError(string);
-        new Handler().postDelayed(new Runnable() {
+        areasOfInterest.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                view.setError(null);
+            public void onClick(View v) {
+                String interests = areasOfInterest.getText().toString();
+                Log.d(TAG, "Area of Interests:" + interests);
+                Intent intent = new Intent(getApplicationContext(), AreasOfInterestActivity.class);
+                if(!interests.trim().equals(""))
+                    intent.putExtra("interests", interests);
+                startActivityForResult(intent, 500);
             }
-        }, 3500);
-    }
+        });
 
-    private void getAutoSuggestions(String input) {
-        RequestParams requestParams = new RequestParams();
-        requestParams.add("input", input);
-        requestParams.add("key", getResources().getString(R.string.google_location_api_key));
-        NetworkClient.autoComplete(getApplicationContext(), requestParams, this);
     }
 
     private void callUpdateService() {
@@ -250,24 +238,18 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
             requestParams.add("address", profileAddress.getText().toString());
             requestParams.add("city", profileAddress1.getText().toString());
             requestParams.add("zip", pinCode.getText().toString());
-            requestParams.add("charges", chargeInput.getText().toString());
-            requestParams.add("charges_unit", chargesPerUnit.getSelectedItemPosition() + "");
-            requestParams.add("experience", experienceInput.getText().toString());
-            requestParams.add("profession", profession.getText().toString());
-            requestParams.add("accomplishments", accomplishment.getText().toString());
-            requestParams.add("google_link", googlePlusLink.getText().toString());
-            requestParams.add("facebook_link", facebookLink.getText().toString());
+            requestParams.add("mentor_for", mentorFor.getSelectedItem().toString());
+            requestParams.add("training_location", trainingLocation.getText().toString());
+            requestParams.add("coaching_type", coachingType.getSelectedItem().toString());
+//            requestParams.add("sub_category", areasOfInterest.getText().toString());
+            requestParams.add("sub_category", areasOfInterest.getText().toString().length()<2 ? " " : areasOfInterest.getText().toString());
             if (!imageInBinary.equals(""))
                 requestParams.add("photograph", imageInBinary);
-            if (isReadyToTravel.isChecked())
-                requestParams.add("availability_yn", "1");
-            else
-                requestParams.add("availability_yn", "0");
 
-            String authToken = StorageHelper.getUserDetails(this, "auth_token");
-            requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
-
-            NetworkClient.updateProfile(this, requestParams, authToken, this);
+            String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
+            requestParams.add("id", StorageHelper.getUserDetails(this,getResources().getString(R.string.user_id)));
+            requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+            NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
             progressDialog.dismiss();
             Toast.makeText(this, getResources().getString(R.string.enter_necessary_details), Toast.LENGTH_LONG).show();
@@ -286,6 +268,19 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+        if (requestCode == 500 && resultCode == RESULT_OK && data != null) {
+            String listJson = data.getStringExtra("interests");
+            List<String> list = new Gson().fromJson(listJson, List.class);
+            String interests = "";
+            for (int index = 0; index < list.size(); index++) {
+                if (interests.equalsIgnoreCase("")) {
+                    interests = list.get(index);
+                } else {
+                    interests = interests + ", " + list.get(index);
+                }
+            }
+            areasOfInterest.setText(interests);
         }
     }
 
@@ -339,13 +334,13 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     }
 
     @Override
-    public void successOperation(Object object) {
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
         if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
         } else {
             progressDialog.dismiss();
-            Response response = (Response) object;
+            ProfileResponse response = (ProfileResponse) object;
             userInfo = response.getData();
             Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
             Intent intent = new Intent();
@@ -356,7 +351,7 @@ public class EditProfileActivity extends Activity implements DatePickerDialog.On
     }
 
     @Override
-    public void failureOperation(Object object) {
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
         String message = (String) object;
         progressDialog.dismiss();
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
