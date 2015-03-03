@@ -53,6 +53,16 @@ public class Data {
     @SerializedName("facebook_link")
     @Expose
     private String facebookLink;
+    @Expose
+    private String gender;
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
     public List<String> getSubCategoryName() {
         return subCategoryName;

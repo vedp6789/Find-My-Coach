@@ -70,6 +70,7 @@ public class MentorDetailsActivity extends Activity implements Callback {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         String jsonData = getIntent().getStringExtra("mentorDetails");
+        Log.d(TAG, jsonData);
         mentorDetails = new Gson().fromJson(jsonData, Response.class);
         userInfo = mentorDetails.getData();
         profileImage = (ImageView) findViewById(R.id.profile_image);
@@ -212,15 +213,13 @@ public class MentorDetailsActivity extends Activity implements Callback {
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-
+        progressDialog.dismiss();
+        Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        String msg = (String) object;
-        if (msg.equals("success"))
-            msg = getResources().getString(R.string.request_sent_successfully);
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
     }
 }

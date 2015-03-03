@@ -49,13 +49,15 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
+        View view = null;
+        // Checking logged in user and return respective view
         if(DashboardActivity.dashboardActivity.user_group == 2){
-            View view = inflater.inflate(R.layout.fragment_schedule_mentee, container, false);
-            return view;
+            view = inflater.inflate(R.layout.fragment_schedule_mentee, container, false);
+        }else if(DashboardActivity.dashboardActivity.user_group == 3) {
+            view = inflater.inflate(R.layout.my_calendar_view, container, false);
+            initialize(view);
+            applyListeners();
         }
-        View view = inflater.inflate(R.layout.my_calendar_view, container, false);
-        initialize(view);
-        applyListeners();
         return view;
     }
 

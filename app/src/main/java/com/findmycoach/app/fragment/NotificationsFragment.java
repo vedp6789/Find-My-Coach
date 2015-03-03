@@ -107,7 +107,6 @@ public class NotificationsFragment extends Fragment implements Callback {
 
         progressDialog.dismiss();
         if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("3")){
-
             if(object instanceof ConnectionRequestsResponse){
                 connectionRequestsResponse = (ConnectionRequestsResponse) object;
                 if(connectionRequestsResponse.getData() != null && connectionRequestsResponse.getData().size() > 0) {
@@ -132,22 +131,19 @@ public class NotificationsFragment extends Fragment implements Callback {
                 intent.putExtra("student_detail",(String) object);
                 startActivityForResult(intent, NotificationAdapter.connection_id);
             }
-        }
-        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")){
-
+        }else if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")){
+            //TODO for student notification
         }
 
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
-        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("3")){
+//        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("3")){
             progressDialog.dismiss();
             Toast.makeText(getActivity(),(String) object, Toast.LENGTH_LONG).show();
-        }
-        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")){
-
-        }
-
+//        }else if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")){
+//            //TODO for student notification
+//        }
     }
 }
