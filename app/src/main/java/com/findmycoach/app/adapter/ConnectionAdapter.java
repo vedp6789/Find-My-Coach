@@ -85,37 +85,65 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
         TextView nameTV = (TextView) view.findViewById(R.id.nameTV);
         TextView lastMsgTV = (TextView) view.findViewById(R.id.lastMsgTV);
         ImageButton connectionButton = (ImageButton) view.findViewById(R.id.detailsTV);
-        if(DashboardActivity.dashboardActivity.user_group == 3) {
-            nameTV.setText(singleConnection.getOwnerName());
-            lastMsgTV.setText("Receiver id : " + singleConnection.getOwnerId() + ", Sender id : " + singleConnection.getInviteeId());
-        }
-        else {
-            nameTV.setText(singleConnection.getInviteeName());
-            lastMsgTV.setText("Receiver id : " + singleConnection.getInviteeId() + ", Sender id : " + singleConnection.getOwnerId());
-        }
-        if(status.equals("accepted")){
-            connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_minus));
-        }else if(status.equals("pending")){
-            connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_plus));
-        }else{
-            connectionButton.setVisibility(View.GONE);
-        }
 
-        connectionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(status.equals("accepted")) {
-                    connection_clicked = position;
-                    disconnect(singleConnection.getId() + "");
-                }
-                else if(status.equals("pending")) {
-                    connection_clicked = position;
-                    connect(singleConnection.getId() + "");
-                }
-            }
-        });
-
+        // Called to show respective row for mentee and mentor
+        populateSingleRow(nameTV, lastMsgTV, connectionButton, DashboardActivity.dashboardActivity.user_group, singleConnection, position);
         return view;
+    }
+
+    private void populateSingleRow(TextView nameTV, TextView lastMsgTV, ImageButton connectionButton, int user_group, final Data singleConnection, final int position ){
+        final String status = singleConnection.getStatus();
+        switch (user_group){
+            case 3:
+                nameTV.setText(singleConnection.getOwnerName());
+                lastMsgTV.setText("Receiver id : " + singleConnection.getOwnerId() + ", Sender id : " + singleConnection.getInviteeId() + ", Status : " + status);
+
+                if(status.equals("accepted")){
+                    connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_minus));
+                }else if(status.equals("pending")){
+                    connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_plus));
+                }else{
+                    connectionButton.setVisibility(View.GONE);
+                }
+
+                connectionButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(status.equals("accepted")) {
+                            connection_clicked = position;
+                            disconnect(singleConnection.getId() + "");
+                        }
+                        else if(status.equals("pending")) {
+                            connection_clicked = position;
+                            connect(singleConnection.getId() + "");
+                        }
+                    }
+                });
+                break;
+
+            case 2:
+                nameTV.setText(singleConnection.getInviteeName());
+                lastMsgTV.setText("Receiver id : " + singleConnection.getInviteeId() + ", Sender id : " + singleConnection.getOwnerId() + ", Status : " + status);
+
+                if(status.equals("accepted")){
+                    connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_minus));
+                }else if(status.equals("pending")){
+                connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_minus));
+                }else{
+                    connectionButton.setVisibility(View.GONE);
+                }
+
+                connectionButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(status.equals("accepted") || status.equals("pending")) {
+                            connection_clicked = position;
+                            disconnect(singleConnection.getId() + "");
+                        }
+                    }
+                });
+                break;
+        }
     }
 
     private void connect(String connectionId) {
@@ -140,7 +168,11 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
         progressDialog.dismiss();
         if(object == null && connection_clicked != -1){
             String status = connectionList.get(connection_clicked).getStatus();
-            connectionList.get(connection_clicked).setStatus(status.equals("accepted") ? "broken" : "accepted");
+            // Updating status of connection i.e. accept/reject/broke
+            if(DashboardActivity.dashboardActivity.user_group == 3)
+                connectionList.get(connection_clicked).setStatus(status.equals("accepted") ? "broken" : "accepted");
+            else if(DashboardActivity.dashboardActivity.user_group == 2)
+                connectionList.get(connection_clicked).setStatus("broken");
             this.notifyDataSetChanged();
         }
 
