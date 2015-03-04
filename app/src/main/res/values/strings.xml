@@ -464,6 +464,7 @@
     <string name="pick_date">Pick date</string>
     <string name="fmc_service">FMC Service</string>
     <string name="fmc_service_description">FMC running in service to allow push notification.</string>
+    <string name="class_schedule">Class Schedule</string>
 
     <!-- end of unique strings block-->
 
@@ -552,6 +553,7 @@
     <string name="days">Days</string>
     <string name="from">From:</string>
     <string name="to">To:</string>
+    <string name="to1">to</string>
     <string name="starting_from">Starting from:</string>
     <string name="till">Till:</string>
     <string name="select">Select</string>
@@ -597,6 +599,7 @@
     <string name="add_vacation">Schedule vacation</string>
     <string name="create_slot">Create Slot</string>
     <string name="schedule">Schedule</string>
+    <string name="schedule_class">Schedule a class</string>
     <string name="schedule_vacation">Vacation schedule</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -626,6 +629,15 @@
     <string name="action_connect">Connect</string>
     <string name="set_time">Set time</string>
     <string name="schedule_vacation_note">A note for vacation schedule</string>
+    <string name="classes_availability">Classes availability</string>
+    <string name="subject">Subject</string>
+    <string name="days_of_week">Days of weeek</string>
+    <string name="duration">Duration</string>
+    <string name="location">Location</string>
+    <string name="mentor_for">Mentor for</string>
+    <string name="pay_now">Pay now</string>
+    <string name="personally">I\'ll pay the mentor personally</string>
+    <string name="proceed_payment">Proceed to payment</string>
     <!-- Static Text -->
 
     <!-- String s related to week days -->
@@ -636,6 +648,16 @@
     <string name="fri">Friday</string>
     <string name="sat">Saturday</string>
     <string name="sun">Sunday</string>
+    <!-- -->
+
+    <!-- String s related to week days -->
+    <string name="m">Mon</string>
+    <string name="t">Tue</string>
+    <string name="w">Wed</string>
+    <string name="th">Thu</string>
+    <string name="f">Fri</string>
+    <string name="s">Sat</string>
+    <string name="su">Sun</string>
     <!-- -->
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~ String related to SharePreferences ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

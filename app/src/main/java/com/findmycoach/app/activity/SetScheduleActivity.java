@@ -11,8 +11,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.alamkanak.weekview.WeekView;
-import com.alamkanak.weekview.WeekViewEvent;
+//import com.alamkanak.weekview.WeekView;
+//import com.alamkanak.weekview.WeekViewEvent;
+import com.findmycoach.app.util.StorageHelper;
+import com.findmycoach.app.views.WeekView;
+import com.findmycoach.app.util.WeekViewEvent;
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.connections.Data;
 
@@ -32,16 +35,16 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     private static final String TAG="FMC";
 
-    private int day;
-    private int month;
-    private int year;
+    public int day;
+    public int month;
+    public int year;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_set_schedule);
+        //setContentView(R.layout.activity_set_schedule);
 
-        mWeekView = (WeekView) findViewById(R.id.weekView);
 
         Intent getIntent = getIntent();
         if(getIntent != null)
@@ -50,22 +53,20 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             month = getIntent.getExtras().getInt("month");
             year = getIntent.getExtras().getInt("year");
 
+            StorageHelper.storePreference(SetScheduleActivity.this,"day",String.valueOf(day));
+            StorageHelper.storePreference(SetScheduleActivity.this,"month",String.valueOf(month));
+            StorageHelper.storePreference(SetScheduleActivity.this,"year", String.valueOf(year));
 
-         Calendar calendar=GregorianCalendar.getInstance();
-         calendar.set(year,month,day);
+            Log.d(TAG,"day from sared preference"+StorageHelper.getGridClickDetails(SetScheduleActivity.this,"day"));
 
-        Date date1=calendar.getTime();
-           Log.d(TAG,"date1....."+date1);
+            setContentView(R.layout.activity_set_schedule);
 
+            mWeekView = (WeekView) findViewById(R.id.weekView);
 
-
-            mWeekView.goToDate(calendar);
             applyProperties();
 
             Toast.makeText(this,""+day+"/"+(month+1)+"/"+year,Toast.LENGTH_LONG).show();
-            /*day=Integer.parseInt(date.split("-",3)[0]);
-            month=Integer.parseInt(date.split("-",3)[1]);
-            year=Integer.parseInt(date.split("-",3)[2]);*/
+
             Log.d(TAG,"Separate date "+"day"+day+"month"+month+"year"+year);
 
 

@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +31,7 @@ import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 
-public class MentorDetailsActivity extends Activity implements Callback {
+public class MentorDetailsActivity extends Activity implements Callback,Button.OnClickListener{
 
     private Response mentorDetails;
     private ImageView profileImage;
@@ -46,13 +47,15 @@ public class MentorDetailsActivity extends Activity implements Callback {
     private Button facebookLink;
     private Data userInfo = null;
     private ProgressDialog progressDialog;
+    private ListView listView_mon_slots,listView_tue_slots,listView_wed_slots,listView_thur_slots,listView_fri_slots,listView_sat_slots,listView_sun_slots;
+    private Button b_schedule_class;
 
     private static final String TAG="FMC";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_profile_mentor);
+        setContentView(R.layout.activity_mentor_details);
         initialize();
         applyActionbarProperties();
         populateFields();
@@ -84,6 +87,20 @@ public class MentorDetailsActivity extends Activity implements Callback {
         profileLocation = (TextView) findViewById(R.id.profile_location);
         googleLink = (Button) findViewById(R.id.profile_google_button);
         facebookLink = (Button) findViewById(R.id.profile_facebook_button);
+
+        listView_mon_slots= (ListView) findViewById(R.id.lv_mon_available_slots);
+        listView_mon_slots= (ListView) findViewById(R.id.lv_tue_available_slots);
+        listView_mon_slots= (ListView) findViewById(R.id.lv_wed_available_slots);
+        listView_mon_slots= (ListView) findViewById(R.id.lv_thur_available_slots);
+        listView_mon_slots= (ListView) findViewById(R.id.lv_fri_available_slots);
+        listView_mon_slots= (ListView) findViewById(R.id.lv_sat_available_slots);
+        listView_mon_slots= (ListView) findViewById(R.id.lv_sun_available_slots);
+
+        b_schedule_class= (Button) findViewById(R.id.b_schedule_class);
+        b_schedule_class.setOnClickListener(this);
+
+
+
     }
 
     private void populateFields() {
@@ -232,5 +249,26 @@ public class MentorDetailsActivity extends Activity implements Callback {
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == b_schedule_class){
+
+            if(validate()){
+                Log.d(TAG,"Start Scheduling activity");
+                  Intent intent=new Intent(MentorDetailsActivity.this, ScheduleNewClass.class);
+                  intent.putExtra("fname",userInfo.getFirstName());
+                  startActivity(intent);
+            }
+        }
+    }
+
+
+    /* validate method will check whether the mentor have any free slot for class or not */
+    private boolean validate() {
+        boolean b_allow_schedule_creation=true;
+        return b_allow_schedule_creation;
+
     }
 }

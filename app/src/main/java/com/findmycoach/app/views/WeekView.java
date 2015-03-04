@@ -1,5 +1,4 @@
-/*
-package com.alamkanak.weekview;
+package com.findmycoach.app.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -17,6 +16,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
@@ -26,6 +26,12 @@ import android.view.View;
 import android.widget.OverScroller;
 import android.widget.Scroller;
 
+import com.findmycoach.app.R;
+import com.findmycoach.app.activity.SetScheduleActivity;
+import com.findmycoach.app.util.DateTimeInterpreter;
+import com.findmycoach.app.util.StorageHelper;
+import com.findmycoach.app.util.WeekViewEvent;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,12 +39,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-*/
 /**
  * Created by Raquib-ul-Alam Kanak on 7/21/2014.
  * Website: http://alamkanak.me
- *//*
-
+ */
 public class WeekView extends View {
 
     @Deprecated
@@ -114,6 +118,16 @@ public class WeekView extends View {
     private EmptyViewClickListener mEmptyViewClickListener;
     private EmptyViewLongPressListener mEmptyViewLongPressListener;
     private DateTimeInterpreter mDateTimeInterpreter;
+
+
+
+
+    // Customization
+    public static int day_of_grid_click=0;
+    public static int month=0;
+    public static int year=0;
+    private static final String TAG="FMC";
+
 
     private final GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
 
@@ -260,12 +274,24 @@ public class WeekView extends View {
             a.recycle();
         }
 
-        init();
+        init(context);
     }
 
-    private void init() {
+    private void init(Context context) {
+        SetScheduleActivity setScheduleActivity=new SetScheduleActivity();
         // Get the date today.
+        day_of_grid_click= Integer.parseInt(StorageHelper.getGridClickDetails(context,"day"));
+        month= Integer.parseInt(StorageHelper.getGridClickDetails(context,"month"));
+        year= Integer.parseInt(StorageHelper.getGridClickDetails(context,"year"));
+
+        Log.d(TAG,"Inside WeekView class and init method "+"day: "+day_of_grid_click+"month: "+month+"year :"+year);
+
         mToday = Calendar.getInstance();
+
+        mToday.set(Calendar.DAY_OF_MONTH,day_of_grid_click);
+        mToday.set(Calendar.MONTH,month);
+        mToday.set(Calendar.YEAR,year);
+
         mToday.set(Calendar.HOUR_OF_DAY, 0);
         mToday.set(Calendar.MINUTE, 0);
         mToday.set(Calendar.SECOND, 0);
@@ -501,14 +527,12 @@ public class WeekView extends View {
 
     }
 
-    */
-/**
+    /**
      * Get the time and date where the user clicked on.
      * @param x The x position of the touch event.
      * @param y The y position of the touch event.
      * @return The time and date at the clicked position.
-     *//*
-
+     */
     private Calendar getTimeFromPoint(float x, float y){
         int leftDaysWithGaps = (int) -(Math.ceil(mCurrentOrigin.x / (mWidthPerDay + mColumnGap)));
         float startPixel = mCurrentOrigin.x + (mWidthPerDay + mColumnGap) * leftDaysWithGaps +
@@ -534,14 +558,12 @@ public class WeekView extends View {
         return null;
     }
 
-    */
-/**
+    /**
      * Draw all the events of a particular day.
      * @param date The day.
      * @param startFromPixel The left position of the day area. The events will never go any left from this value.
      * @param canvas The canvas to draw upon.
-     *//*
-
+     */
     private void drawEvents(Calendar date, float startFromPixel, Canvas canvas) {
         if (mEventRects != null && mEventRects.size() > 0) {
             for (int i = 0; i < mEventRects.size(); i++) {
@@ -589,16 +611,14 @@ public class WeekView extends View {
     }
 
 
-    */
-/**
+    /**
      * Draw the name of the event on top of the event rectangle.
      * @param text The text to draw.
      * @param rect The rectangle on which the text is to be drawn.
      * @param canvas The canvas to draw upon.
      * @param originalTop The original top position of the rectangle. The rectangle may have some of its portion outside of the visible area.
      * @param originalLeft The original left position of the rectangle. The rectangle may have some of its portion outside of the visible area.
-     *//*
-
+     */
     private void drawText(String text, RectF rect, Canvas canvas, float originalTop, float originalLeft) {
         if (rect.right - rect.left - mEventPadding * 2 < 0) return;
 
@@ -627,16 +647,14 @@ public class WeekView extends View {
     }
 
 
-    */
-/**
+    /**
      * A class to hold reference to the events and their visual representation. An EventRect is
      * actually the rectangle that is drawn on the calendar for a given event. There may be more
      * than one rectangle for a single event (an event that expands more than one day). In that
      * case two instances of the EventRect will be used for a single event. The given event will be
      * stored in "originalEvent". But the event that corresponds to rectangle the rectangle
      * instance will be stored in "event".
-     *//*
-
+     */
     private class EventRect {
         public WeekViewEvent event;
         public WeekViewEvent originalEvent;
@@ -646,8 +664,7 @@ public class WeekView extends View {
         public float top;
         public float bottom;
 
-        */
-/**
+        /**
          * Create a new instance of event rect. An EventRect is actually the rectangle that is drawn
          * on the calendar for a given event. There may be more than one rectangle for a single
          * event (an event that expands more than one day). In that case two instances of the
@@ -657,8 +674,7 @@ public class WeekView extends View {
          * @param event Represents the event which this instance of rectangle represents.
          * @param originalEvent The original event that was passed by the user.
          * @param rectF The rectangle.
-         *//*
-
+         */
         public EventRect(WeekViewEvent event, WeekViewEvent originalEvent, RectF rectF) {
             this.event = event;
             this.rectF = rectF;
@@ -667,14 +683,12 @@ public class WeekView extends View {
     }
 
 
-    */
-/**
+    /**
      * Gets more events of one/more month(s) if necessary. This method is called when the user is
      * scrolling the week view. The week view stores the events of three months: the visible month,
      * the previous month, the next month.
      * @param day The day where the user is currently is.
-     *//*
-
+     */
     private void getMoreEvents(Calendar day) {
 
         // Delete all events if its not current month +- 1.
@@ -754,12 +768,10 @@ public class WeekView extends View {
         }
     }
 
-    */
-/**
+    /**
      * Cache the event for smooth scrolling functionality.
      * @param event The event to cache.
-     *//*
-
+     */
     private void cacheEvent(WeekViewEvent event) {
         if (!isSameDay(event.getStartTime(), event.getEndTime())) {
             Calendar endTime = (Calendar) event.getStartTime().clone();
@@ -779,12 +791,10 @@ public class WeekView extends View {
             mEventRects.add(new EventRect(event, event, null));
     }
 
-    */
-/**
+    /**
      * Sorts the events in ascending order.
      * @param events The events to be sorted.
-     *//*
-
+     */
     private void sortEvents(List<WeekViewEvent> events) {
         Collections.sort(events, new Comparator<WeekViewEvent>() {
             @Override
@@ -802,13 +812,11 @@ public class WeekView extends View {
         });
     }
 
-    */
-/**
+    /**
      * Calculates the left and right positions of each events. This comes handy specially if events
      * are overlapping.
      * @param eventRects The events along with their wrapper class.
-     *//*
-
+     */
     private void computePositionOfEvents(List<EventRect> eventRects) {
         // Make "collision groups" for all events that collide with others.
         List<List<EventRect>> collisionGroups = new ArrayList<List<EventRect>>();
@@ -836,13 +844,11 @@ public class WeekView extends View {
         }
     }
 
-    */
-/**
+    /**
      * Expands all the events to maximum possible width. The events will try to occupy maximum
      * space available horizontally.
      * @param collisionGroup The group of events which overlap with each other.
-     *//*
-
+     */
     private void expandEventsToMaxWidth(List<EventRect> collisionGroup) {
         // Expand the events to maximum possible width.
         List<List<EventRect>> columns = new ArrayList<List<EventRect>>();
@@ -888,14 +894,12 @@ public class WeekView extends View {
     }
 
 
-    */
-/**
+    /**
      * Checks if two events overlap.
      * @param event1 The first event.
      * @param event2 The second event.
      * @return true if the events overlap.
-     *//*
-
+     */
     private boolean isEventsCollide(WeekViewEvent event1, WeekViewEvent event2) {
         long start1 = event1.getStartTime().getTimeInMillis();
         long end1 = event1.getEndTime().getTimeInMillis();
@@ -905,24 +909,20 @@ public class WeekView extends View {
     }
 
 
-    */
-/**
+    /**
      * Checks if time1 occurs after (or at the same time) time2.
      * @param time1 The time to check.
      * @param time2 The time to check against.
      * @return true if time1 and time2 are equal or if time1 is after time2. Otherwise false.
-     *//*
-
+     */
     private boolean isTimeAfterOrEquals(Calendar time1, Calendar time2) {
         return !(time1 == null || time2 == null) && time1.getTimeInMillis() >= time2.getTimeInMillis();
     }
 
-    */
-/**
+    /**
      * Deletes the events of the months that are too far away from the current month.
      * @param currentDay The current day.
-     *//*
-
+     */
     private void deleteFarMonths(Calendar currentDay) {
 
         if (mEventRects == null) return;
@@ -1002,12 +1002,10 @@ public class WeekView extends View {
         return mEmptyViewLongPressListener;
     }
 
-    */
-/**
+    /**
      * Get the interpreter which provides the text to show in the header column and the header row.
      * @return The date, time interpreter.
-     *//*
-
+     */
     public DateTimeInterpreter getDateTimeInterpreter() {
         if (mDateTimeInterpreter == null) {
             mDateTimeInterpreter = new DateTimeInterpreter() {
@@ -1038,33 +1036,27 @@ public class WeekView extends View {
         return mDateTimeInterpreter;
     }
 
-    */
-/**
+    /**
      * Set the interpreter which provides the text to show in the header column and the header row.
      * @param dateTimeInterpreter The date, time interpreter.
-     *//*
-
+     */
     public void setDateTimeInterpreter(DateTimeInterpreter dateTimeInterpreter){
         this.mDateTimeInterpreter = dateTimeInterpreter;
     }
 
 
-    */
-/**
+    /**
      * Get the number of visible days in a week.
      * @return The number of visible days in a week.
-     *//*
-
+     */
     public int getNumberOfVisibleDays() {
         return mNumberOfVisibleDays;
     }
 
-    */
-/**
+    /**
      * Set the number of visible days in a week.
      * @param numberOfVisibleDays The number of visible days in a week.
-     *//*
-
+     */
     public void setNumberOfVisibleDays(int numberOfVisibleDays) {
         this.mNumberOfVisibleDays = numberOfVisibleDays;
         mCurrentOrigin.x = 0;
@@ -1094,8 +1086,7 @@ public class WeekView extends View {
         return mFirstDayOfWeek;
     }
 
-    */
-/**
+    /**
      * Set the first day of the week. First day of the week is used only when the week view is first
      * drawn. It does not of any effect after user starts scrolling horizontally.
      * <p>
@@ -1106,8 +1097,7 @@ public class WeekView extends View {
      * {@link java.util.Calendar#MONDAY}, {@link java.util.Calendar#TUESDAY},
      * {@link java.util.Calendar#WEDNESDAY}, {@link java.util.Calendar#THURSDAY},
      * {@link java.util.Calendar#FRIDAY}.
-     *//*
-
+     */
     public void setFirstDayOfWeek(int firstDayOfWeek) {
         mFirstDayOfWeek = firstDayOfWeek;
         invalidate();
@@ -1252,20 +1242,17 @@ public class WeekView extends View {
         invalidate();
     }
 
-    */
-/**
+    /**
      * <b>Note:</b> Use {@link #setDateTimeInterpreter(DateTimeInterpreter)} and
      * {@link #getDateTimeInterpreter()} instead.
      * @return Either long or short day name is being used.
-     *//*
-
+     */
     @Deprecated
     public int getDayNameLength() {
         return mDayNameLength;
     }
 
-    */
-/**
+    /**
      * Set the length of the day name displayed in the header row. Example of short day names is
      * 'M' for 'Monday' and example of long day names is 'Mon' for 'Monday'.
      * <p>
@@ -1273,8 +1260,7 @@ public class WeekView extends View {
      * </p>
      * @param length Supported values are {@link com.alamkanak.weekview.WeekView#LENGTH_SHORT} and
      * {@link com.alamkanak.weekview.WeekView#LENGTH_LONG}.
-     *//*
-
+     */
     @Deprecated
     public void setDayNameLength(int length) {
         if (length != LENGTH_LONG && length != LENGTH_SHORT) {
@@ -1287,12 +1273,10 @@ public class WeekView extends View {
         return mOverlappingEventGap;
     }
 
-    */
-/**
+    /**
      * Set the gap between overlapping events.
      * @param overlappingEventGap The gap between overlapping events.
-     *//*
-
+     */
     public void setOverlappingEventGap(int overlappingEventGap) {
         this.mOverlappingEventGap = overlappingEventGap;
         invalidate();
@@ -1302,54 +1286,44 @@ public class WeekView extends View {
         return mEventMarginVertical;
     }
 
-    */
-/**
+    /**
      * Set the top and bottom margin of the event. The event will release this margin from the top
      * and bottom edge. This margin is useful for differentiation consecutive events.
      * @param eventMarginVertical The top and bottom margin.
-     *//*
-
+     */
     public void setEventMarginVertical(int eventMarginVertical) {
         this.mEventMarginVertical = eventMarginVertical;
         invalidate();
     }
 
-    */
-/**
+    /**
      * Returns the first visible day in the week view.
      * @return The first visible day in the week view.
-     *//*
-
+     */
     public Calendar getFirstVisibleDay() {
         return mFirstVisibleDay;
     }
 
-    */
-/**
+    /**
      * Returns the last visible day in the week view.
      * @return The last visible day in the week view.
-     *//*
-
+     */
     public Calendar getLastVisibleDay() {
         return mLastVisibleDay;
     }
 
-    */
-/**
+    /**
      * Get the scrolling speed factor in horizontal direction.
      * @return The speed factor in horizontal direction.
-     *//*
-
+     */
     public float getXScrollingSpeed() {
         return mXScrollingSpeed;
     }
 
-    */
-/**
+    /**
      * Sets the speed for horizontal scrolling.
      * @param xScrollingSpeed The new horizontal scrolling speed.
-     *//*
-
+     */
     public void setXScrollingSpeed(float xScrollingSpeed) {
         this.mXScrollingSpeed = xScrollingSpeed;
     }
@@ -1409,22 +1383,18 @@ public class WeekView extends View {
     //
     /////////////////////////////////////////////////////////////////
 
-    */
-/**
+    /**
      * Show today on the week view.
-     *//*
-
+     */
     public void goToToday() {
         Calendar today = Calendar.getInstance();
         goToDate(today);
     }
 
-    */
-/**
+    /**
      * Show a specific day on the week view.
      * @param date The date to show.
-     *//*
-
+     */
     public void goToDate(Calendar date) {
         mScroller.forceFinished(true);
         date.set(Calendar.HOUR_OF_DAY, 0);
@@ -1451,22 +1421,18 @@ public class WeekView extends View {
         invalidate();
     }
 
-    */
-/**
+    /**
      * Refreshes the view and loads the events again.
-     *//*
-
+     */
     public void notifyDatasetChanged(){
         mRefreshEvents = true;
         invalidate();
     }
 
-    */
-/**
+    /**
      * Vertically scroll to a specific hour in the week view.
      * @param hour The hour to scroll to in 24-hour format. Supported values are 0-24.
-     *//*
-
+     */
     public void goToHour(double hour){
         int verticalOffset = (int) (mHourHeight * hour);
         if (hour < 0)
@@ -1519,14 +1485,12 @@ public class WeekView extends View {
     //
     /////////////////////////////////////////////////////////////////
 
-    */
-/**
+    /**
      * Checks if an integer array contains a particular value.
      * @param list The haystack.
      * @param value The needle.
      * @return True if the array contains the value. Otherwise returns false.
-     *//*
-
+     */
     private boolean containsValue(int[] list, int value) {
         for (int i = 0; i < list.length; i++){
             if (list[i] == value)
@@ -1535,16 +1499,14 @@ public class WeekView extends View {
         return false;
     }
 
-    */
-/**
+    /**
      * Checks if two times are on the same day.
      * @param dayOne The first day.
      * @param dayTwo The second day.
      * @return Whether the times are on the same day.
-     *//*
-
+     */
     private boolean isSameDay(Calendar dayOne, Calendar dayTwo) {
         return dayOne.get(Calendar.YEAR) == dayTwo.get(Calendar.YEAR) && dayOne.get(Calendar.DAY_OF_YEAR) == dayTwo.get(Calendar.DAY_OF_YEAR);
     }
 
-}*/
+}

@@ -22,6 +22,7 @@ public class StorageHelper {
         editor.commit();
     }
 
+
     public static void checkGcmRegIdSentToSever(Context context, String key, boolean value){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
@@ -41,6 +42,12 @@ public class StorageHelper {
     }
 
     public static String getUserDetails(Context context, String key) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String userToken = preferences.getString(key, null);
+        return userToken;
+    }
+
+    public static String getGridClickDetails(Context context,String key){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String userToken = preferences.getString(key, null);
         return userToken;

@@ -173,8 +173,8 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         context = this;
 
-        Intent intent_service = new Intent(LoginActivity.this, BackgroundService.class);
-        startService(intent_service);
+        /*Intent intent_service = new Intent(LoginActivity.this, BackgroundService.class);
+        startService(intent_service);*/
 
         final String userToken = StorageHelper.getUserDetails(this, "auth_token");
         String phnVerified = StorageHelper.getUserDetails(this, "phone_verified");

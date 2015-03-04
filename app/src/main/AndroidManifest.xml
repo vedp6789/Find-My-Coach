@@ -123,6 +123,10 @@
             android:name=".activity.ScheduleYourVacation"
             android:label="@string/schedule_vacation"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.ScheduleNewClass"
+            android:label="@string/class_schedule"
+            android:screenOrientation="portrait"></activity>
+
 
 
         <receiver
