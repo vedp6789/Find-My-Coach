@@ -183,34 +183,34 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         updateAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(validate(profileFirstName.getText().toString(),profileAddress.getText().toString())){
-                    if(profileAddress1.getText().toString().trim().equals("")){
-                        Toast.makeText(EditProfileActivityMentor.this,getResources().getString(R.string.choose_suggested_copy),Toast.LENGTH_LONG).show();
-                        profileAddress1.setError(getResources().getString(R.string.choose_suggested_copy));
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                profileAddress1.setError(null);
-                            }
-                        }, 3500);
-                        return;
-                    }
+                if(validateUserUpdate())
                     callUpdateService();
-                }
-
             }
         });
 
     }
 
 
-    private boolean validate(String firstName, String address) {
+    // Validate user first name, last name and address
+    private boolean validateUserUpdate() {
+        if(profileAddress1.getText().toString().trim().equals("")){
+            Toast.makeText(EditProfileActivityMentor.this,getResources().getString(R.string.choose_suggested_city),Toast.LENGTH_LONG).show();
+            profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    profileAddress1.setError(null);
+                }
+            }, 3500);
+            return false;
+        }
 
+        String firstName = profileFirstName.getText().toString();
         if (firstName.equals("")) {
             showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
             return false;
         }else{
-            for (int i = 0; i < firstName.length()-1; i++) {
+            for (int i = 0; i < firstName.length(); i++) {
                 if (!Character.isLetter(firstName.charAt(i))) {
                     showErrorMessage(profileFirstName, getResources().getString(R.string.error_not_a_name));
                     return false;
@@ -218,13 +218,18 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             }
         }
 
-        if (address.equals("")) {
-            showErrorMessage(profileAddress, getResources().getString(R.string.error_field_required));
+        String lastName = profileLastName.getText().toString();
+        if (lastName.equals("")) {
+            showErrorMessage(profileLastName, getResources().getString(R.string.error_field_required));
             return false;
+        }else{
+            for (int i = 0; i < lastName.length(); i++) {
+                if (!Character.isLetter(lastName.charAt(i))) {
+                    showErrorMessage(profileLastName, getResources().getString(R.string.error_not_a_name));
+                    return false;
+                }
+            }
         }
-
-
-
         return true;
     }
 

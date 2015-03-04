@@ -205,18 +205,8 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
         updateAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(profileAddress1.getText().toString().trim().equals("")){
-                    Toast.makeText(EditProfileActivityMentee.this,getResources().getString(R.string.choose_suggested_city),Toast.LENGTH_LONG).show();
-                    profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            profileAddress1.setError(null);
-                        }
-                    }, 3500);
-                    return;
-                }
-                callUpdateService();
+                if(validateUserUpdate())
+                    callUpdateService();
             }
         });
 
@@ -232,6 +222,58 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             }
         });
 
+    }
+
+    // Validate user first name, last name and address
+    private boolean validateUserUpdate() {
+        if(profileAddress1.getText().toString().trim().equals("")){
+            Toast.makeText(EditProfileActivityMentee.this,getResources().getString(R.string.choose_suggested_city),Toast.LENGTH_LONG).show();
+            profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    profileAddress1.setError(null);
+                }
+            }, 3500);
+            return false;
+        }
+
+        String firstName = profileFirstName.getText().toString();
+        if (firstName.equals("")) {
+            showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
+            return false;
+        }else{
+            for (int i = 0; i < firstName.length(); i++) {
+                if (!Character.isLetter(firstName.charAt(i))) {
+                    showErrorMessage(profileFirstName, getResources().getString(R.string.error_not_a_name));
+                    return false;
+                }
+            }
+        }
+
+        String lastName = profileLastName.getText().toString();
+        if (lastName.equals("")) {
+            showErrorMessage(profileLastName, getResources().getString(R.string.error_field_required));
+            return false;
+        }else{
+            for (int i = 0; i < lastName.length(); i++) {
+                if (!Character.isLetter(lastName.charAt(i))) {
+                    showErrorMessage(profileLastName, getResources().getString(R.string.error_not_a_name));
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void showErrorMessage(final TextView view, String string) {
+        view.setError(string);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.setError(null);
+            }
+        }, 3500);
     }
 
     private void callUpdateService() {
