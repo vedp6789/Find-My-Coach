@@ -20,7 +20,6 @@ import com.findmycoach.app.util.ImageLoadTask;
 import com.findmycoach.app.util.StorageHelper;
 
 import com.findmycoach.app.R;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,6 +44,8 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
 
     private String storagePathImage, storagePathVideo;
 
+    private ArrayList<Integer> mediaTempList;
+
     public ChatWidgetAdapter(Context context, ArrayList<String> messageList, ArrayList<Integer> sender, ArrayList<Integer> messageType ) {
         super(context, R.layout.signle_chat_cointainer_sent, messageList);
         this.context = context;
@@ -66,6 +67,7 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
         String[] videos = videoFolder.list();
 
         fileNames = new ArrayList<String>();
+        mediaTempList = new ArrayList<Integer>();
         for(String image : images)
             fileNames.add(image.trim());
         for(String video : videos)
@@ -140,10 +142,11 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
         }else {
             final File imageFile = new File(messageList.get(position));
             ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.mediaProgressBar);
+            progressBar.setVisibility(View.VISIBLE);
             if(imageFile.exists()){
-                progressBar.setVisibility(View.VISIBLE);
                 try{
                     imageView.setImageBitmap(decodeFileImage(imageFile));
+                    mediaTempList.add(position);
                 }catch (Exception e){
                     imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
                 }
@@ -156,10 +159,8 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
                         context.startActivity(intent);
                     }
                 });
-            }else
-                progressBar.setVisibility(View.VISIBLE);
-            new ImageLoadTask(messageList.get(position), context, imageName, storagePathImage, fileNames).execute();
-//            Picasso.with(context).load(messageList.get(position)).into(imageView);
+            }
+            new ImageLoadTask(messageList.get(position), context, imageName, storagePathImage, fileNames, position, messageList).execute();
         }
     }
 
@@ -227,10 +228,11 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
         }else{
             final File videoFile = new File(messageList.get(position));
             ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.mediaProgressBar);
+            progressBar.setVisibility(View.VISIBLE);
             if(videoFile.exists()){
                 try{
-                    progressBar.setVisibility(View.VISIBLE);
                     imageView.setImageBitmap(ThumbnailUtils.createVideoThumbnail(videoFile.getAbsolutePath(), MediaStore.Images.Thumbnails.MINI_KIND));
+                    mediaTempList.add(position);
                     imageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -243,10 +245,8 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
                 }catch (Exception e){
                     imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
                 }
-            }else{
-                progressBar.setVisibility(View.VISIBLE);
             }
-            new ImageLoadTask(messageList.get(position), context, videoName, storagePathVideo, fileNames).execute();
+            new ImageLoadTask(messageList.get(position), context, videoName, storagePathVideo, fileNames, position, messageList).execute();
         }
 
     }
@@ -255,5 +255,12 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
         this.messageList.add(messageList.size(),msg);
         this.senderList.add(sender);
         this.messageType.add(messageType);
+    }
+
+    public void downloadFile(String fileUrl, String type){
+        String[] fileName = fileUrl.split("/");
+        String fName = fileName[fileName.length-1].trim();
+        new ImageLoadTask(fileUrl, context, fName, type.equals("image") ? storagePathImage : storagePathVideo, fileNames, mediaTempList.get(0), messageList).execute();
+        mediaTempList.remove(0);
     }
 }

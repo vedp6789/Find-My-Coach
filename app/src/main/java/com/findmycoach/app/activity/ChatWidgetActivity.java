@@ -23,6 +23,7 @@ import com.findmycoach.app.beans.attachment.Attachment;
 import com.findmycoach.app.beans.chats.Chats;
 import com.findmycoach.app.beans.chats.Data;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.ImageLoadTask;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.R;
@@ -360,6 +361,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             if(isSocketConnected) {
                 mWebSocketClient.send(msgJson);
                 Log.d(TAG, msgJson);
+                chatWidgetAdapter.downloadFile(attachmentPath, attachment.getData().getFile_type().contains("image") ? "image" : "video");
             }
             else {
                 progressDialog.show();
