@@ -190,6 +190,9 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         if (id == R.id.action_add) {
             addInterest();
             return true;
+        }else if(id == android.R.id.home){
+            finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

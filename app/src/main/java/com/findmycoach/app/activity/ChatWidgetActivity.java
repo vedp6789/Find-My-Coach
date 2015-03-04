@@ -364,9 +364,9 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
                 connectWebSocket();
                 return;
             }
-            chatWidgetAdapter.updateMessageList(attachmentPath, 0, msgJson.contains("image") ? 1 : 2);
-            chatWidgetAdapter.notifyDataSetChanged();
-            chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+//            chatWidgetAdapter.updateMessageList(attachmentPath, 0, msgJson.contains("image") ? 1 : 2);
+//            chatWidgetAdapter.notifyDataSetChanged();
+//            chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
         }
     }
 

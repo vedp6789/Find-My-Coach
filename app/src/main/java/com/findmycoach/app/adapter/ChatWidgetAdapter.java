@@ -139,8 +139,8 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
             }
         }else {
             final File imageFile = new File(messageList.get(position));
+            ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.mediaProgressBar);
             if(imageFile.exists()){
-                ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.mediaProgressBar);
                 progressBar.setVisibility(View.VISIBLE);
                 try{
                     imageView.setImageBitmap(decodeFileImage(imageFile));
@@ -156,7 +156,8 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
                         context.startActivity(intent);
                     }
                 });
-            }
+            }else
+                progressBar.setVisibility(View.VISIBLE);
             new ImageLoadTask(messageList.get(position), context, imageName, storagePathImage, fileNames).execute();
 //            Picasso.with(context).load(messageList.get(position)).into(imageView);
         }
@@ -225,9 +226,9 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
 
         }else{
             final File videoFile = new File(messageList.get(position));
+            ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.mediaProgressBar);
             if(videoFile.exists()){
                 try{
-                    ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.mediaProgressBar);
                     progressBar.setVisibility(View.VISIBLE);
                     imageView.setImageBitmap(ThumbnailUtils.createVideoThumbnail(videoFile.getAbsolutePath(), MediaStore.Images.Thumbnails.MINI_KIND));
                     imageView.setOnClickListener(new View.OnClickListener() {
@@ -242,6 +243,8 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
                 }catch (Exception e){
                     imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
                 }
+            }else{
+                progressBar.setVisibility(View.VISIBLE);
             }
             new ImageLoadTask(messageList.get(position), context, videoName, storagePathVideo, fileNames).execute();
         }

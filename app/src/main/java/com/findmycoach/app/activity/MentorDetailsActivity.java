@@ -123,7 +123,6 @@ public class MentorDetailsActivity extends Activity implements Callback {
     }
 
     private void applySocialLinks() {
-        if (userInfo.getGoogleLink() != null && !userInfo.getGoogleLink().equals("")) {
             googleLink.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -137,8 +136,7 @@ public class MentorDetailsActivity extends Activity implements Callback {
                     }
                 }
             });
-        }
-        if (userInfo.getFacebookLink() != null && !userInfo.getFacebookLink().equals("")) {
+
             facebookLink.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -152,7 +150,6 @@ public class MentorDetailsActivity extends Activity implements Callback {
                     }
                 }
             });
-        }
     }
 
     @Override
