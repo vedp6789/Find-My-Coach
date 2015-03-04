@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.findmycoach.app.activity.ChatWidgetActivity;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -66,7 +68,8 @@ public class ImageLoadTask extends AsyncTask<Void, Void, OutputStream> {
     protected void onPostExecute(OutputStream result) {
         super.onPostExecute(result);
         try{
-//            fileNames.add(fileName);
+            fileNames.add(fileName);
+            ChatWidgetActivity.chatWidgetActivity.chatWidgetAdapter.notifyDataSetChanged();
         }catch (Exception e){
             e.printStackTrace();
         }

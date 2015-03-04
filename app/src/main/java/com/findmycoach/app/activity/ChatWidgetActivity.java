@@ -48,12 +48,13 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private String receiverName, receiverId, currentUserId;
     private ListView chatWidgetLv;
     private EditText msgToSend;
-    private ChatWidgetAdapter chatWidgetAdapter;
+    public ChatWidgetAdapter chatWidgetAdapter;
     private WebSocketClient mWebSocketClient;
     private ProgressDialog progressDialog;
     private final int STORAGE_GALLERY_IMAGE_REQUEST_CODE = 100;
     private final int STORAGE_GALLERY_VIDEO_REQUEST_CODE = 101;
     private boolean isSocketConnected;
+    public static ChatWidgetActivity chatWidgetActivity;
 
     private static final String TAG="FMC";
     private static final String TAG1="FMC-WebSocket";
@@ -62,6 +63,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        chatWidgetActivity = this;
         setContentView(R.layout.activity_chat_widget);
         initialize();
         applyActionbarProperties();
