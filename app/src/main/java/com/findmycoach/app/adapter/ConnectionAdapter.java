@@ -93,10 +93,10 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
 
     private void populateSingleRow(TextView nameTV, TextView lastMsgTV, ImageButton connectionButton, int user_group, final Data singleConnection, final int position ){
         final String status = singleConnection.getStatus();
+        lastMsgTV.setText("Receiver id : " + singleConnection.getInviteeId() + ", Sender id : " + singleConnection.getOwnerId() + ", Status : " + status);
         switch (user_group){
             case 3:
                 nameTV.setText(singleConnection.getOwnerName());
-                lastMsgTV.setText("Receiver id : " + singleConnection.getOwnerId() + ", Sender id : " + singleConnection.getInviteeId() + ", Status : " + status);
 
                 if(status.equals("accepted")){
                     connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_minus));
@@ -123,7 +123,6 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
 
             case 2:
                 nameTV.setText(singleConnection.getInviteeName());
-                lastMsgTV.setText("Receiver id : " + singleConnection.getInviteeId() + ", Sender id : " + singleConnection.getOwnerId() + ", Status : " + status);
 
                 if(status.equals("accepted")){
                     connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_minus));

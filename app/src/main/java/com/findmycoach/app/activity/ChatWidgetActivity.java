@@ -23,6 +23,7 @@ import com.findmycoach.app.beans.attachment.Attachment;
 import com.findmycoach.app.beans.chats.Chats;
 import com.findmycoach.app.beans.chats.Data;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.ImageLoadTask;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.R;
@@ -48,12 +49,13 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private String receiverName, receiverId, currentUserId;
     private ListView chatWidgetLv;
     private EditText msgToSend;
-    private ChatWidgetAdapter chatWidgetAdapter;
+    public ChatWidgetAdapter chatWidgetAdapter;
     private WebSocketClient mWebSocketClient;
     private ProgressDialog progressDialog;
     private final int STORAGE_GALLERY_IMAGE_REQUEST_CODE = 100;
     private final int STORAGE_GALLERY_VIDEO_REQUEST_CODE = 101;
     private boolean isSocketConnected;
+    public static ChatWidgetActivity chatWidgetActivity;
 
     private static final String TAG="FMC";
     private static final String TAG1="FMC-WebSocket";
@@ -62,6 +64,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        chatWidgetActivity = this;
         setContentView(R.layout.activity_chat_widget);
         initialize();
         applyActionbarProperties();
@@ -358,15 +361,16 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             if(isSocketConnected) {
                 mWebSocketClient.send(msgJson);
                 Log.d(TAG, msgJson);
+                chatWidgetAdapter.downloadFile(attachmentPath, attachment.getData().getFile_type().contains("image") ? "image" : "video");
             }
             else {
                 progressDialog.show();
                 connectWebSocket();
                 return;
             }
-            chatWidgetAdapter.updateMessageList(attachmentPath, 0, msgJson.contains("image") ? 1 : 2);
-            chatWidgetAdapter.notifyDataSetChanged();
-            chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+//            chatWidgetAdapter.updateMessageList(attachmentPath, 0, msgJson.contains("image") ? 1 : 2);
+//            chatWidgetAdapter.notifyDataSetChanged();
+//            chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
         }
     }
 

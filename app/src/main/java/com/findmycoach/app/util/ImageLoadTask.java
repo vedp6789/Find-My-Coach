@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.findmycoach.app.activity.ChatWidgetActivity;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -21,13 +23,19 @@ public class ImageLoadTask extends AsyncTask<Void, Void, OutputStream> {
     private String fileName;
     private String storageFolder;
     private ArrayList<String> fileNames;
+    private boolean localFileException;
+    private int position;
+    private ArrayList<String> messageList;
 
-    public ImageLoadTask(String url, Context context, String fileName, String storageFolder, ArrayList<String> fileNames) {
+    public ImageLoadTask(String url, Context context, String fileName, String storageFolder, ArrayList<String> fileNames, int position, ArrayList<String> messageList) {
         this.url = url;
         this.context = context;
         this.fileName = fileName;
         this.storageFolder = storageFolder;
         this.fileNames = fileNames;
+        localFileException = false;
+        this.position = position;
+        this.messageList = messageList;
     }
 
     @Override
@@ -58,6 +66,7 @@ public class ImageLoadTask extends AsyncTask<Void, Void, OutputStream> {
             return outputStream;
         } catch (Exception e) {
             e.printStackTrace();
+            localFileException = true;
         }
         return null;
     }
@@ -65,9 +74,17 @@ public class ImageLoadTask extends AsyncTask<Void, Void, OutputStream> {
     @Override
     protected void onPostExecute(OutputStream result) {
         super.onPostExecute(result);
+        if(localFileException){
+            fileNames.remove(fileName);
+            return;
+        }
         try{
-//            fileNames.add(fileName);
+            fileNames.add(fileName);
+            messageList.remove(position);
+            messageList.add(position, url);
+            ChatWidgetActivity.chatWidgetActivity.chatWidgetAdapter.notifyDataSetChanged();
         }catch (Exception e){
+            Toast.makeText(context, e+"",Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
         Toast.makeText(context,"Downloaded",Toast.LENGTH_LONG).show();
