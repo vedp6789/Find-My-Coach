@@ -89,23 +89,53 @@
                     android:hint="@string/prompt_location"
                     android:visibility="gone" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/input_category"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/custom_edittext"
-                    android:hint="@string/prompt_category"
-                    android:maxLines="1" />
+<!--Tabs for category starts-->
 
-                <AutoCompleteTextView
-                    android:id="@+id/input_sub_category"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/custom_edittext"
-                    android:hint="@string/prompt_sub_category"
-                    android:maxLines="1" />
+                    android:layout_gravity="center_horizontal">
+                    <TabHost
+                        android:id="@+id/tabhost"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent">
+                            <TabWidget
+                                android:id="@android:id/tabs"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content" />
+                            <FrameLayout
+                                android:id="@android:id/tabcontent"
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"/>
+                        </LinearLayout>
+                    </TabHost>
+
+
+                </LinearLayout>
+
+ <!--Tabs for category ends-->
+
+                <!--<AutoCompleteTextView-->
+                    <!--android:id="@+id/input_category"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_margin="8dp"-->
+                    <!--android:background="@drawable/custom_edittext"-->
+                    <!--android:hint="@string/prompt_category"-->
+                    <!--android:maxLines="1" />-->
+
+                <!--<AutoCompleteTextView-->
+                    <!--android:id="@+id/input_sub_category"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_margin="8dp"-->
+                    <!--android:background="@drawable/custom_edittext"-->
+                    <!--android:hint="@string/prompt_sub_category"-->
+                    <!--android:maxLines="1" />-->
 
                 <RadioGroup
                     android:id="@+id/radio_group"

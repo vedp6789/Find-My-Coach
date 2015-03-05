@@ -1,6 +1,7 @@
 package com.findmycoach.app.fragment_mentee;
 
 import android.app.Activity;
+import android.app.LocalActivityManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,11 +10,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -21,11 +20,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
+import com.findmycoach.app.activity.SubCategoryActivity;
 import com.findmycoach.app.activity.UserListActivity;
 import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.subcategory.Datum;
@@ -44,8 +45,10 @@ import java.util.List;
 public class HomeFragment extends Fragment implements View.OnClickListener, Callback {
 
     private AutoCompleteTextView locationInput;
-    private AutoCompleteTextView categoryInput;
-    private AutoCompleteTextView subCategoryInput;
+//    private AutoCompleteTextView categoryInput;
+//    private AutoCompleteTextView subCategoryInput;
+    private TabHost tabHost;
+    LocalActivityManager localActivityManager;
     private EditText nameInput;
     private AutoCompleteTextView fromTimingInput;
     private AutoCompleteTextView toTimingInput;
@@ -81,12 +84,45 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         View view = inflater.inflate(R.layout.fragment_home_mentee, container, false);
         initialize(view);
         applyActions();
+        localActivityManager.dispatchCreate(savedInstanceState);
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setTabForCategory();
+    }
+
+    private void setTabForCategory() {
+        tabHost.setup(localActivityManager);
+
+
+        TabHost.TabSpec education = tabHost.newTabSpec("Education");
+        education.setIndicator("Education");
+        TabHost.TabSpec sport = tabHost.newTabSpec("Sport");
+        sport.setIndicator("Sport");
+        TabHost.TabSpec vocation = tabHost.newTabSpec("Vocation");
+        vocation.setIndicator("Vocation");
+
+        Intent educationIntent = new Intent(getActivity(), SubCategoryActivity.class);
+        educationIntent.putExtra("row", 9);
+        educationIntent.putExtra("category","Education");
+
+        Intent sportIntent = new Intent(getActivity(), SubCategoryActivity.class);
+        sportIntent.putExtra("row", 15);
+        sportIntent.putExtra("category","Sports");
+
+        Intent vocationIntent = new Intent(getActivity(), SubCategoryActivity.class);
+        vocationIntent.putExtra("row", 3);
+        vocationIntent.putExtra("category","Vocation");
+
+        education.setContent(educationIntent);
+        sport.setContent(sportIntent);
+        vocation.setContent(vocationIntent);
+        tabHost.addTab(education);
+        tabHost.addTab(sport);
+        tabHost.addTab(vocation);
     }
 
     @Override
@@ -108,6 +144,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         if (currentLocationText != null) {
             currentLocationText.setText(NetworkManager.getCurrentLocation(getActivity()));
         }
+        localActivityManager.dispatchResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        localActivityManager.dispatchPause(true);
     }
 
     private void getCategories() {
@@ -180,8 +223,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     private void initialize(View view) {
         locationInput = (AutoCompleteTextView) view.findViewById(R.id.input_location);
-        categoryInput = (AutoCompleteTextView) view.findViewById(R.id.input_category);
-        subCategoryInput = (AutoCompleteTextView) view.findViewById(R.id.input_sub_category);
+//        categoryInput = (AutoCompleteTextView) view.findViewById(R.id.input_category);
+//        subCategoryInput = (AutoCompleteTextView) view.findViewById(R.id.input_sub_category);
         nameInput = (EditText) view.findViewById(R.id.input_name);
         fromTimingInput = (AutoCompleteTextView) view.findViewById(R.id.from_timing);
         toTimingInput = (AutoCompleteTextView) view.findViewById(R.id.to_timing);
@@ -198,6 +241,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         timeBarrierLayout = (LinearLayout) view.findViewById(R.id.time_barrier_layout);
         timeBarrier = (RadioButton) view.findViewById(R.id.on_time);
         noTimeBarrier = (RadioButton) view.findViewById(R.id.no_time);
+        tabHost = (TabHost) view.findViewById(R.id.tabhost);
+        localActivityManager = new LocalActivityManager(getActivity(), false);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
     }
 
@@ -223,15 +268,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private void callSearchApi() {
         progressDialog.show();
         String location = locationInput.getText().toString();
-        String category = categoryInput.getText().toString();
-        String subCategory = subCategoryInput.getText().toString();
+//        String category = categoryInput.getText().toString();
+//        String subCategory = subCategoryInput.getText().toString();
         String name = nameInput.getText().toString();
         String fromTiming = fromTimingInput.getText().toString();
         String toTiming = toTimingInput.getText().toString();
         RequestParams requestParams = new RequestParams();
         requestParams.add("location", location);
-        requestParams.add("category_id", category);
-        requestParams.add("subcategory_id", subCategory);
+//        requestParams.add("category_id", category);
+//        requestParams.add("subcategory_id", subCategory);
         requestParams.add("keyword", name);
         requestParams.add("timing_from", fromTiming);
         requestParams.add("timing_to", toTiming);
@@ -246,10 +291,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
-        } else if (object instanceof Category) {
-            applyCategoryAdapter((Category) object);
-        } else if (object instanceof SubCategory) {
-            applySubCategoryAdapter((SubCategory) object);
+//        } else if (object instanceof Category) {
+//            applyCategoryAdapter((Category) object);
+//        } else if (object instanceof SubCategory) {
+//            applySubCategoryAdapter((SubCategory) object);
         } else {
             progressDialog.dismiss();
             Intent intent = new Intent(getActivity(), UserListActivity.class);
@@ -266,7 +311,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             categories.add(datum.getName());
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, categories);
-        subCategoryInput.setAdapter(adapter);
+//        subCategoryInput.setAdapter(adapter);
     }
 
     private void applyCategoryAdapter(Category category) {
@@ -278,18 +323,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, categories);
-        categoryInput.setAdapter(adapter);
-        categoryInput.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCategory = categoryInput.getText().toString();
-                Log.d(TAG, "Selected Category:" + selectedCategory);
-                Log.d(TAG, "All Categories:" + categories);
-                String selectedCategoryId = data.get(categories.indexOf(selectedCategory)).getId();
-                Log.d(TAG, "Selected Id:" + selectedCategoryId);
-                getSubCategories(selectedCategoryId);
-            }
-        });
+//        categoryInput.setAdapter(adapter);
+//        categoryInput.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                String selectedCategory = categoryInput.getText().toString();
+//                Log.d(TAG, "Selected Category:" + selectedCategory);
+//                Log.d(TAG, "All Categories:" + categories);
+//                String selectedCategoryId = data.get(categories.indexOf(selectedCategory)).getId();
+//                Log.d(TAG, "Selected Id:" + selectedCategoryId);
+//                getSubCategories(selectedCategoryId);
+//            }
+//        });
     }
 
     private void getSubCategories(String selectedCategoryId) {
