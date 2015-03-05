@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,8 +108,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             singleCategory.setIndicator(datum.getName());
 
             Intent intent = new Intent(getActivity(), SubCategoryActivity.class);
-            intent.putExtra("row", 9);
-            intent.putExtra("category",datum.getName());
+            Log.d(TAG, datum.getDataSub().size()+"");
+            StringBuilder subCategory = new StringBuilder();
+            int row = datum.getDataSub().size();
+            for(int x=0; x<row; x++)
+                subCategory.append(datum.getDataSub().get(x).getName()+"#");
+            Log.e(TAG, subCategory.toString());
+            intent.putExtra("row", row);
+            intent.putExtra("category",subCategory.toString());
             singleCategory.setContent(intent);
             tabHost.addTab(singleCategory);
         }

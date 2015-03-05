@@ -24,18 +24,17 @@ public class SubCategoryActivity extends Activity{
         Intent intent = getIntent();
         if(intent != null) {
             rowNumber = intent.getIntExtra("row", 0);
+            if(rowNumber > 0)
+                updateSpinnerValues(intent.getStringExtra("category"));
         }
 
-        if(rowNumber > 0) {
-            updateSpinnerValues(intent.getStringExtra("category"));
-        }
     }
 
     private void updateSpinnerValues(String category) {
         Spinner spinner = (Spinner) findViewById(R.id.spinnerSubCategory);
         String[] rowValue = new String[rowNumber];
         for(int i=0; i<rowNumber; i++)
-            rowValue[i] = category + " : " + (i+1);
+            rowValue[i] = category.split("#")[i];
         spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, rowValue));
     }
 }

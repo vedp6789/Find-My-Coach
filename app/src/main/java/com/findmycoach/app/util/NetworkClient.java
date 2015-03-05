@@ -889,7 +889,7 @@ public class NetworkClient {
     public static void getCategories(Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.get(context, getAbsoluteURL("categories", context), requestParams, new AsyncHttpResponseHandler() {
+        client.post(context, getAbsoluteURL("categorySubCategory", context), requestParams, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         try{
