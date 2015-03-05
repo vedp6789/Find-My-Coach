@@ -49,6 +49,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 //    private AutoCompleteTextView subCategoryInput;
     private TabHost tabHost;
     LocalActivityManager localActivityManager;
+    private Category category;
     private EditText nameInput;
     private AutoCompleteTextView fromTimingInput;
     private AutoCompleteTextView toTimingInput;
@@ -91,38 +92,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setTabForCategory();
     }
 
-    private void setTabForCategory() {
+    private void setTabForCategory(Category categoryResponse) {
+        this.category = categoryResponse;
+        if(categoryResponse.getData().size() < 1)
+            return;
+
         tabHost.setup(localActivityManager);
+        for(int i=0; i<category.getData().size(); i++){
+            com.findmycoach.app.beans.category.Datum datum = category.getData().get(i);
 
+            TabHost.TabSpec singleCategory = tabHost.newTabSpec(datum.getName());
+            singleCategory.setIndicator(datum.getName());
 
-        TabHost.TabSpec education = tabHost.newTabSpec("Education");
-        education.setIndicator("Education");
-        TabHost.TabSpec sport = tabHost.newTabSpec("Sport");
-        sport.setIndicator("Sport");
-        TabHost.TabSpec vocation = tabHost.newTabSpec("Vocation");
-        vocation.setIndicator("Vocation");
-
-        Intent educationIntent = new Intent(getActivity(), SubCategoryActivity.class);
-        educationIntent.putExtra("row", 9);
-        educationIntent.putExtra("category","Education");
-
-        Intent sportIntent = new Intent(getActivity(), SubCategoryActivity.class);
-        sportIntent.putExtra("row", 15);
-        sportIntent.putExtra("category","Sports");
-
-        Intent vocationIntent = new Intent(getActivity(), SubCategoryActivity.class);
-        vocationIntent.putExtra("row", 3);
-        vocationIntent.putExtra("category","Vocation");
-
-        education.setContent(educationIntent);
-        sport.setContent(sportIntent);
-        vocation.setContent(vocationIntent);
-        tabHost.addTab(education);
-        tabHost.addTab(sport);
-        tabHost.addTab(vocation);
+            Intent intent = new Intent(getActivity(), SubCategoryActivity.class);
+            intent.putExtra("row", 9);
+            intent.putExtra("category",datum.getName());
+            singleCategory.setContent(intent);
+            tabHost.addTab(singleCategory);
+        }
     }
 
     @Override
@@ -291,7 +280,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
-//        } else if (object instanceof Category) {
+        } else if (object instanceof Category) {
+            setTabForCategory((Category) object);
 //            applyCategoryAdapter((Category) object);
 //        } else if (object instanceof SubCategory) {
 //            applySubCategoryAdapter((SubCategory) object);
