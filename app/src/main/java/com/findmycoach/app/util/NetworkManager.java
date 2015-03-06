@@ -8,6 +8,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.Locale;
@@ -29,6 +30,8 @@ public class NetworkManager {
             return currentAddress.getAddressLine(0) + ", " + currentAddress.getLocality() + ", " + currentAddress.getAdminArea();
         } catch (Exception e) {
             Log.d(TAG, "Exception: " + e.getMessage());
+            Toast.makeText(context, "GPS is off",Toast.LENGTH_SHORT).show();
+
         }
         return "";
     }

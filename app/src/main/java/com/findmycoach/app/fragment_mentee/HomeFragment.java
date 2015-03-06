@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     private AutoCompleteTextView locationInput;
     private TabHost tabHost;
-    LocalActivityManager localActivityManager;
+    private LocalActivityManager localActivityManager;
     private Category category;
     private EditText nameInput;
     private AutoCompleteTextView fromTimingInput;
@@ -110,8 +110,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             Intent intent = new Intent(getActivity(), SubCategoryActivity.class);
             StringBuilder subCategory = new StringBuilder();
             StringBuilder subCategoryId = new StringBuilder();
-            int row = datum.getDataSub().size();
-            for(int x=0; x<row; x++) {
+            int row = datum.getDataSub().size()+1;
+            subCategory.append("Select one#");
+            subCategoryId.append("-1#");
+            for(int x=0; x<row-1; x++) {
                 subCategory.append(datum.getDataSub().get(x).getName() + "#");
                 subCategoryId.append(datum.getDataSub().get(x).getId() + "#");
             }
@@ -140,28 +142,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     public void onStart() {
         super.onStart();
         getCategories();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (locationInput != null) {
-            locationInput.setText(NetworkManager.getCurrentLocation(getActivity()));
-            if (locationLayout != null) {
-                locationLayout.setVisibility(View.VISIBLE);
-                locationInput.setVisibility(View.GONE);
-            }
-        }
-        if (currentLocationText != null) {
-            currentLocationText.setText(NetworkManager.getCurrentLocation(getActivity()));
-        }
-        localActivityManager.dispatchResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        localActivityManager.dispatchPause(true);
     }
 
     private void getCategories() {
@@ -285,9 +265,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         String fromTiming = fromTimingInput.getText().toString();
         String toTiming = toTimingInput.getText().toString();
         RequestParams requestParams = new RequestParams();
-        Log.d(TAG, "Sub category id : " + subCategoryIds[tabIndex]);
         requestParams.add("location", location);
-        requestParams.add("subcategory_id", subCategoryIds[tabIndex]);
+        try{
+            Log.d(TAG, "Sub category id : " + subCategoryIds[tabIndex]);
+            if(!subCategoryIds[tabIndex].trim().equals("-1"))
+                requestParams.add("subcategory_id", subCategoryIds[tabIndex]);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
         requestParams.add("keyword", name);
         requestParams.add("timing_from", fromTiming);
         requestParams.add("timing_to", toTiming);
