@@ -2,13 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:gravity="center"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:padding="@dimen/activity_vertical_margin"
     tools:context="com.findmycoach.student.activity.SearchActivity">
 
     <ScrollView
@@ -26,15 +21,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:gravity="center_horizontal"
                     android:src="@drawable/user_icon" />
 
@@ -50,7 +43,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -89,46 +81,63 @@
                     android:hint="@string/prompt_location"
                     android:visibility="gone" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/input_category"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/custom_edittext"
-                    android:hint="@string/prompt_category"
-                    android:maxLines="1" />
+<!--Tabs for category starts-->
 
-                <AutoCompleteTextView
-                    android:id="@+id/input_sub_category"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/custom_edittext"
-                    android:hint="@string/prompt_sub_category"
-                    android:maxLines="1" />
+                    android:layout_gravity="center_horizontal">
+                    <TabHost
+                        android:id="@+id/tabhost"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent">
+                            <TabWidget
+                                android:id="@android:id/tabs"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content" />
+                            <FrameLayout
+                                android:id="@android:id/tabcontent"
+                                android:layout_width="fill_parent"
+                                android:background="@android:color/darker_gray"
+                                android:layout_height="fill_parent"/>
+                        </LinearLayout>
+                    </TabHost>
+
+
+                </LinearLayout>
+
+ <!--Tabs for category ends-->
+
 
                 <RadioGroup
                     android:id="@+id/radio_group"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left">
 
-                    <RadioButton
-                        android:id="@+id/no_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="8dp"
-                        android:checked="true"
-                        android:text="No Time Barrier" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal">
+                        <RadioButton
+                            android:id="@+id/no_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:checked="true"
+                            android:text="No Time Barrier" />
 
-                    <RadioButton
-                        android:id="@+id/on_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_margin="8dp"
-                        android:text="Time Barrier" />
+                        <RadioButton
+                            android:id="@+id/on_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:text="Time Barrier" />
+                        </LinearLayout>
                 </RadioGroup>
 
                 <LinearLayout
@@ -198,63 +207,152 @@
                     </LinearLayout>
 
                     <HorizontalScrollView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:scrollbarAlwaysDrawHorizontalTrack="true">
+                        android:scrollbarAlwaysDrawHorizontalTrack="true"
+                        android:layout_gravity="center_horizontal">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                            <CheckBox
-                                android:id="@+id/mon"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="4dp"
-                                android:text="Mon" />
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:layout_margin="4dp">
 
-                            <CheckBox
-                                android:id="@+id/tue"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="4dp"
-                                android:text="Tue" />
+                                <CheckBox
+                                    android:id="@+id/mon"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
 
-                            <CheckBox
-                                android:id="@+id/wed"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="4dp"
-                                android:text="Wed" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Mon"/>
 
-                            <CheckBox
-                                android:id="@+id/thu"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="4dp"
-                                android:text="Thu" />
+                            </LinearLayout>
 
-                            <CheckBox
-                                android:id="@+id/fri"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="4dp"
-                                android:text="Fri" />
 
-                            <CheckBox
-                                android:id="@+id/sat"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="4dp"
-                                android:text="Sat" />
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:layout_margin="4dp">
 
-                            <CheckBox
-                                android:id="@+id/sun"
+                                <CheckBox
+                                    android:id="@+id/tue"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Tue"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="4dp"
-                                android:text="Sun" />
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:layout_margin="4dp">
+
+                                <CheckBox
+                                    android:id="@+id/wed"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Wed"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:layout_margin="4dp">
+
+                                <CheckBox
+                                    android:id="@+id/thu"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Thu"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:layout_margin="4dp">
+
+                                <CheckBox
+                                    android:id="@+id/fri"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Fri"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:layout_margin="4dp">
+
+                                <CheckBox
+                                    android:id="@+id/sat"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Sat"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:layout_margin="4dp">
+
+                                <CheckBox
+                                    android:id="@+id/sun"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Sun"/>
+
+                            </LinearLayout>
+
+
+
 
                         </LinearLayout>
                     </HorizontalScrollView>
@@ -265,7 +363,7 @@
                     android:id="@+id/input_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_margin ="8dp"
                     android:visibility="gone"
                     android:background="@drawable/custom_edittext"
                     android:hint="@string/prompt_name"

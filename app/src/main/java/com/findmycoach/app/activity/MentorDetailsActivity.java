@@ -25,7 +25,6 @@ import com.findmycoach.app.beans.mentor.Data;
 import com.findmycoach.app.beans.mentor.Response;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
-import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
@@ -42,7 +41,6 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     private TextView profileAccomplishment;
     private TextView profileCharges;
     private TextView profileTravelAvailable;
-    private TextView profileLocation;
     private Button googleLink;
     private Button facebookLink;
     private Data userInfo = null;
@@ -84,7 +82,6 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         profileAccomplishment = (TextView) findViewById(R.id.profile_accomplishment);
         profileCharges = (TextView) findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) findViewById(R.id.profile_travel_available);
-        profileLocation = (TextView) findViewById(R.id.profile_location);
         googleLink = (Button) findViewById(R.id.profile_google_button);
         facebookLink = (Button) findViewById(R.id.profile_facebook_button);
 
@@ -123,7 +120,6 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             profileCharges.setText("\u20B9 " + userInfo.getCharges());
         }
         profileRatting.setText(userInfo.getRating());
-        profileLocation.setText(NetworkManager.getCurrentLocation(this));
         if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {
             profileTravelAvailable.setText(getResources().getString(R.string.yes));
         } else {

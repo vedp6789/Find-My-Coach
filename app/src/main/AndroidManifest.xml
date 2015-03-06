@@ -107,7 +107,7 @@
         <activity
             android:name="com.findmycoach.app.activity.AddNewSlotActivity"
             android:label="@string/add_new_slot"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         android:label="@string/add_new_slot" />
         <activity
             android:name="com.findmycoach.app.activity.StudentDetailActivity"
@@ -122,11 +122,14 @@
         <activity
             android:name=".activity.ScheduleYourVacation"
             android:label="@string/schedule_vacation"
-            android:screenOrientation="portrait"></activity>
+
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.ScheduleNewClass"
             android:label="@string/class_schedule"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
 
+
+        <activity android:name=".activity.SubCategoryActivity"/>
 
 
         <receiver
