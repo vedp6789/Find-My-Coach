@@ -404,7 +404,7 @@ public class ScheduleYourVacation extends Activity implements SetDate,SetTime {
                         requestParams.add("slot_time_value", String.valueOf(slot_time_value));*/
                         String auth_token = StorageHelper.getUserDetails(ScheduleYourVacation.this, "auth_token");
                         progressDialog.show();
-                        NetworkClient.scheduleVaccation(ScheduleYourVacation.this, requestParams, auth_token, new Callback() {
+                        NetworkClient.scheduleVacation(ScheduleYourVacation.this, requestParams, auth_token, new Callback() {
 
                             @Override
                             public void successOperation(Object object, int statusCode, int calledApiValue) {

@@ -1045,7 +1045,7 @@ public class NetworkClient {
         });
     }
 
-    public static void scheduleVaccation(final Context context, RequestParams requestParams,String auth_token, final Callback callback, final int calledApiValue) {
+    public static void scheduleVacation(final Context context, RequestParams requestParams,String auth_token, final Callback callback, final int calledApiValue) {
         if(!NetworkManager.isNetworkConnected(context)){
             callback.failureOperation(context.getResources().getString(R.string.check_network_connection),-1,calledApiValue);
             return;

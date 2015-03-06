@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,18 @@ import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.ScheduleYourVacation;
 import com.findmycoach.app.adapter.CalendarGridAdapter;
 import com.findmycoach.app.R;
+import com.findmycoach.app.beans.CalendarSchedule.Day;
+import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
+import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -34,6 +45,14 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     private int month, year;
     private static final String dateTemplate = "MMMM yyyy";
     private MyScheduleFragment myScheduleFragment;
+    private int days_in_month;
+    private static final String TAG="FMC";
+
+
+    //List<ArrayList> month_cal=null;
+    //ArrayList<ArrayList> calendar_day=null;
+    ArrayList<Day> day_schedule=null;
+
 
     public MyScheduleFragment() {
         // Required empty public constructor
@@ -48,6 +67,118 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myScheduleFragment = this;
+        _calendar = Calendar.getInstance(Locale.getDefault());
+        month = _calendar.get(Calendar.MONTH) + 1;
+        year = _calendar.get(Calendar.YEAR);
+
+        Calendar calendar=new GregorianCalendar(year,month-1,1);
+        days_in_month=calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        Log.d(TAG,month+" Month of "+year+" have days: "+calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+
+        //month_cal=new ArrayList<ArrayList>();
+        //calendar_day=new ArrayList<ArrayList>();
+        day_schedule=new ArrayList<Day>();
+
+
+        JSONArray jsonArray=getDemoCalendarDetails(days_in_month,month,year);
+
+        calendarEventSchduler(jsonArray);
+
+
+
+
+
+
+
+        //RequestParams requestParams=new RequestParams();
+
+    }
+
+    private void calendarEventSchduler(JSONArray jsonArray) {
+        for(int e=0;e <jsonArray.length();e++){
+            Day day=new Day();
+            try {
+                JSONObject jsonObject=jsonArray.getJSONObject(e);
+                day.setDay(jsonObject.getInt("day"));
+                day.setMonth(jsonObject.getInt("month"));
+                day.setYear(jsonObject.getInt("year"));
+                List<DayEvent> dayEvents = new ArrayList<DayEvent>();
+                JSONArray eventArray=jsonObject.getJSONArray("event");
+                for (int e_no=0; e_no < eventArray.length();e_no++){
+                    DayEvent dayEvent=new DayEvent();
+                    JSONObject jsonObject1=eventArray.getJSONObject(e_no);
+                    dayEvent.setEvent_start_hour(jsonObject1.getInt("start_hour"));
+                    dayEvent.setEvent_start_min(jsonObject1.getInt("start_min"));
+                    dayEvent.setEvent_stop_hour(jsonObject1.getInt("stop_hour"));
+                    dayEvent.setEvent_stop_min(jsonObject1.getInt("stop_min"));
+                    dayEvent.setEvent_name(jsonObject1.getString("name"));
+                    dayEvents.add(dayEvent);
+                }
+                day.setDayEvents(dayEvents);
+                day_schedule.add(day);
+                //calendar_day.add(day_schedule);
+                //month_cal.add(calendar_day);
+                //month_cal.add(d);
+
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+
+       /* for(Day d : day_schedule){
+            Log.d(TAG,"******************************************");
+            Log.d(TAG,"Day : " + d.getDay() + ", Month : " + d.getMonth() + ", Year : " + d.getYear());
+            for(DayEvent de : d.getDayEvents())
+                Log.d(TAG,"Start Hour : " + de.getEvent_start_hour() + ", Start Min : " + de.getEvent_start_min() +
+                        ", Stop Hour : " + de.getEvent_stop_hour() + ", Stop Min : " + de.getEvent_stop_min() + ", Event-Name : " + de.getEvent_name());
+        }*/
+    }
+
+    private JSONArray getDemoCalendarDetails(int days,int month,int year) {
+        JSONArray jsonArray=new JSONArray();
+        for (int i=1;i<days+1;i++){
+            JSONObject jsonObject1=new JSONObject();
+            try {
+                JSONObject event1=new JSONObject();
+                event1.put("start_hour",10);
+                event1.put("start_min",30);
+                event1.put("stop_hour",11);
+                event1.put("stop_min",45);
+                event1.put("name","Android Tutorial");
+                JSONObject event2=new JSONObject();
+                event2.put("start_hour",13);
+                event2.put("start_min",50);
+                event2.put("stop_hour",17);
+                event2.put("stop_min",45);
+                event2.put("name","Science Tutorial");
+                JSONObject event3=new JSONObject();
+                event3.put("start_hour",8);
+                event3.put("start_min",0);
+                event3.put("stop_hour",9);
+                event3.put("stop_min",30);
+                event3.put("name","Java Programming");
+
+                JSONArray event_array=new JSONArray();
+                if((i%8) != 0 ){
+                    event_array.put(event1);
+                    event_array.put(event2);
+                    event_array.put(event3);
+                }
+
+
+                jsonObject1.put("day",i);
+                jsonObject1.put("month",month);
+                jsonObject1.put("year",year);
+                jsonObject1.put("event",event_array);
+
+                jsonArray.put(jsonObject1);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+return jsonArray;
     }
 
     @Override
@@ -70,9 +201,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     }
 
     private void initialize(View view) {
-        _calendar = Calendar.getInstance(Locale.getDefault());
-        month = _calendar.get(Calendar.MONTH) + 1;
-        year = _calendar.get(Calendar.YEAR);
+
 
         add_slot = (TextView) view.findViewById(R.id.tv_add_new_slot);
         add_slot.setOnClickListener(this);
@@ -92,7 +221,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         calendarView = (GridView) view.findViewById(R.id.calendar);
 
         // Initialised
-        adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment);
+        adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment,day_schedule);
         adapter.notifyDataSetChanged();
         calendarView.setAdapter(adapter);
     }
@@ -158,7 +287,17 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     }
 
     private void setGridCellAdapterToDate(int month, int year) {
-        adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment);
+
+        Calendar calendar=new GregorianCalendar(year,month-1,1);
+        days_in_month=calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        Log.d(TAG,month+" Month of "+year+" have days: "+calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+        JSONArray jsonArray=getDemoCalendarDetails(days_in_month,month,year);
+
+        calendarEventSchduler(jsonArray);
+
+
+        adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment,day_schedule);
         _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
         currentMonth.setText(DateFormat.format(dateTemplate,
                 _calendar.getTime()));

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 //import com.alamkanak.weekview.WeekView;
 //import com.alamkanak.weekview.WeekViewEvent;
+import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.views.WeekView;
 import com.findmycoach.app.util.WeekViewEvent;
@@ -52,6 +53,8 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             day = getIntent.getExtras().getInt("day");
             month = getIntent.getExtras().getInt("month");
             year = getIntent.getExtras().getInt("year");
+            getIntent.getSerializableExtra("day_bean");
+
 
             StorageHelper.storePreference(SetScheduleActivity.this,"day",String.valueOf(day));
             StorageHelper.storePreference(SetScheduleActivity.this,"month",String.valueOf(month));
