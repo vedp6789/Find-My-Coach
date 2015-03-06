@@ -20,7 +20,6 @@ import com.findmycoach.app.beans.student.Data;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
-import com.findmycoach.app.util.NetworkManager;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
@@ -36,7 +35,6 @@ public class StudentDetailActivity  extends Activity implements Callback {
     private ImageView profileImage;
     private TextView profileName;
     private TextView profileAddress;
-    private TextView profileLocation;
     private TextView trainingLocation;
     private TextView mentorFor;
     private TextView coachingType;
@@ -84,7 +82,6 @@ public class StudentDetailActivity  extends Activity implements Callback {
         mentorFor = (TextView) findViewById(R.id.mentor_for);
         coachingType = (TextView) findViewById(R.id.coaching_type);
         areaOfInterest = (ListView) findViewById(R.id.areas_of_interest);
-        profileLocation = (TextView) findViewById(R.id.profile_location);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
     }
@@ -105,7 +102,6 @@ public class StudentDetailActivity  extends Activity implements Callback {
             address = address + studentDetails.getZip();
         }
         profileAddress.setText(address);
-        profileLocation.setText(NetworkManager.getCurrentLocation(this));
         if (studentDetails.getPhotograph() != null && !studentDetails.getPhotograph().equals("")) {
             PicassoTools.clearCache(Picasso.with(this));
             Picasso.with(this)
