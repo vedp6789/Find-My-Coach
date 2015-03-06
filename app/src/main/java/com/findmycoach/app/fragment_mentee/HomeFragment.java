@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -62,6 +61,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private int FLAG;
     public static String[] subCategoryIds;
     private int tabIndex;
+    private View fragmentView;
+    private String location;
 
     private static final String TAG="FMC";
 
@@ -82,17 +83,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home_mentee, container, false);
-        initialize(view);
-        applyActions();
-        localActivityManager.dispatchCreate(savedInstanceState);
-        return view;
+        fragmentView = inflater.inflate(R.layout.fragment_home_mentee, container, false);
+        return fragmentView;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        location = NetworkManager.getCurrentLocation(getActivity());
+        initialize(fragmentView);
+        if(location.equals("")){
+            locationInput.setVisibility(View.VISIBLE);
+            locationLayout.setVisibility(View.GONE);
+        }
+        applyActions();
+        localActivityManager.dispatchCreate(savedInstanceState);
     }
+
 
     private void setTabForCategory(Category categoryResponse) {
         this.category = categoryResponse;
@@ -223,9 +230,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         changeLocation.setOnClickListener(this);
         searchButton.setOnClickListener(this);
         radioGroup = (RadioGroup) view.findViewById(R.id.radio_group);
-        currentLocationText.setText(NetworkManager.getCurrentLocation(getActivity()));
-        locationInput.setText(NetworkManager.getCurrentLocation(getActivity()));
         progressDialog = new ProgressDialog(getActivity());
+        currentLocationText.setText(location);
+        locationInput.setText(location);
         locationLayout = (LinearLayout) view.findViewById(R.id.current_location_layout);
         timeBarrierLayout = (LinearLayout) view.findViewById(R.id.time_barrier_layout);
         timeBarrier = (RadioButton) view.findViewById(R.id.on_time);
