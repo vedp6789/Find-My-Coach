@@ -3,17 +3,20 @@ package com.findmycoach.app.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.fragment_mentee.HomeFragment;
 
 /**
  * Created by prem on 5/3/15.
  */
 public class SubCategoryActivity extends Activity{
 
-    private int rowNumber;
+    private int rowNumber, columnNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,17 +27,33 @@ public class SubCategoryActivity extends Activity{
         Intent intent = getIntent();
         if(intent != null) {
             rowNumber = intent.getIntExtra("row", 0);
-            if(rowNumber > 0)
-                updateSpinnerValues(intent.getStringExtra("category"));
+            columnNumber = intent.getIntExtra("column_index",0);
+            if(rowNumber > 0) {
+                updateSpinnerValues(intent.getStringExtra("sub_category"), intent.getStringExtra("sub_category_id"));
+            }
         }
 
     }
 
-    private void updateSpinnerValues(String category) {
+    private void updateSpinnerValues(String subCat, String subCatId) {
         Spinner spinner = (Spinner) findViewById(R.id.spinnerSubCategory);
         String[] rowValue = new String[rowNumber];
-        for(int i=0; i<rowNumber; i++)
-            rowValue[i] = category.split("#")[i];
+        String[] subCategory = subCat.split("#");
+        final String[] subCategoryId = subCatId.split("#");
+        for(int i=0; i<rowNumber; i++) {
+            rowValue[i] = subCategory[i];
+        }
         spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, rowValue));
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                HomeFragment.subCategoryIds[columnNumber] = subCategoryId[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 }

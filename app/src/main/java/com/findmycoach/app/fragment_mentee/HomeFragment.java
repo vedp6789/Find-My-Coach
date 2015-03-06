@@ -30,8 +30,6 @@ import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.SubCategoryActivity;
 import com.findmycoach.app.activity.UserListActivity;
 import com.findmycoach.app.beans.category.Category;
-import com.findmycoach.app.beans.subcategory.Datum;
-import com.findmycoach.app.beans.subcategory.SubCategory;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.util.Callback;
@@ -46,8 +44,6 @@ import java.util.List;
 public class HomeFragment extends Fragment implements View.OnClickListener, Callback {
 
     private AutoCompleteTextView locationInput;
-//    private AutoCompleteTextView categoryInput;
-//    private AutoCompleteTextView subCategoryInput;
     private TabHost tabHost;
     LocalActivityManager localActivityManager;
     private Category category;
@@ -63,6 +59,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private RadioButton timeBarrier;
     private RadioButton noTimeBarrier;
     private RadioGroup radioGroup;
+    private int FLAG;
+    public static String[] subCategoryIds;
+    private int tabIndex;
 
     private static final String TAG="FMC";
 
@@ -97,28 +96,44 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     private void setTabForCategory(Category categoryResponse) {
         this.category = categoryResponse;
-        if(categoryResponse.getData().size() < 1)
+        if(categoryResponse.getData().size() < 1 || FLAG > 0)
             return;
 
         tabHost.setup(localActivityManager);
+        subCategoryIds = new String[category.getData().size()];
         for(int i=0; i<category.getData().size(); i++){
             com.findmycoach.app.beans.category.Datum datum = category.getData().get(i);
 
-            TabHost.TabSpec singleCategory = tabHost.newTabSpec(datum.getName());
+            TabHost.TabSpec singleCategory = tabHost.newTabSpec(i+"");
             singleCategory.setIndicator(datum.getName());
 
             Intent intent = new Intent(getActivity(), SubCategoryActivity.class);
-            Log.d(TAG, datum.getDataSub().size()+"");
             StringBuilder subCategory = new StringBuilder();
+            StringBuilder subCategoryId = new StringBuilder();
             int row = datum.getDataSub().size();
-            for(int x=0; x<row; x++)
-                subCategory.append(datum.getDataSub().get(x).getName()+"#");
-            Log.e(TAG, subCategory.toString());
+            for(int x=0; x<row; x++) {
+                subCategory.append(datum.getDataSub().get(x).getName() + "#");
+                subCategoryId.append(datum.getDataSub().get(x).getId() + "#");
+            }
+            Log.d(TAG, datum.getDataSub().size()+"");
+            Log.d(TAG, subCategory.toString());
+            Log.d(TAG, subCategoryId.toString());
             intent.putExtra("row", row);
-            intent.putExtra("category",subCategory.toString());
+            intent.putExtra("sub_category", subCategory.toString());
+            intent.putExtra("sub_category_id",subCategoryId.toString());
+            intent.putExtra("column_index", i);
             singleCategory.setContent(intent);
             tabHost.addTab(singleCategory);
         }
+
+        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                tabIndex = Integer.parseInt(tabId);
+            }
+        });
+
+        FLAG = 1;
     }
 
     @Override
@@ -219,8 +234,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     private void initialize(View view) {
         locationInput = (AutoCompleteTextView) view.findViewById(R.id.input_location);
-//        categoryInput = (AutoCompleteTextView) view.findViewById(R.id.input_category);
-//        subCategoryInput = (AutoCompleteTextView) view.findViewById(R.id.input_sub_category);
         nameInput = (EditText) view.findViewById(R.id.input_name);
         fromTimingInput = (AutoCompleteTextView) view.findViewById(R.id.from_timing);
         toTimingInput = (AutoCompleteTextView) view.findViewById(R.id.to_timing);
@@ -262,17 +275,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     }
 
     private void callSearchApi() {
+        if(!NetworkManager.isNetworkConnected(getActivity())){
+            Toast.makeText(getActivity(), getResources().getString(R.string.check_network_connection),Toast.LENGTH_SHORT).show();
+            return;
+        }
         progressDialog.show();
         String location = locationInput.getText().toString();
-//        String category = categoryInput.getText().toString();
-//        String subCategory = subCategoryInput.getText().toString();
         String name = nameInput.getText().toString();
         String fromTiming = fromTimingInput.getText().toString();
         String toTiming = toTimingInput.getText().toString();
         RequestParams requestParams = new RequestParams();
+        Log.d(TAG, "Sub category id : " + subCategoryIds[tabIndex]);
         requestParams.add("location", location);
-//        requestParams.add("category_id", category);
-//        requestParams.add("subcategory_id", subCategory);
+        requestParams.add("subcategory_id", subCategoryIds[tabIndex]);
         requestParams.add("keyword", name);
         requestParams.add("timing_from", fromTiming);
         requestParams.add("timing_to", toTiming);
@@ -289,57 +304,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             updateAutoSuggestion(suggestion);
         } else if (object instanceof Category) {
             setTabForCategory((Category) object);
-//            applyCategoryAdapter((Category) object);
-//        } else if (object instanceof SubCategory) {
-//            applySubCategoryAdapter((SubCategory) object);
         } else {
             progressDialog.dismiss();
             Intent intent = new Intent(getActivity(), UserListActivity.class);
             intent.putExtra("list", (String) object);
             startActivity(intent);
         }
-    }
-
-    private void applySubCategoryAdapter(SubCategory subCategory) {
-        final List<Datum> data = subCategory.getData();
-        List<String> categories = new ArrayList<String>();
-        for (int index = 0; index < data.size(); index++) {
-            com.findmycoach.app.beans.subcategory.Datum datum = data.get(index);
-            categories.add(datum.getName());
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, categories);
-//        subCategoryInput.setAdapter(adapter);
-    }
-
-    private void applyCategoryAdapter(Category category) {
-        final List<com.findmycoach.app.beans.category.Datum> data = category.getData();
-        final List<String> categories = new ArrayList<String>();
-        for (int index = 0; index < data.size(); index++) {
-            com.findmycoach.app.beans.category.Datum datum = data.get(index);
-            categories.add(datum.getName());
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, categories);
-//        categoryInput.setAdapter(adapter);
-//        categoryInput.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                String selectedCategory = categoryInput.getText().toString();
-//                Log.d(TAG, "Selected Category:" + selectedCategory);
-//                Log.d(TAG, "All Categories:" + categories);
-//                String selectedCategoryId = data.get(categories.indexOf(selectedCategory)).getId();
-//                Log.d(TAG, "Selected Id:" + selectedCategoryId);
-//                getSubCategories(selectedCategoryId);
-//            }
-//        });
-    }
-
-    private void getSubCategories(String selectedCategoryId) {
-        RequestParams requestParams = new RequestParams();
-        requestParams.add("id", selectedCategoryId);
-        String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
-        NetworkClient.getSubCategories(getActivity(), requestParams, authToken, this, 33);
     }
 
     private void updateAutoSuggestion(Suggestion suggestion) {
