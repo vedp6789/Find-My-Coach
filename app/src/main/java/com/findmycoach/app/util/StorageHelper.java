@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.findmycoach.app.R;
 
@@ -84,9 +83,9 @@ public class StorageHelper {
         pathVideos.mkdirs();
 
         storePreference(context,"image_path", pathImages.getPath());
-        Log.e("FMC", "StorageHelper : " + pathImages.getPath());
+//        Log.e("FMC", "StorageHelper : " + pathImages.getPath());
         storePreference(context,"video_path", pathVideos.getPath());
-        Log.e("FMC", "StorageHelper : " + pathVideos.getPath());
+//        Log.e("FMC", "StorageHelper : " + pathVideos.getPath());
     }
 
 }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.category.Datum;
@@ -40,7 +39,7 @@ public class DataBase extends SQLiteOpenHelper {
         db = getWritableDatabase();
     }
 
-    public long insertData(Category category){
+    public void insertData(Category category){
         ContentValues contentValues = new ContentValues();
         for(Datum datum : category.getData()) {
             for(DatumSub datumSub : datum.getDataSub()){
@@ -51,7 +50,7 @@ public class DataBase extends SQLiteOpenHelper {
                 db.insert(TABLE_NAME,null,contentValues);
             }
         }
-        return 0;
+        db.close();
     }
 
     public Category selectAllSubCategory(){
@@ -62,8 +61,8 @@ public class DataBase extends SQLiteOpenHelper {
             Datum datum = new Datum();
             datum.setName(cursorCategory.getString(0));
             datum.setId(cursorCategory.getString(1));
-            Log.d("FMC", datum.getName() + " : " + datum.getId());
-            Log.d("FMC", "*********************************************");
+//            Log.d("FMC", datum.getName() + " : " + datum.getId());
+//            Log.d("FMC", "*********************************************");
 
             List<DatumSub> datumSubs = new ArrayList<DatumSub>();
             //tableName, columns name in array, selection(where), selection args, groupby, having, orderby
@@ -72,16 +71,17 @@ public class DataBase extends SQLiteOpenHelper {
                 DatumSub datumSub = new DatumSub();
                 datumSub.setId(cursorSubCategory.getString(1));
                 datumSub.setName(cursorSubCategory.getString(0));
-                Log.d("FMC", datumSub.getName() + " : " + datumSub.getId());
+//                Log.d("FMC", datumSub.getName() + " : " + datumSub.getId());
                 datumSubs.add(datumSub);
             }
-            Log.e("FMC", "*********************************************");
+//            Log.e("FMC", "*********************************************");
             datum.setDataSub(datumSubs);
             datums.add(datum);
         }
         Category category = new Category();
         category.setData(datums);
         category.setMessage("From db");
+        db.close();
         return category;
     }
 

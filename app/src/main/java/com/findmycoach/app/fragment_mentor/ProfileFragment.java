@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.EditProfileActivityMentor;
 import com.findmycoach.app.beans.authentication.Data;
@@ -26,11 +27,12 @@ import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
-import com.findmycoach.app.R;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.PicassoTools;
+
+import java.util.List;
 
 public class ProfileFragment extends Fragment implements Callback {
 
@@ -43,6 +45,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView profileProfession;
     private TextView profileAccomplishment;
     private TextView profileCharges;
+    private TextView areaOfCoaching;
     private TextView profileTravelAvailable;
     private TextView profileLocation;
     private Button googleLink;
@@ -100,6 +103,7 @@ public class ProfileFragment extends Fragment implements Callback {
         profileLocation = (TextView) view.findViewById(R.id.profile_location);
         googleLink = (Button) view.findViewById(R.id.profile_google_button);
         facebookLink = (Button) view.findViewById(R.id.profile_facebook_button);
+        areaOfCoaching = (TextView) view.findViewById(R.id.areas_of_coaching);
     }
 
     @Override
@@ -178,6 +182,21 @@ public class ProfileFragment extends Fragment implements Callback {
         if (userInfo.getCharges() != null) {
             profileCharges.setText("\u20B9 " + userInfo.getCharges());
         }
+
+        List<String> areaOfInterests = userInfo.getSubCategoryName();
+        if (areaOfInterests.get(0)!=null && !areaOfInterests.get(0).equals(" ")) {
+            String areaOfInterest = "";
+            for (int index = 0; index < areaOfInterests.size(); index++) {
+                if (index != 0) {
+                    areaOfInterest = areaOfInterest + ", " + areaOfInterests.get(index);
+                } else {
+                    areaOfInterest = areaOfInterest + areaOfInterests.get(index);
+                }
+            }
+            areaOfCoaching.setText(areaOfInterest);
+        }
+
+
         profileRatting.setText(userInfo.getRating());
         profileLocation.setText(NetworkManager.getCurrentLocation(getActivity()));
         if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {

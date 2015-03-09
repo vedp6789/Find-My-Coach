@@ -104,11 +104,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         Category categoryFromDb = dataBase.selectAllSubCategory();
         if(categoryFromDb.getData().size() < 1) {
             getCategories();
-            Toast.makeText(getActivity(),"api called",Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "sub category api called");
         }
         else {
             setTabForCategory(categoryFromDb);
-            Toast.makeText(getActivity(),"api not called",Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "sub category api not called");
         }
     }
 
@@ -136,9 +136,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 subCategory.append(datum.getDataSub().get(x).getName() + "#");
                 subCategoryId.append(datum.getDataSub().get(x).getId() + "#");
             }
-            Log.d(TAG, datum.getDataSub().size()+"");
-            Log.d(TAG, subCategory.toString());
-            Log.d(TAG, subCategoryId.toString());
+//            Log.d(TAG, datum.getDataSub().size()+"");
+//            Log.d(TAG, subCategory.toString());
+//            Log.d(TAG, subCategoryId.toString());
             intent.putExtra("row", row);
             intent.putExtra("sub_category", subCategory.toString());
             intent.putExtra("sub_category_id",subCategoryId.toString());
