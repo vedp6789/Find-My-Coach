@@ -29,7 +29,6 @@ public class NetworkManager {
             counter++;
             return "";
         }
-        Log.e(TAG, "getCurrentLocation called : " + context.toString());
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         Location currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());

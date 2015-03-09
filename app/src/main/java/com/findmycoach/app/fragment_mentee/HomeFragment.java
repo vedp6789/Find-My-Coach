@@ -32,6 +32,7 @@ import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
@@ -98,6 +99,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         }
         applyActions();
         localActivityManager.dispatchCreate(savedInstanceState);
+
+        DataBase dataBase = new DataBase(getActivity());
+        Category categoryFromDb = dataBase.selectAllSubCategory();
+        if(categoryFromDb.getData().size() < 1) {
+            getCategories();
+            Toast.makeText(getActivity(),"api called",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            setTabForCategory(categoryFromDb);
+            Toast.makeText(getActivity(),"api not called",Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -148,7 +160,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     @Override
     public void onStart() {
         super.onStart();
-        getCategories();
     }
 
     private void getCategories() {
@@ -296,6 +307,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             updateAutoSuggestion(suggestion);
         } else if (object instanceof Category) {
             setTabForCategory((Category) object);
+            DataBase dataBase = new DataBase(getActivity());
+            dataBase.insertData((Category) object);
         } else {
             progressDialog.dismiss();
             Intent intent = new Intent(getActivity(), UserListActivity.class);
