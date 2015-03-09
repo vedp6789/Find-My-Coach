@@ -128,6 +128,10 @@
             android:label="@string/class_schedule"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".activity.PaymentDetailsActivity"
+            android:label="@string/payment_details"
+            android:screenOrientation="portrait"/>
+
 
         <activity android:name=".activity.SubCategoryActivity"/>
 

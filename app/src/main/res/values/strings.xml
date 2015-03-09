@@ -447,6 +447,12 @@
     <string name="set_schedule">Schedule</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_enter_code">Enter 6 character code here.</string>
+    <string name="hint_enter_card_number">Card number</string>
+    <string name="hint_name_on_card">Name on card</string>
+    <string name="hint_date_of_expiry">Date of expiry</string>
+    <string name="hint_enter_cvv">CVV</string>
+    <string name="button_skip">SKIP</string>
+    <string name="button_save_and_continue">Save and continue</string>
     <string name="terms">Welcome to Find My Coach. If you continue to use this app you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern ANI Technologies Private Limited relationship with you in relation to this website and the Service .The term FMC or us or we refers to the owner of the website whose registered office is ANI TECHNOLOGIES PRIVATE LIMITED.</string>
     <string name="dummy_contain_of_message">This is the dummy contain of message </string>
     <string name="enter_valid_email">Please enter valid email</string>
@@ -465,6 +471,8 @@
     <string name="fmc_service">FMC Service</string>
     <string name="fmc_service_description">FMC running in service to allow push notification.</string>
     <string name="class_schedule">Class Schedule</string>
+    <string name="payment_details">Payment details</string>
+    <string name="payment_details_method">Add payment method</string>
 
     <!-- end of unique strings block-->
 
@@ -616,6 +624,7 @@
     <string name="error_field_not_match">Password not matched</string>
     <string name="error_phone_number_invalid">Invalid Phone Number</string>
     <string name="error_invalid_date">Date should less than current date</string>
+    <string name="error_invalid_details">Invalid card number</string>
     <string name="error_password_size">Minimum 5 characters</string>
     <!-- Errors -->
 
