@@ -19,6 +19,7 @@ import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -176,7 +177,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         }
 
         int currentWeekDay = cal.get(Calendar.DAY_OF_WEEK) - 1;
-        Log.d(TAG, "current Week Day" + cal.get(Calendar.DAY_OF_WEEK));
+
 
         trailingSpaces = currentWeekDay;
 
@@ -202,7 +203,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
         // Current Month Days
         for (int i = 1; i <= daysInMonth; i++) {
-//            Log.d(TAG, currentMonthName + ": " + String.valueOf(i) + " " + getMonthAsString(currentMonth) + " " + yy);
+
             if (i == getCurrentDayOfMonth() && currentMonth == CURRENT_MONTH_OF_CALENDAR && yy == CURRENT_YEAR_OF_CALENDAR) {
                 list.add(String.valueOf(i) + "-BLUE" + "-" + getMonthAsString(currentMonth) + "-" + yy);
             } else {
@@ -231,7 +232,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Log.e(TAG,"Inside getView method for CalendarGridAdapter class"+" position: "+position);
+
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context
@@ -249,21 +250,13 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         String theday = day_color[0];
         String themonth = day_color[2];
         String theyear = day_color[3];
-        /*if ((!eventsPerMonthMap.isEmpty()) && (eventsPerMonthMap != null)) {
-            if (eventsPerMonthMap.containsKey(theday)) {
-                num_events_per_day = (TextView) row
-                        .findViewById(R.id.num_events_per_day);
-                Integer numEvents = (Integer) eventsPerMonthMap.get(theday);
-                num_events_per_day.setText(numEvents.toString());
-            }
-        }
-*/
+
         boolean allow_schedule_population=false;
 
         // Set the Day GridCell
         gridcell.setText(theday);
         gridcell.setTag(theday + "-" + themonth + "-" + theyear);
-//        Log.d(TAG, "Grid cell view :" + theday + "/" + themonth + "/" + theyear);
+
 
         if (day_color[1].equals("GREY")) {
             gridcell.setTextColor(context.getResources().getColor(R.color.caldroid_darker_gray));
@@ -272,33 +265,29 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         if (day_color[1].equals("WHITE")) {
             gridcell.setTextColor(context.getResources().getColor(R.color.caldroid_black));
             allow_schedule_population=true;
-            //this.position=position;
-            //Log.d(TAG,"start position of Month which is in foreground calendar"+this.position);
+
         }
         if (day_color[1].equals("BLUE")) {
             gridcell.setTextColor(context.getResources().getColor(R.color.caldroid_holo_blue_dark));
             allow_schedule_population=true;
-            //this.position=position;
-            //Log.d(TAG,"start position of Month which is in foreground calendar"+this.position);
+
         }
 
         day_schedule_index=Integer.parseInt(theday)-1;
         if(allow_schedule_population){
             if(day_schedule_index <day_schedule.size()){
                 day=day_schedule.get(day_schedule_index);
-                Log.d(TAG,"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                Log.d(TAG,"day: "+day.getDay()+", month: "+day.getMonth()+",year: "+day.getYear());
+
                 List<DayEvent> dayEvents = day.getDayEvents();
                 if(dayEvents.size() > 0){
                     gridcell.setBackgroundColor(new Color().CYAN);
                     for(int i=0; i<dayEvents.size();i++){
                         dayEvent=dayEvents.get(i);
 
-                        Log.d(TAG,"start hour: " +dayEvent.getEvent_start_hour()+", start min: "+dayEvent.getEvent_start_min()+", stop hour: "+dayEvent.getEvent_stop_hour()+", stop min: "+dayEvent.getEvent_stop_min()+", event name: "+dayEvent.getEvent_name());
                     }
 
                 }
-                //day_schedule_index++;
+
             }
 
         }
@@ -310,34 +299,48 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     public void onClick(View view) {
         Intent intent = new Intent(context, SetScheduleActivity.class);
         String s = (String) view.getTag();
-        Log.d(TAG, "Current month index:" + CURRENT_MONTH_OF_CALENDAR);
+
         int day=Integer.parseInt(s.split("-",3)[0]);
-        Day day1=day_schedule.get(day-1);
+
         String month = s.split("-", 3)[1];
         String year = s.split("-",3)[2];
         intent.putExtra("date",(String)view.getTag());
         intent.putExtra("day", Integer.parseInt(s.split("-",3)[0]));
         intent.putExtra("year",Integer.parseInt(year));
-        intent.putExtra("day_bean", (android.os.Parcelable) day1);
+
+        intent.putExtra("day_bean", day_schedule);
+
+
+
+
+        for(Day d : day_schedule){
+            Log.i(TAG,"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            Log.d(TAG,"day: "+d.getDay() + ", mont: "+d.getMonth() + ", year: "+d.getYear());
+            for(DayEvent ev : d.getDayEvents())
+                Log.d(TAG,"Start Time : " + ev.getEvent_start_hour() + ", Start Min : " +ev.getEvent_start_min() +
+                        ", Stop Time : " + ev.getEvent_stop_hour() + ", Stop Min : " +ev.getEvent_stop_min()
+                        + ", event Name : " + ev.getEvent_name());
+        }
+
+
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         int month_index_of_grid_clicked = Arrays.asList(months).indexOf(month);
         intent.putExtra("month",month_index_of_grid_clicked);
-        Log.d(TAG, "grid clicked month index" + month_index_of_grid_clicked);
-        Log.d(TAG, "Day of the grid clicked :" + (String) view.getTag());
+
 
         if (month_in_foreground < month_index_of_grid_clicked) {
-            Log.d(TAG,""+1);
+
             myScheduleFragment.showPrevMonth();
 
         } else {
             if (month_in_foreground == month_index_of_grid_clicked) {
                 context.startActivity(intent);
-                Log.d(TAG,""+2);
+
 
 
             } else {
                 if (month_in_foreground > month_index_of_grid_clicked) {
-                   Log.d(TAG,""+3);
+
                     myScheduleFragment.showNextMonth();
 
                 }

@@ -49,9 +49,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     private static final String TAG="FMC";
 
 
-    //List<ArrayList> month_cal=null;
-    //ArrayList<ArrayList> calendar_day=null;
-    ArrayList<Day> day_schedule=null;
+    public static ArrayList<Day> day_schedule=null;
 
 
     public MyScheduleFragment() {
@@ -67,17 +65,18 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myScheduleFragment = this;
+
         _calendar = Calendar.getInstance(Locale.getDefault());
         month = _calendar.get(Calendar.MONTH) + 1;
         year = _calendar.get(Calendar.YEAR);
+
+
 
         Calendar calendar=new GregorianCalendar(year,month-1,1);
         days_in_month=calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         Log.d(TAG,month+" Month of "+year+" have days: "+calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
 
 
-        //month_cal=new ArrayList<ArrayList>();
-        //calendar_day=new ArrayList<ArrayList>();
         day_schedule=new ArrayList<Day>();
 
 
@@ -96,6 +95,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     }
 
     private void calendarEventSchduler(JSONArray jsonArray) {
+        day_schedule=new ArrayList<Day>();
         for(int e=0;e <jsonArray.length();e++){
             Day day=new Day();
             try {
@@ -117,9 +117,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 }
                 day.setDayEvents(dayEvents);
                 day_schedule.add(day);
-                //calendar_day.add(day_schedule);
-                //month_cal.add(calendar_day);
-                //month_cal.add(d);
+
 
             } catch (JSONException e1) {
                 e1.printStackTrace();
@@ -127,13 +125,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         }
 
 
-       /* for(Day d : day_schedule){
-            Log.d(TAG,"******************************************");
-            Log.d(TAG,"Day : " + d.getDay() + ", Month : " + d.getMonth() + ", Year : " + d.getYear());
-            for(DayEvent de : d.getDayEvents())
-                Log.d(TAG,"Start Hour : " + de.getEvent_start_hour() + ", Start Min : " + de.getEvent_start_min() +
-                        ", Stop Hour : " + de.getEvent_stop_hour() + ", Stop Min : " + de.getEvent_stop_min() + ", Event-Name : " + de.getEvent_name());
-        }*/
+
     }
 
     private JSONArray getDemoCalendarDetails(int days,int month,int year) {
@@ -245,13 +237,13 @@ return jsonArray;
     @Override
     public void onClick(View v) {
         if (v == add_slot) {
-            //Toast.makeText(getActivity(),"Add available slot clicked !",Toast.LENGTH_LONG).show();
+
             Intent intent = new Intent(getActivity(), AddNewSlotActivity.class);
             startActivity(intent);
 
         }
         if (v == add_vacation) {
-            //Toast.makeText(getActivity(),"Add available slot clicked !",Toast.LENGTH_LONG).show();
+
             Intent intent = new Intent(getActivity(), ScheduleYourVacation.class);
             startActivity(intent);
 

@@ -140,6 +140,7 @@ public class WeekView extends View {
 
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+
             if (mCurrentScrollDirection == Direction.NONE) {
                 if (Math.abs(distanceX) > Math.abs(distanceY)){
                     mCurrentScrollDirection = Direction.HORIZONTAL;
@@ -158,6 +159,8 @@ public class WeekView extends View {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+
+
             mScroller.forceFinished(true);
             mStickyScroller.forceFinished(true);
 
