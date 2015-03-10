@@ -3,6 +3,8 @@ package com.findmycoach.app.beans.authentication;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Data {
 
     @Expose
@@ -57,6 +59,17 @@ public class Data {
     private String accomplishments;
     @Expose
     private String gender;
+    @SerializedName("sub_category_name")
+    @Expose
+    private List<String> subCategoryName;
+
+    public List<String> getSubCategoryName() {
+        return subCategoryName;
+    }
+
+    public void setSubCategoryName(List<String> subCategoryName) {
+        this.subCategoryName = subCategoryName;
+    }
 
     public String getProfession() {
         return profession;

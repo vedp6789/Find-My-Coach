@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +51,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
     private ImageView profilePicture;
     private TextView profileEmail;
     private TextView profilePhone;
+    private TextView areaOfCoaching;
     private EditText profileFirstName;
     private EditText profileLastName;
     private Spinner profileGender;
@@ -119,6 +121,31 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         } else {
             isReadyToTravel.setChecked(false);
         }
+
+        List<String> areaOfInterests = userInfo.getSubCategoryName();
+        if (areaOfInterests.get(0)!=null && !areaOfInterests.get(0).equals(" ")) {
+            String areaOfInterest = "";
+            for (int index = 0; index < areaOfInterests.size(); index++) {
+                if (index != 0) {
+                    areaOfInterest = areaOfInterest + ", " + areaOfInterests.get(index);
+                } else {
+                    areaOfInterest = areaOfInterest + areaOfInterests.get(index);
+                }
+            }
+            areaOfCoaching.setText(areaOfInterest);
+        }
+
+        areaOfCoaching.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String interests = areaOfCoaching.getText().toString();
+                Log.d("FMC", "Area of Interests:" + interests);
+                Intent intent = new Intent(getApplicationContext(), AreasOfInterestActivity.class);
+                if(!interests.trim().equals(""))
+                    intent.putExtra("interests", interests);
+                startActivityForResult(intent, 500);
+            }
+        });
     }
 
     private void applyActionbarProperties() {
@@ -148,6 +175,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
         updateAction = (Button) findViewById(R.id.button_update);
         chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
+        areaOfCoaching = (TextView) findViewById(R.id.input_areas_of_coaching);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         applyAction();
@@ -280,6 +308,8 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             else
                 requestParams.add("availability_yn", "0");
 
+            requestParams.add("sub_category", areaOfCoaching.getText().toString().length()<2 ? " " : areaOfCoaching.getText().toString());
+
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
@@ -303,6 +333,19 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+        if (requestCode == 500 && resultCode == RESULT_OK && data != null) {
+            String listJson = data.getStringExtra("interests");
+            List<String> list = new Gson().fromJson(listJson, List.class);
+            String interests = "";
+            for (int index = 0; index < list.size(); index++) {
+                if (interests.equalsIgnoreCase("")) {
+                    interests = list.get(index);
+                } else {
+                    interests = interests + ", " + list.get(index);
+                }
+            }
+            areaOfCoaching.setText(interests);
         }
     }
 

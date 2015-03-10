@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/payment_details_method"
+        android:id="@+id/textView4"
+        android:textStyle="bold"
+        android:textSize="26sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:hint="@string/hint_enter_card_number"
+        android:id="@+id/editTextCard"
+        android:layout_below="@+id/textView4"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:inputType="textPersonName"
+        android:hint="@string/hint_name_on_card"
+        android:ems="10"
+        android:id="@+id/editTextName"
+        android:layout_below="@+id/editTextCard"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_date_of_expiry"
+        android:inputType="datetime"
+        android:ems="10"
+        android:focusable="false"
+        android:textIsSelectable="false"
+        android:id="@+id/editTextDate"
+        android:layout_below="@+id/editTextName"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_enter_cvv"
+        android:inputType="datetime"
+        android:ems="10"
+        android:id="@+id/editTextCVV"
+        android:layout_below="@+id/editTextDate"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_skip"
+        android:id="@+id/buttonSkip"
+        android:layout_below="@+id/editTextCVV"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_save_and_continue"
+        android:id="@+id/buttonSave"
+        android:layout_below="@+id/buttonSkip"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+</RelativeLayout>

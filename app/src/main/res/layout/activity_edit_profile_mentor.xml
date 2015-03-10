@@ -476,6 +476,33 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
+                        android:text="Areas of coaching :"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+
+                        android:id="@+id/input_areas_of_coaching"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/custom_edittext"
+                        android:hint="Click Here"
+                        android:inputType="number"
+                        android:padding="4dp"
+                        android:singleLine="true" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
                         android:text="Facebook:"
                         android:textColor="@color/wallet_link_text_light"
                         android:textSize="18sp"
@@ -492,6 +519,7 @@
                         android:padding="4dp"
                         android:singleLine="true" />
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"

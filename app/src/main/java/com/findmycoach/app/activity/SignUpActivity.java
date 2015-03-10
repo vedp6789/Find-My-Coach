@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -18,12 +19,10 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.findmycoach.app.beans.registration.SignUpResponse;
+import com.findmycoach.app.R;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
-import com.findmycoach.app.R;
-import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import java.util.regex.Matcher;
@@ -276,6 +275,9 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
+        if(user_group == 2){
+            startActivity(new Intent(this, PaymentDetailsActivity.class));
+        }
         finish();
     }
 
