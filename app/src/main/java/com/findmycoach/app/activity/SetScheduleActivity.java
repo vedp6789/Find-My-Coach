@@ -38,11 +38,12 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     private static final String TAG="FMC";
 
-    public int day;
-    public int month;
-    public int year;
-
-    private static ArrayList<Day> day_schedule=null;
+    private static int day;
+    private static int month;
+    private static int year;
+    private static ArrayList<Day> prev_month=null;
+    private static ArrayList<Day> current_month=null;
+    private static ArrayList<Day> coming_month=null;
 
 
     @Override
@@ -54,12 +55,21 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             day = getIntent.getExtras().getInt("day");
             month = getIntent.getExtras().getInt("month");
             year = getIntent.getExtras().getInt("year");
-            day_schedule = (ArrayList<Day>) getIntent.getSerializableExtra("day_bean");
+            prev_month=new ArrayList<Day>();
+            current_month=new ArrayList<Day>();
+            coming_month=new ArrayList<Day>();
+            prev_month= (ArrayList<Day>) getIntent.getSerializableExtra("prev_month_data");
+            current_month= (ArrayList<Day>) getIntent.getSerializableExtra("current_month_data");
+            coming_month= (ArrayList<Day>) getIntent.getSerializableExtra("coming_month_data");
 
+
+            Log.d(TAG,"prev_month: "+prev_month.size()+", current_month: "+ current_month.size()+", coming_month: "+coming_month.size());
+            //day_schedule = (ArrayList<Day>) getIntent.getSerializableExtra("day_bean");
+            Toast.makeText(this,""+day+"/"+(month+1)+"/"+year,Toast.LENGTH_LONG).show();
 
         }
 
-            Day day1=day_schedule.get(day-1);
+          //  Day day1=day_schedule.get(day-1);
 
 
             StorageHelper.storePreference(SetScheduleActivity.this, "day", String.valueOf(day));
@@ -74,7 +84,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
             applyProperties();
 
-            Toast.makeText(this,""+day+"/"+(month+1)+"/"+year,Toast.LENGTH_LONG).show();
+
 
 
 
@@ -103,6 +113,23 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
         // Populate the week view with some events.
         List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
+
+
+        Day day1=current_month.get(0);
+        String date=day1.getDate();
+
+
+
+        if(Integer.parseInt(date.split("-",3)[1]) == month && Integer.parseInt(date.split("-",3)[0]) == year ){
+
+        }
+
+
+
+
+/*
+
+
 
 
         Day day1=day_schedule.get(day-1);
@@ -134,6 +161,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         int start_min=dayEvent2.getEvent_start_min();
                         int stop_hour=dayEvent2.getEvent_stop_hour();
                         int stop_min=dayEvent2.getEvent_stop_min();
+                        String event_name=dayEvent2.getEvent_name();
                         startTime.set(Calendar.HOUR_OF_DAY, start_hour);
                         startTime.set(Calendar.MINUTE, start_min);
                         startTime.set(Calendar.MONTH, newMonth-1);
@@ -143,7 +171,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         endTime.add(Calendar.HOUR_OF_DAY, stop_hour-start_hour);
                         endTime.set(Calendar.MINUTE, stop_min);
                         WeekViewEvent event;
-                        event = new WeekViewEvent(4, getEventTitle(startTime), startTime, endTime);
+                        event = new WeekViewEvent(4, getEventTitle(startTime,stop_hour,stop_min,event_name), startTime, endTime);
                         event.setColor(getResources().getColor(R.color.event_color_04));
                         events.add(event);
 
@@ -155,13 +183,14 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             }
 
 
-        }
+        }*/
     return events;
     }
 
-    private String getEventTitle(Calendar time) {
+    private String getEventTitle(Calendar time,int stop_hour,int stop_min,String event_name) {
 
-        return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
+        //return String.format("Event of %02d:%02d to %02d:%02d %s/%d ", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE),stop_hour,stop_min, time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
+        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE),stop_hour,stop_min)+"\n"+event_name;
     }
 
     @Override

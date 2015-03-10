@@ -17,35 +17,22 @@ public class Day implements Parcelable {
 
 
 
+    private String date;
 
-    private int day;
-    private int month;
-    private int year;
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public static Creator getCreator() {
+        return CREATOR;
+    }
+
     private List<DayEvent> dayEvents;
 
-    public int getDay() {
-        return day;
-    }
-
-    public void setDay(int day) {
-        this.day = day;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
 
     public List<DayEvent> getDayEvents() {
         return dayEvents;
@@ -62,17 +49,14 @@ public class Day implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.day);
-        dest.writeInt(this.month);
-        dest.writeInt(this.year);
+        dest.writeString(this.date);
+
         dest.writeTypedList(this.dayEvents);
     }
     public Day(Parcel parcel){
         //readFromParcel(parcel);
         this();
-        this.day = parcel.readInt();
-        this.month=parcel.readInt();
-        this.year=parcel.readInt();
+        this.date=parcel.readString();
         //List<DayEvent> list = null;
         parcel.readTypedList(this.dayEvents, DayEvent.CREATOR);
     }
