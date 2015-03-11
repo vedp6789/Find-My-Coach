@@ -13,6 +13,8 @@ import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.findmycoach.app.activity.DashboardActivity;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -22,10 +24,10 @@ import java.util.Locale;
 public class NetworkManager {
 
     private static final String TAG="FMC:";
-    private static int counter;
+    public static int counter;
 
     public static String getCurrentLocation(Context context) {
-        if(counter == 0){
+        if(counter == 0 && context instanceof DashboardActivity){
             counter++;
             return "";
         }
