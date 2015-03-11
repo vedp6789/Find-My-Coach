@@ -114,14 +114,118 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         // Populate the week view with some events.
         List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
 
+        Day day11=prev_month.get(0);
+        String date1=day11.getDate();
+
 
         Day day1=current_month.get(0);
         String date=day1.getDate();
 
 
+        Day day12=coming_month.get(0);
+        String date2=day12.getDate();
 
-        if(Integer.parseInt(date.split("-",3)[1]) == month && Integer.parseInt(date.split("-",3)[0]) == year ){
 
+
+        if(Integer.parseInt(date1.split("-",3)[1]) == newMonth && Integer.parseInt(date1.split("-",3)[0]) == newYear ){
+           // Log.d(TAG,"Going to create view for previous month.");
+            for(Day d:prev_month){
+                String date_for_d=d.getDate();
+                List<DayEvent> dayEvents=d.getDayEvents();
+                DayEvent dayEvent;
+                if(dayEvents.size() > 0){
+                    for (int event=0; event<dayEvents.size();event++){
+                        dayEvent=dayEvents.get(event);
+
+                        Calendar startTime;
+                        startTime = Calendar.getInstance();
+                        startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-",3)[2]));
+                        String start_time=dayEvent.getEvent_start_time();
+                        String stop_time=dayEvent.getEvent_stop_time();
+                        //String event_name=dayEvent.getEvent_name();
+                        startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":",3)[0]));
+                        startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":",3)[1]));
+                        startTime.set(Calendar.MONTH, newMonth-1);
+                        startTime.set(Calendar.YEAR, newYear);
+                        Calendar endTime;// = (Calendar) startTime.clone();
+                        endTime = (Calendar) startTime.clone();
+                        endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":",3)[0])-Integer.parseInt(start_time.split(":",3)[0]));
+                        endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":",3)[1]));
+                        WeekViewEvent weekViewEvent;
+                        weekViewEvent = new WeekViewEvent(4, getEventTitle(startTime,Integer.parseInt(stop_time.split(":",3)[0]),Integer.parseInt(stop_time.split(":",3)[1])), startTime, endTime);
+                        weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
+                        events.add(weekViewEvent);
+
+                    }
+                }
+            }
+        }
+        if(Integer.parseInt(date.split("-",3)[1]) == newMonth && Integer.parseInt(date.split("-",3)[0]) == newYear ){
+           // Log.d(TAG,"Going to create view for current month.");
+            for(Day d:current_month){
+                String date_for_d=d.getDate();
+                List<DayEvent> dayEvents=d.getDayEvents();
+                DayEvent dayEvent;
+                if(dayEvents.size() > 0){
+                    for (int event=0; event<dayEvents.size();event++){
+                        dayEvent=dayEvents.get(event);
+
+                        Calendar startTime;
+                        startTime = Calendar.getInstance();
+                        startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-",3)[2]));
+                        String start_time=dayEvent.getEvent_start_time();
+                        String stop_time=dayEvent.getEvent_stop_time();
+                        //String event_name=dayEvent.getEvent_name();
+                        startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":",3)[0]));
+                        startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":",3)[1]));
+                        startTime.set(Calendar.MONTH, newMonth-1);
+                        startTime.set(Calendar.YEAR, newYear);
+                        Calendar endTime;// = (Calendar) startTime.clone();
+                        endTime = (Calendar) startTime.clone();
+                        endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":",3)[0])-Integer.parseInt(start_time.split(":",3)[0]));
+                        endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":",3)[1]));
+                        WeekViewEvent weekViewEvent;
+                        weekViewEvent = new WeekViewEvent(4, getEventTitle(startTime,Integer.parseInt(stop_time.split(":",3)[0]),Integer.parseInt(stop_time.split(":",3)[1])), startTime, endTime);
+                        weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
+                        events.add(weekViewEvent);
+
+                    }
+                }
+            }
+        }
+
+        if(Integer.parseInt(date2.split("-",3)[1]) == newMonth && Integer.parseInt(date2.split("-",3)[0]) == newYear){
+           // Log.d(TAG,"Going to create view for next month.");
+            for(Day d:coming_month){
+                String date_for_d=d.getDate();
+                List<DayEvent> dayEvents=d.getDayEvents();
+                DayEvent dayEvent;
+                if(dayEvents.size() > 0){
+                    for (int event=0; event<dayEvents.size();event++){
+                        dayEvent=dayEvents.get(event);
+
+                        Calendar startTime;
+                        startTime = Calendar.getInstance();
+                        startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-",3)[2]));
+                        String start_time=dayEvent.getEvent_start_time();
+                        String stop_time=dayEvent.getEvent_stop_time();
+                        //String event_name=dayEvent.getEvent_name();
+                        startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":",3)[0]));
+                        startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":",3)[1]));
+                        startTime.set(Calendar.MONTH, newMonth-1);
+                        startTime.set(Calendar.YEAR, newYear);
+                        Calendar endTime;// = (Calendar) startTime.clone();
+                        endTime = (Calendar) startTime.clone();
+                        endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":",3)[0])-Integer.parseInt(start_time.split(":",3)[0]));
+                        endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":",3)[1]));
+                        WeekViewEvent weekViewEvent;
+                        weekViewEvent = new WeekViewEvent(4, getEventTitle(startTime,Integer.parseInt(stop_time.split(":",3)[0]),Integer.parseInt(stop_time.split(":",3)[1])), startTime, endTime);
+                        weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
+                        events.add(weekViewEvent);
+
+                    }
+                }
+            }
         }
 
 
@@ -187,10 +291,11 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     return events;
     }
 
-    private String getEventTitle(Calendar time,int stop_hour,int stop_min,String event_name) {
+    private String getEventTitle(Calendar time,int stop_hour,int stop_min) {
 
         //return String.format("Event of %02d:%02d to %02d:%02d %s/%d ", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE),stop_hour,stop_min, time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
-        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE),stop_hour,stop_min)+"\n"+event_name;
+        //return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE),stop_hour,stop_min)+"\n"+event_name;
+        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE),stop_hour,stop_min);
     }
 
     @Override

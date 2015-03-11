@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class MyScheduleFragment extends Fragment implements View.OnClickListener {
+public class MyScheduleFragment extends Fragment implements View.OnClickListener, Callback {
 
     private TextView currentMonth, add_slot, add_vacation;
     private ImageView prevMonth;
@@ -56,6 +56,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     private int days_in_current_month, days_in_prev_month, days_in_next_month;
     private static final String TAG = "FMC";
     ProgressDialog progressDialog;
+    private int days_in_new_prev_month, days_in_new_next_month;
 
 
     public static ArrayList<Day> previousMonthArrayList = null;
@@ -188,112 +189,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         requestParams.add("start_date", String.valueOf(stringBuilder));
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
         progressDialog.show();
-        NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), new Callback() {
-            @TargetApi(Build.VERSION_CODES.KITKAT)
-            @Override
-            public void successOperation(Object object, int statusCode, int calledApiValue) {
-                progressDialog.dismiss();
-                try {
-
-                    JSONObject jsonObject = new JSONObject((String) object);
-                    JSONArray jsonArray_data = jsonObject.getJSONArray("data");
-
-                    for (int i = 0; i < days_in_prev_month; i++) {
-                        Day day1 = new Day();
-                        JSONObject unique_day = jsonArray_data.getJSONObject(i);
-                        day1.setDate(unique_day.getString("date"));
-                        JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
-                        List<DayEvent> dayEvents = new ArrayList<DayEvent>();
-                        if (jsonArray_of_events.length() > 0) {
-                            for (int e = 0; e < jsonArray_of_events.length(); e++) {
-
-                                JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                                DayEvent dayEvent = new DayEvent();
-                                dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                                dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
-                                dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                                dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
-                                dayEvents.add(dayEvent);
-                            }
-                            day1.setDayEvents(dayEvents);
-                        } else {
-                            day1.setDayEvents(dayEvents);
-                        }
-                        previousMonthArrayList.add(day1);
-
-                    }
-
-
-                    for (int i = days_in_prev_month; i < days_in_prev_month + days_in_current_month; i++) {
-                        Day day1 = new Day();
-                        JSONObject unique_day = jsonArray_data.getJSONObject(i);
-                        day1.setDate(unique_day.getString("date"));
-                        JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
-                        List<DayEvent> dayEvents = new ArrayList<DayEvent>();
-                        if (jsonArray_of_events.length() > 0) {
-                            for (int e = 0; e < jsonArray_of_events.length(); e++) {
-
-                                JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                                DayEvent dayEvent = new DayEvent();
-                                dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                                dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
-                                dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                                dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
-                                dayEvents.add(dayEvent);
-                            }
-                            day1.setDayEvents(dayEvents);
-                        } else {
-                            day1.setDayEvents(dayEvents);
-                        }
-                        currentMonthArrayList.add(day1);
-                    }
-
-                    for (int i = days_in_prev_month + days_in_current_month; i < days_in_prev_month + days_in_current_month + days_in_next_month; i++) {
-                        Day day1 = new Day();
-                        JSONObject unique_day = jsonArray_data.getJSONObject(i);
-                        day1.setDate(unique_day.getString("date"));
-                        JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
-                        List<DayEvent> dayEvents = new ArrayList<DayEvent>();
-                        if (jsonArray_of_events.length() > 0) {
-                            for (int e = 0; e < jsonArray_of_events.length(); e++) {
-
-                                JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                                DayEvent dayEvent = new DayEvent();
-                                dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                                dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
-                                dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                                dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
-                                dayEvents.add(dayEvent);
-                            }
-                            day1.setDayEvents(dayEvents);
-                        } else {
-                            day1.setDayEvents(dayEvents);
-                        }
-                        comingMonthArrayList.add(day1);
-                    }
-
-
-                    Log.d(TAG, "previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
-
-
-                    adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
-                    adapter.notifyDataSetChanged();
-                    calendarView.setAdapter(adapter);
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void failureOperation(Object object, int statusCode, int calledApiValue) {
-                progressDialog.dismiss();
-                Toast.makeText(getActivity(), "Unsuccessful import", Toast.LENGTH_SHORT).show();
-            }
-        }, 37);
-
-
+        NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 37);
     }
 
 
@@ -385,7 +281,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
 
         Calendar calendar = new GregorianCalendar(year_for_this, (month_for_this - 1), 1);
-        final int days_in_new_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        days_in_new_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
 
         RequestParams requestParams = new RequestParams();
@@ -393,63 +289,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         requestParams.add("start_date", String.valueOf(stringBuilder));
         requestParams.add("limit", String.valueOf(days_in_new_prev_month));
         progressDialog.show();
-        NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), new Callback() {
-            @Override
-            public void successOperation(Object object, int statusCode, int calledApiValue) {
-                progressDialog.dismiss();
-                try {
-                    JSONObject jsonObject = new JSONObject((String) object);
-                    JSONArray jsonArray_data = jsonObject.getJSONArray("data");
-
-                    comingMonthArrayList = currentMonthArrayList;
-                    currentMonthArrayList = previousMonthArrayList;
-                    previousMonthArrayList = null;
-                    previousMonthArrayList = new ArrayList<Day>();
-
-
-                    for (int i = 0; i < days_in_new_prev_month; i++) {
-                        Day day1 = new Day();
-                        JSONObject unique_day = jsonArray_data.getJSONObject(i);
-                        day1.setDate(unique_day.getString("date"));
-                        JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
-                        List<DayEvent> dayEvents = new ArrayList<DayEvent>();
-                        if (jsonArray_of_events.length() > 0) {
-                            for (int e = 0; e < jsonArray_of_events.length(); e++) {
-
-                                JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                                DayEvent dayEvent = new DayEvent();
-                                dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                                dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
-                                dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                                dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
-                                dayEvents.add(dayEvent);
-                            }
-                            day1.setDayEvents(dayEvents);
-                        } else {
-                            day1.setDayEvents(dayEvents);
-                        }
-                        previousMonthArrayList.add(day1);
-
-                    }
-                    adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
-                    _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
-                    currentMonth.setText(DateFormat.format(dateTemplate,
-                            _calendar.getTime()));
-                    adapter.notifyDataSetChanged();
-                    calendarView.setAdapter(adapter);
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void failureOperation(Object object, int statusCode, int calledApiValue) {
-                Log.d(TAG, "new previous month details : unsuccessful import");
-                progressDialog.dismiss();
-            }
-        }, 37);
+        NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 39);
 
 
     }
@@ -498,7 +338,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
 
         Calendar calendar = new GregorianCalendar(year_for_this, (month_for_this - 1), 1);
-        final int days_in_new_next_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        days_in_new_next_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
 
         RequestParams requestParams = new RequestParams();
@@ -506,13 +346,133 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         requestParams.add("start_date", String.valueOf(stringBuilder));
         requestParams.add("limit", String.valueOf(days_in_new_next_month));
         progressDialog.show();
-        NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), new Callback() {
-            @Override
-            public void successOperation(Object object, int statusCode, int calledApiValue) {
-                progressDialog.dismiss();
-                try {
-                    JSONObject jsonObject = new JSONObject((String) object);
-                    JSONArray jsonArray_data = jsonObject.getJSONArray("data");
+        NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 38);
+
+
+    }
+
+    @Override
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
+        switch (calledApiValue){
+            case 37:
+                threeMonthsData(object);
+                break;
+            case 38:
+                nextMonthData(object);
+                break;
+            case 39:
+                previousMonthData(object);
+                break;
+        }
+    }
+
+    @Override
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
+        Log.d(TAG, "new previous month details : unsuccessful import");
+        progressDialog.dismiss();
+    }
+
+
+    private void threeMonthsData(Object object){
+        progressDialog.dismiss();
+        try {
+
+            JSONObject jsonObject = new JSONObject((String) object);
+            JSONArray jsonArray_data = jsonObject.getJSONArray("data");
+
+            for (int i = 0; i < days_in_prev_month; i++) {
+                Day day1 = new Day();
+                JSONObject unique_day = jsonArray_data.getJSONObject(i);
+                day1.setDate(unique_day.getString("date"));
+                JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
+                List<DayEvent> dayEvents = new ArrayList<DayEvent>();
+                if (jsonArray_of_events.length() > 0) {
+                    for (int e = 0; e < jsonArray_of_events.length(); e++) {
+
+                        JSONObject day_event = jsonArray_of_events.getJSONObject(e);
+                        DayEvent dayEvent = new DayEvent();
+                        dayEvent.setEvent_start_date(day_event.getString("start_date"));
+                        dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
+                        dayEvent.setEvent_start_time(day_event.getString("start_time"));
+                        dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                        dayEvents.add(dayEvent);
+                    }
+                    day1.setDayEvents(dayEvents);
+                } else {
+                    day1.setDayEvents(dayEvents);
+                }
+                previousMonthArrayList.add(day1);
+
+            }
+
+
+            for (int i = days_in_prev_month; i < days_in_prev_month + days_in_current_month; i++) {
+                Day day1 = new Day();
+                JSONObject unique_day = jsonArray_data.getJSONObject(i);
+                day1.setDate(unique_day.getString("date"));
+                JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
+                List<DayEvent> dayEvents = new ArrayList<DayEvent>();
+                if (jsonArray_of_events.length() > 0) {
+                    for (int e = 0; e < jsonArray_of_events.length(); e++) {
+
+                        JSONObject day_event = jsonArray_of_events.getJSONObject(e);
+                        DayEvent dayEvent = new DayEvent();
+                        dayEvent.setEvent_start_date(day_event.getString("start_date"));
+                        dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
+                        dayEvent.setEvent_start_time(day_event.getString("start_time"));
+                        dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                        dayEvents.add(dayEvent);
+                    }
+                    day1.setDayEvents(dayEvents);
+                } else {
+                    day1.setDayEvents(dayEvents);
+                }
+                currentMonthArrayList.add(day1);
+            }
+
+            for (int i = days_in_prev_month + days_in_current_month; i < days_in_prev_month + days_in_current_month + days_in_next_month; i++) {
+                Day day1 = new Day();
+                JSONObject unique_day = jsonArray_data.getJSONObject(i);
+                day1.setDate(unique_day.getString("date"));
+                JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
+                List<DayEvent> dayEvents = new ArrayList<DayEvent>();
+                if (jsonArray_of_events.length() > 0) {
+                    for (int e = 0; e < jsonArray_of_events.length(); e++) {
+
+                        JSONObject day_event = jsonArray_of_events.getJSONObject(e);
+                        DayEvent dayEvent = new DayEvent();
+                        dayEvent.setEvent_start_date(day_event.getString("start_date"));
+                        dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
+                        dayEvent.setEvent_start_time(day_event.getString("start_time"));
+                        dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                        dayEvents.add(dayEvent);
+                    }
+                    day1.setDayEvents(dayEvents);
+                } else {
+                    day1.setDayEvents(dayEvents);
+                }
+                comingMonthArrayList.add(day1);
+            }
+
+
+            Log.d(TAG, "previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
+
+
+            adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
+            adapter.notifyDataSetChanged();
+            calendarView.setAdapter(adapter);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void nextMonthData(Object object){
+        progressDialog.dismiss();
+        try {
+            JSONObject jsonObject = new JSONObject((String) object);
+            JSONArray jsonArray_data = jsonObject.getJSONArray("data");
 /*
 
                     comingMonthArrayList=currentMonthArrayList;
@@ -522,85 +482,44 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 */
 
 
-                    previousMonthArrayList = currentMonthArrayList;
-                    currentMonthArrayList = comingMonthArrayList;
-                    comingMonthArrayList = null;
-                    comingMonthArrayList = new ArrayList<Day>();
+            previousMonthArrayList = currentMonthArrayList;
+            currentMonthArrayList = comingMonthArrayList;
+            comingMonthArrayList = null;
+            comingMonthArrayList = new ArrayList<Day>();
 
 
-                    for (int i = 0; i < days_in_new_next_month; i++) {
-                        Day day1 = new Day();
-                        JSONObject unique_day = jsonArray_data.getJSONObject(i);
-                        day1.setDate(unique_day.getString("date"));
-                        JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
-                        List<DayEvent> dayEvents = new ArrayList<DayEvent>();
-                        if (jsonArray_of_events.length() > 0) {
-                            for (int e = 0; e < jsonArray_of_events.length(); e++) {
+            for (int i = 0; i < days_in_new_next_month; i++) {
+                Day day1 = new Day();
+                JSONObject unique_day = jsonArray_data.getJSONObject(i);
+                day1.setDate(unique_day.getString("date"));
+                JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
+                List<DayEvent> dayEvents = new ArrayList<DayEvent>();
+                if (jsonArray_of_events.length() > 0) {
+                    for (int e = 0; e < jsonArray_of_events.length(); e++) {
 
-                                JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                                DayEvent dayEvent = new DayEvent();
-                                dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                                dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
-                                dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                                dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
-                                dayEvents.add(dayEvent);
-                            }
-                            day1.setDayEvents(dayEvents);
-                        } else {
-                            day1.setDayEvents(dayEvents);
-                        }
-                        comingMonthArrayList.add(day1);
-
+                        JSONObject day_event = jsonArray_of_events.getJSONObject(e);
+                        DayEvent dayEvent = new DayEvent();
+                        dayEvent.setEvent_start_date(day_event.getString("start_date"));
+                        dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
+                        dayEvent.setEvent_start_time(day_event.getString("start_time"));
+                        dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                        dayEvents.add(dayEvent);
                     }
-
-
-                    Log.d(TAG, "comingMonthArrayList size" + comingMonthArrayList.size());
-                    for (Day day1 : comingMonthArrayList) {
-                        Log.d(TAG, "date from new comingMonthArrayList" + day1.getDate());
-                    }
-
-                    adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
-                    _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
-                    currentMonth.setText(DateFormat.format(dateTemplate,
-                            _calendar.getTime()));
-                    adapter.notifyDataSetChanged();
-                    calendarView.setAdapter(adapter);
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    day1.setDayEvents(dayEvents);
+                } else {
+                    day1.setDayEvents(dayEvents);
                 }
+                comingMonthArrayList.add(day1);
+
             }
 
-            @Override
-            public void failureOperation(Object object, int statusCode, int calledApiValue) {
-                Log.d(TAG, "new previous month details : unsuccessful import");
-                progressDialog.dismiss();
+
+            Log.d(TAG, "comingMonthArrayList size" + comingMonthArrayList.size());
+            for (Day day1 : comingMonthArrayList) {
+                Log.d(TAG, "date from new comingMonthArrayList" + day1.getDate());
             }
-        }, 37);
 
-
-    }
-
-    /*private void setGridCellAdapterToDate(int flag, int month, int year) {
-
-        if (flag == 0) {
-            comingMonthArrayList=currentMonthArrayList;
-            currentMonthArrayList=previousMonthArrayList;
-            previousMonthArrayList=null;
-            previousMonthArrayList = new ArrayList<Day>();
-
-            Calendar calendar = new GregorianCalendar(year, (month - 1), 1);
-            days_in_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            Log.d(TAG,"flag 0 :"+", days in prev_month "+days_in_prev_month);
-            prev_json = null;
-            prev_json = getDemoCalendarDetails(days_in_prev_month, month, year);
-            calendarEventScheduler(prev_json);
-
-            *//*arrayList_of_3_months.add(previousMonthArrayList);
-            arrayList_of_3_months.add(currentMonthArrayList);
-            arrayList_of_3_months.add(comingMonthArrayList);*//*
-            adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment,previousMonthArrayList,currentMonthArrayList,comingMonthArrayList);
+            adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
             _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
             currentMonth.setText(DateFormat.format(dateTemplate,
                     _calendar.getTime()));
@@ -608,34 +527,58 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             calendarView.setAdapter(adapter);
 
 
-        } else {
-            if (flag == 1) {
-                previousMonthArrayList=currentMonthArrayList;
-                currentMonthArrayList=comingMonthArrayList;
-                comingMonthArrayList=null;
-                comingMonthArrayList = new ArrayList<Day>();
-
-
-                Calendar calendar = new GregorianCalendar(year, month - 1, 1);
-                days_in_next_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-                Log.d(TAG,"flag 1 :"+", days in coming_month "+days_in_next_month);
-                Log.d(TAG, "days in next month 2: " + days_in_next_month + " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                next_json = getDemoCalendarDetails(days_in_next_month, month, year);
-                calendarEventScheduler(next_json);
-
-                *//*arrayList_of_3_months.add(previousMonthArrayList);
-                arrayList_of_3_months.add(currentMonthArrayList);
-                arrayList_of_3_months.add(comingMonthArrayList);*//*
-                adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList,currentMonthArrayList,comingMonthArrayList);
-                _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
-                currentMonth.setText(DateFormat.format(dateTemplate,
-                        _calendar.getTime()));
-                adapter.notifyDataSetChanged();
-                calendarView.setAdapter(adapter);
-            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+    }
+
+    private void previousMonthData(Object object){
+        progressDialog.dismiss();
+        try {
+            JSONObject jsonObject = new JSONObject((String) object);
+            JSONArray jsonArray_data = jsonObject.getJSONArray("data");
+
+            comingMonthArrayList = currentMonthArrayList;
+            currentMonthArrayList = previousMonthArrayList;
+            previousMonthArrayList = null;
+            previousMonthArrayList = new ArrayList<Day>();
 
 
-    }*/
+            for (int i = 0; i < days_in_new_prev_month; i++) {
+                Day day1 = new Day();
+                JSONObject unique_day = jsonArray_data.getJSONObject(i);
+                day1.setDate(unique_day.getString("date"));
+                JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
+                List<DayEvent> dayEvents = new ArrayList<DayEvent>();
+                if (jsonArray_of_events.length() > 0) {
+                    for (int e = 0; e < jsonArray_of_events.length(); e++) {
+
+                        JSONObject day_event = jsonArray_of_events.getJSONObject(e);
+                        DayEvent dayEvent = new DayEvent();
+                        dayEvent.setEvent_start_date(day_event.getString("start_date"));
+                        dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
+                        dayEvent.setEvent_start_time(day_event.getString("start_time"));
+                        dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                        dayEvents.add(dayEvent);
+                    }
+                    day1.setDayEvents(dayEvents);
+                } else {
+                    day1.setDayEvents(dayEvents);
+                }
+                previousMonthArrayList.add(day1);
+
+            }
+            adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
+            _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
+            currentMonth.setText(DateFormat.format(dateTemplate,
+                    _calendar.getTime()));
+            adapter.notifyDataSetChanged();
+            calendarView.setAdapter(adapter);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

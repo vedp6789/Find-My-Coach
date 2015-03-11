@@ -67,7 +67,9 @@ import org.json.JSONObject;
     *       categories                      34
     *       availableSlots                  35
     *       exception                       36
-    *       calenderDetails                 37
+    *       calenderDetails 3 months        37
+    *       calenderDetails next month      38
+    *       calenderDetails previous month  39
     * */
     
 
