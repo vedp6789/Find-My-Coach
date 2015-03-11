@@ -71,7 +71,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     private static final String TAG = "FMC";
     private static String FOREVER;
 
-    ArrayList<String> days_array = new ArrayList<String>();
+    private static ArrayList<String> days_array=null;
 
     ProgressDialog progressDialog;
 
@@ -232,7 +232,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 if (cb_mon.isChecked()) {
                     boo_mon_checked = true;
-                    days_array.add("M");
+                    //days_array.add("M");
                 } else {
                     boo_mon_checked = false;
                 }
@@ -244,7 +244,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 if (cb_tue.isChecked()) {
                     boo_tue_checked = true;
-                    days_array.add("T");
+                    //days_array.add("T");
                 } else {
                     boo_tue_checked = false;
                 }
@@ -256,7 +256,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 if (cb_wed.isChecked()) {
                     boo_wed_checked = true;
-                    days_array.add("W");
+                    //days_array.add("W");
                 } else {
                     boo_wed_checked = false;
                 }
@@ -268,7 +268,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 if (cb_thur.isChecked()) {
                     boo_thurs_checked = true;
-                    days_array.add("Th");
+                    //days_array.add("Th");
                 } else {
                     boo_thurs_checked = false;
                 }
@@ -280,7 +280,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 if (cb_fri.isChecked()) {
                     boo_fri_checked = true;
-                    days_array.add("F");
+                    //days_array.add("F");
                 } else {
                     boo_fri_checked = false;
                 }
@@ -292,7 +292,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 if (cb_sat.isChecked()) {
                     boo_sat_checked = true;
-                    days_array.add("S");
+                    //days_array.add("S");
                 } else {
                     boo_sat_checked = false;
                 }
@@ -304,7 +304,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 if (cb_sun.isChecked()) {
                     boo_sun_checked = true;
-                    days_array.add("Su");
+                    //days_array.add("Su");
                 } else {
                     boo_sun_checked = false;
                 }
@@ -314,7 +314,33 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         b_create_slot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (validate()) {
+
+                    days_array=new ArrayList<String>();
+
+                    if(boo_mon_checked){
+
+                        days_array.add("M");
+                    }
+                    if(boo_tue_checked){
+                        days_array.add("T");
+                    }
+                    if(boo_wed_checked){
+                        days_array.add("W");
+                    }
+                    if(boo_thurs_checked){
+                        days_array.add("Th");
+                    }
+                    if(boo_fri_checked){
+                        days_array.add("F");
+                    }
+                    if(boo_sat_checked){
+                        days_array.add("S");
+                    }
+                    if(boo_sun_checked){
+                        days_array.add("Su");
+                    }
 
                     if (StorageHelper.getUserGroup(AddNewSlotActivity.this, "user_group").equals("3")) {
                         Log.d(TAG, "Going to create a new slot for you.");
@@ -375,17 +401,30 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
                         requestParams.add("start_time", start_hour + ":" + start_min + ":" + "00");
                         requestParams.add("stop_time", stop_hour + ":" + stop_min + ":" + "00");
-                        String[] days = new String[days_array.size()];
 
+                        StringBuilder stringBuilder1=new StringBuilder();
+                        stringBuilder1.append(days_array.get(0));
+                        if(days_array.size() >1){
+                            for(int i=1;i<days_array.size();i++){
+                                stringBuilder1.append(","+days_array.get(i));
+                            }
+                        }
+
+
+                        /*StringBuilder days = new StringBuilder();
+                        for(String s: days_array)
+                            days.append(s+",");
+*/
                         requestParams.add("name",StorageHelper.getUserDetails(AddNewSlotActivity.this,"user_id")+"_Slot");
                         //requestParams.add("dates", String.valueOf(days_array.toArray(days)));
 
-                        requestParams.add("dates", String.valueOf(days_array));
+                        //requestParams.add("dates", String.valueOf(days_array));
+                        requestParams.add("dates", stringBuilder1.toString());
 
                         for(int i=0; i < days_array.size(); i++){
                             Log.d(TAG,"Day"+days_array.get(i));
                         }
-                        Log.d(TAG,"days array"+String.valueOf(days_array));
+                        Log.d(TAG,"days array"+String.valueOf(days_array)+", days array in string form "+stringBuilder1.toString());
                         //Log.d(TAG,"days array"+String.valueOf(days_array.toArray(days)));
                         //requestParams.add("dates", "M,S,Su");
                         int start_time = ((start_hour * 60) + start_min) * 60;
@@ -412,7 +451,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
                             @Override
                             public void failureOperation(Object object, int statusCode, int calledApiValue) {
-                                Toast.makeText(AddNewSlotActivity.this,"Unfortunately there is some problem during slot creation.",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddNewSlotActivity.this,(String) object,Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             }
                         },35);
@@ -472,12 +511,21 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                     Log.d(TAG, "check7");
                     return false;
                 }else{
-                    if (tv_start_date.getText().length() > 0) {
-                        return true;
-                    } else {
-                        Toast.makeText(AddNewSlotActivity.this, "Please select start date for this slot.", Toast.LENGTH_SHORT).show();
+                    if((slot_time_value % 3600) > 0 ){
+                        Toast.makeText(AddNewSlotActivity.this, "Please select slots in multiple of hours", Toast.LENGTH_SHORT).show();
                         return false;
+                    }else{
+                        if (tv_start_date.getText().length() > 0) {
+                            return true;
+                        } else {
+                            Toast.makeText(AddNewSlotActivity.this, "Please select start date for this slot.", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
                     }
+
+
+
+
                 }
 
             }

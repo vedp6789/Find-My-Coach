@@ -1,13 +1,63 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
-    tools:context="com.findmycoach.student.fragment.MyScheduleFragment">
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/caldroid_gray"
+    android:orientation="vertical">
 
-    <TextView
+
+
+    <LinearLayout
+        android:id="@+id/buttonlayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="My Schedule Fragment" />
+        android:layout_height="60dp"
+        android:height="6dp"
+        android:orientation="horizontal">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/prevMonth"
+            android:layout_width="20sp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="start"
+            android:layout_marginLeft="10sp"
+            android:src="@drawable/calendar_left_arrow_selector"></ImageView>
+
+        <TextView
+            android:id="@+id/currentMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFF"></TextView>
+
+        <ImageView
+            android:id="@+id/nextMonth"
+            android:layout_width="20sp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_marginRight="10sp"
+            android:src="@drawable/calendar_right_arrow_selector"></ImageView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/calendarheader"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:src="@drawable/calendar_days"></ImageView>
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/calendar"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:numColumns="7"></GridView>
+
+</LinearLayout>

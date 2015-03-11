@@ -17,7 +17,7 @@ public class Day implements Parcelable {
 
 
 
-    private String date;
+    public String date;
 
     public String getDate() {
         return date;
@@ -31,7 +31,8 @@ public class Day implements Parcelable {
         return CREATOR;
     }
 
-    private List<DayEvent> dayEvents;
+    public List<DayEvent> dayEvents;
+    public List<DaySlot> daySlots;
 
 
     public List<DayEvent> getDayEvents() {

@@ -14,19 +14,13 @@ public class DayEvent implements Parcelable{
     private String event_stop_time;
     private String event_start_date;
     private String event_stop_date;
-    private String event_name;
+
 
     public DayEvent() {
 
     }
 
-    public String getEvent_name() {
-        return event_name;
-    }
 
-    public void setEvent_name(String event_name) {
-        this.event_name = event_name;
-    }
 
     public String getEvent_start_time() {
         return event_start_time;
@@ -75,7 +69,7 @@ public class DayEvent implements Parcelable{
          dest.writeString(this.event_stop_date);
          dest.writeString(this.event_start_time);
         dest.writeString(this.event_stop_time);
-        dest.writeString(this.event_name);
+
     }
 
     public DayEvent(Parcel source){
@@ -87,7 +81,7 @@ public class DayEvent implements Parcelable{
         this.event_stop_date = source.readString();
         this.event_start_time=source.readString();
         this.event_stop_time=source.readString();
-        this.event_name=source.readString();
+
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

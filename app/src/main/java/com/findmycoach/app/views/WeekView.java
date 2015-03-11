@@ -90,9 +90,10 @@ public class WeekView extends View {
     private int mNumberOfVisibleDays = 3;
     private int mHeaderRowPadding = 10;
     private int mHeaderRowBackgroundColor = Color.WHITE;
-    private int mDayBackgroundColor = Color.rgb(245, 245, 245);
+    private int mDayBackgroundColor = Color.rgb(245,245,245);
     private int mHourSeparatorColor = Color.rgb(230, 230, 230);
-    private int mTodayBackgroundColor = Color.rgb(239, 247, 254);
+    //private int mTodayBackgroundColor = Color.rgb(239, 247, 254);
+    private int mTodayBackgroundColor = Color.rgb(120, 120, 120);
     private int mHourSeparatorHeight = 2;
     private int mTodayHeaderTextColor = Color.rgb(39, 137, 228);
     private int mEventTextSize = 12;
@@ -330,7 +331,9 @@ public class WeekView extends View {
 
         // Prepare day background color paint.
         mDayBackgroundPaint = new Paint();
-        mDayBackgroundPaint.setColor(mDayBackgroundColor);
+       // mDayBackgroundPaint.setColor(mDayBackgroundColor);
+        mDayBackgroundPaint.setColor(Color.rgb(120, 120, 120));
+
 
         // Prepare hour separator color paint.
         mHourSeparatorPaint = new Paint();
@@ -340,7 +343,8 @@ public class WeekView extends View {
 
         // Prepare today background color paint.
         mTodayBackgroundPaint = new Paint();
-        mTodayBackgroundPaint.setColor(mTodayBackgroundColor);
+        //mTodayBackgroundPaint.setColor(mTodayBackgroundColor);
+        mTodayBackgroundPaint.setColor(Color.rgb(120, 120, 120));
 
         // Prepare today header text color paint.
         mTodayHeaderTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -351,7 +355,9 @@ public class WeekView extends View {
 
         // Prepare event background color.
         mEventBackgroundPaint = new Paint();
-        mEventBackgroundPaint.setColor(Color.rgb(174, 208, 238));
+        //mEventBackgroundPaint.setColor(Color.rgb(174, 208, 238));
+        mEventBackgroundPaint.setColor(Color.rgb(120, 120, 120));
+
 
         // Prepare header column background color.
         mHeaderColumnBackgroundPaint = new Paint();
@@ -366,6 +372,7 @@ public class WeekView extends View {
 
         // Set default event color.
         mDefaultEventColor = Color.parseColor("#9fc6e7");
+
     }
 
     @Override
@@ -1027,12 +1034,14 @@ public class WeekView extends View {
 
                 @Override
                 public String interpretTime(int hour) {
-                    String amPm;
+                    /*String amPm;
                     if (hour >= 0 && hour < 12) amPm = "AM";
                     else amPm = "PM";
                     if (hour == 0) hour = 12;
                     if (hour > 12) hour -= 12;
-                    return String.format("%02d %s", hour, amPm);
+                    return String.format("%02d %s", hour, amPm);*/
+                    return String.format("%02d ", hour);
+
                 }
             };
         }

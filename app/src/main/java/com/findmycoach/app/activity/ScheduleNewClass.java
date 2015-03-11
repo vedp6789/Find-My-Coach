@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -16,7 +17,7 @@ import com.findmycoach.app.R;
 /**
  * Created by praka_000 on 3/4/2015.
  */
-public class ScheduleNewClass extends Activity {
+public class ScheduleNewClass extends Activity implements Button.OnClickListener{
     Spinner sp_subjects,sp_class_start_time,sp_class_stop_time,sp_start_date,sp_end_date,sp_mentor_for;
     CheckBox cb_mon,cb_tue,cb_wed,cb_thu,cb_fri,cb_sat;
     EditText et_location;
@@ -57,6 +58,7 @@ public class ScheduleNewClass extends Activity {
         rb_pay_now= (RadioButton) findViewById(R.id.rb_pay_now);
         rb_pay_personally= (RadioButton) findViewById(R.id.pay_personally);
         payment= (Button) findViewById(R.id.b_proceed_to_payment);
+        payment.setOnClickListener(this);
 
 
 
@@ -88,5 +90,12 @@ public class ScheduleNewClass extends Activity {
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == payment){
+
+        }
     }
 }
