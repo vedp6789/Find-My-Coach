@@ -14,11 +14,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
-import com.findmycoach.app.activity.UserListActivity;
 import com.findmycoach.app.beans.search.Datum;
+import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
@@ -29,19 +30,17 @@ import java.util.List;
 /**
  * Created by prem on 21/1/15.
  */
-public class MentorListAdapter extends BaseAdapter {
+public class MentorListAdapter extends BaseAdapter implements Callback {
     private Context context;
     private List<Datum> users;
     private String studentId;
-    private UserListActivity userListActivity;
     private ProgressDialog progressDialog;
 
     private static final String TAG="FMC";
 
-    public MentorListAdapter(Context context, List<Datum> users, UserListActivity userListActivity, ProgressDialog progressDialog) {
+    public MentorListAdapter(Context context, List<Datum> users, ProgressDialog progressDialog) {
         this.context = context;
         this.users = users;
-        this.userListActivity = userListActivity;
         this.progressDialog = progressDialog;
         studentId =  StorageHelper.getUserDetails(context, "user_id");
     }
@@ -82,12 +81,26 @@ public class MentorListAdapter extends BaseAdapter {
                     .error(R.drawable.user_icon).resize(150, 150)
                     .into(image);
         }
-        imageConnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAlert(user.getId());
+        if(user.getConnectionStatus() != null){
+            if(user.getConnectionStatus().equals("accepted")){
+                imageConnect.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_minus));
+            }else if(user.getConnectionStatus().equals("pending")) {
+                imageConnect.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_media_play));
             }
-        });
+            imageConnect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context,"Connection will be break",Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else{
+            imageConnect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showAlert(user.getId());
+                }
+            });
+        }
         return view;
     }
 
@@ -136,6 +149,20 @@ public class MentorListAdapter extends BaseAdapter {
         requestParams.add("invitee", userId);
         requestParams.add("message", message);
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
-        NetworkClient.sendConnectionRequest(context, requestParams, userListActivity, 17);
+        NetworkClient.sendConnectionRequest(context, requestParams, this, 17);
+    }
+
+    @Override
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
+        if(calledApiValue == 17){
+            Toast.makeText(context,(String) object, Toast.LENGTH_LONG).show();
+            this.notifyDataSetChanged();
+        }
+
+    }
+
+    @Override
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
+
     }
 }

@@ -101,7 +101,6 @@
                     android:layout_margin="8dp"
                     android:layout_weight="2"
                     android:gravity="center_vertical"
-                    android:text="Teacher of Magical History"
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />
             </LinearLayout>
@@ -130,7 +129,6 @@
                     android:layout_margin="8dp"
                     android:layout_weight="2"
                     android:gravity="center_vertical"
-                    android:text="Achived best teacher award by University of Hogwarts"
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />
             </LinearLayout>
