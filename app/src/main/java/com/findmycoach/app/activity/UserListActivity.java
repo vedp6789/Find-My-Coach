@@ -78,7 +78,7 @@ public class UserListActivity extends Activity implements Callback {
         Log.d(TAG, "Users:" + users);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
-        listView.setAdapter(new MentorListAdapter(this, users, this, progressDialog));
+        listView.setAdapter(new MentorListAdapter(this, users, progressDialog));
     }
 
 
@@ -100,10 +100,8 @@ public class UserListActivity extends Activity implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        // If for showing connection request response. Else for displaying selected Mentor details
-        if(calledApiValue == 17){
-            Toast.makeText(this,(String) object, Toast.LENGTH_LONG).show();
-        }else if(calledApiValue == 25){
+        // For displaying selected Mentor details
+        if(calledApiValue == 25){
             Intent intent = new Intent(getApplicationContext(), MentorDetailsActivity.class);
             intent.putExtra("mentorDetails", (String) object);
             startActivity(intent);

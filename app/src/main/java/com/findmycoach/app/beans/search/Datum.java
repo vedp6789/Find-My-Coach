@@ -22,7 +22,48 @@ public class Datum {
     @SerializedName("group_id")
     @Expose
     private String groupId;
+    @Expose
+    private String rating;
+    @Expose
+    private String latitude;
+    @Expose
+    private String longitude;
+    @SerializedName("connection_status")
+    @Expose
+    private String connectionStatus;
 
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setConnectionStatus(String connectionStatus) {
+        this.connectionStatus = connectionStatus;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public String getConnectionStatus() {
+        return connectionStatus;
+    }
 
     public String getId() {
         return id;
