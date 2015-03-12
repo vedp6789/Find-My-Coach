@@ -30,6 +30,7 @@ public class UserListActivity extends Activity implements Callback {
     private ListView listView;
     private List<Datum> users;
     private ProgressDialog progressDialog;
+    private Datum datum;
 
     private static final String TAG="FMC";
 
@@ -48,7 +49,7 @@ public class UserListActivity extends Activity implements Callback {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (users != null) {
-                    Datum datum = users.get(position);
+                    datum = users.get(position);
                     getMentorDetails(datum.getId());
                 }
             }
