@@ -49,6 +49,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     private Button b_schedule_class;
     private String connectionStatus;
 
+
     private static final String TAG="FMC";
 
     @Override
@@ -93,12 +94,12 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         facebookLink = (Button) findViewById(R.id.profile_facebook_button);
 
         listView_mon_slots= (ListView) findViewById(R.id.lv_mon_available_slots);
-        listView_mon_slots= (ListView) findViewById(R.id.lv_tue_available_slots);
-        listView_mon_slots= (ListView) findViewById(R.id.lv_wed_available_slots);
-        listView_mon_slots= (ListView) findViewById(R.id.lv_thur_available_slots);
-        listView_mon_slots= (ListView) findViewById(R.id.lv_fri_available_slots);
-        listView_mon_slots= (ListView) findViewById(R.id.lv_sat_available_slots);
-        listView_mon_slots= (ListView) findViewById(R.id.lv_sun_available_slots);
+        listView_tue_slots= (ListView) findViewById(R.id.lv_tue_available_slots);
+        listView_wed_slots= (ListView) findViewById(R.id.lv_wed_available_slots);
+        listView_thur_slots= (ListView) findViewById(R.id.lv_thur_available_slots);
+        listView_fri_slots= (ListView) findViewById(R.id.lv_fri_available_slots);
+        listView_sat_slots= (ListView) findViewById(R.id.lv_sat_available_slots);
+        listView_sun_slots= (ListView) findViewById(R.id.lv_sun_available_slots);
 
         b_schedule_class= (Button) findViewById(R.id.b_schedule_class);
         if(connectionStatus.equals("not connected") || connectionStatus.equals("pending"))

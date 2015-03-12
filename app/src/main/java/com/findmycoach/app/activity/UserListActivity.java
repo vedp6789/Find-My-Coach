@@ -50,6 +50,7 @@ public class UserListActivity extends Activity implements Callback {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (users != null) {
+                    Log.d(TAG,"ListView click");
                     datum = users.get(position);
                     getMentorDetails(datum.getId());
                 }

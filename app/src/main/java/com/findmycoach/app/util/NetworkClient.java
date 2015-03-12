@@ -2,6 +2,7 @@ package com.findmycoach.app.util;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
@@ -73,6 +74,7 @@ import org.json.JSONObject;
     *       calenderDetailsMentee  3months            40
     *       calenderDetailsMentee  next month         41
     *       calenderDetailsMentee  prev month         42
+    *       calenderEvents                  43
     * */
     
 
@@ -1171,6 +1173,46 @@ public class NetworkClient {
             }
         });
     }
+
+
+    public static void getCalenderEvent(final Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        // client.get(context, getAbsoluteURL("calenderDetails", context), requestParams, new AsyncHttpResponseHandler() {
+        client.get(context, getAbsoluteURL("calenderEvents", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    Log.d(TAG, "Success : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success : Response : " + responseJson);
+                    callback.successOperation(responseJson, statusCode, calledApiValue);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseBody, null);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    Log.d(TAG, "Failure : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                }
+            }
+        });
+    }
+
 
 
 }

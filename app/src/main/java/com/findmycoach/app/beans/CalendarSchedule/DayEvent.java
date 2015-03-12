@@ -9,12 +9,36 @@ import java.io.Serializable;
  * Created by ved on 6/3/15.
  */
 public class DayEvent implements Parcelable{
-
+    private String event_id;
     private String event_start_time;
     private String event_stop_time;
-    private String event_start_date;
-    private String event_stop_date;
 
+    private String fname;
+    private String lname;
+
+    public String getEvent_id() {
+        return event_id;
+    }
+
+    public void setEvent_id(String event_id) {
+        this.event_id = event_id;
+    }
+
+    public String getFname() {
+        return fname;
+    }
+
+    public void setFname(String fname) {
+        this.fname = fname;
+    }
+
+    public String getLname() {
+        return lname;
+    }
+
+    public void setLname(String lname) {
+        this.lname = lname;
+    }
 
     public DayEvent() {
 
@@ -30,21 +54,7 @@ public class DayEvent implements Parcelable{
         this.event_start_time = event_start_time;
     }
 
-    public String getEvent_stop_date() {
-        return event_stop_date;
-    }
 
-    public void setEvent_stop_date(String even_stop_date) {
-        this.event_stop_date = even_stop_date;
-    }
-
-    public String getEvent_start_date() {
-        return event_start_date;
-    }
-
-    public void setEvent_start_date(String event_start_date) {
-        this.event_start_date = event_start_date;
-    }
 
     public String getEvent_stop_time() {
         return event_stop_time;
@@ -65,10 +75,12 @@ public class DayEvent implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-         dest.writeString(this.event_start_date);
-         dest.writeString(this.event_stop_date);
-         dest.writeString(this.event_start_time);
+        dest.writeString(this.event_id);
+        dest.writeString(this.event_start_time);
         dest.writeString(this.event_stop_time);
+        dest.writeString(this.fname);
+        dest.writeString(this.lname);
+
 
     }
 
@@ -77,10 +89,11 @@ public class DayEvent implements Parcelable{
      * Reconstruct from the Parcel
      */
 
-        this.event_start_date = source.readString();
-        this.event_stop_date = source.readString();
+        this.event_id=source.readString();
         this.event_start_time=source.readString();
         this.event_stop_time=source.readString();
+        this.fname=source.readString();
+        this.lname=source.readString();
 
     }
 

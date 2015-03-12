@@ -13,6 +13,7 @@ public class WeekViewEvent {
         private String mName;
         private int mColor;
 
+
         public WeekViewEvent(){
 
         }

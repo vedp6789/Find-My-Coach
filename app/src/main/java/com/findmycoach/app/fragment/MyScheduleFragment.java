@@ -526,10 +526,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
                             JSONObject day_event = jsonArray_of_events.getJSONObject(e);
                             DayEvent dayEvent = new DayEvent();
-                            dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                            dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
+                            dayEvent.setEvent_id(day_event.getString("id"));
                             dayEvent.setEvent_start_time(day_event.getString("start_time"));
                             dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                            dayEvent.setFname(day_event.getString("first_name"));
+                            dayEvent.setLname(day_event.getString("last_name"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -568,10 +569,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
                             JSONObject day_event = jsonArray_of_events.getJSONObject(e);
                             DayEvent dayEvent = new DayEvent();
-                            dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                            dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
+
+                            dayEvent.setEvent_id(day_event.getString("id"));
                             dayEvent.setEvent_start_time(day_event.getString("start_time"));
                             dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                            dayEvent.setFname(day_event.getString("first_name"));
+                            dayEvent.setLname(day_event.getString("last_name"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -608,10 +611,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
                             JSONObject day_event = jsonArray_of_events.getJSONObject(e);
                             DayEvent dayEvent = new DayEvent();
-                            dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                            dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
+
+                            dayEvent.setEvent_id(day_event.getString("id"));
                             dayEvent.setEvent_start_time(day_event.getString("start_time"));
                             dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                            dayEvent.setFname(day_event.getString("first_name"));
+                            dayEvent.setLname(day_event.getString("last_name"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -654,10 +659,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
                                 JSONObject day_event = jsonArray_of_events.getJSONObject(e);
                                 DayEvent dayEvent = new DayEvent();
-                                dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                                dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
+
+                                dayEvent.setEvent_id(day_event.getString("id"));
                                 dayEvent.setEvent_start_time(day_event.getString("start_time"));
                                 dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                                dayEvent.setFname(day_event.getString("first_name"));
+                                dayEvent.setLname(day_event.getString("last_name"));
                                 dayEvents.add(dayEvent);
                             }
                             day1.setDayEvents(dayEvents);
@@ -682,10 +689,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
                                 JSONObject day_event = jsonArray_of_events.getJSONObject(e);
                                 DayEvent dayEvent = new DayEvent();
-                                dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                                dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
+
+                                dayEvent.setEvent_id(day_event.getString("id"));
                                 dayEvent.setEvent_start_time(day_event.getString("start_time"));
                                 dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                                dayEvent.setFname(day_event.getString("first_name"));
+                                dayEvent.setLname(day_event.getString("last_name"));
                                 dayEvents.add(dayEvent);
                             }
                             day1.setDayEvents(dayEvents);
@@ -709,10 +718,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
                                 JSONObject day_event = jsonArray_of_events.getJSONObject(e);
                                 DayEvent dayEvent = new DayEvent();
-                                dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                                dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
+
+                                dayEvent.setEvent_id(day_event.getString("id"));
                                 dayEvent.setEvent_start_time(day_event.getString("start_time"));
                                 dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                                dayEvent.setFname(day_event.getString("first_name"));
+                                dayEvent.setLname(day_event.getString("last_name"));
                                 dayEvents.add(dayEvent);
                             }
                             day1.setDayEvents(dayEvents);
@@ -789,10 +800,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
                             JSONObject day_event = jsonArray_of_events.getJSONObject(e);
                             DayEvent dayEvent = new DayEvent();
-                            dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                            dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
+
+                            dayEvent.setEvent_id(day_event.getString("id"));
                             dayEvent.setEvent_start_time(day_event.getString("start_time"));
                             dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                            dayEvent.setFname(day_event.getString("first_name"));
+                            dayEvent.setLname(day_event.getString("last_name"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -856,10 +869,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
                             JSONObject day_event = jsonArray_of_events.getJSONObject(e);
                             DayEvent dayEvent = new DayEvent();
-                            dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                            dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
+
+                            dayEvent.setEvent_id(day_event.getString("id"));
                             dayEvent.setEvent_start_time(day_event.getString("start_time"));
                             dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                            dayEvent.setFname(day_event.getString("first_name"));
+                            dayEvent.setLname(day_event.getString("last_name"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -932,10 +947,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
                             JSONObject day_event = jsonArray_of_events.getJSONObject(e);
                             DayEvent dayEvent = new DayEvent();
-                            dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                            dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
+
+                            dayEvent.setEvent_id(day_event.getString("id"));
                             dayEvent.setEvent_start_time(day_event.getString("start_time"));
                             dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                            dayEvent.setFname(day_event.getString("first_name"));
+                            dayEvent.setLname(day_event.getString("last_name"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -984,10 +1001,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
                             JSONObject day_event = jsonArray_of_events.getJSONObject(e);
                             DayEvent dayEvent = new DayEvent();
-                            dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                            dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
+
+                            dayEvent.setEvent_id(day_event.getString("id"));
                             dayEvent.setEvent_start_time(day_event.getString("start_time"));
                             dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                            dayEvent.setFname(day_event.getString("first_name"));
+                            dayEvent.setLname(day_event.getString("last_name"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
