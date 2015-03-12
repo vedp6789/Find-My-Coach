@@ -506,7 +506,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        
+
     }
 
     @Override
