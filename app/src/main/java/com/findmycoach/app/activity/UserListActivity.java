@@ -30,6 +30,8 @@ public class UserListActivity extends Activity implements Callback {
     private ListView listView;
     private List<Datum> users;
     private ProgressDialog progressDialog;
+    private Datum datum;
+    private boolean isGettingMentor = false;
 
     private static final String TAG="FMC";
 
@@ -48,7 +50,7 @@ public class UserListActivity extends Activity implements Callback {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (users != null) {
-                    Datum datum = users.get(position);
+                    datum = users.get(position);
                     getMentorDetails(datum.getId());
                 }
             }
@@ -56,6 +58,11 @@ public class UserListActivity extends Activity implements Callback {
     }
 
     private void getMentorDetails(String id) {
+        if(isGettingMentor){
+            Toast.makeText(this, getResources().getString(R.string.get_mentor_is_already_called),Toast.LENGTH_SHORT).show();
+            return;
+        }
+        isGettingMentor = true;
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
         requestParams.add("id", id);
@@ -66,7 +73,8 @@ public class UserListActivity extends Activity implements Callback {
 
     private void applyActionbarProperties() {
         ActionBar actionbar = getActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
+        if(actionbar != null)
+            actionbar.setDisplayHomeAsUpEnabled(true);
     }
 
     private void initialize() {
@@ -104,13 +112,17 @@ public class UserListActivity extends Activity implements Callback {
         if(calledApiValue == 25){
             Intent intent = new Intent(getApplicationContext(), MentorDetailsActivity.class);
             intent.putExtra("mentorDetails", (String) object);
+            intent.putExtra("connection_status", datum.getConnectionStatus());
+            datum = null;
             startActivity(intent);
+            isGettingMentor = false;
         }
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
+        isGettingMentor = false;
         Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
     }
 

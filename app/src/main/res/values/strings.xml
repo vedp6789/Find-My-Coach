@@ -493,6 +493,8 @@
     <string name="update_profile">Please update your profile</string>
     <string name="from_date_first">Pick start date for this slot</string>
     <string name="start_time_first">Pick start time for this slot</string>
+    <string name="search_is_already_called">Already a search is running. Please wait...</string>
+    <string name="get_mentor_is_already_called">Already getting a Mentor details for you. Please wait...</string>
 
 
 
@@ -636,6 +638,8 @@
     <string name="mentee">Mentee</string>
     <string name="mentor">Mentor</string>
     <string name="action_connect">Connect</string>
+    <string name="action_disconnect">Disconnect</string>
+    <string name="action_pending">Disconnect (Request already sent)</string>
     <string name="set_time">Set time</string>
     <string name="schedule_vacation_note">A note for vacation schedule</string>
     <string name="classes_availability">Classes availability</string>

@@ -58,11 +58,9 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
     public View getView(final int position, View convertView, ViewGroup parent) {
         final Data singleConnection = connectionList.get(position);
         final String status = singleConnection.getStatus();
-        View view = convertView;
-        if (view == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.connection_single_row_mentor, null);
-        }
+
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.connection_single_row_mentor, null);
         RelativeLayout singleRow = (RelativeLayout) view.findViewById(R.id.singleRow);
 
         singleRow.setOnClickListener(new View.OnClickListener() {
@@ -99,9 +97,9 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
                 nameTV.setText(singleConnection.getOwnerName());
 
                 if(status.equals("accepted")){
-                    connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_minus));
+                    connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_menu_close_clear_cancel));
                 }else if(status.equals("pending")){
-                    connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_plus));
+                    connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_menu_add));
                 }else{
                     connectionButton.setVisibility(View.GONE);
                 }
@@ -125,9 +123,9 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
                 nameTV.setText(singleConnection.getInviteeName());
 
                 if(status.equals("accepted")){
-                    connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_minus));
+                    connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_menu_close_clear_cancel));
                 }else if(status.equals("pending")){
-                connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_minus));
+                connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_notification_clear_all));
                 }else{
                     connectionButton.setVisibility(View.GONE);
                 }

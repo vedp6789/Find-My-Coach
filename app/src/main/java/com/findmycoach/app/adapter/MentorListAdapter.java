@@ -35,6 +35,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     private List<Datum> users;
     private String studentId;
     private ProgressDialog progressDialog;
+    private int clickedPosition;
 
     private static final String TAG="FMC";
 
@@ -61,14 +62,14 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.user_list_item, null);
         }
         ImageView image = (ImageView) view.findViewById(R.id.mentor_image);
-        ImageView imageConnect = (ImageView) view.findViewById(R.id.connect_mentor);
+        final ImageView imageConnect = (ImageView) view.findViewById(R.id.connect_mentor);
         RatingBar rating = (RatingBar) view.findViewById(R.id.mentor_rating);
         TextView name = (TextView) view.findViewById(R.id.mentor_name);
         final Datum user = users.get(position);
@@ -81,22 +82,24 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
                     .error(R.drawable.user_icon).resize(150, 150)
                     .into(image);
         }
-        if(user.getConnectionStatus() != null){
+        if(user.getConnectionStatus() != null && !user.getConnectionStatus().equals("broken")){
             if(user.getConnectionStatus().equals("accepted")){
-                imageConnect.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_minus));
+                imageConnect.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_menu_close_clear_cancel));
             }else if(user.getConnectionStatus().equals("pending")) {
-                imageConnect.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_media_play));
+                imageConnect.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_notification_clear_all));
             }
             imageConnect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context,"Connection will be break",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,user.getConnectionStatus() + " Connection will be break",Toast.LENGTH_SHORT).show();
                 }
             });
         }else{
+            imageConnect.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_menu_add));
             imageConnect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    clickedPosition = position;
                     showAlert(user.getId());
                 }
             });
@@ -155,14 +158,16 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         if(calledApiValue == 17){
+            users.get(clickedPosition).setConnectionStatus("pending");
             Toast.makeText(context,(String) object, Toast.LENGTH_LONG).show();
             this.notifyDataSetChanged();
         }
+        progressDialog.dismiss();
 
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
-
+        progressDialog.dismiss();
     }
 }

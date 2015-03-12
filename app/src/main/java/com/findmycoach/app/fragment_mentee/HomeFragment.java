@@ -64,6 +64,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private int tabIndex;
     private View fragmentView;
     private String location;
+    private boolean isSearching = false;
 
     private static final String TAG="FMC";
 
@@ -277,6 +278,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             Toast.makeText(getActivity(), getResources().getString(R.string.check_network_connection),Toast.LENGTH_SHORT).show();
             return;
         }
+        if(isSearching){
+            Toast.makeText(getActivity(), getResources().getString(R.string.search_is_already_called),Toast.LENGTH_SHORT).show();
+            return;
+        }
+        isSearching = true;
         progressDialog.show();
         String location = locationInput.getText().toString();
         String name = nameInput.getText().toString();
@@ -314,6 +320,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             Intent intent = new Intent(getActivity(), UserListActivity.class);
             intent.putExtra("list", (String) object);
             startActivity(intent);
+            isSearching = false;
         }
     }
 
@@ -329,6 +336,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
+        isSearching = false;
         Toast.makeText(getActivity(), (String) object, Toast.LENGTH_LONG).show();
     }
 
