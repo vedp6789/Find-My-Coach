@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,17 +17,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.ChatWidgetAdapter;
+import com.findmycoach.app.adapter.NotificationAdapter;
 import com.findmycoach.app.beans.attachment.Attachment;
 import com.findmycoach.app.beans.chats.Chats;
 import com.findmycoach.app.beans.chats.Data;
 import com.findmycoach.app.util.Callback;
-import com.findmycoach.app.util.ImageLoadTask;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
-import com.findmycoach.app.R;
 import com.loopj.android.http.RequestParams;
 
 import org.java_websocket.client.WebSocketClient;
@@ -56,6 +58,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private final int STORAGE_GALLERY_VIDEO_REQUEST_CODE = 101;
     private boolean isSocketConnected;
     public static ChatWidgetActivity chatWidgetActivity;
+    private boolean isGettingProfile = false;
 
     private static final String TAG="FMC";
     private static final String TAG1="FMC-WebSocket";
@@ -129,10 +132,40 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     }
 
     private void applyActionbarProperties() {
-        ActionBar actionbar = getActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        if (receiverId != null)
-            actionbar.setTitle(receiverName);
+        ActionBar actionBar = getActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayShowCustomEnabled(true);
+            View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
+            TextView customTitle = (TextView) customView.findViewById(R.id.actionbarTitle);
+            if (receiverId != null)
+                customTitle.setText(receiverName);
+            customTitle.setTypeface(Typeface.MONOSPACE);
+            customTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getProfile();
+                    Toast.makeText(ChatWidgetActivity.this,receiverName + " : " + receiverId,Toast.LENGTH_SHORT).show();
+                }
+            });
+            actionBar.setCustomView(customView);
+        }
+    }
+
+    private void getProfile(){
+        if(isGettingProfile)
+            return;
+        isGettingProfile = true;
+        progressDialog.show();
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("id",receiverId);
+        String authToken = StorageHelper.getUserDetails(this, "auth_token");
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        if(DashboardActivity.dashboardActivity.user_group == 3)
+            NetworkClient.getStudentDetails(this, requestParams, authToken, this, 25);
+        else if(DashboardActivity.dashboardActivity.user_group == 2)
+            NetworkClient.getMentorDetails(this, requestParams, authToken, this, 24);
     }
 
     @Override
@@ -341,6 +374,25 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
+        // For displaying selected Mentor details
+        if(calledApiValue == 24){
+            progressDialog.dismiss();
+            Intent intent = new Intent(this, MentorDetailsActivity.class);
+            intent.putExtra("mentorDetails", (String) object);
+            intent.putExtra("connection_status", "accepted");
+            startActivity(intent);
+            isGettingProfile = false;
+            return;
+        }
+        if(calledApiValue == 25){
+            progressDialog.dismiss();
+            Intent intent = new Intent(this, StudentDetailActivity.class);
+            intent.putExtra("student_detail",(String) object);
+            startActivityForResult(intent, NotificationAdapter.connection_id);
+            isGettingProfile = false;
+            return;
+        }
+
         if(object instanceof Chats){
             Chats chats = (Chats) object;
             if(chats.getData() != null && chats.getData().size() > 0){
