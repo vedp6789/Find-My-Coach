@@ -47,6 +47,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     private ProgressDialog progressDialog;
     private ListView listView_mon_slots,listView_tue_slots,listView_wed_slots,listView_thur_slots,listView_fri_slots,listView_sat_slots,listView_sun_slots;
     private Button b_schedule_class;
+    private String connectionStatus;
 
     private static final String TAG="FMC";
 
@@ -55,6 +56,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mentor_details);
         initialize();
+        Log.d(TAG, connectionStatus);
         applyActionbarProperties();
         populateFields();
     }
@@ -71,6 +73,11 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         String jsonData = getIntent().getStringExtra("mentorDetails");
+        connectionStatus = getIntent().getStringExtra("connection_status");
+        if(connectionStatus == null)
+            connectionStatus = "not connected";
+        if(connectionStatus.equals("broken"))
+            connectionStatus = "not connected";
         Log.d(TAG, jsonData);
         mentorDetails = new Gson().fromJson(jsonData, Response.class);
         userInfo = mentorDetails.getData();
@@ -94,10 +101,9 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         listView_mon_slots= (ListView) findViewById(R.id.lv_sun_available_slots);
 
         b_schedule_class= (Button) findViewById(R.id.b_schedule_class);
+        if(connectionStatus.equals("not connected") || connectionStatus.equals("pending"))
+            b_schedule_class.setVisibility(View.GONE);
         b_schedule_class.setOnClickListener(this);
-
-
-
     }
 
     private void populateFields() {
@@ -167,7 +173,13 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_mentor_details, menu);
+        if(connectionStatus.equals("not connected")) {
+            getMenuInflater().inflate(R.menu.menu_mentor_details_not_connected, menu);
+        }else if(connectionStatus.equals("accepted")) {
+            getMenuInflater().inflate(R.menu.menu_mentor_details_connected, menu);
+        }if(connectionStatus.equals("pending")) {
+            getMenuInflater().inflate(R.menu.menu_mentor_details_pending, menu);
+        }
         return true;
     }
 
@@ -176,6 +188,10 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         int id = item.getItemId();
         if (id == R.id.action_connect) {
             showAlert();
+            return true;
+        }
+        if (id == R.id.action_disconnect) {
+            Toast.makeText(this,"Connection will disconnect",Toast.LENGTH_LONG).show();
             return true;
         }
         if (id == android.R.id.home) {

@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.findmycoach.student.activity.MentorDetailsActivity">
+    <item
+        android:id="@+id/action_disconnect"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/action_disconnect"
+        app:showAsAction="always" />
+</menu>

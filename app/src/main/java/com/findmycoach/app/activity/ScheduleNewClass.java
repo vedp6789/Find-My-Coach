@@ -3,7 +3,6 @@ package com.findmycoach.app.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -75,7 +74,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_mentor_details, menu);
+        getMenuInflater().inflate(R.menu.menu_mentor_details_not_connected, menu);
         return true;
     }*/
 
