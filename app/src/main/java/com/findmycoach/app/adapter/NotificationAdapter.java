@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.beans.requests.Data;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
@@ -87,6 +88,7 @@ public class NotificationAdapter extends BaseAdapter {
                 positionToRemoveFromDetails = position;
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("id",senderData.getOwnerId()+"");
+                requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
                 String authToken = StorageHelper.getUserDetails(context, "auth_token");
                 NetworkClient.getStudentDetails(context, requestParams, authToken, callback, 25);
             }

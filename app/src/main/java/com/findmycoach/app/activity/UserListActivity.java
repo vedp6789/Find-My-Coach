@@ -68,7 +68,7 @@ public class UserListActivity extends Activity implements Callback {
         requestParams.add("id", id);
         String authToken = StorageHelper.getUserDetails(this, "auth_token");
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
-        NetworkClient.getMentorDetails(this, requestParams, authToken, this, 25);
+        NetworkClient.getMentorDetails(this, requestParams, authToken, this, 24);
     }
 
     private void applyActionbarProperties() {
@@ -109,7 +109,7 @@ public class UserListActivity extends Activity implements Callback {
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         // For displaying selected Mentor details
-        if(calledApiValue == 25){
+        if(calledApiValue == 24){
             Intent intent = new Intent(getApplicationContext(), MentorDetailsActivity.class);
             intent.putExtra("mentorDetails", (String) object);
             intent.putExtra("connection_status", datum.getConnectionStatus());
