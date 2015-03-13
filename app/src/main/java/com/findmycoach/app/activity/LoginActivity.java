@@ -22,14 +22,12 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
-
-import com.findmycoach.app.BackgroundService;
+import com.findmycoach.app.R;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
-import com.findmycoach.app.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -276,7 +274,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 saveUserEmail(userId);
                 NetworkClient.login(this, requestParams, this, 1);
             } else
-                Toast.makeText(this, "Check internet connection", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getResources().getString(R.string.check_network_connection), Toast.LENGTH_LONG).show();
         }
         StorageHelper.storePreference(this, "login_with", "Login");
     }

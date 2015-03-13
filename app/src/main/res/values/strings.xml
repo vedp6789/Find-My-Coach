@@ -447,6 +447,12 @@
     <string name="set_schedule">Schedule</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_enter_code">Enter 6 character code here.</string>
+    <string name="resend_code">Resend verification code</string>
+    <string name="find_mentor">Find Mentor</string>
+    <string name="change_location">Change Location</string>
+    <string name="no_time_barrier">No Time Barrier</string>
+    <string name="time_barrier">Time Barrier</string>
+    <string name="search">Search</string>
     <string name="hint_enter_card_number">Card number</string>
     <string name="hint_name_on_card">Name on card</string>
     <string name="hint_date_of_expiry">Date of expiry</string>
@@ -495,6 +501,21 @@
     <string name="start_time_first">Pick start time for this slot</string>
     <string name="search_is_already_called">Already a search is running. Please wait...</string>
     <string name="get_mentor_is_already_called">Already getting a Mentor details for you. Please wait...</string>
+    <string name="select_start_and_end_time">Please select starting time and completion time for this slot.</string>
+    <string name="select_start_time">Please select starting time of this slot.</string>
+    <string name="select_end_time">Please select completion time of this slot.</string>
+    <string name="created_new_slot_successfully">You have successfully created a new slot.</string>
+    <string name="switch_login">Switch your user login.</string>
+    <string name="vacation_scheduled_success">Your vacation get scheduled successfully.</string>
+    <string name="no_notification">No notification for you.</string>
+
+    <!--  Minimum time difference between start time and stop time of a slot   i.e in hours-->
+    <string name="slot_time_difference">Minimum slot duration should be 1 hour!</string>
+    <string name="select_slot_in_multiple_of_hour">Please select slots in multiple of hours.</string>
+    <string name="select_start_date_of_slot">Please select start date for this slot.</string>
+    <string name="select_at_least_one_day">Please select at least one day.</string>
+    <string name="select_start_date_of_vacation">Select start date of vacation.</string>
+    <string name="select_end_date_of_vacation">Select completion date of vacation.</string>
 
 
 
@@ -507,6 +528,7 @@
     <string name="t_and_c">Terms and Conditions</string>
     <string name="logging_in">Logging in...</string>
     <string name="verifying">Verifying...</string>
+    <string name="verify">Verify</string>
 <string name="sending_code">Sending code...</string>
 
     <!--Exception message-->
@@ -542,6 +564,10 @@
     <string name="prompt_last_name">Last Name</string>
     <string name="prompt_date_of_birth">Date Of Birth</string>
     <string name="prompt_gender">Gender</string>
+    <string name="prompt_area_of_interest">Area of Interests</string>
+    <string name="prompt_area_of_coaching">Area of Coachings</string>
+    <string name="prompt_coaching_type">Coaching Type</string>
+    <string name="prompt_training_location">Training Location</string>
     <string name="prompt_male">Male</string>
     <string name="prompt_female">Female</string>
     <string name="prompt_phone">Mobile Number</string>
@@ -572,9 +598,10 @@
     <string name="no_search_result_found">No result found</string>
     <string name="prompt_category">Category</string>
     <string name="prompt_sub_category">Sub Category</string>
-    <string name="prompt_ratting">Ratting</string>
+    <string name="prompt_rating">Rating</string>
     <string name="prompt_name">Search By Name</string>
     <string name="prompt_location">Location</string>
+    <string name="prompt_current_location">Current Location</string>
     <string name="connection_request_msg">Hi, I would like to connect with you.</string>
     <string name="connection_request">Connection Request</string>
     <string name="enter_msg">Enter Message</string>
@@ -600,6 +627,10 @@
     <string name="action_forgot_password">Forgot Password</string>
     <string name="action_sign_up">Sign Up</string>
     <string name="action_save">Save</string>
+    <string name="select_image">Select Image</string>
+    <string name="rotate">Rotate</string>
+    <string name="crop">Crop</string>
+    <string name="type_here">Type here to send</string>
     <string name="action_logout">Log Out</string>
     <string name="action_accept">Accept</string>
     <string name="action_decline">Decline</string>
@@ -683,6 +714,31 @@
     <string name="reg_id_saved_to_server">reg_id_saved</string>
     <!-- -->
 
+
+    <string-array name="week_days">
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+    </string-array>
+
+    <string-array name="months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 

@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="MON" />
+        android:text="@string/m" />
 
     <TextView
         android:id="@+id/d1_label"
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="TUE" />
+        android:text="@string/t" />
 
     <TextView
         android:id="@+id/d2_label"
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="WED" />
+        android:text="@string/w" />
 
     <TextView
         android:id="@+id/d3_label"
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="THU" />
+        android:text="@string/th" />
 
     <TextView
         android:id="@+id/d4_label"
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="FRI" />
+        android:text="@string/f" />
 
     <TextView
         android:id="@+id/d5_label"
@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="SAT" />
+        android:text="@string/s" />
 
     <TextView
         android:id="@+id/d6_label"
@@ -73,5 +73,5 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="SUN" />
+        android:text="@string/su" />
 </LinearLayout>

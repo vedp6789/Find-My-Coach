@@ -177,7 +177,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         if(connectionStatus.equals("not connected")) {
             getMenuInflater().inflate(R.menu.menu_mentor_details_not_connected, menu);
         }else if(connectionStatus.equals("accepted")) {
-            getMenuInflater().inflate(R.menu.menu_mentor_details_connected, menu);
+            getMenuInflater().inflate(R.menu.menu_connected, menu);
         }if(connectionStatus.equals("pending")) {
             getMenuInflater().inflate(R.menu.menu_mentor_details_pending, menu);
         }

@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
-                    android:text="Rating"
+                    android:text="@string/prompt_rating"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -89,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
-                    android:text="Profession"
+                    android:text="@string/prompt_profession"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -117,7 +117,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
-                    android:text="Accomplishment"
+                    android:text="@string/prompt_accomplishment"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -145,7 +145,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
-                    android:text="Charges"
+                    android:text="@string/prompt_charges"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -181,7 +181,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
-                    android:text="Available to travel trainee location"
+                    android:text="@string/prompt_willing_to_travel"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -224,8 +224,7 @@
                     android:textSize="18sp" />
             </LinearLayout>
 
-
-            //////////////////////////////////////////////////////      Classes availability   ///////////////////////////////////////////////
+<!--////////////////////////////////////////////////////////////////////////////-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -261,7 +260,7 @@
                     <ListView
                         android:id="@+id/lv_mon_available_slots"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></ListView>
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -282,7 +281,7 @@
                     <ListView
                         android:id="@+id/lv_tue_available_slots"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"></ListView>
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -303,7 +302,7 @@
                     <ListView
                         android:id="@+id/lv_wed_available_slots"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></ListView>
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -324,7 +323,7 @@
                     <ListView
                         android:id="@+id/lv_thur_available_slots"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></ListView>
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -345,7 +344,7 @@
                     <ListView
                         android:id="@+id/lv_fri_available_slots"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"></ListView>
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -366,7 +365,7 @@
                     <ListView
                         android:id="@+id/lv_sat_available_slots"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"></ListView>
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -387,7 +386,7 @@
                     <ListView
                         android:id="@+id/lv_sun_available_slots"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></ListView>
+                        android:layout_height="wrap_content"/>
 
                 </LinearLayout>
                 <Button

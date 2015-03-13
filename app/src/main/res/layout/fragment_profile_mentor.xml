@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
-                    android:text="Rating"
+                    android:text="@string/prompt_rating"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -89,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
-                    android:text="Profession"
+                    android:text="@string/prompt_profession"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -117,7 +117,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
-                    android:text="Accomplishment"
+                    android:text="@string/prompt_accomplishment"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -145,7 +145,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
-                    android:text="Charges"
+                    android:text="@string/prompt_charges"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -173,7 +173,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
-                    android:text="Current location"
+                    android:text="@string/prompt_current_location"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -201,7 +201,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
-                    android:text="Available to travel trainee location"
+                    android:text="@string/prompt_willing_to_travel"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -228,7 +228,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="Coaching areas"
+                    android:text="@string/prompt_area_of_coaching"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:layout_weight="2"
@@ -257,7 +257,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="Google +"
+                    android:text="@string/google_plus"
                     android:textAllCaps="false"
                     android:textColor="@android:color/holo_red_dark"
                     android:textSize="18sp" />
@@ -267,7 +267,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="Facebook"
+                    android:text="@string/facebook"
                     android:textColor="@color/wallet_link_text_light"
                     android:textSize="18sp" />
             </LinearLayout>

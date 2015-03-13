@@ -27,7 +27,7 @@
             android:id="@+id/sp_subjects"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"></Spinner>
+            android:layout_gravity="right"/>
 
     </LinearLayout>
 
@@ -57,7 +57,7 @@
             <Spinner
                 android:id="@+id/sp_class_start_time"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"></Spinner>
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
         <LinearLayout
@@ -76,7 +76,7 @@
             <Spinner
                 android:id="@+id/sp_class_stop_time"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"></Spinner>
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -89,7 +89,6 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:orientation="horizontal">
-        >
 
         <TextView
             android:layout_width="wrap_content"
@@ -185,7 +184,7 @@
             <Spinner
                 android:id="@+id/sp_start_date"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"></Spinner>
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
@@ -201,7 +200,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="@string/to1"
-                android:textColor="#000000"></TextView>
+                android:textColor="#000000"/>
 
         </LinearLayout>
 
@@ -214,7 +213,7 @@
             <Spinner
                 android:id="@+id/sp_end_date"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"></Spinner>
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -292,7 +291,7 @@
             <Spinner
                 android:id="@+id/sp_mentor_for"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"></Spinner>
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
 

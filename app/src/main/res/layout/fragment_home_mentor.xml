@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@string/welcome_to"
-            android:textColor="#B1D9FF"
+            android:textColor="#000000"
             android:textSize="24sp" />
 
         <TextView
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@string/find_my_coach"
-            android:textColor="#E6F3FD"
+            android:textColor="#000000"
             android:textSize="26sp" />
 
     </LinearLayout>

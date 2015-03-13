@@ -46,7 +46,6 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:gravity="center_vertical"
-                        android:text="abc@gmail.com"
                         android:textColor="@android:color/black"
                         android:textSize="20sp" />
 
@@ -56,7 +55,6 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:gravity="center_vertical"
-                        android:text="+91 7760390178"
                         android:textColor="@android:color/black"
                         android:textSize="20sp" />
                 </LinearLayout>
@@ -78,7 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="First Name:"
+                        android:text="@string/prompt_first_name"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -90,8 +88,7 @@
                         android:background="@drawable/custom_edittext"
                         android:hint="@string/prompt_first_name"
                         android:padding="4dp"
-                        android:singleLine="true"
-                        android:text="William" />
+                        android:singleLine="true" />
 
                 </LinearLayout>
 
@@ -104,7 +101,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Last Name:"
+                        android:text="@string/prompt_last_name"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -116,8 +113,7 @@
                         android:background="@drawable/custom_edittext"
                         android:hint="@string/prompt_last_name"
                         android:padding="4dp"
-                        android:singleLine="true"
-                        android:text="James" />
+                        android:singleLine="true" />
                 </LinearLayout>
 
 
@@ -130,7 +126,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Gender:"
+                        android:text="@string/prompt_gender"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -153,7 +149,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Date Of Birth:"
+                        android:text="@string/prompt_date_of_birth"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -179,7 +175,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Address:"
+                        android:text="@string/prompt_address"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -205,7 +201,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="City:"
+                        android:text="@string/prompt_city"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -221,74 +217,6 @@
 
                 </LinearLayout>
 
-                <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="vertical">-->
-
-                <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_margin="4dp"-->
-                <!--android:text="Country:"-->
-                <!--android:textSize="18sp"-->
-                <!--android:textStyle="bold" />-->
-
-                <!--<Spinner-->
-                <!--android:id="@+id/input_country"-->
-                <!--style="@android:style/Widget.Spinner.DropDown"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="40dp"-->
-                <!--android:prompt="@string/prompt_country"-->
-                <!--android:spinnerMode="dropdown" />-->
-                <!--</LinearLayout>-->
-
-                <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="vertical">-->
-
-                <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_margin="4dp"-->
-                <!--android:text="State:"-->
-                <!--android:textSize="18sp"-->
-                <!--android:textStyle="bold" />-->
-
-                <!--<Spinner-->
-                <!--android:id="@+id/input_state"-->
-                <!--style="@android:style/Widget.Spinner.DropDown"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="40dp"-->
-                <!--android:prompt="@string/prompt_state"-->
-                <!--android:spinnerMode="dropdown" />-->
-                <!--</LinearLayout>-->
-
-                <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="vertical">-->
-
-                <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_margin="4dp"-->
-                <!--android:text="City:"-->
-                <!--android:textSize="18sp"-->
-                <!--android:textStyle="bold" />-->
-
-                <!--<Spinner-->
-                <!--android:id="@+id/input_city"-->
-                <!--style="@android:style/Widget.Spinner.DropDown"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="40dp"-->
-                <!--android:prompt="@string/prompt_city"-->
-                <!--android:spinnerMode="dropdown" />-->
-
-
-                <!--</LinearLayout>-->
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -298,7 +226,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Pin Code:"
+                        android:text="@string/prompt_pin"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -325,7 +253,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Mentor For:"
+                        android:text="@string/mentor_for"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -348,7 +276,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Training Location:"
+                        android:text="@string/prompt_training_location"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -358,7 +286,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
                         android:background="@drawable/custom_edittext"
-                        android:hint="Training Location"
+                        android:hint="@string/prompt_training_location"
                         android:inputType="text"
                         android:padding="4dp"
                         android:singleLine="true" />
@@ -373,7 +301,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Coaching Type:"
+                        android:text="@string/prompt_coaching_type"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -383,7 +311,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:entries="@array/gender"
-                        android:prompt="@string/prompt_gender"
+                        android:prompt="@string/prompt_coaching_type"
                         android:spinnerMode="dropdown" />
                 </LinearLayout>
 
@@ -396,7 +324,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Areas of interest:"
+                        android:text="@string/prompt_area_of_interest"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -407,7 +335,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
                         android:background="@drawable/custom_edittext"
-                        android:hint="Click Here"
+                        android:hint="@string/prompt_area_of_interest"
                         android:inputType="number"
                         android:padding="4dp"
                         android:singleLine="true" />

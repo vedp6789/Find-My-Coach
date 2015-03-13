@@ -3,7 +3,6 @@ package com.findmycoach.app.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,16 +10,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.findmycoach.app.activity.SetScheduleActivity;
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.SetScheduleActivity;
 import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 
-import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -37,8 +33,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
     private final List<String> list;
     private static final int DAY_OFFSET = 1;
-    private final String[] weekdays = new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-    private final String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+    private String[] weekdays;
+    private String[] months;
     private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     private int daysInMonth;
     private int currentDayOfMonth;
@@ -69,7 +65,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         this.list = new ArrayList<String>();
         this.myScheduleFragment = myScheduleFragment;
 
-
+        weekdays = context.getResources().getStringArray(R.array.week_days);
+        months = context.getResources().getStringArray(R.array.months);
         Log.d(TAG,"Inside CalendarGridAdapter");
 
         Calendar calendar = Calendar.getInstance();
@@ -87,12 +84,12 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         Log.d(TAG, "Current week day" + currentWeekDay);
 
 
-        this.prev_month_data=new ArrayList<Day>();
-        this.current_month_data=new ArrayList<Day>();
-        this.coming_month_data=new ArrayList<Day>();
-        this.prev_month_data=prev_month_data;
-        this.current_month_data=current_month_data;
-        this.coming_month_data=coming_month_data;
+        prev_month_data=new ArrayList<Day>();
+        current_month_data=new ArrayList<Day>();
+        coming_month_data=new ArrayList<Day>();
+        CalendarGridAdapter.prev_month_data=prev_month_data;
+        CalendarGridAdapter.current_month_data=current_month_data;
+        CalendarGridAdapter.coming_month_data=coming_month_data;
         // Print Month
         printMonth(month, year);
 

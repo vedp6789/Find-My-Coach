@@ -54,7 +54,7 @@
             android:layout_height="fill_parent"
             android:layout_gravity="start"
             android:layout_marginLeft="10sp"
-            android:src="@drawable/calendar_left_arrow_selector"></ImageView>
+            android:src="@drawable/calendar_left_arrow_selector"/>
 
         <TextView
             android:id="@+id/currentMonth"
@@ -63,7 +63,7 @@
             android:gravity="center"
             android:layout_gravity="center_horizontal"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF"></TextView>
+            android:textColor="#FFFFFF"/>
 
         <ImageView
             android:id="@+id/nextMonth"
@@ -71,7 +71,7 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:layout_marginRight="10sp"
-            android:src="@drawable/calendar_right_arrow_selector"></ImageView>
+            android:src="@drawable/calendar_right_arrow_selector"/>
     </LinearLayout>
 
     <LinearLayout
@@ -85,13 +85,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:scaleType="fitXY"
-            android:src="@drawable/calendar_days"></ImageView>
+            android:src="@drawable/calendar_days"/>
     </LinearLayout>
 
     <GridView
         android:id="@+id/calendar"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:numColumns="7"></GridView>
+        android:numColumns="7"/>
 
 </LinearLayout>

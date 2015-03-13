@@ -125,13 +125,6 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
                 }
                 areasOfInterest.setText(areaOfInterest);
             }
-//            facebookLink.setText(userInfo.getFacebookLink());
-//            googlePlusLink.setText(userInfo.getGoogleLink());
-//            if (userInfo.getAvailabilityYn().equals("1")) {
-//                isReadyToTravel.setChecked(true);
-//            } else {
-//                isReadyToTravel.setChecked(false);
-//            }
         } catch (Exception e) {
 
         }
@@ -155,15 +148,13 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
         profileAddress1 = (AutoCompleteTextView) findViewById(R.id.input_address1);
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         pinCode = (EditText) findViewById(R.id.input_pin);
-//        facebookLink = (EditText) findViewById(R.id.input_facebook);
-//        googlePlusLink = (EditText) findViewById(R.id.input_google_plus);
         mentorFor = (Spinner) findViewById(R.id.input_mentor_for);
         trainingLocation = (EditText) findViewById(R.id.input_training_location);
         coachingType = (Spinner) findViewById(R.id.input_coaching_type);
         areasOfInterest = (TextView) findViewById(R.id.input_areas_of_interest);
         updateAction = (Button) findViewById(R.id.button_update);
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Please wait...");
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
         applyAction();
     }
 

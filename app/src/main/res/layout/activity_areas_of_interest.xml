@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@android:color/holo_orange_dark"
-        android:text="Save"
+        android:text="@string/action_save"
         android:textAllCaps="false" />
 
 </RelativeLayout>

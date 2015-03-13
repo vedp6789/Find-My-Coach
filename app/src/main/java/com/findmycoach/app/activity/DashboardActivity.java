@@ -235,7 +235,7 @@ public class DashboardActivity extends FragmentActivity
                     gcm = GoogleCloudMessaging.getInstance(context);
                 }
                 regid = gcm.register(SENDER_ID);
-                msg = "Device registered, registration ID=" + regid;
+                msg = "Device registered, registration ID = " + regid;
                 Log.d(TAG, "Registration Id:" + regid);
 
                 storeRegistrationId(context, regid);
@@ -243,7 +243,7 @@ public class DashboardActivity extends FragmentActivity
                 msg = getResources().getString(R.string.error) + ex.getMessage();
 
             } catch (Exception e) {
-                Log.d(TAG, "Exeception occured while doing GCM registration:" + e);
+                Log.d(TAG, "Exception occurred while doing GCM registration:" + e);
             }
             return msg;
 
@@ -425,7 +425,7 @@ public class DashboardActivity extends FragmentActivity
 
 
             }else{
-                Toast.makeText(getApplicationContext(),"Switch your user login.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),getResources().getString(R.string.switch_login),Toast.LENGTH_SHORT).show();
             }
 
 

@@ -31,7 +31,6 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center"
             android:layout_margin="8dp"
-            android:text="bjkjbhjbsdjfhjasd fjasdfji hs"
             android:textSize="16sp"
             android:textStyle="bold" />
 

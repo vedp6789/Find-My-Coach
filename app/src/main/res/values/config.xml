@@ -26,10 +26,8 @@
     <!--WEB SOCKET URL-->
     <string name="CHAT_SOCKET_URL">ws://192.241.196.244:9302</string>
 
-    <!--Root path of media storage-->
+    <!--Root path of media storage Folder-->
     <string name="stored_path">FindMyCoach</string>
 
-    <!--  Minimum time difference between start time and stop time of a slot   i.e in hours-->
-    <string name="slot_time_difference">1</string>
 
 </resources>
