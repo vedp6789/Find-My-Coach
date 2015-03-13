@@ -527,6 +527,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
+                            dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -534,7 +535,6 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                         day1.setDayEvents(dayEvents);
                     }
                     previousMonthArrayList.add(day1);
-
                 }
 
 
@@ -571,6 +571,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
+                            dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -579,6 +580,14 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     }
                     currentMonthArrayList.add(day1);
                 }
+
+                    Log.e(TAG,currentMonthArrayList.size()+"");
+                    for(Day d : currentMonthArrayList) {
+                        Log.e(TAG, d.dayEvents.size() + "");
+                        for(DayEvent de : d.dayEvents){
+                            Log.v(TAG, de.getEvent_id() + " : s_time : " + de.getEvent_start_time() + " : L_time : " + de.getEvent_stop_time());
+                        }
+                    }
 
                 for (int i = days_in_prev_month + days_in_current_month; i < days_in_prev_month + days_in_current_month + days_in_next_month; i++) {
                     Day day1 = new Day();
@@ -613,6 +622,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
+                            dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -661,6 +671,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                                 dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
                                 dayEvent.setFname(day_event.getString("first_name"));
                                 dayEvent.setLname(day_event.getString("last_name"));
+                                dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
                                 dayEvents.add(dayEvent);
                             }
                             day1.setDayEvents(dayEvents);
@@ -691,6 +702,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                                 dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
                                 dayEvent.setFname(day_event.getString("first_name"));
                                 dayEvent.setLname(day_event.getString("last_name"));
+                                dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
                                 dayEvents.add(dayEvent);
                             }
                             day1.setDayEvents(dayEvents);
@@ -802,6 +814,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
+                            dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -871,6 +884,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
+                            dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -949,6 +963,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
+                            dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -1003,6 +1018,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
+                            dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);

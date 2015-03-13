@@ -12,9 +12,17 @@ public class WeekViewEvent {
         private Calendar mEndTime;
         private String mName;
         private int mColor;
+        private int eventType;
 
+    public int getEventType() {
+        return eventType;
+    }
 
-        public WeekViewEvent(){
+    public void setEventType(int eventType) {
+        this.eventType = eventType;
+    }
+
+    public WeekViewEvent(){
 
         }
 
@@ -60,11 +68,13 @@ public class WeekViewEvent {
          * @param startTime The time when the event starts.
          * @param endTime The time when the event ends.
          */
-        public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime) {
+        public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime,int event_type) {
             this.mId = id;
             this.mName = name;
             this.mStartTime = startTime;
             this.mEndTime = endTime;
+            this.eventType=event_type;
+
         }
 
 

@@ -5,15 +5,19 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.util.StorageHelper;
+import com.roomorama.caldroid.WeekdayArrayAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by ved on 12/3/15.
@@ -22,10 +26,11 @@ public class AboutEvent extends Activity {
     TextView tv_mentor_name, tv_mentee_name, tv_subject_val, tv_address_type, tv_address_val, tv_start_date_val, tv_end_date_val, tv_time_val;
     ListView lv_week_days;
     private static final String TAG ="FMC";
-    private static String address,start_time,end_time,start_date,end_date;
+    private static String address,start_time,end_time,start_date,end_date,mentor_fname,mentor_lname,mentee_fname,mentee_lname,subject;
     JSONObject jsonObject_aboutEvent;
     JSONArray jsonArrayData;
     JSONObject event_details;
+    ArrayAdapter arrayAdapter;
 
 
 
@@ -47,24 +52,72 @@ public class AboutEvent extends Activity {
             jsonObject_aboutEvent=new JSONObject(about_event);
             jsonArrayData=jsonObject_aboutEvent.getJSONArray("data");
             event_details=jsonArrayData.getJSONObject(0);
+
             address=event_details.getString("location");
             start_date=event_details.getString("start_date");
             end_date=event_details.getString("stop_date");
             start_time=event_details.getString("start_time");
             end_time=event_details.getString("stop_time");
+            mentor_fname=event_details.getString("first_name");
+            mentor_lname=event_details.getString("last_name");
+            mentee_fname=event_details.getString("student_first");
+            mentee_lname=event_details.getString("student_last");
+            subject=event_details.getString("sub_category_name");
             tv_start_date_val.setText(start_date);
             if(end_date != null && end_date.length() > 0){
                 tv_end_date_val.setText(end_date);
             }
             StringBuilder stringBuilder=new StringBuilder();
-            stringBuilder.append(start_time.split(":",3)[0]+":"+start_time.split(":",3)[1]+" to "+end_date.split(":",3)[0]+":"+end_time.split(":",3)[1]);
+            stringBuilder.append(start_time.split(":",3)[0]+":"+start_time.split(":",3)[1]+" to "+end_time.split(":",3)[0]+":"+end_time.split(":",3)[1]);
             tv_time_val.setText(stringBuilder);
-
-
 
             if(address != null && address.length() > 0){
                 tv_address_val.setText(address);
             }
+
+            StringBuilder stringBuilder1=new StringBuilder();
+
+
+            if(mentor_fname.equals("0")){
+                tv_mentor_name.setText("");
+            }
+            else{
+                stringBuilder1.append(mentor_fname);
+                if(!mentor_lname.equals("0")){
+                    stringBuilder1.append(" "+mentor_lname);
+                }
+                tv_mentor_name.setText(stringBuilder1);
+            }
+
+            StringBuilder stringBuilder2=new StringBuilder();
+
+
+            if(mentee_fname.equals("0")){
+                Log.d(TAG,"mentee fname found 0");
+                tv_mentee_name.setText(" ");
+            }
+            else{
+                stringBuilder2.append(mentee_fname);
+                if(!mentee_lname.equals("0")){
+                    stringBuilder2.append(" "+mentee_lname);
+                }
+                tv_mentee_name.setText(stringBuilder2);
+            }
+
+
+            if(!subject.equals("")){
+                tv_subject_val.setText(subject);
+            }else{
+                tv_subject_val.setText("");
+            }
+
+            ArrayList arrayList=new ArrayList();
+            arrayList.add("MON");
+            arrayList.add("TUE");
+            arrayAdapter=new ArrayAdapter(AboutEvent.this,android.R.layout.simple_list_item_1,arrayList.toArray());
+            lv_week_days.setAdapter(arrayAdapter);
+
+
 
         } catch (JSONException e) {
             e.printStackTrace();

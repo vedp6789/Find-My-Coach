@@ -30,6 +30,10 @@ import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MentorDetailsActivity extends Activity implements Callback,Button.OnClickListener{
 
     private Response mentorDetails;
@@ -49,6 +53,10 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     private Button b_schedule_class;
     private String connectionStatus;
 
+    JSONObject jsonObject,jsonObject_Data;
+    JSONArray jsonArray_sub_category;
+
+
 
     private static final String TAG="FMC";
 
@@ -56,10 +64,23 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mentor_details);
+
+        try {
+            jsonObject=new JSONObject(getIntent().getStringExtra("mentorDetails"));
+            jsonObject_Data=jsonObject.getJSONObject("data");
+            jsonArray_sub_category=jsonObject_Data.getJSONArray("sub_category_name");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         initialize();
         Log.d(TAG, connectionStatus);
         applyActionbarProperties();
         populateFields();
+
+
+
+
     }
 
     private void applyActionbarProperties() {
@@ -102,7 +123,15 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         listView_sun_slots= (ListView) findViewById(R.id.lv_sun_available_slots);
 
         b_schedule_class= (Button) findViewById(R.id.b_schedule_class);
-        if(connectionStatus.equals("not connected") || connectionStatus.equals("pending"))
+
+        if(!(jsonArray_sub_category.length()>0)){
+            Log.d(TAG,"sub category is  null");
+        }else{
+            Log.d(TAG,"sub category is not null");
+        }
+
+
+        if(connectionStatus.equals("not connected") || connectionStatus.equals("pending") || !(jsonArray_sub_category.length()>0))
             b_schedule_class.setVisibility(View.GONE);
         b_schedule_class.setOnClickListener(this);
     }

@@ -11,10 +11,10 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:text="@string/mentor_name"
         android:textColor="#000000"
-        android:textSize="20sp" />
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/tv_mentor_name_val"
@@ -23,10 +23,10 @@
         android:layout_below="@+id/tv_mentor_name"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="2dp"
+
         android:hint="@string/mentor_name"
         android:textColor="#000000"
-        android:textSize="20sp" />
+        android:textSize="15sp" />
 
 
     <TextView
@@ -39,7 +39,7 @@
         android:layout_marginTop="5dp"
         android:text="@string/mentee_name"
         android:textColor="#000000"
-        android:textSize="20sp" />
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/tv_mentee_name_val"
@@ -48,29 +48,28 @@
         android:layout_below="@+id/tv_mentee_name"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="2dp"
+
         android:hint="@string/mentor_name"
         android:textColor="#000000"
-        android:textSize="20sp" />
+        android:textSize="15sp" />
 
     <LinearLayout
         android:id="@+id/ll_event_subject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_mentee_name_val"
+        android:layout_below="@+id/tv_mentee_name_val"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
         <TextView
-
             android:id="@+id/tv_subject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sub"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tv_subject_Val"
@@ -78,7 +77,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/sub"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
     </LinearLayout>
 
     <TextView
@@ -86,10 +85,10 @@
         android:layout_below="@id/ll_event_subject"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:hint="@string/location"
         android:textColor="#000000"
         ></TextView>
@@ -98,29 +97,18 @@
         android:layout_below="@id/tv_address"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#000000"
-        android:textSize="20sp"/>
+        android:textSize="15sp"/>
 
-    <TextView
-        android:id="@+id/tv_duration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_address_val"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/duration"
-        android:textColor="#000000"
-        android:textSize="20sp" />
 
     <LinearLayout
         android:id="@+id/ll_start_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_duration"
+        android:layout_below="@id/tv_address_val"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
@@ -132,7 +120,7 @@
             android:layout_height="wrap_content"
             android:text="@string/start_date"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tv_event_start_date_val"
@@ -140,7 +128,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/start_date"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -159,7 +147,7 @@
             android:layout_height="wrap_content"
             android:text="@string/end_date"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tv_event_end_date_val"
@@ -167,7 +155,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/end_date"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
     </LinearLayout>
 
 
@@ -187,14 +175,14 @@
             android:layout_height="wrap_content"
             android:text="@string/event_time"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tv_event_time_val"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -212,7 +200,8 @@
             android:layout_height="wrap_content"
             android:text="@string/week_days"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="15sp"
+            android:gravity="start"/>
 
         <ListView
             android:id="@+id/lv_week_days"

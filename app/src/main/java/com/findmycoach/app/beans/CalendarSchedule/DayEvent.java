@@ -15,6 +15,15 @@ public class DayEvent implements Parcelable{
 
     private String fname;
     private String lname;
+    private String sub_category_name;
+
+    public String getSub_category_name() {
+        return sub_category_name;
+    }
+
+    public void setSub_category_name(String sub_category_name) {
+        this.sub_category_name = sub_category_name;
+    }
 
     public String getEvent_id() {
         return event_id;
@@ -80,6 +89,7 @@ public class DayEvent implements Parcelable{
         dest.writeString(this.event_stop_time);
         dest.writeString(this.fname);
         dest.writeString(this.lname);
+        dest.writeString(this.sub_category_name);
 
 
     }
@@ -94,6 +104,7 @@ public class DayEvent implements Parcelable{
         this.event_stop_time=source.readString();
         this.fname=source.readString();
         this.lname=source.readString();
+        this.sub_category_name=source.readString();
 
     }
 

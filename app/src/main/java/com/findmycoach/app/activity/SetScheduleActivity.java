@@ -52,6 +52,8 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     private static ArrayList<Day> prev_month = null;
     private static ArrayList<Day> current_month = null;
     private static ArrayList<Day> coming_month = null;
+    private static final int slot_event_type=0;
+    private static final int event_type=1;
 
     private static ProgressDialog progressDialog;
 
@@ -158,6 +160,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             String f_name = dayEvent.getFname();
                             String l_name = dayEvent.getLname();
                             String event_id = dayEvent.getEvent_id();
+                            String sub_category_name=dayEvent.getSub_category_name();
                             //String event_name=dayEvent.getEvent_name();
                             startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
                             startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
@@ -168,7 +171,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":", 3)[0]) - Integer.parseInt(start_time.split(":", 3)[0]));
                             endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":", 3)[1]));
                             WeekViewEvent weekViewEvent;
-                            weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name), startTime, endTime);
+                            weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name,sub_category_name), startTime, endTime,event_type);
                             weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
                             events.add(weekViewEvent);
 
@@ -203,7 +206,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":", 3)[0]) - Integer.parseInt(start_time.split(":", 3)[0]));
                             endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":", 3)[1]));
                             WeekViewEvent weekViewEvent;
-                            weekViewEvent = new WeekViewEvent(4, getSlotTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1])), startTime, endTime);
+                            weekViewEvent = new WeekViewEvent(4, getSlotTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1])), startTime, endTime,slot_event_type);
                             weekViewEvent.setColor(getResources().getColor(R.color.event_color_02));
                             events.add(weekViewEvent);
 
@@ -224,6 +227,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             String f_name = dayEvent.getFname();
                             String l_name = dayEvent.getLname();
                             String event_id = dayEvent.getEvent_id();
+                            String sub_category_name=dayEvent.getSub_category_name();
                             //String event_name=dayEvent.getEvent_name();
                             startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
                             startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
@@ -234,7 +238,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":", 3)[0]) - Integer.parseInt(start_time.split(":", 3)[0]));
                             endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":", 3)[1]));
                             WeekViewEvent weekViewEvent;
-                            weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name), startTime, endTime);
+                            weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name,sub_category_name), startTime, endTime,event_type);
                             weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
                             events.add(weekViewEvent);
 
@@ -266,6 +270,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             String f_name = dayEvent.getFname();
                             String l_name = dayEvent.getLname();
                             String event_id = dayEvent.getEvent_id();
+                            String sub_category_name=dayEvent.getSub_category_name();
                             //String event_name=dayEvent.getEvent_name();
                             startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
                             startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
@@ -276,7 +281,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":", 3)[0]) - Integer.parseInt(start_time.split(":", 3)[0]));
                             endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":", 3)[1]));
                             WeekViewEvent weekViewEvent;
-                            weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name), startTime, endTime);
+                            weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name,sub_category_name), startTime, endTime,event_type);
                             weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
                             events.add(weekViewEvent);
 
@@ -310,7 +315,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":", 3)[0]) - Integer.parseInt(start_time.split(":", 3)[0]));
                             endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":", 3)[1]));
                             WeekViewEvent weekViewEvent;
-                            weekViewEvent = new WeekViewEvent(4, getSlotTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1])), startTime, endTime);
+                            weekViewEvent = new WeekViewEvent(4, getSlotTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1])), startTime, endTime,slot_event_type);
                             weekViewEvent.setColor(getResources().getColor(R.color.event_color_02));
                             events.add(weekViewEvent);
 
@@ -330,6 +335,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             String f_name = dayEvent.getFname();
                             String l_name = dayEvent.getLname();
                             String event_id = dayEvent.getEvent_id();
+                            String sub_category_name=dayEvent.getSub_category_name();
                             //String event_name=dayEvent.getEvent_name();
                             startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
                             startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
@@ -340,7 +346,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":", 3)[0]) - Integer.parseInt(start_time.split(":", 3)[0]));
                             endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":", 3)[1]));
                             WeekViewEvent weekViewEvent;
-                            weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name), startTime, endTime);
+                            weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name,sub_category_name), startTime, endTime,event_type);
                             weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
                             events.add(weekViewEvent);
 
@@ -373,6 +379,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             String f_name = dayEvent.getFname();
                             String l_name = dayEvent.getLname();
                             String event_id = dayEvent.getEvent_id();
+                            String sub_category_name=dayEvent.getSub_category_name();
                             //String event_name=dayEvent.getEvent_name();
                             startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
                             startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
@@ -383,7 +390,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":", 3)[0]) - Integer.parseInt(start_time.split(":", 3)[0]));
                             endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":", 3)[1]));
                             WeekViewEvent weekViewEvent;
-                            weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name), startTime, endTime);
+                            weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name,sub_category_name), startTime, endTime,event_type);
                             weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
                             events.add(weekViewEvent);
 
@@ -417,7 +424,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":", 3)[0]) - Integer.parseInt(start_time.split(":", 3)[0]));
                             endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":", 3)[1]));
                             WeekViewEvent weekViewEvent;
-                            weekViewEvent = new WeekViewEvent(4, getSlotTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1])), startTime, endTime);
+                            weekViewEvent = new WeekViewEvent(4, getSlotTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1])), startTime, endTime,slot_event_type);
                             weekViewEvent.setColor(getResources().getColor(R.color.event_color_02));
                             events.add(weekViewEvent);
 
@@ -437,6 +444,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             String f_name = dayEvent.getFname();
                             String l_name = dayEvent.getLname();
                             String event_id = dayEvent.getEvent_id();
+                            String sub_category_name=dayEvent.getSub_category_name();
                             //String event_name=dayEvent.getEvent_name();
                             startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
                             startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
@@ -447,7 +455,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":", 3)[0]) - Integer.parseInt(start_time.split(":", 3)[0]));
                             endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":", 3)[1]));
                             WeekViewEvent weekViewEvent;
-                            weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name), startTime, endTime);
+                            weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name,sub_category_name), startTime, endTime,event_type);
                             weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
                             events.add(weekViewEvent);
 
@@ -462,12 +470,53 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         return events;
     }
 
-    private String getEventTitle(Calendar time, int stop_hour, int stop_min, String fname, String lname) {
+    private String getEventTitle(Calendar time, int stop_hour, int stop_min, String fname, String lname,String sub_category_name) {
         if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 3) {
-            return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + fname + " " + lname;
+            if(fname.equals("0")){
+                if(sub_category_name != null){
+                    return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min)+"\n"+sub_category_name;
+                }else {
+                    return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
+                }
+
+            }else{
+                if(lname.equals("0")){
+                    if(sub_category_name != null){
+                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + "" + fname +"\n"+sub_category_name;
+                    }else {
+                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + "" + fname+"\n"+"";
+                    }
+                }
+            }
+            if(sub_category_name != null){
+                return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + "" + " " + lname+"\n"+sub_category_name;
+            }else {
+                return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + "" + " " + lname+"\n"+"";
+            }
+            //return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + fname + " " + lname+"\n"+sub_category_name;
         }
         if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 2) {
-            return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + fname + " " + lname;
+
+            if(fname.equals("0")){
+                if(sub_category_name != null){
+                    return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) +"\n"+sub_category_name;
+                }else {
+                    return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) ;
+                }
+            }else{
+                if(lname.equals("0")){
+                    if(sub_category_name != null){
+                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + fname+"\n"+sub_category_name;
+                    }else {
+                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " +fname+"\n"+"";
+                    }
+                }
+            }
+            if(sub_category_name != null){
+                return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + "" + " " + lname+"\n"+sub_category_name;
+            }else {
+                return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + "" + " " + lname+"\n"+"";
+            }
         }
         return null;
         //return String.format("Event of %02d:%02d to %02d:%02d %s/%d ", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE),stop_hour,stop_min, time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
@@ -485,16 +534,19 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        Toast.makeText(SetScheduleActivity.this, getResources().getString(R.string.clicked) + event.getName(), Toast.LENGTH_SHORT).show();
+       // Toast.makeText(SetScheduleActivity.this, getResources().getString(R.string.clicked) + event.getName(), Toast.LENGTH_SHORT).show();
 
         Log.d(TAG, "Event Id: " + event.getId() + ", Event start time: " + event.getStartTime() + "Event stop time: " + event.getEndTime());
 
+        int event_type=event.getEventType();
+        if(event_type == 1){
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("user_group", StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group"));
+            requestParams.add("id", String.valueOf(event.getId()));
+            progressDialog.show();
+            NetworkClient.getCalenderEvent(SetScheduleActivity.this, requestParams, StorageHelper.getUserDetails(SetScheduleActivity.this, "auth_token"), this, 43);
+        }
 
-        RequestParams requestParams = new RequestParams();
-        requestParams.add("user_group", StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group"));
-        requestParams.add("id", String.valueOf(event.getId()));
-        progressDialog.show();
-        NetworkClient.getCalenderEvent(SetScheduleActivity.this, requestParams, StorageHelper.getUserDetails(SetScheduleActivity.this, "auth_token"), this, 43);
 
     }
 
