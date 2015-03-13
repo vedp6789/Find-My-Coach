@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Verify"
+        android:text="@string/verify"
         android:id="@+id/btnVerify"
         android:layout_below="@+id/verificationCodeET"
         android:layout_centerHorizontal="true" />
@@ -24,7 +24,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Resend Verification Code"
+        android:text="@string/resend_code"
         android:textSize="10sp"
         android:id="@+id/btnResend"
         android:layout_marginBottom="25dp"

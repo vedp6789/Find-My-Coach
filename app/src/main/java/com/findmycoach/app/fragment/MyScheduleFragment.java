@@ -1,11 +1,8 @@
 package com.findmycoach.app.fragment;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
@@ -18,12 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.Request;
+import com.findmycoach.app.R;
 import com.findmycoach.app.activity.AddNewSlotActivity;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.ScheduleYourVacation;
 import com.findmycoach.app.adapter.CalendarGridAdapter;
-import com.findmycoach.app.R;
 import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
@@ -218,7 +214,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
 
         progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Please wait...");
+        progressDialog.setMessage(getActivity().getResources().getString(R.string.please_wait));
 
         RequestParams requestParams = new RequestParams();
         requestParams.add("user_group",String.valueOf("3"));
@@ -363,7 +359,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         Calendar calendar = new GregorianCalendar(year_for_this, (month_for_this - 1), 1);
         days_in_new_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        if(Integer.parseInt(StorageHelper.getUserGroup(getActivity(),"user_group")) == 3){
+        if(DashboardActivity.dashboardActivity.user_group == 3){
             RequestParams requestParams = new RequestParams();
             requestParams.add("user_group",String.valueOf("3"));
             requestParams.add("mentor_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
@@ -372,7 +368,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             progressDialog.show();
             NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 39);
         }
-        if(Integer.parseInt(StorageHelper.getUserGroup(getActivity(),"user_group")) == 2){
+        if(DashboardActivity.dashboardActivity.user_group == 2){
             Log.d(TAG,"calling getMenteeCalendarDetails api for prev month");
             RequestParams requestParams = new RequestParams();
             requestParams.add("user_group",String.valueOf("2"));

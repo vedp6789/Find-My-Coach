@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,14 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
-import com.findmycoach.app.fragment_mentor.StartDateDialogFragment;
 import com.findmycoach.app.fragment_mentor.StartDateForVaccationSchedule;
-import com.findmycoach.app.fragment_mentor.StartTimeDialogFragment;
 import com.findmycoach.app.fragment_mentor.StartTimeForVaccationSchedule;
 import com.findmycoach.app.fragment_mentor.StopDateForVacationSchedule;
-import com.findmycoach.app.fragment_mentor.StopTimeDialogFragment;
 import com.findmycoach.app.fragment_mentor.StopTimeForVaccationSchedule;
-import com.findmycoach.app.fragment_mentor.TillDateDialogFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.SetDate;
@@ -408,18 +403,16 @@ public class ScheduleYourVacation extends Activity implements SetDate,SetTime {
 
                             @Override
                             public void successOperation(Object object, int statusCode, int calledApiValue) {
-                                Toast.makeText(ScheduleYourVacation.this, "Hi, your vacation get scheduled.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.vacation_scheduled_success), Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             }
 
                             @Override
                             public void failureOperation(Object object, int statusCode, int calledApiValue) {
-                                Toast.makeText(ScheduleYourVacation.this, "Unfortunately there is some problem during registering your vacation schedule.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ScheduleYourVacation.this, (String) object, Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             }
                         }, 36);
-
-
                         //requestParams.add("start_date",)
                     }
                 }
@@ -433,18 +426,18 @@ public class ScheduleYourVacation extends Activity implements SetDate,SetTime {
                 Log.d(TAG, "check1");
                 if (time_from.equals(getResources().getString(R.string.select)) && time_to.equals(getResources().getString(R.string.select))) {
                     Log.d(TAG, "check2");
-                    Toast.makeText(ScheduleYourVacation.this, "Please select starting time & completion time for this vacation.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.select_start_and_end_time), Toast.LENGTH_SHORT).show();
                     return false;
                 } else {
                     Log.d(TAG, "check3");
                     if (time_from.equals(getResources().getString(R.string.select))) {
-                        Toast.makeText(ScheduleYourVacation.this, "Select starting time of this vacation.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.select_start_time), Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "check4");
                         return false;
 
                     } else {
                         if (time_to.equals(getResources().getString(R.string.select))) {
-                            Toast.makeText(ScheduleYourVacation.this, "Select completion time of this vacation.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.select_end_time), Toast.LENGTH_SHORT).show();
                             Log.d(TAG, "check5");
                             return false;
                         }
@@ -470,7 +463,7 @@ public class ScheduleYourVacation extends Activity implements SetDate,SetTime {
                 int minimum_difference = (Integer.parseInt(getResources().getString(R.string.slot_time_difference)) * 60) * 60;
 
                 if (slot_time_value < minimum_difference) {
-                    Toast.makeText(ScheduleYourVacation.this, "Minimum vacation duration should be " + getResources().getString(R.string.slot_time_difference) + " hour !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.slot_time_difference), Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "check7");
                     return false;
                 }else{
@@ -478,11 +471,11 @@ public class ScheduleYourVacation extends Activity implements SetDate,SetTime {
                         if(tv_till_date.getText().length() > 0 ){
                             return true;
                         }else {
-                            Toast.makeText(ScheduleYourVacation.this, "Select completion date of vacation.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.select_end_date_of_vacation), Toast.LENGTH_SHORT).show();
                             return false;
                         }
                     } else {
-                        Toast.makeText(ScheduleYourVacation.this, "Select starting date of vacation.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.select_start_date_of_vacation), Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 }
@@ -490,7 +483,7 @@ public class ScheduleYourVacation extends Activity implements SetDate,SetTime {
             }
 
         } else {
-            Toast.makeText(ScheduleYourVacation.this, "Please at least select one day for this schedule.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.select_at_least_one_day), Toast.LENGTH_SHORT).show();
             return false;
         }
     }

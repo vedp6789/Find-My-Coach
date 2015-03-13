@@ -46,7 +46,6 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:gravity="center_vertical"
-                        android:hint="yourEmail@mail.com"
                         android:textColor="@android:color/black"
                         android:textSize="20sp" />
 
@@ -56,7 +55,6 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:gravity="center_vertical"
-                        android:hint="1234567890"
                         android:textColor="@android:color/black"
                         android:textSize="20sp" />
                 </LinearLayout>
@@ -78,7 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="First Name:"
+                        android:text="@string/prompt_first_name"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -103,7 +101,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Last Name:"
+                        android:text="@string/prompt_last_name"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -128,7 +126,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Gender:"
+                        android:text="@string/prompt_gender"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -151,7 +149,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Date Of Birth:"
+                        android:text="@string/prompt_date_of_birth"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -177,7 +175,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Address:"
+                        android:text="@string/prompt_address"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -203,7 +201,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="City:"
+                        android:text="@string/prompt_city"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -329,7 +327,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Pin Code:"
+                        android:text="@string/prompt_pin"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -356,7 +354,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Profession:"
+                        android:text="@string/prompt_profession"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -382,7 +380,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Accomplishment:"
+                        android:text="@string/prompt_accomplishment"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -407,7 +405,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Charges:"
+                        android:text="@string/prompt_charges"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -451,7 +449,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Years of Experience:"
+                        android:text="@string/prompt_experience"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -476,7 +474,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Areas of coaching :"
+                        android:text="@string/prompt_area_of_coaching"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -503,7 +501,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Facebook:"
+                        android:text="@string/facebook"
                         android:textColor="@color/wallet_link_text_light"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -530,7 +528,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Google +:"
+                        android:text="@string/google_plus"
                         android:textColor="@android:color/holo_red_dark"
                         android:textSize="18sp"
                         android:textStyle="bold" />

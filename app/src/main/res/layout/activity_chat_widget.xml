@@ -27,5 +27,5 @@
         android:layout_height="50dp"
         android:layout_gravity="left|bottom"
         android:layout_marginRight="50dp"
-        android:hint="Type here to send" />
+        android:hint="@string/type_here" />
 </FrameLayout>

@@ -62,6 +62,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
     private static final String TAG="FMC";
     private static final String TAG1="FMC-WebSocket";
+    private String receiverGroupId;
 
 
     @Override
@@ -72,6 +73,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         initialize();
         applyActionbarProperties();
         progressDialog.show();
+        receiverGroupId = DashboardActivity.dashboardActivity.user_group == 3 ? "2" : "3";
 
         /*Creating/Checking folder for media storage*/
         StorageHelper.createAppMediaFolders(this);
@@ -285,7 +287,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             messageObject.put("receiver_id", receiverId);
             messageObject.put("type", type);
             messageObject.put("data", msg);
-            messageObject.put("receiver_group_id", "2");
+            messageObject.put("receiver_group_id", receiverGroupId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -387,6 +389,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         if(calledApiValue == 25){
             progressDialog.dismiss();
             Intent intent = new Intent(this, StudentDetailActivity.class);
+            intent.putExtra("coming_from","ChatWidget");
             intent.putExtra("student_detail",(String) object);
             startActivityForResult(intent, NotificationAdapter.connection_id);
             isGettingProfile = false;
@@ -420,9 +423,6 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
                 connectWebSocket();
                 return;
             }
-//            chatWidgetAdapter.updateMessageList(attachmentPath, 0, msgJson.contains("image") ? 1 : 2);
-//            chatWidgetAdapter.notifyDataSetChanged();
-//            chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
         }
     }
 

@@ -35,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="Find Mentor"
+                    android:text="@string/find_mentor"
                     android:textSize="28sp" />
 
             </LinearLayout>
@@ -67,7 +67,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
                         android:layout_weight="2"
-                        android:text="Change Location"
+                        android:text="@string/change_location"
                         android:textAllCaps="false" />
                 </LinearLayout>
 
@@ -129,14 +129,14 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
                             android:checked="true"
-                            android:text="No Time Barrier" />
+                            android:text="@string/no_time_barrier" />
 
                         <RadioButton
                             android:id="@+id/on_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
-                            android:text="Time Barrier" />
+                            android:text="@string/time_barrier" />
                         </LinearLayout>
                 </RadioGroup>
 
@@ -167,7 +167,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
-                                android:text="From:" />
+                                android:text="@string/from" />
 
                             <AutoCompleteTextView
                                 android:id="@+id/from_timing"
@@ -191,7 +191,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
-                                android:text="To:" />
+                                android:text="@string/to" />
 
                             <AutoCompleteTextView
                                 android:id="@+id/to_timing"
@@ -232,7 +232,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Mon"/>
+                                    android:text="@string/m"/>
 
                             </LinearLayout>
 
@@ -252,7 +252,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Tue"/>
+                                    android:text="@string/t"/>
 
                             </LinearLayout>
 
@@ -271,7 +271,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Wed"/>
+                                    android:text="@string/w"/>
 
                             </LinearLayout>
 
@@ -290,7 +290,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Thu"/>
+                                    android:text="@string/th"/>
 
                             </LinearLayout>
 
@@ -309,7 +309,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Fri"/>
+                                    android:text="@string/f"/>
 
                             </LinearLayout>
 
@@ -328,7 +328,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Sat"/>
+                                    android:text="@string/s"/>
 
                             </LinearLayout>
 
@@ -347,7 +347,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Sun"/>
+                                    android:text="@string/su"/>
 
                             </LinearLayout>
 
@@ -373,7 +373,7 @@
                     android:id="@+id/action_search"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Search"
+                    android:text="@string/search"
                     android:textAllCaps="false" />
             </LinearLayout>
         </LinearLayout>

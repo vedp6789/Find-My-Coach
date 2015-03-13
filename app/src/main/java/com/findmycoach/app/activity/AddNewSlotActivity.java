@@ -2,24 +2,18 @@ package com.findmycoach.app.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.app.FragmentManager;
-import android.text.InputType;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.Request;
+import com.findmycoach.app.R;
 import com.findmycoach.app.fragment_mentor.StartDateDialogFragment;
 import com.findmycoach.app.fragment_mentor.StartTimeDialogFragment;
 import com.findmycoach.app.fragment_mentor.StopTimeDialogFragment;
@@ -27,7 +21,6 @@ import com.findmycoach.app.fragment_mentor.TillDateDialogFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.SetDate;
-import com.findmycoach.app.R;
 import com.findmycoach.app.util.SetTime;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
@@ -445,7 +438,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
                             @Override
                             public void successOperation(Object object, int statusCode, int calledApiValue) {
-                                Toast.makeText(AddNewSlotActivity.this,"Hi, you have created a new slot.",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully),Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             }
 
@@ -455,8 +448,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                                 progressDialog.dismiss();
                             }
                         },35);
-
-
                         //requestParams.add("start_date",)
                     }
                 }
@@ -470,18 +461,18 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 Log.d(TAG, "check1");
                 if (time_from.equals(getResources().getString(R.string.select)) && time_to.equals(getResources().getString(R.string.select))) {
                     Log.d(TAG, "check2");
-                    Toast.makeText(AddNewSlotActivity.this, "Please select starting time & completion time for this slot.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_start_and_end_time), Toast.LENGTH_SHORT).show();
                     return false;
                 } else {
                     Log.d(TAG, "check3");
                     if (time_from.equals(getResources().getString(R.string.select))) {
-                        Toast.makeText(AddNewSlotActivity.this, "Please select starting time of this slot.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_start_time), Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "check4");
                         return false;
 
                     } else {
                         if (time_to.equals(getResources().getString(R.string.select))) {
-                            Toast.makeText(AddNewSlotActivity.this, "Please select completion time for this slot.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_end_time), Toast.LENGTH_SHORT).show();
                             Log.d(TAG, "check5");
                             return false;
                         }
@@ -507,18 +498,18 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 int minimum_difference = (Integer.parseInt(getResources().getString(R.string.slot_time_difference)) * 60) * 60;
 
                 if (slot_time_value < minimum_difference) {
-                    Toast.makeText(AddNewSlotActivity.this, "Minimum slot duration should be " + getResources().getString(R.string.slot_time_difference) + " hour !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddNewSlotActivity.this,getResources().getString(R.string.slot_time_difference), Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "check7");
                     return false;
                 }else{
                     if((slot_time_value % 3600) > 0 ){
-                        Toast.makeText(AddNewSlotActivity.this, "Please select slots in multiple of hours", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_slot_in_multiple_of_hour), Toast.LENGTH_SHORT).show();
                         return false;
                     }else{
                         if (tv_start_date.getText().length() > 0) {
                             return true;
                         } else {
-                            Toast.makeText(AddNewSlotActivity.this, "Please select start date for this slot.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_start_date_of_slot), Toast.LENGTH_SHORT).show();
                             return false;
                         }
                     }
@@ -531,7 +522,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             }
 
         } else {
-            Toast.makeText(AddNewSlotActivity.this, "Please at least select one day for this slot.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_at_least_one_day), Toast.LENGTH_SHORT).show();
             return false;
         }
     }

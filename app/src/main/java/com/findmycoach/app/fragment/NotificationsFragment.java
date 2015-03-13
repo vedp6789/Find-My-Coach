@@ -88,7 +88,7 @@ public class NotificationsFragment extends Fragment implements Callback {
             NetworkClient.getConnectionRequests(getActivity(), requestParams, authToken, this,22);
         }else if(DashboardActivity.dashboardActivity.user_group == 2){
          progressDialog.dismiss();
-            notificationListView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.no_data_found, new String[]{"No notification for you."}));
+            notificationListView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.no_data_found, new String[]{getActivity().getResources().getString(R.string.no_notification)}));
         }
 
 

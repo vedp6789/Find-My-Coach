@@ -120,7 +120,11 @@ public class StudentDetailActivity  extends Activity implements Callback {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.student_details, menu);
+        String comingFrom = getIntent().getStringExtra("coming_from");
+        if(comingFrom != null && comingFrom.equals("ChatWidget"))
+            getMenuInflater().inflate(R.menu.menu_connected, menu);
+        else
+            getMenuInflater().inflate(R.menu.student_details, menu);
         return true;
     }
 
@@ -133,6 +137,8 @@ public class StudentDetailActivity  extends Activity implements Callback {
             respondToRequest("rejected");
         }else if (id == android.R.id.home) {
             finish();
+        }else if (id == R.id.action_disconnect) {
+            Toast.makeText(this,"Connection will disconnect",Toast.LENGTH_LONG).show();
         }
         return true;
     }
