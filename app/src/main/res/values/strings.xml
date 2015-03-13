@@ -557,6 +557,7 @@
 
     <!-- String s related to Prompting -->
     <string name="prompt_email">User Id</string>
+    <string name="prompt_enter_phone">Enter phone number</string>
     <string name="prompt_email_id">Email Id</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_confirm_password">Confirm Password</string>
@@ -665,6 +666,7 @@
     <string name="error_invalid_date">Date should less than current date</string>
     <string name="error_invalid_details">Invalid card number</string>
     <string name="error_password_size">Minimum 5 characters</string>
+    <string name="select_country_code">Select country code</string>
     <!-- Errors -->
 
     <!-- String s related to Static Text -->

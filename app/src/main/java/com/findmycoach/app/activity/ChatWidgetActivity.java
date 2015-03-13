@@ -148,7 +148,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
                 @Override
                 public void onClick(View v) {
                     getProfile();
-                    Toast.makeText(ChatWidgetActivity.this,receiverName + " : " + receiverId,Toast.LENGTH_SHORT).show();
+                    Log.d(TAG,receiverName + " <= Name : Id => " + receiverId);
                 }
             });
             actionBar.setCustomView(customView);

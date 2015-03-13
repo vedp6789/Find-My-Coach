@@ -2,18 +2,21 @@ package com.findmycoach.app.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -28,7 +31,7 @@ import com.loopj.android.http.RequestParams;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SignUpActivity extends Activity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, Callback {
+public class SignUpActivity extends Activity implements View.OnClickListener, Callback {
 
 
     private int year = 1990, month = 1, day = 1;
@@ -43,6 +46,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
     private RadioGroup radioGroup_user_sigup;
     private RadioButton radioButton_mentee_signup, radioButton_mentor_signup;
     private int user_group=0;
+    private TextView countryCodeTV;
+    private String[] country_code;
 
 
     @Override
@@ -51,26 +56,13 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
         setContentView(R.layout.activity_signup);
         applyActionbarProperties();
         radioGroup_user_sigup = (RadioGroup) findViewById(R.id.radio_group_user_signup);
-//        radioGroup_user_sigup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(RadioGroup group, int checkedId) {
-//                if (checkedId == R.id.radio_button_mentee_signup) {
-//                    user_group=2;
-//                    //Toast.makeText(SignUpActivity.this,"User group"+user_group,Toast.LENGTH_SHORT).show();
-//                }
-//                if (checkedId == R.id.radio_button_mentor_signup){
-//                    user_group=3;
-//                    //Toast.makeText(SignUpActivity.this,"User group"+user_group,Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
         initialize();
-
     }
 
     private void applyActionbarProperties() {
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if(actionBar != null)
+            actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     private void initialize() {
@@ -83,43 +75,13 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
         confirmPasswordInput = (EditText) findViewById(R.id.input_confirm_password);
         phoneNumberInput = (EditText) findViewById(R.id.input_phone);
         signUpButton = (Button) findViewById(R.id.button_signup);
+        countryCodeTV = (TextView) findViewById(R.id.countryCodeTV);
+        countryCodeTV.setText(getCountryZipCode());
+        countryCodeTV.setOnClickListener(this);
         signUpButton.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
     }
-
-    @SuppressWarnings("deprecation")
-    public void setDate(View view) {
-        showDialog(999);
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        if (id == 999) {
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
-            datePickerDialog.setTitle(getResources().getString(R.string.dob));
-            return datePickerDialog;
-        }
-        return null;
-    }
-
-    private void showDate(int year, int month, int day) {
-//        Calendar calendar = Calendar.getInstance();
-//        if (year > calendar.get(Calendar.YEAR)) {
-//            showErrorMessage(dateOfBirthInput, getResources().getString(R.string.error_invalid_date));
-//            return;
-//        } else if (year == calendar.get(Calendar.YEAR) && month > (calendar.get(Calendar.MONTH) + 1)) {
-//            showErrorMessage(dateOfBirthInput, getResources().getString(R.string.error_invalid_date));
-//            return;
-//        } else if (year == calendar.get(Calendar.YEAR) && month == (calendar.get(Calendar.MONTH) + 1) &&
-//                day >= calendar.get(Calendar.DATE)) {
-//            showErrorMessage(dateOfBirthInput, getResources().getString(R.string.error_invalid_date));
-//            return;
-//        }
-//        dateOfBirthInput.setText(new StringBuilder().append(day).append("/")
-//                .append(month).append("/").append(year));
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -141,20 +103,38 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
         int id = v.getId();
         if (id == R.id.button_signup) {
             registerUser();
+        }else if(id == R.id.countryCodeTV){
+            showCountryCodeDialog();
         }
     }
 
-    private void registerUser() {
+    private void showCountryCodeDialog() {
+        final Dialog countryDialog = new Dialog(this);
+        countryDialog.setCanceledOnTouchOutside(true);
+        countryDialog.setTitle(getResources().getString(R.string.select_country_code));
+        countryDialog.setContentView(R.layout.dialog_country_code);
+        ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
+        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, country_code));
+        countryDialog.show();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                countryCodeTV.setText(country_code[position].split(",")[0]);
+                countryDialog.dismiss();
+            }
+        });
+    }
 
+    private void registerUser() {
         String firstName = firstNameInput.getText().toString();
         String lastName = lastNameInput.getText().toString();
         String phone = phoneNumberInput.getText().toString();
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
         String confirmPassword = confirmPasswordInput.getText().toString();
+        String countryCode = countryCodeTV.getText().toString().trim();
 
-        boolean isValid = validate(firstName, lastName, phone, email,
-                password, confirmPassword);
+        boolean isValid = validate(firstName, lastName, phone, email, password, confirmPassword, countryCode);
 
         if (isValid) {
             if(radioButton_mentee_signup.isChecked())
@@ -169,7 +149,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
                 requestParams.add("last_name", lastName);
                 requestParams.add("email", email);
                 requestParams.add("password", password);
-                requestParams.add("phone_number", phone);
+                requestParams.add("phone_number", countryCode + phone);
                 requestParams.add("user_group", String.valueOf(user_group));
                 StorageHelper.storePreference(this, "phone_number", phone);
                 callApiToRegister(requestParams);
@@ -183,8 +163,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
         NetworkClient.register(this, requestParams, this, 2);
     }
 
-    private boolean validate(String firstName, String lastName, String phone,
-                             String email, String password, String confirmPassword) {
+    private boolean validate(String firstName, String lastName, String phone, String email, String password, String confirmPassword, String countryCode) {
 
         if (firstName.equals("")) {
             showErrorMessage(firstNameInput, getResources().getString(R.string.error_field_required));
@@ -208,6 +187,11 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
                     return false;
                 }
             }
+        }
+
+        if(countryCode.trim().equals("")){
+            showErrorMessage(countryCodeTV, getResources().getString(R.string.select_country_code));
+            return false;
         }
 
         if (phone.equals("")) {
@@ -266,10 +250,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
         }, 3500);
     }
 
-    @Override
-    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-        showDate(year, month + 1, date);
-    }
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
@@ -286,5 +266,21 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Da
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
+    }
+
+    public String getCountryZipCode(){
+        String CountryID = "";
+        String CountryZipCode = "";
+        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        CountryID= manager.getSimCountryIso().toUpperCase();
+        country_code = this.getResources().getStringArray(R.array.country_codes);
+        for(int i=0;i< country_code.length;i++){
+            String[] g = country_code[i].split(",");
+            if(g[1].trim().equals(CountryID.trim())){
+                CountryZipCode=g[0];
+                break;
+            }
+        }
+        return CountryZipCode;
     }
 }
