@@ -139,6 +139,9 @@
 
 
         <activity android:name=".activity.SubCategoryActivity"/>
+        <activity android:name=".activity.AboutEvent"
+            android:label="@string/event_desc"
+            android:screenOrientation="portrait"></activity>
 
 
         <receiver

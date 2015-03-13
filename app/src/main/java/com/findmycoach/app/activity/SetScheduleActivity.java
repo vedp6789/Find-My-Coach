@@ -506,7 +506,9 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-
+        Intent intent=new Intent(SetScheduleActivity.this,AboutEvent.class);
+        intent.putExtra("about_event",(String)object);
+        startActivity(intent);
     }
 
     @Override

@@ -565,6 +565,8 @@
     <string name="to">To:</string>
     <string name="to1">to</string>
     <string name="starting_from">Starting from:</string>
+    <string name="start_date">Start date:</string>
+    <string name="end_date">Completion date:</string>
     <string name="till">Till:</string>
     <string name="select">Select</string>
     <string name="forever">Forever</string>
@@ -586,6 +588,10 @@
     <string name="add_interest">Add Interest</string>
     <string name="enter_interest">Enter Interest</string>
     <string name="data_already_exist">Data Already Exist</string>
+    <string name="mentor_name">Mentor\'s Name:</string>
+    <string name="mentee_name">Mentee\'s Name:</string>
+    <string name="sub">Subject:</string>
+    <string name="event_time">Time:</string>
 
     <!-- Prompting -->
 
@@ -645,12 +651,14 @@
     <string name="classes_availability">Classes availability</string>
     <string name="subject">Subject</string>
     <string name="days_of_week">Days of weeek</string>
+    <string name="week_days">Week days:</string>
     <string name="duration">Duration</string>
     <string name="location">Location</string>
     <string name="mentor_for">Mentor for</string>
     <string name="pay_now">Pay now</string>
     <string name="personally">I\'ll pay the mentor personally</string>
     <string name="proceed_payment">Proceed to payment</string>
+    <string name="event_desc">Event Description</string>
     <!-- Static Text -->
 
     <!-- String s related to week days -->
