@@ -588,6 +588,7 @@
     <string name="prompt_google_plus">Google +</string>
     <string name="days">Days</string>
     <string name="from">From:</string>
+    <string name="timing">Timing:</string>
     <string name="to">To:</string>
     <string name="to1">to</string>
     <string name="starting_from">Starting from:</string>
@@ -680,7 +681,7 @@
     <string name="set_time">Set time</string>
     <string name="schedule_vacation_note">A note for vacation schedule</string>
     <string name="classes_availability">Classes availability</string>
-    <string name="subject">Subject</string>
+    <string name="subject">Subject: </string>
     <string name="days_of_week">Days of weeek</string>
     <string name="week_days">Week days:</string>
     <string name="duration">Duration</string>

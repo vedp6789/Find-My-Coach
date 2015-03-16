@@ -30,7 +30,10 @@ public class AboutEvent extends Activity {
     JSONObject jsonObject_aboutEvent;
     JSONArray jsonArrayData;
     JSONObject event_details;
+    JSONArray jsonArray_days;
     ArrayAdapter arrayAdapter;
+    private ArrayList<String> days;
+
 
 
 
@@ -52,6 +55,37 @@ public class AboutEvent extends Activity {
             jsonObject_aboutEvent=new JSONObject(about_event);
             jsonArrayData=jsonObject_aboutEvent.getJSONArray("data");
             event_details=jsonArrayData.getJSONObject(0);
+            jsonArray_days=event_details.getJSONArray("dates");
+            Log.d(TAG,"Days json array size from AboutEvent : "+jsonArray_days.length());
+            days=new ArrayList<String>();
+            for(int i=0;i < jsonArray_days.length();i++){
+                String day=jsonArray_days.getString(i);
+                if(day.equals("M")){
+                    days.add("Mon");
+                }
+                if(day.equals("T")){
+                    days.add("Tue");
+                }
+                if(day.equals("W")){
+                    days.add("Wed");
+                }
+                if(day.equals("Th")){
+                    days.add("Thu");
+                }
+                if(day.equals("F")){
+                    days.add("Fri");
+                }
+                if(day.equals("S")){
+                    days.add("Sat");
+                }
+                if(day.equals("su")){
+                    days.add("Sun");
+                }
+                Log.d(TAG,"json array for Days value "+i+" :"+jsonArray_days.getString(i));
+
+            }
+
+            Log.d(TAG,"days array size"+" :"+days.size());
 
             address=event_details.getString("location");
             start_date=event_details.getString("start_date");
@@ -111,10 +145,8 @@ public class AboutEvent extends Activity {
                 tv_subject_val.setText("");
             }
 
-            ArrayList arrayList=new ArrayList();
-            arrayList.add("MON");
-            arrayList.add("TUE");
-            arrayAdapter=new ArrayAdapter(AboutEvent.this,android.R.layout.simple_list_item_1,arrayList.toArray());
+
+            arrayAdapter=new ArrayAdapter(AboutEvent.this,android.R.layout.simple_list_item_1,days.toArray());
             lv_week_days.setAdapter(arrayAdapter);
 
 

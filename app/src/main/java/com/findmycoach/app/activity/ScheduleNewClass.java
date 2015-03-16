@@ -17,7 +17,7 @@ import com.findmycoach.app.R;
  * Created by praka_000 on 3/4/2015.
  */
 public class ScheduleNewClass extends Activity implements Button.OnClickListener{
-    Spinner sp_subjects,sp_class_start_time,sp_class_stop_time,sp_start_date,sp_end_date,sp_mentor_for;
+    Spinner sp_subjects,sp_class_timing,sp_start_date,sp_end_date,sp_mentor_for;
     CheckBox cb_mon,cb_tue,cb_wed,cb_thu,cb_fri,cb_sat;
     EditText et_location;
     RadioButton rb_pay_now,rb_pay_personally;
@@ -42,8 +42,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
     private void initialize() {
         sp_subjects= (Spinner) findViewById(R.id.sp_subjects);
-        sp_class_start_time= (Spinner) findViewById(R.id.sp_class_start_time);
-        sp_class_stop_time= (Spinner) findViewById(R.id.sp_class_stop_time);
+        sp_class_timing= (Spinner) findViewById(R.id.sp_class_time);
         sp_start_date= (Spinner) findViewById(R.id.sp_start_date);
         sp_end_date= (Spinner) findViewById(R.id.sp_end_date);
         sp_mentor_for= (Spinner) findViewById(R.id.sp_mentor_for);

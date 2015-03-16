@@ -124,16 +124,32 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
 
         b_schedule_class= (Button) findViewById(R.id.b_schedule_class);
 
-        if(!(jsonArray_sub_category.length()>0)){
-            Log.d(TAG,"sub category is  null");
-        }else{
-            Log.d(TAG,"sub category is not null");
+
+        Log.d(TAG,"sub category length : "+jsonArray_sub_category.length()+"");
+        if(jsonArray_sub_category.length() > 0){
+            Log.i(TAG,"sub_category size not null");
+        }
+        if(jsonArray_sub_category.length() <= 0){
+            Log.i(TAG,"sub_category size is null");
         }
 
 
-        if(connectionStatus.equals("not connected") || connectionStatus.equals("pending") || !(jsonArray_sub_category.length()>0))
+        if(connectionStatus.equals("not connected") || connectionStatus.equals("pending") || jsonArray_sub_category.length() <= 0)
             b_schedule_class.setVisibility(View.GONE);
-        b_schedule_class.setOnClickListener(this);
+
+        /*int sub_category_length=jsonArray_sub_category.length();
+        try {
+            if(sub_category_length== 1){
+               String x= (String) jsonArray_sub_category.get(0);
+                if(x.equals("null")){
+                    Log.i(TAG,"null matched");
+                }
+            }
+
+            b_schedule_class.setOnClickListener(this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
     }
 
     private void populateFields() {
