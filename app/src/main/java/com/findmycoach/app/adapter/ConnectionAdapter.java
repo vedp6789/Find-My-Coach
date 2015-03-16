@@ -8,14 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.findmycoach.app.R;
 import com.findmycoach.app.activity.ChatWidgetActivity;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.beans.requests.Data;
-import com.findmycoach.app.R;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.loopj.android.http.RequestParams;
@@ -80,20 +81,24 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
                 }
             }
         });
+        ImageView imageView = (ImageView) view.findViewById(R.id.studentImageView);
         TextView nameTV = (TextView) view.findViewById(R.id.nameTV);
         TextView lastMsgTV = (TextView) view.findViewById(R.id.lastMsgTV);
         ImageButton connectionButton = (ImageButton) view.findViewById(R.id.detailsTV);
 
         // Called to show respective row for mentee and mentor
-        populateSingleRow(nameTV, lastMsgTV, connectionButton, DashboardActivity.dashboardActivity.user_group, singleConnection, position);
+        populateSingleRow(imageView, nameTV, lastMsgTV, connectionButton, DashboardActivity.dashboardActivity.user_group, singleConnection, position);
         return view;
     }
 
-    private void populateSingleRow(TextView nameTV, TextView lastMsgTV, ImageButton connectionButton, int user_group, final Data singleConnection, final int position ){
+    private void populateSingleRow(ImageView imageView, TextView nameTV, TextView lastMsgTV, ImageButton connectionButton, int user_group, final Data singleConnection, final int position ){
         final String status = singleConnection.getStatus();
         lastMsgTV.setText("Receiver id : " + singleConnection.getInviteeId() + ", Sender id : " + singleConnection.getOwnerId() + ", Status : " + status);
+//        ImageLoader imgLoader = new ImageLoader(context.getApplicationContext());
+//        imgLoader.DisplayImage(singleConnection.getPhotograph(), R.drawable.user_icon, imageView);
         switch (user_group){
             case 3:
+
                 nameTV.setText(singleConnection.getOwnerName());
 
                 if(status.equals("accepted")){

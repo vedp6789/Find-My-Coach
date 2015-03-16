@@ -19,11 +19,11 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.beans.search.Datum;
+import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -76,11 +76,9 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         name.setText(user.getFirstName() + " " + user.getLastName());
 //            rating.setRating(user.get);
         if (user.getPhotograph() != null && !( user.getPhotograph()).equals("")) {
-            Picasso.with(context)
-                    .load((String) user.getPhotograph()).resize(150, 150)
-                    .placeholder(R.drawable.user_icon).resize(150, 150)
-                    .error(R.drawable.user_icon).resize(150, 150)
-                    .into(image);
+            ImageLoader imgLoader = new ImageLoader(context.getApplicationContext());
+            imgLoader.clearCache();
+            imgLoader.DisplayImage((String) user.getPhotograph(), R.drawable.user_icon, image);
         }
         if(user.getConnectionStatus() != null && !user.getConnectionStatus().equals("broken")){
             if(user.getConnectionStatus().equals("accepted")){
