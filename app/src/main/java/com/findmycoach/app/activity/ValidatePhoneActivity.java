@@ -3,14 +3,20 @@ package com.findmycoach.app.activity;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Session;
@@ -31,6 +37,8 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     private String email;
     private ProgressDialog progressDialog;
     private int user_group;
+    private TextView countryCodeTV;
+    private String[] country_code;
 
     private static final String TAG="FMC";
 
@@ -70,8 +78,28 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
             }
         }else if(id == R.id.btnVerify){
             sendVerificationCode();
+        }else if(id == R.id.countryCodeTV){
+            showCountryCodeDialog();
         }
     }
+
+    private void showCountryCodeDialog() {
+        final Dialog countryDialog = new Dialog(this);
+        countryDialog.setCanceledOnTouchOutside(true);
+        countryDialog.setTitle(getResources().getString(R.string.select_country_code));
+        countryDialog.setContentView(R.layout.dialog_country_code);
+        ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
+        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, country_code));
+        countryDialog.show();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                countryCodeTV.setText(country_code[position].split(",")[0]);
+                countryDialog.dismiss();
+            }
+        });
+    }
+
 
     private void sendVerificationCode() {
         String code = verificationCode.getText().toString();
@@ -170,6 +198,9 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.phone_number_dialog);
         final EditText phoneEditText = (EditText) dialog.findViewById(R.id.phoneEditText);
+        countryCodeTV = (TextView) dialog.findViewById(R.id.countryCodeTV);
+        countryCodeTV.setText(getCountryZipCode());
+        countryCodeTV.setOnClickListener(this);
         phoneEditText.setText(lastPhoneNumber);
         dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,7 +214,15 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                             phoneEditText.setError(null);
                         }
                     }, 3500);
-                } else {
+                }else if(countryCodeTV.getText().toString().trim().equals("")){
+                    countryCodeTV.setError(getResources().getString(R.string.select_country_code));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            countryCodeTV.setError(null);
+                        }
+                    }, 3500);
+                }else {
                     dialog.dismiss();
                     requestParams.add("phone_number", phnNum);
                     requestParams.add("user_group", user_group+"");
@@ -208,6 +247,21 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
             }
         });
         dialog.show();
+    }
 
+    public String getCountryZipCode(){
+        String CountryID = "";
+        String CountryZipCode = "";
+        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        CountryID= manager.getSimCountryIso().toUpperCase();
+        country_code = this.getResources().getStringArray(R.array.country_codes);
+        for(int i=0;i< country_code.length;i++){
+            String[] g = country_code[i].split(",");
+            if(g[1].trim().equals(CountryID.trim())){
+                CountryZipCode=g[0];
+                break;
+            }
+        }
+        return CountryZipCode;
     }
 }

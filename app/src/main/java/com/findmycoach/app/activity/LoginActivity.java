@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
 import android.os.Handler;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -65,6 +66,8 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     private int user_group;
     PendingIntent pendingIntent;
     Context context;
+    private TextView countryCodeTV;
+    private String[] country_code;
 
     private static final String TAG = "FMC1";
     private static final String TAG1 = "FMC1: Permissions:";
@@ -393,6 +396,9 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         dialog.setTitle(getResources().getString(R.string.phone_no_must));
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.phone_number_dialog);
+        countryCodeTV = (TextView) dialog.findViewById(R.id.countryCodeTV);
+        countryCodeTV.setText(getCountryZipCode());
+        countryCodeTV.setOnClickListener(this);
         final EditText phoneEditText = (EditText) dialog.findViewById(R.id.phoneEditText);
         dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -404,6 +410,14 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                         @Override
                         public void run() {
                             phoneEditText.setError(null);
+                        }
+                    }, 3500);
+                }else if(countryCodeTV.getText().toString().trim().equals("")){
+                    countryCodeTV.setError(getResources().getString(R.string.select_country_code));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            countryCodeTV.setError(null);
                         }
                     }, 3500);
                 } else {
@@ -606,6 +620,22 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         //Restarting the LoginActivity
         finish();
         startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+    }
+
+    public String getCountryZipCode(){
+        String CountryID = "";
+        String CountryZipCode = "";
+        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        CountryID= manager.getSimCountryIso().toUpperCase();
+        country_code = this.getResources().getStringArray(R.array.country_codes);
+        for(int i=0;i< country_code.length;i++){
+            String[] g = country_code[i].split(",");
+            if(g[1].trim().equals(CountryID.trim())){
+                CountryZipCode=g[0];
+                break;
+            }
+        }
+        return CountryZipCode;
     }
 }
 
