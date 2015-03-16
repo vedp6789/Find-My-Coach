@@ -37,8 +37,8 @@ public class SubCategoryActivity extends Activity{
 
     private void updateSpinnerValues(String subCat, String subCatId) {
         Spinner spinner = (Spinner) findViewById(R.id.spinnerSubCategory);
-        String[] rowValue = new String[rowNumber];
-        String[] subCategory = subCat.split("#");
+        final String[] rowValue = new String[rowNumber];
+        final String[] subCategory = subCat.split("#");
         final String[] subCategoryId = subCatId.split("#");
         for(int i=0; i<rowNumber; i++) {
             rowValue[i] = subCategory[i];
@@ -47,7 +47,20 @@ public class SubCategoryActivity extends Activity{
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                HomeFragment.subCategoryIds[columnNumber] = subCategoryId[position];
+                try{
+                    HomeFragment.subCategoryIds[columnNumber] = subCategoryId[position];
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                try{
+                    if(position != 0 && !AreasOfInterestActivity.list.contains(rowValue[position])) {
+                        AreasOfInterestActivity.list.add(rowValue[position]);
+                        AreasOfInterestActivity.notifyAdapter();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
 
             @Override

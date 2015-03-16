@@ -12,9 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +42,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView trainingLocation;
     private TextView mentorFor;
     private TextView coachingType;
-    private ListView areaOfInterest;
+    private TextView areaOfInterest;
     private Data userInfo = null;
     private ImageLoader imgLoader;
 
@@ -95,7 +93,7 @@ public class ProfileFragment extends Fragment implements Callback {
         trainingLocation = (TextView) view.findViewById(R.id.training_location);
         mentorFor = (TextView) view.findViewById(R.id.mentor_for);
         coachingType = (TextView) view.findViewById(R.id.coaching_type);
-        areaOfInterest = (ListView) view.findViewById(R.id.areas_of_interest);
+        areaOfInterest = (TextView) view.findViewById(R.id.areas_of_interest);
         profileLocation = (TextView) view.findViewById(R.id.profile_location);
     }
 
@@ -177,14 +175,17 @@ public class ProfileFragment extends Fragment implements Callback {
         mentorFor.setText(userInfo.getMentorFor());
         trainingLocation.setText((String) userInfo.getTrainingLocation());
         coachingType.setText((String) userInfo.getCoachingType());
-        List<String> list = userInfo.getSubCategoryName();
-        try{
-            if(list.size() > 0 && list.get(0)!=null && !list.get(0).equals(" "))
-                areaOfInterest.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list));
-            else
-                areaOfInterest.setAdapter(null);
-        }catch (Exception e){
-            e.printStackTrace();
+        List<String> areaOfInterests = userInfo.getSubCategoryName();
+        if (areaOfInterests.size() > 0 && areaOfInterests.get(0)!=null && !areaOfInterests.get(0).trim().equals("")) {
+            String areaOfInterestString = "";
+            for (int index = 0; index < areaOfInterests.size(); index++) {
+                if (index != 0) {
+                    areaOfInterestString = areaOfInterestString + ", " + areaOfInterests.get(index);
+                } else {
+                    areaOfInterestString = areaOfInterestString + areaOfInterests.get(index);
+                }
+            }
+            areaOfInterest.setText(areaOfInterestString);
         }
     }
 
