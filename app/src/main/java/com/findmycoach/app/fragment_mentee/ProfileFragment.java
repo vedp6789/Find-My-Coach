@@ -21,7 +21,6 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.EditProfileActivityMentee;
-import com.findmycoach.app.activity.EditProfileActivityMentor;
 import com.findmycoach.app.beans.student.Data;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.util.Callback;
@@ -179,10 +178,14 @@ public class ProfileFragment extends Fragment implements Callback {
         trainingLocation.setText((String) userInfo.getTrainingLocation());
         coachingType.setText((String) userInfo.getCoachingType());
         List<String> list = userInfo.getSubCategoryName();
-        if(list.get(0)!=null && !list.get(0).equals(" "))
-            areaOfInterest.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list));
-        else
-            areaOfInterest.setAdapter(null);
+        try{
+            if(list.size() > 0 && list.get(0)!=null && !list.get(0).equals(" "))
+                areaOfInterest.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list));
+            else
+                areaOfInterest.setAdapter(null);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 

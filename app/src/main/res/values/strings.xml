@@ -366,18 +366,11 @@
         <item>Tumakuru</item>
     </string-array>
 
-    <string-array name="navigation_items_mentor">
+    <string-array name="navigation_items">
         <item>Home</item>
         <item>Notifications</item>
         <item>My Connections</item>
         <item>My Schedule</item>
-    </string-array>
-    <string-array name="navigation_items_mentee">
-        <item>Home</item>
-        <item>Notifications</item>
-        <item>My Connections</item>
-        <item>My Schedule</item>
-        <item>Settings</item>
     </string-array>
     <string-array name="gender">
         <item>Male</item>
@@ -638,7 +631,7 @@
     <string name="rotate">Rotate</string>
     <string name="crop">Crop</string>
     <string name="type_here">Type here to send</string>
-    <string name="action_logout">Log Out</string>
+    <string name="action_logout">Logout</string>
     <string name="action_accept">Accept</string>
     <string name="action_decline">Decline</string>
     <string name="action_attach_image">Image</string>

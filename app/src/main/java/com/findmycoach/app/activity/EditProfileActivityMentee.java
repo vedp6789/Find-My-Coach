@@ -189,6 +189,9 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ChooseImageActivity.class);
+                profilePicture.buildDrawingCache();
+                Bitmap bitMap = profilePicture.getDrawingCache();
+                intent.putExtra("BitMap",BinaryForImage.getBinaryStringFromBitmap(bitMap));
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });

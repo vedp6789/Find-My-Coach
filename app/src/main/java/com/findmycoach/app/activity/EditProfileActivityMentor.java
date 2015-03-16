@@ -122,17 +122,21 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             isReadyToTravel.setChecked(false);
         }
 
-        List<String> areaOfInterests = userInfo.getSubCategoryName();
-        if (areaOfInterests.get(0)!=null && !areaOfInterests.get(0).equals(" ")) {
-            String areaOfInterest = "";
-            for (int index = 0; index < areaOfInterests.size(); index++) {
-                if (index != 0) {
-                    areaOfInterest = areaOfInterest + ", " + areaOfInterests.get(index);
-                } else {
-                    areaOfInterest = areaOfInterest + areaOfInterests.get(index);
+        try{
+            List<String> areaOfInterests = userInfo.getSubCategoryName();
+            if (areaOfInterests.size() > 0 && areaOfInterests.get(0)!=null && !areaOfInterests.get(0).equals(" ")) {
+                String areaOfInterest = "";
+                for (int index = 0; index < areaOfInterests.size(); index++) {
+                    if (index != 0) {
+                        areaOfInterest = areaOfInterest + ", " + areaOfInterests.get(index);
+                    } else {
+                        areaOfInterest = areaOfInterest + areaOfInterests.get(index);
+                    }
                 }
+                areaOfCoaching.setText(areaOfInterest);
             }
-            areaOfCoaching.setText(areaOfInterest);
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
         areaOfCoaching.setOnClickListener(new View.OnClickListener() {
@@ -204,6 +208,9 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ChooseImageActivity.class);
+                profilePicture.buildDrawingCache();
+                Bitmap bitMap = profilePicture.getDrawingCache();
+                intent.putExtra("BitMap",BinaryForImage.getBinaryStringFromBitmap(bitMap));
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });

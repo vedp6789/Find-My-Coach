@@ -11,8 +11,11 @@ import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -252,7 +255,27 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             case R.id.action_forgot_password:
                 callForgotPasswordActivity();
                 break;
+            case R.id.countryCodeTV:
+                showCountryCodeDialog();
+                break;
         }
+    }
+
+    private void showCountryCodeDialog() {
+        final Dialog countryDialog = new Dialog(this);
+        countryDialog.setCanceledOnTouchOutside(true);
+        countryDialog.setTitle(getResources().getString(R.string.select_country_code));
+        countryDialog.setContentView(R.layout.dialog_country_code);
+        ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
+        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, country_code));
+        countryDialog.show();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                countryCodeTV.setText(country_code[position].split(",")[0]);
+                countryDialog.dismiss();
+            }
+        });
     }
 
 
