@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,8 +23,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.findmycoach.app.R;
-import com.findmycoach.app.beans.subcategory.SubCategory;
+import com.findmycoach.app.beans.category.Category;
+import com.findmycoach.app.beans.category.DatumSub;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
@@ -40,6 +43,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     private InterestsAdapter adapter;
     private Button saveAction;
     private ArrayAdapter<String> autoSuggestionAdapter = null;
+    private final String TAG = "FMC";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +52,23 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         initialize();
         applyActionbarProperties();
         applyActions();
-        getSubCategories();
+
+        DataBase dataBase = new DataBase(this);
+        Category categoryFromDb = dataBase.selectAllSubCategory();
+        if(categoryFromDb.getData().size() < 1) {
+            Log.d(TAG, "sub category api called");
+            getSubCategories();
+        }
+        else {
+            Log.d(TAG, "sub category api not called");
+            applySubCategoryAdapter(categoryFromDb);
+        }
     }
 
     private void getSubCategories() {
         RequestParams requestParams = new RequestParams();
         String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
-        NetworkClient.getSubCategories(this, requestParams, authToken, this, 33);
+        NetworkClient.getCategories(this, requestParams, authToken, this, 34);
     }
 
     private void applyActions() {
@@ -81,13 +95,17 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         listView.setAdapter(adapter);
     }
 
-    private void applySubCategoryAdapter(SubCategory subCategory) {
-        final List<com.findmycoach.app.beans.subcategory.Datum> data = subCategory.getData();
+    private void applySubCategoryAdapter(Category category) {
+        final List<DatumSub> data = new ArrayList<DatumSub>();
         List<String> categories = new ArrayList<String>();
-        for (int index = 0; index < data.size(); index++) {
-            com.findmycoach.app.beans.subcategory.Datum datum = data.get(index);
-            categories.add(datum.getName());
+        for(com.findmycoach.app.beans.category.Datum d : category.getData()){
+            for(DatumSub ds : d.getDataSub()){
+                data.add(ds);
+                categories.add(ds.getName());
+            }
         }
+        for(String s : categories)
+            Log.e(TAG, s);
         autoSuggestionAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, categories);
     }
 
@@ -153,6 +171,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         input.setLayoutParams(lp);
         alertDialog.setView(input);
         input.setBackgroundDrawable(getResources().getDrawable(R.drawable.custom_edittext));
+
         alertDialog.setPositiveButton(getResources().getString(R.string.yes),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -204,7 +223,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        applySubCategoryAdapter((SubCategory) object);
+        applySubCategoryAdapter((Category) object);
     }
 
     @Override

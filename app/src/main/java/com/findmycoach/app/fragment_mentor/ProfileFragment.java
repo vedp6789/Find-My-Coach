@@ -184,7 +184,7 @@ public class ProfileFragment extends Fragment implements Callback {
         }
 
         List<String> areaOfInterests = userInfo.getSubCategoryName();
-        if (areaOfInterests.get(0)!=null && !areaOfInterests.get(0).equals(" ")) {
+        if (areaOfInterests.size() > 0 && areaOfInterests.get(0)!=null && !areaOfInterests.get(0).trim().equals("")) {
             String areaOfInterest = "";
             for (int index = 0; index < areaOfInterests.size(); index++) {
                 if (index != 0) {

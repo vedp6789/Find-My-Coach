@@ -8,10 +8,14 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
 import android.os.Handler;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -65,6 +69,8 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     private int user_group;
     PendingIntent pendingIntent;
     Context context;
+    private TextView countryCodeTV;
+    private String[] country_code;
 
     private static final String TAG = "FMC1";
     private static final String TAG1 = "FMC1: Permissions:";
@@ -249,7 +255,27 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             case R.id.action_forgot_password:
                 callForgotPasswordActivity();
                 break;
+            case R.id.countryCodeTV:
+                showCountryCodeDialog();
+                break;
         }
+    }
+
+    private void showCountryCodeDialog() {
+        final Dialog countryDialog = new Dialog(this);
+        countryDialog.setCanceledOnTouchOutside(true);
+        countryDialog.setTitle(getResources().getString(R.string.select_country_code));
+        countryDialog.setContentView(R.layout.dialog_country_code);
+        ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
+        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, country_code));
+        countryDialog.show();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                countryCodeTV.setText(country_code[position].split(",")[0]);
+                countryDialog.dismiss();
+            }
+        });
     }
 
 
@@ -393,6 +419,9 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         dialog.setTitle(getResources().getString(R.string.phone_no_must));
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.phone_number_dialog);
+        countryCodeTV = (TextView) dialog.findViewById(R.id.countryCodeTV);
+        countryCodeTV.setText(getCountryZipCode());
+        countryCodeTV.setOnClickListener(this);
         final EditText phoneEditText = (EditText) dialog.findViewById(R.id.phoneEditText);
         dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -404,6 +433,14 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                         @Override
                         public void run() {
                             phoneEditText.setError(null);
+                        }
+                    }, 3500);
+                }else if(countryCodeTV.getText().toString().trim().equals("")){
+                    countryCodeTV.setError(getResources().getString(R.string.select_country_code));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            countryCodeTV.setError(null);
                         }
                     }, 3500);
                 } else {
@@ -606,6 +643,22 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         //Restarting the LoginActivity
         finish();
         startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+    }
+
+    public String getCountryZipCode(){
+        String CountryID = "";
+        String CountryZipCode = "";
+        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        CountryID= manager.getSimCountryIso().toUpperCase();
+        country_code = this.getResources().getStringArray(R.array.country_codes);
+        for(int i=0;i< country_code.length;i++){
+            String[] g = country_code[i].split(",");
+            if(g[1].trim().equals(CountryID.trim())){
+                CountryZipCode=g[0];
+                break;
+            }
+        }
+        return CountryZipCode;
     }
 }
 

@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.edmodo.cropper.CropImageView;
 import com.findmycoach.app.R;
+import com.findmycoach.app.util.BinaryForImage;
 
 public class ChooseImageActivity extends Activity {
 
@@ -59,6 +60,12 @@ public class ChooseImageActivity extends Activity {
     private void initialize() {
         chooseImage = (Button) findViewById(R.id.select_picture);
         cropImageView = (CropImageView) findViewById(R.id.CropImageView);
+        try{
+            cropImageView.setImageBitmap(BinaryForImage.getBitmapFromBinaryString(getIntent().getStringExtra("BitMap")));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         cropImageView.setFixedAspectRatio(true);
         cropImageView.setAspectRatio(DEFAULT_ASPECT_RATIO_VALUES, DEFAULT_ASPECT_RATIO_VALUES);
         rotateButton = (Button) findViewById(R.id.Button_rotate);

@@ -179,7 +179,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
             Picasso.with(this)
-                    .load((String) userInfo.getPhotograph()).resize(150, 150)
+                    .load(userInfo.getPhotograph()).resize(150, 150)
                     .placeholder(R.drawable.user_icon)
                     .error(R.drawable.user_icon)
                     .into(profileImage);

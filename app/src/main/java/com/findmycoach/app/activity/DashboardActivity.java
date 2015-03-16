@@ -525,13 +525,12 @@ public class DashboardActivity extends FragmentActivity
         if(user_group == 3){
             if (position == 0)
                 fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentor.HomeFragment());
-            if (position == 1)
+            else if (position == 1)
                 fragmentTransaction.replace(R.id.container, new NotificationsFragment());
-            if (position == 2)
+            else if (position == 2)
                 fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-            if (position == 3)
+            else if (position == 3)
                 fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
-
 
             fragmentTransaction.commit();
             onSectionAttached(position);
@@ -539,16 +538,12 @@ public class DashboardActivity extends FragmentActivity
         if(user_group == 2){
             if (position == 0)
                 fragmentTransaction.replace(R.id.container, new HomeFragment());
-            if (position == 1)
+            else if (position == 1)
                 fragmentTransaction.replace(R.id.container, new NotificationsFragment());
-            if (position == 2)
+            else if (position == 2)
                 fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-            if (position == 3)
+            else if (position == 3)
                 fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
-            if(position == 4){
-                startActivity(new Intent(this, Settings.class));
-                return;
-            }
 
             fragmentTransaction.commit();
             onSectionAttached(position);
@@ -557,13 +552,7 @@ public class DashboardActivity extends FragmentActivity
     }
 
     public void onSectionAttached(int number) {
-        if (user_group == 3){
-            mTitle = getResources().getStringArray(R.array.navigation_items_mentor)[number];
-        }
-        if (user_group == 2){
-            mTitle = getResources().getStringArray(R.array.navigation_items_mentee)[number];
-        }
-
+      mTitle = getResources().getStringArray(R.array.navigation_items)[number];
     }
 
     public void restoreActionBar() {

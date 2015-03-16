@@ -108,16 +108,14 @@
                     android:weightSum="4">
 
                     <TextView
+                        android:id="@+id/countryCodeTV"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="8dp"
                         android:layout_weight="3"
                         android:background="@drawable/custom_edittext"
-                        android:editable="false"
                         android:gravity="center"
-                        android:inputType="textEmailAddress"
-                        android:padding="4dp"
-                        android:text="+91" />
+                        android:padding="4dp" />
 
                     <EditText
                         android:id="@+id/input_phone"
