@@ -1,5 +1,6 @@
 package com.findmycoach.app.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -11,6 +12,7 @@ import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -35,6 +37,13 @@ import com.findmycoach.app.util.StorageHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.loopj.android.http.RequestParams;
 
@@ -45,7 +54,8 @@ import java.util.regex.Pattern;
 /**
  * A login screen that offers login via email/password, Facebook and Google+ sign in.
  */
-public class LoginActivity extends PlusBaseActivity implements View.OnClickListener, Callback {
+public class LoginActivity extends Activity implements OnClickListener, Callback, ConnectionCallbacks,
+        OnConnectionFailedListener {
 
     /* Request code used to invoke sign in user interactions. */
     public static boolean doLogout = false;
@@ -76,106 +86,24 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     private static final String TAG1 = "FMC1: Permissions:";
     private static final String TAG2 = "FMC1: User:";
 
-    @Override
-    protected void onPlusClientSignIn() {
-        if (doLogout) {
-            signOut();
-            doLogout = false;
-            progressDialog.dismiss();
-        } else {
-            enableDisconnectButtons();
-            getProfileInformation();
-        }
-    }
-
-    @Override
-    protected void onPlusClientBlockingUI(boolean show) {
-        progressDialog.show();
-    }
-
-    @Override
-    protected void updateConnectButtonState() {
-        boolean connected = getPlusClient().isConnected();
-        mSignOutButtons.setVisibility(connected ? View.VISIBLE : View.GONE);
-        mPlusSignInButton.setVisibility(connected ? View.GONE : View.VISIBLE);
-    }
-
-    @Override
-    protected void onPlusClientRevokeAccess() {
-        // TODO: Access to the user's G+ account has been revoked.  Per the developer terms, delete
-        // any stored user data here.
-    }
-
-    @Override
-    protected void onPlusClientSignOut() {
-    }
-
-    private void authenticateUser(Person user) {
-        progressDialog.show();
-        if (NetworkManager.isNetworkConnected(this)) {
-            RequestParams requestParams = new RequestParams();
-            requestParams.add("email", mPlusClient.getAccountName());
-            try {
-                String displayName = user.getDisplayName();
-                String[] names = displayName.split(" ");
-                requestParams.add("first_name", names[0]);
-                requestParams.add("last_name", names[1]);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try{
-               requestParams.add("dob", user.getBirthday());
-            }catch (Exception e) {
-                 e.printStackTrace();
-            }
-            try{
-                requestParams.add("google_link", user.getUrl());
-            }catch (Exception e) {
-               e.printStackTrace();
-            }
-            try{
-                requestParams.add("gender", user.getGender() + "");
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
-            try{
-                requestParams.add("photograph", (user.getImage().getUrl()));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            requestParams.add("user_group",String.valueOf(user_group));
-            saveUserEmail(mPlusClient.getAccountName());
-            NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
-        } else {
-            Toast.makeText(this, getResources().getString(R.string.check_network_connection), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void enableDisconnectButtons() {
-        //Set up sign out and disconnect buttons.
-
-        signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signOut();
-                updateConnectButtonState();
-            }
-        });
-
-        disconnectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                revokeAccess();
-                updateConnectButtonState();
-            }
-        });
-    }
+    public GoogleApiClient googleApiClient;
+    private boolean mSignInClicked;
+    private static final int G_SING_IN = 0;
+    private ConnectionResult connectionResult;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
+
+
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Plus.API)
+                .addScope(Plus.SCOPE_PLUS_LOGIN)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
 
         /*Intent intent_service = new Intent(LoginActivity.this, BackgroundService.class);
         startService(intent_service);*/
@@ -189,16 +117,16 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
 
         } else {
             setContentView(R.layout.activity_login);
-            user_group=2;
+            user_group = 2;
             radioGroup_user_login = (RadioGroup) findViewById(R.id.radio_group_user_login);
             radioGroup_user_login.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     if (checkedId == R.id.radio_button_mentee_login) {
-                         user_group=2;
+                        user_group = 2;
                     }
-                    if (checkedId == R.id.radio_button_mentor_login){
-                         user_group=3;
+                    if (checkedId == R.id.radio_button_mentor_login) {
+                        user_group = 3;
                     }
                 }
             });
@@ -209,8 +137,8 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
 
     /* This method get all views references */
     private void initialize() {
-        radioButton_mentee_login= (RadioButton) findViewById(R.id.radio_button_mentee_login);
-        radioButton_mentor_login= (RadioButton) findViewById(R.id.radio_button_mentor_login);
+        radioButton_mentee_login = (RadioButton) findViewById(R.id.radio_button_mentee_login);
+        radioButton_mentor_login = (RadioButton) findViewById(R.id.radio_button_mentor_login);
         registerAction = (TextView) findViewById(R.id.action_register);
         registerAction.setOnClickListener(this);
         inputUserName = (EditText) findViewById(R.id.input_login_id);
@@ -246,8 +174,8 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             case R.id.google_login_button:
                 Log.d(TAG, "Google + clicked");
                 if (supportsGooglePlayServices()) {
+                    signInWithGooglePlus();
                     Log.d(TAG, "Google Play Support");
-                    signIn();
                 } else {
                     mPlusSignInButton.setVisibility(View.GONE);
                 }
@@ -258,6 +186,30 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             case R.id.countryCodeTV:
                 showCountryCodeDialog();
                 break;
+        }
+    }
+
+    private void signInWithGooglePlus() {
+        googleApiClient.connect();
+        if (!googleApiClient.isConnecting()) {
+            mSignInClicked = true;
+            resolveSignInError();
+        }else{
+            Log.d(TAG,"Trying to connect with Google plus");
+        }
+    }
+
+    private void resolveSignInError() {
+        if (mConnectionResult.hasResolution()) {
+            mIntentInProgress = true;
+            try {
+                mConnectionResult.startResolutionForResult(this, G_SING_IN);
+            } catch (IntentSender.SendIntentException e) {
+                mIntentInProgress = false;
+                googleApiClient.connect();
+                e.printStackTrace();
+            }
+
         }
     }
 
@@ -296,7 +248,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("email", userId);
                 requestParams.add("password", userPassword);
-                requestParams.add("user_group",String.valueOf(user_group));
+                requestParams.add("user_group", String.valueOf(user_group));
                 saveUserEmail(userId);
                 NetworkClient.login(this, requestParams, this, 1);
             } else
@@ -353,10 +305,16 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         progressDialog.dismiss();
-        if (requestCode == OUR_REQUEST_CODE) {
+        Log.d(TAG,"Inside onActivityResult method!");
+        if (requestCode == G_SING_IN) {
+            Log.d(TAG,"request code :"+G_SING_IN);
+            if (resultCode != RESULT_OK) {
+                mSignInClicked = false;
+
+            }
             mIntentInProgress = false;
-            if (!mPlusClient.isConnecting()) {
-                mPlusClient.connect();
+            if (!googleApiClient.isConnecting()) {
+                googleApiClient.connect();
             }
             StorageHelper.storePreference(this, "login_with", "G+");
         } else { // If Result from Facebook
@@ -408,7 +366,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         requestParams.add("email", (String) user.getProperty("email"));
         requestParams.add("gender", (String) user.getProperty("gender"));
         requestParams.add("photograph", "http://graph.facebook.com/" + user.getId() + "/picture?type=large");
-        requestParams.add("user_group",String.valueOf(user_group));
+        requestParams.add("user_group", String.valueOf(user_group));
         saveUserEmail((String) user.getProperty("email"));
         NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
     }
@@ -435,7 +393,7 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                             phoneEditText.setError(null);
                         }
                     }, 3500);
-                }else if(countryCodeTV.getText().toString().trim().equals("")){
+                } else if (countryCodeTV.getText().toString().trim().equals("")) {
                     countryCodeTV.setError(getResources().getString(R.string.select_country_code));
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -445,8 +403,8 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                     }, 3500);
                 } else {
                     dialog.dismiss();
-                    requestParams.add("phone_number", phnNum);
-                    requestParams.add("user_group",String.valueOf(user_group));
+                    requestParams.add("phone_number",countryCodeTV.getText().toString().trim() + phnNum);
+                    requestParams.add("user_group", String.valueOf(user_group));
                     saveUserPhoneNumber(phnNum);
                     NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 26);
                     progressDialog.show();
@@ -460,11 +418,11 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 fbClearToken();
                 finish();
                 dialog.dismiss();
-                String user_group_saved=StorageHelper.getUserGroup(LoginActivity.this,"user_group");
-                if(user_group_saved !=null && user_group_saved.equals(String.valueOf(user_group))){
+                String user_group_saved = StorageHelper.getUserGroup(LoginActivity.this, "user_group");
+                if (user_group_saved != null && user_group_saved.equals(String.valueOf(user_group))) {
                     // No need to change saved value of user_group
-                }else{
-                    StorageHelper.storePreference(LoginActivity.this,"user_group",String.valueOf(user_group));
+                } else {
+                    StorageHelper.storePreference(LoginActivity.this, "user_group", String.valueOf(user_group));
                 }
                 startActivity(new Intent(LoginActivity.this, LoginActivity.class));
             }
@@ -497,38 +455,6 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
                 ConnectionResult.SUCCESS;
     }
 
-    /* A helper method to resolve the current ConnectionResult error. */
-    private void resolveSignInError() {
-        Log.d(TAG, "resolve SignIn Error");
-        if (mConnectionResult.hasResolution()) {
-            try {
-                mIntentInProgress = true;
-                startIntentSenderForResult(mConnectionResult.getResolution().getIntentSender(),
-                        OUR_REQUEST_CODE, null, 0, 0, 0);
-            } catch (IntentSender.SendIntentException e) {
-                mIntentInProgress = false;
-                mPlusClient.connect();
-            }
-        }
-    }
-
-
-    /**
-     * Successfully connected (called by PlusClient)
-     */
-    @Override
-    public void onConnected(Bundle connectionHint) {
-        updateConnectButtonState();
-        setProgressBarVisible(false);
-        onPlusClientSignIn();
-    }
-
-    public void getProfileInformation() {
-        Person currentPerson = mPlusClient.getCurrentPerson();
-        String accountName = mPlusClient.getAccountName();
-//        Toast.makeText(this, accountName + " is connected.", Toast.LENGTH_LONG).show();
-        authenticateUser(currentPerson);
-    }
 
     private void populateUserFields(Person currentPerson) {
         Log.d(TAG2, "Name:" + currentPerson.getName());
@@ -557,27 +483,20 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         StorageHelper.storePreference(this, "phone_number", phoneNumber);
     }
 
-    void showSharedPreferences(String from) {
-        Log.d(TAG, from + " auth_token : " + StorageHelper.getUserDetails(this, "auth_token"));
-        Log.d(TAG, from + " user_id : " + StorageHelper.getUserDetails(this, "user_id"));
-        Log.d(TAG, from + " phone_verified : " + StorageHelper.getUserDetails(this, "phone_verified"));
-        Log.d(TAG, from + " user_email : " + StorageHelper.getUserDetails(this, "user_email"));
-        Log.d(TAG, from + " phone_number : " + StorageHelper.getUserDetails(this, "phone_number"));
-    }
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
 
         // Saving user group
-        String user_group_saved = StorageHelper.getUserGroup(LoginActivity.this,"user_group");
-        if(user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group))) {
+        String user_group_saved = StorageHelper.getUserGroup(LoginActivity.this, "user_group");
+        if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group))) {
             StorageHelper.storePreference(LoginActivity.this, "user_group", String.valueOf(user_group));
         }
 
         Response response = (Response) object;
 
-        if(response == null)
+        if (response == null)
             return;
 
         // Saving auth token and user id of user for further use
@@ -588,13 +507,13 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
             saveUserPhn("True");
             finish();
             startActivity(new Intent(this, DashboardActivity.class));
-        }else{
+        } else {
             if (response.getData().getPhonenumber() == null) {
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("email", response.getData().getEmail());
                 getPhoneNumber(requestParams);
                 return;
-            }  else {
+            } else {
                 // Saving phone number for validating purpose and starting ValidatePhoneActivity
                 saveUserPhoneNumber(response.getData().getPhonenumber());
                 Intent intent = new Intent(this, ValidatePhoneActivity.class);
@@ -612,11 +531,11 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         String msg = (String) message;
 
         // Saving user group
-        String user_group_saved = StorageHelper.getUserGroup(LoginActivity.this,"user_group");
-        if(user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group)))
-            StorageHelper.storePreference(LoginActivity.this,"user_group",String.valueOf(user_group));
+        String user_group_saved = StorageHelper.getUserGroup(LoginActivity.this, "user_group");
+        if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group)))
+            StorageHelper.storePreference(LoginActivity.this, "user_group", String.valueOf(user_group));
 
-        if(msg.equals("Phone number is not set")) {
+        if (msg.equals("Phone number is not set")) {
             RequestParams requestParams = new RequestParams();
             requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
             getPhoneNumber(requestParams);
@@ -635,9 +554,10 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
 
         //Clearing facebook token and G+ user if connected
         fbClearToken();
-        if (mPlusClient.isConnected()) {
-            mPlusClient.clearDefaultAccount();
-            mPlusClient.disconnect();
+        if (googleApiClient.isConnected()) {
+            //googleApiClient.clearDefaultAccount();
+            googleApiClient.disconnect();
+            //mPlusClient.disconnect();
         }
 
         //Restarting the LoginActivity
@@ -645,20 +565,81 @@ public class LoginActivity extends PlusBaseActivity implements View.OnClickListe
         startActivity(new Intent(LoginActivity.this, LoginActivity.class));
     }
 
-    public String getCountryZipCode(){
+    public String getCountryZipCode() {
         String CountryID = "";
         String CountryZipCode = "";
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        CountryID= manager.getSimCountryIso().toUpperCase();
+        CountryID = manager.getSimCountryIso().toUpperCase();
         country_code = this.getResources().getStringArray(R.array.country_codes);
-        for(int i=0;i< country_code.length;i++){
+        for (int i = 0; i < country_code.length; i++) {
             String[] g = country_code[i].split(",");
-            if(g[1].trim().equals(CountryID.trim())){
-                CountryZipCode=g[0];
+            if (g[1].trim().equals(CountryID.trim())) {
+                CountryZipCode = g[0];
                 break;
             }
         }
         return CountryZipCode;
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        mSignInClicked = false;
+        Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
+        getProfileInformation();
+        updateUI(true);
+    }
+
+    private void updateUI(boolean b) {
+        if (b) {
+            mPlusSignInButton.setVisibility(View.GONE);
+            mSignOutButtons.setVisibility(View.VISIBLE);
+
+        } else {
+            mPlusSignInButton.setVisibility(View.VISIBLE);
+            mSignOutButtons.setVisibility(View.GONE);
+        }
+    }
+
+    private void getProfileInformation() {
+        try {
+            if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
+                Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
+                String personName = currentPerson.getDisplayName();
+                String personPhotoUrl = currentPerson.getImage().getUrl();
+                String personGooglePlusProfile = currentPerson.getUrl();
+                String email = Plus.AccountApi.getAccountName(googleApiClient);
+                Log.e(TAG, "Name: " + personName + ", plusProfile: "
+                        + personGooglePlusProfile + ", email: " + email
+                        + ", Image: " + personPhotoUrl);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        googleApiClient.connect();
+        updateUI(false);
+        Log.i(TAG,"Google Plus login suspended.");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.i(TAG,"Google Plus login failed.");
+        if (!connectionResult.hasResolution()) {
+            Log.i(TAG,"Google Plus login failed. connectionResult.hasResolution is false");
+            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), this, 0).show();
+            return;
+        }
+        if(!mIntentInProgress){
+            Log.i(TAG,"Google Plus login failed. mIntentInProgress is false");
+            this.connectionResult=connectionResult;
+            if(mSignInClicked){
+                resolveSignInError();
+            }
+        }
     }
 }
 

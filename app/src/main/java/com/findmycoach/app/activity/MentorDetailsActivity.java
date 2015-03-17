@@ -123,6 +123,8 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         listView_sun_slots= (ListView) findViewById(R.id.lv_sun_available_slots);
 
         b_schedule_class= (Button) findViewById(R.id.b_schedule_class);
+        b_schedule_class.setOnClickListener(this);
+
 
 
         Log.d(TAG,"sub category length : "+jsonArray_sub_category.length()+"");
@@ -314,6 +316,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
                 Log.d(TAG,"Start Scheduling activity");
                   Intent intent=new Intent(MentorDetailsActivity.this, ScheduleNewClass.class);
                   intent.putExtra("fname",userInfo.getFirstName());
+                  intent.putExtra("mentor_details",jsonObject_Data.toString());
                   startActivity(intent);
             }
         }

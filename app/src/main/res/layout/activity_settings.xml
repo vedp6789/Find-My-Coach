@@ -11,6 +11,35 @@
         android:text="@string/profile"
         android:padding="@dimen/textView_padding_margin"
         android:id="@+id/profileSettings" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:orientation="vertical"
+        android:background="#000000"></LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/change_password"
+        android:padding="@dimen/textView_padding_margin"
+        android:id="@+id/change_password"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:orientation="vertical"
+        android:background="#000000"></LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/change_phone"
+        android:padding="@dimen/textView_padding_margin"
+        android:id="@+id/change_phone_no" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:orientation="vertical"
+        android:background="#000000"></LinearLayout>
 
 
 </LinearLayout>

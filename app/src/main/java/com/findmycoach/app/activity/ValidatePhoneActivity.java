@@ -224,7 +224,6 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                     }, 3500);
                 }else {
                     dialog.dismiss();
-                    requestParams.add("phone_number", phnNum);
                     requestParams.add("user_group", user_group+"");
                     progressDialog.setMessage(getResources().getString(R.string.sending_code));
                     if(lastPhoneNumber != null && lastPhoneNumber.equals(phnNum)){
@@ -232,7 +231,8 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                         NetworkClient.repostOtp(ValidatePhoneActivity.this, requestParams, ValidatePhoneActivity.this, 28);
                     }else{
                         StorageHelper.storePreference(ValidatePhoneActivity.this, "phone_number", phnNum);
-                        requestParams.add("phone_number", phnNum);
+                        requestParams.add("phone_number",countryCodeTV.getText().toString().trim()+ phnNum);
+                        Log.d(TAG, countryCodeTV.getText().toString().trim()+ phnNum);
                         progressDialog.show();
                         NetworkClient.updatePhoneForSocialMedia(ValidatePhoneActivity.this, requestParams, ValidatePhoneActivity.this, 26);
                     }

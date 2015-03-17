@@ -1,6 +1,7 @@
 package com.findmycoach.app.activity;
 
 import android.app.ActionBar;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.fragment.ChangePasswordFragment;
 
 /**
  * Created by prem on 29/1/15.
@@ -25,6 +27,8 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
 
     private void initView() {
         findViewById(R.id.profileSettings).setOnClickListener(this);
+        findViewById(R.id.change_password).setOnClickListener(this);
+        findViewById(R.id.change_phone_no).setOnClickListener(this);
         applyActionbarProperties();
     }
 
@@ -46,6 +50,15 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
                 actionbar.setTitle(getResources().getString(R.string.profile));
                 getSupportFragmentManager().addOnBackStackChangedListener(this);
                 break;
+            case R.id.change_password:
+                FragmentManager fragmentManager=getSupportFragmentManager();
+                ChangePasswordFragment changePasswordFragment=new ChangePasswordFragment();
+                changePasswordFragment.show(fragmentManager,null);
+
+                break;
+            case R.id.change_phone_no:
+                break;
+
         }
     }
 
