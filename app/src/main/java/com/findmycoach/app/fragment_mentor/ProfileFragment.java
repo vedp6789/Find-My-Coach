@@ -23,14 +23,13 @@ import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.EditProfileActivityMentor;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
+import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.PicassoTools;
 
 import java.util.List;
 
@@ -51,6 +50,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private Button googleLink;
     private Button facebookLink;
     private Data userInfo = null;
+    private ImageLoader imgLoader;
 
     private static final String TAG="FMC:";
 
@@ -151,13 +151,11 @@ public class ProfileFragment extends Fragment implements Callback {
         progressDialog.hide();
         Response response = (Response) object;
         userInfo = response.getData();
-
         populateFields();
     }
 
 
     private void populateFields() {
-        PicassoTools.clearCache(Picasso.with(getActivity()));
         profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
         String address = "";
         if (userInfo.getAddress() != null) {
@@ -205,9 +203,10 @@ public class ProfileFragment extends Fragment implements Callback {
             profileTravelAvailable.setText(getResources().getString(R.string.no));
         }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-            Picasso.with(getActivity())
-                    .load(userInfo.getPhotograph()).skipMemoryCache()
-                    .into(profileImage);
+            if(imgLoader == null)
+                imgLoader = new ImageLoader(getActivity().getApplicationContext());
+            imgLoader.clearCache();
+            imgLoader.DisplayImage(userInfo.getPhotograph(), R.drawable.user_icon, profileImage);
         }
         applySocialLinks();
     }

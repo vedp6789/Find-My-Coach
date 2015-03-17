@@ -26,19 +26,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.findmycoach.app.R;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
+import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
-import com.findmycoach.app.R;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.PicassoTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,14 +81,12 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
     }
 
     private void populateUserData() {
-        PicassoTools.clearCache(Picasso.with(this));
         if (userInfo == null) {
             return;
         }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-            Picasso.with(this)
-                    .load((String) userInfo.getPhotograph()).skipMemoryCache()
-                    .into(profilePicture);
+            ImageLoader imgLoader = new ImageLoader(this.getApplicationContext());
+            imgLoader.DisplayImage(userInfo.getPhotograph(), R.drawable.user_icon, profilePicture);
         }
         profileEmail.setText(userInfo.getEmail());
         profilePhone.setText(userInfo.getPhonenumber());

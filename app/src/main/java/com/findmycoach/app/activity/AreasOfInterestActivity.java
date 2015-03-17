@@ -3,6 +3,8 @@ package com.findmycoach.app.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.LocalActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.findmycoach.app.R;
@@ -39,19 +42,33 @@ import java.util.List;
 public class AreasOfInterestActivity extends Activity implements Callback {
 
     private ListView listView;
-    public List<String> list = new ArrayList<String>();
-    private InterestsAdapter adapter;
+    public static List<String> list = new ArrayList<String>();
+    private static InterestsAdapter adapter;
     private Button saveAction;
-    private ArrayAdapter<String> autoSuggestionAdapter = null;
+    private ArrayAdapter<String> autoSuggestionAdapter;
     private final String TAG = "FMC";
+    private LocalActivityManager localActivityManager;
+    private List<String> categories;
+    private Category category;
+
+
+    public static void notifyAdapter(){
+        adapter.notifyDataSetChanged();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        autoSuggestionAdapter = null;
+
         setContentView(R.layout.activity_areas_of_interest);
         initialize();
         applyActionbarProperties();
         applyActions();
+
+        localActivityManager = new LocalActivityManager(this, false);
+        localActivityManager.dispatchCreate(savedInstanceState);
 
         DataBase dataBase = new DataBase(this);
         Category categoryFromDb = dataBase.selectAllSubCategory();
@@ -96,8 +113,9 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     }
 
     private void applySubCategoryAdapter(Category category) {
+        this.category = category;
         final List<DatumSub> data = new ArrayList<DatumSub>();
-        List<String> categories = new ArrayList<String>();
+        categories = new ArrayList<String>();
         for(com.findmycoach.app.beans.category.Datum d : category.getData()){
             for(DatumSub ds : d.getDataSub()){
                 data.add(ds);
@@ -157,44 +175,37 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     }
 
     private void addInterest() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle(getResources().getString(R.string.add_interest));
-        alertDialog.setMessage(getResources().getString(R.string.enter_interest));
-        final AutoCompleteTextView input = new AutoCompleteTextView(this);
-        if (autoSuggestionAdapter != null) {
-            input.setAdapter(autoSuggestionAdapter);
+
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_area_of_interest);
+        dialog.setTitle(getResources().getString(R.string.select_sub_category));
+        TabHost tabHost = (TabHost) dialog.findViewById(R.id.tabhost);
+        tabHost.setup(localActivityManager);
+
+        for(int i=0; i<category.getData().size(); i++){
+            com.findmycoach.app.beans.category.Datum datum = category.getData().get(i);
+            TabHost.TabSpec singleCategory = tabHost.newTabSpec(i+"");
+            singleCategory.setIndicator(datum.getName());
+            Intent intent = new Intent(this, SubCategoryActivity.class);
+            StringBuilder subCategory = new StringBuilder();
+            StringBuilder subCategoryId = new StringBuilder();
+            int row = datum.getDataSub().size()+1;
+            subCategory.append("Select one#");
+            subCategoryId.append("-1#");
+            for(int x=0; x<row-1; x++) {
+                subCategory.append(datum.getDataSub().get(x).getName() + "#");
+                subCategoryId.append(datum.getDataSub().get(x).getId() + "#");
+            }
+            intent.putExtra("row", row);
+            intent.putExtra("sub_category", subCategory.toString());
+            intent.putExtra("sub_category_id",subCategoryId.toString());
+            intent.putExtra("column_index", i);
+            singleCategory.setContent(intent);
+            tabHost.addTab(singleCategory);
         }
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        lp.setMargins(4, 4, 4, 4);
-        input.setLayoutParams(lp);
-        alertDialog.setView(input);
-        input.setBackgroundDrawable(getResources().getDrawable(R.drawable.custom_edittext));
 
-        alertDialog.setPositiveButton(getResources().getString(R.string.yes),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        String inputProductName = input.getText().toString();
-                        if (!inputProductName.equals("")) {
-                            if (list.contains(inputProductName)) {
-                                input.setError(getResources().getString(R.string.data_already_exist));
-                            } else {
-                                list.add(inputProductName);
-                                adapter.notifyDataSetChanged();
-                                dialog.dismiss();
-                            }
-                        }
-                    }
-                });
+        dialog.show();
 
-        alertDialog.setNegativeButton(getResources().getString(R.string.no),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-        alertDialog.show();
     }
 
     @Override

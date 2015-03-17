@@ -18,12 +18,11 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.NotificationAdapter;
 import com.findmycoach.app.beans.student.Data;
 import com.findmycoach.app.beans.student.ProfileResponse;
+import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.PicassoTools;
 
 import java.util.List;
 
@@ -103,16 +102,14 @@ public class StudentDetailActivity  extends Activity implements Callback {
         }
         profileAddress.setText(address);
         if (studentDetails.getPhotograph() != null && !studentDetails.getPhotograph().equals("")) {
-            PicassoTools.clearCache(Picasso.with(this));
-            Picasso.with(this)
-                    .load((String) studentDetails.getPhotograph()).skipMemoryCache()
-                    .into(profileImage);
+            ImageLoader imgLoader = new ImageLoader(this.getApplicationContext());
+            imgLoader.DisplayImage((String) studentDetails.getPhotograph(), R.drawable.user_icon, profileImage);
         }
         mentorFor.setText(studentDetails.getMentorFor());
         trainingLocation.setText((String) studentDetails.getTrainingLocation());
         coachingType.setText((String) studentDetails.getCoachingType());
         List<String> list = studentDetails.getSubCategoryName();
-        if(list.get(0)!=null && !list.get(0).equals(" "))
+        if(list.size() >0 && list.get(0)!=null && !list.get(0).equals(" "))
             areaOfInterest.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list));
         else
             areaOfInterest.setAdapter(null);

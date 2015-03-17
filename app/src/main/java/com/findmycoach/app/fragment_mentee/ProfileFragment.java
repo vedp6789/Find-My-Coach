@@ -12,9 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,14 +21,13 @@ import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.EditProfileActivityMentee;
 import com.findmycoach.app.beans.student.Data;
 import com.findmycoach.app.beans.student.ProfileResponse;
+import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.PicassoTools;
 
 import java.util.List;
 
@@ -45,8 +42,9 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView trainingLocation;
     private TextView mentorFor;
     private TextView coachingType;
-    private ListView areaOfInterest;
+    private TextView areaOfInterest;
     private Data userInfo = null;
+    private ImageLoader imgLoader;
 
     private static final String TAG="TAG";
 
@@ -95,7 +93,7 @@ public class ProfileFragment extends Fragment implements Callback {
         trainingLocation = (TextView) view.findViewById(R.id.training_location);
         mentorFor = (TextView) view.findViewById(R.id.mentor_for);
         coachingType = (TextView) view.findViewById(R.id.coaching_type);
-        areaOfInterest = (ListView) view.findViewById(R.id.areas_of_interest);
+        areaOfInterest = (TextView) view.findViewById(R.id.areas_of_interest);
         profileLocation = (TextView) view.findViewById(R.id.profile_location);
     }
 
@@ -169,22 +167,25 @@ public class ProfileFragment extends Fragment implements Callback {
         profileAddress.setText(address);
         profileLocation.setText(NetworkManager.getCurrentLocation(getActivity()));
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-            PicassoTools.clearCache(Picasso.with(getActivity()));
-            Picasso.with(getActivity())
-                    .load((String) userInfo.getPhotograph()).skipMemoryCache()
-                    .into(profileImage);
+            if(imgLoader == null)
+                imgLoader = new ImageLoader(getActivity().getApplicationContext());
+            imgLoader.clearCache();
+            imgLoader.DisplayImage((String)userInfo.getPhotograph(), R.drawable.user_icon, profileImage);
         }
         mentorFor.setText(userInfo.getMentorFor());
         trainingLocation.setText((String) userInfo.getTrainingLocation());
         coachingType.setText((String) userInfo.getCoachingType());
-        List<String> list = userInfo.getSubCategoryName();
-        try{
-            if(list.size() > 0 && list.get(0)!=null && !list.get(0).equals(" "))
-                areaOfInterest.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list));
-            else
-                areaOfInterest.setAdapter(null);
-        }catch (Exception e){
-            e.printStackTrace();
+        List<String> areaOfInterests = userInfo.getSubCategoryName();
+        if (areaOfInterests.size() > 0 && areaOfInterests.get(0)!=null && !areaOfInterests.get(0).trim().equals("")) {
+            String areaOfInterestString = "";
+            for (int index = 0; index < areaOfInterests.size(); index++) {
+                if (index != 0) {
+                    areaOfInterestString = areaOfInterestString + ", " + areaOfInterests.get(index);
+                } else {
+                    areaOfInterestString = areaOfInterestString + areaOfInterests.get(index);
+                }
+            }
+            areaOfInterest.setText(areaOfInterestString);
         }
     }
 

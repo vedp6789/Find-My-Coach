@@ -23,12 +23,12 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.mentor.Data;
 import com.findmycoach.app.beans.mentor.Response;
+import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -180,11 +180,8 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             profileTravelAvailable.setText(getResources().getString(R.string.no));
         }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-            Picasso.with(this)
-                    .load(userInfo.getPhotograph()).resize(150, 150)
-                    .placeholder(R.drawable.user_icon)
-                    .error(R.drawable.user_icon)
-                    .into(profileImage);
+            ImageLoader imgLoader = new ImageLoader(this.getApplicationContext());
+            imgLoader.DisplayImage(userInfo.getPhotograph(), R.drawable.user_icon, profileImage);
         }
         applySocialLinks();
     }

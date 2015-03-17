@@ -98,7 +98,7 @@ public class ChooseImageActivity extends Activity {
     private void passImage() {
         try {
             croppedImage = cropImageView.getCroppedCircleImage();
-            croppedImage = Bitmap.createScaledBitmap(croppedImage, 75, 75, false);
+            croppedImage = Bitmap.createScaledBitmap(croppedImage, 175, 175, false);
             Intent intent = new Intent();
             intent.putExtra("image", croppedImage);
             setResult(RESULT_OK, intent);
