@@ -557,8 +557,9 @@
     <string name="prompt_password">Password</string>
     <string name="old_password">Old password:</string>
     <string name="new_password">New password:</string>
-
+<string name="new_phone_no">Mobile Number:</string>
     <string name="prompt_confirm_password">Confirm Password</string>
+    <string name="prompt_commit">Commit</string>
     <string name="prompt_first_name">First Name</string>
     <string name="prompt_last_name">Last Name</string>
     <string name="prompt_date_of_birth">Date Of Birth</string>

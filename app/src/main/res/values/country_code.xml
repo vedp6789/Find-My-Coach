@@ -2,6 +2,7 @@
 <resources>
 
     <string-array name="country_codes" >
+        <item>Select</item>
         <item>93,AF</item>
         <item>355,AL</item>
         <item>213,DZ</item>

@@ -52,7 +52,7 @@ public class ChangePasswordFragment extends DialogFragment implements View.OnCli
 
         Dialog dialog = getDialog();
         dialog.setTitle(getString(R.string.change_password));
-        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCanceledOnTouchOutside(true);
 
         return view;
     }

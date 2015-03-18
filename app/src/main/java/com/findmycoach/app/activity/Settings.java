@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.fragment.ChangePasswordFragment;
+import com.findmycoach.app.fragment.ChangePhoneNoFragment;
 
 /**
  * Created by prem on 29/1/15.
@@ -57,6 +58,9 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
 
                 break;
             case R.id.change_phone_no:
+                FragmentManager fragmentManager1=getSupportFragmentManager();
+                ChangePhoneNoFragment changePhoneNoFragment=new ChangePhoneNoFragment();
+                changePhoneNoFragment.show(fragmentManager1,null);
                 break;
 
         }
