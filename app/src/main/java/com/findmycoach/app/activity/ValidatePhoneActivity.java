@@ -214,7 +214,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                             phoneEditText.setError(null);
                         }
                     }, 3500);
-                }else if(countryCodeTV.getText().toString().trim().equals("")){
+                }else if(countryCodeTV.getText().toString().trim().equals("Select")){
                     countryCodeTV.setError(getResources().getString(R.string.select_country_code));
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -251,11 +251,11 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
 
     public String getCountryZipCode(){
         String CountryID = "";
-        String CountryZipCode = "";
+        String CountryZipCode = "Select";
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         CountryID= manager.getSimCountryIso().toUpperCase();
         country_code = this.getResources().getStringArray(R.array.country_codes);
-        for(int i=0;i< country_code.length;i++){
+        for(int i=1;i< country_code.length;i++){
             String[] g = country_code[i].split(",");
             if(g[1].trim().equals(CountryID.trim())){
                 CountryZipCode=g[0];
