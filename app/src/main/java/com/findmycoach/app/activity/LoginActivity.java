@@ -1,10 +1,12 @@
 package com.findmycoach.app.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -38,11 +41,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.drive.Drive;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.loopj.android.http.RequestParams;
@@ -51,11 +49,12 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 /**
  * A login screen that offers login via email/password, Facebook and Google+ sign in.
  */
-public class LoginActivity extends Activity implements OnClickListener, Callback, ConnectionCallbacks,
-        OnConnectionFailedListener {
+public class LoginActivity extends Activity implements OnClickListener, Callback,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     /* Request code used to invoke sign in user interactions. */
     public static boolean doLogout = false;
@@ -65,49 +64,39 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private EditText inputPassword;
     private Button actionLogin;
     private LoginButton actionFacebook;
-    private SignInButton mPlusSignInButton;
     private TextView forgotAction;
-    private boolean mIntentInProgress;
-    private ConnectionResult mConnectionResult;
     private ProgressDialog progressDialog;
-    private View mProgressView;
-    private View mSignOutButtons;
-    private Button signOutButton;
-    private Button disconnectButton;
     private RadioGroup radioGroup_user_login;
     private RadioButton radioButton_mentee_login, radioButton_mentor_login;
     private int user_group;
-    PendingIntent pendingIntent;
-    Context context;
     private TextView countryCodeTV;
     private String[] country_code;
+
+    //Related to G+
+    private static final int STATE_DEFAULT = 0;
+    private static final int STATE_SIGN_IN = 1;
+    private static final int STATE_IN_PROGRESS = 2;
+    private static final int RC_SIGN_IN = 0;
+    private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
+    private static final String SAVED_PROGRESS = "sign_in_progress";
+    private GoogleApiClient mGoogleApiClient;
+    private int mSignInProgress;
+    private PendingIntent mSignInIntent;
+    private int mSignInError;
+    private SignInButton mSignInButton;
+    private Button mSignOutButton;
+    private Button mRevokeButton;
+    private LinearLayout mSignOutButtons;
 
     private static final String TAG = "FMC1";
     private static final String TAG1 = "FMC1: Permissions:";
     private static final String TAG2 = "FMC1: User:";
 
-    public GoogleApiClient googleApiClient;
-    private boolean mSignInClicked;
-    private static final int G_SING_IN = 0;
-    private ConnectionResult connectionResult;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = this;
-
-
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Plus.API)
-                .addScope(Plus.SCOPE_PLUS_LOGIN)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-
-        /*Intent intent_service = new Intent(LoginActivity.this, BackgroundService.class);
-        startService(intent_service);*/
-
         final String userToken = StorageHelper.getUserDetails(this, "auth_token");
         String phnVerified = StorageHelper.getUserDetails(this, "phone_verified");
         if (userToken != null && phnVerified != null) {
@@ -130,13 +119,28 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                     }
                 }
             });
-            initialize();
+
+            initialize(savedInstanceState);
         }
     }
 
 
     /* This method get all views references */
-    private void initialize() {
+    private void initialize(Bundle savedInstanceState) {
+
+        //G+ related
+        mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        mSignOutButton = (Button) findViewById(R.id.sign_out_button);
+        mRevokeButton = (Button) findViewById(R.id.revoke_access_button);
+        mSignOutButtons = (LinearLayout) findViewById(R.id.plus_sign_out_buttons);
+        mSignInButton.setOnClickListener(this);
+        mSignOutButton.setOnClickListener(this);
+        mRevokeButton.setOnClickListener(this);
+        if (savedInstanceState != null) {
+            mSignInProgress = savedInstanceState.getInt(SAVED_PROGRESS, STATE_DEFAULT);
+        }
+        mGoogleApiClient = buildGoogleApiClient();
+
         radioButton_mentee_login = (RadioButton) findViewById(R.id.radio_button_mentee_login);
         radioButton_mentor_login = (RadioButton) findViewById(R.id.radio_button_mentor_login);
         registerAction = (TextView) findViewById(R.id.action_register);
@@ -147,16 +151,10 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         actionLogin.setOnClickListener(this);
         actionFacebook = (LoginButton) findViewById(R.id.facebook_login_button);
         actionFacebook.setReadPermissions(Arrays.asList("user_location", "user_birthday", "email"));
-        mPlusSignInButton = (SignInButton) findViewById(R.id.google_login_button);
-        mPlusSignInButton.setOnClickListener(this);
         forgotAction = (TextView) findViewById(R.id.action_forgot_password);
         forgotAction.setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.logging_in));
-        mProgressView = findViewById(R.id.login_progress);
-        signOutButton = (Button) findViewById(R.id.plus_sign_out_button);
-        disconnectButton = (Button) findViewById(R.id.plus_disconnect_button);
-        mSignOutButtons = findViewById(R.id.plus_sign_out_buttons);
     }
 
     @Override
@@ -168,16 +166,25 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 break;
             case R.id.email_sign_in_button:
                 logIn();
-                //Intent intent=new Intent(this,DashboardActivity.class);
-                //startActivity(intent);
                 break;
-            case R.id.google_login_button:
-                Log.d(TAG, "Google + clicked");
-                if (supportsGooglePlayServices()) {
-                    signInWithGooglePlus();
-                    Log.d(TAG, "Google Play Support");
-                } else {
-                    mPlusSignInButton.setVisibility(View.GONE);
+            case R.id.sign_in_button:
+                if (!mGoogleApiClient.isConnecting()) {
+                    resolveSignInError();
+                }
+                break;
+            case R.id.sign_out_button:
+                if (!mGoogleApiClient.isConnecting()) {
+                    Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                    mGoogleApiClient.disconnect();
+                    mGoogleApiClient.connect();
+                }
+                break;
+            case R.id.revoke_access_button:
+                if (!mGoogleApiClient.isConnecting()) {
+                    Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                    Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient);
+                    mGoogleApiClient = buildGoogleApiClient();
+                    mGoogleApiClient.connect();
                 }
                 break;
             case R.id.action_forgot_password:
@@ -186,30 +193,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             case R.id.countryCodeTV:
                 showCountryCodeDialog();
                 break;
-        }
-    }
-
-    private void signInWithGooglePlus() {
-        googleApiClient.connect();
-        if (!googleApiClient.isConnecting()) {
-            mSignInClicked = true;
-            resolveSignInError();
-        }else{
-            Log.d(TAG,"Trying to connect with Google plus");
-        }
-    }
-
-    private void resolveSignInError() {
-        if (mConnectionResult.hasResolution()) {
-            mIntentInProgress = true;
-            try {
-                mConnectionResult.startResolutionForResult(this, G_SING_IN);
-            } catch (IntentSender.SendIntentException e) {
-                mIntentInProgress = false;
-                googleApiClient.connect();
-                e.printStackTrace();
-            }
-
         }
     }
 
@@ -306,16 +289,16 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         super.onActivityResult(requestCode, resultCode, data);
         progressDialog.dismiss();
         Log.d(TAG,"Inside onActivityResult method!");
-        if (requestCode == G_SING_IN) {
-            Log.d(TAG,"request code :"+G_SING_IN);
-            if (resultCode != RESULT_OK) {
-                mSignInClicked = false;
-
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_OK) {
+                mSignInProgress = STATE_SIGN_IN;
+            } else {
+                mSignInProgress = STATE_DEFAULT;
             }
-            mIntentInProgress = false;
-            if (!googleApiClient.isConnecting()) {
-                googleApiClient.connect();
+            if (!mGoogleApiClient.isConnecting()) {
+                mGoogleApiClient.connect();
             }
+            Log.d(TAG,"request code : "+ RC_SIGN_IN);
             StorageHelper.storePreference(this, "login_with", "G+");
         } else { // If Result from Facebook
             Session session = Session.getActiveSession();
@@ -444,28 +427,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
     }
 
-    /**
-     * Check if the device supports Google Play Services.  It's best
-     * practice to check first rather than handling this as an error case.
-     *
-     * @return whether the device supports Google Play Services
-     */
-    private boolean supportsGooglePlayServices() {
-        return GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) ==
-                ConnectionResult.SUCCESS;
-    }
-
-
-    private void populateUserFields(Person currentPerson) {
-        Log.d(TAG2, "Name:" + currentPerson.getName());
-        Log.d(TAG2, "Display Name:" + currentPerson.getDisplayName());
-        Log.d(TAG2, "Nick Name:" + currentPerson.getNickname());
-        Log.d(TAG2, "Date of Birth:" + currentPerson.getBirthday());
-        Log.d(TAG2, "Current Location:" + currentPerson.getCurrentLocation());
-        Log.d(TAG2, "Gender:" + currentPerson.getGender());
-        Log.d(TAG2, "Gender:" + currentPerson.getImage());
-    }
-
     private void saveUser(String authToken, String userId) {
         StorageHelper.storePreference(this, "auth_token", authToken);
         StorageHelper.storePreference(this, "user_id", userId);
@@ -554,10 +515,10 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         //Clearing facebook token and G+ user if connected
         fbClearToken();
-        if (googleApiClient.isConnected()) {
-            //googleApiClient.clearDefaultAccount();
-            googleApiClient.disconnect();
-            //mPlusClient.disconnect();
+        if (!mGoogleApiClient.isConnecting()) {
+            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+            mGoogleApiClient.disconnect();
+            mGoogleApiClient.connect();
         }
 
         //Restarting the LoginActivity
@@ -581,64 +542,175 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         return CountryZipCode;
     }
 
-    @Override
-    public void onConnected(Bundle bundle) {
-        mSignInClicked = false;
-        Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
-        getProfileInformation();
-        updateUI(true);
-    }
 
-    private void updateUI(boolean b) {
-        if (b) {
-            mPlusSignInButton.setVisibility(View.GONE);
-            mSignOutButtons.setVisibility(View.VISIBLE);
-
-        } else {
-            mPlusSignInButton.setVisibility(View.VISIBLE);
-            mSignOutButtons.setVisibility(View.GONE);
-        }
-    }
-
-    private void getProfileInformation() {
+    //old method
+    private void getProfileInformation(Person currentPerson) {
+        progressDialog.show();
+        RequestParams requestParams = new RequestParams();
         try {
-            if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
-                Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
-                String personName = currentPerson.getDisplayName();
-                String personPhotoUrl = currentPerson.getImage().getUrl();
-                String personGooglePlusProfile = currentPerson.getUrl();
-                String email = Plus.AccountApi.getAccountName(googleApiClient);
-                Log.e(TAG, "Name: " + personName + ", plusProfile: "
-                        + personGooglePlusProfile + ", email: " + email
-                        + ", Image: " + personPhotoUrl);
-            }
+            String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
+            requestParams.add("email", email);
+            saveUserEmail(email);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        try {
+            requestParams.add("first_name", currentPerson.getDisplayName().split(" ")[0]);
+            requestParams.add("last_name", currentPerson.getDisplayName().split(" ")[1]);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        try{
+            requestParams.add("dob", currentPerson.getBirthday());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        try{
+            requestParams.add("gender", currentPerson.getGender() == 0 ? "M" : "F");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        try{
+            requestParams.add("google_link", currentPerson.getUrl());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        try{
+            requestParams.add("photograph",currentPerson.getImage().getUrl());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        requestParams.add("user_group", String.valueOf(user_group));
+        NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, this, 23);
     }
 
-    @Override
-    public void onConnectionSuspended(int i) {
-        googleApiClient.connect();
-        updateUI(false);
-        Log.i(TAG,"Google Plus login suspended.");
-    }
 
+    // G+ related
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.i(TAG,"Google Plus login failed.");
-        if (!connectionResult.hasResolution()) {
-            Log.i(TAG,"Google Plus login failed. connectionResult.hasResolution is false");
-            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), this, 0).show();
+    public void onConnected(Bundle connectionHint) {
+        Log.d(TAG, "onConnected");
+
+        if(doLogout){
+            try{
+                Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                mGoogleApiClient.disconnect();
+                mGoogleApiClient.connect();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            doLogout = false;
             return;
         }
-        if(!mIntentInProgress){
-            Log.i(TAG,"Google Plus login failed. mIntentInProgress is false");
-            this.connectionResult=connectionResult;
-            if(mSignInClicked){
+
+        mSignInButton.setVisibility(View.GONE);
+        mSignOutButtons.setVisibility(View.VISIBLE);
+
+        Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+        getProfileInformation(currentUser);
+        mSignInProgress = STATE_DEFAULT;
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        Log.d(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
+                + result.getErrorCode());
+        if (result.getErrorCode() == ConnectionResult.API_UNAVAILABLE) {
+        } else if (mSignInProgress != STATE_IN_PROGRESS) {
+            mSignInIntent = result.getResolution();
+            mSignInError = result.getErrorCode();
+            if (mSignInProgress == STATE_SIGN_IN) {
                 resolveSignInError();
             }
+        }
+        onSignedOut();
+    }
+
+    private GoogleApiClient buildGoogleApiClient() {
+        return new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Plus.API, Plus.PlusOptions.builder().build())
+                .addScope(Plus.SCOPE_PLUS_LOGIN)
+                .build();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SAVED_PROGRESS, mSignInProgress);
+    }
+
+    private void resolveSignInError() {
+        if (mSignInIntent != null) {
+            try {
+                mSignInProgress = STATE_IN_PROGRESS;
+                startIntentSenderForResult(mSignInIntent.getIntentSender(),
+                        RC_SIGN_IN, null, 0, 0, 0);
+            } catch (IntentSender.SendIntentException e) {
+                Log.i(TAG, "Sign in intent could not be sent: " + e.getLocalizedMessage());
+                mSignInProgress = STATE_SIGN_IN;
+                mGoogleApiClient.connect();
+            }
+        } else {
+            showDialog(DIALOG_PLAY_SERVICES_ERROR);
+        }
+    }
+
+    private void onSignedOut() {
+        mSignInButton.setVisibility(View.VISIBLE);
+        mSignOutButtons.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case DIALOG_PLAY_SERVICES_ERROR:
+                if (GooglePlayServicesUtil.isUserRecoverableError(mSignInError)) {
+                    return GooglePlayServicesUtil.getErrorDialog(
+                            mSignInError,
+                            this,
+                            RC_SIGN_IN,
+                            new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    Log.e(TAG, "Google Play services resolution cancelled");
+                                    mSignInProgress = STATE_DEFAULT;
+                                }
+                            });
+                } else {
+                    return new AlertDialog.Builder(this)
+                            .setMessage(R.string.play_services_error)
+                            .setPositiveButton(R.string.close,
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Log.e(TAG, "Google Play services error could not be "
+                                                    + "resolved: " + mSignInError);
+                                            mSignInProgress = STATE_DEFAULT;
+                                        }
+                                    }).create();
+                }
+            default:
+                return super.onCreateDialog(id);
         }
     }
 }

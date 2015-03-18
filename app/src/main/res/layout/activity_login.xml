@@ -168,7 +168,7 @@
                 fb:logout_text="@string/action_logout" />
 
             <com.google.android.gms.common.SignInButton
-                android:id="@+id/google_login_button"
+                android:id="@+id/sign_in_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="4dp"
@@ -195,7 +195,7 @@
             android:weightSum="2">
 
             <Button
-                android:id="@+id/plus_sign_out_button"
+                android:id="@+id/sign_out_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -203,7 +203,7 @@
                 android:text="@string/plus_sign_out" />
 
             <Button
-                android:id="@+id/plus_disconnect_button"
+                android:id="@+id/revoke_access_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

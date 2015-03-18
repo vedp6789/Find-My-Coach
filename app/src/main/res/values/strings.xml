@@ -626,7 +626,7 @@
     <!-- String s related to Actions -->
     <string name="action_sign_in">Login</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="plus_sign_out">Switch Google+ account</string>
+    <string name="plus_sign_out">SignOut Google+</string>
     <string name="plus_disconnect">Disconnect from Google+</string>
     <string name="facebook">Facebook</string>
     <string name="google_plus">Google +</string>
@@ -657,6 +657,8 @@
     <!-- Actions -->
 
     <!-- String s related to Errors -->
+    <string name="play_services_error">Google Play services is not available.  This application will close.</string>
+    <string name="close">Close</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
