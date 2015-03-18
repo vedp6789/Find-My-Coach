@@ -21,7 +21,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,23 +55,16 @@ import java.util.regex.Pattern;
 public class LoginActivity extends Activity implements OnClickListener, Callback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    /* Request code used to invoke sign in user interactions. */
+    /** Request code used to invoke sign in user interactions. */
     public static boolean doLogout = false;
-    // UI references.
-    private TextView registerAction;
     private EditText inputUserName;
     private EditText inputPassword;
-    private Button actionLogin;
-    private LoginButton actionFacebook;
-    private TextView forgotAction;
     private ProgressDialog progressDialog;
-    private RadioGroup radioGroup_user_login;
-    private RadioButton radioButton_mentee_login, radioButton_mentor_login;
     private int user_group;
     private TextView countryCodeTV;
     private String[] country_code;
 
-    //Related to G+
+    /** Related to G+ */
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
     private static final int STATE_IN_PROGRESS = 2;
@@ -84,14 +76,11 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private PendingIntent mSignInIntent;
     private int mSignInError;
     private SignInButton mSignInButton;
-    private Button mSignOutButton;
-    private Button mRevokeButton;
     private LinearLayout mSignOutButtons;
 
-    private static final String TAG = "FMC1";
-    private static final String TAG1 = "FMC1: Permissions:";
-    private static final String TAG2 = "FMC1: User:";
-
+    /** Log tags*/
+    private static final String TAG = "FMC";
+    private static final String TAG1 = "FMC: Permissions:";
 
 
     @Override
@@ -99,15 +88,19 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         super.onCreate(savedInstanceState);
         final String userToken = StorageHelper.getUserDetails(this, "auth_token");
         String phnVerified = StorageHelper.getUserDetails(this, "phone_verified");
+
+        /** If user is already logged-in in app then open Dashboard Activity */
         if (userToken != null && phnVerified != null) {
             Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
             this.finish();
 
-        } else {
+        }
+        /** Else setup the login screen */
+        else {
             setContentView(R.layout.activity_login);
             user_group = 2;
-            radioGroup_user_login = (RadioGroup) findViewById(R.id.radio_group_user_login);
+            RadioGroup radioGroup_user_login = (RadioGroup) findViewById(R.id.radio_group_user_login);
             radioGroup_user_login.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -119,19 +112,18 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                     }
                 }
             });
-
             initialize(savedInstanceState);
         }
     }
 
 
-    /* This method get all views references */
+    /** This method get references of all views */
     private void initialize(Bundle savedInstanceState) {
 
-        //G+ related
+        /** G+ related */
         mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        mSignOutButton = (Button) findViewById(R.id.sign_out_button);
-        mRevokeButton = (Button) findViewById(R.id.revoke_access_button);
+        Button mSignOutButton = (Button) findViewById(R.id.sign_out_button);
+        Button mRevokeButton = (Button) findViewById(R.id.revoke_access_button);
         mSignOutButtons = (LinearLayout) findViewById(R.id.plus_sign_out_buttons);
         mSignInButton.setOnClickListener(this);
         mSignOutButton.setOnClickListener(this);
@@ -141,18 +133,22 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
         mGoogleApiClient = buildGoogleApiClient();
 
-        radioButton_mentee_login = (RadioButton) findViewById(R.id.radio_button_mentee_login);
-        radioButton_mentor_login = (RadioButton) findViewById(R.id.radio_button_mentor_login);
-        registerAction = (TextView) findViewById(R.id.action_register);
+
+        /** FB related */
+        LoginButton actionFacebook = (LoginButton) findViewById(R.id.facebook_login_button);
+        actionFacebook.setReadPermissions(Arrays.asList("user_location", "user_birthday", "email"));
+
+        /** Other views related to generic login, sign up, forget password */
+        TextView registerAction = (TextView) findViewById(R.id.action_register);
         registerAction.setOnClickListener(this);
         inputUserName = (EditText) findViewById(R.id.input_login_id);
         inputPassword = (EditText) findViewById(R.id.input_login_password);
-        actionLogin = (Button) findViewById(R.id.email_sign_in_button);
+        Button actionLogin = (Button) findViewById(R.id.email_sign_in_button);
         actionLogin.setOnClickListener(this);
-        actionFacebook = (LoginButton) findViewById(R.id.facebook_login_button);
-        actionFacebook.setReadPermissions(Arrays.asList("user_location", "user_birthday", "email"));
-        forgotAction = (TextView) findViewById(R.id.action_forgot_password);
+        TextView forgotAction = (TextView) findViewById(R.id.action_forgot_password);
         forgotAction.setOnClickListener(this);
+
+        /** initializing progress dialog and setting up progress message*/
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.logging_in));
     }
@@ -172,6 +168,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                     resolveSignInError();
                 }
                 break;
+
+            /** Signing out G+ user*/
             case R.id.sign_out_button:
                 if (!mGoogleApiClient.isConnecting()) {
                     Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
@@ -179,6 +177,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                     mGoogleApiClient.connect();
                 }
                 break;
+
+            /** Revoking access for G+ user*/
             case R.id.revoke_access_button:
                 if (!mGoogleApiClient.isConnecting()) {
                     Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
@@ -196,33 +196,23 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
     }
 
-    private void showCountryCodeDialog() {
-        final Dialog countryDialog = new Dialog(this);
-        countryDialog.setCanceledOnTouchOutside(true);
-        countryDialog.setTitle(getResources().getString(R.string.select_country_code));
-        countryDialog.setContentView(R.layout.dialog_country_code);
-        ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
-        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, country_code));
-        countryDialog.show();
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                countryCodeTV.setText(country_code[position].split(",")[0]);
-                countryDialog.dismiss();
-            }
-        });
+    /** Opens register activity */
+    private void callSignUpActivity() {
+        Intent signUpIntent = new Intent(this, SignUpActivity.class);
+        startActivity(signUpIntent);
     }
 
-
+    /** Opens forget password activity */
     private void callForgotPasswordActivity() {
         Intent intent = new Intent(this, ForgotPasswordActivity.class);
         startActivity(intent);
     }
 
 
+    /** Called when user clicks the generic login button */
     private void logIn() {
-        String userId = inputUserName.getText().toString();
-        String userPassword = inputPassword.getText().toString();
+        String userId = inputUserName.getText().toString();              /** Getting user's email id */
+        String userPassword = inputPassword.getText().toString();        /** Getting entered password */
         boolean isFormValid = validateLoginForm(userId, userPassword);
         if (isFormValid) {
             Log.d(TAG, "email:" + userId + "\n Password:" + userPassword);
@@ -240,6 +230,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         StorageHelper.storePreference(this, "login_with", "Login");
     }
 
+    /** Validating login details i.e email and password */
     private boolean validateLoginForm(String userId, String userPassword) {
         boolean isValid = true;
         if (!isEmailValid(userId)) {
@@ -256,19 +247,19 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     }
 
 
-    /*Checking entered email is valid email or not*/
+    /** Checking entered email is valid email or not */
     public boolean isEmailValid(String email) {
         boolean isValid = false;
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        CharSequence inputStr = email;
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(inputStr);
+        Matcher matcher = pattern.matcher(email);
         if (matcher.matches()) {
             isValid = true;
         }
         return isValid;
     }
 
+    /** Used to show error for empty or wrong entered details in corresponding EditText with error message*/
     private void showErrorMessage(final EditText editText, String errorMessage) {
         editText.setError(errorMessage);
         new Handler().postDelayed(new Runnable() {
@@ -279,16 +270,15 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }, 3500);
     }
 
-    private void callSignUpActivity() {
-        Intent signUpIntent = new Intent(this, SignUpActivity.class);
-        startActivity(signUpIntent);
-    }
 
+    /** Called when user wants to login using G+ or fb */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         progressDialog.dismiss();
-        Log.d(TAG,"Inside onActivityResult method!");
+
+        /** Attempt to login with G+ */
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
                 mSignInProgress = STATE_SIGN_IN;
@@ -300,7 +290,10 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             }
             Log.d(TAG,"request code : "+ RC_SIGN_IN);
             StorageHelper.storePreference(this, "login_with", "G+");
-        } else { // If Result from Facebook
+        }
+
+        /** Attempt to login with FB */
+        else {
             Session session = Session.getActiveSession();
             session.onActivityResult(this, requestCode, resultCode, data);
             if (resultCode == RESULT_OK) {
@@ -310,8 +303,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
     }
 
-
-    /*This function will get Facebook Session*/
+    /** Getting Facebook Session */
     private void getSession() {
         Session.openActiveSession(this, true, new Session.StatusCallback() {
             @Override
@@ -339,6 +331,21 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         });
     }
 
+    /** Clearing Fb user if exists */
+    public void fbClearToken() {
+        Session session = Session.getActiveSession();
+        if (session != null) {
+            if (!session.isClosed()) {
+                session.closeAndClearTokenInformation();
+            }
+        } else {
+            session = new Session(this);
+            Session.setActiveSession(session);
+            session.closeAndClearTokenInformation();
+        }
+    }
+
+    /** Calling socialAuthentication api with user's fb details */
     private void callWebservice(GraphUser user) {
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
@@ -354,196 +361,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
     }
 
-    private void getPhoneNumber(final RequestParams requestParams) {
-        progressDialog.dismiss();
-        final Dialog dialog = new Dialog(this);
-        dialog.setTitle(getResources().getString(R.string.phone_no_must));
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.phone_number_dialog);
-        countryCodeTV = (TextView) dialog.findViewById(R.id.countryCodeTV);
-        countryCodeTV.setText(getCountryZipCode());
-        countryCodeTV.setOnClickListener(this);
-        final EditText phoneEditText = (EditText) dialog.findViewById(R.id.phoneEditText);
-        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String phnNum = phoneEditText.getText().toString();
-                if (phnNum.equals("") || phnNum.length() < 10) {
-                    phoneEditText.setError(getResources().getString(R.string.enter_valid_phone_no));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            phoneEditText.setError(null);
-                        }
-                    }, 3500);
-                } else if (countryCodeTV.getText().toString().trim().equals("Select")) {
-                    countryCodeTV.setError(getResources().getString(R.string.select_country_code));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            countryCodeTV.setError(null);
-                        }
-                    }, 3500);
-                } else {
-                    dialog.dismiss();
-                    requestParams.add("phone_number",countryCodeTV.getText().toString().trim() + phnNum);
-                    requestParams.add("user_group", String.valueOf(user_group));
-                    saveUserPhoneNumber(phnNum);
-                    NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 26);
-                    progressDialog.show();
-                }
-            }
-        });
-
-        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fbClearToken();
-                finish();
-                dialog.dismiss();
-                String user_group_saved = StorageHelper.getUserGroup(LoginActivity.this, "user_group");
-                if (user_group_saved != null && user_group_saved.equals(String.valueOf(user_group))) {
-                    // No need to change saved value of user_group
-                } else {
-                    StorageHelper.storePreference(LoginActivity.this, "user_group", String.valueOf(user_group));
-                }
-                startActivity(new Intent(LoginActivity.this, LoginActivity.class));
-            }
-        });
-        dialog.show();
-
-    }
-
-    public void fbClearToken() {
-        Session session = Session.getActiveSession();
-        if (session != null) {
-            if (!session.isClosed()) {
-                session.closeAndClearTokenInformation();
-            }
-        } else {
-            session = new Session(this);
-            Session.setActiveSession(session);
-            session.closeAndClearTokenInformation();
-        }
-    }
-
-    private void saveUser(String authToken, String userId) {
-        StorageHelper.storePreference(this, "auth_token", authToken);
-        StorageHelper.storePreference(this, "user_id", userId);
-    }
-
-    private void saveUserPhn(String isPhnVerified) {
-        StorageHelper.storePreference(this, "phone_verified", isPhnVerified);
-    }
-
-    private void saveUserEmail(String emailId) {
-        StorageHelper.storePreference(this, "user_email", emailId);
-    }
-
-    private void saveUserPhoneNumber(String phoneNumber) {
-        StorageHelper.storePreference(this, "phone_number", phoneNumber);
-    }
-
-
-    @Override
-    public void successOperation(Object object, int statusCode, int calledApiValue) {
-        progressDialog.dismiss();
-
-        // Saving user group
-        String user_group_saved = StorageHelper.getUserGroup(LoginActivity.this, "user_group");
-        if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group))) {
-            StorageHelper.storePreference(LoginActivity.this, "user_group", String.valueOf(user_group));
-        }
-
-        Response response = (Response) object;
-
-        if (response == null)
-            return;
-
-        // Saving auth token and user id of user for further use
-        if (response.getAuthToken() != null && response.getData().getId() != null) {
-            saveUser(response.getAuthToken(), response.getData().getId());
-        }
-        if (response.getMessage() != null && response.getMessage().equals("Success")) {
-            saveUserPhn("True");
-            finish();
-            startActivity(new Intent(this, DashboardActivity.class));
-        } else {
-            if (response.getData().getPhonenumber() == null) {
-                RequestParams requestParams = new RequestParams();
-                requestParams.add("email", response.getData().getEmail());
-                getPhoneNumber(requestParams);
-                return;
-            } else {
-                // Saving phone number for validating purpose and starting ValidatePhoneActivity
-                saveUserPhoneNumber(response.getData().getPhonenumber());
-                Intent intent = new Intent(this, ValidatePhoneActivity.class);
-
-                finish();
-                startActivity(intent);
-            }
-
-        }
-    }
-
-    @Override
-    public void failureOperation(Object message, int statusCode, int calledApiValue) {
-        progressDialog.dismiss();
-        String msg = (String) message;
-
-        // Saving user group
-        String user_group_saved = StorageHelper.getUserGroup(LoginActivity.this, "user_group");
-        if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group)))
-            StorageHelper.storePreference(LoginActivity.this, "user_group", String.valueOf(user_group));
-
-        if (msg.equals("Phone number is not set")) {
-            RequestParams requestParams = new RequestParams();
-            requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
-            getPhoneNumber(requestParams);
-            return;
-        }
-
-        // If phone number is not verified then starting ValidatePhoneActivity
-        if (msg.equals("Validate Phone number to login") || msg.equals("Validate Phone number and Email to Login ")) {
-            startActivity(new Intent(this, ValidatePhoneActivity.class));
-            finish();
-            return;
-        }
-
-        // Displaying error message to user
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-
-        //Clearing facebook token and G+ user if connected
-        fbClearToken();
-        if (!mGoogleApiClient.isConnecting()) {
-            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-            mGoogleApiClient.disconnect();
-            mGoogleApiClient.connect();
-        }
-
-        //Restarting the LoginActivity
-        finish();
-        startActivity(new Intent(LoginActivity.this, LoginActivity.class));
-    }
-
-    public String getCountryZipCode() {
-        String CountryID = "";
-        String CountryZipCode = "Select";
-        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        CountryID = manager.getSimCountryIso().toUpperCase();
-        country_code = this.getResources().getStringArray(R.array.country_codes);
-        for (int i = 1; i < country_code.length; i++) {
-            String[] g = country_code[i].split(",");
-            if (g[1].trim().equals(CountryID.trim())) {
-                CountryZipCode = g[0];
-                break;
-            }
-        }
-        return CountryZipCode;
-    }
-
-
-    //old method
+    /** Calling socialAuthentication api with user's G+ account details */
     private void getProfileInformation(Person currentPerson) {
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
@@ -584,12 +402,12 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, this, 23);
     }
 
-
-    // G+ related
+    /** G+ account is connected */
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.d(TAG, "onConnected");
 
+        /** If G+ logged in user logged out (DashBoard Activity) */
         if(doLogout){
             try{
                 Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
@@ -602,24 +420,29 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             return;
         }
 
+        /** G+ is connected, hide G+ login button and show sign out, revoke access button */
         mSignInButton.setVisibility(View.GONE);
         mSignOutButtons.setVisibility(View.VISIBLE);
 
+        /** Getting details of connected G+ user and sending details to api for logging in */
         Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
         getProfileInformation(currentUser);
         mSignInProgress = STATE_DEFAULT;
     }
 
+    /** if suspended the reconnect G+ user*/
     @Override
     public void onConnectionSuspended(int cause) {
         mGoogleApiClient.connect();
     }
 
+    /** When G+ connection failed */
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         Log.d(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
                 + result.getErrorCode());
         if (result.getErrorCode() == ConnectionResult.API_UNAVAILABLE) {
+            /* If G+ API is unavailable */
         } else if (mSignInProgress != STATE_IN_PROGRESS) {
             mSignInIntent = result.getResolution();
             mSignInError = result.getErrorCode();
@@ -630,6 +453,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         onSignedOut();
     }
 
+    /** Getting reference of Google Api client into mGoogleApiClient */
     private GoogleApiClient buildGoogleApiClient() {
         return new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -639,12 +463,14 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 .build();
     }
 
+    /** On next start, if G+ user is already provide access then connect client  */
     @Override
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
     }
 
+    /** Disconnecting G+ connection if connected*/
     @Override
     protected void onStop() {
         super.onStop();
@@ -653,12 +479,14 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
     }
 
+    /** Saving G+ client state */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(SAVED_PROGRESS, mSignInProgress);
     }
 
+    /** Used to resolve G+ connection error */
     private void resolveSignInError() {
         if (mSignInIntent != null) {
             try {
@@ -675,6 +503,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
     }
 
+    /** Updating G+ sign in and sign out UI*/
     private void onSignedOut() {
         mSignInButton.setVisibility(View.VISIBLE);
         mSignOutButtons.setVisibility(View.GONE);
@@ -713,6 +542,219 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 return super.onCreateDialog(id);
         }
     }
+
+    /** Dialog to get phone number if not present in case of Social registration  */
+    private void getPhoneNumber(final RequestParams requestParams) {
+        progressDialog.dismiss();
+        final Dialog dialog = new Dialog(this);
+        dialog.setTitle(getResources().getString(R.string.phone_no_must));
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.phone_number_dialog);
+        countryCodeTV = (TextView) dialog.findViewById(R.id.countryCodeTV);
+        countryCodeTV.setText(getCountryZipCode());
+        countryCodeTV.setOnClickListener(this);
+        final EditText phoneEditText = (EditText) dialog.findViewById(R.id.phoneEditText);
+
+        /** Ok button clicked */
+        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String phnNum = phoneEditText.getText().toString();
+
+                /** If phone number is null */
+                if (phnNum.equals("") || phnNum.length() < 10) {
+                    phoneEditText.setError(getResources().getString(R.string.enter_valid_phone_no));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            phoneEditText.setError(null);
+                        }
+                    }, 3500);
+                }
+
+                /** if country code is not update automatically or not selected */
+                else if (countryCodeTV.getText().toString().trim().equals("Select")) {
+                    countryCodeTV.setError(getResources().getString(R.string.select_country_code));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            countryCodeTV.setError(null);
+                        }
+                    }, 3500);
+                }
+
+                /** Phone number is provided with country code, updating user's phone number in server */
+                else {
+                    dialog.dismiss();
+                    requestParams.add("phone_number",countryCodeTV.getText().toString().trim() + phnNum);
+                    requestParams.add("user_group", String.valueOf(user_group));
+                    saveUserPhoneNumber(phnNum);
+                    NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 26);
+                    progressDialog.show();
+                }
+            }
+        });
+
+        /** Cancel button clicked */
+        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fbClearToken();
+                finish();
+                dialog.dismiss();
+                String user_group_saved = StorageHelper.getUserGroup(LoginActivity.this, "user_group");
+                if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group))) {
+                    StorageHelper.storePreference(LoginActivity.this, "user_group", String.valueOf(user_group));
+                }
+                startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+            }
+        });
+        dialog.show();
+    }
+
+    /** Dialog for selecting country code */
+    private void showCountryCodeDialog() {
+        final Dialog countryDialog = new Dialog(this);
+        countryDialog.setCanceledOnTouchOutside(true);
+        countryDialog.setTitle(getResources().getString(R.string.select_country_code));
+        countryDialog.setContentView(R.layout.dialog_country_code);
+        ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
+        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, country_code));
+        countryDialog.show();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                countryCodeTV.setText(country_code[position].split(",")[0]);
+                countryDialog.dismiss();
+            }
+        });
+    }
+
+    /** Getting country code using TelephonyManager */
+    public String getCountryZipCode() {
+        String CountryID = "";
+        String CountryZipCode = "Select";
+        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        CountryID = manager.getSimCountryIso().toUpperCase();
+        country_code = this.getResources().getStringArray(R.array.country_codes);
+        for (int i = 1; i < country_code.length; i++) {
+            String[] g = country_code[i].split(",");
+            if (g[1].trim().equals(CountryID.trim())) {
+                CountryZipCode = g[0];
+                break;
+            }
+        }
+        return CountryZipCode;
+    }
+
+    /** Saving logged in user's id and auth token in shared preferences */
+    private void saveUser(String authToken, String userId) {
+        StorageHelper.storePreference(this, "auth_token", authToken);
+        StorageHelper.storePreference(this, "user_id", userId);
+    }
+
+    /** Saving whether phone is verified or not in shared preferences */
+    private void saveUserPhn(String isPhnVerified) {
+        StorageHelper.storePreference(this, "phone_verified", isPhnVerified);
+    }
+
+    /** Saving email of user in shared preferences*/
+    private void saveUserEmail(String emailId) {
+        StorageHelper.storePreference(this, "user_email", emailId);
+    }
+
+    /** Saving user's phone number in shared preferences */
+    private void saveUserPhoneNumber(String phoneNumber) {
+        StorageHelper.storePreference(this, "phone_number", phoneNumber);
+    }
+
+
+    @Override
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
+        progressDialog.dismiss();
+
+        /** Saving user group */
+        String user_group_saved = StorageHelper.getUserGroup(LoginActivity.this, "user_group");
+        if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group))) {
+            StorageHelper.storePreference(LoginActivity.this, "user_group", String.valueOf(user_group));
+        }
+
+        Response response = (Response) object;
+        if (response == null)
+            return;
+
+        /** Saving auth token and user id of user for further use */
+        if (response.getAuthToken() != null && response.getData().getId() != null) {
+            saveUser(response.getAuthToken(), response.getData().getId());
+        }
+
+        /** Login is successful start DashBoard Activity */
+        if (response.getMessage() != null && response.getMessage().equals("Success")) {
+            saveUserPhn("True");
+            finish();
+            startActivity(new Intent(this, DashboardActivity.class));
+        }
+
+        else {
+            /** Login is successful but phone number not present, open dialog to get phone number */
+            if (response.getData().getPhonenumber() == null) {
+                RequestParams requestParams = new RequestParams();
+                requestParams.add("email", response.getData().getEmail());
+                getPhoneNumber(requestParams);
+            }
+
+            /** Login is successful but phone number not validated, open ValidatePhone Activity */
+            else {
+                /** Saving phone number for validating purpose and starting ValidatePhoneActivity */
+                saveUserPhoneNumber(response.getData().getPhonenumber());
+                Intent intent = new Intent(this, ValidatePhoneActivity.class);
+                finish();
+                startActivity(intent);
+            }
+
+        }
+    }
+
+    @Override
+    public void failureOperation(Object message, int statusCode, int calledApiValue) {
+        progressDialog.dismiss();
+        String msg = (String) message;
+
+        /** Saving user group */
+        String user_group_saved = StorageHelper.getUserGroup(LoginActivity.this, "user_group");
+        if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group)))
+            StorageHelper.storePreference(LoginActivity.this, "user_group", String.valueOf(user_group));
+
+        if (msg.equals("Phone number is not set")) {
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
+            getPhoneNumber(requestParams);
+            return;
+        }
+
+        /** If phone number is not verified then starting ValidatePhoneActivity */
+        if (msg.equals("Validate Phone number to login") || msg.equals("Validate Phone number and Email to Login ")) {
+            startActivity(new Intent(this, ValidatePhoneActivity.class));
+            finish();
+            return;
+        }
+
+        /** Displaying error message to user */
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+
+        /** Clearing facebook token and G+ user if connected */
+        fbClearToken();
+        if (!mGoogleApiClient.isConnecting()) {
+            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+            mGoogleApiClient.disconnect();
+            mGoogleApiClient.connect();
+        }
+
+        /** Restarting the LoginActivity */
+        finish();
+        startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+    }
+
 }
 
 
