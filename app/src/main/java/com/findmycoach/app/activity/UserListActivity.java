@@ -67,6 +67,8 @@ public class UserListActivity extends Activity implements Callback {
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
         requestParams.add("id", id);
+        int limit=7;                                          //  This is a limit for getting free slots details for this mentor in terms of limit days from current date
+        requestParams.add("limit", String.valueOf(limit));
         String authToken = StorageHelper.getUserDetails(this, "auth_token");
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
         NetworkClient.getMentorDetails(this, requestParams, authToken, this, 24);
@@ -114,6 +116,7 @@ public class UserListActivity extends Activity implements Callback {
             Intent intent = new Intent(getApplicationContext(), MentorDetailsActivity.class);
             intent.putExtra("mentorDetails", (String) object);
             intent.putExtra("connection_status", datum.getConnectionStatus());
+
             datum = null;
             startActivity(intent);
             isGettingMentor = false;

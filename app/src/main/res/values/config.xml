@@ -29,5 +29,8 @@
     <!--Root path of media storage Folder-->
     <string name="stored_path">FindMyCoach</string>
 
+    <!--Minimum time difference-->
+    <string name="slot_time_difference_in_hour">1</string>
+
 
 </resources>

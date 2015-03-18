@@ -495,7 +495,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 } else {
                     slot_time_value = stop_time - start_time;
                 }
-                int minimum_difference = (Integer.parseInt(getResources().getString(R.string.slot_time_difference)) * 60) * 60;
+                int minimum_difference = (Integer.parseInt(getResources().getString(R.string.slot_time_difference_in_hour)) * 60) * 60;
 
                 if (slot_time_value < minimum_difference) {
                     Toast.makeText(AddNewSlotActivity.this,getResources().getString(R.string.slot_time_difference), Toast.LENGTH_SHORT).show();

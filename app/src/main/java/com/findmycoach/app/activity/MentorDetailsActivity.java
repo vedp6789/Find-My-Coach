@@ -313,7 +313,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
                 Log.d(TAG,"Start Scheduling activity");
                   Intent intent=new Intent(MentorDetailsActivity.this, ScheduleNewClass.class);
                   intent.putExtra("fname",userInfo.getFirstName());
-                  intent.putExtra("mentor_details",jsonObject_Data.toString());
+                  intent.putExtra("mentor_details",jsonObject.toString());
                   startActivity(intent);
             }
         }
