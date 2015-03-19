@@ -2,7 +2,6 @@ package com.findmycoach.app.util;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.ProgressBar;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
@@ -684,7 +683,7 @@ public class NetworkClient {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Failure: Response:" + responseJson);
                     Log.d(TAG, "Failure: Response Code:" + statusCode);
-                    if (responseJson.contains("\"message\":\"Success\",")) {
+                    if (responseJson.contains("\"message\":\"Success\",") || responseJson.contains("No connections found")) {
                         callback.failureOperation("Success", statusCode, calledApiValue);
                         return;
                     }

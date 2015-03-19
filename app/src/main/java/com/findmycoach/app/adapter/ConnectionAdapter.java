@@ -20,6 +20,7 @@ import com.findmycoach.app.beans.requests.Data;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -94,10 +95,14 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
     private void populateSingleRow(ImageView imageView, TextView nameTV, TextView lastMsgTV, ImageButton connectionButton, int user_group, final Data singleConnection, final int position ){
         final String status = singleConnection.getStatus();
         lastMsgTV.setText("Receiver id : " + singleConnection.getInviteeId() + ", Sender id : " + singleConnection.getOwnerId() + ", Status : " + status);
-//        ImageLoader imgLoader = new ImageLoader(context.getApplicationContext());
-//        imgLoader.DisplayImage(singleConnection.getPhotograph(), R.drawable.user_icon, imageView);
         switch (user_group){
             case 3:
+
+                Picasso.with(context)
+                        .load(singleConnection.getOwnerImage())
+                        .placeholder(R.drawable.user_icon)
+                        .error(R.drawable.user_icon)
+                        .into(imageView);
 
                 nameTV.setText(singleConnection.getOwnerName());
 
@@ -125,6 +130,13 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
                 break;
 
             case 2:
+
+                Picasso.with(context)
+                        .load(singleConnection.getInviteeImage())
+                        .placeholder(R.drawable.user_icon)
+                        .error(R.drawable.user_icon)
+                        .into(imageView);
+
                 nameTV.setText(singleConnection.getInviteeName());
 
                 if(status.equals("accepted")){

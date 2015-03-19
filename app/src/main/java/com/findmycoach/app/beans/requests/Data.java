@@ -37,6 +37,14 @@ public class Data {
     @Expose
     private String inviteeName;
 
+    @SerializedName("owner_image")
+    @Expose
+    private String ownerImage;
+
+    @SerializedName("invitee_image")
+    @Expose
+    private String inviteeImage;
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -59,6 +67,14 @@ public class Data {
 
     public void setConnectionMessage(String connectionMessage) {
         this.connectionMessage = connectionMessage;
+    }
+
+    public void setOwnerImage(String ownerImage) {
+        this.ownerImage = ownerImage;
+    }
+
+    public void setInviteeImage(String imviteeImage) {
+        this.inviteeImage = imviteeImage;
     }
 
     public void setOwnerName(String ownerName) {
@@ -99,5 +115,13 @@ public class Data {
 
     public String getInviteeName() {
         return inviteeName;
+    }
+
+    public String getOwnerImage() {
+        return ownerImage;
+    }
+
+    public String getInviteeImage() {
+        return inviteeImage;
     }
 }

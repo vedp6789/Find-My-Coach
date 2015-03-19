@@ -274,7 +274,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         CountryID= manager.getSimCountryIso().toUpperCase();
         country_code = this.getResources().getStringArray(R.array.country_codes);
-        for(int i=0;i< country_code.length;i++){
+        for(int i=1;i< country_code.length;i++){
             String[] g = country_code[i].split(",");
             if(g[1].trim().equals(CountryID.trim())){
                 CountryZipCode=g[0];
