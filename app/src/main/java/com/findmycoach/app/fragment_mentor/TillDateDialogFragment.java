@@ -24,8 +24,8 @@ import java.util.Calendar;
 public class TillDateDialogFragment extends DialogFragment implements View.OnClickListener {
     DatePicker datePicker;
     Button b_ok,b_can;
-    AddNewSlotActivity addNewSlotActivity;
-    ScheduleNewClass scheduleNewClass;
+    public AddNewSlotActivity addNewSlotActivity;
+    public ScheduleNewClass scheduleNewClass;
     CheckBox cb_till_date;
     Calendar calendar;
     long time;
@@ -44,12 +44,9 @@ public class TillDateDialogFragment extends DialogFragment implements View.OnCli
                 dismiss();
                 if(addNewSlotActivity != null ){
                     addNewSlotActivity.setSelectedTillDate(day,month,year,allow_forever);
-                }
-                if(scheduleNewClass != null){
-                    Log.d(TAG,"ScheduleNewClass variable is not null ");
+                }else if(scheduleNewClass != null){
                     scheduleNewClass.setSelectedTillDate(day,month,year,allow_forever);   // allow_forever i.e. fourth parameter is not being used here
                 }
-
 
                 break;
             case R.id.b_cancel:
@@ -62,17 +59,21 @@ public class TillDateDialogFragment extends DialogFragment implements View.OnCli
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         int [] date;
-        called_from=getArguments().getString("ComingFrom");
-
-        if(called_from.equals("AddNewSlotActivity")){
-            addNewSlotActivity=new AddNewSlotActivity();
-            date=addNewSlotActivity.getTillInitialLimit();
-        }else{
-            scheduleNewClass=new ScheduleNewClass();
-            date=scheduleNewClass.getTillInitialLimit();
-        }
+//        called_from=getArguments().getString("ComingFrom");
+//
+//        if(called_from.equals("AddNewSlotActivity")){
+//            addNewSlotActivity=new AddNewSlotActivity();
+//            date=addNewSlotActivity.getTillInitialLimit();
+//        }else{
+//            scheduleNewClass=new ScheduleNewClass();
+//            date=scheduleNewClass.getTillInitialLimit();
+//        }
         allow_forever=false;
 
+        if(addNewSlotActivity == null)
+            date = scheduleNewClass.getTillInitialLimit();
+        else
+            date = addNewSlotActivity.getTillInitialLimit();
         calendar = Calendar.getInstance();
         calendar.set(date[2], date[1], date[0]+1, 0, 0, 0);
         time = calendar.getTimeInMillis();

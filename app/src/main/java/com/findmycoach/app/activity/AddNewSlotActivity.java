@@ -148,10 +148,11 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 Log.d(TAG, "On click");
                 FragmentManager fragmentManager = getFragmentManager();
-                Bundle bundle=new Bundle();
-                bundle.putString("ComingFrom","AddNewSlotActivity");
+//                Bundle bundle=new Bundle();
+//                bundle.putString("ComingFrom","AddNewSlotActivity");
                 StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
-                dateDialogFragment.setArguments(bundle);
+                dateDialogFragment.addNewSlotActivity = AddNewSlotActivity.this;
+//                dateDialogFragment.setArguments(bundle);
                 dateDialogFragment.show(fragmentManager, null);
 
                 /*if (tv_start_date.getText().length() > 0) {
@@ -171,10 +172,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 if (tv_start_date.getText().length() > 0) {
                     FragmentManager fragmentManager = getFragmentManager();
                     TillDateDialogFragment dateDialogFragment = new TillDateDialogFragment();
-                    Bundle bundle=new Bundle();
-                    bundle.putString("ComingFrom","AddNewSlotActivity");
-                    dateDialogFragment.setArguments(bundle);
-
+//                    Bundle bundle=new Bundle();
+//                    bundle.putString("ComingFrom","AddNewSlotActivity");
+//                    dateDialogFragment.setArguments(bundle);
+                    dateDialogFragment.addNewSlotActivity = AddNewSlotActivity.this;
                     dateDialogFragment.show(fragmentManager, null);
                 } else {
                     Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.from_date_first), Toast.LENGTH_SHORT).show();

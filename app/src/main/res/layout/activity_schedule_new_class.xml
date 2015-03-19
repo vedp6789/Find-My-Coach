@@ -166,6 +166,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
             android:layout_weight="8">
+            <TextView
+                android:id="@+id/tv_from_date"
+                android:layout_width="1dp"
+                android:layout_height="1dp" />
 
             <Button
                 android:id="@+id/b_from_date"
@@ -174,26 +178,23 @@
                 android:text="@string/from_date"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="1dp"
-            android:layout_weight="1">
-
-
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
             android:layout_weight="8">
-
+            <TextView
+                android:text=""
+                android:id="@+id/tv_to_date"
+                android:layout_width="1dp"
+                android:layout_height="1dp"></TextView>
             <Button
                 android:id="@+id/b_to_date"
                 android:text="@string/to_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+            />
         </LinearLayout>
     </LinearLayout>
 

@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.FragmentManager;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
@@ -33,6 +35,7 @@ import java.util.TreeSet;
  * Created by praka_000 on 3/4/2015.
  */
 public class ScheduleNewClass extends Activity implements Button.OnClickListener, SetDate {
+    TextView tv_from_date,tv_to_date;
     Spinner sp_subjects, sp_class_timing, sp_mentor_for;
     CheckBox cb_mon, cb_tue, cb_wed, cb_thu, cb_fri, cb_sat, cb_sun;
     EditText et_location;
@@ -434,6 +437,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private void initialize() {
         sp_subjects = (Spinner) findViewById(R.id.sp_subjects);
         sp_class_timing = (Spinner) findViewById(R.id.sp_class_time);
+        tv_from_date= (TextView) findViewById(R.id.tv_from_date);
+        tv_to_date= (TextView) findViewById(R.id.tv_to_date);
         b_from_date = (Button) findViewById(R.id.b_from_date);
         b_from_date.setOnClickListener(this);
         b_to_date = (Button) findViewById(R.id.b_to_date);
@@ -489,18 +494,20 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 break;
             case R.id.b_from_date:
                 FragmentManager fragmentManager = getFragmentManager();
-                Bundle bundle = new Bundle();
-                bundle.putString("ComingFrom", "ScheduleNewClass");
+//                Bundle bundle = new Bundle();
+//                bundle.putString("ComingFrom", "ScheduleNewClass");
                 StartDateDialogFragment startDateDialogFragment = new StartDateDialogFragment();
-                startDateDialogFragment.setArguments(bundle);
+//                startDateDialogFragment.setArguments(bundle);
+                startDateDialogFragment.scheduleNewClass = this;
                 startDateDialogFragment.show(fragmentManager, null);
                 break;
             case R.id.b_to_date:
                 FragmentManager fragmentManager1 = getFragmentManager();
-                Bundle bundle1 = new Bundle();
-                bundle1.putString("ComingFrom", "ScheduleNewClass");
+//                Bundle bundle1 = new Bundle();
+//                bundle1.putString("ComingFrom", "ScheduleNewClass");
                 TillDateDialogFragment tillDateDialogFragment = new TillDateDialogFragment();
-                tillDateDialogFragment.setArguments(bundle1);
+//                tillDateDialogFragment.setArguments(bundle1);
+                tillDateDialogFragment.scheduleNewClass = this;
                 tillDateDialogFragment.show(fragmentManager1, null);
                 break;
         }
@@ -530,12 +537,38 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         stringBuilder.append("/" + year);
         Log.d(TAG, "start date:" + stringBuilder.toString());
         ScheduleNewClass.b_from_date.setText(stringBuilder.toString());
-        ScheduleNewClass.date_from = String.valueOf(stringBuilder);
+        ScheduleNewClass.date_from = stringBuilder.toString();
 
 
-        if(ScheduleNewClass.date_from != null & ScheduleNewClass.date_to != null){
-            Toast.makeText(ScheduleNewClass.this,"Start date : "+ScheduleNewClass.date_from,Toast.LENGTH_SHORT);
-            Toast.makeText(ScheduleNewClass.this,"Stop date : "+ScheduleNewClass.date_to,Toast.LENGTH_SHORT);
+        if(ScheduleNewClass.date_from != null && ScheduleNewClass.date_to != null){
+
+            int start_day=Integer.parseInt(ScheduleNewClass.date_from.split("/",3)[0]);
+            int start_month=Integer.parseInt(ScheduleNewClass.date_from.split("/",3)[1]);
+            int start_year=Integer.parseInt(ScheduleNewClass.date_from.split("/",3)[2]);
+
+            int stop_day=Integer.parseInt(ScheduleNewClass.date_to.split("/",3)[0]);
+            int stop_month=Integer.parseInt(ScheduleNewClass.date_to.split("/",3)[1]);
+            int stop_year=Integer.parseInt(ScheduleNewClass.date_to.split("/",3)[2]);
+
+            Log.d(TAG,"Start_date  and Stop details in int variable from setSelectedStartDate method : "+start_day+" "+start_month +" "+start_year +"  :  "+ stop_day +" "+stop_month +" "+stop_year);
+            if(stop_year < start_year){
+
+                Toast.makeText(this,getResources().getString(R.string.stop_date_should_be_greater),Toast.LENGTH_SHORT).show();
+                showErrorMessage(tv_to_date, getResources().getString(R.string.stop_date_should_be_greater));
+            }else{
+                if (stop_year == start_year){
+                    if(stop_month < start_month){
+                        showErrorMessage(tv_to_date,getResources().getString(R.string.stop_date_should_be_greater));
+                    }else{
+                        if( stop_month == start_month){
+                            if(stop_day < start_day){
+                                showErrorMessage(tv_to_date,getResources().getString(R.string.stop_date_should_be_greater));
+                            }
+                        }
+                    }
+                }
+            }
+
         }
 
 
@@ -568,11 +601,50 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         Log.d(TAG, "till date:" + stringBuilder.toString());
         ScheduleNewClass.b_to_date.setText(stringBuilder.toString());
         date_to = stringBuilder.toString();
-        if(ScheduleNewClass.date_from != null){
-            Toast.makeText(ScheduleNewClass.this,"Start date : "+ScheduleNewClass.date_from.toString(),Toast.LENGTH_SHORT);
-            Toast.makeText(ScheduleNewClass.this,"Stop date : "+ScheduleNewClass.date_to.toString(),Toast.LENGTH_SHORT);
+        if(ScheduleNewClass.date_from != null ){
+            Log.e(TAG, ScheduleNewClass.date_from);
+            Log.e(TAG, ScheduleNewClass.date_to);
+
+            int start_day=Integer.parseInt(ScheduleNewClass.date_from.split("/",3)[0]);
+            int start_month=Integer.parseInt(ScheduleNewClass.date_from.split("/",3)[1]);
+            int start_year=Integer.parseInt(ScheduleNewClass.date_from.split("/",3)[2]);
+
+            int stop_day=Integer.parseInt(ScheduleNewClass.date_to.split("/",3)[0]);
+            int stop_month=Integer.parseInt(ScheduleNewClass.date_to.split("/",3)[1]);
+            int stop_year=Integer.parseInt(ScheduleNewClass.date_to.split("/",3)[2]);
+
+            Log.d(TAG,"Start_date  and Stop details in int variable from setSelectedTillDate method : "+start_day+" "+start_month +" "+start_year +"  :  "+ stop_day +" "+stop_month +" "+stop_year);
+
+
+            if(stop_year < start_year){
+                showErrorMessage(tv_to_date,getResources().getString(R.string.stop_date_should_be_greater));
+            }else{
+                if (stop_year == start_year){
+                    if(stop_month < start_month){
+                        showErrorMessage(tv_to_date,getResources().getString(R.string.stop_date_should_be_greater));
+                    }else{
+                        if( stop_month == start_month){
+                            if(stop_day < start_day){
+                                showErrorMessage(tv_to_date,getResources().getString(R.string.stop_date_should_be_greater));
+                            }
+                        }
+                    }
+                }
+            }
+
         }
 
+    }
+
+
+    private void showErrorMessage(final TextView view, String string) {
+        view.setError(string);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.setError(null);
+            }
+        }, 3500);
     }
 
     @Override

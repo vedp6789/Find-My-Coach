@@ -25,11 +25,11 @@ import java.util.Calendar;
 public class StartDateDialogFragment extends DialogFragment implements View.OnClickListener {
     public static DatePicker datePicker;
     Button b_ok, b_can;
-    AddNewSlotActivity addNewSlotActivity;
-    ScheduleNewClass scheduleNewClass;
+    public AddNewSlotActivity addNewSlotActivity;
+    public ScheduleNewClass scheduleNewClass;
     Calendar calendar;
     long time;
-    private String called_from;
+//    private String called_from;
 
     private static final String selected_date = null;
 
@@ -68,14 +68,14 @@ public class StartDateDialogFragment extends DialogFragment implements View.OnCl
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        called_from=getArguments().getString("ComingFrom");
-        if(called_from.equals("AddNewSlotActivity")){
-            addNewSlotActivity = new AddNewSlotActivity();
-        }
-
-        if(called_from.equals("ScheduleNewClass")){
-            scheduleNewClass=new ScheduleNewClass();
-        }
+//        called_from=getArguments().getString("ComingFrom");
+//        if(called_from.equals("AddNewSlotActivity")){
+//            addNewSlotActivity = new AddNewSlotActivity();
+//        }
+//
+//        if(called_from.equals("ScheduleNewClass")){
+//            scheduleNewClass=new ScheduleNewClass();
+//        }
 
 
 
