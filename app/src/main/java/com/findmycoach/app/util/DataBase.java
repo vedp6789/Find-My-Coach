@@ -18,6 +18,7 @@ import java.util.List;
  */
 public class DataBase extends SQLiteOpenHelper {
 
+    /** Private variables */
     private static final String DB_NAME = "FindMyCoachDB";
     private static final String TABLE_NAME = "TableSubCategory";
     private static final int DB_VERSION = 1;
@@ -25,20 +26,34 @@ public class DataBase extends SQLiteOpenHelper {
     private static final String CATEGORY_ID = "category_id";
     private static final String SUBCATEGORY = "subcategory";
     private static final String SUBCATEGORY_ID = "subcategory_id";
+
     private static final String _ID = "id";
 
-
+    /** Query to create table */
     private final static String query = "Create TABLE "+TABLE_NAME+" (" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             CATEGORY + " TEXT, " + SUBCATEGORY +" TEXT, " + CATEGORY_ID + " INTEGER, " + SUBCATEGORY_ID + " INTEGER);";
+
+    /** Drop table query used when DB version updates */
     private final static String dropTable = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
-    private static SQLiteDatabase db;
+    private SQLiteDatabase db;
 
-    public DataBase(Context context) {
+    /** Static variable of type DataBase to make this class singleton */
+    public static DataBase dataBase;
+
+    private DataBase(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         db = getWritableDatabase();
     }
 
+    /** Static method for getting reference of DataBase */
+    public static DataBase singleton(Context context){
+        if(dataBase == null)
+            dataBase = new DataBase(context);
+        return dataBase;
+    }
+
+    /** Inserting sub categories into table TableSubCategory */
     public void insertData(Category category){
         ContentValues contentValues = new ContentValues();
         for(Datum datum : category.getData()) {
@@ -50,12 +65,15 @@ public class DataBase extends SQLiteOpenHelper {
                 db.insert(TABLE_NAME,null,contentValues);
             }
         }
-        db.close();
     }
 
+    /** Selecting all sub categories from database */
     public Category selectAllSubCategory(){
+        /** Selecting all from table*/
         //tableName, columns name in array, selection(where), selection args, groupby, having, orderby
         Cursor cursorCategory = db.query(TABLE_NAME, new String[]{CATEGORY, CATEGORY_ID}, null ,null, CATEGORY, null, null);
+
+        /** Creating list of Datum object */
         List<Datum> datums = new ArrayList<Datum>();
         while (cursorCategory.moveToNext()){
             Datum datum = new Datum();
@@ -64,6 +82,7 @@ public class DataBase extends SQLiteOpenHelper {
 //            Log.d("FMC", datum.getName() + " : " + datum.getId());
 //            Log.d("FMC", "*********************************************");
 
+            /** Creating list of DatumSub, them add it to respective Datum object */
             List<DatumSub> datumSubs = new ArrayList<DatumSub>();
             //tableName, columns name in array, selection(where), selection args, groupby, having, orderby
             Cursor cursorSubCategory = db.query(TABLE_NAME, new String[]{SUBCATEGORY, SUBCATEGORY_ID}, CATEGORY_ID + " = ?" ,new String[]{datum.getId()} , SUBCATEGORY, null, null);
@@ -78,20 +97,22 @@ public class DataBase extends SQLiteOpenHelper {
             datum.setDataSub(datumSubs);
             datums.add(datum);
         }
+
+        /** Creating Category object using list of Datum, and custom message */
         Category category = new Category();
         category.setData(datums);
         category.setMessage("From db");
-        db.close();
         return category;
     }
 
 
-
+    /** Create table if not present */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(query);
     }
 
+    /** Deleting and then creating table in case any update is done to DB*/
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(dropTable);

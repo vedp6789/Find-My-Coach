@@ -70,7 +70,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         localActivityManager = new LocalActivityManager(this, false);
         localActivityManager.dispatchCreate(savedInstanceState);
 
-        DataBase dataBase = new DataBase(this);
+        DataBase dataBase = DataBase.singleton(this);
         Category categoryFromDb = dataBase.selectAllSubCategory();
         if(categoryFromDb.getData().size() < 1) {
             Log.d(TAG, "sub category api called");
