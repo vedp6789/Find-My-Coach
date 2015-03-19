@@ -3,6 +3,7 @@ package com.findmycoach.app.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,8 +43,6 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     private TextView profileName;
     private TextView profileAddress;
     private TextView profileRatting;
-    private TextView profileProfession;
-    private TextView profileAccomplishment;
     private TextView profileCharges;
     private TextView profileTravelAvailable;
     private Button googleLink;
@@ -107,8 +107,6 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         profileName = (TextView) findViewById(R.id.profile_name);
         profileAddress = (TextView) findViewById(R.id.profile_address);
         profileRatting = (TextView) findViewById(R.id.profile_rating);
-        profileProfession = (TextView) findViewById(R.id.profile_profession);
-        profileAccomplishment = (TextView) findViewById(R.id.profile_accomplishment);
         profileCharges = (TextView) findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) findViewById(R.id.profile_travel_available);
         googleLink = (Button) findViewById(R.id.profile_google_button);
@@ -222,6 +220,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             getMenuInflater().inflate(R.menu.menu_mentor_details_not_connected, menu);
         }else if(connectionStatus.equals("accepted")) {
             getMenuInflater().inflate(R.menu.menu_connected, menu);
+            menu.add(0, Menu.FIRST, Menu.NONE, R.string.rate);
         }if(connectionStatus.equals("pending")) {
             getMenuInflater().inflate(R.menu.menu_mentor_details_pending, menu);
         }
@@ -235,14 +234,37 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             showAlert();
             return true;
         }
-        if (id == R.id.action_disconnect) {
+        else if (id == R.id.action_disconnect) {
             Toast.makeText(this,"Connection will disconnect",Toast.LENGTH_LONG).show();
             return true;
         }
         if (id == android.R.id.home) {
             finish();
         }
+        if(id == Menu.FIRST){
+            showRatingDialog();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    /** Dialog to rate mentor */
+    private void showRatingDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setTitle(getResources().getString(R.string.rate) + " " + userInfo.getFirstName());
+        dialog.setContentView(R.layout.dialog_rate_mentor);
+
+        final RatingBar ratingBar = (RatingBar) dialog.findViewById(R.id.ratingBar);
+
+        dialog.findViewById(R.id.submitRating).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MentorDetailsActivity.this,"Rating for " + userInfo.getFirstName() + " is " + ratingBar.getRating() +" will be submitted", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     private void showAlert() {
