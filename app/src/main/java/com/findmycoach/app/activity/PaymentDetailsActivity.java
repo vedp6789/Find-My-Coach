@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +20,8 @@ import com.findmycoach.app.fragment.DatePickerFragment;
  */
 public class PaymentDetailsActivity extends Activity implements View.OnClickListener {
 
-    private EditText inputCardNumber, inputCardName, inputCardExpiry, inputCardCVV;
-    private Button actionSkip, actionSave;
+    private EditText inputCardNumber, inputCardName, inputCardCVV;
+    public static EditText inputCardExpiry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +83,7 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
     }
 
     private void showDateTimeDialog() {
-        DialogFragment datePickerDialog = new DatePickerFragment(this, inputCardExpiry);
+        DialogFragment datePickerDialog = new DatePickerFragment();
         datePickerDialog.show(getFragmentManager(), "timePicker");
     }
 
