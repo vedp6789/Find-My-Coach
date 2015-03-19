@@ -19,11 +19,11 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.beans.search.Datum;
-import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -68,7 +68,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.user_list_item, null);
         }
-        ImageView image = (ImageView) view.findViewById(R.id.mentor_image);
+        ImageView imageView = (ImageView) view.findViewById(R.id.mentor_image);
         final ImageView imageConnect = (ImageView) view.findViewById(R.id.connect_mentor);
         RatingBar rating = (RatingBar) view.findViewById(R.id.mentor_rating);
         TextView name = (TextView) view.findViewById(R.id.mentor_name);
@@ -76,9 +76,11 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         name.setText(user.getFirstName() + " " + user.getLastName());
 //            rating.setRating(user.get);
         if (user.getPhotograph() != null && !( user.getPhotograph()).equals("")) {
-            ImageLoader imgLoader = new ImageLoader(context.getApplicationContext());
-            imgLoader.clearCache();
-            imgLoader.DisplayImage((String) user.getPhotograph(), R.drawable.user_icon, image);
+            Picasso.with(context)
+                    .load((String) user.getPhotograph())
+                    .placeholder(R.drawable.user_icon)
+                    .error(R.drawable.user_icon)
+                    .into(imageView);
         }
         if(user.getConnectionStatus() != null && !user.getConnectionStatus().equals("broken")){
             if(user.getConnectionStatus().equals("accepted")){

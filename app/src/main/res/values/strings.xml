@@ -604,6 +604,7 @@
     <string name="prompt_category">Category</string>
     <string name="prompt_sub_category">Sub Category</string>
     <string name="prompt_rating">Rating</string>
+    <string name="rate">Rate</string>
     <string name="prompt_name">Search By Name</string>
     <string name="prompt_location">Location</string>
     <string name="prompt_current_location">Current Location</string>
@@ -656,6 +657,7 @@
     <string name="cancel">Cancel</string>
     <string name="start_time">Select</string>
     <string name="stop_time">Select</string>
+    <string name="submit_rating">Submit Rating</string>
     <!-- Actions -->
 
     <!-- String s related to Errors -->
