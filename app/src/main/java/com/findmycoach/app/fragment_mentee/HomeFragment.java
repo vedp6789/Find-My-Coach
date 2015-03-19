@@ -101,7 +101,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         applyActions();
         localActivityManager.dispatchCreate(savedInstanceState);
 
-        DataBase dataBase = new DataBase(getActivity());
+        DataBase dataBase = DataBase.singleton(getActivity());;
         Category categoryFromDb = dataBase.selectAllSubCategory();
         if(categoryFromDb.getData().size() < 1) {
             getCategories();
@@ -313,7 +313,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             updateAutoSuggestion(suggestion);
         } else if (object instanceof Category) {
             setTabForCategory((Category) object);
-            DataBase dataBase = new DataBase(getActivity());
+            DataBase dataBase = DataBase.singleton(getActivity());;
             dataBase.insertData((Category) object);
         } else {
             progressDialog.dismiss();

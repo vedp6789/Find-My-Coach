@@ -32,5 +32,7 @@
     <!--Minimum time difference-->
     <string name="slot_time_difference_in_hour">1</string>
 
+    <!-- Splash screen duration -->
+    <integer name="splash_screen_hold_duration">3000</integer>
 
 </resources>

@@ -3,10 +3,10 @@ package com.findmycoach.app.fragment;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.widget.DatePicker;
-import android.widget.EditText;
+
+import com.findmycoach.app.activity.PaymentDetailsActivity;
 
 import java.util.Calendar;
 
@@ -15,12 +15,8 @@ import java.util.Calendar;
  */
 public class DatePickerFragment  extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
-    Context context;
-    EditText inputDate;
 
-    public DatePickerFragment(Context context, EditText inputDate){
-        this.context = context;
-        this.inputDate = inputDate;
+    public DatePickerFragment(){
     }
 
     @Override
@@ -53,8 +49,8 @@ public class DatePickerFragment  extends DialogFragment implements DatePickerDia
             case 11: mon = "Dec"; break;
         }
         if(mon != null)
-            inputDate.setText(mon + " - " + year);
+            PaymentDetailsActivity.inputCardExpiry.setText(mon + " - " + year);
         else
-            inputDate.setText((month + 1) + " - " + year);
+            PaymentDetailsActivity.inputCardExpiry.setText((month + 1) + " - " + year);
     }
 }

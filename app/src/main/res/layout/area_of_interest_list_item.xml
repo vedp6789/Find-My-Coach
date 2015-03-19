@@ -14,22 +14,12 @@
         android:layout_gravity="center"/>
 
     <ImageView
-        android:id="@+id/item_edit"
+        android:id="@+id/item_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_margin="8dp"
         android:clickable="true"
-        android:src="@android:drawable/ic_menu_edit" />
-
-    <ImageView
-        android:id="@+id/item_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_margin="8dp"
-        android:layout_toLeftOf="@+id/item_edit"
-        android:layout_toStartOf="@+id/item_edit"
-        android:clickable="true"
         android:src="@android:drawable/ic_delete" />
+
 </RelativeLayout>
