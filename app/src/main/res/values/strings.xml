@@ -592,6 +592,8 @@
     <string name="to">To:</string>
     <string name="to1">to</string>
     <string name="starting_from">Starting from:</string>
+    <string name="from_date">From date</string>
+    <string name="to_date">To date</string>
     <string name="start_date">Start date:</string>
     <string name="end_date">Completion date:</string>
     <string name="till">Till:</string>

@@ -125,6 +125,13 @@
             android:text="@string/s"
             android:textColor="#000000" />
 
+        <CheckBox
+            android:id="@+id/cb_su"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/su"
+            android:textColor="#000000" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -152,17 +159,19 @@
         android:layout_marginRight="5dp"
         android:orientation="horizontal">
 
+
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
             android:layout_weight="8">
 
-            <Spinner
-                android:id="@+id/sp_start_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
+            <Button
+                android:id="@+id/b_from_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/from_date"/>
         </LinearLayout>
 
         <LinearLayout
@@ -171,13 +180,6 @@
             android:layout_margin="1dp"
             android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/to"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="@string/to1"
-                android:textColor="#000000"/>
 
         </LinearLayout>
 
@@ -187,10 +189,11 @@
             android:layout_margin="1dp"
             android:layout_weight="8">
 
-            <Spinner
-                android:id="@+id/sp_end_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/b_to_date"
+                android:text="@string/to_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
 

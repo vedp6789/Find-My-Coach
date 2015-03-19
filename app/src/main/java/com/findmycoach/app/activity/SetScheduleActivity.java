@@ -22,6 +22,7 @@ import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
+import com.findmycoach.app.util.SetDate;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.views.WeekView;
 import com.findmycoach.app.util.WeekViewEvent;
@@ -38,7 +39,7 @@ import java.util.Set;
 
 
 public class SetScheduleActivity extends Activity implements WeekView.MonthChangeListener,
-        WeekView.EventClickListener, WeekView.EventLongPressListener, Callback {
+        WeekView.EventClickListener, WeekView.EventLongPressListener, Callback{
 
     private WeekView mWeekView;
     private String date;
@@ -568,4 +569,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         progressDialog.dismiss();
         Toast.makeText(SetScheduleActivity.this,(String)object,Toast.LENGTH_SHORT).show();
     }
+
+
 }

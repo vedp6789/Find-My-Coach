@@ -14,6 +14,8 @@ import android.widget.DatePicker;
 
 import com.findmycoach.app.activity.AddNewSlotActivity;
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.ScheduleNewClass;
+import com.findmycoach.app.activity.SetScheduleActivity;
 
 import java.util.Calendar;
 
@@ -24,8 +26,10 @@ public class StartDateDialogFragment extends DialogFragment implements View.OnCl
     public static DatePicker datePicker;
     Button b_ok, b_can;
     AddNewSlotActivity addNewSlotActivity;
+    ScheduleNewClass scheduleNewClass;
     Calendar calendar;
     long time;
+    private String called_from;
 
     private static final String selected_date = null;
 
@@ -42,7 +46,16 @@ public class StartDateDialogFragment extends DialogFragment implements View.OnCl
                 String year = String.valueOf(datePicker.getYear());
                 dismiss();
 
-                addNewSlotActivity.setSelectedStartDate(day, month, year);
+                if(addNewSlotActivity != null){
+                    addNewSlotActivity.setSelectedStartDate(day, month, year);
+                }
+
+                if(scheduleNewClass != null){
+                    scheduleNewClass.setSelectedStartDate(day, month, year);
+                }
+
+
+
                 break;
             case R.id.b_cancel:
                 dismiss();
@@ -54,7 +67,18 @@ public class StartDateDialogFragment extends DialogFragment implements View.OnCl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addNewSlotActivity = new AddNewSlotActivity();
+
+        called_from=getArguments().getString("ComingFrom");
+        if(called_from.equals("AddNewSlotActivity")){
+            addNewSlotActivity = new AddNewSlotActivity();
+        }
+
+        if(called_from.equals("ScheduleNewClass")){
+            scheduleNewClass=new ScheduleNewClass();
+        }
+
+
+
         calendar = Calendar.getInstance();
         Log.d(TAG, "Current year:" + calendar.get(Calendar.YEAR));
         Log.d(TAG, "Current month:" + calendar.get(Calendar.MONTH));

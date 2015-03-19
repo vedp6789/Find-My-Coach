@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 
 import com.findmycoach.app.activity.AddNewSlotActivity;
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.ScheduleNewClass;
 
 import java.util.Calendar;
 
@@ -24,12 +25,13 @@ public class TillDateDialogFragment extends DialogFragment implements View.OnCli
     DatePicker datePicker;
     Button b_ok,b_can;
     AddNewSlotActivity addNewSlotActivity;
+    ScheduleNewClass scheduleNewClass;
     CheckBox cb_till_date;
     Calendar calendar;
     long time;
     static boolean allow_forever =false;// for making user select forever option for till date
     private static final String selected_date=null;
-
+    private String called_from;
     private static final String TAG="FMC";
 
     @Override
@@ -40,7 +42,15 @@ public class TillDateDialogFragment extends DialogFragment implements View.OnCli
                 String month=String.valueOf(datePicker.getMonth()+1);
                 String year=String.valueOf(datePicker.getYear());
                 dismiss();
-                addNewSlotActivity.setSelectedTillDate(day,month,year,allow_forever);
+                if(addNewSlotActivity != null ){
+                    addNewSlotActivity.setSelectedTillDate(day,month,year,allow_forever);
+                }
+                if(scheduleNewClass != null){
+                    Log.d(TAG,"ScheduleNewClass variable is not null ");
+                    scheduleNewClass.setSelectedTillDate(day,month,year,allow_forever);   // allow_forever i.e. fourth parameter is not being used here
+                }
+
+
                 break;
             case R.id.b_cancel:
                 dismiss();
@@ -51,8 +61,16 @@ public class TillDateDialogFragment extends DialogFragment implements View.OnCli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addNewSlotActivity=new AddNewSlotActivity();
-        int [] date=addNewSlotActivity.getTillInitialLimit();
+        int [] date;
+        called_from=getArguments().getString("ComingFrom");
+
+        if(called_from.equals("AddNewSlotActivity")){
+            addNewSlotActivity=new AddNewSlotActivity();
+            date=addNewSlotActivity.getTillInitialLimit();
+        }else{
+            scheduleNewClass=new ScheduleNewClass();
+            date=scheduleNewClass.getTillInitialLimit();
+        }
         allow_forever=false;
 
         calendar = Calendar.getInstance();
@@ -86,6 +104,10 @@ public class TillDateDialogFragment extends DialogFragment implements View.OnCli
             }
         });
 
+        if(scheduleNewClass != null){
+
+            cb_till_date.setVisibility(View.GONE);
+        }
 
         b_ok.setOnClickListener(this);
         b_can.setOnClickListener(this);

@@ -120,50 +120,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         tv_start_date.setText(date_from);
         date_to = getResources().getString(R.string.forever);
 
-        /*et_start_date.setInputType(InputType.TYPE_NULL);
-        et_till_date.setInputType(InputType.TYPE_NULL);
-        et_start_time.setInputType(InputType.TYPE_NULL);
-        et_stop_time.setInputType(InputType.TYPE_NULL);
-*/
-        /*ArrayAdapter<String> arrayAdapter = new ArrayAdapter(AddNewSlotActivity.this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.time1));
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sp_time_from.setAdapter(arrayAdapter);
-        sp_time_from.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                time_from = parent.getItemAtPosition(position).toString();
-                if (time_from.equals("Select")) {
-                    //Toast.makeText(AddNewSlotActivity.this,"Please select your slot start time.",Toast.LENGTH_SHORT).show();
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
-        ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter(AddNewSlotActivity.this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.time1));
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sp_time_to.setAdapter(arrayAdapter1);
-        sp_time_to.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                time_to = parent.getItemAtPosition(position).toString();
-                //Toast.makeText(AddNewSlotActivity.this,".."+time_to,Toast.LENGTH_SHORT).show();
-                if (time_to.equals("Select")) {
-                    //Toast.makeText(AddNewSlotActivity.this,"Please select your slot completion time.",Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-*/
 
         tv_start_time.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,7 +148,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 Log.d(TAG, "On click");
                 FragmentManager fragmentManager = getFragmentManager();
+                Bundle bundle=new Bundle();
+                bundle.putString("ComingFrom","AddNewSlotActivity");
                 StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
+                dateDialogFragment.setArguments(bundle);
                 dateDialogFragment.show(fragmentManager, null);
 
                 /*if (tv_start_date.getText().length() > 0) {
@@ -212,6 +171,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 if (tv_start_date.getText().length() > 0) {
                     FragmentManager fragmentManager = getFragmentManager();
                     TillDateDialogFragment dateDialogFragment = new TillDateDialogFragment();
+                    Bundle bundle=new Bundle();
+                    bundle.putString("ComingFrom","AddNewSlotActivity");
+                    dateDialogFragment.setArguments(bundle);
+
                     dateDialogFragment.show(fragmentManager, null);
                 } else {
                     Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.from_date_first), Toast.LENGTH_SHORT).show();
