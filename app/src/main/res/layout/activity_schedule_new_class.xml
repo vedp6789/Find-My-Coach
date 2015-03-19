@@ -27,7 +27,7 @@
             android:id="@+id/sp_subjects"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"/>
+            android:layout_gravity="right" />
 
     </LinearLayout>
 
@@ -42,18 +42,17 @@
         android:orientation="horizontal">
 
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/timing"
+            android:textColor="#000000"
+            android:textSize="15dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/timing"
-                android:textColor="#000000"
-                android:textSize="15dp" />
-
-            <Spinner
-                android:id="@+id/sp_class_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+        <Spinner
+            android:id="@+id/sp_class_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
 
     </LinearLayout>
@@ -71,7 +70,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/days_of_week"
-            android:textColor="#000000" />
+            android:textColor="#000000"
+            android:textSize="15sp"/>
 
     </LinearLayout>
 
@@ -147,6 +147,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/duration"
+            android:textSize="15sp"
             android:textColor="#000000" />
     </LinearLayout>
 
@@ -160,22 +161,40 @@
         android:orientation="horizontal">
 
 
-
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
             android:layout_weight="8">
-            <TextView
-                android:id="@+id/tv_from_date"
-                android:layout_width="1dp"
-                android:layout_height="1dp" />
 
-            <Button
-                android:id="@+id/b_from_date"
+            <TextView
+                android:id="@+id/tv_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/from"
+                android:textColor="#000000"
+                android:textSize="18dp" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/from_date"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_date_from_dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/select"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:textSize="18dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#000000"></LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
 
 
@@ -184,17 +203,35 @@
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
             android:layout_weight="8">
+
             <TextView
-                android:text=""
-                android:id="@+id/tv_to_date"
-                android:layout_width="1dp"
-                android:layout_height="1dp"></TextView>
-            <Button
-                android:id="@+id/b_to_date"
-                android:text="@string/to_date"
+                android:id="@+id/tv_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/to"
+                android:textColor="#000000"
+                android:textSize="18dp" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_date_to_dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/select"
+                    android:textColor="#000000"
+                    android:textSize="18dp"
+                    android:gravity="center"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#000000"></LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 
@@ -205,21 +242,23 @@
         android:layout_below="@+id/ll_duration_selection"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="1dp"
             android:layout_weight="8">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="@string/location"
                 android:textColor="#000000"
-                android:textSize="15sp" />
+                android:textSize="18sp"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -232,7 +271,8 @@
                 android:id="@+id/et_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/location" />
+                android:hint="@string/address"
+                android:gravity="center"/>
 
         </LinearLayout>
 
@@ -250,17 +290,17 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="1dp"
             android:layout_weight="8">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="@string/mentor_for"
                 android:textColor="#000000"
-                android:textSize="15sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -272,26 +312,25 @@
             <Spinner
                 android:id="@+id/sp_mentor_for"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
-</LinearLayout>
+    </LinearLayout>
 
     <RadioGroup
         android:id="@+id/rg_payment_option"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_mentor_for"
-        android:orientation="vertical"
-        android:checkedButton="@+id/rb_pay_now">
+        android:checkedButton="@+id/rb_pay_now"
+        android:orientation="vertical">
 
         <RadioButton
             android:id="@+id/rb_pay_now"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/pay_now"
-           />
+            android:text="@string/pay_now" />
 
         <RadioButton
             android:id="@+id/pay_personally"
@@ -299,13 +338,13 @@
             android:layout_height="wrap_content"
             android:text="@string/personally" />
     </RadioGroup>
-    
+
     <Button
         android:id="@+id/b_proceed_to_payment"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/proceed_payment"/>
+        android:layout_alignParentBottom="true"
+        android:text="@string/check_availability" />
 
 
 </RelativeLayout>

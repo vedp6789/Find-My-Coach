@@ -592,8 +592,8 @@
     <string name="to">To:</string>
     <string name="to1">to</string>
     <string name="starting_from">Starting from:</string>
-    <string name="from_date">From date</string>
-    <string name="to_date">To date</string>
+    <string name="from_date">From:</string>
+    <string name="to_date">To:</string>
     <string name="start_date">Start date:</string>
     <string name="end_date">Completion date:</string>
     <string name="till">Till:</string>
@@ -674,7 +674,7 @@
     <string name="error_invalid_details">Invalid card number</string>
     <string name="error_password_size">Minimum 5 characters</string>
     <string name="select_country_code">Select country code</string>
-    <string name="stop_date_should_be_greater">Choose date ahead of From date</string>
+    <string name="stop_date_should_be_greater">Wrong date</string>
     <!-- Errors -->
 
     <!-- String s related to Static Text -->
@@ -691,14 +691,15 @@
     <string name="schedule_vacation_note">A note for vacation schedule</string>
     <string name="classes_availability">Classes availability</string>
     <string name="subject">Subject: </string>
-    <string name="days_of_week">Days of weeek</string>
+    <string name="days_of_week">Days of week</string>
     <string name="week_days">Week days:</string>
     <string name="duration">Duration</string>
     <string name="location">Location</string>
+    <string name="address">Address please</string>
     <string name="mentor_for">Mentor for</string>
     <string name="pay_now">Pay now</string>
     <string name="personally">I\'ll pay the mentor personally</string>
-    <string name="proceed_payment">Proceed to payment</string>
+    <string name="check_availability">Check for availability</string>
     <string name="event_desc">Event Description</string>
     <!-- Static Text -->
 
