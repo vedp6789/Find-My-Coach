@@ -80,6 +80,7 @@
             />
 
     </LinearLayout>
+
     <HorizontalScrollView
         android:id="@+id/sv_week_days"
         android:layout_below="@id/ll_days_of_work"
