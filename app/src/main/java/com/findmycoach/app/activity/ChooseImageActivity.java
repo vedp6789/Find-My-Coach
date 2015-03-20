@@ -19,21 +19,20 @@ import com.findmycoach.app.util.BinaryForImage;
 
 public class ChooseImageActivity extends Activity {
 
-    // Static final constants
+    /** Static final constants */
     private static final int DEFAULT_ASPECT_RATIO_VALUES = 10;
-    // Instance variables
+    /** Instance variables */
     private int mAspectRatioX = DEFAULT_ASPECT_RATIO_VALUES;
     private int mAspectRatioY = DEFAULT_ASPECT_RATIO_VALUES;
     private static final int ROTATE_NINETY_DEGREES = 90;
     private static final String ASPECT_RATIO_X = "ASPECT_RATIO_X";
     private static final String ASPECT_RATIO_Y = "ASPECT_RATIO_Y";
     private static final int REQUEST_CODE = 101;
-    private Bitmap croppedImage;
     private CropImageView cropImageView;
     private Button chooseImage;
     private Button rotateButton;
 
-    // Saves the state upon rotating the screen/restarting the activity
+    /** Saves the state upon rotating the screen/restarting the activity */
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
@@ -41,7 +40,7 @@ public class ChooseImageActivity extends Activity {
         bundle.putInt(ASPECT_RATIO_Y, mAspectRatioY);
     }
 
-    // Restores the state upon rotating the screen/restarting the activity
+    /** Restores the state upon rotating the screen/restarting the activity */
     @Override
     protected void onRestoreInstanceState(Bundle bundle) {
         super.onRestoreInstanceState(bundle);
@@ -57,6 +56,7 @@ public class ChooseImageActivity extends Activity {
         applyAction();
     }
 
+    /** Getting references of views */
     private void initialize() {
         chooseImage = (Button) findViewById(R.id.select_picture);
         cropImageView = (CropImageView) findViewById(R.id.CropImageView);
@@ -65,7 +65,6 @@ public class ChooseImageActivity extends Activity {
         }catch (Exception e){
             e.printStackTrace();
         }
-
         cropImageView.setFixedAspectRatio(true);
         cropImageView.setAspectRatio(DEFAULT_ASPECT_RATIO_VALUES, DEFAULT_ASPECT_RATIO_VALUES);
         rotateButton = (Button) findViewById(R.id.Button_rotate);
@@ -78,13 +77,14 @@ public class ChooseImageActivity extends Activity {
                 cropImageView.rotateImage(ROTATE_NINETY_DEGREES);
             }
         });
-        final Button cropButton = (Button) findViewById(R.id.Button_crop);
-        cropButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.Button_crop).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 passImage();
             }
         });
+
+        /** Starting intent to choose image from storage */
         chooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,9 +95,10 @@ public class ChooseImageActivity extends Activity {
         });
     }
 
+    /** Passing back cropped image to calling class */
     private void passImage() {
         try {
-            croppedImage = cropImageView.getCroppedCircleImage();
+            Bitmap croppedImage = cropImageView.getCroppedCircleImage();
             croppedImage = Bitmap.createScaledBitmap(croppedImage, 175, 175, false);
             Intent intent = new Intent();
             intent.putExtra("image", croppedImage);
@@ -109,6 +110,7 @@ public class ChooseImageActivity extends Activity {
         }
     }
 
+    /** Setting selected image from device in the image view */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -122,7 +124,7 @@ public class ChooseImageActivity extends Activity {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String imgDecodableString = cursor.getString(columnIndex);
             cursor.close();
-            // Set the Image in ImageView after decoding the String
+            /** Set the Image in ImageView after decoding the String */
             cropImageView.setImageBitmap(BitmapFactory
                     .decodeFile(imgDecodableString));
         } else {
