@@ -681,45 +681,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         checkDurationSelected();
 
 
-        /*if (ScheduleNewClass.date_from != null) {
-            Log.e(TAG, ScheduleNewClass.date_from);
-            Log.e(TAG, ScheduleNewClass.date_to);
-
-            int start_day = Integer.parseInt(ScheduleNewClass.date_from.split("/", 3)[0]);
-            int start_month = Integer.parseInt(ScheduleNewClass.date_from.split("/", 3)[1]);
-            int start_year = Integer.parseInt(ScheduleNewClass.date_from.split("/", 3)[2]);
-
-            int stop_day = Integer.parseInt(ScheduleNewClass.date_to.split("/", 3)[0]);
-            int stop_month = Integer.parseInt(ScheduleNewClass.date_to.split("/", 3)[1]);
-            int stop_year = Integer.parseInt(ScheduleNewClass.date_to.split("/", 3)[2]);
-
-            Log.d(TAG, "Start_date  and Stop details in int variable from setSelectedTillDate method : " + start_day + " " + start_month + " " + start_year + "  :  " + stop_day + " " + stop_month + " " + stop_year);
-
-
-            if (stop_year < start_year) {
-                showErrorMessage(tv_to_date, getResources().getString(R.string.stop_date_should_be_greater));
-            } else {
-                if (stop_year == start_year) {
-                    if (stop_month < start_month) {
-                        showErrorMessage(tv_to_date, getResources().getString(R.string.stop_date_should_be_greater));
-                    } else {
-                        if (stop_month == start_month) {
-                            if (stop_day < start_day) {
-                                showErrorMessage(tv_to_date, getResources().getString(R.string.stop_date_should_be_greater));
-                            } else {
-                                dates_valid = true;
-                            }
-                        } else {
-                            dates_valid = true;
-                        }
-                    }
-                } else {
-                    dates_valid = true;
-                }
-            }
-
-
-        }*/
 
     }
 
