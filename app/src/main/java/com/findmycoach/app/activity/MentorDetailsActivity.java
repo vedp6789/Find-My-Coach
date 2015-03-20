@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,6 +37,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class MentorDetailsActivity extends Activity implements Callback,Button.OnClickListener{
 
     private Response mentorDetails;
@@ -49,12 +52,12 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     private Button facebookLink;
     private Data userInfo = null;
     private ProgressDialog progressDialog;
-    private ListView listView_mon_slots,listView_tue_slots,listView_wed_slots,listView_thur_slots,listView_fri_slots,listView_sat_slots,listView_sun_slots;
+    private TextView tv_mon_slots,tv_tue_slots,tv_wed_slots,tv_thur_slots,tv_fri_slots,tv_sat_slots,tv_sun_slots;
     private Button b_schedule_class;
     private String connectionStatus;
 
-    JSONObject jsonObject,jsonObject_Data;
-    JSONArray jsonArray_sub_category;
+    JSONObject jsonObject,jsonObject_Data,jsonObject_slots;
+    JSONArray jsonArray_sub_category, jArray_mon_slots, jArray_tue_slots, jArray_wed_slots, jArray_thu_slots, jArray_fri_slots, jArray_sat_slots, jArray_sun_slots;
 
 
 
@@ -69,6 +72,15 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             jsonObject=new JSONObject(getIntent().getStringExtra("mentorDetails"));
             jsonObject_Data=jsonObject.getJSONObject("data");
             jsonArray_sub_category=jsonObject_Data.getJSONArray("sub_category_name");
+            jsonObject_slots=jsonObject.getJSONObject("freeSlots");
+
+            jArray_mon_slots = jsonObject_slots.getJSONArray("M");
+            jArray_tue_slots = jsonObject_slots.getJSONArray("T");
+            jArray_wed_slots = jsonObject_slots.getJSONArray("W");
+            jArray_thu_slots = jsonObject_slots.getJSONArray("Th");
+            jArray_fri_slots = jsonObject_slots.getJSONArray("F");
+            jArray_sat_slots = jsonObject_slots.getJSONArray("S");
+            jArray_sun_slots = jsonObject_slots.getJSONArray("Su");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -77,6 +89,197 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         Log.d(TAG, connectionStatus);
         applyActionbarProperties();
         populateFields();
+        populateDaysSlotsListView();
+
+
+
+
+    }
+
+    private void populateDaysSlotsListView(){
+        ArrayList<String> mon_slots=new ArrayList<String>();
+        for(int i=0;i<jArray_mon_slots.length();i++){
+            try {
+                JSONArray jsonArray=jArray_mon_slots.getJSONArray(i);
+                String start_time=jsonArray.getString(0);
+                String stop_time=jsonArray.getString(1);
+                mon_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+"-"+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        ArrayList<String> tue_slots=new ArrayList<String>();
+        for(int i=0;i<jArray_tue_slots.length();i++){
+            try {
+                JSONArray jsonArray=jArray_tue_slots.getJSONArray(i);
+                String start_time=jsonArray.getString(0);
+                String stop_time=jsonArray.getString(1);
+               tue_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+"-"+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        ArrayList<String> wed_slots=new ArrayList<String>();
+        for(int i=0;i<jArray_wed_slots.length();i++){
+            try {
+                JSONArray jsonArray=jArray_wed_slots.getJSONArray(i);
+                String start_time=jsonArray.getString(0);
+                String stop_time=jsonArray.getString(1);
+                wed_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+"-"+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        ArrayList<String> thur_slots=new ArrayList<String>();
+        for(int i=0;i<jArray_thu_slots.length();i++){
+            try {
+                JSONArray jsonArray=jArray_thu_slots.getJSONArray(i);
+                String start_time=jsonArray.getString(0);
+                String stop_time=jsonArray.getString(1);
+                thur_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+"-"+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        ArrayList<String> fri_slots=new ArrayList<String>();
+        for(int i=0;i<jArray_fri_slots.length();i++){
+            try {
+                JSONArray jsonArray=jArray_fri_slots.getJSONArray(i);
+                String start_time=jsonArray.getString(0);
+                String stop_time=jsonArray.getString(1);
+                fri_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+"-"+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        ArrayList<String> sat_slots=new ArrayList<String>();
+        for(int i=0;i<jArray_sat_slots.length();i++){
+            try {
+                JSONArray jsonArray=jArray_sat_slots.getJSONArray(i);
+                String start_time=jsonArray.getString(0);
+                String stop_time=jsonArray.getString(1);
+                sat_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+"-"+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        ArrayList<String> sun_slots=new ArrayList<String>();
+        for(int i=0;i<jArray_sun_slots.length();i++){
+            try {
+                JSONArray jsonArray=jArray_sun_slots.getJSONArray(i);
+                String start_time=jsonArray.getString(0);
+                String stop_time=jsonArray.getString(1);
+                sun_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+"-"+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Log.d(TAG,"Mon slots size"+mon_slots.size()+" sample of data in mon_slots :"+mon_slots.get(0));
+        StringBuilder stringBuilder0=new StringBuilder();
+        StringBuilder stringBuilder1=new StringBuilder();
+        StringBuilder stringBuilder2=new StringBuilder();
+        StringBuilder stringBuilder3=new StringBuilder();
+        StringBuilder stringBuilder4=new StringBuilder();
+        StringBuilder stringBuilder5=new StringBuilder();
+        StringBuilder stringBuilder6=new StringBuilder();
+
+        if(mon_slots.size() <=0){
+            tv_mon_slots.setText("Not free");
+        }
+        if(tue_slots.size() <=0){
+            tv_tue_slots.setText("Not free");
+        }
+        if(wed_slots.size() <=0){
+            tv_wed_slots.setText("Not free");
+        }
+        if(thur_slots.size() <=0){
+            tv_thur_slots.setText("Not free");
+        }
+        if(fri_slots.size() <=0){
+            tv_fri_slots.setText("Not free");
+        }if(sat_slots.size() <=0){
+            tv_sat_slots.setText("Not free");
+        }
+        if(sun_slots.size() <=0){
+            tv_sun_slots.setText("Not free");
+        }
+
+
+
+        for (int j=0;j<mon_slots.size();j++){
+
+            Log.d(TAG,"Mon slots size"+mon_slots.size()+" sample of data in mon_slots :"+mon_slots.get(j));
+            if(j==0){
+                stringBuilder0.append(mon_slots.get(j));
+            }else{
+                stringBuilder0.append(","+mon_slots.get(j));
+            }
+            tv_mon_slots.setText(stringBuilder0.toString());
+        }
+        for (int j=0;j<tue_slots.size();j++){
+            Log.d(TAG,"Tue slots size"+tue_slots.size()+" sample of data in tue_slots :"+tue_slots.get(j));
+            if(j==0){
+                stringBuilder1.append(tue_slots.get(j));
+            }else{
+                stringBuilder1.append(","+tue_slots.get(j));
+            }
+            tv_tue_slots.setText(stringBuilder1.toString());
+        }
+        for (int j=0;j<wed_slots.size();j++){
+            Log.d(TAG,"Wed slots size"+wed_slots.size()+" sample of data in wed_slots :"+wed_slots.get(j));
+            if(j==0){
+                stringBuilder2.append(wed_slots.get(j));
+            }else{
+                stringBuilder2.append(","+wed_slots.get(j));
+            }
+            tv_wed_slots.setText(stringBuilder2.toString());
+        }for (int j=0;j<thur_slots.size();j++){
+            Log.d(TAG,"Thur slots size"+thur_slots.size()+" sample of data in thur_slots :"+thur_slots.get(j));
+            if(j==0){
+                stringBuilder3.append(thur_slots.get(j));
+            }else{
+                stringBuilder3.append(","+thur_slots.get(j));
+            }
+            tv_thur_slots.setText(stringBuilder3.toString());
+        }for (int j=0;j<fri_slots.size();j++){
+            Log.d(TAG,"Fri slots size"+fri_slots.size()+" sample of data in fri_slots :"+fri_slots.get(j));
+            if(j==0){
+                stringBuilder4.append(fri_slots.get(j));
+            }else{
+                stringBuilder4.append(","+fri_slots.get(j));
+            }
+            tv_fri_slots.setText(stringBuilder4.toString());
+        }for (int j=0;j<sat_slots.size();j++){
+            Log.d(TAG,"Sat slots size"+sat_slots.size()+" sample of data in sat_slots :"+sat_slots.get(j));
+            if(j==0){
+                stringBuilder5.append(sat_slots.get(j));
+            }else{
+                stringBuilder5.append(","+sat_slots.get(j));
+            }
+            tv_sat_slots.setText(stringBuilder5.toString());
+        }
+        for (int j=0;j<sun_slots.size();j++){
+
+            if(j==0){
+                stringBuilder6.append(sun_slots.get(j));
+            }else{
+                stringBuilder6.append(","+sun_slots.get(j));
+            }
+            tv_sun_slots.setText(stringBuilder6.toString());
+
+        }
+
+
+
+
 
 
 
@@ -112,13 +315,13 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         googleLink = (Button) findViewById(R.id.profile_google_button);
         facebookLink = (Button) findViewById(R.id.profile_facebook_button);
 
-        listView_mon_slots= (ListView) findViewById(R.id.lv_mon_available_slots);
-        listView_tue_slots= (ListView) findViewById(R.id.lv_tue_available_slots);
-        listView_wed_slots= (ListView) findViewById(R.id.lv_wed_available_slots);
-        listView_thur_slots= (ListView) findViewById(R.id.lv_thur_available_slots);
-        listView_fri_slots= (ListView) findViewById(R.id.lv_fri_available_slots);
-        listView_sat_slots= (ListView) findViewById(R.id.lv_sat_available_slots);
-        listView_sun_slots= (ListView) findViewById(R.id.lv_sun_available_slots);
+        tv_mon_slots= (TextView) findViewById(R.id.tv_mon_available_slots);
+        tv_tue_slots= (TextView) findViewById(R.id.tv_tue_available_slots);
+        tv_wed_slots= (TextView) findViewById(R.id.tv_wed_available_slots);
+        tv_thur_slots= (TextView) findViewById(R.id.tv_thur_available_slots);
+        tv_fri_slots= (TextView) findViewById(R.id.tv_fri_available_slots);
+        tv_sat_slots= (TextView) findViewById(R.id.tv_sat_available_slots);
+        tv_sun_slots= (TextView) findViewById(R.id.tv_sun_available_slots);
 
         b_schedule_class= (Button) findViewById(R.id.b_schedule_class);
         b_schedule_class.setOnClickListener(this);
@@ -134,7 +337,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         }
 
 
-        if(connectionStatus.equals("not connected") || connectionStatus.equals("pending") || jsonArray_sub_category.length() <= 0)
+        if(connectionStatus.equals("not connected") || connectionStatus.equals("pending") || jsonArray_sub_category.length() <= 0 || noSlotsAvailable())
             b_schedule_class.setVisibility(View.GONE);
 
         /*int sub_category_length=jsonArray_sub_category.length();
@@ -150,6 +353,14 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         } catch (JSONException e) {
             e.printStackTrace();
         }*/
+    }
+
+    private boolean noSlotsAvailable(){
+        if(jArray_mon_slots.length() <= 0 && jArray_tue_slots.length() <=0 && jArray_wed_slots.length() <= 0 && jArray_thu_slots.length() <= 0 && jArray_fri_slots.length() <= 0 && jArray_sat_slots.length() <= 0 && jArray_sun_slots.length() <= 0){
+            return true;
+        }else
+            return false;
+
     }
 
     private void populateFields() {

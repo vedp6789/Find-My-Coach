@@ -707,13 +707,13 @@
     <!-- Static Text -->
 
     <!-- String s related to week days -->
-    <string name="mon">Monday</string>
-    <string name="tue">Tuesday</string>
-    <string name="wed">Wednesday</string>
-    <string name="thur">Thursday</string>
-    <string name="fri">Friday</string>
-    <string name="sat">Saturday</string>
-    <string name="sun">Sunday</string>
+    <string name="mon">Monday:</string>
+    <string name="tue">Tuesday:</string>
+    <string name="wed">Wednesday:</string>
+    <string name="thur">Thursday:</string>
+    <string name="fri">Friday:</string>
+    <string name="sat">Saturday:</string>
+    <string name="sun">Sunday:</string>
     <!-- -->
 
     <!-- String s related to week days -->
