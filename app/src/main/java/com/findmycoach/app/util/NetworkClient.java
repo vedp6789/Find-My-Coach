@@ -619,7 +619,7 @@ public class NetworkClient {
                     Log.d(TAG, "Success: Response:" + responseJson);
                     Log.d(TAG, "Success: Response Code:" + statusCode);
                     if (statusCode == 200)
-                        callback.successOperation(null, statusCode, calledApiValue);
+                        callback.successOperation("Success", statusCode, calledApiValue);
                     else {
                         try {
                             Response response = new Gson().fromJson(responseJson, Response.class);

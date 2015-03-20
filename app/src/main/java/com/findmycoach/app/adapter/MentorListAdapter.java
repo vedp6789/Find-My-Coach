@@ -91,7 +91,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
             imageConnect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context,user.getConnectionStatus() + " Connection will be break",Toast.LENGTH_SHORT).show();
+                    disconnect(user.getConnectionId(), user.getId());
                 }
             });
         }else{
@@ -155,19 +155,28 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         NetworkClient.sendConnectionRequest(context, requestParams, this, 17);
     }
 
+    private void disconnect(String connectionId, String oppositeUSerId) {
+        progressDialog.show();
+        Log.d(TAG, "id : " + connectionId + ", user_id : " + oppositeUSerId +
+                ", user_group : " + DashboardActivity.dashboardActivity.user_group);
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("id", connectionId);
+        requestParams.add("user_id", oppositeUSerId);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.breakConnection(context, requestParams, this, 21);
+    }
+
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        if(calledApiValue == 17){
-            users.get(clickedPosition).setConnectionStatus("pending");
-            Toast.makeText(context,(String) object, Toast.LENGTH_LONG).show();
-            this.notifyDataSetChanged();
-        }
+        users.get(clickedPosition).setConnectionStatus(calledApiValue == 17 ? "pending" : "broken");
+        Toast.makeText(context,(String) object, Toast.LENGTH_LONG).show();
+        this.notifyDataSetChanged();
         progressDialog.dismiss();
-
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
+        Toast.makeText(context,(String) object, Toast.LENGTH_LONG).show();
     }
 }

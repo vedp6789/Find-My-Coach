@@ -3,6 +3,7 @@ package com.findmycoach.app.adapter;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,8 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
     private List<Data> connectionList;
     public int connection_clicked = -1;
     private ProgressDialog progressDialog;
+
+    private static final String TAG = "FMC";
 
     public ConnectionAdapter(Context context, List<Data> connectionList) {
         this.context = context;
@@ -119,7 +122,7 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
                     public void onClick(View v) {
                         if(status.equals("accepted")) {
                             connection_clicked = position;
-                            disconnect(singleConnection.getId() + "");
+                            disconnect(singleConnection.getId() + "", singleConnection.getOwnerId());
                         }
                         else if(status.equals("pending")) {
                             connection_clicked = position;
@@ -152,7 +155,7 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
                     public void onClick(View v) {
                         if(status.equals("accepted") || status.equals("pending")) {
                             connection_clicked = position;
-                            disconnect(singleConnection.getId() + "");
+                            disconnect(singleConnection.getId() + "", singleConnection.getInviteeId());
                         }
                     }
                 });
@@ -169,10 +172,13 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
         NetworkClient.respondToConnectionRequest(context, requestParams, this, 18);
     }
 
-    private void disconnect(String connectionId) {
+    private void disconnect(String connectionId, int oppositeUSerId) {
         progressDialog.show();
+        Log.d(TAG, "id : " + connectionId + ", user_id : " + oppositeUSerId +
+                ", user_group : " + DashboardActivity.dashboardActivity.user_group);
         RequestParams requestParams = new RequestParams();
         requestParams.add("id", connectionId);
+        requestParams.add("user_id", oppositeUSerId+"");
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
         NetworkClient.breakConnection(context, requestParams, this, 21);
     }
@@ -187,6 +193,10 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
                 connectionList.get(connection_clicked).setStatus(status.equals("accepted") ? "broken" : "accepted");
             else if(DashboardActivity.dashboardActivity.user_group == 2)
                 connectionList.get(connection_clicked).setStatus("broken");
+
+            if(connectionList.get(connection_clicked).getStatus().contains("broken"))
+                connectionList.remove(connection_clicked);
+            connection_clicked = -1;
             this.notifyDataSetChanged();
         }
 
