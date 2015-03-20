@@ -674,7 +674,8 @@
     <string name="error_invalid_details">Invalid card number</string>
     <string name="error_password_size">Minimum 5 characters</string>
     <string name="select_country_code">Select country code</string>
-    <string name="stop_date_should_be_greater">Wrong date</string>
+    <string name="stop_date_should_be_greater">Evaluate this with start date</string>
+    <string name="wrong_duration">You have selected start date of this schedule ahead of stop date!</string>
     <!-- Errors -->
 
     <!-- String s related to Static Text -->

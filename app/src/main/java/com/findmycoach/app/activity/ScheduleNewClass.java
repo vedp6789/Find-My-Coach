@@ -598,6 +598,14 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         ScheduleNewClass.date_from = stringBuilder.toString();
 
 
+        checkDurationSelected();
+
+
+
+
+    }
+    boolean checkDurationSelected(){
+
         if (ScheduleNewClass.date_from != null && ScheduleNewClass.date_to != null) {
 
             int start_day = Integer.parseInt(ScheduleNewClass.date_from.split("/", 3)[0]);
@@ -611,15 +619,19 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             Log.d(TAG, "Start_date  and Stop details in int variable from setSelectedStartDate method : " + start_day + " " + start_month + " " + start_year + "  :  " + stop_day + " " + stop_month + " " + stop_year);
             if (stop_year < start_year) {
 
-                Toast.makeText(this, getResources().getString(R.string.stop_date_should_be_greater), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ScheduleNewClass.this,getResources().getString(R.string.wrong_duration),Toast.LENGTH_LONG).show();
                 showErrorMessage(tv_to_date, getResources().getString(R.string.stop_date_should_be_greater));
+
             } else {
                 if (stop_year == start_year) {
                     if (stop_month < start_month) {
+                        Toast.makeText(ScheduleNewClass.this,getResources().getString(R.string.wrong_duration),Toast.LENGTH_LONG).show();
                         showErrorMessage(tv_to_date, getResources().getString(R.string.stop_date_should_be_greater));
+
                     } else {
                         if (stop_month == start_month) {
                             if (stop_day < start_day) {
+                                Toast.makeText(ScheduleNewClass.this,getResources().getString(R.string.wrong_duration),Toast.LENGTH_LONG).show();
                                 showErrorMessage(tv_to_date, getResources().getString(R.string.stop_date_should_be_greater));
                             } else {
                                 dates_valid = true;
@@ -633,10 +645,10 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 }
             }
 
-
+            return true;     // This true means there is error in dates selected
+        }else{
+            return false;    // This false means duration is not completely filled
         }
-
-
     }
 
     @Override
@@ -666,7 +678,10 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         ScheduleNewClass.tv_to_date.setText(stringBuilder.toString());
         date_to = stringBuilder.toString();
 
-        if (ScheduleNewClass.date_from != null) {
+        checkDurationSelected();
+
+
+        /*if (ScheduleNewClass.date_from != null) {
             Log.e(TAG, ScheduleNewClass.date_from);
             Log.e(TAG, ScheduleNewClass.date_to);
 
@@ -704,7 +719,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             }
 
 
-        }
+        }*/
 
     }
 
@@ -755,7 +770,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             Log.d(TAG,"Data going to be validated at the time of successful date selection \n id : "+mentor_data.get("id")+", start time : "+start_time.split(":")[0] + ":" + start_time.split(":")[1] +":00"+", stop time :"+stop_time.split(":")[0]+":"+stop_time.split(":")[1]+":00"+" , days : "+stringBuilder1.toString()+", start date : "+ tv_from_date.getText().toString()+", stop_date : "+tv_to_date.getText().toString()+", sub category name : "+selected_subject.toString());
 */
         } else {
-            Toast.makeText(ScheduleNewClass.this, "Please select at least one week-day ", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(ScheduleNewClass.this, "Please select at least one week-day ", Toast.LENGTH_SHORT).show();
             return false;
 
         }
@@ -784,10 +799,15 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         } else {
             if (days_checked()) {
+                if(checkDurationSelected()){
+                    showErrorMessage(tv_to_date,getResources().getString(R.string.stop_date_should_be_greater));
 
-                Toast.makeText(ScheduleNewClass.this, "Select the duration for this schedule.", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(ScheduleNewClass.this, "Select the duration for this schedule.", Toast.LENGTH_SHORT).show();
+                }
+
             } else {
-               // Toast.makeText(ScheduleNewClass.this, "Select the duration and at least one week-day.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ScheduleNewClass.this, "Select at least one week-day.", Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -834,7 +854,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
             Log.d(TAG, "Data going to be validated at the time of successful date selection \n id : " + mentor_data.get("id") + ", start time : " + start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00" + ", stop time :" + stop_time.split(":")[0] + ":" + stop_time.split(":")[1] + ":00" + " , days : " + stringBuilder1.toString() + ", start date : " + tv_from_date.getText().toString() + ", stop_date : " + tv_to_date.getText().toString() + ", sub category name : " + selected_subject.toString());
 
-            Log.d(TAG, "Can start network comminication");
+            Log.d(TAG, "Can start network communication");
 
 
         } catch (JSONException e) {
