@@ -70,6 +70,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     public HomeFragment() {
         // Required empty public constructor
+        subCategoryIds = null;
     }
 
     public static HomeFragment newInstance(String param1, String param2) {

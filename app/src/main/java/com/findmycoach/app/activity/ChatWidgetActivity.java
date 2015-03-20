@@ -75,13 +75,12 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         progressDialog.show();
         receiverGroupId = DashboardActivity.dashboardActivity.user_group == 3 ? "2" : "3";
 
-        /*Creating/Checking folder for media storage*/
+        /** Creating/Checking folder for media storage */
         StorageHelper.createAppMediaFolders(this);
-//        populateData();
-//        connectWebSocket();
         getChatHistory();
     }
 
+    /** Getting chat history */
     public void getChatHistory() {
         RequestParams requestParams = new RequestParams();
         requestParams.add("sender_id", currentUserId);
@@ -90,6 +89,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         NetworkClient.getChatHistory(this, requestParams, this, 29);
     }
 
+    /** Getting references of views */
     private void initialize() {
         Intent getUserIntent = getIntent();
         if (getUserIntent != null) {
@@ -108,6 +108,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         isSocketConnected = false;
     }
 
+    /** Populating data to their respective views */
     private void populateData(List<Data> chats) {
         ArrayList<String> messageList = new ArrayList<String>();
         ArrayList<Integer> senderList = new ArrayList<Integer>();
@@ -133,6 +134,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         chatWidgetLv.setAdapter(chatWidgetAdapter);
     }
 
+    /** Adding cutom action bar to display Receiver name, add click listener to title */
     private void applyActionbarProperties() {
         ActionBar actionBar = getActionBar();
         if(actionBar != null) {
@@ -155,6 +157,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         }
     }
 
+    /** Getting profile of receiver */
     private void getProfile(){
         if(isGettingProfile)
             return;
@@ -164,6 +167,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         requestParams.add("id",receiverId);
         String authToken = StorageHelper.getUserDetails(this, "auth_token");
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+
+        /** Checking whether mentee profile is required or mentor profile */
         if(DashboardActivity.dashboardActivity.user_group == 3)
             NetworkClient.getStudentDetails(this, requestParams, authToken, this, 25);
         else if(DashboardActivity.dashboardActivity.user_group == 2)
@@ -183,11 +188,15 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             case android.R.id.home:
                 finish();
                 break;
+
+            /** Starting intent to select image from device */
             case R.id.attach_image:
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, STORAGE_GALLERY_IMAGE_REQUEST_CODE);
                 break;
+
+            /** Starting intent to select video from device */
             case R.id.attach_video:
                 Intent videoPickerIntent = new Intent(Intent.ACTION_PICK);
                 videoPickerIntent.setType("video/*");
@@ -201,14 +210,14 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         String path = null;
-        // Image selected
+        /** Image selected */
         if (resultCode == RESULT_OK && requestCode == STORAGE_GALLERY_IMAGE_REQUEST_CODE){
             path = getRealPathFromURI(data.getData());
             Log.d(TAG, path);
             sendAttachment(path, "image");
         }
 
-        //Video selected
+        /** Video selected */
         else if (resultCode == RESULT_OK && requestCode == STORAGE_GALLERY_VIDEO_REQUEST_CODE){
             path = getRealPathFromURI(data.getData());
             Log.d(TAG, path);
@@ -216,9 +225,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         }
     }
 
+    /** Sending attachment to server */
     private void sendAttachment(String filePath, String type) {
-//        progressDialog.setMessage(getResources().getString(R.string.sending));
-//        progressDialog.show();
         try {
             RequestParams requestParams = new RequestParams();
             requestParams.add("sender_id", currentUserId);
@@ -241,7 +249,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         }
     }
 
-    // And to convert the image URI to the direct file system path of the image file
+    /** Convert the attachment URI to the direct file system path */
     public String getRealPathFromURI(Uri contentUri) {
         String [] proj={MediaStore.Images.Media.DATA};
         Cursor cursor = managedQuery( contentUri,  proj, null, null, null);
@@ -257,14 +265,19 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         }
     }
 
+    /** Sending msg to chat socket */
     private void sendMsg() {
         String msg = msgToSend.getText().toString().trim();
+
+        /** If msg is null or nothing */
         if (TextUtils.isEmpty(msg)) {
             msgToSend.requestFocus();
             return;
         }
 
         String msgJson = getMsgInJson("text", msg).toString();
+
+        /** Socket is connected or not */
         if(isSocketConnected) {
             mWebSocketClient.send(msgJson);
             Log.d(TAG, msgJson);
@@ -275,12 +288,14 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             return;
         }
 
+        /** Sending message to socket */
         msgToSend.setText("");
         chatWidgetAdapter.updateMessageList(msg, 0, 0);
         chatWidgetAdapter.notifyDataSetChanged();
         chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
     }
 
+    /** Creating json object for sending message */
     private JSONObject getMsgInJson(String type, String msg) {
         JSONObject messageObject = new JSONObject();
         try {
@@ -294,20 +309,28 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         return messageObject;
     }
 
+    /** Displaying received message  */
     private void showReceivedMessage(String message) {
         try {
             JSONObject jsonMessage = new JSONObject(message);
             String msg = jsonMessage.getString("message");
             String messageType = jsonMessage.getString("message_type");
+            /** Text message received */
             if(messageType.equals("text")){
                 chatWidgetAdapter.updateMessageList(msg, 1, 0);
                 chatWidgetAdapter.notifyDataSetChanged();
                 chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
-            }else if(messageType.equals("image")){
+            }
+
+            /** Image message received */
+            else if(messageType.equals("image")){
                 chatWidgetAdapter.updateMessageList(msg, 1, 1);
                 chatWidgetAdapter.notifyDataSetChanged();
                 chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
-            }else if(messageType.equals("video")){
+            }
+
+            /** Video message received */
+            else if(messageType.equals("video")){
                 chatWidgetAdapter.updateMessageList(msg, 1, 2);
                 chatWidgetAdapter.notifyDataSetChanged();
                 chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
@@ -317,6 +340,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         }
     }
 
+    /** Disconnect web socket onDestroy*/
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -327,6 +351,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         }
     }
 
+    /** Connect to web socket server */
     private void connectWebSocket() {
         progressDialog.setMessage(getResources().getString(R.string.connecting));
         URI uri;
@@ -376,7 +401,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        // For displaying selected Mentor details
+        /** For displaying selected Mentor details */
         if(calledApiValue == 24){
             progressDialog.dismiss();
             Intent intent = new Intent(this, MentorDetailsActivity.class);
@@ -386,6 +411,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             isGettingProfile = false;
             return;
         }
+
+        /** For displaying selected Student details */
         if(calledApiValue == 25){
             progressDialog.dismiss();
             Intent intent = new Intent(this, StudentDetailActivity.class);
@@ -396,6 +423,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             return;
         }
 
+        /** Chat history is received from api */
         if(object instanceof Chats){
             Chats chats = (Chats) object;
             if(chats.getData() != null && chats.getData().size() > 0){
@@ -406,12 +434,15 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             }
             connectWebSocket();
         }
+
+        /** Attachment is uploaded to server */
         else if(object instanceof Attachment){
             progressDialog.dismiss();
             Attachment attachment = (Attachment) object;
             Log.d(TAG,attachment.getData().getPath());
             String attachmentPath = attachment.getData().getPath();
 
+            /** Sending attachment url with type to chat socket */
             String msgJson = getMsgInJson(attachment.getData().getFile_type().contains("image") ? "image" : "video", attachmentPath).toString();
             if(isSocketConnected) {
                 mWebSocketClient.send(msgJson);
@@ -421,7 +452,6 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             else {
                 progressDialog.show();
                 connectWebSocket();
-                return;
             }
         }
     }

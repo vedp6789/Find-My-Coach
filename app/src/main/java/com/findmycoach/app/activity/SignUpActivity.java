@@ -14,11 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,16 +32,13 @@ import java.util.regex.Pattern;
 public class SignUpActivity extends Activity implements View.OnClickListener, Callback {
 
 
-    private int year = 1990, month = 1, day = 1;
     private EditText firstNameInput;
     private EditText lastNameInput;
     private EditText passwordInput;
     private EditText confirmPasswordInput;
     private EditText emailInput;
     private EditText phoneNumberInput;
-    private Button signUpButton;
     private ProgressDialog progressDialog;
-    private RadioGroup radioGroup_user_sigup;
     private RadioButton radioButton_mentee_signup, radioButton_mentor_signup;
     private int user_group=0;
     private TextView countryCodeTV;
@@ -55,7 +50,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         applyActionbarProperties();
-        radioGroup_user_sigup = (RadioGroup) findViewById(R.id.radio_group_user_signup);
         initialize();
     }
 
@@ -65,6 +59,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
+    /** Getting references of views */
     private void initialize() {
         radioButton_mentee_signup= (RadioButton) findViewById(R.id.radio_button_mentee_signup);
         radioButton_mentor_signup= (RadioButton) findViewById(R.id.radio_button_mentor_signup);
@@ -74,11 +69,10 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         passwordInput = (EditText) findViewById(R.id.input_password);
         confirmPasswordInput = (EditText) findViewById(R.id.input_confirm_password);
         phoneNumberInput = (EditText) findViewById(R.id.input_phone);
-        signUpButton = (Button) findViewById(R.id.button_signup);
         countryCodeTV = (TextView) findViewById(R.id.countryCodeTV);
         countryCodeTV.setText(getCountryZipCode());
         countryCodeTV.setOnClickListener(this);
-        signUpButton.setOnClickListener(this);
+        findViewById(R.id.button_signup).setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
     }
@@ -108,6 +102,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         }
     }
 
+    /** Dialog for selecting country code */
     private void showCountryCodeDialog() {
         final Dialog countryDialog = new Dialog(this);
         countryDialog.setCanceledOnTouchOutside(true);
@@ -125,6 +120,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         });
     }
 
+    /** Registering user with FMC */
     private void registerUser() {
         String firstName = firstNameInput.getText().toString();
         String lastName = lastNameInput.getText().toString();
@@ -134,6 +130,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         String confirmPassword = confirmPasswordInput.getText().toString();
         String countryCode = countryCodeTV.getText().toString().trim();
 
+        /** Validating form data */
         boolean isValid = validate(firstName, lastName, phone, email, password, confirmPassword, countryCode);
 
         if (isValid) {
@@ -158,11 +155,13 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         }
     }
 
+    /** Sending data to server for new registration */
     private void callApiToRegister(RequestParams requestParams) {
         progressDialog.show();
         NetworkClient.register(this, requestParams, this, 2);
     }
 
+    /** validating inserted user details */
     private boolean validate(String firstName, String lastName, String phone, String email, String password, String confirmPassword, String countryCode) {
 
         if (firstName.equals("")) {
@@ -227,7 +226,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         return true;
     }
 
-    /*Checking entered email is valid email or not*/
+    /** Checking entered email is valid email or not */
     public boolean isEmailValid(String email) {
         boolean isValid = false;
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
@@ -240,6 +239,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         return isValid;
     }
 
+    /** Displaying error is any detail is wrong */
     private void showErrorMessage(final TextView view, String string) {
         view.setError(string);
         new Handler().postDelayed(new Runnable() {
@@ -250,24 +250,27 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         }, 3500);
     }
 
-
+    /** If user registered successfully close activity */
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
+
+        /** If newly registered user is mentee then open PaymentDetail Activity for getting card details */
         if(user_group == 2){
             startActivity(new Intent(this, PaymentDetailsActivity.class));
         }
         finish();
     }
 
-
+    /** If registration is not successful */
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
     }
 
+    /** Automatic detect country code */
     public String getCountryZipCode(){
         String CountryID = "";
         String CountryZipCode = "";

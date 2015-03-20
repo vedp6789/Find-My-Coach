@@ -37,7 +37,6 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     private Category category;
     private Bundle bundle;
 
-
     public static void notifyAdapter(){
         adapter.notifyDataSetChanged();
     }
@@ -55,21 +54,29 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         initialize();
         applyActionbarProperties();
         applyActions();
+        checkSUbCategory();
+    }
 
+    /** Checking whether subcategory is already cached or not*/
+    private void checkSUbCategory() {
         dataBase = DataBase.singleton(this);
         category = dataBase.selectAllSubCategory();
+
+        /** If not then call api to get sub categories */
         if(category.getData().size() < 1) {
             Log.d(TAG, "sub category api called");
             getSubCategories();
         }
     }
 
+    /** Calling category api  */
     private void getSubCategories() {
         RequestParams requestParams = new RequestParams();
         String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
         NetworkClient.getCategories(this, requestParams, authToken, this, 34);
     }
 
+    /** Passing data back to calling class  */
     private void applyActions() {
         saveAction.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +89,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         });
     }
 
+    /** Getting references of views */
     private void initialize() {
         ListView listView = (ListView) findViewById(R.id.areas_of_interest_list);
         saveAction = (Button) findViewById(R.id.save_interests);
@@ -101,6 +109,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
             actionbar.setDisplayHomeAsUpEnabled(true);
     }
 
+    /** Dialog to add sub category */
     private void addInterest(Category category) {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_area_of_interest);
@@ -162,6 +171,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         return super.onOptionsItemSelected(item);
     }
 
+    /** If subcategories are successfully retried from server, store it into database*/
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         dataBase.insertData((Category) object);
