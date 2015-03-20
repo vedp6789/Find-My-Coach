@@ -712,7 +712,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         if (cb_sun.isEnabled() && cb_sun.isChecked()) {
             arrayList_days.add("Su");
         }
-
+        Log.d(TAG,"arrayList_days size"+arrayList_days.size());
         if (arrayList_days.size() > 0) {
             return true;
             /*StringBuilder stringBuilder1=new StringBuilder();
@@ -760,6 +760,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                     checkForValidity();
                 }
 
+            }else{
+                Toast.makeText(ScheduleNewClass.this, "Select at least one week-day.", Toast.LENGTH_SHORT).show();
             }
 
 
