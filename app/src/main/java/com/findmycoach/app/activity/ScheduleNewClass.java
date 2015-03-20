@@ -792,8 +792,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             start_time = start_time.replace(".", ":");
             stop_time = stop_time.replace(".", ":");
             Log.d(TAG, "start time: hour " + start_time);
-            String[] arr = start_time.split(":");
-            Log.e(TAG, arr.length + "");
             Log.d(TAG, "start_time : " + start_time + "stop_time : " + stop_time + ", Selected start time: " + start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00");
             requestParams.add("start_time", start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00");
             requestParams.add("stop_time", stop_time.split(":")[0] + ":" + stop_time.split(":")[1] + ":00");

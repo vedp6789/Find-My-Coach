@@ -943,8 +943,8 @@ public class NetworkClient {
                     Log.d(TAG, "Success : Status code : " + statusCode);
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Success : Response : " + responseJson);
-                    Response response = new Gson().fromJson(responseJson, Response.class);
-                    callback.successOperation(response.getMessage(), statusCode, calledApiValue);
+                    JSONObject jsonObject = new JSONObject(new String(responseBody));
+                    callback.successOperation(jsonObject.get("data"), statusCode, calledApiValue);
                 } catch (Exception e) {
                     e.printStackTrace();
                     onFailure(statusCode, headers, responseBody, null);

@@ -35,7 +35,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     private List<Datum> users;
     private String studentId;
     private ProgressDialog progressDialog;
-    private int clickedPosition;
+    private int clickedPosition = -1;
 
     private static final String TAG="FMC";
 
@@ -91,6 +91,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
             imageConnect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    clickedPosition = position;
                     disconnect(user.getConnectionId(), user.getId());
                 }
             });
@@ -168,10 +169,23 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        users.get(clickedPosition).setConnectionStatus(calledApiValue == 17 ? "pending" : "broken");
-        Toast.makeText(context,(String) object, Toast.LENGTH_LONG).show();
-        this.notifyDataSetChanged();
         progressDialog.dismiss();
+        if(clickedPosition != -1) {
+            if(calledApiValue == 17 ) {
+                users.get(clickedPosition).setConnectionStatus("pending");
+                String status = object+"";
+                try{
+                    users.get(clickedPosition).setConnectionId(Integer.parseInt(status)+"");
+                }catch (Exception e){
+                    Toast.makeText(context, "Success", Toast.LENGTH_LONG).show();
+                }
+            }else if(calledApiValue == 21){
+                users.get(clickedPosition).setConnectionStatus("broken");
+                Toast.makeText(context, (String) object, Toast.LENGTH_LONG).show();
+            }
+            clickedPosition = -1;
+            this.notifyDataSetChanged();
+        }
     }
 
     @Override
