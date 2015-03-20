@@ -18,16 +18,18 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/subject"
+            android:gravity="center_vertical"
             android:textColor="#000000"
             android:textSize="15dp" />
 
         <Spinner
             android:id="@+id/sp_subjects"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:gravity="center_vertical"/>
 
     </LinearLayout>
 
@@ -44,15 +46,17 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/timing"
+            android:gravity="center_vertical"
             android:textColor="#000000"
             android:textSize="15dp" />
 
         <Spinner
             android:id="@+id/sp_class_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"/>
 
 
     </LinearLayout>
@@ -67,11 +71,13 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:text="@string/days_of_week"
             android:textColor="#000000"
-            android:textSize="15sp"/>
+            android:textSize="15sp"
+            android:background="@color/accent_material_light"
+            />
 
     </LinearLayout>
 
@@ -144,9 +150,10 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:text="@string/duration"
+            android:background="@color/accent_material_light"
             android:textSize="15sp"
             android:textColor="#000000" />
     </LinearLayout>
@@ -240,16 +247,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_duration_selection"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_marginTop="2dp"
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="1dp"
-            android:layout_weight="8">
+            >
 
             <TextView
                 android:layout_width="match_parent"
@@ -257,15 +264,15 @@
                 android:gravity="center_vertical"
                 android:text="@string/location"
                 android:textColor="#000000"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
-            android:layout_weight="8">
+            >
 
             <EditText
                 android:id="@+id/et_location"
@@ -284,8 +291,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_location"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="2dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -300,7 +308,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/mentor_for"
                 android:textColor="#000000"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -311,18 +319,39 @@
 
             <Spinner
                 android:id="@+id/sp_mentor_for"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
         </LinearLayout>
 
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_payment_option"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_mentor_for"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/payment_option"
+            android:background="@color/accent_material_light"
+            android:textSize="15sp"
+            android:textColor="#000000" />
     </LinearLayout>
 
     <RadioGroup
         android:id="@+id/rg_payment_option"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_mentor_for"
+        android:layout_marginTop="1dp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/ll_payment_option"
         android:checkedButton="@+id/rb_pay_now"
         android:orientation="vertical">
 
@@ -344,7 +373,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="@string/check_availability" />
+        android:text="@string/check_availability"
+        android:background="@color/accent_material_light"/>
 
 
 </RelativeLayout>

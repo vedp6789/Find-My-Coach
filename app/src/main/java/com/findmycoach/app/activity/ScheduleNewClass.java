@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -475,8 +476,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
              mentor_availability= mentor_data.getString("availability_yn");
             if (!mentor_availability.equals("1")) {
-
-                et_location.setEnabled(false);
+                LinearLayout linearLayout= (LinearLayout) findViewById(R.id.ll_location);
+                linearLayout.setVisibility(View.GONE);
+                //et_location.setEnabled(false);
             }
             // mentor_data.get()
 
@@ -745,7 +747,10 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
             if (days_checked()) {
                 if(mentor_availability.equals("1")){
-                    if(et_location.getText().equals("")){
+                    Log.d(TAG,"mentor_availability equals 1");
+                    String location=et_location.getText().toString();
+                    Log.d(TAG,"address string size : "+location.trim().length());
+                    if(location.equals("") || location.trim().length()== 0){
                         showErrorMessage1(et_location,getResources().getString(R.string.error_field_required));
                         Toast.makeText(ScheduleNewClass.this,"Your Address please!",Toast.LENGTH_SHORT).show();
                     }else{
@@ -807,13 +812,14 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             requestParams.add("stop_date", tv_to_date.getText().toString());
             requestParams.add("sub_category_name", selected_subject);
             if(mentor_availability.equals("1")){
+
                 requestParams.add("mentee_address",et_location.getText().toString());
             }
             requestParams.add("mentor_for",selected_mentor_for);
 
 
 
-            Log.d(TAG, "Data going to be validated at the time of successful date selection \n id : " + mentor_data.get("id") + ", start time : " + start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00" + ", stop time :" + stop_time.split(":")[0] + ":" + stop_time.split(":")[1] + ":00" + " , days : " + stringBuilder1.toString() + ", start date : " + tv_from_date.getText().toString() + ", stop_date : " + tv_to_date.getText().toString() + ", sub category name : " + selected_subject.toString());
+            Log.d(TAG, "Data going to be validated at the time of successful date selection \n id : " + mentor_data.get("id") + ", start time : " + start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00" + ", stop time :" + stop_time.split(":")[0] + ":" + stop_time.split(":")[1] + ":00" + " , days : " + stringBuilder1.toString() + ", start date : " + tv_from_date.getText().toString() + ", stop_date : " + tv_to_date.getText().toString() + ", sub category name : " + selected_subject.toString()+"mentee address : "+et_location.getText().toString());
 
             Log.d(TAG, "Can start network communication");
 

@@ -113,7 +113,7 @@ public class TillDateDialogFragment extends DialogFragment implements View.OnCli
         b_ok.setOnClickListener(this);
         b_can.setOnClickListener(this);
         Dialog dialog = getDialog();
-        dialog.setTitle(getString(R.string.date_picker));
+        dialog.setTitle(getString(R.string.date_picker_to));
         dialog.setCanceledOnTouchOutside(false);
 
         return view;

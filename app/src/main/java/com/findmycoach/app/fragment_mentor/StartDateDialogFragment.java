@@ -98,7 +98,7 @@ public class StartDateDialogFragment extends DialogFragment implements View.OnCl
         b_ok.setOnClickListener(this);
         b_can.setOnClickListener(this);
         Dialog dialog = getDialog();
-        dialog.setTitle(getString(R.string.date_picker));
+        dialog.setTitle(getString(R.string.date_picker_from));
         dialog.setCanceledOnTouchOutside(false);
         return view;
     }

@@ -599,7 +599,8 @@
     <string name="till">Till:</string>
     <string name="select">Select</string>
     <string name="forever">Forever</string>
-    <string name="date_picker">Date Picker</string>
+    <string name="date_picker_from">From</string>
+    <string name="date_picker_to">To</string>
     <string name="no_search_result_found">No result found</string>
     <string name="prompt_category">Category</string>
     <string name="prompt_sub_category">Sub Category</string>
@@ -695,9 +696,10 @@
     <string name="days_of_week">Days of week</string>
     <string name="week_days">Week days:</string>
     <string name="duration">Duration</string>
-    <string name="location">Location</string>
+    <string name="payment_option">Payment option</string>
+    <string name="location">Location:</string>
     <string name="address">Address please</string>
-    <string name="mentor_for">Mentor for</string>
+    <string name="mentor_for">Mentor for:</string>
     <string name="pay_now">Pay now</string>
     <string name="personally">I\'ll pay the mentor personally</string>
     <string name="check_availability">Check for availability</string>
