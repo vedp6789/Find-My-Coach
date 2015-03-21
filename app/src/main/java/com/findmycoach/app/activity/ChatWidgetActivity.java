@@ -169,10 +169,14 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
 
         /** Checking whether mentee profile is required or mentor profile */
-        if(DashboardActivity.dashboardActivity.user_group == 3)
+        if(DashboardActivity.dashboardActivity.user_group == 3) {
+            requestParams.add("invitee_id", StorageHelper.getUserDetails(this,"user_id"));
             NetworkClient.getStudentDetails(this, requestParams, authToken, this, 25);
-        else if(DashboardActivity.dashboardActivity.user_group == 2)
+        }
+        else if(DashboardActivity.dashboardActivity.user_group == 2) {
+            requestParams.add("owner_id", StorageHelper.getUserDetails(this,"user_id"));
             NetworkClient.getMentorDetails(this, requestParams, authToken, this, 24);
+        }
     }
 
     @Override

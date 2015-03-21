@@ -54,6 +54,30 @@ public class Data {
     @Expose
     private String charges;
 
+    @SerializedName("connection_id")
+    @Expose
+    private String connectionId;
+
+    @SerializedName("connection_status")
+    @Expose
+    private String connectionStatus;
+
+    public String getConnectionId() {
+        return connectionId;
+    }
+
+    public void setConnectionId(String connectionId) {
+        this.connectionId = connectionId;
+    }
+
+    public String getConnectionStatus() {
+        return connectionStatus;
+    }
+
+    public void setConnectionStatus(String connectionStatus) {
+        this.connectionStatus = connectionStatus;
+    }
+
     /**
      * @return The id
      */

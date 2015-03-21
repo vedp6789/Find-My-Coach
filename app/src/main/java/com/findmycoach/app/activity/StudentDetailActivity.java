@@ -40,6 +40,7 @@ public class StudentDetailActivity  extends Activity implements Callback {
     private ListView areaOfInterest;
     private Data studentDetails;
     private ProgressDialog progressDialog;
+    private static final String TAG = "FMC";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +129,7 @@ public class StudentDetailActivity  extends Activity implements Callback {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        Log.d(TAG,studentDetails.getConnectionStatus() + " : " + studentDetails.getConnectionId());
         if (id == R.id.accept) {
             respondToRequest("accepted");
         }else if (id == R.id.decline) {
@@ -135,9 +137,21 @@ public class StudentDetailActivity  extends Activity implements Callback {
         }else if (id == android.R.id.home) {
             finish();
         }else if (id == R.id.action_disconnect) {
+            disconnect(studentDetails.getConnectionId(), studentDetails.getId());
             Toast.makeText(this,getResources().getString(R.string.connection_disconnect_warn),Toast.LENGTH_LONG).show();
         }
         return true;
+    }
+
+    private void disconnect(String connectionId, String oppositeUSerId) {
+        progressDialog.show();
+        Log.d(TAG, "id : " + connectionId + ", user_id : " + oppositeUSerId +
+                ", user_group : " + DashboardActivity.dashboardActivity.user_group);
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("id", connectionId);
+        requestParams.add("user_id", oppositeUSerId);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.breakConnection(this, requestParams, this, 21);
     }
 
     private void respondToRequest(String response) {
@@ -154,6 +168,10 @@ public class StudentDetailActivity  extends Activity implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
+        if(calledApiValue == 21){
+            finish();
+            return;
+        }
         if(object == null) {
             Intent intent = new Intent();
             setResult(RESULT_OK, intent);

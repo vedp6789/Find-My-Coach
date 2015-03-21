@@ -31,7 +31,13 @@ public class Datum {
     @SerializedName("connection_status")
     @Expose
     private String connectionStatus;
+    @SerializedName("connection_id")
+    @Expose
+    private String connectionId;
 
+    public void setConnectionId(String connectionId) {
+        this.connectionId = connectionId;
+    }
 
     public void setRating(String rating) {
         this.rating = rating;
@@ -47,6 +53,10 @@ public class Datum {
 
     public void setConnectionStatus(String connectionStatus) {
         this.connectionStatus = connectionStatus;
+    }
+
+    public String getConnectionId() {
+        return connectionId;
     }
 
     public String getRating() {

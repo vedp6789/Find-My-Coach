@@ -13,12 +13,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +53,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     private TextView tv_mon_slots,tv_tue_slots,tv_wed_slots,tv_thur_slots,tv_fri_slots,tv_sat_slots,tv_sun_slots;
     private Button b_schedule_class;
     private String connectionStatus;
+    private Menu menu;
 
     JSONObject jsonObject,jsonObject_Data,jsonObject_slots;
     JSONArray jsonArray_sub_category, jArray_mon_slots, jArray_tue_slots, jArray_wed_slots, jArray_thu_slots, jArray_fri_slots, jArray_sat_slots, jArray_sun_slots;
@@ -182,7 +181,11 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             }
         }
 
-        Log.d(TAG,"Mon slots size"+mon_slots.size()+" sample of data in mon_slots :"+mon_slots.get(0));
+        try{
+            Log.d(TAG,"Mon slots size"+mon_slots.size()+" sample of data in mon_slots :"+mon_slots.get(0));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         StringBuilder stringBuilder0=new StringBuilder();
         StringBuilder stringBuilder1=new StringBuilder();
         StringBuilder stringBuilder2=new StringBuilder();
@@ -427,6 +430,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         if(connectionStatus.equals("not connected")) {
             getMenuInflater().inflate(R.menu.menu_mentor_details_not_connected, menu);
         }else if(connectionStatus.equals("accepted")) {
@@ -441,11 +445,13 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        Log.d(TAG,userInfo.getConnectionStatus() + " : " + userInfo.getConnectionId());
         if (id == R.id.action_connect) {
             showAlert();
             return true;
         }
         else if (id == R.id.action_disconnect) {
+            disconnect(userInfo.getConnectionId(), userInfo.getId());
             Toast.makeText(this,getResources().getString(R.string.connection_disconnect_warn),Toast.LENGTH_LONG).show();
             return true;
         }
@@ -456,7 +462,19 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             showRatingDialog();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void disconnect(String connectionId, String oppositeUSerId) {
+        progressDialog.show();
+        Log.d(TAG, "id : " + connectionId + ", user_id : " + oppositeUSerId +
+                ", user_group : " + DashboardActivity.dashboardActivity.user_group);
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("id", connectionId);
+        requestParams.add("user_id", oppositeUSerId);
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        NetworkClient.breakConnection(this, requestParams, this, 21);
     }
 
     /** Dialog to rate mentor */
@@ -530,6 +548,10 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
+        if(calledApiValue == 21){
+            connectionStatus = "not connected";
+            onCreateOptionsMenu(menu);
+        }
     }
 
     @Override
