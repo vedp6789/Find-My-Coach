@@ -641,8 +641,8 @@
     <string name="mentee_name">Mentee\'s Name:</string>
     <string name="sub">Subject:</string>
     <string name="event_time">Time:</string>
-    <string name="mentee_add">Mentee's address:</string>
-    <string name="mentor_add">Mentor's address:</string>
+    <string name="mentee_add">Mentee\'s address:</string>
+    <string name="mentor_add">Mentor\'s address:</string>
 
     <!-- Prompting -->
 
