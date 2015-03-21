@@ -135,7 +135,7 @@ public class StudentDetailActivity  extends Activity implements Callback {
         }else if (id == android.R.id.home) {
             finish();
         }else if (id == R.id.action_disconnect) {
-            Toast.makeText(this,"Connection will disconnect",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,getResources().getString(R.string.connection_disconnect_warn),Toast.LENGTH_LONG).show();
         }
         return true;
     }

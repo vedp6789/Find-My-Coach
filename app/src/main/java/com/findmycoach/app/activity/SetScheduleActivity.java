@@ -76,7 +76,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             coming_month = (ArrayList<Day>) getIntent.getSerializableExtra("coming_month_data");
 
             progressDialog = new ProgressDialog(SetScheduleActivity.this);
-            progressDialog.setMessage("Please wait...");
+            progressDialog.setMessage(getResources().getString(R.string.please_wait));
 
 
             Log.d(TAG, "prev_month: " + prev_month.size() + ", current_month: " + current_month.size() + ", coming_month: " + coming_month.size());
@@ -483,16 +483,16 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             }else{
                 if(lname.equals("0")){
                     if(sub_category_name != null){
-                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + "" + fname +"\n"+sub_category_name;
+                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + getResources().getString(R.string.with) + "" + fname +"\n"+sub_category_name;
                     }else {
-                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + "" + fname+"\n"+"";
+                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + getResources().getString(R.string.with) + "" + fname+"\n"+"";
                     }
                 }
             }
             if(sub_category_name != null){
-                return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + "" + " " + lname+"\n"+sub_category_name;
+                return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + getResources().getString(R.string.with) + "" + " " + lname+"\n"+sub_category_name;
             }else {
-                return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + "" + " " + lname+"\n"+"";
+                return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + getResources().getString(R.string.with) + "" + " " + lname+"\n"+"";
             }
             //return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + fname + " " + lname+"\n"+sub_category_name;
         }
@@ -507,16 +507,16 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             }else{
                 if(lname.equals("0")){
                     if(sub_category_name != null){
-                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + fname+"\n"+sub_category_name;
+                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + getResources().getString(R.string.with) + fname+"\n"+sub_category_name;
                     }else {
-                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " +fname+"\n"+"";
+                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + getResources().getString(R.string.with)+fname+"\n"+"";
                     }
                 }
             }
             if(sub_category_name != null){
-                return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + "" + " " + lname+"\n"+sub_category_name;
+                return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + getResources().getString(R.string.with) + "" + " " + lname+"\n"+sub_category_name;
             }else {
-                return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + "" + " " + lname+"\n"+"";
+                return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + getResources().getString(R.string.with) + "" + " " + lname+"\n"+"";
             }
         }
         return null;

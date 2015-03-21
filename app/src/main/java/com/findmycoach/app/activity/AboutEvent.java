@@ -44,10 +44,10 @@ public class AboutEvent extends Activity {
         initialize();
         applyActionbarProperties();
         if(Integer.parseInt(StorageHelper.getUserGroup(AboutEvent.this,"user_group"))== 3){
-           tv_address_type.setText("Mentee's address:");
+           tv_address_type.setText(getResources().getString(R.string.mentee_add));
         }
         if(Integer.parseInt(StorageHelper.getUserGroup(AboutEvent.this,"user_group"))== 2){
-            tv_address_type.setText("Mentor's address:");
+            tv_address_type.setText(getResources().getString(R.string.mentor_add));
         }
         String about_event=getIntent().getStringExtra("about_event");
         Log.d(TAG,"Event details: "+about_event);

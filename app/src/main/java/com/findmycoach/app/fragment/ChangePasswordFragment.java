@@ -68,7 +68,7 @@ public class ChangePasswordFragment extends DialogFragment implements View.OnCli
         switch (v.getId()){
             case R.id.b_confirm_new_password:
                 if(validate()){
-                    Toast.makeText(getActivity(),"Network Communication will start",Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getActivity(),"Network Communication will start",Toast.LENGTH_SHORT).show();
 
                     RequestParams requestParams=new RequestParams();
                     requestParams.add("id", StorageHelper.getUserDetails(getActivity(),"user_id"));

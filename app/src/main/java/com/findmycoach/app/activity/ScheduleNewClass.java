@@ -191,14 +191,11 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             Iterator<Float> itr = slotsTimeTreeSet.iterator();
             while (itr.hasNext()) {
                 float start_time = itr.next();
-                //float stop_time=itr.next()+1;
-                //System.out.println(TAG+"Start time in TreeSet : "+start_time+", Stop time acc to Tree set : "+ ++start_time);
-
                 slot_timings.add(String.valueOf(start_time) + "-" + String.valueOf(++start_time));
 
             }
 
-            String[] mentor_for = {"Self", "Child"};
+            String[] mentor_for = {getResources().getString(R.string.self), getResources().getString(R.string.child)};
             ArrayAdapter arrayAdapter1_mentor_for = new ArrayAdapter(this, android.R.layout.simple_spinner_item, mentor_for);
             arrayAdapter1_mentor_for.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             sp_mentor_for.setAdapter(arrayAdapter1_mentor_for);
@@ -752,7 +749,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                     Log.d(TAG,"address string size : "+location.trim().length());
                     if(location.equals("") || location.trim().length()== 0){
                         showErrorMessage1(et_location,getResources().getString(R.string.error_field_required));
-                        Toast.makeText(ScheduleNewClass.this,"Your Address please!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ScheduleNewClass.this,getResources().getString(R.string.your_address_please),Toast.LENGTH_SHORT).show();
                     }else{
                         checkForValidity();
                     }
@@ -761,7 +758,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 }
 
             }else{
-                Toast.makeText(ScheduleNewClass.this, "Select at least one week-day.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ScheduleNewClass.this,getResources().getString(R.string.atleast_a_week_day), Toast.LENGTH_SHORT).show();
             }
 
 
@@ -771,11 +768,11 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                     showErrorMessage(tv_to_date,getResources().getString(R.string.stop_date_should_be_greater));
 
                 }else{
-                    Toast.makeText(ScheduleNewClass.this, "Select the duration for this schedule.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.duration_please), Toast.LENGTH_SHORT).show();
                 }
 
             } else {
-                Toast.makeText(ScheduleNewClass.this, "Select at least one week-day.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.atleast_a_week_day), Toast.LENGTH_SHORT).show();
             }
 
         }

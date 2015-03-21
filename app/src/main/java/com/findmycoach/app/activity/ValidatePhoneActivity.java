@@ -290,7 +290,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     /** Getting country code using TelephonyManager */
     public String getCountryZipCode(){
         String CountryID = "";
-        String CountryZipCode = "Select";
+        String CountryZipCode = getResources().getString(R.string.select);
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         CountryID= manager.getSimCountryIso().toUpperCase();
         country_code = this.getResources().getStringArray(R.array.country_codes);

@@ -56,8 +56,8 @@ switch (v.getId()){
 
     private boolean validate() {
         phone_number=et_mobile_no.getText().toString();
-        if(country_code.equals("Select")){
-            Toast.makeText(getActivity(),"Select the country code",Toast.LENGTH_SHORT).show();
+        if(country_code.equals(getResources().getString(R.string.select))){
+            Toast.makeText(getActivity(),getResources().getString(R.string.select_country_code),Toast.LENGTH_SHORT).show();
             return false;
         }
         if(phone_number.equals("")){

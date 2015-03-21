@@ -192,24 +192,24 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         StringBuilder stringBuilder6=new StringBuilder();
 
         if(mon_slots.size() <=0){
-            tv_mon_slots.setText("Not free");
+            tv_mon_slots.setText(getResources().getString(R.string.not_free));
         }
         if(tue_slots.size() <=0){
-            tv_tue_slots.setText("Not free");
+            tv_tue_slots.setText(getResources().getString(R.string.not_free));
         }
         if(wed_slots.size() <=0){
-            tv_wed_slots.setText("Not free");
+            tv_wed_slots.setText(getResources().getString(R.string.not_free));
         }
         if(thur_slots.size() <=0){
-            tv_thur_slots.setText("Not free");
+            tv_thur_slots.setText(getResources().getString(R.string.not_free));
         }
         if(fri_slots.size() <=0){
-            tv_fri_slots.setText("Not free");
+            tv_fri_slots.setText(getResources().getString(R.string.not_free));
         }if(sat_slots.size() <=0){
-            tv_sat_slots.setText("Not free");
+            tv_sat_slots.setText(getResources().getString(R.string.not_free));
         }
         if(sun_slots.size() <=0){
-            tv_sun_slots.setText("Not free");
+            tv_sun_slots.setText(getResources().getString(R.string.not_free));
         }
 
 
@@ -446,7 +446,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             return true;
         }
         else if (id == R.id.action_disconnect) {
-            Toast.makeText(this,"Connection will disconnect",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,getResources().getString(R.string.connection_disconnect_warn),Toast.LENGTH_LONG).show();
             return true;
         }
         if (id == android.R.id.home) {
@@ -470,7 +470,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         dialog.findViewById(R.id.submitRating).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MentorDetailsActivity.this,"Rating for " + userInfo.getFirstName() + " is " + ratingBar.getRating() +" will be submitted", Toast.LENGTH_LONG).show();
+                Toast.makeText(MentorDetailsActivity.this,getResources().getString(R.string.rating_for) + userInfo.getFirstName() + getResources().getString(R.string.is) + ratingBar.getRating() +getResources().getString(R.string.will_be_submitted), Toast.LENGTH_LONG).show();
                 dialog.dismiss();
             }
         });

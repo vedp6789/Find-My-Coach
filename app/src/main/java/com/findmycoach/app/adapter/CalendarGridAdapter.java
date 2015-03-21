@@ -96,32 +96,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         // Find Number of Events
         eventsPerMonthMap = findNumberOfEventsPerMonth(year, month);
     }
-    /*public CalendarGridAdapter(int month, int year) {
-        super();
-        //this.context = context;
-        this.list = new ArrayList<String>();
-        Calendar calendar = Calendar.getInstance();
-        setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
-        setCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
 
-
-        CURRENT_MONTH_OF_CALENDAR = calendar.get(Calendar.MONTH);
-        CURRENT_YEAR_OF_CALENDAR = calendar.get(Calendar.YEAR);
-        month_in_foreground = month - 1;
-
-        Log.d(TAG, "Current Month of Calendar:" + CURRENT_MONTH_OF_CALENDAR);
-        Log.d(TAG, "Current Year of Calendar:" + CURRENT_YEAR_OF_CALENDAR);
-        Log.d(TAG, "Current day of month" + currentDayOfMonth);
-        Log.d(TAG, "Current week day" + currentWeekDay);
-
-
-        // Print Month
-        printMonth(month, year);
-
-        // Find Number of Events
-        eventsPerMonthMap = findNumberOfEventsPerMonth(year, month);
-    }
-*/
 
 
     private String getMonthAsString(int i) {

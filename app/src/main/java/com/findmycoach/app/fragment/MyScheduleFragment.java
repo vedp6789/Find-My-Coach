@@ -124,7 +124,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
 
         progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Please wait...");
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
 
         RequestParams requestParams = new RequestParams();
         requestParams.add("user_group",String.valueOf(2));
@@ -169,7 +169,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         //current_json = getDemoCalendarDetails(days_in_current_month, month, year);
         //calendarEventScheduler(current_json);
 
-        Toast.makeText(getActivity(), "Start date" + String.valueOf(stringBuilder), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getResources().getString(R.string.start_date1) + String.valueOf(stringBuilder), Toast.LENGTH_SHORT).show();
         requestParams.add("start_date", String.valueOf(stringBuilder));
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
         progressDialog.show();
@@ -259,7 +259,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         //current_json = getDemoCalendarDetails(days_in_current_month, month, year);
         //calendarEventScheduler(current_json);
 
-        Toast.makeText(getActivity(), "Start date" + String.valueOf(stringBuilder), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getResources().getString(R.string.start_date1) + String.valueOf(stringBuilder), Toast.LENGTH_SHORT).show();
         requestParams.add("start_date", String.valueOf(stringBuilder));
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
         progressDialog.show();

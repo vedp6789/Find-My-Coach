@@ -72,7 +72,7 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
             case R.id.buttonSave:
                 if(validateData(inputCardNumber.getText().toString(), inputCardName.getText().toString(),
                         inputCardExpiry.getText().toString(), inputCardCVV.getText().toString())) {
-                    Toast.makeText(this, "Card details will be saved", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getResources().getString(R.string.cards_detail_will_saved), Toast.LENGTH_LONG).show();
                     finish();
                 }
                 break;
