@@ -18,12 +18,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Session;
+import com.findmycoach.app.R;
 import com.findmycoach.app.fragment.MyConnectionsFragment;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.fragment.NavigationDrawerFragment;
@@ -33,7 +36,6 @@ import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
-import com.findmycoach.app.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -76,6 +78,8 @@ public class DashboardActivity extends FragmentActivity
     AtomicInteger msgId = new AtomicInteger();
     SharedPreferences prefs;
     Context context;
+    private ActionBar actionBar;
+    public static TextView customTitle;
 
     int fragment_to_launch_from_notification = 0;  ///  On a tap over Push notification, then it will be used to identify which operation to perform
     int group_push_notification = 0;      /// it will identify push notification for which type of user.
@@ -109,7 +113,6 @@ public class DashboardActivity extends FragmentActivity
 
         fragment_to_launch_from_notification = getIntent().getIntExtra("fragment", 0);
         group_push_notification= getIntent().getIntExtra("group",0);
-
 
         if (fragment_to_launch_from_notification == 0) {
             // Check device for Play Services APK.
@@ -516,11 +519,21 @@ public class DashboardActivity extends FragmentActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
+        FrameLayout container = (FrameLayout) findViewById(R.id.container);
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+                (DrawerLayout) findViewById(R.id.drawer_layout), container);
         onNavigationDrawerItemSelected(0);
-        userToken = StorageHelper.getUserDetails(this, "auth_token");
+        userToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
+
+
+        actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
+        customTitle = (TextView) customView.findViewById(R.id.actionbarTitle);
+        customTitle.setText(getResources().getString(R.string.app_name));
+        actionBar.setCustomView(customView);
     }
 
     @Override
@@ -557,14 +570,11 @@ public class DashboardActivity extends FragmentActivity
     }
 
     public void onSectionAttached(int number) {
-      mTitle = getResources().getStringArray(R.array.navigation_items)[number];
+        mTitle = getResources().getStringArray(R.array.navigation_items)[number];
     }
 
     public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        customTitle.setText(mTitle);
     }
 
     @Override
