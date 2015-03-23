@@ -32,8 +32,10 @@ public class UserListActivity extends Activity implements Callback {
     private ProgressDialog progressDialog;
     private Datum datum;
     private boolean isGettingMentor = false;
-
     private static final String TAG="FMC";
+    private static final int NEED_TO_REFRESH = 100;
+    private MentorListAdapter mentorListAdapter;
+    private int selectedPosition = -1;
 
 
     @Override
@@ -51,6 +53,7 @@ public class UserListActivity extends Activity implements Callback {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (users != null) {
                     Log.d(TAG,"ListView click");
+                    selectedPosition = position;
                     datum = users.get(position);
                     getMentorDetails(datum.getId());
                 }
@@ -68,7 +71,7 @@ public class UserListActivity extends Activity implements Callback {
         RequestParams requestParams = new RequestParams();
         requestParams.add("id", id);
         requestParams.add("owner_id",StorageHelper.getUserDetails(this,"user_id"));
-        int limit=7;                                          //  This is a limit for getting free slots details for this mentor in terms of limit days from current date
+        int limit = 7;                                          //  This is a limit for getting free slots details for this mentor in terms of limit days from current date
         requestParams.add("limit", String.valueOf(limit));
         String authToken = StorageHelper.getUserDetails(this, "auth_token");
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
@@ -90,7 +93,8 @@ public class UserListActivity extends Activity implements Callback {
         Log.d(TAG, "Users:" + users);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
-        listView.setAdapter(new MentorListAdapter(this, users, progressDialog));
+        mentorListAdapter = new MentorListAdapter(this, users, progressDialog);
+        listView.setAdapter(mentorListAdapter);
     }
 
 
@@ -110,6 +114,23 @@ public class UserListActivity extends Activity implements Callback {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == NEED_TO_REFRESH){
+            if(users != null && selectedPosition != -1){
+                try{
+                    users.get(selectedPosition).setConnectionId(data.getStringExtra("connectionId"));
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                users.get(selectedPosition).setConnectionStatus(data.getStringExtra("connectionStatus"));
+                mentorListAdapter.notifyDataSetChanged();
+                datum = null;
+            }
+        }
+    }
+
+    @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         // For displaying selected Mentor details
@@ -118,7 +139,7 @@ public class UserListActivity extends Activity implements Callback {
             intent.putExtra("mentorDetails", (String) object);
             intent.putExtra("connection_status", datum.getConnectionStatus());
             datum = null;
-            startActivity(intent);
+            startActivityForResult(intent, NEED_TO_REFRESH);
             isGettingMentor = false;
         }
     }

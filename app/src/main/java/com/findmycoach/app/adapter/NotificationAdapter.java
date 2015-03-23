@@ -40,6 +40,7 @@ public class NotificationAdapter extends BaseAdapter {
         this.notifications = notifications;
         this.callback = callback;
         this.progressDialog = progressDialog;
+        connection_id = -1;
     }
 
     public NotificationAdapter(Context context) {
@@ -105,11 +106,10 @@ public class NotificationAdapter extends BaseAdapter {
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("id", senderData.getId() + "");
                 requestParams.add("status", "accepted");
-                Log.d(TAG, senderData.getId() + "");
-                Log.d(TAG, "accepted");
                 NetworkClient.respondToConnectionRequest(context, requestParams, callback, 18);
             }
         });
+
         ImageButton declineButton = (ImageButton) view.findViewById(R.id.declineButton);
         declineButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +124,7 @@ public class NotificationAdapter extends BaseAdapter {
                 NetworkClient.respondToConnectionRequest(context, requestParams, callback, 18);
             }
         });
+
         sender.setText(senderData.getOwnerName());
         message.setText(senderData.getConnectionMessage());
         return view;

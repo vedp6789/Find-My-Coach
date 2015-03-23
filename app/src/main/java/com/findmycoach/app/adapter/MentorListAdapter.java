@@ -82,7 +82,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
                     .error(R.drawable.user_icon)
                     .into(imageView);
         }
-        if(user.getConnectionStatus() != null && !user.getConnectionStatus().equals("broken")){
+        if(user.getConnectionStatus() != null && !user.getConnectionStatus().equals("broken") && !user.getConnectionStatus().equals("rejected")){
             if(user.getConnectionStatus().equals("accepted")){
                 imageConnect.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_menu_close_clear_cancel));
             }else if(user.getConnectionStatus().equals("pending")) {
@@ -177,7 +177,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
                 try{
                     users.get(clickedPosition).setConnectionId(Integer.parseInt(status)+"");
                 }catch (Exception e){
-                    Toast.makeText(context, "Success", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, context.getResources().getString(R.string.success), Toast.LENGTH_LONG).show();
                 }
             }else if(calledApiValue == 21){
                 users.get(clickedPosition).setConnectionStatus("broken");

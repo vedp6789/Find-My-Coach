@@ -519,13 +519,20 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
-        if(calledApiValue == 21){
+        if(calledApiValue == 21 || calledApiValue == 17){
             Intent intent = new Intent();
             intent.putExtra("status", "close_activity");
+            String status = object+"";
+            try{
+                intent.putExtra("connectionId", Integer.parseInt(status)+"");
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            intent.putExtra("connectionStatus", calledApiValue == 17 ? "pending" : "broken");
             setResult(RESULT_OK, intent);
             finish();
         }
+        Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
     }
 
     @Override
