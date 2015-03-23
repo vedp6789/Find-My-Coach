@@ -192,8 +192,15 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
         if(object != null && connection_clicked != -1){
             String status = connectionList.get(connection_clicked).getStatus();
             // Updating status of connection i.e. accept/reject/broke
-            if(DashboardActivity.dashboardActivity.user_group == 3)
+            if(DashboardActivity.dashboardActivity.user_group == 3) {
+                Log.e(TAG, status + ", Position : " + connection_clicked);
                 connectionList.get(connection_clicked).setStatus(status.equals("accepted") ? "broken" : "accepted");
+                try{
+                    connectionList.get(connection_clicked).setId(Integer.parseInt(status));
+                }catch (Exception e){
+                    Toast.makeText(context, "Success", Toast.LENGTH_LONG).show();
+                }
+            }
             else if(DashboardActivity.dashboardActivity.user_group == 2)
                 connectionList.get(connection_clicked).setStatus("broken");
 
@@ -209,6 +216,5 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Toast.makeText(context,(String) object,Toast.LENGTH_LONG).show();
-
     }
 }

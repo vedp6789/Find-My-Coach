@@ -29,14 +29,25 @@ public class MyConnectionsFragment extends Fragment implements Callback {
     private ProgressDialog progressDialog;
     private ConnectionRequestsResponse connectionRequestsResponse;
     private ConnectionAdapter connectionAdapter;
+    public static boolean needToRefresh = false;
 
     public MyConnectionsFragment() {
         // Required empty public constructor
+        needToRefresh= false;
     }
 
     public static MyConnectionsFragment newInstance(String param1, String param2) {
         MyConnectionsFragment fragment = new MyConnectionsFragment();
         return fragment;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(needToRefresh) {
+            getConnectionList();
+            needToRefresh = false;
+        }
     }
 
     @Override
@@ -108,6 +119,6 @@ public class MyConnectionsFragment extends Fragment implements Callback {
         if(msg.equals("Success"))
             connectionListView.setAdapter(new ArrayAdapter<String>(getActivity(),R.layout.no_data_found, new String[]{getResources().getString(R.string.not_connected)}));
         else
-            Toast.makeText(getActivity(),msg , Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
     }
 }

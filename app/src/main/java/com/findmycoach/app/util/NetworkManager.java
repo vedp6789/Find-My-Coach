@@ -46,13 +46,9 @@ public class NetworkManager {
     }
 
     public static boolean isNetworkConnected(Context context) {
-
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            return true;
-        }
-        return false;
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     private static void showGpsDialog(final Context context) {
@@ -76,7 +72,5 @@ public class NetworkManager {
                         });
         builder.create().show();
     }
-
-    public static void xxx(){}
 
 }

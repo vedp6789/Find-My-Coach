@@ -25,6 +25,7 @@ import com.findmycoach.app.adapter.ChatWidgetAdapter;
 import com.findmycoach.app.beans.attachment.Attachment;
 import com.findmycoach.app.beans.chats.Chats;
 import com.findmycoach.app.beans.chats.Data;
+import com.findmycoach.app.fragment.MyConnectionsFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -232,9 +233,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         /** Update if connection is broken */
         else if (resultCode == RESULT_OK && requestCode == PROFILE_DETAILS){
             if(data.getStringExtra("status").equals("close_activity")){
-                Intent intent = new Intent();
-                intent.putExtra("status", "refresh");
-                setResult(RESULT_OK, intent);
+                MyConnectionsFragment.needToRefresh = true;
                 finish();
             }
 
