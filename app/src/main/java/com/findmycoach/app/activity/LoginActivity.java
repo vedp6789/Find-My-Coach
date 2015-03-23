@@ -744,7 +744,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         /** Clearing facebook token and G+ user if connected */
         fbClearToken();
-        if (!mGoogleApiClient.isConnecting()) {
+        if (!mGoogleApiClient.isConnecting()  && mGoogleApiClient.isConnected()) {
             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
             mGoogleApiClient.disconnect();
             mGoogleApiClient.connect();

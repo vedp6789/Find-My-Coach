@@ -2,6 +2,7 @@ package com.findmycoach.app.activity;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -494,6 +495,10 @@ public class DashboardActivity extends FragmentActivity
         if(loginWith == null || loginWith.equals("G+")) {
             LoginActivity.doLogout = true;
         }
+
+        NotificationManager notificationManager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+
         StorageHelper.clearUser(this);
         StorageHelper.clearUserPhone(this);
         fbClearToken();
