@@ -448,22 +448,17 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         Log.d(TAG,userInfo.getConnectionStatus() + " : " + userInfo.getConnectionId());
         if (id == R.id.action_connect) {
             showAlert();
-            return true;
         }
         else if (id == R.id.action_disconnect) {
             disconnect(userInfo.getConnectionId(), userInfo.getId());
-            Toast.makeText(this,getResources().getString(R.string.connection_disconnect_warn),Toast.LENGTH_LONG).show();
-            return true;
         }
         if (id == android.R.id.home) {
             finish();
         }
         if(id == Menu.FIRST){
             showRatingDialog();
-            return true;
         }
-
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     private void disconnect(String connectionId, String oppositeUSerId) {
@@ -549,8 +544,10 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         progressDialog.dismiss();
         Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
         if(calledApiValue == 21){
-            connectionStatus = "not connected";
-            onCreateOptionsMenu(menu);
+            Intent intent = new Intent();
+            intent.putExtra("status", "close_activity");
+            setResult(RESULT_OK, intent);
+            finish();
         }
     }
 
@@ -563,7 +560,6 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     @Override
     public void onClick(View v) {
         if(v == b_schedule_class){
-
             if(validate()){
                 Log.d(TAG,"Start Scheduling activity");
                   Intent intent=new Intent(MentorDetailsActivity.this, ScheduleNewClass.class);

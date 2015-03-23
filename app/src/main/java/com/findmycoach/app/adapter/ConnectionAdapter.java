@@ -164,6 +164,7 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
     }
 
     private void connect(String connectionId) {
+        Log.e(TAG,"Connect");
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
         requestParams.add("id", connectionId);
@@ -173,6 +174,7 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
     }
 
     private void disconnect(String connectionId, int oppositeUSerId) {
+        Log.e(TAG,"Disconnect");
         progressDialog.show();
         Log.d(TAG, "id : " + connectionId + ", user_id : " + oppositeUSerId +
                 ", user_group : " + DashboardActivity.dashboardActivity.user_group);
@@ -185,8 +187,9 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
+        Log.e(TAG,object + " : " + connection_clicked);
         progressDialog.dismiss();
-        if(object == null && connection_clicked != -1){
+        if(object != null && connection_clicked != -1){
             String status = connectionList.get(connection_clicked).getStatus();
             // Updating status of connection i.e. accept/reject/broke
             if(DashboardActivity.dashboardActivity.user_group == 3)
@@ -194,7 +197,7 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
             else if(DashboardActivity.dashboardActivity.user_group == 2)
                 connectionList.get(connection_clicked).setStatus("broken");
 
-            if(connectionList.get(connection_clicked).getStatus().contains("broken"))
+            if(connectionList.get(connection_clicked).getStatus().trim().equalsIgnoreCase("broken"))
                 connectionList.remove(connection_clicked);
             connection_clicked = -1;
             this.notifyDataSetChanged();

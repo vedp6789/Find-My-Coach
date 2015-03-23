@@ -138,7 +138,6 @@ public class StudentDetailActivity  extends Activity implements Callback {
             finish();
         }else if (id == R.id.action_disconnect) {
             disconnect(studentDetails.getConnectionId(), studentDetails.getId());
-            Toast.makeText(this,getResources().getString(R.string.connection_disconnect_warn),Toast.LENGTH_LONG).show();
         }
         return true;
     }
@@ -169,6 +168,9 @@ public class StudentDetailActivity  extends Activity implements Callback {
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         if(calledApiValue == 21){
+            Intent intent = new Intent();
+            intent.putExtra("status", "close_activity");
+            setResult(RESULT_OK, intent);
             finish();
             return;
         }
