@@ -31,6 +31,8 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
         applyActionbarProperties();
     }
 
+
+
     private void initialize() {
         inputCardNumber = (EditText) findViewById(R.id.editTextCard);
         inputCardName = (EditText) findViewById(R.id.editTextName);

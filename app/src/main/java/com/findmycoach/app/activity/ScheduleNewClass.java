@@ -2,6 +2,7 @@ package com.findmycoach.app.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.app.FragmentManager;
 import android.os.Handler;
@@ -22,6 +23,8 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.fragment_mentor.StartDateDialogFragment;
 import com.findmycoach.app.fragment_mentor.TillDateDialogFragment;
+import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.SetDate;
 import com.loopj.android.http.RequestParams;
 
@@ -36,7 +39,7 @@ import java.util.TreeSet;
 /**
  * Created by praka_000 on 3/4/2015.
  */
-public class ScheduleNewClass extends Activity implements Button.OnClickListener, SetDate {
+public class ScheduleNewClass extends Activity implements Button.OnClickListener, SetDate, Callback {
     private static TextView tv_from_date, tv_to_date;
     Spinner sp_subjects, sp_class_timing, sp_mentor_for;
     CheckBox cb_mon, cb_tue, cb_wed, cb_thu, cb_fri, cb_sat, cb_sun;
@@ -63,13 +66,16 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private static int till_month;//completion month of the schedule
     private static int till_year;//completion year of the schedule
 
+    private ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_new_class);
         String fname = getIntent().getExtras().getString("fname");
-
+        progressDialog = new ProgressDialog(ScheduleNewClass.this);
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
         applyActionbarProperties(fname);
 
 
@@ -471,9 +477,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 }
             });
 
-             mentor_availability= mentor_data.getString("availability_yn");
+            mentor_availability = mentor_data.getString("availability_yn");
             if (!mentor_availability.equals("1")) {
-                LinearLayout linearLayout= (LinearLayout) findViewById(R.id.ll_location);
+                LinearLayout linearLayout = (LinearLayout) findViewById(R.id.ll_location);
                 linearLayout.setVisibility(View.GONE);
                 //et_location.setEnabled(false);
             }
@@ -542,7 +548,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.b_proceed_to_payment:
-                Log.d(TAG,"inside button action case");
+                Log.d(TAG, "inside button action case");
                 arrayList_days = null;
                 scheduleValidation();
 
@@ -600,10 +606,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         checkDurationSelected();
 
 
-
-
     }
-    boolean checkDurationSelected(){
+
+    boolean checkDurationSelected() {
 
         if (ScheduleNewClass.date_from != null && ScheduleNewClass.date_to != null) {
 
@@ -618,19 +623,19 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             Log.d(TAG, "Start_date  and Stop details in int variable from setSelectedStartDate method : " + start_day + " " + start_month + " " + start_year + "  :  " + stop_day + " " + stop_month + " " + stop_year);
             if (stop_year < start_year) {
 
-                Toast.makeText(ScheduleNewClass.this,getResources().getString(R.string.wrong_duration),Toast.LENGTH_LONG).show();
+                Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.wrong_duration), Toast.LENGTH_LONG).show();
                 showErrorMessage(tv_to_date, getResources().getString(R.string.stop_date_should_be_greater));
 
             } else {
                 if (stop_year == start_year) {
                     if (stop_month < start_month) {
-                        Toast.makeText(ScheduleNewClass.this,getResources().getString(R.string.wrong_duration),Toast.LENGTH_LONG).show();
+                        Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.wrong_duration), Toast.LENGTH_LONG).show();
                         showErrorMessage(tv_to_date, getResources().getString(R.string.stop_date_should_be_greater));
 
                     } else {
                         if (stop_month == start_month) {
                             if (stop_day < start_day) {
-                                Toast.makeText(ScheduleNewClass.this,getResources().getString(R.string.wrong_duration),Toast.LENGTH_LONG).show();
+                                Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.wrong_duration), Toast.LENGTH_LONG).show();
                                 showErrorMessage(tv_to_date, getResources().getString(R.string.stop_date_should_be_greater));
                             } else {
                                 dates_valid = true;
@@ -645,7 +650,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             }
 
             return true;     // This true means there is error in dates selected
-        }else{
+        } else {
             return false;    // This false means duration is not completely filled
         }
     }
@@ -680,7 +685,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         checkDurationSelected();
 
 
-
     }
 
     private boolean days_checked() {
@@ -709,7 +713,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         if (cb_sun.isEnabled() && cb_sun.isChecked()) {
             arrayList_days.add("Su");
         }
-        Log.d(TAG,"arrayList_days size"+arrayList_days.size());
+        Log.d(TAG, "arrayList_days size" + arrayList_days.size());
         if (arrayList_days.size() > 0) {
             return true;
             /*StringBuilder stringBuilder1=new StringBuilder();
@@ -743,31 +747,31 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
 
             if (days_checked()) {
-                if(mentor_availability.equals("1")){
-                    Log.d(TAG,"mentor_availability equals 1");
-                    String location=et_location.getText().toString();
-                    Log.d(TAG,"address string size : "+location.trim().length());
-                    if(location.equals("") || location.trim().length()== 0){
-                        showErrorMessage1(et_location,getResources().getString(R.string.error_field_required));
-                        Toast.makeText(ScheduleNewClass.this,getResources().getString(R.string.your_address_please),Toast.LENGTH_SHORT).show();
-                    }else{
+                if (mentor_availability.equals("1")) {
+                    Log.d(TAG, "mentor_availability equals 1");
+                    String location = et_location.getText().toString();
+                    Log.d(TAG, "address string size : " + location.trim().length());
+                    if (location.equals("") || location.trim().length() == 0) {
+                        showErrorMessage1(et_location, getResources().getString(R.string.error_field_required));
+                        Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.your_address_please), Toast.LENGTH_SHORT).show();
+                    } else {
                         checkForValidity();
                     }
-                }else{
+                } else {
                     checkForValidity();
                 }
 
-            }else{
-                Toast.makeText(ScheduleNewClass.this,getResources().getString(R.string.atleast_a_week_day), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.atleast_a_week_day), Toast.LENGTH_SHORT).show();
             }
 
 
         } else {
             if (days_checked()) {
-                if(checkDurationSelected()){
-                    showErrorMessage(tv_to_date,getResources().getString(R.string.stop_date_should_be_greater));
+                if (checkDurationSelected()) {
+                    showErrorMessage(tv_to_date, getResources().getString(R.string.stop_date_should_be_greater));
 
-                }else{
+                } else {
                     Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.duration_please), Toast.LENGTH_SHORT).show();
                 }
 
@@ -808,15 +812,18 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             requestParams.add("start_date", tv_from_date.getText().toString());
             requestParams.add("stop_date", tv_to_date.getText().toString());
             requestParams.add("sub_category_name", selected_subject);
-            if(mentor_availability.equals("1")){
+            if (mentor_availability.equals("1")) {
 
-                requestParams.add("mentee_address",et_location.getText().toString());
+                requestParams.add("mentee_address", et_location.getText().toString());
             }
-            requestParams.add("mentor_for",selected_mentor_for);
+            requestParams.add("mentor_for", selected_mentor_for);
 
 
+            progressDialog.show();
+            NetworkClient.validateMenteeEvent(ScheduleNewClass.this, requestParams, this, 46);
 
-            Log.d(TAG, "Data going to be validated at the time of successful date selection \n id : " + mentor_data.get("id") + ", start time : " + start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00" + ", stop time :" + stop_time.split(":")[0] + ":" + stop_time.split(":")[1] + ":00" + " , days : " + stringBuilder1.toString() + ", start date : " + tv_from_date.getText().toString() + ", stop_date : " + tv_to_date.getText().toString() + ", sub category name : " + selected_subject.toString()+"mentee address : "+et_location.getText().toString());
+
+            Log.d(TAG, "Data going to be validated at the time of successful date selection \n id : " + mentor_data.get("id") + ", start time : " + start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00" + ", stop time :" + stop_time.split(":")[0] + ":" + stop_time.split(":")[1] + ":00" + " , days : " + stringBuilder1.toString() + ", start date : " + tv_from_date.getText().toString() + ", stop_date : " + tv_to_date.getText().toString() + ", sub category name : " + selected_subject.toString() + "mentee address : " + et_location.getText().toString());
 
             Log.d(TAG, "Can start network communication");
 
@@ -869,5 +876,15 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     @Override
     public void setTillUpperLimit(Object o1, Object o2, Object o3) {
 
+    }
+
+    @Override
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
+        progressDialog.dismiss();
     }
 }

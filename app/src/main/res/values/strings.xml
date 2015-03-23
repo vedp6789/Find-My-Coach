@@ -477,6 +477,7 @@
     <string name="not_free">Not free</string>
     <string name="connection_disconnect_warn">Connection will disconnect</string>
     <string name="self">Self</string>
+    <string name="select_card">Select a card</string>
     <string name="child">Child</string>
 
 
@@ -703,6 +704,7 @@
     <string name="find_my_coach">Find My Coach</string>
     <string name="or">OR</string>
     <string name="add_new_slot">Add new slot</string>
+    <string name="add_new_card">Add new card</string>
     <string name="mentee">Mentee</string>
     <string name="mentor">Mentor</string>
     <string name="action_connect">Connect</string>

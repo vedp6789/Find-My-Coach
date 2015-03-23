@@ -102,7 +102,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
                 JSONArray jsonArray=jArray_mon_slots.getJSONArray(i);
                 String start_time=jsonArray.getString(0);
                 String stop_time=jsonArray.getString(1);
-                mon_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+"-"+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
+                mon_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+" - "+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -114,7 +114,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
                 JSONArray jsonArray=jArray_tue_slots.getJSONArray(i);
                 String start_time=jsonArray.getString(0);
                 String stop_time=jsonArray.getString(1);
-               tue_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+"-"+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
+               tue_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+" - "+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -126,7 +126,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
                 JSONArray jsonArray=jArray_wed_slots.getJSONArray(i);
                 String start_time=jsonArray.getString(0);
                 String stop_time=jsonArray.getString(1);
-                wed_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+"-"+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
+                wed_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+" - "+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -138,7 +138,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
                 JSONArray jsonArray=jArray_thu_slots.getJSONArray(i);
                 String start_time=jsonArray.getString(0);
                 String stop_time=jsonArray.getString(1);
-                thur_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+"-"+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
+                thur_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+" - "+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -150,7 +150,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
                 JSONArray jsonArray=jArray_fri_slots.getJSONArray(i);
                 String start_time=jsonArray.getString(0);
                 String stop_time=jsonArray.getString(1);
-                fri_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+"-"+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
+                fri_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+" - "+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -162,7 +162,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
                 JSONArray jsonArray=jArray_sat_slots.getJSONArray(i);
                 String start_time=jsonArray.getString(0);
                 String stop_time=jsonArray.getString(1);
-                sat_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+"-"+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
+                sat_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+" - "+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -174,7 +174,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
                 JSONArray jsonArray=jArray_sun_slots.getJSONArray(i);
                 String start_time=jsonArray.getString(0);
                 String stop_time=jsonArray.getString(1);
-                sun_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+"-"+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
+                sun_slots.add(start_time.split(":")[0]+":"+start_time.split(":")[1]+" - "+stop_time.split(":")[0]+":"+stop_time.split(":")[1]);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -223,7 +223,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             if(j==0){
                 stringBuilder0.append(mon_slots.get(j));
             }else{
-                stringBuilder0.append(","+mon_slots.get(j));
+                stringBuilder0.append(", "+mon_slots.get(j));
             }
             tv_mon_slots.setText(stringBuilder0.toString());
         }
@@ -232,7 +232,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             if(j==0){
                 stringBuilder1.append(tue_slots.get(j));
             }else{
-                stringBuilder1.append(","+tue_slots.get(j));
+                stringBuilder1.append(", "+tue_slots.get(j));
             }
             tv_tue_slots.setText(stringBuilder1.toString());
         }
@@ -241,7 +241,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             if(j==0){
                 stringBuilder2.append(wed_slots.get(j));
             }else{
-                stringBuilder2.append(","+wed_slots.get(j));
+                stringBuilder2.append(", "+wed_slots.get(j));
             }
             tv_wed_slots.setText(stringBuilder2.toString());
         }for (int j=0;j<thur_slots.size();j++){
@@ -249,7 +249,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             if(j==0){
                 stringBuilder3.append(thur_slots.get(j));
             }else{
-                stringBuilder3.append(","+thur_slots.get(j));
+                stringBuilder3.append(", "+thur_slots.get(j));
             }
             tv_thur_slots.setText(stringBuilder3.toString());
         }for (int j=0;j<fri_slots.size();j++){
@@ -257,7 +257,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             if(j==0){
                 stringBuilder4.append(fri_slots.get(j));
             }else{
-                stringBuilder4.append(","+fri_slots.get(j));
+                stringBuilder4.append(", "+fri_slots.get(j));
             }
             tv_fri_slots.setText(stringBuilder4.toString());
         }for (int j=0;j<sat_slots.size();j++){
@@ -265,7 +265,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             if(j==0){
                 stringBuilder5.append(sat_slots.get(j));
             }else{
-                stringBuilder5.append(","+sat_slots.get(j));
+                stringBuilder5.append(", "+sat_slots.get(j));
             }
             tv_sat_slots.setText(stringBuilder5.toString());
         }
@@ -274,7 +274,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             if(j==0){
                 stringBuilder6.append(sun_slots.get(j));
             }else{
-                stringBuilder6.append(","+sun_slots.get(j));
+                stringBuilder6.append(", "+sun_slots.get(j));
             }
             tv_sun_slots.setText(stringBuilder6.toString());
 

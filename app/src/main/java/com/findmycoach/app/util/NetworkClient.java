@@ -76,6 +76,7 @@ import org.json.JSONObject;
     *       calenderEvents                  43
     *       resetPassword                   44
     *       setPhoneNumber                  45     // To change Phone number
+    *       event                           46     // used when Mentee go for all details validation for a schedule
     * */
     
 
@@ -1266,6 +1267,46 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.post(context, getAuthAbsoluteURL("setPhoneNumber", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    Log.d(TAG,"Success : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG,"Success : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    if(statusCode == 200)
+                        callback.successOperation(response, statusCode, calledApiValue);
+                    else
+                        callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseBody, null);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    Log.d(TAG,"Failure : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG,"Failure : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                }
+            }
+        });
+    }
+
+    public static void validateMenteeEvent(final Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.post(context, getAbsoluteURL("event", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {

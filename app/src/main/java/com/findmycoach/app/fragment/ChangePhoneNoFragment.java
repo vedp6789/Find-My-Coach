@@ -47,7 +47,7 @@ switch (v.getId()){
             requestParams.add("user_group",StorageHelper.getUserGroup(getActivity(),"user_group"));
             Log.d(TAG, "Phone no. to get update : " + country_code.split(",", 2)[0] + phone_number);
             requestParams.add("email",StorageHelper.getUserDetails(getActivity(),"user_email"));
-            requestParams.add("phone_no", country_code.split(",", 2)[0] + phone_number);
+            requestParams.add("phone_number", country_code.split(",", 2)[0] + phone_number);
             progressDialog.show();
             NetworkClient.setNewPhoneNumber(getActivity(),requestParams,this,45);
         }
