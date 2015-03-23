@@ -54,7 +54,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     private static int till_day;// completion day of the slot
     private static int till_month;//completion month of the slot
     private static int till_year;//completion year of the slot.
-
     private static int start_hour;
     private static int start_min;
     private static int stop_hour;
@@ -88,10 +87,13 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_avail_slot);
+
         time_from = getResources().getString(R.string.select);
         time_to = getResources().getString(R.string.select);
         date_to = getResources().getString(R.string.forever);
+
         FOREVER = getResources().getString(R.string.forever);
+
         from_day = 0;
         from_month = 0;
         from_year = 0;
@@ -109,10 +111,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         progressDialog = new ProgressDialog(AddNewSlotActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
 
-        /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Current date ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+        /* Current date */
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyy");
         String current_date = simpleDateFormat.format(new Date());
-        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
         date_from = current_date.substring(0, 2) + "/" + current_date.substring(2, 4) + "/" + current_date.substring(4, 8);
         from_day=Integer.parseInt(current_date.substring(0, 2));
         from_month=Integer.parseInt(current_date.substring(2, 4));
@@ -120,7 +122,11 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         tv_start_date.setText(date_from);
         date_to = getResources().getString(R.string.forever);
 
+        allListeners();
 
+    }
+
+    private void allListeners() {
         tv_start_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,20 +154,9 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 Log.d(TAG, "On click");
                 FragmentManager fragmentManager = getFragmentManager();
-//                Bundle bundle=new Bundle();
-//                bundle.putString("ComingFrom","AddNewSlotActivity");
-                StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
+StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
                 dateDialogFragment.addNewSlotActivity = AddNewSlotActivity.this;
-//                dateDialogFragment.setArguments(bundle);
                 dateDialogFragment.show(fragmentManager, null);
-
-                /*if (tv_start_date.getText().length() > 0) {
-
-                } else {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
-                    dateDialogFragment.show(fragmentManager, null);
-                }*/
 
             }
         });
@@ -172,9 +167,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 if (tv_start_date.getText().length() > 0) {
                     FragmentManager fragmentManager = getFragmentManager();
                     TillDateDialogFragment dateDialogFragment = new TillDateDialogFragment();
-//                    Bundle bundle=new Bundle();
-//                    bundle.putString("ComingFrom","AddNewSlotActivity");
-//                    dateDialogFragment.setArguments(bundle);
                     dateDialogFragment.addNewSlotActivity = AddNewSlotActivity.this;
                     dateDialogFragment.show(fragmentManager, null);
                 } else {
@@ -189,7 +181,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 if (cb_mon.isChecked()) {
                     boo_mon_checked = true;
-                    //days_array.add("M");
                 } else {
                     boo_mon_checked = false;
                 }
@@ -201,8 +192,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 if (cb_tue.isChecked()) {
                     boo_tue_checked = true;
-                    //days_array.add("T");
-                } else {
+ } else {
                     boo_tue_checked = false;
                 }
             }
@@ -213,8 +203,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 if (cb_wed.isChecked()) {
                     boo_wed_checked = true;
-                    //days_array.add("W");
-                } else {
+} else {
                     boo_wed_checked = false;
                 }
             }
@@ -225,8 +214,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 if (cb_thur.isChecked()) {
                     boo_thurs_checked = true;
-                    //days_array.add("Th");
-                } else {
+ } else {
                     boo_thurs_checked = false;
                 }
             }
@@ -237,8 +225,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 if (cb_fri.isChecked()) {
                     boo_fri_checked = true;
-                    //days_array.add("F");
-                } else {
+} else {
                     boo_fri_checked = false;
                 }
             }
@@ -249,8 +236,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 if (cb_sat.isChecked()) {
                     boo_sat_checked = true;
-                    //days_array.add("S");
-                } else {
+} else {
                     boo_sat_checked = false;
                 }
             }
@@ -261,8 +247,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 if (cb_sun.isChecked()) {
                     boo_sun_checked = true;
-                    //days_array.add("Su");
-                } else {
+} else {
                     boo_sun_checked = false;
                 }
             }
@@ -368,22 +353,14 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                         }
 
 
-                        /*StringBuilder days = new StringBuilder();
-                        for(String s: days_array)
-                            days.append(s+",");
-*/
-                        requestParams.add("name",StorageHelper.getUserDetails(AddNewSlotActivity.this,"user_id")+"_Slot");
-                        //requestParams.add("dates", String.valueOf(days_array.toArray(days)));
 
-                        //requestParams.add("dates", String.valueOf(days_array));
+                        requestParams.add("name",StorageHelper.getUserDetails(AddNewSlotActivity.this,"user_id")+"_Slot");
                         requestParams.add("dates", stringBuilder1.toString());
 
                         for(int i=0; i < days_array.size(); i++){
                             Log.d(TAG,"Day"+days_array.get(i));
                         }
                         Log.d(TAG,"days array"+String.valueOf(days_array)+", days array in string form "+stringBuilder1.toString());
-                        //Log.d(TAG,"days array"+String.valueOf(days_array.toArray(days)));
-                        //requestParams.add("dates", "M,S,Su");
                         int start_time = ((start_hour * 60) + start_min) * 60;
                         int stop_time = ((stop_hour * 60) + stop_min) * 60;
                         int intermediate_time = (24 * 60) * 60;
@@ -412,7 +389,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                                 progressDialog.dismiss();
                             }
                         },35);
-                        //requestParams.add("start_date",)
                     }
                 }
             }
@@ -445,8 +421,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                     }
 
                     Log.d(TAG, "check6");
-                    //return false;
-                }
+                  }
                 return false;
             } else {
                 int start_time = ((start_hour * 60) + start_min) * 60;
@@ -499,8 +474,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         cb_fri = (CheckBox) findViewById(R.id.cb_fri);
         cb_sat = (CheckBox) findViewById(R.id.cb_sat);
         cb_sun = (CheckBox) findViewById(R.id.cb_sun);
-        //sp_time_from = (Spinner) findViewById(R.id.sp_time_from);
-        //sp_time_to = (Spinner) findViewById(R.id.sp_time_to);
         tv_start_date = (TextView) findViewById(R.id.tv_slot_start_date);
         tv_till_date = (TextView) findViewById(R.id.tv_slot_till_date);
         tv_start_time = (TextView) findViewById(R.id.tv_slot_start_time);
@@ -549,9 +522,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         AddNewSlotActivity.date_from = String.valueOf(stringBuilder);
 
         AddNewSlotActivity.tv_till_date.setText(date_to);
-
-        // et_start_date.setText(stringBuilder.toString());
-    }
+}
 
     @Override
     public void setSelectedTillDate(Object o1, Object o2, Object o3, boolean b) {
