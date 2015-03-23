@@ -22,10 +22,10 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.ChatWidgetAdapter;
-import com.findmycoach.app.adapter.NotificationAdapter;
 import com.findmycoach.app.beans.attachment.Attachment;
 import com.findmycoach.app.beans.chats.Chats;
 import com.findmycoach.app.beans.chats.Data;
+import com.findmycoach.app.fragment.MyConnectionsFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -56,6 +56,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
     private ProgressDialog progressDialog;
     private final int STORAGE_GALLERY_IMAGE_REQUEST_CODE = 100;
     private final int STORAGE_GALLERY_VIDEO_REQUEST_CODE = 101;
+    private final int PROFILE_DETAILS = 102;
     private boolean isSocketConnected;
     public static ChatWidgetActivity chatWidgetActivity;
     private boolean isGettingProfile = false;
@@ -190,6 +191,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
+                setResult(RESULT_OK, new Intent());
                 finish();
                 break;
 
@@ -226,6 +228,15 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             path = getRealPathFromURI(data.getData());
             Log.d(TAG, path);
             sendAttachment(path, "video");
+        }
+
+        /** Update if connection is broken */
+        else if (resultCode == RESULT_OK && requestCode == PROFILE_DETAILS){
+            if(data.getStringExtra("status").equals("close_activity")){
+                MyConnectionsFragment.needToRefresh = true;
+                finish();
+            }
+
         }
     }
 
@@ -411,7 +422,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             Intent intent = new Intent(this, MentorDetailsActivity.class);
             intent.putExtra("mentorDetails", (String) object);
             intent.putExtra("connection_status", "accepted");
-            startActivity(intent);
+            startActivityForResult(intent, PROFILE_DETAILS);
             isGettingProfile = false;
             return;
         }
@@ -422,7 +433,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             Intent intent = new Intent(this, StudentDetailActivity.class);
             intent.putExtra("coming_from","ChatWidget");
             intent.putExtra("student_detail",(String) object);
-            startActivityForResult(intent, NotificationAdapter.connection_id);
+            startActivityForResult(intent, PROFILE_DETAILS);
             isGettingProfile = false;
             return;
         }
@@ -459,6 +470,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             }
         }
     }
+
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {

@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.StudentDetailActivity;
 import com.findmycoach.app.adapter.NotificationAdapter;
@@ -20,7 +21,6 @@ import com.findmycoach.app.beans.requests.ConnectionRequestsResponse;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
-import com.findmycoach.app.R;
 import com.loopj.android.http.RequestParams;
 
 public class NotificationsFragment extends Fragment implements Callback {
@@ -29,6 +29,7 @@ public class NotificationsFragment extends Fragment implements Callback {
     private ProgressDialog progressDialog;
     private NotificationAdapter notificationAdapter;
     private ConnectionRequestsResponse connectionRequestsResponse;
+    private static final int REFRESH_PAGE = 100;
 
     private static final String TAG="FMC";
 
@@ -78,29 +79,29 @@ public class NotificationsFragment extends Fragment implements Callback {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        getNotifications();
+    }
+
+    private void getNotifications() {
         progressDialog.show();
         String userId = StorageHelper.getUserDetails(getActivity(), "user_id");
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
         if(DashboardActivity.dashboardActivity.user_group == 3){
-            Log.d(TAG,"Auth Token : " + authToken + "\nUser ID : " + userId);
+            Log.d(TAG, "Auth Token : " + authToken + "\nUser ID : " + userId);
             RequestParams requestParams = new RequestParams();
             requestParams.add("invitee", userId);
-            NetworkClient.getConnectionRequests(getActivity(), requestParams, authToken, this,22);
+            NetworkClient.getConnectionRequests(getActivity(), requestParams, authToken, this, 22);
         }else if(DashboardActivity.dashboardActivity.user_group == 2){
-         progressDialog.dismiss();
+            progressDialog.dismiss();
             notificationListView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.no_data_found, new String[]{getActivity().getResources().getString(R.string.no_notification)}));
         }
-
-
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == NotificationAdapter.connection_id && resultCode == Activity.RESULT_OK && connectionRequestsResponse != null){
-            connectionRequestsResponse.getData().remove(notificationAdapter.positionToRemoveFromDetails);
-            notificationAdapter.notifyDataSetChanged();
-        }
-        notificationAdapter.positionToRemoveFromDetails = -1;
+        if (resultCode == Activity.RESULT_OK && requestCode == REFRESH_PAGE)
+            getNotifications();
+        Log.e(TAG,"'OnResult'");
         NotificationAdapter.connection_id = -1;
     }
 
@@ -131,7 +132,7 @@ public class NotificationsFragment extends Fragment implements Callback {
                     return;
                 Intent intent = new Intent(getActivity(), StudentDetailActivity.class);
                 intent.putExtra("student_detail",(String) object);
-                startActivityForResult(intent, NotificationAdapter.connection_id);
+                startActivityForResult(intent, REFRESH_PAGE);
             }
         }else if(DashboardActivity.dashboardActivity.user_group == 2){
             //TODO for student notification

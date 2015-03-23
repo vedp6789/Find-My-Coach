@@ -138,7 +138,6 @@ public class StudentDetailActivity  extends Activity implements Callback {
             finish();
         }else if (id == R.id.action_disconnect) {
             disconnect(studentDetails.getConnectionId(), studentDetails.getId());
-            Toast.makeText(this,getResources().getString(R.string.connection_disconnect_warn),Toast.LENGTH_LONG).show();
         }
         return true;
     }
@@ -157,23 +156,17 @@ public class StudentDetailActivity  extends Activity implements Callback {
     private void respondToRequest(String response) {
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
-        requestParams.add("id", NotificationAdapter.connection_id + "");
+        requestParams.add("id", NotificationAdapter.connection_id+"");
         requestParams.add("status", response);
-        Log.d("FMC", NotificationAdapter.connection_id + "");
-        Log.d("FMC", response);
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
         NetworkClient.respondToConnectionRequest(this, requestParams, this, 18);
     }
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        if(calledApiValue == 21){
-            finish();
-            return;
-        }
-        if(object == null) {
+        if(calledApiValue == 21 || calledApiValue == 18){
             Intent intent = new Intent();
+            intent.putExtra("status", "close_activity");
             setResult(RESULT_OK, intent);
             finish();
         }

@@ -39,7 +39,6 @@ import java.util.ArrayList;
 
 public class MentorDetailsActivity extends Activity implements Callback,Button.OnClickListener{
 
-    private Response mentorDetails;
     private ImageView profileImage;
     private TextView profileName;
     private TextView profileAddress;
@@ -53,7 +52,6 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     private TextView tv_mon_slots,tv_tue_slots,tv_wed_slots,tv_thur_slots,tv_fri_slots,tv_sat_slots,tv_sun_slots;
     private Button b_schedule_class;
     private String connectionStatus;
-    private Menu menu;
 
     JSONObject jsonObject,jsonObject_Data,jsonObject_slots;
     JSONArray jsonArray_sub_category, jArray_mon_slots, jArray_tue_slots, jArray_wed_slots, jArray_thu_slots, jArray_fri_slots, jArray_sat_slots, jArray_sun_slots;
@@ -89,10 +87,6 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         applyActionbarProperties();
         populateFields();
         populateDaysSlotsListView();
-
-
-
-
     }
 
     private void populateDaysSlotsListView(){
@@ -218,7 +212,6 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
 
 
         for (int j=0;j<mon_slots.size();j++){
-
             Log.d(TAG,"Mon slots size"+mon_slots.size()+" sample of data in mon_slots :"+mon_slots.get(j));
             if(j==0){
                 stringBuilder0.append(mon_slots.get(j));
@@ -279,14 +272,6 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             tv_sun_slots.setText(stringBuilder6.toString());
 
         }
-
-
-
-
-
-
-
-
     }
 
     private void applyActionbarProperties() {
@@ -307,7 +292,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         if(connectionStatus.equals("broken"))
             connectionStatus = "not connected";
         Log.d(TAG, jsonData);
-        mentorDetails = new Gson().fromJson(jsonData, Response.class);
+        Response mentorDetails = new Gson().fromJson(jsonData, Response.class);
         userInfo = mentorDetails.getData();
         profileImage = (ImageView) findViewById(R.id.profile_image);
         profileName = (TextView) findViewById(R.id.profile_name);
@@ -329,8 +314,6 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         b_schedule_class= (Button) findViewById(R.id.b_schedule_class);
         b_schedule_class.setOnClickListener(this);
 
-
-
         Log.d(TAG,"sub category length : "+jsonArray_sub_category.length()+"");
         if(jsonArray_sub_category.length() > 0){
             Log.i(TAG,"sub_category size not null");
@@ -338,7 +321,6 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         if(jsonArray_sub_category.length() <= 0){
             Log.i(TAG,"sub_category size is null");
         }
-
 
         if(connectionStatus.equals("not connected") || connectionStatus.equals("pending") || jsonArray_sub_category.length() <= 0 || noSlotsAvailable())
             b_schedule_class.setVisibility(View.GONE);
@@ -359,11 +341,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     }
 
     private boolean noSlotsAvailable(){
-        if(jArray_mon_slots.length() <= 0 && jArray_tue_slots.length() <=0 && jArray_wed_slots.length() <= 0 && jArray_thu_slots.length() <= 0 && jArray_fri_slots.length() <= 0 && jArray_sat_slots.length() <= 0 && jArray_sun_slots.length() <= 0){
-            return true;
-        }else
-            return false;
-
+        return jArray_mon_slots.length() <= 0 && jArray_tue_slots.length() <= 0 && jArray_wed_slots.length() <= 0 && jArray_thu_slots.length() <= 0 && jArray_fri_slots.length() <= 0 && jArray_sat_slots.length() <= 0 && jArray_sun_slots.length() <= 0;
     }
 
     private void populateFields() {
@@ -430,7 +408,6 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        this.menu = menu;
         if(connectionStatus.equals("not connected")) {
             getMenuInflater().inflate(R.menu.menu_mentor_details_not_connected, menu);
         }else if(connectionStatus.equals("accepted")) {
@@ -448,22 +425,17 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         Log.d(TAG,userInfo.getConnectionStatus() + " : " + userInfo.getConnectionId());
         if (id == R.id.action_connect) {
             showAlert();
-            return true;
         }
         else if (id == R.id.action_disconnect) {
             disconnect(userInfo.getConnectionId(), userInfo.getId());
-            Toast.makeText(this,getResources().getString(R.string.connection_disconnect_warn),Toast.LENGTH_LONG).show();
-            return true;
         }
         if (id == android.R.id.home) {
             finish();
         }
         if(id == Menu.FIRST){
             showRatingDialog();
-            return true;
         }
-
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     private void disconnect(String connectionId, String oppositeUSerId) {
@@ -547,11 +519,20 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
-        if(calledApiValue == 21){
-            connectionStatus = "not connected";
-            onCreateOptionsMenu(menu);
+        if(calledApiValue == 21 || calledApiValue == 17){
+            Intent intent = new Intent();
+            intent.putExtra("status", "close_activity");
+            String status = object+"";
+            try{
+                intent.putExtra("connectionId", Integer.parseInt(status)+"");
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            intent.putExtra("connectionStatus", calledApiValue == 17 ? "pending" : "broken");
+            setResult(RESULT_OK, intent);
+            finish();
         }
+        Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -563,7 +544,6 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     @Override
     public void onClick(View v) {
         if(v == b_schedule_class){
-
             if(validate()){
                 Log.d(TAG,"Start Scheduling activity");
                   Intent intent=new Intent(MentorDetailsActivity.this, ScheduleNewClass.class);
@@ -574,8 +554,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         }
     }
 
-
-    /* validate method will check whether the mentor have any free slot for class or not */
+    /** validate method will check whether the mentor have any free slot for class or not */
     private boolean validate() {
         boolean b_allow_schedule_creation=true;
         return b_allow_schedule_creation;
