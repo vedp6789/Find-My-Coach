@@ -44,9 +44,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     private WeekView mWeekView;
     private String date;
     private Calendar cal;
-
-    private static final String TAG = "FMC";
-
+private static final String TAG = "FMC";
     private static int day;
     private static int month;
     private static int year;
@@ -62,6 +60,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Intent getIntent = getIntent();
         if (getIntent != null) {
             date = getIntent.getStringExtra("date");
@@ -306,7 +305,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
                             String start_time = daySlot.getSlot_start_time();
                             String stop_time = daySlot.getSlot_stop_time();
-                            //String event_name=dayEvent.getEvent_name();
                             startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
                             startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
                             startTime.set(Calendar.MONTH, newMonth - 1);
@@ -337,7 +335,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             String l_name = dayEvent.getLname();
                             String event_id = dayEvent.getEvent_id();
                             String sub_category_name=dayEvent.getSub_category_name();
-                            //String event_name=dayEvent.getEvent_name();
                             startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
                             startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
                             startTime.set(Calendar.MONTH, newMonth - 1);

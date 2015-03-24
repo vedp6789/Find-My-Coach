@@ -63,17 +63,18 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     private static final String TAG = "FMC";
     private static String FOREVER;
 
-    private static ArrayList<String> days_array=null;
+    private static ArrayList<String> days_array = null;
 
     ProgressDialog progressDialog;
 
     private void applyActionbarProperties() {
         ActionBar actionBar = getActionBar();
-        if(actionBar != null){
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(getResources().getString(R.string.add_new_slot));
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -116,9 +117,9 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         String current_date = simpleDateFormat.format(new Date());
 
         date_from = current_date.substring(0, 2) + "/" + current_date.substring(2, 4) + "/" + current_date.substring(4, 8);
-        from_day=Integer.parseInt(current_date.substring(0, 2));
-        from_month=Integer.parseInt(current_date.substring(2, 4));
-        from_year=Integer.parseInt(current_date.substring(4, 8));
+        from_day = Integer.parseInt(current_date.substring(0, 2));
+        from_month = Integer.parseInt(current_date.substring(2, 4));
+        from_year = Integer.parseInt(current_date.substring(4, 8));
         tv_start_date.setText(date_from);
         date_to = getResources().getString(R.string.forever);
 
@@ -154,7 +155,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             public void onClick(View v) {
                 Log.d(TAG, "On click");
                 FragmentManager fragmentManager = getFragmentManager();
-StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
+                StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
                 dateDialogFragment.addNewSlotActivity = AddNewSlotActivity.this;
                 dateDialogFragment.show(fragmentManager, null);
 
@@ -192,7 +193,7 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
             public void onClick(View v) {
                 if (cb_tue.isChecked()) {
                     boo_tue_checked = true;
- } else {
+                } else {
                     boo_tue_checked = false;
                 }
             }
@@ -203,7 +204,7 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
             public void onClick(View v) {
                 if (cb_wed.isChecked()) {
                     boo_wed_checked = true;
-} else {
+                } else {
                     boo_wed_checked = false;
                 }
             }
@@ -214,7 +215,7 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
             public void onClick(View v) {
                 if (cb_thur.isChecked()) {
                     boo_thurs_checked = true;
- } else {
+                } else {
                     boo_thurs_checked = false;
                 }
             }
@@ -225,7 +226,7 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
             public void onClick(View v) {
                 if (cb_fri.isChecked()) {
                     boo_fri_checked = true;
-} else {
+                } else {
                     boo_fri_checked = false;
                 }
             }
@@ -236,7 +237,7 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
             public void onClick(View v) {
                 if (cb_sat.isChecked()) {
                     boo_sat_checked = true;
-} else {
+                } else {
                     boo_sat_checked = false;
                 }
             }
@@ -247,7 +248,7 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
             public void onClick(View v) {
                 if (cb_sun.isChecked()) {
                     boo_sun_checked = true;
-} else {
+                } else {
                     boo_sun_checked = false;
                 }
             }
@@ -259,28 +260,28 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
 
                 if (validate()) {
 
-                    days_array=new ArrayList<String>();
+                    days_array = new ArrayList<String>();
 
-                    if(boo_mon_checked){
+                    if (boo_mon_checked) {
 
                         days_array.add("M");
                     }
-                    if(boo_tue_checked){
+                    if (boo_tue_checked) {
                         days_array.add("T");
                     }
-                    if(boo_wed_checked){
+                    if (boo_wed_checked) {
                         days_array.add("W");
                     }
-                    if(boo_thurs_checked){
+                    if (boo_thurs_checked) {
                         days_array.add("Th");
                     }
-                    if(boo_fri_checked){
+                    if (boo_fri_checked) {
                         days_array.add("F");
                     }
-                    if(boo_sat_checked){
+                    if (boo_sat_checked) {
                         days_array.add("S");
                     }
-                    if(boo_sun_checked){
+                    if (boo_sun_checked) {
                         days_array.add("Su");
                     }
 
@@ -344,23 +345,22 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
                         requestParams.add("start_time", start_hour + ":" + start_min + ":" + "00");
                         requestParams.add("stop_time", stop_hour + ":" + stop_min + ":" + "00");
 
-                        StringBuilder stringBuilder1=new StringBuilder();
+                        StringBuilder stringBuilder1 = new StringBuilder();
                         stringBuilder1.append(days_array.get(0));
-                        if(days_array.size() >1){
-                            for(int i=1;i<days_array.size();i++){
-                                stringBuilder1.append(","+days_array.get(i));
+                        if (days_array.size() > 1) {
+                            for (int i = 1; i < days_array.size(); i++) {
+                                stringBuilder1.append("," + days_array.get(i));
                             }
                         }
 
 
-
-                        requestParams.add("name",StorageHelper.getUserDetails(AddNewSlotActivity.this,"user_id")+"_Slot");
+                        requestParams.add("name", StorageHelper.getUserDetails(AddNewSlotActivity.this, "user_id") + "_Slot");
                         requestParams.add("dates", stringBuilder1.toString());
 
-                        for(int i=0; i < days_array.size(); i++){
-                            Log.d(TAG,"Day"+days_array.get(i));
+                        for (int i = 0; i < days_array.size(); i++) {
+                            Log.d(TAG, "Day" + days_array.get(i));
                         }
-                        Log.d(TAG,"days array"+String.valueOf(days_array)+", days array in string form "+stringBuilder1.toString());
+
                         int start_time = ((start_hour * 60) + start_min) * 60;
                         int stop_time = ((stop_hour * 60) + stop_min) * 60;
                         int intermediate_time = (24 * 60) * 60;
@@ -371,7 +371,7 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
                         } else {
                             slot_time_value = stop_time - start_time;
                         }
-                        Log.d(TAG,"Slot time value from AddNewSlotActivity"+slot_time_value/(60 * 60));
+                        Log.d(TAG, "Slot time value from AddNewSlotActivity" + slot_time_value / (60 * 60));
                         requestParams.add("slot_time_value", String.valueOf(slot_time_value));
                         String auth_token = StorageHelper.getUserDetails(AddNewSlotActivity.this, "auth_token");
                         progressDialog.show();
@@ -379,16 +379,16 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
 
                             @Override
                             public void successOperation(Object object, int statusCode, int calledApiValue) {
-                                Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully),Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully), Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             }
 
                             @Override
                             public void failureOperation(Object object, int statusCode, int calledApiValue) {
-                                Toast.makeText(AddNewSlotActivity.this,(String) object,Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddNewSlotActivity.this, (String) object, Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             }
-                        },35);
+                        }, 35);
                     }
                 }
             }
@@ -398,30 +398,24 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
     private boolean validate() {
         if (boo_mon_checked || boo_tue_checked || boo_wed_checked || boo_thurs_checked || boo_fri_checked || boo_sat_checked || boo_sun_checked) {
             if (time_from.equals(getResources().getString(R.string.select)) || time_to.equals(getResources().getString(R.string.select))) {
-                Log.d(TAG, "check1");
                 if (time_from.equals(getResources().getString(R.string.select)) && time_to.equals(getResources().getString(R.string.select))) {
-                    Log.d(TAG, "check2");
                     Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_start_and_end_time), Toast.LENGTH_SHORT).show();
                     return false;
                 } else {
-                    Log.d(TAG, "check3");
                     if (time_from.equals(getResources().getString(R.string.select))) {
                         Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_start_time), Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "check4");
                         return false;
 
                     } else {
                         if (time_to.equals(getResources().getString(R.string.select))) {
                             Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_end_time), Toast.LENGTH_SHORT).show();
-                            Log.d(TAG, "check5");
                             return false;
                         }
 
 
                     }
 
-                    Log.d(TAG, "check6");
-                  }
+                }
                 return false;
             } else {
                 int start_time = ((start_hour * 60) + start_min) * 60;
@@ -437,14 +431,13 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
                 int minimum_difference = (Integer.parseInt(getResources().getString(R.string.slot_time_difference_in_hour)) * 60) * 60;
 
                 if (slot_time_value < minimum_difference) {
-                    Toast.makeText(AddNewSlotActivity.this,getResources().getString(R.string.slot_time_difference), Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "check7");
-                    return false;
-                }else{
-                    if((slot_time_value % 3600) > 0 ){
+                    Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.slot_time_difference), Toast.LENGTH_SHORT).show();
+                     return false;
+                } else {
+                    if ((slot_time_value % 3600) > 0) {
                         Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_slot_in_multiple_of_hour), Toast.LENGTH_SHORT).show();
                         return false;
-                    }else{
+                    } else {
                         if (tv_start_date.getText().length() > 0) {
                             return true;
                         } else {
@@ -452,8 +445,6 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
                             return false;
                         }
                     }
-
-
 
 
                 }
@@ -494,7 +485,7 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
         super.onResume();
     }
 
-
+    /* Initializes start date from StartDateDialogFragment*/
     @Override
     public void setSelectedStartDate(Object o1, Object o2, Object o3) {
         Log.d(TAG, o1.toString() + "/" + o2.toString() + "/" + o3.toString());
@@ -522,8 +513,10 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
         AddNewSlotActivity.date_from = String.valueOf(stringBuilder);
 
         AddNewSlotActivity.tv_till_date.setText(date_to);
-}
+    }
 
+
+    /* Initializes Completion date from TillDateDialogFragment */
     @Override
     public void setSelectedTillDate(Object o1, Object o2, Object o3, boolean b) {
         Log.d(TAG, o1.toString() + "/" + o2.toString() + "/" + o3.toString());
@@ -577,7 +570,7 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
 
     }
 
-
+    /* Initializes start date from StartTimeDialogFragment*/
     @Override
     public void setSelectedStartTime(Object o1, Object o2) {
         String hour = (String) o1;
@@ -588,7 +581,7 @@ StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
         tv_start_time.setText(hour + ":" + minute);
 
     }
-
+    /* Initializes start date from StopTimeDialogFragment*/
     @Override
     public void setSelectedTillTime(Object o1, Object o2) {
         String hour = (String) o1;

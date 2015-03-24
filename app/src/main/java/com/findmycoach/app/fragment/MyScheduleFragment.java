@@ -73,10 +73,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myScheduleFragment = this;
-
+/* Getting Calendar current instance*/
         _calendar = Calendar.getInstance(Locale.getDefault());
-        month = _calendar.get(Calendar.MONTH) + 1;
-        year = _calendar.get(Calendar.YEAR);
+        month = _calendar.get(Calendar.MONTH) + 1;   /* current month*/
+        year = _calendar.get(Calendar.YEAR); /* current year */
 
 
     }
@@ -87,19 +87,18 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         View view = null;
         // Checking logged in user and return respective view
         if (DashboardActivity.dashboardActivity.user_group == 2) {
-            Log.d(TAG,"Initializing mentee view ");
             view = inflater.inflate(R.layout.fragment_schedule_mentee, container, false);
             initializeMenteeView(view);
         } else if (DashboardActivity.dashboardActivity.user_group == 3) {
-            Log.d(TAG,"Initializing mentor view ");
             view = inflater.inflate(R.layout.my_calendar_view, container, false);
             initialize(view);
             applyListeners();
         }
         return view;
     }
-
+/* Initializing views for Mentee login */
     private void initializeMenteeView(View view) {
+
         prevMonth = (ImageView) view.findViewById(R.id.prevMonth);
         prevMonth.setOnClickListener(this);
 
@@ -111,13 +110,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
         calendarView = (GridView) view.findViewById(R.id.calendar);
 
-        // Initialised
-        /*arrayList_of_3_months = new ArrayList<ArrayList>();
-        arrayList_of_3_months.add(previousMonthArrayList);
-        arrayList_of_3_months.add(currentMonthArrayList);
-        arrayList_of_3_months.add(comingMonthArrayList);
-*/
 
+        /* Array list of 3 months previous, current and coming , These points Day class object for day details like class schedule*/
         previousMonthArrayList = new ArrayList<Day>();
         currentMonthArrayList = new ArrayList<Day>();
         comingMonthArrayList = new ArrayList<Day>();
@@ -131,7 +125,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         requestParams.add("student_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         StringBuilder stringBuilder = new StringBuilder();
 
-
+        /*Checking previous month possibilities for month and year as we have to get no. of days from previous month and adding this with current and coming month */
         if (month == 1) {
             Calendar calendar = new GregorianCalendar(year - 1, 11, 1);
             stringBuilder.append((year - 1));
@@ -139,8 +133,6 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             stringBuilder.append("/" + 1);
 
             days_in_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            //prev_json = getDemoCalendarDetails(days_in_prev_month, 12, year - 1);
-            //calendarEventScheduler(prev_json);
         } else {
             Calendar calendar = new GregorianCalendar(year, (month - 1) - 1, 1);
             stringBuilder.append(year);
@@ -148,39 +140,30 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             stringBuilder.append("/" + 1);
 
             days_in_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            //prev_json = getDemoCalendarDetails(days_in_prev_month, month - 1, year - 1);
-            //calendarEventScheduler(prev_json);
         }
 
 
         if (month == 12) {
             Calendar calendar = new GregorianCalendar(year + 1, 0, 1);
             days_in_next_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            //next_json = getDemoCalendarDetails(days_in_next_month, 1, year + 1);
-            //calendarEventScheduler(next_json);
         } else {
             Calendar calendar = new GregorianCalendar(year, (month - 1) + 1, 1);
             days_in_next_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            //next_json = getDemoCalendarDetails(days_in_next_month, month + 1, year);
-            //calendarEventScheduler(next_json);
-        }
+         }
 
         days_in_current_month = new GregorianCalendar(year, month - 1, 1).getActualMaximum(Calendar.DAY_OF_MONTH);
-        //current_json = getDemoCalendarDetails(days_in_current_month, month, year);
-        //calendarEventScheduler(current_json);
-
         Toast.makeText(getActivity(), getResources().getString(R.string.start_date1) + String.valueOf(stringBuilder), Toast.LENGTH_SHORT).show();
         requestParams.add("start_date", String.valueOf(stringBuilder));
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
         progressDialog.show();
-        NetworkClient.getMenteeCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 40);
+        NetworkClient.getMenteeCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 40);  /*Network operation for getting details for three months */
     }
 
     private void applyListeners() {
 
 
     }
-
+    /* Initializing views for Mentor login */
     private void initialize(View view) {
 
 
@@ -201,13 +184,6 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
         calendarView = (GridView) view.findViewById(R.id.calendar);
 
-        // Initialised
-        /*arrayList_of_3_months = new ArrayList<ArrayList>();
-        arrayList_of_3_months.add(previousMonthArrayList);
-        arrayList_of_3_months.add(currentMonthArrayList);
-        arrayList_of_3_months.add(comingMonthArrayList);
-*/
-
         previousMonthArrayList = new ArrayList<Day>();
         currentMonthArrayList = new ArrayList<Day>();
         comingMonthArrayList = new ArrayList<Day>();
@@ -221,7 +197,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         requestParams.add("mentor_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         StringBuilder stringBuilder = new StringBuilder();
 
-
+/*Checking previous month possibilities for month and year as we have to get no. of days from previous month and adding this with current and coming month */
         if (month == 1) {
             Calendar calendar = new GregorianCalendar(year - 1, 11, 1);
             stringBuilder.append((year - 1));
@@ -229,41 +205,31 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             stringBuilder.append("/" + 1);
 
             days_in_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            //prev_json = getDemoCalendarDetails(days_in_prev_month, 12, year - 1);
-            //calendarEventScheduler(prev_json);
-        } else {
+         } else {
             Calendar calendar = new GregorianCalendar(year, (month - 1) - 1, 1);
             stringBuilder.append(year);
             stringBuilder.append("/" + (month - 1));
             stringBuilder.append("/" + 1);
 
             days_in_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            //prev_json = getDemoCalendarDetails(days_in_prev_month, month - 1, year - 1);
-            //calendarEventScheduler(prev_json);
-        }
+         }
 
 
         if (month == 12) {
             Calendar calendar = new GregorianCalendar(year + 1, 0, 1);
             days_in_next_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            //next_json = getDemoCalendarDetails(days_in_next_month, 1, year + 1);
-            //calendarEventScheduler(next_json);
-        } else {
+         } else {
             Calendar calendar = new GregorianCalendar(year, (month - 1) + 1, 1);
             days_in_next_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-            //next_json = getDemoCalendarDetails(days_in_next_month, month + 1, year);
-            //calendarEventScheduler(next_json);
-        }
+         }
 
         days_in_current_month = new GregorianCalendar(year, month - 1, 1).getActualMaximum(Calendar.DAY_OF_MONTH);
-        //current_json = getDemoCalendarDetails(days_in_current_month, month, year);
-        //calendarEventScheduler(current_json);
 
         Toast.makeText(getActivity(), getResources().getString(R.string.start_date1) + String.valueOf(stringBuilder), Toast.LENGTH_SHORT).show();
         requestParams.add("start_date", String.valueOf(stringBuilder));
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
         progressDialog.show();
-        NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 37);
+        NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 37);/*Network operation for getting details for three months */
     }
 
 
@@ -284,7 +250,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-
+        /* Add New Slot option for mentor*/
         if(Integer.parseInt(StorageHelper.getUserGroup(getActivity(),"user_group")) == 3){
             if (v == add_slot) {
 
@@ -301,7 +267,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         }
 
 
-
+        /* Operation on previous month or next month button click */
         if (v == prevMonth) {
             showPrevMonth();
 
@@ -325,9 +291,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             month--;
         }
 
-
-        //    setGridCellAdapterToDate(0, month, year);
-    }
+}
 
     private void newPreviousMonth() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -385,9 +349,6 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     public void showNextMonth() {
         newNextMonth();
-
-        Log.d(TAG, "initial month: " + month + ", year: " + year);
-
         if (month > 11) {
             month = 1;
             year++;
@@ -395,9 +356,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             month++;
         }
 
-
-        //   setGridCellAdapterToDate(1, month, year);
-    }
+}
 
     private void newNextMonth() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -405,17 +364,14 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         int year_for_this = year;
         int month_for_this = month;
         if (month == 12) {
-            Log.d(TAG, "inside month equals 1");
             year_for_this++;
             month_for_this = 2;
         } else {
             if (month == 11) {
-                Log.d(TAG, "inside month equals 2");
                 year_for_this++;
                 month_for_this = 1;
 
             } else {
-                Log.d(TAG, "inside month not equals 1 and 2");
                 year_for_this = year;
                 month_for_this = month + 2;
             }
@@ -766,13 +722,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             try {
                 JSONObject jsonObject = new JSONObject((String) object);
                 JSONArray jsonArray_data = jsonObject.getJSONArray("data");
-/*
 
-                    comingMonthArrayList=currentMonthArrayList;
-                    currentMonthArrayList=previousMonthArrayList;
-                    previousMonthArrayList=null;
-                    previousMonthArrayList = new ArrayList<Day>();
-*/
 
 
                 previousMonthArrayList = currentMonthArrayList;
@@ -850,13 +800,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             try {
                 JSONObject jsonObject = new JSONObject((String) object);
                 JSONArray jsonArray_data = jsonObject.getJSONArray("data");
-/*
 
-                    comingMonthArrayList=currentMonthArrayList;
-                    currentMonthArrayList=previousMonthArrayList;
-                    previousMonthArrayList=null;
-                    previousMonthArrayList = new ArrayList<Day>();
-*/
 
 
                 previousMonthArrayList = currentMonthArrayList;

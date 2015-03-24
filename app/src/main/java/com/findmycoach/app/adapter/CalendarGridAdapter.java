@@ -67,7 +67,6 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         this.list = new ArrayList<String>();
         this.myScheduleFragment = myScheduleFragment;
 
-        Log.d(TAG,"Inside CalendarGridAdapter");
 
         Calendar calendar = Calendar.getInstance();
         setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
@@ -78,11 +77,11 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         CURRENT_YEAR_OF_CALENDAR = calendar.get(Calendar.YEAR);
         month_in_foreground = month - 1;
 
-        Log.d(TAG, "Current Month of Calendar : " + CURRENT_MONTH_OF_CALENDAR);
+        /*Log.d(TAG, "Current Month of Calendar : " + CURRENT_MONTH_OF_CALENDAR);
         Log.d(TAG, "Current Year of Calendar : " + CURRENT_YEAR_OF_CALENDAR);
         Log.d(TAG, "Current day of month : " + currentDayOfMonth);
         Log.d(TAG, "Current week day : "  + currentWeekDay);
-
+*/
 
         CalendarGridAdapter.prev_month_data=new ArrayList<Day>();
         CalendarGridAdapter.current_month_data=new ArrayList<Day>();
@@ -90,10 +89,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         CalendarGridAdapter.prev_month_data=prev_month_data;
         CalendarGridAdapter.current_month_data=current_month_data;
         CalendarGridAdapter.coming_month_data=coming_month_data;
-        // Print Month
+
         printMonth(month, year);
 
-        // Find Number of Events
         eventsPerMonthMap = findNumberOfEventsPerMonth(year, month);
     }
 
@@ -256,10 +254,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                 List<DayEvent> dayEvents = day.getDayEvents();
                 if (dayEvents.size() > 0) {
                     gridcell.setBackgroundColor(new Color().CYAN);
-                    /*for (int i = 0; i < dayEvents.size(); i++) {
-                        dayEvent = dayEvents.get(i);
 
-                    }*/
 
                 }
 

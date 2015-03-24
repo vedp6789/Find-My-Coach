@@ -65,7 +65,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private static int till_day;// completion day of the schedule
     private static int till_month;//completion month of the schedule
     private static int till_year;//completion year of the schedule
-
     private ProgressDialog progressDialog;
 
 
@@ -84,19 +83,14 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
     }
 
+    /* Populate the respective layout */
     private void populateFields() {
-        Log.d(TAG, "Inside populateFields method");
         sub_category_name = new ArrayList<String>();
 
         try {
+            parseJSON();
 
-            mentor_Details = new JSONObject(getIntent().getStringExtra("mentor_details"));
-            Log.d(TAG, "Mentors Detail: " + mentor_Details.toString());
-            mentor_data = mentor_Details.getJSONObject("data");
-            slots_detail = new JSONObject();
-            slots_detail = mentor_Details.getJSONObject("freeSlots");
-            Log.d(TAG, "Slots detail: " + slots_detail.toString());
-            jsonArray_sub_category_name = mentor_data.getJSONArray("sub_category_name");
+            /* creating array of subcategories to populate subcategory/subject spinner */
             for (int i = 0; i < jsonArray_sub_category_name.length(); i++) {
                 sub_category_name.add(jsonArray_sub_category_name.getString(i));
             }
@@ -116,91 +110,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 }
             });
 
-            mon_slots = slots_detail.getJSONArray("M");
-            tue_slots = slots_detail.getJSONArray("T");
-            wed_slots = slots_detail.getJSONArray("W");
-            thu_slots = slots_detail.getJSONArray("Th");
-            fri_slots = slots_detail.getJSONArray("F");
-            sat_slots = slots_detail.getJSONArray("S");
-            sun_slots = slots_detail.getJSONArray("Su");
-            //   Log.d(TAG,"Mon slots"+mon_slots.toString());
-
-
-            slotsTimeTreeSet = new TreeSet<Float>();
-
-
-            for (int m = 0; m < mon_slots.length(); m++) {
-                jsonArray = mon_slots.getJSONArray(m);
-                String start_time = jsonArray.getString(0);
-                String aFloat = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
-                float v = Float.parseFloat(aFloat);
-                //  Log.d(TAG,"Float value for start time : "+ v);
-                slotsTimeTreeSet.add(v);
-
-            }
-            for (int t = 0; t < tue_slots.length(); t++) {
-                jsonArray = tue_slots.getJSONArray(t);
-                String start_time = jsonArray.getString(0);
-                String aFloat = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
-                float v = Float.parseFloat(aFloat);
-                //  Log.d(TAG,"Float value for start time : "+ v);
-                slotsTimeTreeSet.add(v);
-
-            }
-            for (int w = 0; w < wed_slots.length(); w++) {
-                jsonArray = wed_slots.getJSONArray(w);
-                String start_time = jsonArray.getString(0);
-                String aFloat = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
-                float v = Float.parseFloat(aFloat);
-                //  Log.d(TAG,"Float value for start time : "+ v);
-                slotsTimeTreeSet.add(v);
-
-            }
-            for (int th = 0; th < thu_slots.length(); th++) {
-                jsonArray = thu_slots.getJSONArray(th);
-                String start_time = jsonArray.getString(0);
-                String aFloat = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
-                float v = Float.parseFloat(aFloat);
-                //  Log.d(TAG,"Float value for start time : "+ v);
-                slotsTimeTreeSet.add(v);
-
-            }
-            for (int f = 0; f < fri_slots.length(); f++) {
-                jsonArray = fri_slots.getJSONArray(f);
-                String start_time = jsonArray.getString(0);
-                String aFloat = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
-                float v = Float.parseFloat(aFloat);
-                //  Log.d(TAG,"Float value for start time : "+ v);
-                slotsTimeTreeSet.add(v);
-
-            }
-            for (int s = 0; s < sat_slots.length(); s++) {
-                jsonArray = sat_slots.getJSONArray(s);
-                String start_time = jsonArray.getString(0);
-                String aFloat = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
-                float v = Float.parseFloat(aFloat);
-                // Log.d(TAG,"Float value for start time : "+ v);
-                slotsTimeTreeSet.add(v);
-
-            }
-            for (int su = 0; su < sun_slots.length(); su++) {
-                jsonArray = sun_slots.getJSONArray(su);
-                String start_time = jsonArray.getString(0);
-                String aFloat = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
-                float v = Float.parseFloat(aFloat);
-                //Log.d(TAG,"Float value for start time : "+ v);
-                slotsTimeTreeSet.add(v);
-
-            }
-            slot_timings = new ArrayList<String>();
-
-            Iterator<Float> itr = slotsTimeTreeSet.iterator();
-            while (itr.hasNext()) {
-                float start_time = itr.next();
-                slot_timings.add(String.valueOf(start_time) + "-" + String.valueOf(++start_time));
-
-            }
-
+            /* Mentor for spinner population*/
             String[] mentor_for = {getResources().getString(R.string.self), getResources().getString(R.string.child)};
             ArrayAdapter arrayAdapter1_mentor_for = new ArrayAdapter(this, android.R.layout.simple_spinner_item, mentor_for);
             arrayAdapter1_mentor_for.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -218,6 +128,18 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             });
 
 
+
+            /* Creating array list of slot timing each of 1 hour by incrementing different start time from TreeSet by 1*/
+            Iterator<Float> itr = slotsTimeTreeSet.iterator();
+            while (itr.hasNext()) {
+                float start_time = itr.next();
+                slot_timings.add(String.valueOf(start_time) + "-" + String.valueOf(++start_time));
+
+            }
+
+
+
+            /* Populating timing spinner and according to time selection, a filter over days availability is going to be applied. */
             ArrayAdapter arrayAdapter1 = new ArrayAdapter(this, android.R.layout.simple_spinner_item, slot_timings);
             arrayAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             sp_class_timing.setAdapter(arrayAdapter1);
@@ -225,8 +147,11 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     selected_time = parent.getItemAtPosition(position).toString();
+
+
                     boolean b_m = false, b_t = false, b_w = false, b_th = false, b_f = false, b_s = false, b_su = false;
 
+                    /* Initially making all check boxes enabled and checked. These get disabled and unchecked according to timing of the slot selected by user */
                     cb_mon.setEnabled(true);
                     cb_tue.setEnabled(true);
                     cb_wed.setEnabled(true);
@@ -247,8 +172,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                     String selected_start_time = selected_time.split("-", 2)[0];
                     String selected_stop_time = selected_time.split("-", 2)[1];
 
-                    Log.d(TAG, "selected start time :" + selected_start_time + " , selected stop time : " + selected_stop_time);
-
 
                     if (mon_slots.length() > 0) {
                         for (int m = 0; m < mon_slots.length(); m++) {
@@ -259,11 +182,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                                 String startTime_in_float_format = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
                                 String stopTime_in_float_format = stop_time.split(":", 3)[0] + "." + stop_time.split(":", 3)[1];
                                 if (startTime_in_float_format.equals(selected_start_time) && stopTime_in_float_format.equals(selected_stop_time)) {
-                                    Log.d(TAG, "time get matched for monday");
                                     b_m = true;
                                 } else {
-                                    Log.d(TAG, "time not get matched for monday");
-
                                 }
 
                             } catch (JSONException e) {
@@ -273,7 +193,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
                         }
                     } else {
-                        Log.d(TAG, "time not get matched for monday from else part");
                         cb_mon.setChecked(false);
                     }
 
@@ -287,10 +206,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                                 String startTime_in_float_format = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
                                 String stopTime_in_float_format = stop_time.split(":", 3)[0] + "." + stop_time.split(":", 3)[1];
                                 if (startTime_in_float_format.equals(selected_start_time) && stopTime_in_float_format.equals(selected_stop_time)) {
-                                    Log.d(TAG, "time get matched for tuesday");
                                     b_t = true;
                                 } else {
-                                    Log.d(TAG, "time not get matched for tuesday");
 
                                 }
                             } catch (JSONException e) {
@@ -300,7 +217,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
                         }
                     } else {
-                        Log.d(TAG, "time not get matched for tuesday from else part");
                         cb_tue.setChecked(false);
                     }
 
@@ -314,10 +230,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                                 String startTime_in_float_format = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
                                 String stopTime_in_float_format = stop_time.split(":", 3)[0] + "." + stop_time.split(":", 3)[1];
                                 if (startTime_in_float_format.equals(selected_start_time) && stopTime_in_float_format.equals(selected_stop_time)) {
-                                    Log.d(TAG, "time get matched for wednesday");
                                     b_w = true;
                                 } else {
-                                    Log.d(TAG, "time not get matched for wednesday");
+
 
                                 }
                             } catch (JSONException e) {
@@ -327,7 +242,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
                         }
                     } else {
-                        Log.d(TAG, "time not get matched for wednesday from else part");
                         cb_wed.setChecked(false);
                     }
 
@@ -340,11 +254,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                                 String startTime_in_float_format = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
                                 String stopTime_in_float_format = stop_time.split(":", 3)[0] + "." + stop_time.split(":", 3)[1];
                                 if (startTime_in_float_format.equals(selected_start_time) && stopTime_in_float_format.equals(selected_stop_time)) {
-                                    Log.d(TAG, "time get matched for thursday");
                                     b_th = true;
                                 } else {
-                                    Log.d(TAG, "time not get matched for thurday");
-
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -353,7 +264,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
                         }
                     } else {
-                        Log.d(TAG, "time not get matched for thurday from else part");
                         cb_thu.setChecked(false);
                     }
 
@@ -367,11 +277,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                                 String startTime_in_float_format = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
                                 String stopTime_in_float_format = stop_time.split(":", 3)[0] + "." + stop_time.split(":", 3)[1];
                                 if (startTime_in_float_format.equals(selected_start_time) && stopTime_in_float_format.equals(selected_stop_time)) {
-                                    Log.d(TAG, "time get matched for fri");
                                     b_f = true;
                                 } else {
-                                    Log.d(TAG, "time not get matched for fri");
-
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -380,7 +287,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
                         }
                     } else {
-                        Log.d(TAG, "time not get matched for fri from else part");
                         cb_fri.setChecked(false);
                     }
 
@@ -394,11 +300,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                                 String startTime_in_float_format = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
                                 String stopTime_in_float_format = stop_time.split(":", 3)[0] + "." + stop_time.split(":", 3)[1];
                                 if (startTime_in_float_format.equals(selected_start_time) && stopTime_in_float_format.equals(selected_stop_time)) {
-                                    Log.d(TAG, "time get matched for satday");
                                     b_s = true;
                                 } else {
-                                    Log.d(TAG, "time not get matched for satday");
-
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -407,7 +310,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
                         }
                     } else {
-                        Log.d(TAG, "time not get matched for satday from else part");
                         cb_sat.setChecked(false);
                     }
 
@@ -421,11 +323,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                                 String startTime_in_float_format = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
                                 String stopTime_in_float_format = stop_time.split(":", 3)[0] + "." + stop_time.split(":", 3)[1];
                                 if (startTime_in_float_format.equals(selected_start_time) && stopTime_in_float_format.equals(selected_stop_time)) {
-                                    Log.d(TAG, "time get matched for sunday");
                                     b_su = true;
                                 } else {
-                                    Log.d(TAG, "time not get matched for sunday");
-
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -434,10 +333,12 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
                         }
                     } else {
-                        Log.d(TAG, "time not get matched for sunday from else part");
                         cb_sun.setChecked(false);
                     }
 
+
+
+                    /* Checking boolean variable for days which are not available for selected timing and making these disabled and unchecked*/
                     if (!b_m) {
                         cb_mon.setEnabled(false);
                         cb_mon.setChecked(false);
@@ -477,16 +378,106 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 }
             });
 
+            /*Checking mentor's availability to mentee location, if mentor is not going to be available then address is not going to be needed from mentee so disabling it*/
             mentor_availability = mentor_data.getString("availability_yn");
             if (!mentor_availability.equals("1")) {
                 LinearLayout linearLayout = (LinearLayout) findViewById(R.id.ll_location);
                 linearLayout.setVisibility(View.GONE);
-                //et_location.setEnabled(false);
             }
-            // mentor_data.get()
 
         } catch (JSONException e) {
 
+            e.printStackTrace();
+        }
+
+    }
+
+    /* Picking different start-time of slot, from different days */
+    private void createTreeSetOfSlotStartTime() {
+        slotsTimeTreeSet = new TreeSet<Float>();  /* Purpose of using TreeSet is to store slot start-time and in ascending order */
+        try {
+            for (int m = 0; m < mon_slots.length(); m++) {
+                jsonArray = mon_slots.getJSONArray(m);
+                String start_time = jsonArray.getString(0);
+                String aFloat = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
+                float v = Float.parseFloat(aFloat);
+                slotsTimeTreeSet.add(v);
+
+            }
+            for (int t = 0; t < tue_slots.length(); t++) {
+                jsonArray = tue_slots.getJSONArray(t);
+                String start_time = jsonArray.getString(0);
+                String aFloat = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
+                float v = Float.parseFloat(aFloat);
+                slotsTimeTreeSet.add(v);
+
+            }
+            for (int w = 0; w < wed_slots.length(); w++) {
+                jsonArray = wed_slots.getJSONArray(w);
+                String start_time = jsonArray.getString(0);
+                String aFloat = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
+                float v = Float.parseFloat(aFloat);
+                slotsTimeTreeSet.add(v);
+
+            }
+            for (int th = 0; th < thu_slots.length(); th++) {
+                jsonArray = thu_slots.getJSONArray(th);
+                String start_time = jsonArray.getString(0);
+                String aFloat = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
+                float v = Float.parseFloat(aFloat);
+                slotsTimeTreeSet.add(v);
+
+            }
+            for (int f = 0; f < fri_slots.length(); f++) {
+                jsonArray = fri_slots.getJSONArray(f);
+                String start_time = jsonArray.getString(0);
+                String aFloat = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
+                float v = Float.parseFloat(aFloat);
+                slotsTimeTreeSet.add(v);
+
+            }
+            for (int s = 0; s < sat_slots.length(); s++) {
+                jsonArray = sat_slots.getJSONArray(s);
+                String start_time = jsonArray.getString(0);
+                String aFloat = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
+                float v = Float.parseFloat(aFloat);
+                slotsTimeTreeSet.add(v);
+
+            }
+            for (int su = 0; su < sun_slots.length(); su++) {
+                jsonArray = sun_slots.getJSONArray(su);
+                String start_time = jsonArray.getString(0);
+                String aFloat = start_time.split(":", 3)[0] + "." + start_time.split(":", 3)[1];
+                float v = Float.parseFloat(aFloat);
+                slotsTimeTreeSet.add(v);
+
+            }
+            slot_timings = new ArrayList<String>();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /* parsing JSON string */
+    private void parseJSON() {
+        try {
+            mentor_Details = new JSONObject(getIntent().getStringExtra("mentor_details"));
+            mentor_data = mentor_Details.getJSONObject("data");
+            slots_detail = new JSONObject();
+            slots_detail = mentor_Details.getJSONObject("freeSlots");
+            jsonArray_sub_category_name = mentor_data.getJSONArray("sub_category_name");
+            mon_slots = slots_detail.getJSONArray("M");
+            tue_slots = slots_detail.getJSONArray("T");
+            wed_slots = slots_detail.getJSONArray("W");
+            thu_slots = slots_detail.getJSONArray("Th");
+            fri_slots = slots_detail.getJSONArray("F");
+            sat_slots = slots_detail.getJSONArray("S");
+            sun_slots = slots_detail.getJSONArray("Su");
+
+            createTreeSetOfSlotStartTime();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -716,25 +707,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         Log.d(TAG, "arrayList_days size" + arrayList_days.size());
         if (arrayList_days.size() > 0) {
             return true;
-            /*StringBuilder stringBuilder1=new StringBuilder();
-            if(arrayList_days.size() > 1){
-                stringBuilder1.append(arrayList_days.get(0));
-                for(int i=1;i<arrayList_days.size();i++){
-                    stringBuilder1.append(","+arrayList_days.get(i));
-                }
-            }else{
-                stringBuilder1.append(arrayList_days.get(0));
-            }
 
-            requestParams.add("days",stringBuilder1.toString());
-            requestParams.add("start_date", tv_from_date.getText().toString());
-            requestParams.add("stop_date",tv_to_date.getText().toString());
-            requestParams.add("sub_category_name",selected_subject);
-
-            Log.d(TAG,"Data going to be validated at the time of successful date selection \n id : "+mentor_data.get("id")+", start time : "+start_time.split(":")[0] + ":" + start_time.split(":")[1] +":00"+", stop time :"+stop_time.split(":")[0]+":"+stop_time.split(":")[1]+":00"+" , days : "+stringBuilder1.toString()+", start date : "+ tv_from_date.getText().toString()+", stop_date : "+tv_to_date.getText().toString()+", sub category name : "+selected_subject.toString());
-*/
         } else {
-            //Toast.makeText(ScheduleNewClass.this, "Please select at least one week-day ", Toast.LENGTH_SHORT).show();
+
             return false;
 
         }
@@ -813,10 +788,19 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             requestParams.add("stop_date", tv_to_date.getText().toString());
             requestParams.add("sub_category_name", selected_subject);
             if (mentor_availability.equals("1")) {
-
-                requestParams.add("mentee_address", et_location.getText().toString());
+                   requestParams.add("mentee_address", et_location.getText().toString());
             }
             requestParams.add("mentor_for", selected_mentor_for);
+
+
+            if(rb_pay_now.isChecked()){
+                requestParams.add("mentee_payment","1");  /* Flag is 1 if mentee  selected pay now*/
+
+            }else{
+                requestParams.add("mentee_payment","0");  /* Flag is 0 if mentee selected payment personally */
+            }
+
+
 
 
             progressDialog.show();
