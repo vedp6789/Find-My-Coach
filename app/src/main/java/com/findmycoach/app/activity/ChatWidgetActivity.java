@@ -48,7 +48,7 @@ import java.util.List;
  */
 public class ChatWidgetActivity extends Activity implements View.OnClickListener, Callback {
 
-    private String receiverName, receiverId, currentUserId;
+    private String receiverName, receiverId, currentUserId, receiverImage;
     private ListView chatWidgetLv;
     private EditText msgToSend;
     public ChatWidgetAdapter chatWidgetAdapter;
@@ -96,6 +96,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         if (getUserIntent != null) {
             receiverId = getUserIntent.getStringExtra("receiver_id").trim();
             receiverName = getUserIntent.getStringExtra("receiver_name").trim();
+            receiverImage = getUserIntent.getStringExtra("receiver_image").trim();
         }
         chatWidgetLv = (ListView) findViewById(R.id.chatWidgetLv);
         msgToSend = (EditText) findViewById(R.id.msgToSendET);
@@ -135,7 +136,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         chatWidgetLv.setAdapter(chatWidgetAdapter);
     }
 
-    /** Adding cutom action bar to display Receiver name, add click listener to title */
+    /** Adding custom action bar to display Receiver name, add click listener to title */
     private void applyActionbarProperties() {
         ActionBar actionBar = getActionBar();
         if(actionBar != null) {
@@ -155,6 +156,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
                 }
             });
             actionBar.setCustomView(customView);
+            Log.v(TAG, receiverImage);
         }
     }
 

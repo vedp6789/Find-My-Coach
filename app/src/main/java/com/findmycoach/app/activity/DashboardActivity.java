@@ -18,9 +18,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,6 +80,7 @@ public class DashboardActivity extends FragmentActivity
     Context context;
     private ActionBar actionBar;
     public static TextView customTitle;
+    private
 
     int fragment_to_launch_from_notification = 0;  ///  On a tap over Push notification, then it will be used to identify which operation to perform
     int group_push_notification = 0;      /// it will identify push notification for which type of user.
@@ -519,21 +520,23 @@ public class DashboardActivity extends FragmentActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
-        FrameLayout container = (FrameLayout) findViewById(R.id.container);
+        RelativeLayout container = (RelativeLayout) findViewById(R.id.wholeContainer);
+        ImageView drawerIcon = (ImageView) findViewById(R.id.drawerIcon);
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout), container);
+                (DrawerLayout) findViewById(R.id.drawer_layout), container, drawerIcon);
         onNavigationDrawerItemSelected(0);
         userToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
 
 
         actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowCustomEnabled(true);
-        View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
-        customTitle = (TextView) customView.findViewById(R.id.actionbarTitle);
+        actionBar.hide();
+//        actionBar.setDisplayShowTitleEnabled(false);
+//        actionBar.setDisplayShowCustomEnabled(true);
+//        View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
+        customTitle = (TextView) findViewById(R.id.actionbarTitle);
         customTitle.setText(getResources().getString(R.string.app_name));
-        actionBar.setCustomView(customView);
+//        actionBar.setCustomView(customView);
     }
 
     @Override

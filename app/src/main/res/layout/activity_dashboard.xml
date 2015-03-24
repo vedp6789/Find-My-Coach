@@ -6,10 +6,48 @@
     android:layout_height="match_parent"
     tools:context="com.findmycoach.app.activity.DashboardActivity">
 
-    <FrameLayout
-        android:id="@+id/container"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:id="@+id/wholeContainer">
+
+        <RelativeLayout
+            android:id="@+id/actionBar"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:background="#cccc"
+            android:layout_height="50dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="22sp"
+                android:singleLine="true"
+                android:layout_marginLeft="20dp"
+                android:textColor="@android:color/black"
+                android:gravity="center_vertical"
+                android:id="@+id/actionbarTitle" />
+
+            <ImageView
+                android:src="@drawable/ic_drawer"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:padding="15dp"
+                android:id="@+id/drawerIcon"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_below="@+id/actionBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        </RelativeLayout>
 
     <fragment
         android:id="@+id/navigation_drawer"
