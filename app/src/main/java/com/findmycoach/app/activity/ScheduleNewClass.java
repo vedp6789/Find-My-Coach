@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.app.FragmentManager;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,11 +22,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.fragment_mentee.ChildDOB;
+import com.findmycoach.app.fragment_mentor.Schedule;
 import com.findmycoach.app.fragment_mentor.StartDateDialogFragment;
 import com.findmycoach.app.fragment_mentor.TillDateDialogFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.SetDate;
+import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
@@ -66,6 +70,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private static int till_month;//completion month of the schedule
     private static int till_year;//completion year of the schedule
     private ProgressDialog progressDialog;
+    public static String child_DOB=null;
 
 
     @Override
@@ -76,7 +81,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         progressDialog = new ProgressDialog(ScheduleNewClass.this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         applyActionbarProperties(fname);
-
 
         initialize();
 
@@ -110,7 +114,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 }
             });
 
-            /* Mentor for spinner population*/
+            /* Mentor-for spinner data */
             String[] mentor_for = {getResources().getString(R.string.self), getResources().getString(R.string.child)};
             ArrayAdapter arrayAdapter1_mentor_for = new ArrayAdapter(this, android.R.layout.simple_spinner_item, mentor_for);
             arrayAdapter1_mentor_for.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -118,7 +122,15 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             sp_mentor_for.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    child_DOB=null;
+                    selected_mentor_for=null;
                     selected_mentor_for = (String) parent.getItemAtPosition(position);
+                    if(selected_mentor_for.equals(getResources().getString(R.string.child))){
+                       FragmentManager fragmentManager=getFragmentManager();
+                        ChildDOB childDOB=new ChildDOB();
+                        childDOB.scheduleNewClass=ScheduleNewClass.this;
+                        childDOB.show(fragmentManager,null);
+                    }
                 }
 
                 @Override
@@ -232,8 +244,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                                 if (startTime_in_float_format.equals(selected_start_time) && stopTime_in_float_format.equals(selected_stop_time)) {
                                     b_w = true;
                                 } else {
-
-
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -758,9 +768,33 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     }
 
     private void checkForValidity() {
+        if(selected_mentor_for.equals("Child")){
+
+            Log.i(TAG,"child dob "+child_DOB);
+            if(child_DOB != null){
+                Log.d(TAG,"Child DOB :"+child_DOB);
+                proceedWithValidity();
+            }else{
+                Toast.makeText(ScheduleNewClass.this,"Child's date of birth please! ",Toast.LENGTH_LONG).show();
+                FragmentManager fragmentManager=getFragmentManager();
+                ChildDOB childDOB=new ChildDOB();
+                childDOB.show(fragmentManager,null);
+            }
+        }else{
+            proceedWithValidity();
+        }
+
+
+
+
+    }
+
+    private void proceedWithValidity() {
         try {
             requestParams = new RequestParams();
-            requestParams.add("id", mentor_data.getString("id"));
+            requestParams.add("student_id", StorageHelper.getUserDetails(ScheduleNewClass.this,"user_id"));
+            Log.i(TAG,"mentor_id"+mentor_data.getString("id"));
+            requestParams.add("mentor_id", mentor_data.getString("id"));
             Log.d(TAG, "Timing selected :" + String.valueOf(selected_time));
             String timing_selected = String.valueOf(selected_time);
             String start_time = timing_selected.split("-")[0];
@@ -783,22 +817,33 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 stringBuilder1.append(arrayList_days.get(0));
             }
 
-            requestParams.add("days", stringBuilder1.toString());
-            requestParams.add("start_date", tv_from_date.getText().toString());
-            requestParams.add("stop_date", tv_to_date.getText().toString());
+            String start_date=tv_from_date.getText().toString();
+            String stop_date=tv_to_date.getText().toString();
+
+            requestParams.add("dates", stringBuilder1.toString());
+            requestParams.add("start_date", start_date.split("/")[2]+"-"+start_date.split("/")[1]+"-"+start_date.split("/")[0]);
+            requestParams.add("stop_date", stop_date.split("/")[2]+"-"+stop_date.split("/")[1]+"-"+stop_date.split("/")[0]);
+            Log.i(TAG,"Student id"+StorageHelper.getUserDetails(ScheduleNewClass.this,"user_id"));
+            Log.d(TAG,"start_date ::::"+start_date.split("/")[2]+"-"+start_date.split("/")[1]+"-"+start_date.split("/")[0]+"stop_Date:::"+stop_date.split("/")[2]+"-"+stop_date.split("/")[1]+"-"+stop_date.split("/")[0]);
             requestParams.add("sub_category_name", selected_subject);
+            requestParams.add("availability",mentor_availability);
             if (mentor_availability.equals("1")) {
-                   requestParams.add("mentee_address", et_location.getText().toString());
+                requestParams.add("location", et_location.getText().toString());
             }
-            requestParams.add("mentor_for", selected_mentor_for);
+            if(selected_mentor_for.equals("Child")){
+                requestParams.add("date_of_birth_kid",child_DOB);
+            }
+            //requestParams.add("mentor_for", selected_mentor_for);
+
 
 
             if(rb_pay_now.isChecked()){
-                requestParams.add("mentee_payment","1");  /* Flag is 1 if mentee  selected pay now*/
+                requestParams.add("payment","1");  /* Flag is 1 if mentee  selected pay now*/
 
             }else{
-                requestParams.add("mentee_payment","0");  /* Flag is 0 if mentee selected payment personally */
+                requestParams.add("payment","0");  /* Flag is 0 if mentee selected payment personally */
             }
+
 
 
 
@@ -865,10 +910,12 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
+        Toast.makeText(ScheduleNewClass.this,(String)object,Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
+        Toast.makeText(ScheduleNewClass.this,(String)object,Toast.LENGTH_SHORT).show();
     }
 }

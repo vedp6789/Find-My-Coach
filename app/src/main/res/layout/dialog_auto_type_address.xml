@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <AutoCompleteTextView
+        android:layout_alignParentTop="true"
+        android:id="@+id/auto_tv_location"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/custom_edittext"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        android:hint="@string/loc"
+        android:inputType="textAutoComplete"
+        android:padding="4dp"/>
+
+    <Button
+        android:id="@+id/b_ok"
+        android:layout_below="@id/auto_tv_location"
+        android:text="@string/ok"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+</RelativeLayout>

@@ -5,11 +5,14 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +26,7 @@ import com.findmycoach.app.adapter.CalendarGridAdapter;
 import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
+import com.findmycoach.app.fragment_mentor.LocationForSchedule;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -42,6 +46,7 @@ import java.util.Locale;
 public class MyScheduleFragment extends Fragment implements View.OnClickListener, Callback {
 
     private TextView currentMonth, add_slot, add_vacation;
+    CheckBox cb_calendar_by_location;
     private ImageView prevMonth;
     private ImageView nextMonth;
     private GridView calendarView;
@@ -58,6 +63,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public static ArrayList<Day> currentMonthArrayList = null;
     public static ArrayList<Day> comingMonthArrayList = null;
     public JSONArray prev_json, current_json, next_json;
+    public String calendar_by_location =null;
 
 
     public MyScheduleFragment() {
@@ -77,6 +83,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         _calendar = Calendar.getInstance(Locale.getDefault());
         month = _calendar.get(Calendar.MONTH) + 1;   /* current month*/
         year = _calendar.get(Calendar.YEAR); /* current year */
+
+
 
 
     }
@@ -164,7 +172,21 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     }
     /* Initializing views for Mentor login */
-    private void initialize(View view) {
+    public  void initialize(final View view) {
+        cb_calendar_by_location= (CheckBox) view.findViewById(R.id.cb_calendar_by_location);
+        cb_calendar_by_location.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Toast.makeText(getActivity(),""+isChecked,Toast.LENGTH_SHORT).show();
+                if(isChecked){
+                    FragmentManager fragmentManager=getFragmentManager();
+                    LocationForSchedule locationForSchedule=new LocationForSchedule();
+                    locationForSchedule.myScheduleFragment=MyScheduleFragment.this;
+                    locationForSchedule.show(fragmentManager,null);
+
+                }
+            }
+        });
 
 
         add_slot = (TextView) view.findViewById(R.id.tv_add_new_slot);
@@ -183,7 +205,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         nextMonth.setOnClickListener(this);
 
         calendarView = (GridView) view.findViewById(R.id.calendar);
+        getCalendarDetailsAPICall();    /* API call for 3 months data */
 
+}
+    public void  getCalendarDetailsAPICall(){
         previousMonthArrayList = new ArrayList<Day>();
         currentMonthArrayList = new ArrayList<Day>();
         comingMonthArrayList = new ArrayList<Day>();
@@ -205,23 +230,23 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             stringBuilder.append("/" + 1);
 
             days_in_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-         } else {
+        } else {
             Calendar calendar = new GregorianCalendar(year, (month - 1) - 1, 1);
             stringBuilder.append(year);
             stringBuilder.append("/" + (month - 1));
             stringBuilder.append("/" + 1);
 
             days_in_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-         }
+        }
 
 
         if (month == 12) {
             Calendar calendar = new GregorianCalendar(year + 1, 0, 1);
             days_in_next_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-         } else {
+        } else {
             Calendar calendar = new GregorianCalendar(year, (month - 1) + 1, 1);
             days_in_next_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-         }
+        }
 
         days_in_current_month = new GregorianCalendar(year, month - 1, 1).getActualMaximum(Calendar.DAY_OF_MONTH);
 
@@ -230,6 +255,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
         progressDialog.show();
         NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 37);/*Network operation for getting details for three months */
+
     }
 
 
@@ -392,6 +418,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             requestParams.add("mentor_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
             requestParams.add("start_date", String.valueOf(stringBuilder));
             requestParams.add("limit", String.valueOf(days_in_new_next_month));
+            Log.i(TAG, "user_group : " + String.valueOf("3") + " mentor id : " + StorageHelper.getUserDetails(getActivity(), "user_id") + " start date : " + String.valueOf(stringBuilder) + " limit : " + String.valueOf(days_in_new_next_month));
             progressDialog.show();
             NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 38);
         }
@@ -444,6 +471,18 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
 
             if(Integer.parseInt(StorageHelper.getUserGroup(getActivity(),"user_group")) == 3){
+
+                if(cb_calendar_by_location.isChecked()){
+                    Log.i(TAG,"calendar_by_location"+calendar_by_location);
+                    if(calendar_by_location != null){
+
+                    }else{
+
+                    }
+                }
+
+
+
                 Log.d(TAG,"INside threeMonthData method for user_group 3");
                 progressDialog.dismiss();
                 try {
@@ -537,9 +576,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     currentMonthArrayList.add(day1);
                 }
 
-                    Log.e(TAG,currentMonthArrayList.size()+"");
+
                     for(Day d : currentMonthArrayList) {
-                        Log.e(TAG, d.dayEvents.size() + "");
+
                         for(DayEvent de : d.dayEvents){
                             Log.v(TAG, de.getEvent_id() + " : s_time : " + de.getEvent_start_time() + " : L_time : " + de.getEvent_stop_time());
                         }
@@ -985,5 +1024,6 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             }
         }
     }
+
 
 }
