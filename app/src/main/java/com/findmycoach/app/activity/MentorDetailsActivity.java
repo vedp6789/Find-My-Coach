@@ -370,8 +370,8 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             profileTravelAvailable.setText(getResources().getString(R.string.no));
         }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-            ImageLoader imgLoader = new ImageLoader(this.getApplicationContext());
-            imgLoader.DisplayImage(userInfo.getPhotograph(), R.drawable.user_icon, profileImage);
+            ImageLoader imgLoader = new ImageLoader(profileImage);
+            imgLoader.execute((String) userInfo.getPhotograph());
         }
         applySocialLinks();
     }

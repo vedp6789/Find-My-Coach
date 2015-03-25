@@ -295,14 +295,14 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append(String.valueOf(from_year));
                         if ((from_month / 10) > 0) {
-                            stringBuilder.append("/" + from_month);
+                            stringBuilder.append("-" + from_month);
                         } else {
-                            stringBuilder.append("/" + 0 + from_month);
+                            stringBuilder.append("-" + 0 + from_month);
                         }
                         if ((from_day / 10) > 0) {
-                            stringBuilder.append("/" + from_day);
+                            stringBuilder.append("-" + from_day);
                         } else {
-                            stringBuilder.append("/" + 0 + from_day);
+                            stringBuilder.append("-" + 0 + from_day);
                         }
                         Log.d(TAG, "start date:" + stringBuilder.toString());
 
@@ -312,14 +312,14 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                             StringBuilder stringBuilder2 = new StringBuilder();
                             stringBuilder2.append(String.valueOf(from_year + 10));
                             if ((from_month / 10) > 0) {
-                                stringBuilder2.append("/" + from_month);
+                                stringBuilder2.append("-" + from_month);
                             } else {
-                                stringBuilder2.append("/" + 0 + from_month);
+                                stringBuilder2.append("-" + 0 + from_month);
                             }
                             if ((from_day / 10) > 0) {
-                                stringBuilder2.append("/" + from_day);
+                                stringBuilder2.append("-" + from_day);
                             } else {
-                                stringBuilder2.append("/" + 0 + from_day);
+                                stringBuilder2.append("-" + 0 + from_day);
                             }
                             Log.d(TAG, "till date1:" + stringBuilder2.toString());
 
@@ -328,14 +328,14 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                             StringBuilder stringBuilder3 = new StringBuilder();
                             stringBuilder3.append(String.valueOf(till_year));
                             if ((till_month / 10) > 0) {
-                                stringBuilder3.append("/" + till_month);
+                                stringBuilder3.append("-" + till_month);
                             } else {
-                                stringBuilder3.append("/" + 0 + till_month);
+                                stringBuilder3.append("-" + 0 + till_month);
                             }
                             if ((till_day / 10) > 0) {
-                                stringBuilder3.append("/" + till_day);
+                                stringBuilder3.append("-" + till_day);
                             } else {
-                                stringBuilder3.append("/" + 0 + till_day);
+                                stringBuilder3.append("-" + 0 + till_day);
                             }
                             Log.d(TAG, "till date2:" + stringBuilder3.toString());
 
@@ -503,11 +503,11 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             stringBuilder.append("" + 0 + day);
         }
         if ((month / 10) > 0) {
-            stringBuilder.append("/" + month);
+            stringBuilder.append("-" + month);
         } else {
-            stringBuilder.append("/" + 0 + month);
+            stringBuilder.append("-" + 0 + month);
         }
-        stringBuilder.append("/" + year);
+        stringBuilder.append("-" + year);
         Log.d(TAG, "start date:" + stringBuilder.toString());
         AddNewSlotActivity.tv_start_date.setText(stringBuilder.toString());
         AddNewSlotActivity.date_from = String.valueOf(stringBuilder);
@@ -537,11 +537,11 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 stringBuilder.append("" + 0 + day);
             }
             if ((month / 10) > 0) {
-                stringBuilder.append("/" + month);
+                stringBuilder.append("-" + month);
             } else {
-                stringBuilder.append("/" + 0 + month);
+                stringBuilder.append("-" + 0 + month);
             }
-            stringBuilder.append("/" + year);
+            stringBuilder.append("-" + year);
             Log.d(TAG, "till date:" + stringBuilder.toString());
             AddNewSlotActivity.tv_till_date.setText(stringBuilder.toString());
         }

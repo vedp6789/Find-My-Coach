@@ -26,6 +26,10 @@ import com.findmycoach.app.util.SetTime;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -117,7 +121,7 @@ public class ScheduleYourVacation extends Activity implements SetDate,SetTime {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyy");
         String current_date = simpleDateFormat.format(new Date());
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-        date_from = current_date.substring(0, 2) + "/" + current_date.substring(2, 4) + "/" + current_date.substring(4, 8);
+        date_from = current_date.substring(0, 2) + "-" + current_date.substring(2, 4) + "-" + current_date.substring(4, 8);
         from_day=Integer.parseInt(current_date.substring(0, 2));
         from_month=Integer.parseInt(current_date.substring(2, 4));
         from_year=Integer.parseInt(current_date.substring(4, 8));
@@ -323,14 +327,14 @@ public class ScheduleYourVacation extends Activity implements SetDate,SetTime {
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append(String.valueOf(from_year));
                         if ((from_month / 10) > 0) {
-                            stringBuilder.append("/" + from_month);
+                            stringBuilder.append("-" + from_month);
                         } else {
-                            stringBuilder.append("/" + 0 + from_month);
+                            stringBuilder.append("-" + 0 + from_month);
                         }
                         if ((from_day / 10) > 0) {
-                            stringBuilder.append("/" + from_day);
+                            stringBuilder.append("-" + from_day);
                         } else {
-                            stringBuilder.append("/" + 0 + from_day);
+                            stringBuilder.append("-" + 0 + from_day);
                         }
                         Log.d(TAG, "start date:" + stringBuilder.toString());
 
@@ -340,14 +344,14 @@ public class ScheduleYourVacation extends Activity implements SetDate,SetTime {
                             StringBuilder stringBuilder2 = new StringBuilder();
                             stringBuilder2.append(String.valueOf(from_year + 10));
                             if ((from_month / 10) > 0) {
-                                stringBuilder2.append("/" + from_month);
+                                stringBuilder2.append("-" + from_month);
                             } else {
-                                stringBuilder2.append("/" + 0 + from_month);
+                                stringBuilder2.append("-" + 0 + from_month);
                             }
                             if ((from_day / 10) > 0) {
-                                stringBuilder2.append("/" + from_day);
+                                stringBuilder2.append("-" + from_day);
                             } else {
-                                stringBuilder2.append("/" + 0 + from_day);
+                                stringBuilder2.append("-" + 0 + from_day);
                             }
                             Log.d(TAG, "till date1:" + stringBuilder2.toString());
 
@@ -356,14 +360,14 @@ public class ScheduleYourVacation extends Activity implements SetDate,SetTime {
                             StringBuilder stringBuilder3 = new StringBuilder();
                             stringBuilder3.append(String.valueOf(till_year));
                             if ((till_month / 10) > 0) {
-                                stringBuilder3.append("/" + till_month);
+                                stringBuilder3.append("-" + till_month);
                             } else {
-                                stringBuilder3.append("/" + 0 + till_month);
+                                stringBuilder3.append("-" + 0 + till_month);
                             }
                             if ((till_day / 10) > 0) {
-                                stringBuilder3.append("/" + till_day);
+                                stringBuilder3.append("-" + till_day);
                             } else {
-                                stringBuilder3.append("/" + 0 + till_day);
+                                stringBuilder3.append("-" + 0 + till_day);
                             }
                             Log.d(TAG, "till date2:" + stringBuilder3.toString());
 
@@ -410,6 +414,14 @@ public class ScheduleYourVacation extends Activity implements SetDate,SetTime {
                             @Override
                             public void failureOperation(Object object, int statusCode, int calledApiValue) {
                                 Toast.makeText(ScheduleYourVacation.this, (String) object, Toast.LENGTH_SHORT).show();
+                                String failure_response=(String)object;
+                                try {
+                                    JSONObject jsonObject=new JSONObject(failure_response);
+                                    JSONArray jsonArray_coincidingExceptions=jsonObject.getJSONArray("coincidingExceptions");
+                                    //JSONArray coninciding_days=jsonArray_coincidingExceptions.getJSONArray("W");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                                 progressDialog.dismiss();
                             }
                         }, 36);
@@ -460,13 +472,13 @@ public class ScheduleYourVacation extends Activity implements SetDate,SetTime {
                 } else {
                     slot_time_value = stop_time - start_time;
                 }
-                int minimum_difference = (Integer.parseInt(getResources().getString(R.string.slot_time_difference)) * 60) * 60;
+                int minimum_difference = (Integer.parseInt(getResources().getString(R.string.slot_time_difference_in_hour)) * 60) * 60;
 
-                if (slot_time_value < minimum_difference) {
+                /*if (slot_time_value < minimum_difference) {
                     Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.slot_time_difference), Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "check7");
                     return false;
-                }else{
+                }else{*/
                     if (tv_start_date.getText().length() > 0) {
                         if(tv_till_date.getText().length() > 0 ){
                             return true;
@@ -480,7 +492,7 @@ public class ScheduleYourVacation extends Activity implements SetDate,SetTime {
                     }
                 }
 
-            }
+           /* }*/
 
         } else {
             Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.select_at_least_one_day), Toast.LENGTH_SHORT).show();
@@ -538,11 +550,11 @@ public class ScheduleYourVacation extends Activity implements SetDate,SetTime {
             stringBuilder.append("" + 0 + day);
         }
         if ((month / 10) > 0) {
-            stringBuilder.append("/" + month);
+            stringBuilder.append("-" + month);
         } else {
-            stringBuilder.append("/" + 0 + month);
+            stringBuilder.append("-" + 0 + month);
         }
-        stringBuilder.append("/" + year);
+        stringBuilder.append("-" + year);
         Log.d(TAG, "start date:" + stringBuilder.toString());
         ScheduleYourVacation.tv_start_date.setText(stringBuilder.toString());
         ScheduleYourVacation.date_from = String.valueOf(stringBuilder);
@@ -569,11 +581,11 @@ public class ScheduleYourVacation extends Activity implements SetDate,SetTime {
                 stringBuilder.append("" + 0 + day);
             }
             if ((month / 10) > 0) {
-                stringBuilder.append("/" + month);
+                stringBuilder.append("-" + month);
             } else {
-                stringBuilder.append("/" + 0 + month);
+                stringBuilder.append("-" + 0 + month);
             }
-            stringBuilder.append("/" + year);
+            stringBuilder.append("-" + year);
             Log.d(TAG, "till date:" + stringBuilder.toString());
             ScheduleYourVacation.tv_till_date.setText(stringBuilder.toString());
 

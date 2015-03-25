@@ -167,10 +167,8 @@ public class ProfileFragment extends Fragment implements Callback {
         profileAddress.setText(address);
         profileLocation.setText(NetworkManager.getCurrentLocation(getActivity()));
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-            if(imgLoader == null)
-                imgLoader = new ImageLoader(getActivity().getApplicationContext());
-            imgLoader.clearCache();
-            imgLoader.DisplayImage((String)userInfo.getPhotograph(), R.drawable.user_icon, profileImage);
+           imgLoader = new ImageLoader(profileImage);
+           imgLoader.execute((String) userInfo.getPhotograph());
         }
         mentorFor.setText(userInfo.getMentorFor());
         trainingLocation.setText((String) userInfo.getTrainingLocation());

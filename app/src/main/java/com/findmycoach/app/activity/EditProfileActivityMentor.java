@@ -85,8 +85,8 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             return;
         }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-            ImageLoader imgLoader = new ImageLoader(this.getApplicationContext());
-            imgLoader.DisplayImage(userInfo.getPhotograph(), R.drawable.user_icon, profilePicture);
+            ImageLoader imgLoader = new ImageLoader(profilePicture);
+            imgLoader.execute((String) userInfo.getPhotograph());
         }
         profileEmail.setText(userInfo.getEmail());
         profilePhone.setText(userInfo.getPhonenumber());

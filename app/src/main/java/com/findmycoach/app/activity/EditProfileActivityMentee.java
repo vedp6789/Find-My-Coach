@@ -82,8 +82,8 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
     private void
     populateUserData() {
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-            ImageLoader imgLoader = new ImageLoader(this.getApplicationContext());
-            imgLoader.DisplayImage((String) userInfo.getPhotograph(), R.drawable.user_icon, profilePicture);
+            ImageLoader imgLoader = new ImageLoader(profilePicture);
+            imgLoader.execute((String) userInfo.getPhotograph());
         }
         try {
             profileEmail.setText(userInfo.getEmail());

@@ -66,7 +66,7 @@ import org.json.JSONObject;
     *       subCategories                   33
     *       categories                      34
     *       availableSlots                  35
-    *       exception                       36
+    *       exceptions                      36
     *       calenderDetails 3 months        37
     *       calenderDetails next month      38
     *       calenderDetails previous month  39
@@ -1063,7 +1063,7 @@ public class NetworkClient {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), auth_token);
         //requestParams.add(userGroup, "3");
-        client.post(getAbsoluteURL("exception", context), requestParams, new AsyncHttpResponseHandler() {
+        client.post(getAbsoluteURL("exceptions", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try{

@@ -103,8 +103,8 @@ public class StudentDetailActivity  extends Activity implements Callback {
         }
         profileAddress.setText(address);
         if (studentDetails.getPhotograph() != null && !studentDetails.getPhotograph().equals("")) {
-            ImageLoader imgLoader = new ImageLoader(this.getApplicationContext());
-            imgLoader.DisplayImage((String) studentDetails.getPhotograph(), R.drawable.user_icon, profileImage);
+            ImageLoader imgLoader = new ImageLoader(profileImage);
+            imgLoader.execute((String) studentDetails.getPhotograph());
         }
         mentorFor.setText(studentDetails.getMentorFor());
         trainingLocation.setText((String) studentDetails.getTrainingLocation());

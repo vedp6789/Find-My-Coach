@@ -81,11 +81,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myScheduleFragment = this;
-/* Getting Calendar current instance*/
+
         startPointForCalendar();
         b_three_months_data=false;
     }
-
+    /* Get Calendar current instance*/
     void startPointForCalendar(){
         _calendar = Calendar.getInstance(Locale.getDefault());
         month = _calendar.get(Calendar.MONTH) + 1;   /* current month*/

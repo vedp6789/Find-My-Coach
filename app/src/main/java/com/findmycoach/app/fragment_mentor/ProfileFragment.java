@@ -203,10 +203,8 @@ public class ProfileFragment extends Fragment implements Callback {
             profileTravelAvailable.setText(getResources().getString(R.string.no));
         }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-            if(imgLoader == null)
-                imgLoader = new ImageLoader(getActivity().getApplicationContext());
-            imgLoader.clearCache();
-            imgLoader.DisplayImage(userInfo.getPhotograph(), R.drawable.user_icon, profileImage);
+            imgLoader = new ImageLoader(profileImage);
+            imgLoader.execute((String) userInfo.getPhotograph());
         }
         applySocialLinks();
     }

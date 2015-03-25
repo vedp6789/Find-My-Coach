@@ -523,6 +523,7 @@
 
     <!--  Minimum time difference between start time and stop time of a slot   i.e in hours-->
     <string name="slot_time_difference">Minimum slot duration should be 1 hour!</string>
+
     <string name="select_slot_in_multiple_of_hour">Please select slots in multiple of hours.</string>
     <string name="select_start_date_of_slot">Please select start date for this slot.</string>
     <string name="select_at_least_one_day">Please select at least one day.</string>
