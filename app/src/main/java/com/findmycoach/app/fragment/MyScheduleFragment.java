@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.AddNewSlotActivity;
 import com.findmycoach.app.activity.DashboardActivity;
+import com.findmycoach.app.activity.ScheduleNewClass;
 import com.findmycoach.app.activity.ScheduleYourVacation;
 import com.findmycoach.app.adapter.CalendarGridAdapter;
 import com.findmycoach.app.beans.CalendarSchedule.Day;
@@ -46,11 +47,11 @@ import java.util.Locale;
 public class MyScheduleFragment extends Fragment implements View.OnClickListener, Callback {
 
     private TextView currentMonth, add_slot, add_vacation;
-    CheckBox cb_calendar_by_location;
+    private  CheckBox cb_calendar_by_location;
     private ImageView prevMonth;
     private ImageView nextMonth;
     private GridView calendarView;
-    private CalendarGridAdapter adapter;
+    private CalendarGridAdapter adapter1,adapter2,adapter3;
     private Calendar _calendar;
     private static int month, year;
     private static final String dateTemplate = "MMMM yyyy";
@@ -63,7 +64,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public static ArrayList<Day> currentMonthArrayList = null;
     public static ArrayList<Day> comingMonthArrayList = null;
     public JSONArray prev_json, current_json, next_json;
-    public String calendar_by_location =null;
+    public String calendar_by_location = null;
+    public boolean cb_calendar_by_location_is_checked=false,b_three_months_data;
 
 
     public MyScheduleFragment() {
@@ -80,12 +82,14 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
         myScheduleFragment = this;
 /* Getting Calendar current instance*/
+        startPointForCalendar();
+        b_three_months_data=false;
+    }
+
+    void startPointForCalendar(){
         _calendar = Calendar.getInstance(Locale.getDefault());
         month = _calendar.get(Calendar.MONTH) + 1;   /* current month*/
         year = _calendar.get(Calendar.YEAR); /* current year */
-
-
-
 
     }
 
@@ -104,7 +108,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         }
         return view;
     }
-/* Initializing views for Mentee login */
+
+    /* Initializing views for Mentee login */
     private void initializeMenteeView(View view) {
 
         prevMonth = (ImageView) view.findViewById(R.id.prevMonth);
@@ -129,7 +134,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
 
         RequestParams requestParams = new RequestParams();
-        requestParams.add("user_group",String.valueOf(2));
+        requestParams.add("user_group", String.valueOf(2));
         requestParams.add("student_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -157,7 +162,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         } else {
             Calendar calendar = new GregorianCalendar(year, (month - 1) + 1, 1);
             days_in_next_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-         }
+        }
 
         days_in_current_month = new GregorianCalendar(year, month - 1, 1).getActualMaximum(Calendar.DAY_OF_MONTH);
         Toast.makeText(getActivity(), getResources().getString(R.string.start_date1) + String.valueOf(stringBuilder), Toast.LENGTH_SHORT).show();
@@ -171,23 +176,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
 
     }
+
     /* Initializing views for Mentor login */
-    public  void initialize(final View view) {
-        cb_calendar_by_location= (CheckBox) view.findViewById(R.id.cb_calendar_by_location);
-        cb_calendar_by_location.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast.makeText(getActivity(),""+isChecked,Toast.LENGTH_SHORT).show();
-                if(isChecked){
-                    FragmentManager fragmentManager=getFragmentManager();
-                    LocationForSchedule locationForSchedule=new LocationForSchedule();
-                    locationForSchedule.myScheduleFragment=MyScheduleFragment.this;
-                    locationForSchedule.show(fragmentManager,null);
-
-                }
-            }
-        });
-
+    public void initialize(final View view) {
 
         add_slot = (TextView) view.findViewById(R.id.tv_add_new_slot);
         add_slot.setOnClickListener(this);
@@ -207,18 +198,47 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         calendarView = (GridView) view.findViewById(R.id.calendar);
         getCalendarDetailsAPICall();    /* API call for 3 months data */
 
-}
-    public void  getCalendarDetailsAPICall(){
+        /* Checkbox used to set flag for viewing calendar details by location */
+        cb_calendar_by_location = (CheckBox) view.findViewById(R.id.cb_calendar_by_location);
+        cb_calendar_by_location.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {                                                                 /* Starting a fragment to get the location detail by autotype method */
+                    cb_calendar_by_location_is_checked=true;
+                    getLocationFromDialog();
+                } else {
+                    cb_calendar_by_location_is_checked=false;
+                    calendar_by_location=null;
+                    getCalendarDetailsAPICall();
+                }
+            }
+        });
+
+    }
+
+    void getLocationFromDialog() {
+        FragmentManager fragmentManager = getFragmentManager();
+        LocationForSchedule locationForSchedule = new LocationForSchedule();
+        locationForSchedule.myScheduleFragment = MyScheduleFragment.this;
+        locationForSchedule.show(fragmentManager, null);
+
+    }
+
+    public void getCalendarDetailsAPICall() {
+
         previousMonthArrayList = new ArrayList<Day>();
         currentMonthArrayList = new ArrayList<Day>();
         comingMonthArrayList = new ArrayList<Day>();
+
+        startPointForCalendar();
 
 
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getActivity().getResources().getString(R.string.please_wait));
 
         RequestParams requestParams = new RequestParams();
-        requestParams.add("user_group",String.valueOf("3"));
+        requestParams.add("user_group", String.valueOf("3"));
         requestParams.add("mentor_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -253,8 +273,29 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         Toast.makeText(getActivity(), getResources().getString(R.string.start_date1) + String.valueOf(stringBuilder), Toast.LENGTH_SHORT).show();
         requestParams.add("start_date", String.valueOf(stringBuilder));
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
+
+        if (cb_calendar_by_location_is_checked) {
+            Log.d(TAG,"calendar_by_location is checked true");
+            if (calendar_by_location != null) {
+                Log.d(TAG, "Calendar_by_location getting passed to server : " + calendar_by_location);
+                requestParams.add("location", calendar_by_location);
+                networkCall1(requestParams);
+            } else {
+                Toast.makeText(getActivity(), "Please provide location to access calendar details", Toast.LENGTH_SHORT).show();
+                getLocationFromDialog();  /* start LocationFromDialog to get the location */
+            }
+        } else {
+
+            Log.d(TAG,"start networkCall1");
+            networkCall1(requestParams);
+        }
+
+
+    }
+
+    void networkCall1(RequestParams requestParams) {
         progressDialog.show();
-        NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 37);/*Network operation for getting details for three months */
+        NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 37); /* Network operation for getting details for three months */
 
     }
 
@@ -277,7 +318,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         /* Add New Slot option for mentor*/
-        if(Integer.parseInt(StorageHelper.getUserGroup(getActivity(),"user_group")) == 3){
+        if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 3) {
             if (v == add_slot) {
 
                 Intent intent = new Intent(getActivity(), AddNewSlotActivity.class);
@@ -317,7 +358,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             month--;
         }
 
-}
+    }
 
     private void newPreviousMonth() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -349,19 +390,31 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         Calendar calendar = new GregorianCalendar(year_for_this, (month_for_this - 1), 1);
         days_in_new_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        if(DashboardActivity.dashboardActivity.user_group == 3){
+        if (DashboardActivity.dashboardActivity.user_group == 3) {
             RequestParams requestParams = new RequestParams();
-            requestParams.add("user_group",String.valueOf("3"));
+            requestParams.add("user_group", String.valueOf("3"));
             requestParams.add("mentor_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
             requestParams.add("start_date", String.valueOf(stringBuilder));
             requestParams.add("limit", String.valueOf(days_in_new_prev_month));
-            progressDialog.show();
-            NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 39);
+            if (cb_calendar_by_location_is_checked) {
+                if (calendar_by_location != null) {
+                    Log.d(TAG, "Calendar_by_location getting passed to server : " + calendar_by_location);
+                    requestParams.add("location", calendar_by_location);
+                    networkCall2(requestParams);
+                } else {
+                    Toast.makeText(getActivity(), "Please provide location to access calendar details", Toast.LENGTH_SHORT).show();
+                    getLocationFromDialog();  /* start LocationFromDialog to get the location */
+                }
+            } else {
+
+                networkCall2(requestParams);
+            }
+
         }
-        if(DashboardActivity.dashboardActivity.user_group == 2){
-            Log.d(TAG,"calling getMenteeCalendarDetails api for prev month");
+        if (DashboardActivity.dashboardActivity.user_group == 2) {
+            Log.d(TAG, "calling getMenteeCalendarDetails api for prev month");
             RequestParams requestParams = new RequestParams();
-            requestParams.add("user_group",String.valueOf("2"));
+            requestParams.add("user_group", String.valueOf("2"));
             requestParams.add("student_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
             requestParams.add("start_date", String.valueOf(stringBuilder));
             requestParams.add("limit", String.valueOf(days_in_new_prev_month));
@@ -370,6 +423,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         }
 
 
+    }
+
+    /* Network call for getting previous to previous month data in case of mentor login*/
+    void networkCall2(RequestParams requestParams){
+        progressDialog.show();
+        NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 39);
     }
 
 
@@ -382,7 +441,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             month++;
         }
 
-}
+    }
 
     private void newNextMonth() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -411,19 +470,32 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         Calendar calendar = new GregorianCalendar(year_for_this, (month_for_this - 1), 1);
         days_in_new_next_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        if(Integer.parseInt(StorageHelper.getUserGroup(getActivity(),"user_group")) == 3) {
-            Log.d(TAG,"calling getMenteeCalendarDetails api for next month user_Group 3");
+        if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 3) {
+            Log.d(TAG, "calling getMenteeCalendarDetails api for next month user_Group 3");
             RequestParams requestParams = new RequestParams();
             requestParams.add("user_group", String.valueOf("3"));
             requestParams.add("mentor_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
             requestParams.add("start_date", String.valueOf(stringBuilder));
             requestParams.add("limit", String.valueOf(days_in_new_next_month));
             Log.i(TAG, "user_group : " + String.valueOf("3") + " mentor id : " + StorageHelper.getUserDetails(getActivity(), "user_id") + " start date : " + String.valueOf(stringBuilder) + " limit : " + String.valueOf(days_in_new_next_month));
-            progressDialog.show();
-            NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 38);
+            if (cb_calendar_by_location_is_checked) {
+                if (calendar_by_location != null) {
+                    Log.d(TAG, "Calendar_by_location getting passed to server : " + calendar_by_location);
+                    requestParams.add("location", calendar_by_location);
+                    networkCall3(requestParams);
+                } else {
+                    Toast.makeText(getActivity(), "Please provide location to access calendar details", Toast.LENGTH_SHORT).show();
+                    getLocationFromDialog();  /* start LocationFromDialog to get the location */
+                }
+            } else {
+
+                networkCall3(requestParams);
+            }
+
+
         }
-        if(Integer.parseInt(StorageHelper.getUserGroup(getActivity(),"user_group")) == 2) {
-            Log.d(TAG,"calling getMenteeCalendarDetails api for next month user_Group 2");
+        if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 2) {
+            Log.d(TAG, "calling getMenteeCalendarDetails api for next month user_Group 2");
             RequestParams requestParams = new RequestParams();
             requestParams.add("user_group", String.valueOf("2"));
             requestParams.add("student_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
@@ -436,9 +508,17 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     }
 
+    /* Network call for getting next to next month data in case of mentor login*/
+    void networkCall3(RequestParams requestParams){
+        progressDialog.show();
+        NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 38);
+    }
+
+
+
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        switch (calledApiValue){
+        switch (calledApiValue) {
             case 37:
                 threeMonthsData(object);
                 break;
@@ -462,32 +542,26 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
-        Toast.makeText(getActivity(),(String) object,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
         progressDialog.dismiss();
     }
 
 
-    private void threeMonthsData(Object object){
+    private void threeMonthsData(Object object) {
+
+        Log.d(TAG,"inside three months data population");
 
 
-            if(Integer.parseInt(StorageHelper.getUserGroup(getActivity(),"user_group")) == 3){
-
-                if(cb_calendar_by_location.isChecked()){
-                    Log.i(TAG,"calendar_by_location"+calendar_by_location);
-                    if(calendar_by_location != null){
-
-                    }else{
-
-                    }
-                }
+        if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 3) {
 
 
 
-                Log.d(TAG,"INside threeMonthData method for user_group 3");
-                progressDialog.dismiss();
-                try {
 
-                    JSONObject jsonObject = new JSONObject((String) object);
+            Log.d(TAG, "INside threeMonthData method for user_group 3");
+            progressDialog.dismiss();
+            try {
+
+                JSONObject jsonObject = new JSONObject((String) object);
                 JSONArray jsonArray_data = jsonObject.getJSONArray("data");
 
                 for (int i = 0; i < days_in_prev_month; i++) {
@@ -496,19 +570,19 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     day1.setDate(unique_day.getString("date"));
                     JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
                     List<DayEvent> dayEvents = new ArrayList<DayEvent>();
-                    JSONArray jsonArray_of_slots=unique_day.getJSONArray("slots");
+                    JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
 
-                    List<DaySlot> daySlots=new ArrayList<DaySlot>();
-                    if(jsonArray_of_slots.length() > 0){
-                        for (int s=0;s<jsonArray_of_slots.length();s++){
-                            JSONObject day_slot=jsonArray_of_slots.getJSONObject(s);
-                            DaySlot daySlot=new DaySlot();
+                    List<DaySlot> daySlots = new ArrayList<DaySlot>();
+                    if (jsonArray_of_slots.length() > 0) {
+                        for (int s = 0; s < jsonArray_of_slots.length(); s++) {
+                            JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
+                            DaySlot daySlot = new DaySlot();
                             daySlot.setSlot_start_time(day_slot.getString("start_time"));
                             daySlot.setSlot_stop_time(day_slot.getString("stop_time"));
                             daySlots.add(daySlot);
                         }
                         day1.setDaySlots(daySlots);
-                    }else{
+                    } else {
                         day1.setDaySlots(daySlots);
                     }
 
@@ -539,19 +613,19 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     day1.setDate(unique_day.getString("date"));
                     JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
                     List<DayEvent> dayEvents = new ArrayList<DayEvent>();
-                    JSONArray jsonArray_of_slots=unique_day.getJSONArray("slots");
+                    JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
 
-                    List<DaySlot> daySlots=new ArrayList<DaySlot>();
-                    if(jsonArray_of_slots.length() > 0){
-                        for (int s=0;s<jsonArray_of_slots.length();s++){
-                            JSONObject day_slot=jsonArray_of_slots.getJSONObject(s);
-                            DaySlot daySlot=new DaySlot();
+                    List<DaySlot> daySlots = new ArrayList<DaySlot>();
+                    if (jsonArray_of_slots.length() > 0) {
+                        for (int s = 0; s < jsonArray_of_slots.length(); s++) {
+                            JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
+                            DaySlot daySlot = new DaySlot();
                             daySlot.setSlot_start_time(day_slot.getString("start_time"));
                             daySlot.setSlot_stop_time(day_slot.getString("stop_time"));
                             daySlots.add(daySlot);
                         }
                         day1.setDaySlots(daySlots);
-                    }else{
+                    } else {
                         day1.setDaySlots(daySlots);
                     }
 
@@ -577,12 +651,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 }
 
 
-                    for(Day d : currentMonthArrayList) {
+                for (Day d : currentMonthArrayList) {
 
-                        for(DayEvent de : d.dayEvents){
-                            Log.v(TAG, de.getEvent_id() + " : s_time : " + de.getEvent_start_time() + " : L_time : " + de.getEvent_stop_time());
-                        }
+                    for (DayEvent de : d.dayEvents) {
+                        Log.v(TAG, de.getEvent_id() + " : s_time : " + de.getEvent_start_time() + " : L_time : " + de.getEvent_stop_time());
                     }
+                }
 
                 for (int i = days_in_prev_month + days_in_current_month; i < days_in_prev_month + days_in_current_month + days_in_next_month; i++) {
                     Day day1 = new Day();
@@ -591,18 +665,18 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
                     List<DayEvent> dayEvents = new ArrayList<DayEvent>();
 
-                    JSONArray jsonArray_of_slots=unique_day.getJSONArray("slots");
-                    List<DaySlot> daySlots=new ArrayList<DaySlot>();
-                    if(jsonArray_of_slots.length() > 0){
-                        for (int s=0;s<jsonArray_of_slots.length();s++){
-                            JSONObject day_slot=jsonArray_of_slots.getJSONObject(s);
-                            DaySlot daySlot=new DaySlot();
+                    JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
+                    List<DaySlot> daySlots = new ArrayList<DaySlot>();
+                    if (jsonArray_of_slots.length() > 0) {
+                        for (int s = 0; s < jsonArray_of_slots.length(); s++) {
+                            JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
+                            DaySlot daySlot = new DaySlot();
                             daySlot.setSlot_start_time(day_slot.getString("start_time"));
                             daySlot.setSlot_stop_time(day_slot.getString("stop_time"));
                             daySlots.add(daySlot);
                         }
                         day1.setDaySlots(daySlots);
-                    }else{
+                    } else {
                         day1.setDaySlots(daySlots);
                     }
 
@@ -629,139 +703,146 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
 
                 Log.d(TAG, "previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
+                if(b_three_months_data){
+                    Log.d(TAG,"Three months data get changed");
+                    adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
+                    calendarView.setAdapter(adapter1);
+                    adapter1.notifyDataSetChanged();
+                    currentMonth.setText(DateFormat.format(dateTemplate,_calendar.getTime()));
+                }else{
+                    adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
+                    calendarView.setAdapter(adapter1);
+                    adapter1.notifyDataSetChanged();
+                }
 
 
-                adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
-                adapter.notifyDataSetChanged();
-                calendarView.setAdapter(adapter);
+
+
+                b_three_months_data=true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 2) {
+            progressDialog.dismiss();
+            Log.d(TAG, "INside threeMonthData method for user_group 2");
+            try {
+
+                JSONObject jsonObject = new JSONObject((String) object);
+                JSONArray jsonArray_data = jsonObject.getJSONArray("data");
+
+                for (int i = 0; i < days_in_prev_month; i++) {
+                    Day day1 = new Day();
+                    JSONObject unique_day = jsonArray_data.getJSONObject(i);
+                    day1.setDate(unique_day.getString("date"));
+                    JSONArray jsonArray_of_events = unique_day.getJSONArray("event");
+                    List<DayEvent> dayEvents = new ArrayList<DayEvent>();
+
+                    if (jsonArray_of_events.length() > 0) {
+                        for (int e = 0; e < jsonArray_of_events.length(); e++) {
+
+                            JSONObject day_event = jsonArray_of_events.getJSONObject(e);
+                            DayEvent dayEvent = new DayEvent();
+
+                            dayEvent.setEvent_id(day_event.getString("id"));
+                            dayEvent.setEvent_start_time(day_event.getString("start_time"));
+                            dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                            dayEvent.setFname(day_event.getString("first_name"));
+                            dayEvent.setLname(day_event.getString("last_name"));
+                            dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                            dayEvents.add(dayEvent);
+                        }
+                        day1.setDayEvents(dayEvents);
+                    } else {
+                        day1.setDayEvents(dayEvents);
+                    }
+                    previousMonthArrayList.add(day1);
+
+                }
+
+
+                for (int i = days_in_prev_month; i < days_in_prev_month + days_in_current_month; i++) {
+                    Day day1 = new Day();
+                    JSONObject unique_day = jsonArray_data.getJSONObject(i);
+                    day1.setDate(unique_day.getString("date"));
+                    JSONArray jsonArray_of_events = unique_day.getJSONArray("event");
+                    List<DayEvent> dayEvents = new ArrayList<DayEvent>();
+
+
+                    if (jsonArray_of_events.length() > 0) {
+                        for (int e = 0; e < jsonArray_of_events.length(); e++) {
+
+                            JSONObject day_event = jsonArray_of_events.getJSONObject(e);
+                            DayEvent dayEvent = new DayEvent();
+
+                            dayEvent.setEvent_id(day_event.getString("id"));
+                            dayEvent.setEvent_start_time(day_event.getString("start_time"));
+                            dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                            dayEvent.setFname(day_event.getString("first_name"));
+                            dayEvent.setLname(day_event.getString("last_name"));
+                            dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                            dayEvents.add(dayEvent);
+                        }
+                        day1.setDayEvents(dayEvents);
+                    } else {
+                        day1.setDayEvents(dayEvents);
+                    }
+                    currentMonthArrayList.add(day1);
+                }
+
+                for (int i = days_in_prev_month + days_in_current_month; i < days_in_prev_month + days_in_current_month + days_in_next_month; i++) {
+                    Day day1 = new Day();
+                    JSONObject unique_day = jsonArray_data.getJSONObject(i);
+                    day1.setDate(unique_day.getString("date"));
+                    JSONArray jsonArray_of_events = unique_day.getJSONArray("event");
+                    List<DayEvent> dayEvents = new ArrayList<DayEvent>();
+
+
+                    if (jsonArray_of_events.length() > 0) {
+                        for (int e = 0; e < jsonArray_of_events.length(); e++) {
+
+                            JSONObject day_event = jsonArray_of_events.getJSONObject(e);
+                            DayEvent dayEvent = new DayEvent();
+
+                            dayEvent.setEvent_id(day_event.getString("id"));
+                            dayEvent.setEvent_start_time(day_event.getString("start_time"));
+                            dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                            dayEvent.setFname(day_event.getString("first_name"));
+                            dayEvent.setLname(day_event.getString("last_name"));
+                            dayEvents.add(dayEvent);
+                        }
+                        day1.setDayEvents(dayEvents);
+                    } else {
+                        day1.setDayEvents(dayEvents);
+                    }
+                    comingMonthArrayList.add(day1);
+                }
+
+
+                Log.d(TAG, "previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
+
+
+                adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
+                adapter1.notifyDataSetChanged();
+                calendarView.setAdapter(adapter1);
 
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            }
-            if(Integer.parseInt(StorageHelper.getUserGroup(getActivity(),"user_group")) == 2){
-                progressDialog.dismiss();
-                Log.d(TAG,"INside threeMonthData method for user_group 2");
-                try {
-
-                    JSONObject jsonObject = new JSONObject((String) object);
-                    JSONArray jsonArray_data = jsonObject.getJSONArray("data");
-
-                    for (int i = 0; i < days_in_prev_month; i++) {
-                        Day day1 = new Day();
-                        JSONObject unique_day = jsonArray_data.getJSONObject(i);
-                        day1.setDate(unique_day.getString("date"));
-                        JSONArray jsonArray_of_events = unique_day.getJSONArray("event");
-                        List<DayEvent> dayEvents = new ArrayList<DayEvent>();
-
-                        if (jsonArray_of_events.length() > 0) {
-                            for (int e = 0; e < jsonArray_of_events.length(); e++) {
-
-                                JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                                DayEvent dayEvent = new DayEvent();
-
-                                dayEvent.setEvent_id(day_event.getString("id"));
-                                dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                                dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
-                                dayEvent.setFname(day_event.getString("first_name"));
-                                dayEvent.setLname(day_event.getString("last_name"));
-                                dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
-                                dayEvents.add(dayEvent);
-                            }
-                            day1.setDayEvents(dayEvents);
-                        } else {
-                            day1.setDayEvents(dayEvents);
-                        }
-                        previousMonthArrayList.add(day1);
-
-                    }
-
-
-                    for (int i = days_in_prev_month; i < days_in_prev_month + days_in_current_month; i++) {
-                        Day day1 = new Day();
-                        JSONObject unique_day = jsonArray_data.getJSONObject(i);
-                        day1.setDate(unique_day.getString("date"));
-                        JSONArray jsonArray_of_events = unique_day.getJSONArray("event");
-                        List<DayEvent> dayEvents = new ArrayList<DayEvent>();
-
-
-                        if (jsonArray_of_events.length() > 0) {
-                            for (int e = 0; e < jsonArray_of_events.length(); e++) {
-
-                                JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                                DayEvent dayEvent = new DayEvent();
-
-                                dayEvent.setEvent_id(day_event.getString("id"));
-                                dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                                dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
-                                dayEvent.setFname(day_event.getString("first_name"));
-                                dayEvent.setLname(day_event.getString("last_name"));
-                                dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
-                                dayEvents.add(dayEvent);
-                            }
-                            day1.setDayEvents(dayEvents);
-                        } else {
-                            day1.setDayEvents(dayEvents);
-                        }
-                        currentMonthArrayList.add(day1);
-                    }
-
-                    for (int i = days_in_prev_month + days_in_current_month; i < days_in_prev_month + days_in_current_month + days_in_next_month; i++) {
-                        Day day1 = new Day();
-                        JSONObject unique_day = jsonArray_data.getJSONObject(i);
-                        day1.setDate(unique_day.getString("date"));
-                        JSONArray jsonArray_of_events = unique_day.getJSONArray("event");
-                        List<DayEvent> dayEvents = new ArrayList<DayEvent>();
-
-
-
-                        if (jsonArray_of_events.length() > 0) {
-                            for (int e = 0; e < jsonArray_of_events.length(); e++) {
-
-                                JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                                DayEvent dayEvent = new DayEvent();
-
-                                dayEvent.setEvent_id(day_event.getString("id"));
-                                dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                                dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
-                                dayEvent.setFname(day_event.getString("first_name"));
-                                dayEvent.setLname(day_event.getString("last_name"));
-                                dayEvents.add(dayEvent);
-                            }
-                            day1.setDayEvents(dayEvents);
-                        } else {
-                            day1.setDayEvents(dayEvents);
-                        }
-                        comingMonthArrayList.add(day1);
-                    }
-
-
-                    Log.d(TAG, "previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
-
-
-                    adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
-                    adapter.notifyDataSetChanged();
-                    calendarView.setAdapter(adapter);
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
+        }
 
 
     }
 
-    private void nextMonthData(Object object){
+    private void nextMonthData(Object object) {
 
-        if(Integer.parseInt(StorageHelper.getUserGroup(getActivity(),"user_group")) == 3){
+        if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 3) {
 
             progressDialog.dismiss();
             try {
                 JSONObject jsonObject = new JSONObject((String) object);
                 JSONArray jsonArray_data = jsonObject.getJSONArray("data");
-
 
 
                 previousMonthArrayList = currentMonthArrayList;
@@ -777,18 +858,18 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
                     List<DayEvent> dayEvents = new ArrayList<DayEvent>();
 
-                    JSONArray jsonArray_of_slots=unique_day.getJSONArray("slots");
-                    List<DaySlot> daySlots=new ArrayList<DaySlot>();
-                    if(jsonArray_of_slots.length() > 0){
-                        for (int s=0;s<jsonArray_of_slots.length();s++){
-                            JSONObject day_slot=jsonArray_of_slots.getJSONObject(s);
-                            DaySlot daySlot=new DaySlot();
+                    JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
+                    List<DaySlot> daySlots = new ArrayList<DaySlot>();
+                    if (jsonArray_of_slots.length() > 0) {
+                        for (int s = 0; s < jsonArray_of_slots.length(); s++) {
+                            JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
+                            DaySlot daySlot = new DaySlot();
                             daySlot.setSlot_start_time(day_slot.getString("start_time"));
                             daySlot.setSlot_stop_time(day_slot.getString("stop_time"));
                             daySlots.add(daySlot);
                         }
                         day1.setDaySlots(daySlots);
-                    }else{
+                    } else {
                         day1.setDaySlots(daySlots);
                     }
 
@@ -820,12 +901,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     Log.d(TAG, "date from new comingMonthArrayList" + day1.getDate());
                 }
 
-                adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
+                adapter2 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
                 _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
                 currentMonth.setText(DateFormat.format(dateTemplate,
                         _calendar.getTime()));
-                adapter.notifyDataSetChanged();
-                calendarView.setAdapter(adapter);
+                adapter2.notifyDataSetChanged();
+                calendarView.setAdapter(adapter2);
 
 
             } catch (JSONException e) {
@@ -834,12 +915,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         }
 
 
-        if(Integer.parseInt(StorageHelper.getUserGroup(getActivity(),"user_group")) == 2){
+        if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 2) {
             progressDialog.dismiss();
             try {
                 JSONObject jsonObject = new JSONObject((String) object);
                 JSONArray jsonArray_data = jsonObject.getJSONArray("data");
-
 
 
                 previousMonthArrayList = currentMonthArrayList;
@@ -884,12 +964,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     Log.d(TAG, "date from new comingMonthArrayList" + day1.getDate());
                 }
 
-                adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
+                adapter2 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
                 _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
                 currentMonth.setText(DateFormat.format(dateTemplate,
                         _calendar.getTime()));
-                adapter.notifyDataSetChanged();
-                calendarView.setAdapter(adapter);
+                adapter2.notifyDataSetChanged();
+                calendarView.setAdapter(adapter2);
 
 
             } catch (JSONException e) {
@@ -899,9 +979,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     }
 
-    private void previousMonthData(Object object){
+    private void previousMonthData(Object object) {
 
-        if(Integer.parseInt(StorageHelper.getUserGroup(getActivity(),"user_group")) == 3){
+        if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 3) {
             progressDialog.dismiss();
             try {
                 JSONObject jsonObject = new JSONObject((String) object);
@@ -920,18 +1000,18 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
                     List<DayEvent> dayEvents = new ArrayList<DayEvent>();
 
-                    JSONArray jsonArray_of_slots=unique_day.getJSONArray("slots");
-                    List<DaySlot> daySlots=new ArrayList<DaySlot>();
-                    if(jsonArray_of_slots.length() > 0){
-                        for (int s=0;s<jsonArray_of_slots.length();s++){
-                            JSONObject day_slot=jsonArray_of_slots.getJSONObject(s);
-                            DaySlot daySlot=new DaySlot();
+                    JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
+                    List<DaySlot> daySlots = new ArrayList<DaySlot>();
+                    if (jsonArray_of_slots.length() > 0) {
+                        for (int s = 0; s < jsonArray_of_slots.length(); s++) {
+                            JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
+                            DaySlot daySlot = new DaySlot();
                             daySlot.setSlot_start_time(day_slot.getString("start_time"));
                             daySlot.setSlot_stop_time(day_slot.getString("stop_time"));
                             daySlots.add(daySlot);
                         }
                         day1.setDaySlots(daySlots);
-                    }else{
+                    } else {
                         day1.setDaySlots(daySlots);
                     }
 
@@ -956,12 +1036,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     previousMonthArrayList.add(day1);
 
                 }
-                adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
+                adapter3= new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
                 _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
                 currentMonth.setText(DateFormat.format(dateTemplate,
                         _calendar.getTime()));
-                adapter.notifyDataSetChanged();
-                calendarView.setAdapter(adapter);
+                adapter3.notifyDataSetChanged();
+                calendarView.setAdapter(adapter3);
 
 
             } catch (JSONException e) {
@@ -969,7 +1049,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             }
         }
 
-        if(Integer.parseInt(StorageHelper.getUserGroup(getActivity(),"user_group")) == 2){
+        if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 2) {
             progressDialog.dismiss();
             try {
                 JSONObject jsonObject = new JSONObject((String) object);
@@ -989,7 +1069,6 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     List<DayEvent> dayEvents = new ArrayList<DayEvent>();
 
 
-
                     if (jsonArray_of_events.length() > 0) {
                         for (int e = 0; e < jsonArray_of_events.length(); e++) {
 
@@ -1011,12 +1090,13 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     previousMonthArrayList.add(day1);
 
                 }
-                adapter = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
+                adapter3= new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
+
                 _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
                 currentMonth.setText(DateFormat.format(dateTemplate,
                         _calendar.getTime()));
-                adapter.notifyDataSetChanged();
-                calendarView.setAdapter(adapter);
+                adapter3.notifyDataSetChanged();
+                calendarView.setAdapter(adapter3);
 
 
             } catch (JSONException e) {

@@ -102,10 +102,6 @@ public class DashboardActivity extends FragmentActivity
 
         /*Creating folder for media storage*/
         StorageHelper.createAppMediaFolders(this);
-        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("fragment")) {
-            int fragment_to_start_val = getIntent().getExtras().getInt("fragment");
-        } else {
-        }
 
         fragment_to_launch_from_notification = getIntent().getIntExtra("fragment", 0);
         group_push_notification= getIntent().getIntExtra("group",0);
@@ -124,11 +120,11 @@ public class DashboardActivity extends FragmentActivity
                 if (regid.isEmpty() || !regid_saved_to_server) {
                     registerInBackground();
                 }
-                initialize();
 
-                if (StorageHelper.getUserDetails(this, "terms") == null) {
+                if (StorageHelper.getUserDetails(this, "terms") == null || !StorageHelper.getUserDetails(this, "terms").equals("yes")) {
                     showTermsAndConditions();
                 }
+                initialize();
             } else {
                 Toast.makeText(DashboardActivity.this, getResources().getString(R.string.google_play_services_not_supported), Toast.LENGTH_LONG).show();
                 Log.i(TAG, "No valid Google Play Services APK found.");
@@ -136,6 +132,7 @@ public class DashboardActivity extends FragmentActivity
 
         } else {
             initialize();
+
         }
 
 
@@ -487,7 +484,7 @@ public class DashboardActivity extends FragmentActivity
                     }
                 }
         );
-        // alertDialog.show();
+        alertDialog.show();
     }
 
     private void logout() {
