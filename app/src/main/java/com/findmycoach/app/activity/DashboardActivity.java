@@ -80,7 +80,6 @@ public class DashboardActivity extends FragmentActivity
     Context context;
     private ActionBar actionBar;
     public static TextView customTitle;
-    private
 
     int fragment_to_launch_from_notification = 0;  ///  On a tap over Push notification, then it will be used to identify which operation to perform
     int group_push_notification = 0;      /// it will identify push notification for which type of user.
@@ -90,6 +89,8 @@ public class DashboardActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        actionBar = getActionBar();
+        actionBar.hide();
         dashboardActivity = this;
 
         try{
@@ -529,8 +530,6 @@ public class DashboardActivity extends FragmentActivity
         userToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
 
 
-        actionBar = getActionBar();
-        actionBar.hide();
 //        actionBar.setDisplayShowTitleEnabled(false);
 //        actionBar.setDisplayShowCustomEnabled(true);
 //        View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);

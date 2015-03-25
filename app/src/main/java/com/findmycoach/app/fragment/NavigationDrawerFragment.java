@@ -37,7 +37,7 @@ import com.findmycoach.app.activity.DashboardActivity;
  */
 public class NavigationDrawerFragment extends Fragment {
 
-    private boolean isDrawerClosed;
+    private boolean isDrawerClosed, isSliding;
 
     /**
      * Remember the position of the selected item.
@@ -133,6 +133,7 @@ public class NavigationDrawerFragment extends Fragment {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
         isDrawerClosed = true;
+        isSliding = false;
 
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -158,6 +159,7 @@ public class NavigationDrawerFragment extends Fragment {
                 if (!isAdded()) {
                     return;
                 }
+                isSliding = false;
                 isDrawerClosed = true;
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
@@ -168,7 +170,7 @@ public class NavigationDrawerFragment extends Fragment {
                 if (!isAdded()) {
                     return;
                 }
-
+                isSliding = false;
                 isDrawerClosed = false;
                 if (!mUserLearnedDrawer) {
                     // The user manually opened the drawer; store this flag to prevent auto-showing
@@ -182,18 +184,21 @@ public class NavigationDrawerFragment extends Fragment {
             }
 
             @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                super.onDrawerSlide(drawerView, slideOffset);
+            public void onDrawerSlide(View drawerView, float slideOffset){
+                if (isDrawerClosed && !isSliding) {
+                    isSliding = true;
+                    applyRotation(0, 35, container, 0, container.getPivotY(), 400);
+                    applyRotation(-45, 0, mDrawerListView, mDrawerListView.getX(), container.getPivotY(), 500);
+                } else if (!isDrawerClosed && !isSliding) {
+                    isSliding = true;
+                    applyRotation(35, 0, container, 0, container.getPivotY(), 300);
+                    applyRotation(0, -45, mDrawerListView, mDrawerListView.getX(), container.getPivotY(), 200);
+                }
             }
 
             @Override
             public void onDrawerStateChanged(int newState) {
                 super.onDrawerStateChanged(newState);
-                if(newState == 2 && isDrawerClosed){
-                    applyRotation(0, 45, container);
-                }else if(newState == 2 && !isDrawerClosed){
-                    applyRotation(45, 0, container);
-                }
             }
         };
 
@@ -225,16 +230,12 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
-    private void applyRotation(float start, float end, RelativeLayout container) {
-
-        final float centerX = 0.0f;
-        final float centerY = 0.0f;
+    private void applyRotation(float start, float end, View container, float centerX, float centerY, long duration) {
         final Flip3dAnimation rotation = new Flip3dAnimation(start, end, centerX, centerY);
-        rotation.setDuration(200);
+        rotation.setDuration(duration);
         rotation.setFillAfter(true);
         rotation.setInterpolator(new AccelerateInterpolator());
         container.startAnimation(rotation);
-
     }
 
     private void selectItem(int position) {
