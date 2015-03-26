@@ -50,9 +50,17 @@ public class LocationForSchedule extends DialogFragment implements Callback{
 
         Dialog dialog = getDialog();
         dialog.setTitle(getString(R.string.calendar_by_loc));
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(false);
         launchListener();
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG,"LocationForSchedule dialog is on destroy");
+        myScheduleFragment.cb_calendar_by_location.setChecked(false);
+
     }
 
     private void launchListener() {
@@ -78,7 +86,6 @@ public class LocationForSchedule extends DialogFragment implements Callback{
             @Override
             public void onClick(View v) {
                 myScheduleFragment.calendar_by_location=auto_tv_location.getText().toString();
-                Toast.makeText(getActivity(),"autotext calendar location to string "+auto_tv_location.getText().toString(),Toast.LENGTH_SHORT).show();
                 dismiss();
                 myScheduleFragment.getCalendarDetailsAPICall();
 

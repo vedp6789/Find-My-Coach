@@ -620,6 +620,7 @@
     <string name="till">Till:</string>
     <string name="select">Select</string>
     <string name="forever">Forever</string>
+    <string name="how_long">How long?</string>
     <string name="date_picker_from">From</string>
     <string name="date_picker_to">To</string>
     <string name="no_search_result_found">No result found</string>

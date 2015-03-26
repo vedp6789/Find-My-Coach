@@ -47,7 +47,7 @@ import java.util.Locale;
 public class MyScheduleFragment extends Fragment implements View.OnClickListener, Callback {
 
     private TextView currentMonth, add_slot, add_vacation;
-    private  CheckBox cb_calendar_by_location;
+    public   CheckBox cb_calendar_by_location;
     private ImageView prevMonth;
     private ImageView nextMonth;
     private GridView calendarView;
@@ -209,8 +209,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     getLocationFromDialog();
                 } else {
                     cb_calendar_by_location_is_checked=false;
-                    calendar_by_location=null;
-                    getCalendarDetailsAPICall();
+
+                    if(calendar_by_location != null && calendar_by_location.trim().length() > 0){
+                        Log.d(TAG,"calendar_by_location strig size :"+calendar_by_location.trim().length());
+                        getCalendarDetailsAPICall();
+                    }
+
                 }
             }
         });
@@ -276,13 +280,14 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
         if (cb_calendar_by_location_is_checked) {
             Log.d(TAG,"calendar_by_location is checked true");
-            if (calendar_by_location != null) {
+            if (calendar_by_location != null && !calendar_by_location.trim().equals("")) {
                 Log.d(TAG, "Calendar_by_location getting passed to server : " + calendar_by_location);
                 requestParams.add("location", calendar_by_location);
                 networkCall1(requestParams);
             } else {
-                Toast.makeText(getActivity(), "Please provide location to access calendar details", Toast.LENGTH_SHORT).show();
-                getLocationFromDialog();  /* start LocationFromDialog to get the location */
+
+//                getLocationFromDialog();  /* start LocationFromDialog to get the location */
+                cb_calendar_by_location.setChecked(false);
             }
         } else {
 
@@ -518,6 +523,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
+        progressDialog.dismiss();
         switch (calledApiValue) {
             case 37:
                 threeMonthsData(object);

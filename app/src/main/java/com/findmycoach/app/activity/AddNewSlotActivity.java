@@ -25,9 +25,12 @@ import com.findmycoach.app.util.SetTime;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by praka_000 on 2/12/2015.
@@ -58,6 +61,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     private static int start_min;
     private static int stop_hour;
     private static int stop_min;
+
+    private Date newDate;
 
 
     private static final String TAG = "FMC";
@@ -116,7 +121,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyy");
         String current_date = simpleDateFormat.format(new Date());
 
-        date_from = current_date.substring(0, 2) + "/" + current_date.substring(2, 4) + "/" + current_date.substring(4, 8);
+        date_from = current_date.substring(0, 2) + "-" + current_date.substring(2, 4) + "-" + current_date.substring(4, 8);
         from_day = Integer.parseInt(current_date.substring(0, 2));
         from_month = Integer.parseInt(current_date.substring(2, 4));
         from_year = Integer.parseInt(current_date.substring(4, 8));
@@ -439,7 +444,11 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                         return false;
                     } else {
                         if (tv_start_date.getText().length() > 0) {
-                            return true;
+                            if(tv_till_date.getText().toString().equals(getResources().getString(R.string.forever))){
+                                return true;
+                            }else{
+                                return checkDaysAvailability(tv_start_date.getText().toString(),tv_till_date.getText().toString());
+                            }
                         } else {
                             Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_start_date_of_slot), Toast.LENGTH_SHORT).show();
                             return false;
@@ -456,6 +465,206 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             return false;
         }
     }
+
+    boolean checkDaysAvailability(String start_date, String till_date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+
+        Date start_convertedDate = null, till_CovertedDate = null/*,todayWithZeroTime=null*/;
+        try {
+            start_convertedDate = dateFormat.parse(start_date);
+            till_CovertedDate = dateFormat.parse(till_date);
+
+            /*Date today = new Date();
+
+            todayWithZeroTime =dateFormat.parse(dateFormat.format(today));*/
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        int s_year = 0, s_month = 0, s_day = 0;
+
+        Calendar s_cal = Calendar.getInstance();
+        s_cal.setTime(start_convertedDate);
+
+        s_year = s_cal.get(Calendar.YEAR);
+        s_month = s_cal.get(Calendar.MONTH);
+        s_day = s_cal.get(Calendar.DAY_OF_MONTH);
+
+
+        Calendar t_cal = Calendar.getInstance();
+        t_cal.setTime(till_CovertedDate);
+
+        int t_year = t_cal.get(Calendar.YEAR);
+        int t_month = t_cal.get(Calendar.MONTH);
+        int t_day = t_cal.get(Calendar.DAY_OF_MONTH);
+
+        Calendar date1 = Calendar.getInstance();
+        Calendar date2 = Calendar.getInstance();
+
+        date1.clear();
+        date1.set(s_year, s_month, s_day);
+        date2.clear();
+        date2.set(t_year, t_month, t_day);
+
+        long diff = date2.getTimeInMillis() - date1.getTimeInMillis();
+
+        float dayCount = (float) diff / (24 * 60 * 60 * 1000);
+        int day_count = (int) dayCount + 1;
+
+        Log.d(TAG, "Duration difference : " + dayCount + ", in Days : " + day_count);
+
+        int no_of_odd_days = (day_count % 7);
+
+        if (no_of_odd_days > 0 && day_count < 7) {
+            int weeks_having_no_odd_days = (day_count / 7);   /* Week number from start date and stop date having odd days*/
+            int move_by = weeks_having_no_odd_days * 7;
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(start_convertedDate);
+            calendar.add(Calendar.DAY_OF_YEAR, move_by);
+
+            newDate = calendar.getTime();
+            Log.d(TAG, " start of odd dates from this date by adding one date " + dateFormat.format(newDate) + " no of odd days : " + no_of_odd_days);
+
+            ArrayList<String> checkedWeekDays = getListForCheckedDays();
+            Log.d(TAG, "Checked day arraylist values");
+            for (int i = 0; i < checkedWeekDays.size(); i++) {
+                Log.d(TAG, " Checked days :" + checkedWeekDays.get(i));
+            }
+
+            Log.d(TAG, "ArrayList of selected week days : " + checkedWeekDays.size());
+            if (checkedWeekDays.size() > 0) {
+
+                String weeK_day = dayOfDate(newDate);
+                Log.d(TAG, "First week day from odd days : " + weeK_day);
+                for (int i = 0; i < checkedWeekDays.size(); i++) {
+                    String day = checkedWeekDays.get(i);
+                    if (weeK_day.equals(day)) {
+                        Log.d(TAG, "Initial day get removed !");
+                        checkedWeekDays.remove(i);
+                    }
+                }
+
+
+                Log.d(TAG, "Checked day arraylist values after first deletion ");
+                for (int i = 0; i < checkedWeekDays.size(); i++) {
+                    Log.d(TAG, " Checked days :" + checkedWeekDays.get(i));
+                }
+
+                int loop = 1;
+
+                while (loop < no_of_odd_days) {
+                    Calendar calendar1 = Calendar.getInstance();
+                    calendar1.setTime(newDate);
+                    calendar1.add(Calendar.DAY_OF_YEAR, 1);
+                    newDate = calendar1.getTime();
+                    Log.d(TAG, " new odd date from " + loop + " : " + dateFormat.format(newDate));
+                    Log.d(TAG, "ArrayList of selected week days from odd day loop " + loop + " is :" + checkedWeekDays.size());
+                    if (checkedWeekDays.size() > 0) {
+                        String weeK_day1 = dayOfDate(newDate);
+                        for (int i = 0; i < checkedWeekDays.size(); i++) {
+                            String day = checkedWeekDays.get(i);
+                            if (weeK_day1.equals(day)) {
+                                checkedWeekDays.remove(i);
+                            }
+                        }
+                    }
+                    ++loop;
+                }
+
+
+                Log.d(TAG, "Selected week day size after all operation " + checkedWeekDays.size());
+
+                Log.d(TAG, "Checked day arraylist values after all deletions");
+                for (int i = 0; i < checkedWeekDays.size(); i++) {
+                    Log.d(TAG, " Checked days :" + checkedWeekDays.get(i));
+                }
+
+                if (checkedWeekDays.size() > 0) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String day = checkedWeekDays.get(0);
+                    if (day.equals("1"))
+                        stringBuilder.append("Sun");
+                    if (day.equals("2"))
+                        stringBuilder.append("Mon");
+                    if (day.equals("3"))
+                        stringBuilder.append("Tue");
+                    if (day.equals("4"))
+                        stringBuilder.append("Wed");
+                    if (day.equals("5"))
+                        stringBuilder.append("Thu");
+                    if (day.equals("6"))
+                        stringBuilder.append("Fri");
+                    if (day.equals("7"))
+                        stringBuilder.append("Sat");
+
+
+                    for (int s = 1; s < checkedWeekDays.size(); s++) {
+                        String day1 = checkedWeekDays.get(s);
+
+                        if (day1.equals("1"))
+                            stringBuilder.append(", Sun");
+                        if (day1.equals("2"))
+                            stringBuilder.append(", Mon");
+                        if (day1.equals("3"))
+                            stringBuilder.append(", Tue");
+                        if (day1.equals("4"))
+                            stringBuilder.append(", Wed");
+                        if (day1.equals("5"))
+                            stringBuilder.append(", Thu");
+                        if (day1.equals("6"))
+                            stringBuilder.append(", Fri");
+                        if (day1.equals("7"))
+                            stringBuilder.append(", Sat");
+
+
+                    }
+                    Toast.makeText(AddNewSlotActivity.this, "Selected week-days for " + stringBuilder.toString() + " are not coming in the selected duration.", Toast.LENGTH_LONG).show();
+                    return false;
+                } else
+                    return true;
+
+
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+
+
+    }
+
+    private String dayOfDate(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date); // yourdate is a object of type Date
+
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+        return String.valueOf(dayOfWeek);
+    }
+
+    private ArrayList<String> getListForCheckedDays() {
+        ArrayList<String> days_checked = new ArrayList<String>();
+        if (cb_mon.isChecked())
+            days_checked.add("2");
+        if (cb_tue.isChecked())
+            days_checked.add("3");
+        if (cb_wed.isChecked())
+            days_checked.add("4");
+        if (cb_thur.isChecked())
+            days_checked.add("5");
+        if (cb_fri.isChecked())
+            days_checked.add("6");
+        if (cb_sat.isChecked())
+            days_checked.add("7");
+        if (cb_sun.isChecked())
+            days_checked.add("1");
+
+        return days_checked;
+
+    }
+
 
     void initialize() {
         cb_mon = (CheckBox) findViewById(R.id.cb_mon);

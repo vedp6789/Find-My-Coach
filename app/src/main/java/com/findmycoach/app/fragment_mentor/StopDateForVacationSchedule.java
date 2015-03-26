@@ -59,7 +59,9 @@ public class StopDateForVacationSchedule extends DialogFragment implements View.
         allow_forever=false;
 
         calendar = Calendar.getInstance();
-        calendar.set(date[2], date[1], date[0]+1, 0, 0, 0);
+        //calendar.set(date[2], date[1], date[0]+1, 0, 0, 0);
+        calendar.set(date[2], date[1], date[0], 0, 0, 0);
+
         time = calendar.getTimeInMillis();
 
 
