@@ -59,7 +59,7 @@ public class LocationForSchedule extends DialogFragment implements Callback{
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG,"LocationForSchedule dialog is on destroy");
-        myScheduleFragment.cb_calendar_by_location.setChecked(false);
+
 
     }
 

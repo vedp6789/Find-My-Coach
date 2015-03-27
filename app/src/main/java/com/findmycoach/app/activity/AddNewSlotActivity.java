@@ -66,7 +66,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
 
     private static final String TAG = "FMC";
-    private static String FOREVER;
+
 
     private static ArrayList<String> days_array = null;
 
@@ -98,7 +98,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         time_to = getResources().getString(R.string.select);
         date_to = getResources().getString(R.string.forever);
 
-        FOREVER = getResources().getString(R.string.forever);
+
 
         from_day = 0;
         from_month = 0;
@@ -126,6 +126,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         from_month = Integer.parseInt(current_date.substring(2, 4));
         from_year = Integer.parseInt(current_date.substring(4, 8));
         tv_start_date.setText(date_from);
+        tv_till_date.setText(getResources().getString(R.string.forever));
         date_to = getResources().getString(R.string.forever);
 
         allListeners();
@@ -351,10 +352,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                         requestParams.add("stop_time", stop_hour + ":" + stop_min + ":" + "00");
 
                         StringBuilder stringBuilder1 = new StringBuilder();
-                        stringBuilder1.append(days_array.get(0));
+                        stringBuilder1.append(days_array.get(0)+",");
                         if (days_array.size() > 1) {
                             for (int i = 1; i < days_array.size(); i++) {
-                                stringBuilder1.append("," + days_array.get(i));
+                                stringBuilder1.append(days_array.get(i)+",");
                             }
                         }
 
@@ -444,7 +445,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                         return false;
                     } else {
                         if (tv_start_date.getText().length() > 0) {
-                            if(tv_till_date.getText().toString().equals(getResources().getString(R.string.forever))){
+                            String till_date_val=tv_till_date.getText().toString();
+                            String s=getResources().getString(R.string.forever);
+                            Log.d(TAG," till date value : "+till_date_val+" forever string from resource : "+s);
+                            if(till_date_val.equals(s)){
                                 return true;
                             }else{
                                 return checkDaysAvailability(tv_start_date.getText().toString(),tv_till_date.getText().toString());
@@ -620,7 +624,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
 
                     }
-                    Toast.makeText(AddNewSlotActivity.this, "Selected week-days for " + stringBuilder.toString() + " are not coming in the selected duration.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddNewSlotActivity.this, stringBuilder.toString() + getResources().getString(R.string.out_of_duration), Toast.LENGTH_LONG).show();
                     return false;
                 } else
                     return true;
@@ -730,7 +734,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     public void setSelectedTillDate(Object o1, Object o2, Object o3, boolean b) {
         Log.d(TAG, o1.toString() + "/" + o2.toString() + "/" + o3.toString());
         if (b) {
-            AddNewSlotActivity.tv_till_date.setText(FOREVER);
+            AddNewSlotActivity.tv_till_date.setText(getResources().getString(R.string.forever));
 
         } else {
             int day = Integer.parseInt(o1.toString());

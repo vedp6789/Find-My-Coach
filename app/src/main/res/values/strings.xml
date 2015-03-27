@@ -519,6 +519,7 @@
     <string name="duration_please">Select the duration for this schedule.</string>
     <string name="cards_detail_will_saved">Card details will be saved</string>
     <string name="with">with </string>
+    <string name="out_of_duration"> are out of selected duration.</string>
 
 
     <!--  Minimum time difference between start time and stop time of a slot   i.e in hours-->

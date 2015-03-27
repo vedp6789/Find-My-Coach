@@ -2,8 +2,10 @@ package com.findmycoach.app.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -337,11 +339,18 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
 
                         requestParams.add("start_time", start_hour + ":" + start_min + ":" + "00");
                         requestParams.add("stop_time", stop_hour + ":" + stop_min + ":" + "00");
-                        String[] days = new String[days_array.size()];
+
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        stringBuilder1.append(days_array.get(0)+",");
+                        if (days_array.size() > 1) {
+                            for (int i = 1; i < days_array.size(); i++) {
+                                stringBuilder1.append(days_array.get(i)+",");
+                            }
+                        }
 
                         requestParams.add("name", StorageHelper.getUserDetails(ScheduleYourVacation.this, "user_id") + "_vacation_schedule");
 
-                        requestParams.add("dates", String.valueOf(days_array));
+                        requestParams.add("dates", stringBuilder1.toString());
 
                         for (int i = 0; i < days_array.size(); i++) {
                             Log.d(TAG, "Day" + days_array.get(i));
@@ -363,9 +372,9 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                                 Toast.makeText(ScheduleYourVacation.this, (String) object, Toast.LENGTH_SHORT).show();
                                 String failure_response = (String) object;
                                 try {
-                                    JSONObject jsonObject = new JSONObject(failure_response);
-                                    JSONArray jsonArray_coincidingExceptions = jsonObject.getJSONArray("coincidingExceptions");
-                                    //JSONArray coninciding_days=jsonArray_coincidingExceptions.getJSONArray("W");
+                                    JSONObject jO_failure_resp = new JSONObject(failure_response);
+                                    JSONArray jA_coincidingExceptions = jO_failure_resp.getJSONArray("coincidingExceptions");
+                                    coincidingExceptionMessage(jA_coincidingExceptions);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -379,32 +388,109 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
         });
     }
 
-    private boolean validate() {
-        if (cb_mon.isChecked() || cb_tue.isChecked() || cb_wed.isChecked() || cb_thur.isChecked() || cb_fri.isChecked() || cb_sat.isChecked() || cb_sun.isChecked()) {
-            if (time_from.equals("00:00") || time_to.equals("24:00")) {
+    void coincidingExceptionMessage(JSONArray jsonArray){
+        if(jsonArray.length() > 1){
+
+        }else{
+            try {
+                String s_date,st_date,s_time,st_time,days=null;
+                JSONObject jO_coinciding_detail=jsonArray.getJSONObject(0);
+                JSONArray jA_Week_days=jO_coinciding_detail.getJSONArray("Week_days");
+                if(jA_Week_days.length() > 0){
+                    days=jA_Week_days.getString(0);
+                }
+                s_date=jO_coinciding_detail.getString("start_date");
+                st_date=jO_coinciding_detail.getString("stop_date");
+                s_time=jO_coinciding_detail.getString("start_time");
+                st_time=jO_coinciding_detail.getString("stop_time");
+                StringBuilder stringBuilder=new StringBuilder();
 
 
-                /*  default time is available so we do not need to restrict user on time selection */
 
-                /*if (time_from.equals(getResources().getString(R.string.select)) && time_to.equals(getResources().getString(R.string.select))) {
-                    Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.select_start_and_end_time), Toast.LENGTH_SHORT).show();
-                    return false;
-                } else {
-                    if (time_from.equals(getResources().getString(R.string.select))) {
-                        Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.select_start_time), Toast.LENGTH_SHORT).show();
-                        return false;
 
-                    } else {
-                        if (time_to.equals(getResources().getString(R.string.select))) {
-                            Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.select_end_time), Toast.LENGTH_SHORT).show();
-                            return false;
-                        }
+
+
+
+
+
+                if(days != null){
+                    String [] days_a=days.split(",");
+                    StringBuilder stringBuilder1=new StringBuilder();
+                    String day1=days_a[0];
+                    if(day1.equals("M"));
+                    stringBuilder1.append("Mon");
+                    if(day1.equals("T"));
+                    stringBuilder1.append("Tue");
+                    if(day1.equals("W"));
+                    stringBuilder1.append("Wed");
+                    if(day1.equals("Th"));
+                    stringBuilder1.append("Thu");
+                    if(day1.equals("F"));
+                    stringBuilder1.append("Fri");
+                    if(day1.equals("S"));
+                    stringBuilder1.append("Sat");
+                    if(day1.equals("Su"));
+                    stringBuilder1.append("Sun");
+
+                    for (int i =1; i<days_a.length ;i++){
+                        String day=days_a[i];
+                        if(day.equals("M"));
+                        stringBuilder1.append(", Mon");
+                        if(day.equals("T"));
+                        stringBuilder1.append(", Tue");
+                        if(day.equals("W"));
+                        stringBuilder1.append(", Wed");
+                        if(day.equals("Th"));
+                        stringBuilder1.append(", Thu");
+                        if(day.equals("F"));
+                        stringBuilder1.append(", Fri");
+                        if(day.equals("S"));
+                        stringBuilder1.append(", Sat");
+                        if(day.equals("Su"));
+                        stringBuilder1.append(", Sun");
+
+
 
 
                     }
 
+
+                    stringBuilder.append("Sorry, there is already a schedule between \n"+s_date +" & "+st_date +"from "+s_time.substring(0,6) +" to "+st_time.substring(0,6)+ " for "+stringBuilder1.toString());
+                    /*stringBuilder.append("")
+                    showCoincidingAlertMessage();*/
+                }else{
+
                 }
-                return false;*/
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    void showCoincidingAlertMessage(String message){
+        new AlertDialog.Builder(this)
+                .setTitle("Its coinciding schedule")
+                .setMessage(message)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    private boolean validate() {
+        if (cb_mon.isChecked() || cb_tue.isChecked() || cb_wed.isChecked() || cb_thur.isChecked() || cb_fri.isChecked() || cb_sat.isChecked() || cb_sun.isChecked()) {
+            if (time_from.equals("00:00") || time_to.equals("24:00")) {
+
 
                 return dateValidation();
 
@@ -471,11 +557,29 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
 
         int s_year = 0, s_month = 0, s_day = 0;
 
+
+
+
+
+
+
+
+
+
         Calendar s_cal = Calendar.getInstance();
         s_cal.setTime(start_convertedDate);
 
         s_year = s_cal.get(Calendar.YEAR);
         s_month = s_cal.get(Calendar.MONTH);
+
+
+
+
+
+
+
+
+
         s_day = s_cal.get(Calendar.DAY_OF_MONTH);
 
 
@@ -560,26 +664,7 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                     ++loop;
                 }
 
-                /*do {
-                    Calendar calendar1 = Calendar.getInstance();
-                    calendar1.setTime(newDate);
-                    calendar1.add(Calendar.DAY_OF_YEAR, 1);
-                    newDate = calendar1.getTime();
-                    Log.d(TAG, " new odd date from " + loop +" : "+ dateFormat.format(newDate));
-                    Log.d(TAG, "ArrayList of selected week days from odd day loop " + loop + " is :" + checkedWeekDays.size());
-                    if (checkedWeekDays.size() > 0) {
-                        String weeK_day1 = dayOfDate(newDate);
-                        for (int i = 0; i < checkedWeekDays.size(); i++) {
-                            String day = checkedWeekDays.get(i);
-                            if (weeK_day1.equals(day)) {
-                                checkedWeekDays.remove(i);
-                            }
-                        }
-                    }
-                    ++loop;
 
-                } while (loop < no_of_odd_days);
-*/
                 Log.d(TAG, "Selected week day size after all operation " + checkedWeekDays.size());
 
                 Log.d(TAG, "Checked day arraylist values after all deletions");
@@ -625,8 +710,17 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                             stringBuilder.append(", Sat");
 
 
+
+
+
+
+
+
+
+
+
                     }
-                    Toast.makeText(ScheduleYourVacation.this, "Selected week-days for " + stringBuilder.toString() + " are not coming in the selected duration.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ScheduleYourVacation.this, stringBuilder.toString() + getResources().getString(R.string.out_of_duration), Toast.LENGTH_LONG).show();
                     return false;
                 } else
                     return true;
@@ -635,6 +729,15 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
             } else {
                 return true;
             }
+
+
+
+
+
+
+
+
+
         } else {
             return true;
         }

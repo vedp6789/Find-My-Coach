@@ -526,21 +526,27 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         progressDialog.dismiss();
         switch (calledApiValue) {
             case 37:
+                Log.d(TAG," API 37 success");
                 threeMonthsData(object);
                 break;
             case 38:
+                Log.d(TAG," API 38 success");
                 nextMonthData(object);
                 break;
             case 39:
+                Log.d(TAG," API 39 success");
                 previousMonthData(object);
                 break;
             case 40:
+                Log.d(TAG," API 40 success");
                 threeMonthsData(object);
                 break;
             case 41:
+                Log.d(TAG," API 41 success");
                 nextMonthData(object);
                 break;
             case 42:
+                Log.d(TAG," API 42 success");
                 previousMonthData(object);
                 break;
         }
@@ -548,6 +554,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
+        Log.d(TAG,"API "+calledApiValue+" failure");
         Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
         progressDialog.dismiss();
     }
