@@ -352,10 +352,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                         requestParams.add("stop_time", stop_hour + ":" + stop_min + ":" + "00");
 
                         StringBuilder stringBuilder1 = new StringBuilder();
-                        stringBuilder1.append(days_array.get(0)+",");
+                        stringBuilder1.append(days_array.get(0));
                         if (days_array.size() > 1) {
                             for (int i = 1; i < days_array.size(); i++) {
-                                stringBuilder1.append(days_array.get(i)+",");
+                                stringBuilder1.append(","+days_array.get(i));
                             }
                         }
 
@@ -624,7 +624,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
 
                     }
-                    Toast.makeText(AddNewSlotActivity.this, stringBuilder.toString() + getResources().getString(R.string.out_of_duration), Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddNewSlotActivity.this, stringBuilder.toString() +" "+ getResources().getString(R.string.out_of_duration), Toast.LENGTH_LONG).show();
                     return false;
                 } else
                     return true;
