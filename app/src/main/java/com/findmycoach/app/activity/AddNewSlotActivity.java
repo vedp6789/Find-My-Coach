@@ -2,8 +2,10 @@ package com.findmycoach.app.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -25,12 +27,17 @@ import com.findmycoach.app.util.SetTime;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TreeSet;
 
 /**
  * Created by praka_000 on 2/12/2015.
@@ -97,7 +104,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         time_from = getResources().getString(R.string.select);
         time_to = getResources().getString(R.string.select);
         date_to = getResources().getString(R.string.forever);
-
 
 
         from_day = 0;
@@ -355,7 +361,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                         stringBuilder1.append(days_array.get(0));
                         if (days_array.size() > 1) {
                             for (int i = 1; i < days_array.size(); i++) {
-                                stringBuilder1.append(","+days_array.get(i));
+                                stringBuilder1.append("," + days_array.get(i));
                             }
                         }
 
@@ -391,14 +397,335 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
                             @Override
                             public void failureOperation(Object object, int statusCode, int calledApiValue) {
-                                Toast.makeText(AddNewSlotActivity.this, (String) object, Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
+                                String failure_response = (String) object;
+                                Log.d(TAG, "failure  response for add new slot activity : " + failure_response);
+
+                                JSONObject jO_failure_resp = null;
+                                JSONArray jA_coinciding_slots = null, jA_coinciding_Exceptions = null;
+                                if (failure_response.equals(getResources().getString(R.string.problem_in_connection_server))) {
+                                    Toast.makeText(AddNewSlotActivity.this, (String) object, Toast.LENGTH_SHORT).show();
+                                   // progressDialog.dismiss();
+                                } else {
+                                    try {
+                                        jO_failure_resp = new JSONObject(failure_response);
+                                        jA_coinciding_slots = jO_failure_resp.getJSONArray("coincidingSlots");
+                                        jA_coinciding_Exceptions = jO_failure_resp.getJSONArray("coincidingExceptions");
+
+                                        if (jA_coinciding_slots != null) {
+                                            coincideOf(jA_coinciding_slots, 0);
+                                        }
+                                        if (jA_coinciding_Exceptions != null) {
+                                            coincideOf(jA_coinciding_Exceptions, 1);
+                                        }
+
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+                                }
+
+
                             }
                         }, 35);
                     }
                 }
             }
         });
+    }
+
+    /* This method generates message when either slots coincide or there is coinciding exceptions like vaccation*/
+    void coincideOf(JSONArray jsonArray, int flag) {      /* flag 0 means slot is coinciding and 1 means there is some exceptions while this schedule like mentor has already scheduled some vaccations*/
+
+        if (jsonArray.length() > 1) {
+            String s_date, st_date, s_time, st_time;
+
+            Date start_date = null, stop_date = null;
+            TreeSet<String> tset_days = new TreeSet<String>();
+            TreeSet<Float> tset_s_time = new TreeSet<Float>();
+            TreeSet<Float> tset_st_time = new TreeSet<Float>();
+            JSONObject jO_coinciding_detail = null;
+            try {
+                jO_coinciding_detail = jsonArray.getJSONObject(0);
+                JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("Week_days");
+                if (jA_Week_days.length() > 0) {
+
+                    for (int jA_Week_day = 0; jA_Week_day < jA_Week_days.length(); jA_Week_day++) {
+                        tset_days.add(jA_Week_days.getString(jA_Week_day));
+                    }
+
+                }
+                s_date = jO_coinciding_detail.getString("start_date");
+                st_date = jO_coinciding_detail.getString("stop_date");
+                s_time = jO_coinciding_detail.getString("start_time");
+                st_time = jO_coinciding_detail.getString("stop_time");
+
+                float f_s_time = Float.parseFloat(s_time.split(":")[0] + "." + s_time.split(":")[1]);
+                float f_st_time = Float.parseFloat(st_time.split(":")[0] + "." + st_time.split(":")[1]);
+
+                tset_s_time.add(f_s_time);
+                tset_st_time.add(f_st_time);
+
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                try {
+                    start_date = dateFormat.parse(s_date);
+                    stop_date = dateFormat.parse(st_date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            for (int i = 1; i < jsonArray.length(); i++) {
+                Date new_start_date, new_stop_date;
+                JSONObject jO_coinciding_detail1 = null;
+                try {
+                    jO_coinciding_detail1 = jsonArray.getJSONObject(i);
+                    JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("Week_days");
+                    if (jA_Week_days.length() > 0) {
+                        for (int jA_Week_day = 0; jA_Week_day < jA_Week_days.length(); jA_Week_day++) {
+                            tset_days.add(jA_Week_days.getString(jA_Week_day));
+                        }
+                    }
+                    s_date = jO_coinciding_detail.getString("start_date");
+                    st_date = jO_coinciding_detail.getString("stop_date");
+                    s_time = jO_coinciding_detail.getString("start_time");
+                    st_time = jO_coinciding_detail.getString("stop_time");
+
+                    float f_s_time = Float.parseFloat(s_time.split(":")[0] + "." + s_time.split(":")[1]);
+                    float f_st_time = Float.parseFloat(st_time.split(":")[0] + "." + st_time.split(":")[1]);
+
+                    tset_s_time.add(f_s_time);
+                    tset_st_time.add(f_st_time);
+
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                    try {
+                        new_start_date = dateFormat.parse(s_date);
+                        new_stop_date = dateFormat.parse(st_date);
+
+                        if (new_start_date.before(start_date)) {
+                            start_date = new_start_date;
+                        }
+
+                        if (new_stop_date.after(stop_date)) {
+                            stop_date = new_stop_date;
+                        }
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            if (start_date != null && stop_date != null && tset_s_time.size() > 0 && tset_st_time.size() > 0) {
+                float start_time = tset_s_time.first();
+                float stop_time = tset_st_time.last();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMYYYY", Locale.getDefault());
+
+
+                if (tset_days.size() > 0) {
+                    ArrayList<String> days_selected = new ArrayList<String>(tset_days.size());
+                    days_selected.addAll(tset_days);
+
+                    String day = days_selected.get(0);
+
+                    StringBuilder stringBuilder1 = new StringBuilder();
+
+
+                    for (int i = 0; i < days_selected.size(); i++) {
+                        String day1 = days_selected.get(i);
+                        if (day1.equals("M"))
+                            stringBuilder1.append("Mon");
+                        if (day1.equals("T"))
+                            stringBuilder1.append("Tue");
+                        if (day1.equals("W"))
+                            stringBuilder1.append("Wed");
+                        if (day1.equals("Th"))
+                            stringBuilder1.append("Thu");
+                        if (day1.equals("F"))
+                            stringBuilder1.append("Fri");
+                        if (day1.equals("S"))
+                            stringBuilder1.append("Sat");
+                        if (day1.equals("Su"))
+                            stringBuilder1.append("Sun");
+                    }
+
+                    /* if condition is checking whether the flag is 0 or 1 in case of multiple coincidiing slots with Week-days mentioned, or in case of multiple coinciding exceptions with Week-days in Json string .*/
+                    if (flag == 0) {
+                        stringBuilder.append("Sorry, there is already a slot between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + String.valueOf(start_time).replace(".", ":") + " to " + String.valueOf(stop_time).replace(".", ":") + " for " + stringBuilder1.toString() + " \n So this slot cannot be placed!");
+                        showCoincidingAlertMessage(stringBuilder.toString(), flag);
+                        Log.d(TAG, "Message for coinciding slot schedule : " + stringBuilder.toString());
+                    } else {
+                        stringBuilder.append("Hi, you have placed a new slot with a vacation between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + String.valueOf(start_time).replace(".", ":") + " to " + String.valueOf(stop_time).replace(".", ":") + " for " + stringBuilder1.toString());
+                        showCoincidingAlertMessage(stringBuilder.toString(), flag);
+                        Log.d(TAG, "Message for coinciding exception while add new slot : " + stringBuilder.toString());
+                    }
+
+                } else {
+                    /* if condition is checking whether the flag is 0 or 1 in case of multiple coincidiing slots , or in case of multiple coinciding exceptions  in Json string .*/
+                    if (flag == 0) {
+                        stringBuilder.append("Sorry, there is already a slot between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + String.valueOf(start_time).replace(".", ":") + " to " + String.valueOf(stop_time).replace(".", ":") + "\n So this slot cannot be placed!");
+                        showCoincidingAlertMessage(stringBuilder.toString(), flag);
+                        Log.d(TAG, "Message for coinciding slot schedule : " + stringBuilder.toString());
+                    } else {
+                        stringBuilder.append("Hi, you have placed a new slot with a vacation between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + String.valueOf(start_time).replace(".", ":") + " to " + String.valueOf(stop_time).replace(".", ":"));
+                        showCoincidingAlertMessage(stringBuilder.toString(), flag);
+                        Log.d(TAG, "Message for coinciding exception while add new slot : " + stringBuilder.toString());
+                    }
+                }
+
+            }
+
+
+        } else {
+            if (jsonArray.length() > 0) {
+                try {
+                    String s_date, st_date, s_time, st_time;
+                    ArrayList<String> days = new ArrayList<String>();
+
+                    JSONObject jO_coinciding_detail = jsonArray.getJSONObject(0);
+                    JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("Week_days");
+                    if (jA_Week_days.length() > 0) {
+                        for (int jA_index = 0; jA_index < jA_Week_days.length(); jA_index++) {
+                            days.add(jA_Week_days.getString(jA_index));
+                        }
+                    }
+                    s_date = jO_coinciding_detail.getString("start_date");
+                    st_date = jO_coinciding_detail.getString("stop_date");
+                    s_time = jO_coinciding_detail.getString("start_time");
+                    st_time = jO_coinciding_detail.getString("stop_time");
+                    StringBuilder stringBuilder = new StringBuilder();
+                    Date start_date = null, stop_date = null;
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                    try {
+                        start_date = dateFormat.parse(s_date);
+                        stop_date = dateFormat.parse(st_date);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+
+                    Log.d(TAG, "days : " + days);
+
+                    if (days != null) {
+
+                        StringBuilder stringBuilder1 = new StringBuilder();
+                        String day1 = days.get(0);
+                        if (day1.equals("M"))
+                            stringBuilder1.append("Mon");
+                        if (day1.equals("T"))
+                            stringBuilder1.append("Tue");
+                        if (day1.equals("W"))
+                            stringBuilder1.append("Wed");
+                        if (day1.equals("Th"))
+                            stringBuilder1.append("Thu");
+                        if (day1.equals("F"))
+                            stringBuilder1.append("Fri");
+                        if (day1.equals("S"))
+                            stringBuilder1.append("Sat");
+                        if (day1.equals("Su"))
+                            stringBuilder1.append("Sun");
+
+                        for (int i = 1; i < days.size(); i++) {
+                            String day = days.get(i);
+                            if (day.equals("M"))
+                                stringBuilder1.append(", Mon");
+                            if (day.equals("T"))
+                                stringBuilder1.append(", Tue");
+                            if (day.equals("W"))
+                                stringBuilder1.append(", Wed");
+                            if (day.equals("Th"))
+                                stringBuilder1.append(", Thu");
+                            if (day.equals("F"))
+                                stringBuilder1.append(", Fri");
+                            if (day.equals("S"))
+                                stringBuilder1.append(", Sat");
+                            if (day.equals("Su"))
+                                stringBuilder1.append(", Sun");
+
+                        }
+
+
+
+                    /* if condition is checking whether the flag is 0 or 1 in case of single coinciding slot with Week-days mentioned, or in case of single coinciding exception with Week-days in Json string .*/
+                        if (flag == 0) {
+                            stringBuilder.append("Sorry, there is already a slot between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + st_time.substring(0, 5) + " for " + stringBuilder1.toString() + " \n So this slot cannot be placed!");
+
+                            showCoincidingAlertMessage(stringBuilder.toString(), flag);
+                            Log.d(TAG, "Message for coinciding slot schedule : " + stringBuilder.toString());
+                        } else {
+                            stringBuilder.append("Hi, you have placed a new slot with a vacation between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + st_time.substring(0, 5) + " for " + stringBuilder1.toString());
+                            showCoincidingAlertMessage(stringBuilder.toString(), flag);
+                            Log.d(TAG, "Message for coinciding exception while add new slot : " + stringBuilder.toString());
+                        }
+
+
+                    } else {
+
+                    /* if condition is checking whether the flag is 0 or 1 in case of single coinciding slot,or in case of single coinciding exception in Json string.*/
+                        if (flag == 0) {
+                            stringBuilder.append("Sorry, there is already a slot between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + st_time.substring(0, 5) + "\n So this slot cannot be placed!");
+                            showCoincidingAlertMessage(stringBuilder.toString(), flag);
+                            Log.d(TAG, "Message for coinciding slot schedule : " + stringBuilder.toString());
+                        } else {
+                            stringBuilder.append("Hi, you have placed a new slot with a vacation between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + st_time.substring(0, 5));
+                            showCoincidingAlertMessage(stringBuilder.toString(), flag);
+                            Log.d(TAG, "Message for coinciding exception while add new slot : " + stringBuilder.toString());
+                        }
+
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    }
+
+
+    void showCoincidingAlertMessage(String message, int flag) {
+        if (flag == 0) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Coinciding slot")
+                    .setMessage(message)
+                    .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        } else {
+            new AlertDialog.Builder(this)
+                    .setTitle("Vaccation schedule found")
+                    .setMessage(message)
+                    .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+
     }
 
     private boolean validate() {
@@ -438,20 +765,20 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
                 if (slot_time_value < minimum_difference) {
                     Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.slot_time_difference), Toast.LENGTH_SHORT).show();
-                     return false;
+                    return false;
                 } else {
                     if ((slot_time_value % 3600) > 0) {
                         Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_slot_in_multiple_of_hour), Toast.LENGTH_SHORT).show();
                         return false;
                     } else {
                         if (tv_start_date.getText().length() > 0) {
-                            String till_date_val=tv_till_date.getText().toString();
-                            String s=getResources().getString(R.string.forever);
-                            Log.d(TAG," till date value : "+till_date_val+" forever string from resource : "+s);
-                            if(till_date_val.equals(s)){
+                            String till_date_val = tv_till_date.getText().toString();
+                            String s = getResources().getString(R.string.forever);
+                            Log.d(TAG, " till date value : " + till_date_val + " forever string from resource : " + s);
+                            if (till_date_val.equals(s)) {
                                 return true;
-                            }else{
-                                return checkDaysAvailability(tv_start_date.getText().toString(),tv_till_date.getText().toString());
+                            } else {
+                                return checkDaysAvailability(tv_start_date.getText().toString(), tv_till_date.getText().toString());
                             }
                         } else {
                             Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_start_date_of_slot), Toast.LENGTH_SHORT).show();
@@ -589,6 +916,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                     StringBuilder stringBuilder = new StringBuilder();
                     String day = checkedWeekDays.get(0);
                     if (day.equals("1"))
+
                         stringBuilder.append("Sun");
                     if (day.equals("2"))
                         stringBuilder.append("Mon");
@@ -624,7 +952,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
 
                     }
-                    Toast.makeText(AddNewSlotActivity.this, stringBuilder.toString() +" "+ getResources().getString(R.string.out_of_duration), Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddNewSlotActivity.this, stringBuilder.toString() + " " + getResources().getString(R.string.out_of_duration), Toast.LENGTH_LONG).show();
                     return false;
                 } else
                     return true;
@@ -794,6 +1122,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         tv_start_time.setText(hour + ":" + minute);
 
     }
+
     /* Initializes start date from StopTimeDialogFragment*/
     @Override
     public void setSelectedTillTime(Object o1, Object o2) {

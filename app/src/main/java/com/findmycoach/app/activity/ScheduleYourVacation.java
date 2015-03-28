@@ -383,17 +383,24 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                             @Override
                             public void failureOperation(Object object, int statusCode, int calledApiValue) {
 
-                                Toast.makeText(ScheduleYourVacation.this, (String) object, Toast.LENGTH_SHORT).show();
+
+
                                 String failure_response = (String) object;
-                                Log.d(TAG,"failure response : "+failure_response);
-                                try {
-                                    JSONObject jO_failure_resp = new JSONObject(failure_response);
-                                    JSONArray jA_coincidingExceptions = jO_failure_resp.getJSONArray("coincidingExceptions");
-                                    coincidingExceptionMessage(jA_coincidingExceptions);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                if(failure_response.equals(getResources().getString(R.string.problem_in_connection_server))){
+                                    Log.d(TAG,"failure response : "+failure_response);
+                                    Toast.makeText(ScheduleYourVacation.this, failure_response, Toast.LENGTH_SHORT).show();
+                                }else {
+                                    Log.d(TAG,"failure response : "+failure_response);
+                                    try {
+                                        JSONObject jO_failure_resp = new JSONObject(failure_response);
+                                        JSONArray jA_coincidingExceptions = jO_failure_resp.getJSONArray("coincidingExceptions");
+                                        coincidingExceptionMessage(jA_coincidingExceptions);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    progressDialog.dismiss();
                                 }
-                                progressDialog.dismiss();
+
                             }
                         }, 36);
 
@@ -587,7 +594,7 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                 if (days != null) {
 
                     StringBuilder stringBuilder1 = new StringBuilder();
-                    /*String day1 = days.get(0);
+                    String day1 = days.get(0);
                     if (day1.equals("M"))
                     stringBuilder1.append("Mon");
                     if (day1.equals("T"))
@@ -601,9 +608,9 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                     if (day1.equals("S"))
                     stringBuilder1.append("Sat");
                     if (day1.equals("Su"))
-                    stringBuilder1.append("Sun");*/
+                    stringBuilder1.append("Sun");
 
-                    for (int i = 0; i < days.size(); i++) {
+                    for (int i = 1; i < days.size(); i++) {
                         String day = days.get(i);
                         if (day.equals("M"))
                         stringBuilder1.append(", Mon");
