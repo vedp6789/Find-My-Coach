@@ -69,10 +69,10 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
     private static int till_month;//completion month of the slot
     private static int till_year;//completion year of the slot.
 
-    private static int start_hour;
-    private static int start_min;
-    private static int stop_hour;
-    private static int stop_min;
+    private static int start_hour=0;
+    private static int start_min=0;
+    private static int stop_hour=0;
+    private static int stop_min=0;
 
 
     private static final String TAG = "FMC";
@@ -348,6 +348,8 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                         requestParams.add("start_time", start_hour + ":" + start_min + ":" + "00");
                         requestParams.add("stop_time", stop_hour + ":" + stop_min + ":" + "00");
 
+                        Log.d(TAG,"Vacation schedule time"+ " start time : "+ start_hour + ":" + start_min + ":" + "00"+" /n stop time : "+ stop_hour + ":" + stop_min + ":" + "00");
+
                         StringBuilder stringBuilder1 = new StringBuilder();
                         stringBuilder1.append(days_array.get(0));
                         if (days_array.size() > 1) {
@@ -372,6 +374,7 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
 
                         String auth_token = StorageHelper.getUserDetails(ScheduleYourVacation.this, "auth_token");
                         progressDialog.show();
+
                         NetworkClient.scheduleVacation(ScheduleYourVacation.this, requestParams, auth_token, new Callback() {
 
                             @Override
@@ -518,7 +521,7 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
             if (start_date != null && stop_date != null && tset_s_time.size() > 0 && tset_st_time.size() > 0) {
                 float start_time = tset_s_time.first();
                 float stop_time = tset_st_time.last();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMYYYY", Locale.getDefault());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
 
 
                 if (tset_days.size() > 0) {
@@ -665,8 +668,11 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
 
     private boolean validate() {
         if (cb_mon.isChecked() || cb_tue.isChecked() || cb_wed.isChecked() || cb_thur.isChecked() || cb_fri.isChecked() || cb_sat.isChecked() || cb_sun.isChecked()) {
-            if (time_from.equals("00:00") || time_to.equals("24:00")) {
-
+            if (time_from.equals("00:00") && time_to.equals("24:00")) {
+                start_hour=0;
+                start_min=0;
+                stop_hour=24;
+                stop_min=0;
 
                 return dateValidation();
 
@@ -674,17 +680,16 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
             } else {
                 int start_time = ((start_hour * 60) + start_min) * 60;
                 int stop_time = ((stop_hour * 60) + stop_min) * 60;
-                int intermediate_time = (24 * 60) * 60;
-                int slot_time_value;
-                if (start_hour > stop_hour) {
-                    int first_half_time = intermediate_time - start_time;
-                    slot_time_value = first_half_time + stop_time;
-                } else {
-                    slot_time_value = stop_time - start_time;
-                }
-                int minimum_difference = (Integer.parseInt(getResources().getString(R.string.slot_time_difference_in_hour)) * 60) * 60;
 
-                return dateValidation();
+                if (start_time > stop_time) {
+                    Toast.makeText(ScheduleYourVacation.this,getResources().getString(R.string.stop_time_should_be_grater), Toast.LENGTH_LONG).show();
+                    return false;
+                } else {
+                    return dateValidation();
+                }
+
+
+
 
             }
 
@@ -940,8 +945,12 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
         tv_till_date = (TextView) findViewById(R.id.tv_slot_till_date);
         tv_start_time = (TextView) findViewById(R.id.tv_slot_start_time);
         tv_start_time.setText("00:00");
+        start_hour=0;
+        start_min=0;
         tv_stop_time = (TextView) findViewById(R.id.tv_slot_stop_time);
         tv_stop_time.setText("24:00");
+        stop_hour=24;
+        stop_min=0;
 
         et_note_vaccation = (EditText) findViewById(R.id.et_vacation_note);
 

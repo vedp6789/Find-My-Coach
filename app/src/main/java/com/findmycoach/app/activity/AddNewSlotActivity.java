@@ -393,6 +393,29 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                             public void successOperation(Object object, int statusCode, int calledApiValue) {
                                 Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully), Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
+
+                                String success_response=(String) object;
+                                Log.d(TAG, "success response for add new slot activity : " + success_response);
+                                JSONObject jO_success_response =null;
+                                JSONArray jA_coinciding_Exceptions=null;
+
+                                if (success_response.equals(getResources().getString(R.string.problem_in_connection_server))) {
+                                    Toast.makeText(AddNewSlotActivity.this, (String) object, Toast.LENGTH_SHORT).show();
+                                    // progressDialog.dismiss();
+                                }else{
+                                    try {
+                                        jO_success_response=new JSONObject(success_response);
+                                        jA_coinciding_Exceptions=jO_success_response.getJSONArray("coincidingExceptions");
+                                        String message=jO_success_response.getString("message");
+                                        if(message.equals("Success")){
+                                            if(jA_coinciding_Exceptions.length() > 0){
+                                                coincideOf(jA_coinciding_Exceptions,1);
+                                            }
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
                             }
 
                             @Override
@@ -534,7 +557,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             if (start_date != null && stop_date != null && tset_s_time.size() > 0 && tset_st_time.size() > 0) {
                 float start_time = tset_s_time.first();
                 float stop_time = tset_st_time.last();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMYYYY", Locale.getDefault());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
 
 
                 if (tset_days.size() > 0) {
@@ -753,41 +776,43 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             } else {
                 int start_time = ((start_hour * 60) + start_min) * 60;
                 int stop_time = ((stop_hour * 60) + stop_min) * 60;
-                int intermediate_time = (24 * 60) * 60;
-                int slot_time_value;
-                if (start_hour > stop_hour) {
-                    int first_half_time = intermediate_time - start_time;
-                    slot_time_value = first_half_time + stop_time;
+
+                int slot_time_value=0;
+                if (start_time > stop_time) {
+                    Toast.makeText(AddNewSlotActivity.this,getResources().getString(R.string.stop_time_should_be_grater), Toast.LENGTH_LONG).show();
+                    return false;
+
                 } else {
                     slot_time_value = stop_time - start_time;
-                }
-                int minimum_difference = (Integer.parseInt(getResources().getString(R.string.slot_time_difference_in_hour)) * 60) * 60;
+                    int minimum_difference = (Integer.parseInt(getResources().getString(R.string.slot_time_difference_in_hour)) * 60) * 60;
 
-                if (slot_time_value < minimum_difference) {
-                    Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.slot_time_difference), Toast.LENGTH_SHORT).show();
-                    return false;
-                } else {
-                    if ((slot_time_value % 3600) > 0) {
-                        Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_slot_in_multiple_of_hour), Toast.LENGTH_SHORT).show();
+                    if (slot_time_value < minimum_difference) {
+                        Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.slot_time_difference), Toast.LENGTH_SHORT).show();
                         return false;
                     } else {
-                        if (tv_start_date.getText().length() > 0) {
-                            String till_date_val = tv_till_date.getText().toString();
-                            String s = getResources().getString(R.string.forever);
-                            Log.d(TAG, " till date value : " + till_date_val + " forever string from resource : " + s);
-                            if (till_date_val.equals(s)) {
-                                return true;
-                            } else {
-                                return checkDaysAvailability(tv_start_date.getText().toString(), tv_till_date.getText().toString());
-                            }
-                        } else {
-                            Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_start_date_of_slot), Toast.LENGTH_SHORT).show();
+                        if ((slot_time_value % 3600) > 0) {
+                            Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_slot_in_multiple_of_hour), Toast.LENGTH_SHORT).show();
                             return false;
+                        } else {
+                            if (tv_start_date.getText().length() > 0) {
+                                String till_date_val = tv_till_date.getText().toString();
+                                String s = getResources().getString(R.string.forever);
+                                Log.d(TAG, " till date value : " + till_date_val + " forever string from resource : " + s);
+                                if (till_date_val.equals(s)) {
+                                    return true;
+                                } else {
+                                    return checkDaysAvailability(tv_start_date.getText().toString(), tv_till_date.getText().toString());
+                                }
+                            } else {
+                                Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_start_date_of_slot), Toast.LENGTH_SHORT).show();
+                                return false;
+                            }
                         }
+
+
                     }
-
-
                 }
+
 
             }
 

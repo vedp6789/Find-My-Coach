@@ -520,6 +520,7 @@
     <string name="cards_detail_will_saved">Card details will be saved</string>
     <string name="with">with </string>
     <string name="out_of_duration"> are out of selected duration.</string>
+    <string name="stop_time_should_be_grater">Completion time should be greater than start time !</string>
 
 
     <!--  Minimum time difference between start time and stop time of a slot   i.e in hours-->

@@ -810,7 +810,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
 
             StringBuilder stringBuilder1 = new StringBuilder();
-            if (arrayList_days.size() > 1) {
+            if (arrayList_days.size() > 0) {
                 stringBuilder1.append(arrayList_days.get(0));
                 for (int i = 1; i < arrayList_days.size(); i++) {
                     stringBuilder1.append("," + arrayList_days.get(i));
@@ -854,7 +854,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             NetworkClient.validateMenteeEvent(ScheduleNewClass.this, requestParams, this, 46);
 
 
-            Log.d(TAG, "Data going to be validated at the time of successful date selection \n id : " + mentor_data.get("id") + ", start time : " + start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00" + ", stop time :" + stop_time.split(":")[0] + ":" + stop_time.split(":")[1] + ":00" + " , days : " + stringBuilder1.toString() + ", start date : " + tv_from_date.getText().toString() + ", stop_date : " + tv_to_date.getText().toString() + ", sub category name : " + selected_subject.toString() + "mentee address : " + et_location.getText().toString());
+            Log.d(TAG, "Data going to be validated at the time of successful date selection \n id : " + mentor_data.get("id") + ", start time : " + start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00" + ", stop time :" + stop_time.split(":")[0] + ":" + stop_time.split(":")[1] + ":00 " + " , days : " + stringBuilder1.toString() + " , start date : " + tv_from_date.getText().toString() + ", stop_date : " + tv_to_date.getText().toString() + ", sub category name : " + selected_subject.toString() + "mentee address : " + et_location.getText().toString());
 
             Log.d(TAG, "Can start network communication");
 
