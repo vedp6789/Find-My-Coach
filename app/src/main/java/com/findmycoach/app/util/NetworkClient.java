@@ -897,6 +897,10 @@ public class NetworkClient {
     }
 
     public static void getCategories(Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
+        if(!NetworkManager.isNetworkConnected(context)){
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
         client.post(context, getAbsoluteURL("categorySubCategory", context), requestParams, new AsyncHttpResponseHandler() {

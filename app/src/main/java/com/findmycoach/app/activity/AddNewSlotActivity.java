@@ -472,7 +472,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             JSONObject jO_coinciding_detail = null;
             try {
                 jO_coinciding_detail = jsonArray.getJSONObject(0);
-                JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("Week_days");
+                JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
                 if (jA_Week_days.length() > 0) {
 
                     for (int jA_Week_day = 0; jA_Week_day < jA_Week_days.length(); jA_Week_day++) {
@@ -510,7 +510,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 JSONObject jO_coinciding_detail1 = null;
                 try {
                     jO_coinciding_detail1 = jsonArray.getJSONObject(i);
-                    JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("Week_days");
+                    JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
                     if (jA_Week_days.length() > 0) {
                         for (int jA_Week_day = 0; jA_Week_day < jA_Week_days.length(); jA_Week_day++) {
                             tset_days.add(jA_Week_days.getString(jA_Week_day));
@@ -621,7 +621,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                     ArrayList<String> days = new ArrayList<String>();
 
                     JSONObject jO_coinciding_detail = jsonArray.getJSONObject(0);
-                    JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("Week_days");
+                    JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
                     if (jA_Week_days.length() > 0) {
                         for (int jA_index = 0; jA_index < jA_Week_days.length(); jA_index++) {
                             days.add(jA_Week_days.getString(jA_index));

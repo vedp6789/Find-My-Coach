@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -35,6 +36,8 @@ public class LocationForSchedule extends DialogFragment implements Callback{
     Button b_ok;
     public String TAG="FMC";
     public MyScheduleFragment myScheduleFragment;
+    private String location;
+    ArrayAdapter<String> arrayAdapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,34 @@ public class LocationForSchedule extends DialogFragment implements Callback{
         auto_tv_location= (AutoCompleteTextView) view.findViewById(R.id.auto_tv_location);
         b_ok= (Button) view.findViewById(R.id.b_ok);
 
+        auto_tv_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(location != null){
+                    Log.d(TAG,"Location : "+location);
+
+                }else{
+                    Log.d(TAG,"Location : "+" not set correctly yet ");
+
+                }
+            }
+        });
+
+
+        auto_tv_location.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                location = arrayAdapter.getItem(position).toString();
+                if(location != null){
+                    Log.d(TAG,"Location : "+location);
+
+                }else{
+                    Log.d(TAG,"Location : "+" not set correctly yet ");
+
+                }
+            }
+        });
+
         Dialog dialog = getDialog();
         dialog.setTitle(getString(R.string.calendar_by_loc));
         dialog.setCanceledOnTouchOutside(false);
@@ -59,8 +90,6 @@ public class LocationForSchedule extends DialogFragment implements Callback{
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG,"LocationForSchedule dialog is on destroy");
-
-
     }
 
     private void launchListener() {
@@ -75,6 +104,14 @@ public class LocationForSchedule extends DialogFragment implements Callback{
 
             @Override
             public void afterTextChanged(Editable s) {
+                location=null;
+                if(location != null){
+                    Log.d(TAG,"Location after text changed  : "+location);
+
+                }else{
+                    Log.d(TAG,"Location after text changed : "+" not set correctly yet ");
+
+                }
                 String input = auto_tv_location.getText().toString();
                 if (input.length() >= 2) {
                     getAutoSuggestions(input);
@@ -117,7 +154,10 @@ public class LocationForSchedule extends DialogFragment implements Callback{
         for (int index = 0; index < suggestions.size(); index++) {
             list.add(suggestions.get(index).getDescription());
         }
-        auto_tv_location.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list));
+        arrayAdapter=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,list);
+        auto_tv_location.setAdapter(arrayAdapter);
+        //auto_tv_location.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list));
+
     }
 
     @Override
