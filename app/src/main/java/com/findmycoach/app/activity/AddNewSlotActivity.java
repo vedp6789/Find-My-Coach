@@ -751,7 +751,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
                     .setMessage(message)
                     .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+
                             dialog.dismiss();
+                            setResult(500);
+                            finish();
                         }
                     })
 
