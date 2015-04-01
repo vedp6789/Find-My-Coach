@@ -16,13 +16,29 @@
         android:inputType="textAutoComplete"
         android:padding="4dp"/>
 
-    <Button
-        android:id="@+id/b_ok"
-        android:layout_below="@id/auto_tv_location"
-        android:text="@string/ok"
-        android:layout_marginTop="5dp"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:layout_below="@id/auto_tv_location"
+        android:orientation="horizontal"
+        android:weightSum="1">
+        <Button
+            android:id="@+id/b_ok"
+            android:text="@string/ok"
+            android:layout_marginTop="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            />
+        <Button
+            android:id="@+id/b_cancel"
+            android:text="@string/cancel"
+            android:layout_marginTop="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            />
+        </LinearLayout>
+
 
 </RelativeLayout>

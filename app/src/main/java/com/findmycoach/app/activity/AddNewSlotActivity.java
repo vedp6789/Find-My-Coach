@@ -6,7 +6,10 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.fragment_mentor.StartDateDialogFragment;
 import com.findmycoach.app.fragment_mentor.StartTimeDialogFragment;
 import com.findmycoach.app.fragment_mentor.StopTimeDialogFragment;
@@ -42,7 +46,7 @@ import java.util.TreeSet;
 /**
  * Created by praka_000 on 2/12/2015.
  */
-public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
+public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
     CheckBox cb_mon, cb_tue,
             cb_wed, cb_thur,
             cb_fri, cb_sat,
@@ -410,6 +414,12 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                                         if(message.equals("Success")){
                                             if(jA_coinciding_Exceptions.length() > 0){
                                                 coincideOf(jA_coinciding_Exceptions,1);
+                                            }else{
+
+                                                setResult(500);
+                                                finish();
+
+
                                             }
                                         }
                                     } catch (JSONException e) {

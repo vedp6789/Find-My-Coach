@@ -321,27 +321,51 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         if(jsonArray_sub_category.length() <= 0){
             Log.i(TAG,"sub_category size is null");
         }
-
-        if(connectionStatus.equals("not connected") || connectionStatus.equals("pending") || jsonArray_sub_category.length() <= 0 || noSlotsAvailable())
+        Toast.makeText(MentorDetailsActivity.this,"Connection status : "+connectionStatus+"\nsubcategorey length : "+jsonArray_sub_category.length()+ " \nslots available : "+noSlotsAvailable(),Toast.LENGTH_LONG).show();
+        /*if(connectionStatus.equals("not connected") || connectionStatus.equals("pending") || jsonArray_sub_category.length() <= 0 || noSlotsAvailable())
+            b_schedule_class.setVisibility(View.GONE);
+*/
+        if(connectionStatus.equals("not connected") || connectionStatus.equals("pending") || jsonArray_sub_category.length() <= 0 )
             b_schedule_class.setVisibility(View.GONE);
 
-        /*int sub_category_length=jsonArray_sub_category.length();
-        try {
-            if(sub_category_length== 1){
-               String x= (String) jsonArray_sub_category.get(0);
-                if(x.equals("null")){
-                    Log.i(TAG,"null matched");
-                }
-            }
 
-            b_schedule_class.setOnClickListener(this);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
     }
 
     private boolean noSlotsAvailable(){
-        return jArray_mon_slots.length() <= 0 && jArray_tue_slots.length() <= 0 && jArray_wed_slots.length() <= 0 && jArray_thu_slots.length() <= 0 && jArray_fri_slots.length() <= 0 && jArray_sat_slots.length() <= 0 && jArray_sun_slots.length() <= 0;
+        if(jArray_mon_slots.length() <= 0){
+            if(jArray_tue_slots.length() <= 0){
+                if(jArray_wed_slots.length() <= 0){
+                    if(jArray_thu_slots.length() <= 0){
+                        if(jArray_fri_slots.length() <= 0){
+                            if(jArray_fri_slots.length() <= 0){
+                                if(jArray_sat_slots.length() <= 0){
+                                    if(jArray_sun_slots.length() <= 0){
+                                        return true;
+                                    }else{
+                                        return false;
+                                    }
+                                }else{
+                                    return false;
+                                }
+                            }else{
+                                return false;
+                            }
+                        }else{
+                            return false;
+                        }
+                    }else{
+                        return false;
+                    }
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+        //return jArray_mon_slots.length() <= 0 && jArray_tue_slots.length() <= 0 && jArray_wed_slots.length() <= 0 && jArray_thu_slots.length() <= 0 && jArray_fri_slots.length() <= 0 && jArray_sat_slots.length() <= 0 && jArray_sun_slots.length() <= 0;
     }
 
     private void populateFields() {

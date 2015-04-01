@@ -319,9 +319,6 @@ public class DashboardActivity extends FragmentActivity
 
                         case 1: {
                             Log.d(TAG, "Inside DashboardActivity of Mentor, going to start Notification fragment");
-                            // initialize();
-                            //NotificationsFragment notificationsFragment=new NotificationsFragment();
-                            //fragmentTransaction.add(R.id.container,notificationsFragment);
                             fragmentTransaction.replace(R.id.container, new NotificationsFragment());
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();

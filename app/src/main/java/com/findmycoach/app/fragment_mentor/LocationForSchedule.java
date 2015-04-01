@@ -33,10 +33,11 @@ import java.util.List;
  */
 public class LocationForSchedule extends DialogFragment implements Callback{
     AutoCompleteTextView auto_tv_location;
-    Button b_ok;
+    Button b_ok,b_cancel;
     public String TAG="FMC";
     public MyScheduleFragment myScheduleFragment;
-    private String location;
+    private String location=null;
+    private String last_location_selected=null;
     ArrayAdapter<String> arrayAdapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,32 +51,28 @@ public class LocationForSchedule extends DialogFragment implements Callback{
         View view=inflater.inflate(R.layout.dialog_auto_type_address,container,false);
         auto_tv_location= (AutoCompleteTextView) view.findViewById(R.id.auto_tv_location);
         b_ok= (Button) view.findViewById(R.id.b_ok);
-
-        auto_tv_location.setOnClickListener(new View.OnClickListener() {
+        b_cancel= (Button) view.findViewById(R.id.b_cancel);
+        /*auto_tv_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(location != null){
                     Log.d(TAG,"Location : "+location);
 
                 }else{
-                    Log.d(TAG,"Location : "+" not set correctly yet ");
+                    auto_tv_location.setText(null);
+                    Log.d(TAG,"Location : "+ location +" doesn't match from suggested address ");
 
                 }
             }
-        });
+        });*/
 
 
         auto_tv_location.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 location = arrayAdapter.getItem(position).toString();
-                if(location != null){
-                    Log.d(TAG,"Location : "+location);
+                last_location_selected=location;
 
-                }else{
-                    Log.d(TAG,"Location : "+" not set correctly yet ");
-
-                }
             }
         });
 
@@ -104,7 +101,7 @@ public class LocationForSchedule extends DialogFragment implements Callback{
 
             @Override
             public void afterTextChanged(Editable s) {
-                location=null;
+                location=null;    /* making location string null because if user do changes in location and doest not select location from suggested location then this location string should be null which is used to validate the location */
                 if(location != null){
                     Log.d(TAG,"Location after text changed  : "+location);
 
@@ -122,11 +119,43 @@ public class LocationForSchedule extends DialogFragment implements Callback{
         b_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myScheduleFragment.calendar_by_location=auto_tv_location.getText().toString();
+                if(location != null){
+                    if (location.equals(auto_tv_location.getText().toString())){
+                        myScheduleFragment.calendar_by_location=auto_tv_location.getText().toString();
+                        dismiss();
+                        myScheduleFragment.getCalendarDetailsAPICall();
+                    }else{
+                        if(last_location_selected.equals(auto_tv_location.getText().toString())){
+                            myScheduleFragment.calendar_by_location=auto_tv_location.getText().toString();
+                            dismiss();
+                            myScheduleFragment.getCalendarDetailsAPICall();
+                        }else{
+                            Toast.makeText(getActivity(),getResources().getString(R.string.select_suggested_location),Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }else{
+                    if( last_location_selected != null && last_location_selected.equals(auto_tv_location.getText().toString())){
+                        myScheduleFragment.calendar_by_location=auto_tv_location.getText().toString();
+                        dismiss();
+                        myScheduleFragment.getCalendarDetailsAPICall();
+                    }else{
+                        Toast.makeText(getActivity(),getResources().getString(R.string.select_suggested_location),Toast.LENGTH_SHORT).show();
+                    }
+
+                   // Toast.makeText(getActivity(),getResources().getString(R.string.select_suggested_location),Toast.LENGTH_SHORT).show();
+                }
+
+
+
+            }
+        });
+
+        b_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 dismiss();
                 myScheduleFragment.getCalendarDetailsAPICall();
-
-
             }
         });
     }

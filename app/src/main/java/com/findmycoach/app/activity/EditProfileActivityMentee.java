@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -67,7 +68,9 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
     private Data userInfo;
     private String imageInBinary = "";
     private final String[] coachingTypeOptions = new String[]{"Solo", "Multiple"};
-
+    ArrayAdapter<String> arrayAdapter;
+    private String city=null;
+    private String last_city_selected=null;
     private static final String TAG="FMC";
 
     @Override
@@ -92,6 +95,8 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             profileLastName.setText(userInfo.getLastName());
             profileAddress.setText((String) userInfo.getAddress());
             profileAddress1.setText((String) userInfo.getCity());
+            city=(String) userInfo.getCity();  /* city string initially set to the city i.e. earlier get updated*/
+            last_city_selected=city;
             profileDOB.setText((String) userInfo.getDob());
             pinCode.setText((String) userInfo.getZip());
             mentorFor.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"Self","Kid"}));
@@ -175,10 +180,21 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
 
             @Override
             public void afterTextChanged(Editable s) {
+                city=null;
                 String input = profileAddress1.getText().toString();
                 if (input.length() >= 2) {
                     getAutoSuggestions(input);
                 }
+            }
+        });
+
+
+
+        profileAddress1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                city = arrayAdapter.getItem(position).toString();
+                last_city_selected=city;
             }
         });
 
@@ -217,7 +233,34 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
 
     // Validate user first name, last name and address
     private boolean validateUserUpdate() {
-        if(profileAddress1.getText().toString().trim().equals("")){
+        if(profileAddress1.getText().toString() != null){
+            if(profileAddress1.getText().toString().trim().equals("")){
+                Toast.makeText(EditProfileActivityMentee.this,getResources().getString(R.string.choose_suggested_city),Toast.LENGTH_LONG).show();
+                profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        profileAddress1.setError(null);
+                    }
+                }, 3500);
+                return false;
+            }
+            if(!profileAddress1.getText().toString().equals(city)){
+                if(!profileAddress1.getText().toString().equals(last_city_selected)){
+                    Toast.makeText(EditProfileActivityMentee.this,getResources().getString(R.string.choose_suggested_city),Toast.LENGTH_LONG).show();
+                    profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            profileAddress1.setError(null);
+                        }
+                    }, 3500);
+                    return false;
+                }
+
+            }
+
+        }else{
             Toast.makeText(EditProfileActivityMentee.this,getResources().getString(R.string.choose_suggested_city),Toast.LENGTH_LONG).show();
             profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
             new Handler().postDelayed(new Runnable() {
@@ -374,7 +417,8 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
         for (int index = 0; index < suggestions.size(); index++) {
             list.add(suggestions.get(index).getDescription());
         }
-        profileAddress1.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list));
+        arrayAdapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
+        profileAddress1.setAdapter(arrayAdapter);
     }
 
     @Override

@@ -60,13 +60,13 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     private static final String TAG = "FMC";
     ProgressDialog progressDialog;
     private int days_in_new_prev_month, days_in_new_next_month;
-    public static ArrayList<Day> previousMonthArrayList = null;
-    public static ArrayList<Day> currentMonthArrayList = null;
-    public static ArrayList<Day> comingMonthArrayList = null;
+    public ArrayList<Day> previousMonthArrayList = null;
+    public ArrayList<Day> currentMonthArrayList = null;
+    public ArrayList<Day> comingMonthArrayList = null;
     public JSONArray prev_json, current_json, next_json;
     public String calendar_by_location = null;
     public boolean cb_calendar_by_location_is_checked=false,b_three_months_data;
-
+    private int NEW_SLT=0, VAC_SCH=1,REULT_OK=500;
 
     public MyScheduleFragment() {
         // Required empty public constructor
@@ -108,6 +108,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         }
         return view;
     }
+
+
+
+
+
 
     /* Initializing views for Mentee login */
     private void initializeMenteeView(View view) {
@@ -169,6 +174,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         requestParams.add("start_date", String.valueOf(stringBuilder));
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
         progressDialog.show();
+
         NetworkClient.getMenteeCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 40);  /*Network operation for getting details for three months */
     }
 
@@ -206,6 +212,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
                 if (isChecked) {                                                                 /* Starting a fragment to get the location detail by autotype method */
                     cb_calendar_by_location_is_checked=true;
+                    calendar_by_location=null;
                     getLocationFromDialog();
                 } else {
                     cb_calendar_by_location_is_checked=false;
@@ -230,7 +237,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     }
 
     public void getCalendarDetailsAPICall() {
-
+        Log.d(TAG,"state 1");
         previousMonthArrayList = new ArrayList<Day>();
         currentMonthArrayList = new ArrayList<Day>();
         comingMonthArrayList = new ArrayList<Day>();
@@ -277,12 +284,16 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         Toast.makeText(getActivity(), getResources().getString(R.string.start_date1) + String.valueOf(stringBuilder), Toast.LENGTH_SHORT).show();
         requestParams.add("start_date", String.valueOf(stringBuilder));
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
+        Log.d(TAG, "state 2");
 
         if (cb_calendar_by_location_is_checked) {
+            Log.d(TAG,"state 3");
+
             Log.d(TAG,"calendar_by_location is checked true");
             if (calendar_by_location != null && !calendar_by_location.trim().equals("")) {
                 Log.d(TAG, "Calendar_by_location getting passed to server : " + calendar_by_location);
                 requestParams.add("location", calendar_by_location);
+                Log.d(TAG," Data getting requested for three months : "+ "start date : "+String.valueOf(stringBuilder)+ " limit : "+String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month)+" location : "+calendar_by_location );
                 networkCall1(requestParams);
             } else {
 
@@ -290,7 +301,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 cb_calendar_by_location.setChecked(false);
             }
         } else {
+            Log.d(TAG,"state 4");
 
+            Log.d(TAG," Data getting requested for three months : "+ "start date : "+String.valueOf(stringBuilder)+ " limit : "+String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month) );
             Log.d(TAG,"start networkCall1");
             networkCall1(requestParams);
         }
@@ -315,10 +328,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         super.onDetach();
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
+
 
     @Override
     public void onClick(View v) {
@@ -327,13 +337,14 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             if (v == add_slot) {
 
                 Intent intent = new Intent(getActivity(), AddNewSlotActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,NEW_SLT);
 
             }
             if (v == add_vacation) {
 
                 Intent intent = new Intent(getActivity(), ScheduleYourVacation.class);
-                startActivity(intent);
+                startActivityForResult(intent,VAC_SCH);
+
 
             }
         }
@@ -349,6 +360,17 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
             }
         }
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==NEW_SLT && resultCode==REULT_OK){
+            Log.d(TAG,"onActivityResult call ");
+            getCalendarDetailsAPICall();
+        }
+
+        //super.onActivityResult(requestCode, resultCode, data);
 
     }
 
@@ -405,13 +427,14 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 if (calendar_by_location != null) {
                     Log.d(TAG, "Calendar_by_location getting passed to server : " + calendar_by_location);
                     requestParams.add("location", calendar_by_location);
+                    Log.d(TAG," Request for calendar details for prev month "+"start _date: "+String.valueOf(stringBuilder)+ " limit : "+String.valueOf(days_in_new_prev_month)+" calendar by location : "+calendar_by_location);
                     networkCall2(requestParams);
                 } else {
                     Toast.makeText(getActivity(), "Please provide location to access calendar details", Toast.LENGTH_SHORT).show();
                     getLocationFromDialog();  /* start LocationFromDialog to get the location */
                 }
             } else {
-
+                Log.d(TAG," Request for calendar details for prev month "+"start _date: "+String.valueOf(stringBuilder)+ " limit : "+String.valueOf(days_in_new_prev_month));
                 networkCall2(requestParams);
             }
 
@@ -487,13 +510,14 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 if (calendar_by_location != null) {
                     Log.d(TAG, "Calendar_by_location getting passed to server : " + calendar_by_location);
                     requestParams.add("location", calendar_by_location);
+                    Log.d(TAG," Request for calendar details for prev month "+"start _date: "+String.valueOf(stringBuilder)+ " limit : "+String.valueOf(days_in_new_next_month)+ " location : "+ calendar_by_location);
                     networkCall3(requestParams);
                 } else {
                     Toast.makeText(getActivity(), "Please provide location to access calendar details", Toast.LENGTH_SHORT).show();
                     getLocationFromDialog();  /* start LocationFromDialog to get the location */
                 }
             } else {
-
+                Log.d(TAG," Request for calendar details for prev month "+"start _date: "+String.valueOf(stringBuilder)+ " limit : "+String.valueOf(days_in_new_next_month));
                 networkCall3(requestParams);
             }
 
