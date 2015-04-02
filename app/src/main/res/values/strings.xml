@@ -733,7 +733,8 @@
     <string name="personally">I\'ll pay the mentor personally</string>
     <string name="check_availability">Check for availability</string>
     <string name="event_desc">Event Description</string>
-
+  <string name="month">Month</string>
+    <string name="year">Year</string>
     <string name="calendar_by_loc">Calendar by location</string>
     <string name="loc">Location</string>
     <!-- Static Text -->
@@ -793,6 +794,9 @@
         <item>November</item>
         <item>December</item>
     </string-array>
+
+
+
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 

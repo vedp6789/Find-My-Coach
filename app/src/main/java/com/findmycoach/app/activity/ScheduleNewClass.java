@@ -155,7 +155,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
 
             /* Creating array list of slot timing each of 1 hour by incrementing different start time from TreeSet by 1*/
-            Iterator<Float> itr = slotsTimeTreeSet.iterator();
+            /*Iterator<Float> itr = slotsTimeTreeSet.iterator();
             while (itr.hasNext()) {
                 float start_time = itr.next();
                 float stop_time=(start_time+1);
@@ -165,7 +165,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
                 SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HH:mm");
                 try {
-         /*           Log.d(TAG," start time parsed  : "+simpleDateFormat.parse(String.valueOf(start_time).replace(".",":"))+" start time format : ");*/
+         *//*           Log.d(TAG," start time parsed  : "+simpleDateFormat.parse(String.valueOf(start_time).replace(".",":"))+" start time format : ");*//*
                     Date s_d=simpleDateFormat.parse(String.valueOf(start_time).replace(".",":"));
                     s_hr=s_d.getHours();
                     s_min=s_d.getMinutes();
@@ -207,10 +207,60 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 slot_timings.add(sB_s_time.toString() + "-" + sB_st_time.toString());
 
             }
+*/
 
 
+            ArrayList<String> timings=new ArrayList<String>();
+            timings.add("00:00 - 01:00");
+            timings.add("01:00 - 02:00");
+            timings.add("02:00 - 03:00");
+            timings.add("03:00 - 04:00");
+            timings.add("04:00 - 05:00");
+            timings.add("05:00 - 06:00");
+            timings.add("06:00 - 07:00");
+            timings.add("07:00 - 08:00");
+            timings.add("08:00 - 09:00");
+            timings.add("09:00 - 10:00");
+            timings.add("10:00 - 11:00");
+            timings.add("11:00 - 12:00");
+            timings.add("12:00 - 13:00");
+            timings.add("13:00 - 14:00");
+            timings.add("14:00 - 15:00");
+            timings.add("15:00 - 16:00");
+            timings.add("16:00 - 17:00");
+            timings.add("17:00 - 18:00");
+            timings.add("18:00 - 19:00");
+            timings.add("19:00 - 20:00");
+            timings.add("20:00 - 21:00");
+            timings.add("21:00 - 22:00");
+            timings.add("22:00 - 23:00");
+            timings.add("23:00 - 00:00");
 
-            /* Populating timing spinner and according to time selection, a filter over days availability is going to be applied. */
+            ArrayAdapter arrayAdapter1 = new ArrayAdapter(this, android.R.layout.simple_spinner_item, timings);
+            arrayAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sp_class_timing.setAdapter(arrayAdapter1);
+            sp_class_timing.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    selected_time=parent.getItemAtPosition(position).toString();
+                    cb_mon.setChecked(true);
+                    cb_tue.setChecked(true);
+                    cb_wed.setChecked(true);
+                    cb_thu.setChecked(true);
+                    cb_fri.setChecked(true);
+                    cb_sat.setChecked(true);
+                    cb_sun.setChecked(true);
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+
+            /* Populating timing spinner and according to time selection, a filter over days availability is going to be applied. *//*
             ArrayAdapter arrayAdapter1 = new ArrayAdapter(this, android.R.layout.simple_spinner_item, slot_timings);
             arrayAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             sp_class_timing.setAdapter(arrayAdapter1);
@@ -222,7 +272,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
                     boolean b_m = false, b_t = false, b_w = false, b_th = false, b_f = false, b_s = false, b_su = false;
 
-                    /* Initially making all check boxes enabled and checked. These get disabled and unchecked according to timing of the slot selected by user */
+                    *//* Initially making all check boxes enabled and checked. These get disabled and unchecked according to timing of the slot selected by user *//*
                     cb_mon.setEnabled(true);
                     cb_tue.setEnabled(true);
                     cb_wed.setEnabled(true);
@@ -420,7 +470,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
 
 
-                    /* Checking boolean variable for days which are not available for selected timing and making these disabled and unchecked*/
+                    *//* Checking boolean variable for days which are not available for selected timing and making these disabled and unchecked*//*
                     if (!b_m) {
                         cb_mon.setEnabled(false);
                         cb_mon.setChecked(false);
@@ -459,7 +509,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
                 }
             });
-
+*/
             /*Checking mentor's availability to mentee location, if mentor is not going to be available then address is not going to be needed from mentee so disabling it*/
             mentor_availability = mentor_data.getString("availability_yn");
             if (!mentor_availability.equals("1")) {
@@ -867,25 +917,41 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             requestParams.add("mentor_id", mentor_data.getString("id"));
             Log.d(TAG, "Timing selected :" + String.valueOf(selected_time));
             String timing_selected = String.valueOf(selected_time);
-            String start_time = timing_selected.split("-")[0];
-            String stop_time = timing_selected.split("-")[1];
-            start_time = start_time.replace(".", ":");
+            String start_time = timing_selected.split(" - ")[0];
+            String stop_time = timing_selected.split(" - ")[1];
+            /*start_time = start_time.replace(".", ":");
             stop_time = stop_time.replace(".", ":");
+            */
             Log.d(TAG, "start time: hour " + start_time);
             Log.d(TAG, "start_time : " + start_time + "stop_time : " + stop_time + ", Selected start time: " + start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00");
-            requestParams.add("start_time", start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00");
+            /*requestParams.add("start_time", start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00");
             requestParams.add("stop_time", stop_time.split(":")[0] + ":" + stop_time.split(":")[1] + ":00");
-
+*/
+            requestParams.add("start_time", start_time);
+            requestParams.add("stop_time", stop_time);
 
             StringBuilder stringBuilder1 = new StringBuilder();
-            if (arrayList_days.size() > 0) {
+
+
+            ArrayList<String> a_days=getListForCheckedDays1();
+            if (a_days.size() > 0) {
+                stringBuilder1.append(a_days.get(0));
+                for (int i = 1; i < a_days.size(); i++) {
+                    stringBuilder1.append("," + a_days.get(i));
+                }
+            } else {
+                stringBuilder1.append(a_days.get(0));
+            }
+
+
+            /*if (arrayList_days.size() > 0) {
                 stringBuilder1.append(arrayList_days.get(0));
                 for (int i = 1; i < arrayList_days.size(); i++) {
                     stringBuilder1.append("," + arrayList_days.get(i));
                 }
             } else {
                 stringBuilder1.append(arrayList_days.get(0));
-            }
+            }*/
 
             String start_date=tv_from_date.getText().toString();
             String stop_date=tv_to_date.getText().toString();
@@ -917,12 +983,13 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
 
 
+            Log.d(TAG, "Data going to be validated at the time of successful date selection \n id : " + mentor_data.get("id") + ", start time : " + start_time + ", stop time :" +stop_time +" , days : " + stringBuilder1.toString() + " , start date : " + start_date.split("-")[2]+"-"+start_date.split("-")[1]+"-"+start_date.split("-")[0] + ", stop_date : " + stop_date.split("-")[2]+"-"+stop_date.split("-")[1]+"-"+stop_date.split("-")[0] + ", sub category name : " + selected_subject.toString() + "mentee address : " + et_location.getText().toString());
 
             progressDialog.show();
             NetworkClient.validateMenteeEvent(ScheduleNewClass.this, requestParams, this, 46);
 
 
-            Log.d(TAG, "Data going to be validated at the time of successful date selection \n id : " + mentor_data.get("id") + ", start time : " + start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00" + ", stop time :" + stop_time.split(":")[0] + ":" + stop_time.split(":")[1] + ":00 " + " , days : " + stringBuilder1.toString() + " , start date : " + tv_from_date.getText().toString() + ", stop_date : " + tv_to_date.getText().toString() + ", sub category name : " + selected_subject.toString() + "mentee address : " + et_location.getText().toString());
+          //  Log.d(TAG, "Data going to be validated at the time of successful date selection \n id : " + mentor_data.get("id") + ", start time : " + start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00" + ", stop time :" + stop_time.split(":")[0] + ":" + stop_time.split(":")[1] + ":00 " + " , days : " + stringBuilder1.toString() + " , start date : " + tv_from_date.getText().toString() + ", stop_date : " + tv_to_date.getText().toString() + ", sub category name : " + selected_subject.toString() + "mentee address : " + et_location.getText().toString());
 
             Log.d(TAG, "Can start network communication");
 
@@ -1503,6 +1570,28 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
     }
 
+    private ArrayList<String> getListForCheckedDays1() {
+        ArrayList<String> days_checked = new ArrayList<String>();
+        if (cb_mon.isChecked())
+            days_checked.add("M");
+        if (cb_tue.isChecked())
+            days_checked.add("T");
+        if (cb_wed.isChecked())
+            days_checked.add("W");
+        if (cb_thu.isChecked())
+            days_checked.add("Th");
+        if (cb_fri.isChecked())
+            days_checked.add("F");
+        if (cb_sat.isChecked())
+            days_checked.add("S");
+        if (cb_sun.isChecked())
+            days_checked.add("Su");
+
+        return days_checked;
+
+    }
+
+
 
     @Override
     public void setStartInitialLimit(Object o1, Object o2, Object o3) {
@@ -1536,22 +1625,24 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 JSONObject jO_response=new JSONObject(String.valueOf(object));
                 String message=jO_response.getString("message");
                 if(message.equalsIgnoreCase("success")) {
-                    Log.d(TAG,"success");
+                    Toast.makeText(ScheduleNewClass.this,"Your schedule request get submitted.",Toast.LENGTH_SHORT).show();
+                    /*Log.d(TAG,"success");
                     JSONArray jA_exceptions=jO_response.getJSONArray("coincidingExceptions");
                     if(jA_exceptions.length() > 0){
                         coincideOf(jA_exceptions,1);
                     }else{
                         Toast.makeText(ScheduleNewClass.this,getResources().getString(R.string.class_is_available), Toast.LENGTH_SHORT).show();
                     }
-
+*/
 
                 }else {
-                    Log.d(TAG,"failure");
+                    Toast.makeText(ScheduleNewClass.this,"Mentor is not available for your requested schedule.",Toast.LENGTH_SHORT).show();
+                   /* Log.d(TAG,"failure");
                     JSONArray jA_availability=jO_response.getJSONArray("availability");
                     if(jA_availability.length() > 0){
                         coincideOf(jA_availability,2);
                     }
-
+*/
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1567,16 +1658,24 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         Log.d(TAG,"failure response : "+String.valueOf(object));
         if(statusCode == 403){
             try {
-                JSONObject jO_resoponse=new JSONObject(String.valueOf(object));
-                JSONArray jA_Coinciding_Class=jO_resoponse.getJSONArray("coincidingEvents");
+                JSONObject jO_resp=new JSONObject(String.valueOf(object));
+                String message=jO_resp.getString("message");
+                if(message.equals("Success")){
+                    Toast.makeText(ScheduleNewClass.this,"Your schedule request get submitted.",Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(ScheduleNewClass.this,"Mentor is not available for your requested schedule.",Toast.LENGTH_SHORT).show();
+                }
+                //JSONArray jA_Coinciding_Class=jO_resoponse.getJSONArray("coincidingEvents");
 
-                if(jA_Coinciding_Class.length() > 0){
+                /*if(jA_Coinciding_Class.length() > 0){
                     coincideOf(jA_Coinciding_Class,0);
                 }
-
+*/
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }else{
+            Toast.makeText(ScheduleNewClass.this,getResources().getString(R.string.problem_in_connection_server),Toast.LENGTH_SHORT).show();
         }
 
 

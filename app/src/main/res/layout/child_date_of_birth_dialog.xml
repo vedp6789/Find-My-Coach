@@ -7,13 +7,18 @@
     <DatePicker
         android:id="@+id/dp_child_dob"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></DatePicker>
+        android:layout_height="wrap_content"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:layout_centerHorizontal="true"></DatePicker>
 
     <LinearLayout
         android:id="@+id/ll_selection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/dp_child_dob"
+
+
         android:layout_marginTop="5dp"
         android:orientation="horizontal">
 

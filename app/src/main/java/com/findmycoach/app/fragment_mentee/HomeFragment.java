@@ -65,7 +65,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private View fragmentView;
     private String location;
     private boolean isSearching = false;
-
     private static final String TAG="FMC";
 
     public HomeFragment() {

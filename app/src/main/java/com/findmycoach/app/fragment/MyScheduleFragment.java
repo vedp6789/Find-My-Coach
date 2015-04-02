@@ -1,6 +1,8 @@
 package com.findmycoach.app.fragment;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,9 +56,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     private GridView calendarView;
     private CalendarGridAdapter adapter1,adapter2,adapter3;
     private Calendar _calendar;
-    private static int month, year;
+    protected static int month, year;
     private static final String dateTemplate = "MMMM yyyy";
-    private MyScheduleFragment myScheduleFragment;
+    protected static MyScheduleFragment myScheduleFragment;
     private int days_in_current_month, days_in_prev_month, days_in_next_month;
     private static final String TAG = "FMC";
     ProgressDialog progressDialog;
@@ -66,7 +69,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public JSONArray prev_json, current_json, next_json;
     public String calendar_by_location = null;
     public boolean cb_calendar_by_location_is_checked=false,b_three_months_data;
-    private int NEW_SLT=0, VAC_SCH=1,REULT_OK=500;
+    private int NEW_SLT=0, VAC_SCH=1,RESULT_OK=500;
+    protected static  int month_from_dialog,year_from_dialog;
+
+
 
     public MyScheduleFragment() {
         // Required empty public constructor
@@ -81,7 +87,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myScheduleFragment = this;
-
+        month_from_dialog=0;
+        year_from_dialog=0;
         startPointForCalendar();
         b_three_months_data=false;
     }
@@ -122,17 +129,32 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
         currentMonth = (TextView) view.findViewById(R.id.currentMonth);
         currentMonth.setText(DateFormat.format(dateTemplate, _calendar.getTime()));
+        currentMonth.setOnClickListener(this);
 
         nextMonth = (ImageView) view.findViewById(R.id.nextMonth);
         nextMonth.setOnClickListener(this);
 
         calendarView = (GridView) view.findViewById(R.id.calendar);
 
+        getCalendarDetailsForMentee();
 
+    }
+
+
+    public void getCalendarDetailsForMentee(){
         /* Array list of 3 months previous, current and coming , These points Day class object for day details like class schedule*/
         previousMonthArrayList = new ArrayList<Day>();
         currentMonthArrayList = new ArrayList<Day>();
         comingMonthArrayList = new ArrayList<Day>();
+
+        if(month_from_dialog == 0 && year_from_dialog == 0){
+            startPointForCalendar();
+        }else{
+            month=month_from_dialog;
+            year=year_from_dialog;
+            currentMonth.setText(getResources().getStringArray(R.array.months)[month-1]+" "+year);
+        }
+
 
 
         progressDialog = new ProgressDialog(getActivity());
@@ -173,6 +195,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         Toast.makeText(getActivity(), getResources().getString(R.string.start_date1) + String.valueOf(stringBuilder), Toast.LENGTH_SHORT).show();
         requestParams.add("start_date", String.valueOf(stringBuilder));
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
+        networkCallForMentee(requestParams);
+    }
+
+    void networkCallForMentee(RequestParams requestParams){
         progressDialog.show();
 
         NetworkClient.getMenteeCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 40);  /*Network operation for getting details for three months */
@@ -197,6 +223,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
         currentMonth = (TextView) view.findViewById(R.id.currentMonth);
         currentMonth.setText(DateFormat.format(dateTemplate, _calendar.getTime()));
+        currentMonth.setOnClickListener(this);
 
         nextMonth = (ImageView) view.findViewById(R.id.nextMonth);
         nextMonth.setOnClickListener(this);
@@ -242,7 +269,14 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         currentMonthArrayList = new ArrayList<Day>();
         comingMonthArrayList = new ArrayList<Day>();
 
-        startPointForCalendar();
+
+        if(month_from_dialog == 0 && year_from_dialog == 0){
+            startPointForCalendar();
+        }else{
+            month=month_from_dialog;
+            year=year_from_dialog;
+           currentMonth.setText(getResources().getStringArray(R.array.months)[month-1]+" "+year);
+        }
 
 
         progressDialog = new ProgressDialog(getActivity());
@@ -253,7 +287,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         requestParams.add("mentor_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         StringBuilder stringBuilder = new StringBuilder();
 
-/*Checking previous month possibilities for month and year as we have to get no. of days from previous month and adding this with current and coming month */
+        /*Checking previous month possibilities for month and year as we have to get no. of days from previous month and adding this with current and coming month */
         if (month == 1) {
             Calendar calendar = new GregorianCalendar(year - 1, 11, 1);
             stringBuilder.append((year - 1));
@@ -347,25 +381,79 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
 
             }
+            if(v == currentMonth){
+                FragmentManager fragmentManager=getFragmentManager();
+                CustomDatePickerFragment customDatePickerFragment=new CustomDatePickerFragment();
+                customDatePickerFragment.show(fragmentManager,null);
+                month_from_dialog=0;
+                year_from_dialog=0;
+              /*DatePickerDialog datePickerDialog=createDialogWithoutDateField();
+                datePickerDialog.show();
+*/
+            }
         }
+
+
 
 
         /* Operation on previous month or next month button click */
         if (v == prevMonth) {
+            Log.d(TAG,"previous month clicked");
             showPrevMonth();
 
         } else {
-            if (v == nextMonth) {
-                showNextMonth();
+            Log.d(TAG,"previous month not clicked");
+            if(v == currentMonth){
+                Log.d(TAG,"currentMonth clicked");
+                FragmentManager fragmentManager=getFragmentManager();
+                CustomDatePickerFragment customDatePickerFragment=new CustomDatePickerFragment();
+                customDatePickerFragment.show(fragmentManager,null);
+                month_from_dialog=0;
+                year_from_dialog=0;
+            }else{
+                if (v == nextMonth) {
+                    showNextMonth();
 
+                }
             }
+
         }
 
     }
 
+
+    private DatePickerDialog createDialogWithoutDateField() {
+
+        DatePickerDialog dpd = new DatePickerDialog(getActivity(), null, 2014, 1, 24);
+        try {
+            java.lang.reflect.Field[] datePickerDialogFields = dpd.getClass().getDeclaredFields();
+            for (java.lang.reflect.Field datePickerDialogField : datePickerDialogFields) {
+                if (datePickerDialogField.getName().equals("mDatePicker")) {
+                    datePickerDialogField.setAccessible(true);
+                    DatePicker datePicker = (DatePicker) datePickerDialogField.get(dpd);
+                    datePicker.setSpinnersShown(true);
+                    datePicker.setCalendarViewShown(false);
+                    java.lang.reflect.Field[] datePickerFields = datePickerDialogField.getType().getDeclaredFields();
+                    for (java.lang.reflect.Field datePickerField : datePickerFields) {
+                        Log.i("test", datePickerField.getName());
+                        if ("mDaySpinner".equals(datePickerField.getName())) {
+                            datePickerField.setAccessible(true);
+                            Object dayPicker = new Object();
+                            dayPicker = datePickerField.get(datePicker);
+                            ((View) dayPicker).setVisibility(View.GONE);
+                        }
+                    }
+                }
+
+            }
+        } catch (Exception ex) {
+        }
+        return dpd;
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==NEW_SLT && resultCode==REULT_OK){
+        if(requestCode==NEW_SLT && resultCode==RESULT_OK){
             Log.d(TAG,"onActivityResult call ");
             getCalendarDetailsAPICall();
         }
@@ -745,7 +833,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
                     calendarView.setAdapter(adapter1);
                     adapter1.notifyDataSetChanged();
-                    currentMonth.setText(DateFormat.format(dateTemplate,_calendar.getTime()));
+                    if(month_from_dialog == 0 && year_from_dialog == 0){
+                        currentMonth.setText(DateFormat.format(dateTemplate,_calendar.getTime()));
+                    }
+
                 }else{
                     adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
                     calendarView.setAdapter(adapter1);

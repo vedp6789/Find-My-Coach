@@ -321,10 +321,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         if(jsonArray_sub_category.length() <= 0){
             Log.i(TAG,"sub_category size is null");
         }
-        Toast.makeText(MentorDetailsActivity.this,"Connection status : "+connectionStatus+"\nsubcategorey length : "+jsonArray_sub_category.length()+ " \nslots available : "+noSlotsAvailable(),Toast.LENGTH_LONG).show();
-        /*if(connectionStatus.equals("not connected") || connectionStatus.equals("pending") || jsonArray_sub_category.length() <= 0 || noSlotsAvailable())
-            b_schedule_class.setVisibility(View.GONE);
-*/
+
         if(connectionStatus.equals("not connected") || connectionStatus.equals("pending") || jsonArray_sub_category.length() <= 0 )
             b_schedule_class.setVisibility(View.GONE);
 
