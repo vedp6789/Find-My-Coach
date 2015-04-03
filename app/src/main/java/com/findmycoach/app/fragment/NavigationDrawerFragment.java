@@ -188,7 +188,7 @@ public class NavigationDrawerFragment extends Fragment {
                 if (isDrawerClosed && !isSliding) {
                     isSliding = true;
                     applyRotation(0, 35, container, 0, container.getPivotY(), 400);
-                    applyRotation(-45, 0, mDrawerListView, mDrawerListView.getX(), container.getPivotY(), 500);
+                    applyRotation(-45, 0, mDrawerListView, mDrawerListView.getX(), container.getPivotY(), 400);
                 } else if (!isDrawerClosed && !isSliding) {
                     isSliding = true;
                     applyRotation(35, 0, container, 0, container.getPivotY(), 300);
