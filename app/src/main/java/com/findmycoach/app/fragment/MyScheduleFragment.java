@@ -392,6 +392,16 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 */
             }
         }
+        if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 2) {
+            if(v == currentMonth){
+                Log.d(TAG,"currentMonth clicked");
+                FragmentManager fragmentManager=getFragmentManager();
+                CustomDatePickerFragment customDatePickerFragment=new CustomDatePickerFragment();
+                customDatePickerFragment.show(fragmentManager,null);
+                month_from_dialog=0;
+                year_from_dialog=0;
+            }
+        }
 
 
 
@@ -403,19 +413,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
         } else {
             Log.d(TAG,"previous month not clicked");
-            if(v == currentMonth){
-                Log.d(TAG,"currentMonth clicked");
-                FragmentManager fragmentManager=getFragmentManager();
-                CustomDatePickerFragment customDatePickerFragment=new CustomDatePickerFragment();
-                customDatePickerFragment.show(fragmentManager,null);
-                month_from_dialog=0;
-                year_from_dialog=0;
-            }else{
+
                 if (v == nextMonth) {
                     showNextMonth();
 
                 }
-            }
+
 
         }
 

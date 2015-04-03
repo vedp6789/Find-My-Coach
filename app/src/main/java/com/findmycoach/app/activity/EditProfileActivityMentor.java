@@ -256,8 +256,8 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
                 }, 3500);
                 return false;
             }
-            if(!profileAddress1.getText().toString().equals(city)){
-                if(!profileAddress1.getText().toString().equals(last_city_selected)){
+            if(!profileAddress1.getText().toString().equalsIgnoreCase(city)){
+                if(!profileAddress1.getText().toString().equalsIgnoreCase(last_city_selected)){
                     Toast.makeText(EditProfileActivityMentor.this,getResources().getString(R.string.choose_suggested_city),Toast.LENGTH_LONG).show();
                     profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
                     new Handler().postDelayed(new Runnable() {

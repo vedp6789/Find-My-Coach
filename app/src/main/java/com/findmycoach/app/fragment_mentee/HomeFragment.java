@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -64,9 +66,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private int tabIndex;
     private View fragmentView;
     private String location;
+    private String location_auto_suggested_temp,location_auto_suggested;
+    boolean flag_change_location=false;
+
     private boolean isSearching = false;
     private static final String TAG="FMC";
-
+    ArrayAdapter<String> arrayAdapter;
     public HomeFragment() {
         // Required empty public constructor
         subCategoryIds = null;
@@ -80,6 +85,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        location_auto_suggested_temp=null;
+        location_auto_suggested=null;
     }
 
     @Override
@@ -93,8 +100,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         location = NetworkManager.getCurrentLocation(getActivity());
+        location_auto_suggested_temp=location;
+        location_auto_suggested=location_auto_suggested_temp;
+
         initialize(fragmentView);
         if(location.equals("")){
+            flag_change_location=true;
             locationInput.setVisibility(View.VISIBLE);
             locationLayout.setVisibility(View.GONE);
         }
@@ -182,10 +193,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
             @Override
             public void afterTextChanged(Editable s) {
+                location_auto_suggested_temp=null;
                 String input = locationInput.getText().toString();
                 if (input.length() >= 2) {
+
                     getAutoSuggestions(input);
                 }
+            }
+        });
+        locationInput.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                location_auto_suggested_temp=arrayAdapter.getItem(position);
+                location_auto_suggested=location_auto_suggested_temp;
             }
         });
         String[] period = getResources().getStringArray(R.array.time1);
@@ -258,7 +278,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         RequestParams requestParams = new RequestParams();
         requestParams.add("input", input);
         requestParams.add("key", getResources().getString(R.string.google_location_api_key));
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+//        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
         NetworkClient.autoComplete(getActivity(), requestParams, this, 32);
     }
 
@@ -268,6 +288,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             callSearchApi();
         }
         if (v.getId() == R.id.change_location) {
+            flag_change_location=true;
             locationInput.setVisibility(View.VISIBLE);
             locationLayout.setVisibility(View.GONE);
         }
@@ -282,6 +303,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             Toast.makeText(getActivity(), getResources().getString(R.string.search_is_already_called),Toast.LENGTH_SHORT).show();
             return;
         }
+        if(flag_change_location){
+            if(validateLocation()){
+               goForSearch();
+            }
+        }else{
+           goForSearch();
+        }
+
+    }
+
+    void goForSearch(){
         isSearching = true;
         progressDialog.show();
         String location = locationInput.getText().toString();
@@ -305,6 +337,49 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
         NetworkClient.search(getActivity(), requestParams, authToken, this, 6);
     }
+
+    boolean validateLocation(){
+        if(locationInput.getText().toString() != null){
+            if(locationInput.getText().toString().trim().equalsIgnoreCase("")){
+                Toast.makeText(getActivity(),getResources().getString(R.string.choose_suggested_location),Toast.LENGTH_LONG).show();
+                locationInput.setError(getResources().getString(R.string.choose_suggested_location));
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        locationInput.setError(null);
+                    }
+                }, 3500);
+                return false;
+            }
+            if(!locationInput.getText().toString().equalsIgnoreCase(location_auto_suggested_temp)){
+                if(!locationInput.getText().toString().equalsIgnoreCase(location_auto_suggested)){
+                    Toast.makeText(getActivity(),getResources().getString(R.string.choose_suggested_location),Toast.LENGTH_LONG).show();
+                    locationInput.setError(getResources().getString(R.string.choose_suggested_location));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            locationInput.setError(null);
+                        }
+                    }, 3500);
+                    return false;
+                }
+
+            }
+        }else{
+            Toast.makeText(getActivity(),getResources().getString(R.string.choose_suggested_location),Toast.LENGTH_LONG).show();
+            locationInput.setError(getResources().getString(R.string.choose_suggested_location));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    locationInput.setError(null);
+                }
+            }, 3500);
+            return false;
+        }
+        return true;
+
+    }
+
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
@@ -330,7 +405,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         for (int index = 0; index < suggestions.size(); index++) {
             list.add(suggestions.get(index).getDescription());
         }
-        locationInput.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list));
+        arrayAdapter=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,list);
+        locationInput.setAdapter(arrayAdapter);
     }
 
     @Override

@@ -120,12 +120,12 @@ public class LocationForSchedule extends DialogFragment implements Callback{
             @Override
             public void onClick(View v) {
                 if(location != null){
-                    if (location.equals(auto_tv_location.getText().toString())){
+                    if (location.equalsIgnoreCase(auto_tv_location.getText().toString())){
                         myScheduleFragment.calendar_by_location=auto_tv_location.getText().toString();
                         dismiss();
                         myScheduleFragment.getCalendarDetailsAPICall();
                     }else{
-                        if(last_location_selected.equals(auto_tv_location.getText().toString())){
+                        if(last_location_selected.equalsIgnoreCase(auto_tv_location.getText().toString())){
                             myScheduleFragment.calendar_by_location=auto_tv_location.getText().toString();
                             dismiss();
                             myScheduleFragment.getCalendarDetailsAPICall();
@@ -135,7 +135,7 @@ public class LocationForSchedule extends DialogFragment implements Callback{
 
                     }
                 }else{
-                    if( last_location_selected != null && last_location_selected.equals(auto_tv_location.getText().toString())){
+                    if( last_location_selected != null && last_location_selected.equalsIgnoreCase(auto_tv_location.getText().toString())){
                         myScheduleFragment.calendar_by_location=auto_tv_location.getText().toString();
                         dismiss();
                         myScheduleFragment.getCalendarDetailsAPICall();

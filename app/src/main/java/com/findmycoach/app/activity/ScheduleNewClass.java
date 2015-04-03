@@ -632,6 +632,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         cb_sat = (CheckBox) findViewById(R.id.cb_s);
         cb_sun = (CheckBox) findViewById(R.id.cb_su);
         et_location = (EditText) findViewById(R.id.et_location);
+
         rb_pay_now = (RadioButton) findViewById(R.id.rb_pay_now);
         rb_pay_personally = (RadioButton) findViewById(R.id.pay_personally);
         b_payment = (Button) findViewById(R.id.b_proceed_to_payment);

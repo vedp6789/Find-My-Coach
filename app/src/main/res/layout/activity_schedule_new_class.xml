@@ -281,6 +281,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             >
 
             <EditText
@@ -288,7 +290,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/address"
-                android:gravity="center"/>
+                android:gravity="center"
+
+               />
 
         </LinearLayout>
 

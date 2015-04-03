@@ -643,6 +643,7 @@
     <string name="created_on">  Created on : </string>
     <string name="not_connected_to_anyone">Not connected to anyone.</string>
     <string name="choose_suggested_city">Choose a suggested city</string>
+    <string name="choose_suggested_location">Choose a suggested location</string>
     <string name="add_interest">Add Interest</string>
     <string name="enter_interest">Enter Interest</string>
     <string name="data_already_exist">Data Already Exist</string>
@@ -795,10 +796,7 @@
         <item>December</item>
     </string-array>
 
-
-
-
-    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
 
 </resources>
