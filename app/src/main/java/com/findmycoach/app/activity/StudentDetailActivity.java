@@ -8,9 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +35,8 @@ public class StudentDetailActivity  extends Activity implements Callback {
     private TextView trainingLocation;
     private TextView mentorFor;
     private TextView coachingType;
-    private ListView areaOfInterest;
+    private TextView areaOfInterest;
+    private TextView profilePhone;
     private Data studentDetails;
     private ProgressDialog progressDialog;
     private static final String TAG = "FMC";
@@ -81,7 +80,8 @@ public class StudentDetailActivity  extends Activity implements Callback {
         trainingLocation = (TextView) findViewById(R.id.training_location);
         mentorFor = (TextView) findViewById(R.id.mentor_for);
         coachingType = (TextView) findViewById(R.id.coaching_type);
-        areaOfInterest = (ListView) findViewById(R.id.areas_of_interest);
+        areaOfInterest = (TextView) findViewById(R.id.areas_of_interest);
+        profilePhone = (TextView) findViewById(R.id.profile_phone);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
     }
@@ -109,11 +109,19 @@ public class StudentDetailActivity  extends Activity implements Callback {
         mentorFor.setText(studentDetails.getMentorFor());
         trainingLocation.setText((String) studentDetails.getTrainingLocation());
         coachingType.setText((String) studentDetails.getCoachingType());
-        List<String> list = studentDetails.getSubCategoryName();
-        if(list.size() >0 && list.get(0)!=null && !list.get(0).equals(" "))
-            areaOfInterest.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list));
-        else
-            areaOfInterest.setAdapter(null);
+        profilePhone.setText(studentDetails.getPhonenumber());
+        List<String> areaOfInterests = studentDetails.getSubCategoryName();
+        if (areaOfInterests.size() > 0 && areaOfInterests.get(0)!=null && !areaOfInterests.get(0).trim().equals("")) {
+            String areaOfInterestString = "";
+            for (int index = 0; index < areaOfInterests.size(); index++) {
+                if (index != 0) {
+                    areaOfInterestString = areaOfInterestString + ", " + areaOfInterests.get(index);
+                } else {
+                    areaOfInterestString = areaOfInterestString + areaOfInterests.get(index);
+                }
+            }
+            areaOfInterest.setText(areaOfInterestString);
+        }
     }
 
     @Override

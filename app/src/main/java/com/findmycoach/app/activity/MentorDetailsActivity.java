@@ -36,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MentorDetailsActivity extends Activity implements Callback,Button.OnClickListener{
 
@@ -45,6 +46,8 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
     private TextView profileRatting;
     private TextView profileCharges;
     private TextView profileTravelAvailable;
+    private TextView profilePhone;
+    private TextView areaOfCoaching;
     private Button googleLink;
     private Button facebookLink;
     private Data userInfo = null;
@@ -300,8 +303,10 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         profileRatting = (TextView) findViewById(R.id.profile_rating);
         profileCharges = (TextView) findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) findViewById(R.id.profile_travel_available);
+        areaOfCoaching = (TextView) findViewById(R.id.areas_of_coaching);
         googleLink = (Button) findViewById(R.id.profile_google_button);
         facebookLink = (Button) findViewById(R.id.profile_facebook_button);
+        profilePhone = (TextView) findViewById(R.id.profile_phone);
 
         tv_mon_slots= (TextView) findViewById(R.id.tv_mon_available_slots);
         tv_tue_slots= (TextView) findViewById(R.id.tv_tue_available_slots);
@@ -394,6 +399,22 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             ImageLoader imgLoader = new ImageLoader(profileImage);
             imgLoader.execute((String) userInfo.getPhotograph());
         }
+
+        List<String> areaOfInterests = userInfo.getSubCategoryName();
+        if (areaOfInterests.size() > 0 && areaOfInterests.get(0)!=null && !areaOfInterests.get(0).trim().equals("")) {
+            String areaOfInterest = "";
+            for (int index = 0; index < areaOfInterests.size(); index++) {
+                if (index != 0) {
+                    areaOfInterest = areaOfInterest + ", " + areaOfInterests.get(index);
+                } else {
+                    areaOfInterest = areaOfInterest + areaOfInterests.get(index);
+                }
+            }
+            areaOfCoaching.setText(areaOfInterest);
+        }else{
+            areaOfCoaching.setText("");
+        }
+        profilePhone.setText(userInfo.getPhonenumber());
         applySocialLinks();
     }
 
