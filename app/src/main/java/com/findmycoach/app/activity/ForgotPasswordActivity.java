@@ -123,6 +123,8 @@ public class ForgotPasswordActivity extends Activity implements Callback {
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         String message = (String) object;
+        if(message.trim().equals("false"))
+            message = getResources().getString(R.string.email_not_registered);
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }
