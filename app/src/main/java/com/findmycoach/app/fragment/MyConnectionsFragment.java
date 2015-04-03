@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyConnectionsFragment extends Fragment implements Callback {
@@ -30,6 +32,7 @@ public class MyConnectionsFragment extends Fragment implements Callback {
     private ConnectionRequestsResponse connectionRequestsResponse;
     private ConnectionAdapter connectionAdapter;
     public static boolean needToRefresh = false;
+    private static final String TAG = "FMC";
 
     public MyConnectionsFragment() {
         // Required empty public constructor
@@ -89,7 +92,19 @@ public class MyConnectionsFragment extends Fragment implements Callback {
     }
 
     private void populateData(final List<Data> data) {
-        connectionAdapter = new ConnectionAdapter(getActivity(), data);
+        List<Data> dataToShow = new ArrayList<Data>();
+        for(Data d : data){
+            boolean flag = false;
+            for(Data d1 : dataToShow){
+                if(d1.getInviteeId().equals(d.getInviteeId())){
+                    flag = true;
+                }
+            }
+            if(!flag)
+                dataToShow.add(d);
+        }
+        Log.d(TAG, "Actual connection size : " + data.size() + ", current size : " + dataToShow.size());
+        connectionAdapter = new ConnectionAdapter(getActivity(), dataToShow);
         connectionListView.setAdapter(connectionAdapter);
     }
 

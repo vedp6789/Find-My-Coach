@@ -43,6 +43,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView mentorFor;
     private TextView coachingType;
     private TextView areaOfInterest;
+    private TextView profilePhone;
     private Data userInfo = null;
     private ImageLoader imgLoader;
 
@@ -95,6 +96,7 @@ public class ProfileFragment extends Fragment implements Callback {
         coachingType = (TextView) view.findViewById(R.id.coaching_type);
         areaOfInterest = (TextView) view.findViewById(R.id.areas_of_interest);
         profileLocation = (TextView) view.findViewById(R.id.profile_location);
+        profilePhone = (TextView) view.findViewById(R.id.profile_phone);
     }
 
     @Override
@@ -173,6 +175,7 @@ public class ProfileFragment extends Fragment implements Callback {
         mentorFor.setText(userInfo.getMentorFor());
         trainingLocation.setText((String) userInfo.getTrainingLocation());
         coachingType.setText((String) userInfo.getCoachingType());
+        profilePhone.setText(userInfo.getPhonenumber());
         List<String> areaOfInterests = userInfo.getSubCategoryName();
         if (areaOfInterests.size() > 0 && areaOfInterests.get(0)!=null && !areaOfInterests.get(0).trim().equals("")) {
             String areaOfInterestString = "";
@@ -184,6 +187,8 @@ public class ProfileFragment extends Fragment implements Callback {
                 }
             }
             areaOfInterest.setText(areaOfInterestString);
+        }else{
+            areaOfInterest.setText("");
         }
     }
 

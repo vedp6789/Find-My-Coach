@@ -47,6 +47,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView areaOfCoaching;
     private TextView profileTravelAvailable;
     private TextView profileLocation;
+    private TextView profilePhone;
     private Button googleLink;
     private Button facebookLink;
     private Data userInfo = null;
@@ -104,6 +105,7 @@ public class ProfileFragment extends Fragment implements Callback {
         googleLink = (Button) view.findViewById(R.id.profile_google_button);
         facebookLink = (Button) view.findViewById(R.id.profile_facebook_button);
         areaOfCoaching = (TextView) view.findViewById(R.id.areas_of_coaching);
+        profilePhone = (TextView) view.findViewById(R.id.profile_phone);
     }
 
     @Override
@@ -181,6 +183,7 @@ public class ProfileFragment extends Fragment implements Callback {
             profileCharges.setText("\u20B9 " + userInfo.getCharges());
         }
 
+        profilePhone.setText(userInfo.getPhonenumber());
         List<String> areaOfInterests = userInfo.getSubCategoryName();
         if (areaOfInterests.size() > 0 && areaOfInterests.get(0)!=null && !areaOfInterests.get(0).trim().equals("")) {
             String areaOfInterest = "";
@@ -192,6 +195,8 @@ public class ProfileFragment extends Fragment implements Callback {
                 }
             }
             areaOfCoaching.setText(areaOfInterest);
+        }else{
+            areaOfCoaching.setText("");
         }
 
 

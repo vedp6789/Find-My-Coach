@@ -733,7 +733,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
 
         /** If phone number is not verified then starting ValidatePhoneActivity */
-        if (msg.equals("Validate Phone number to login") || msg.equals("Validate Phone number and Email to Login ")) {
+        if (msg.equals("Validate Phone number to login") || msg.equals("Validate Phone number and Email to Login ")
+                || msg.equals("Validate phone number to activate account")) {
             startActivity(new Intent(this, ValidatePhoneActivity.class));
             finish();
             return;
