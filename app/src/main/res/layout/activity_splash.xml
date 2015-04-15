@@ -3,11 +3,11 @@
     android:layout_height="match_parent"
     tools:context="inmobi.inmobisamsung.SplashActivity">
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/splashImage"
-        android:layout_centerVertical="true"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/ic_launcher" />
+        android:text="@string/find_my_coach"
+        android:textSize="30sp"
+        android:layout_centerVertical="true"/>
 </RelativeLayout>

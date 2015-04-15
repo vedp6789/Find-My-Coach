@@ -333,42 +333,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
 
     }
 
-    private boolean noSlotsAvailable(){
-        if(jArray_mon_slots.length() <= 0){
-            if(jArray_tue_slots.length() <= 0){
-                if(jArray_wed_slots.length() <= 0){
-                    if(jArray_thu_slots.length() <= 0){
-                        if(jArray_fri_slots.length() <= 0){
-                            if(jArray_fri_slots.length() <= 0){
-                                if(jArray_sat_slots.length() <= 0){
-                                    if(jArray_sun_slots.length() <= 0){
-                                        return true;
-                                    }else{
-                                        return false;
-                                    }
-                                }else{
-                                    return false;
-                                }
-                            }else{
-                                return false;
-                            }
-                        }else{
-                            return false;
-                        }
-                    }else{
-                        return false;
-                    }
-                }else{
-                    return false;
-                }
-            }else{
-                return false;
-            }
-        }else{
-            return false;
-        }
-        //return jArray_mon_slots.length() <= 0 && jArray_tue_slots.length() <= 0 && jArray_wed_slots.length() <= 0 && jArray_thu_slots.length() <= 0 && jArray_fri_slots.length() <= 0 && jArray_sat_slots.length() <= 0 && jArray_sun_slots.length() <= 0;
-    }
+
 
     private void populateFields() {
         profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
