@@ -1,6 +1,5 @@
 package com.findmycoach.app.activity;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -14,12 +13,12 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
-import android.widget.ImageView;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +27,6 @@ import com.facebook.Session;
 import com.findmycoach.app.R;
 import com.findmycoach.app.fragment.MyConnectionsFragment;
 import com.findmycoach.app.fragment.MyScheduleFragment;
-import com.findmycoach.app.fragment.NavigationDrawerFragment;
 import com.findmycoach.app.fragment.NotificationsFragment;
 import com.findmycoach.app.fragment_mentee.HomeFragment;
 import com.findmycoach.app.util.Callback;
@@ -39,22 +37,21 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.loopj.android.http.RequestParams;
+import com.special.ResideMenu.ResideMenu;
+import com.special.ResideMenu.ResideMenuItem;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class DashboardActivity extends FragmentActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, Callback {
+        implements Callback, View.OnClickListener {
 
-    private NavigationDrawerFragment mNavigationDrawerFragment;
     private CharSequence mTitle;
-    private String userToken;
     public int user_group;
     public static DashboardActivity dashboardActivity;
+    private String[] navigationTitle;
 
     /* Below are the class variables which are mainly used GCM Client registration and Google Play Services device configuration check*/
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private static final String GCM_SHARED_PREFERENCE = " gcm_preference";
@@ -72,24 +69,26 @@ public class DashboardActivity extends FragmentActivity
     static final String TAG = "Google Play Services status:";
     static final String TAG1 = "GCMCommunication";
     static final String TAG2 = "FMC-GCM";
-    TextView mDisplay;
     GoogleCloudMessaging gcm;
-    AtomicInteger msgId = new AtomicInteger();
-    SharedPreferences prefs;
     Context context;
-    private ActionBar actionBar;
-    public static TextView customTitle;
 
     int fragment_to_launch_from_notification = 0;  ///  On a tap over Push notification, then it will be used to identify which operation to perform
     int group_push_notification = 0;      /// it will identify push notification for which type of user.
+
+    /**Related to reside menu*/
+    private ResideMenu resideMenu;
+    private ResideMenuItem itemHome;
+    private ResideMenuItem itemNotification;
+    private ResideMenuItem itemConnection;
+    private ResideMenuItem itemSchedule;
+    private ResideMenuItem itemSettings;
+    private ResideMenuItem itemLogout;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        actionBar = getActionBar();
-        actionBar.hide();
         dashboardActivity = this;
 
         try {
@@ -136,11 +135,23 @@ public class DashboardActivity extends FragmentActivity
 
         } else {
             initialize();
-
         }
-
-
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.dashboard, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.drawer)
+            resideMenu.openMenu(ResideMenu.DIRECTION_RIGHT);
+        return true;
+    }
+
+
 
     /**
      * Gets the current registration ID for application on GCM service.
@@ -254,7 +265,6 @@ public class DashboardActivity extends FragmentActivity
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-
             sendRegistrationIdToBackend();
         }
 
@@ -299,137 +309,40 @@ public class DashboardActivity extends FragmentActivity
     protected void onResume() {
         super.onResume();
         if (fragment_to_launch_from_notification == 0) {
-            if (checkPlayServices()) {
-
-           /* gcm = GoogleCloudMessaging.getInstance(this);
-            regid = getRegistrationId(context);
-
-            if (regid.isEmpty()) {
-                registerInBackground();
-            }*/
-            } else {
+            if (!checkPlayServices()) {
                 Toast.makeText(DashboardActivity.this, getResources().getString(R.string.google_play_services_not_supported), Toast.LENGTH_LONG).show();
                 Log.i(TAG, "No valid Google Play Services APK found.");
             }
         } else {
 
             if (Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group")) == group_push_notification) {
+                user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
 
-                if (Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group")) == 3) {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    switch (fragment_to_launch_from_notification) {
+                ResideMenuItem item = null;
 
-
-                        case 1: {
-                            Log.d(TAG, "Inside DashboardActivity of Mentor, going to start Notification fragment");
-                            fragmentTransaction.replace(R.id.container, new NotificationsFragment());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            break;
-                        }
-                        case 4: {
-                            Log.d(TAG, "Inside DashboardActivity of Mentor, going to start MySchedule fragment");
-                            //initialize();
-                            fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            break;
-                        }
-                        case 7: {
-                            Log.d(TAG, "Inside DashboardActivity of Mentor,going to start MyConnection Fragment");
-                            // initialize();
-                            fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            break;
-                        }
-                        case 8: {
-                            Log.d(TAG, "Inside DashboardActivity of Mentor,going to start My Connection Fragment ");
-                            // initialize();
-                            fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            break;
-                        }
-                        case 9: {
-                            Log.d(TAG, "Inside DashboardActivity of Mentor,going to start My Connection fragment ");
-                            // initialize();
-                            fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            break;
-                        }
-
-                    }
+                switch (fragment_to_launch_from_notification) {
+                    case 1:case 2:case 3:
+                        item = itemNotification;
+                        break;
+                    case 7:case 8:case 9:
+                        item = itemConnection;
+                        break;
+                    case 4:case 5:case 6:
+                        item = itemSchedule;
+                        break;
                 }
-                if (Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group")) == 2) {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    switch (fragment_to_launch_from_notification) {
+                fragment_to_launch_from_notification = 0;
 
+                if(resideMenu == null)
+                    setUpMenu(item);
+                else if(item != null)
+                    item.callOnClick();
 
-                        case 2: {
-
-                            fragmentTransaction.replace(R.id.container, new NotificationsFragment());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            break;
-                        }
-                        case 3: {
-
-                            fragmentTransaction.replace(R.id.container, new NotificationsFragment());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            break;
-                        }
-                        case 5: {
-
-                            fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            break;
-                        }
-                        case 6: {
-
-                            fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            break;
-                        }
-                        case 7: {
-
-                            fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            break;
-                        }
-                        case 8: {
-
-                            fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            break;
-                        }
-                        case 9: {
-
-                            fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            break;
-                        }
-                    }
-                }
-
-
+                setTitle(mTitle);
             } else {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.switch_login), Toast.LENGTH_SHORT).show();
             }
-
-
         }
-
-
     }
 
     /**
@@ -503,74 +416,136 @@ public class DashboardActivity extends FragmentActivity
     }
 
     private void updateTermsAndConditionsStatus() {
-        //TODO: Needs to call update status method of terms and conditions.
         StorageHelper.storePreference(this, "terms", "yes");
     }
 
     private void initialize() {
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
-        RelativeLayout container = (RelativeLayout) findViewById(R.id.wholeContainer);
-        ImageView drawerIcon = (ImageView) findViewById(R.id.drawerIcon);
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout), container, drawerIcon);
-        onNavigationDrawerItemSelected(0);
-        userToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
+        navigationTitle = getResources().getStringArray(R.array.navigation_items);
+        mTitle = getResources().getString(R.string.app_name);
+        if(resideMenu == null)
+            setUpMenu(null);
+    }
+
+    private void setUpMenu(ResideMenuItem item) {
+
+        // attach to current activity;
+        resideMenu = new ResideMenu(this);
+        resideMenu.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
+        resideMenu.attachToActivity(this);
+        resideMenu.setMenuListener(menuListener);
+        //valid scale factor is between 0.0f and 1.0f. leftmenu'width is 150dip.
+        resideMenu.setScaleValue(0.6f);
+
+        // create menu items;
+        itemHome     = new ResideMenuItem(this, R.drawable.icon_home, navigationTitle[0]);
+        itemNotification  = new ResideMenuItem(this, R.drawable.icon_profile, navigationTitle[1]);
+        itemConnection = new ResideMenuItem(this, android.R.drawable.ic_dialog_alert, navigationTitle[2]);
+        itemSchedule = new ResideMenuItem(this, R.drawable.icon_calendar, navigationTitle[3]);
+        itemSettings = new ResideMenuItem(this, R.drawable.icon_settings, navigationTitle[4]);
+        itemLogout = new ResideMenuItem(this, android.R.drawable.ic_dialog_email, navigationTitle[5]);
+
+        itemHome.setOnClickListener(this);
+        itemNotification.setOnClickListener(this);
+        itemConnection.setOnClickListener(this);
+        itemSchedule.setOnClickListener(this);
+        itemSettings.setOnClickListener(this);
+        itemLogout.setOnClickListener(this);
+        resideMenu.setOnClickListener(this);
+
+        resideMenu.addMenuItem(itemHome, ResideMenu.DIRECTION_RIGHT);
+        resideMenu.addMenuItem(itemNotification, ResideMenu.DIRECTION_RIGHT);
+        resideMenu.addMenuItem(itemConnection, ResideMenu.DIRECTION_RIGHT);
+        resideMenu.addMenuItem(itemSchedule, ResideMenu.DIRECTION_RIGHT);
+        resideMenu.addMenuItem(itemSettings, ResideMenu.DIRECTION_RIGHT);
+        resideMenu.addMenuItem(itemLogout, ResideMenu.DIRECTION_RIGHT);
+
+        // You can disable a direction by setting ->
+        resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_LEFT);
 
 
-//        actionBar.setDisplayShowTitleEnabled(false);
-//        actionBar.setDisplayShowCustomEnabled(true);
-//        View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
-        customTitle = (TextView) findViewById(R.id.actionbarTitle);
-        customTitle.setText(getResources().getString(R.string.app_name));
-//        actionBar.setCustomView(customView);
+        if(item != null)
+            item.callOnClick();
+        else
+            itemHome.callOnClick();
+
     }
 
     @Override
-    public void onNavigationDrawerItemSelected(int position) {
+    public void onClick(View view) {
+        int position = -1;
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (user_group == 3) {
-            if (position == 0)
-                fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentor.HomeFragment());
-            else if (position == 1)
-                fragmentTransaction.replace(R.id.container, new NotificationsFragment());
-            else if (position == 2)
-                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-            else if (position == 3)
-                fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
 
+        if (user_group == 3) {
+            if (view == itemHome) {
+                fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentor.HomeFragment());
+                position = 0;
+            }
+            else if (view == itemNotification) {
+                fragmentTransaction.replace(R.id.container, new NotificationsFragment());
+                position = 1;
+            }
+            else if (view == itemConnection) {
+                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+                position = 2;
+            }
+            else if (view == itemSchedule) {
+                fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
+                position = 3;
+            }
             fragmentTransaction.commit();
-            onSectionAttached(position);
         }
         if (user_group == 2) {
-            if (position == 0)
+            if (view == itemHome) {
                 fragmentTransaction.replace(R.id.container, new HomeFragment());
-            else if (position == 1)
+                position = 0;
+            }
+            else if (view == itemNotification) {
                 fragmentTransaction.replace(R.id.container, new NotificationsFragment());
-            else if (position == 2)
+                position = 1;
+            }
+            else if (view == itemConnection) {
                 fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
-            else if (position == 3)
+                position = 2;
+            }
+            else if (view == itemSchedule) {
                 fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
-
+                position = 3;
+            }
             fragmentTransaction.commit();
-            onSectionAttached(position);
         }
 
-        if (position == 4)
+        if(position > -1)
+            onSectionAttached(position);
+
+
+        if (view == itemSettings)
             startActivity(new Intent(this, Settings.class));
-        else if (position == 5)
+        else if (view == itemLogout)
             logout();
+        if(resideMenu != null && resideMenu.isOpened())
+            resideMenu.closeMenu();
     }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return resideMenu.dispatchTouchEvent(ev);
+    }
+
+    private ResideMenu.OnMenuListener menuListener = new ResideMenu.OnMenuListener() {
+        @Override
+        public void openMenu() {
+            setTitle(getResources().getString(R.string.app_name));
+        }
+
+        @Override
+        public void closeMenu() {
+            setTitle(mTitle);
+        }
+    };
 
     public void onSectionAttached(int number) {
-        mTitle = getResources().getStringArray(R.array.navigation_items)[number];
-    }
-
-    public void restoreActionBar() {
-        customTitle.setText(mTitle);
+        mTitle = navigationTitle[number];
     }
 
     @Override
@@ -579,16 +554,6 @@ public class DashboardActivity extends FragmentActivity
         startMain.addCategory(Intent.CATEGORY_HOME);
         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(startMain);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (mNavigationDrawerFragment != null && !mNavigationDrawerFragment.isDrawerOpen()) {
-            getMenuInflater().inflate(R.menu.dashboard, menu);
-            restoreActionBar();
-            return true;
-        }
-        return super.onCreateOptionsMenu(menu);
     }
 
     public void fbClearToken() {
