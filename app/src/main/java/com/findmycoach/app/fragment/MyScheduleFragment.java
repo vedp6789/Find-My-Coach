@@ -18,6 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +51,8 @@ import java.util.Locale;
 public class MyScheduleFragment extends Fragment implements View.OnClickListener, Callback {
 
     private TextView currentMonth, add_slot, add_vacation;
+    public TextView tv_location_for_calendar;
+    public LinearLayout ll_location_for_calendar;
     public   CheckBox cb_calendar_by_location;
     private ImageView prevMonth;
     private ImageView nextMonth;
@@ -212,6 +215,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     /* Initializing views for Mentor login */
     public void initialize(final View view) {
 
+        tv_location_for_calendar= (TextView) view.findViewById(R.id.tv_location_for_calendar);
+        ll_location_for_calendar= (LinearLayout) view.findViewById(R.id.ll_location_for_calendar);
+
         add_slot = (TextView) view.findViewById(R.id.tv_add_new_slot);
         add_slot.setOnClickListener(this);
 
@@ -240,12 +246,14 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 if (isChecked) {                                                                 /* Starting a fragment to get the location detail by autotype method */
                     cb_calendar_by_location_is_checked=true;
                     calendar_by_location=null;
+
                     getLocationFromDialog();
                 } else {
                     cb_calendar_by_location_is_checked=false;
 
                     if(calendar_by_location != null && calendar_by_location.trim().length() > 0){
                         Log.d(TAG,"calendar_by_location strig size :"+calendar_by_location.trim().length());
+                        ll_location_for_calendar.setVisibility(View.GONE);
                         getCalendarDetailsAPICall();
                     }
 
@@ -260,6 +268,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         LocationForSchedule locationForSchedule = new LocationForSchedule();
         locationForSchedule.myScheduleFragment = MyScheduleFragment.this;
         locationForSchedule.show(fragmentManager, null);
+        tv_location_for_calendar.setText("");
 
     }
 
