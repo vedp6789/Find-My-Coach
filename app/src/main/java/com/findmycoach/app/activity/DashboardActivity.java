@@ -17,7 +17,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -93,14 +92,14 @@ public class DashboardActivity extends FragmentActivity
         actionBar.hide();
         dashboardActivity = this;
 
-        try{
+        try {
             user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             logout();
             return;
         }
-        Log.e("FMC - user_group",""+user_group);
+        Log.e("FMC - user_group", "" + user_group);
         setContentView(R.layout.activity_dashboard);
 
         context = getApplicationContext();
@@ -110,7 +109,7 @@ public class DashboardActivity extends FragmentActivity
         StorageHelper.createAppMediaFolders(this);
 
         fragment_to_launch_from_notification = getIntent().getIntExtra("fragment", 0);
-        group_push_notification= getIntent().getIntExtra("group",0);
+        group_push_notification = getIntent().getIntExtra("group", 0);
 
         if (fragment_to_launch_from_notification == 0) {
             // Check device for Play Services APK.
@@ -268,7 +267,7 @@ public class DashboardActivity extends FragmentActivity
             Log.d("registration_id:", regid);
             requestParams.add("user_id", user_id);
             requestParams.add("registration_id", regid);
-            requestParams.add("user_group",user_group+"");
+            requestParams.add("user_group", user_group + "");
 
 
             NetworkClient.registerGcmRegistrationId(DashboardActivity.this, requestParams, authToken, new Callback() {
@@ -299,7 +298,7 @@ public class DashboardActivity extends FragmentActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if (fragment_to_launch_from_notification == 0){
+        if (fragment_to_launch_from_notification == 0) {
             if (checkPlayServices()) {
 
            /* gcm = GoogleCloudMessaging.getInstance(this);
@@ -312,11 +311,11 @@ public class DashboardActivity extends FragmentActivity
                 Toast.makeText(DashboardActivity.this, getResources().getString(R.string.google_play_services_not_supported), Toast.LENGTH_LONG).show();
                 Log.i(TAG, "No valid Google Play Services APK found.");
             }
-        }else{
+        } else {
 
-            if(Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this,"user_group")) == group_push_notification){
+            if (Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group")) == group_push_notification) {
 
-                if(Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this,"user_group")) == 3){
+                if (Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group")) == 3) {
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     switch (fragment_to_launch_from_notification) {
@@ -364,7 +363,7 @@ public class DashboardActivity extends FragmentActivity
 
                     }
                 }
-                if(Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this,"user_group")) == 2){
+                if (Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group")) == 2) {
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     switch (fragment_to_launch_from_notification) {
@@ -423,15 +422,12 @@ public class DashboardActivity extends FragmentActivity
                 }
 
 
-
-            }else{
-                Toast.makeText(getApplicationContext(),getResources().getString(R.string.switch_login),Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.switch_login), Toast.LENGTH_SHORT).show();
             }
 
 
         }
-
-
 
 
     }
@@ -490,12 +486,12 @@ public class DashboardActivity extends FragmentActivity
     }
 
     private void logout() {
-        String loginWith = StorageHelper.getUserDetails(this,"login_with");
-        if(loginWith == null || loginWith.equals("G+")) {
+        String loginWith = StorageHelper.getUserDetails(this, "login_with");
+        if (loginWith == null || loginWith.equals("G+")) {
             LoginActivity.doLogout = true;
         }
 
-        NotificationManager notificationManager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
 
         StorageHelper.clearUser(this);
@@ -536,7 +532,7 @@ public class DashboardActivity extends FragmentActivity
     public void onNavigationDrawerItemSelected(int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if(user_group == 3){
+        if (user_group == 3) {
             if (position == 0)
                 fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentor.HomeFragment());
             else if (position == 1)
@@ -549,7 +545,7 @@ public class DashboardActivity extends FragmentActivity
             fragmentTransaction.commit();
             onSectionAttached(position);
         }
-        if(user_group == 2){
+        if (user_group == 2) {
             if (position == 0)
                 fragmentTransaction.replace(R.id.container, new HomeFragment());
             else if (position == 1)
@@ -563,6 +559,10 @@ public class DashboardActivity extends FragmentActivity
             onSectionAttached(position);
         }
 
+        if (position == 4)
+            startActivity(new Intent(this, Settings.class));
+        else if (position == 5)
+            logout();
     }
 
     public void onSectionAttached(int number) {
@@ -589,19 +589,6 @@ public class DashboardActivity extends FragmentActivity
             return true;
         }
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, Settings.class));
-            return true;
-        } else if (id == R.id.log_out) {
-            logout();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public void fbClearToken() {

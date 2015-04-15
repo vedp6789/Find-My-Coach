@@ -16,10 +16,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.findmycoach.app.R;
 import com.findmycoach.app.util.ImageLoadTask;
 import com.findmycoach.app.util.StorageHelper;
-
-import com.findmycoach.app.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 /**
  * Created by IgluLabs on 1/23/2015.
  */
-public class ChatWidgetAdapter  extends ArrayAdapter<String> {
+public class ChatWidgetAdapter extends ArrayAdapter<String> {
 
 
     private Context context;
@@ -46,7 +46,7 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
 
     private ArrayList<Integer> mediaTempList;
 
-    public ChatWidgetAdapter(Context context, ArrayList<String> messageList, ArrayList<Integer> sender, ArrayList<Integer> messageType ) {
+    public ChatWidgetAdapter(Context context, ArrayList<String> messageList, ArrayList<Integer> sender, ArrayList<Integer> messageType) {
         super(context, R.layout.signle_chat_cointainer_sent, messageList);
         this.context = context;
         this.messageList = messageList;
@@ -55,77 +55,73 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
 
         /*Creating/Checking folder for media storage*/
         StorageHelper.createAppMediaFolders(context);
-        storagePathImage = StorageHelper.getUserDetails(context,"image_path");
-        storagePathVideo = StorageHelper.getUserDetails(context,"video_path");
+        storagePathImage = StorageHelper.getUserDetails(context, "image_path");
+        storagePathVideo = StorageHelper.getUserDetails(context, "video_path");
 
-        Log.d("FMC",storagePathImage);
-        Log.d("FMC",storagePathVideo);
+        Log.d("FMC", storagePathImage);
+        Log.d("FMC", storagePathVideo);
 
-        File imageFolder = new File(StorageHelper.getUserDetails(context,"image_path"));
-        File videoFolder = new File(StorageHelper.getUserDetails(context,"video_path"));
+        File imageFolder = new File(StorageHelper.getUserDetails(context, "image_path"));
+        File videoFolder = new File(StorageHelper.getUserDetails(context, "video_path"));
         String[] images = imageFolder.list();
         String[] videos = videoFolder.list();
 
         fileNames = new ArrayList<String>();
         mediaTempList = new ArrayList<Integer>();
-        for(String image : images)
+        for (String image : images)
             fileNames.add(image.trim());
-        for(String video : videos)
+        for (String video : videos)
             fileNames.add(video.trim());
     }
 
     @Override
     public View getView(int position, View rowView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        try{
-            if(senderList.get(position) == 1 && messageType.get(position) == 0) {
+        try {
+            if (senderList.get(position) == 1 && messageType.get(position) == 0) {
                 rowView = inflater.inflate(R.layout.signle_chat_cointainer_received, parent, false);
                 showTextMsg(rowView, position);
-            }
-            else if(senderList.get(position) == 1 && messageType.get(position) == 1) {
+            } else if (senderList.get(position) == 1 && messageType.get(position) == 1) {
                 rowView = inflater.inflate(R.layout.signle_chat_cointainer_received_image_video, parent, false);
                 showImageMsg(rowView, position);
-            }
-            else if(senderList.get(position) == 1 && messageType.get(position) == 2) {
+            } else if (senderList.get(position) == 1 && messageType.get(position) == 2) {
                 rowView = inflater.inflate(R.layout.signle_chat_cointainer_received_image_video, parent, false);
                 showVideoMsg(rowView, position);
-            }
-            else if(senderList.get(position) == 0 && messageType.get(position) == 0) {
+            } else if (senderList.get(position) == 0 && messageType.get(position) == 0) {
                 rowView = inflater.inflate(R.layout.signle_chat_cointainer_sent, parent, false);
                 showTextMsg(rowView, position);
-            }
-            else if(senderList.get(position) == 0 && messageType.get(position) == 1) {
+            } else if (senderList.get(position) == 0 && messageType.get(position) == 1) {
                 rowView = inflater.inflate(R.layout.signle_chat_cointainer_sent_image_video, parent, false);
                 showImageMsg(rowView, position);
-            }
-            else if(senderList.get(position) == 0 && messageType.get(position) == 2) {
+            } else if (senderList.get(position) == 0 && messageType.get(position) == 2) {
                 rowView = inflater.inflate(R.layout.signle_chat_cointainer_sent_image_video, parent, false);
                 showVideoMsg(rowView, position);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             System.gc();
         }
         return rowView;
     }
 
-    private void showTextMsg(View v, int position){
+    private void showTextMsg(View v, int position) {
         final TextView msgTextView = (TextView) v.findViewById(R.id.messageTV);
         msgTextView.setText(messageList.get(position));
     }
 
-    private void showImageMsg(View v, int position){
+    private void showImageMsg(View v, int position) {
         final ImageView imageView = (ImageView) v.findViewById(R.id.mediaIV);
 
         String[] fileName = messageList.get(position).split("/");
-        final String imageName = fileName[fileName.length-1].trim();
+        final String imageName = fileName[fileName.length - 1].trim();
 
-        if(fileNames.contains(imageName)) {
+        if (fileNames.contains(imageName)) {
             final File imageFile = new File(storagePathImage + "/" + fileNames.get(fileNames.indexOf(imageName)));
-            if(imageFile.exists()){
-                try{
-                    imageView.setImageBitmap(decodeFileImage(imageFile));
-                }catch (Exception e){
+            if (imageFile.exists()) {
+                try {
+                    Picasso.with(context).load(imageFile).into(imageView);
+//                    imageView.setImageBitmap(decodeFileImage(imageFile));
+                } catch (Exception e) {
                     imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
                 }
 
@@ -139,15 +135,16 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
                     }
                 });
             }
-        }else {
+        } else {
             final File imageFile = new File(messageList.get(position));
             ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.mediaProgressBar);
             progressBar.setVisibility(View.VISIBLE);
-            if(imageFile.exists()){
-                try{
-                    imageView.setImageBitmap(decodeFileImage(imageFile));
+            if (imageFile.exists()) {
+                try {
+                    Picasso.with(context).load(imageFile).into(imageView);
+//                    imageView.setImageBitmap(decodeFileImage(imageFile));
                     mediaTempList.add(position);
-                }catch (Exception e){
+                } catch (Exception e) {
                     imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
                 }
                 imageView.setOnClickListener(new View.OnClickListener() {
@@ -164,51 +161,53 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
         }
     }
 
-    private Bitmap decodeFileImage(File f){
+    private Bitmap decodeFileImage(File f) {
         try {
             //Decode image size
             BitmapFactory.Options o = new BitmapFactory.Options();
             o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f),null,o);
+            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
 
             //The new size we want to scale to
-            final int REQUIRED_SIZE=50;
+            final int REQUIRED_SIZE = 50;
 
             //Find the correct scale value. It should be the power of 2.
-            int scale=1;
-            while(o.outWidth/scale/2>=REQUIRED_SIZE && o.outHeight/scale/2>=REQUIRED_SIZE)
-                scale*=2;
+            int scale = 1;
+            while (o.outWidth / scale / 2 >= REQUIRED_SIZE && o.outHeight / scale / 2 >= REQUIRED_SIZE)
+                scale *= 2;
 
             //Decode with inSampleSi
             BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize=scale;
+            o2.inSampleSize = scale;
             Bitmap bitmap = null;
-            try{
+            try {
                 bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-            }catch (OutOfMemoryError e){
+            } catch (OutOfMemoryError e) {
                 System.gc();
-                try{
+                try {
                     bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-                }catch (OutOfMemoryError ex){
+                } catch (OutOfMemoryError ex) {
                     ex.printStackTrace();
                     System.gc();
                     return null;
                 }
             }
             return bitmap;
-        } catch (FileNotFoundException e) {e.printStackTrace();}
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
-    private void showVideoMsg(View v, int position){
+    private void showVideoMsg(View v, int position) {
         final ImageView imageView = (ImageView) v.findViewById(R.id.mediaIV);
 
         String[] fileName = messageList.get(position).split("/");
-        String videoName = fileName[fileName.length-1].trim();
-        if(fileNames.contains(videoName)) {
+        String videoName = fileName[fileName.length - 1].trim();
+        if (fileNames.contains(videoName)) {
             final File videoFile = new File(storagePathVideo + "/" + fileNames.get(fileNames.indexOf(videoName)));
-            if(videoFile.exists()){
-                try{
+            if (videoFile.exists()) {
+                try {
                     imageView.setImageBitmap(ThumbnailUtils.createVideoThumbnail(videoFile.getAbsolutePath(), MediaStore.Images.Thumbnails.MINI_KIND));
 
                     imageView.setOnClickListener(new View.OnClickListener() {
@@ -220,17 +219,17 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
                             context.startActivity(intent);
                         }
                     });
-                }catch (Exception e){
+                } catch (Exception e) {
                     imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
                 }
             }
 
-        }else{
+        } else {
             final File videoFile = new File(messageList.get(position));
             ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.mediaProgressBar);
             progressBar.setVisibility(View.VISIBLE);
-            if(videoFile.exists()){
-                try{
+            if (videoFile.exists()) {
+                try {
                     imageView.setImageBitmap(ThumbnailUtils.createVideoThumbnail(videoFile.getAbsolutePath(), MediaStore.Images.Thumbnails.MINI_KIND));
                     mediaTempList.add(position);
                     imageView.setOnClickListener(new View.OnClickListener() {
@@ -242,7 +241,7 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
                             context.startActivity(intent);
                         }
                     });
-                }catch (Exception e){
+                } catch (Exception e) {
                     imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
                 }
             }
@@ -251,15 +250,15 @@ public class ChatWidgetAdapter  extends ArrayAdapter<String> {
 
     }
 
-    public void updateMessageList(String msg, int sender, int messageType){
-        this.messageList.add(messageList.size(),msg);
+    public void updateMessageList(String msg, int sender, int messageType) {
+        this.messageList.add(messageList.size(), msg);
         this.senderList.add(sender);
         this.messageType.add(messageType);
     }
 
-    public void downloadFile(String fileUrl, String type){
+    public void downloadFile(String fileUrl, String type) {
         String[] fileName = fileUrl.split("/");
-        String fName = fileName[fileName.length-1].trim();
+        String fName = fileName[fileName.length - 1].trim();
         new ImageLoadTask(fileUrl, context, fName, type.equals("image") ? storagePathImage : storagePathVideo, fileNames, mediaTempList.get(0), messageList).execute();
         mediaTempList.remove(0);
     }
