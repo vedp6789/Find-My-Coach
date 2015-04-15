@@ -123,11 +123,15 @@ public class LocationForSchedule extends DialogFragment implements Callback{
                     if (location.equalsIgnoreCase(auto_tv_location.getText().toString())){
                         myScheduleFragment.calendar_by_location=auto_tv_location.getText().toString();
                         dismiss();
+                        myScheduleFragment.ll_location_for_calendar.setVisibility(View.VISIBLE);
+                        myScheduleFragment.tv_location_for_calendar.setText(auto_tv_location.getText().toString());
                         myScheduleFragment.getCalendarDetailsAPICall();
                     }else{
                         if(last_location_selected.equalsIgnoreCase(auto_tv_location.getText().toString())){
                             myScheduleFragment.calendar_by_location=auto_tv_location.getText().toString();
                             dismiss();
+                            myScheduleFragment.ll_location_for_calendar.setVisibility(View.VISIBLE);
+                            myScheduleFragment.tv_location_for_calendar.setText(auto_tv_location.getText().toString());
                             myScheduleFragment.getCalendarDetailsAPICall();
                         }else{
                             Toast.makeText(getActivity(),getResources().getString(R.string.select_suggested_location),Toast.LENGTH_SHORT).show();
@@ -138,6 +142,8 @@ public class LocationForSchedule extends DialogFragment implements Callback{
                     if( last_location_selected != null && last_location_selected.equalsIgnoreCase(auto_tv_location.getText().toString())){
                         myScheduleFragment.calendar_by_location=auto_tv_location.getText().toString();
                         dismiss();
+                        myScheduleFragment.ll_location_for_calendar.setVisibility(View.VISIBLE);
+                        myScheduleFragment.tv_location_for_calendar.setText(auto_tv_location.getText().toString());
                         myScheduleFragment.getCalendarDetailsAPICall();
                     }else{
                         Toast.makeText(getActivity(),getResources().getString(R.string.select_suggested_location),Toast.LENGTH_SHORT).show();

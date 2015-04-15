@@ -54,6 +54,8 @@ import java.util.TreeSet;
  * Created by praka_000 on 3/4/2015.
  */
 public class ScheduleNewClass extends Activity implements Button.OnClickListener, SetDate, Callback {
+    private LinearLayout ll_child_dob;
+    public static TextView tv_child_dob;
     private static TextView tv_from_date, tv_to_date;
     Spinner sp_subjects, sp_class_timing, sp_mentor_for;
     CheckBox cb_mon, cb_tue, cb_wed, cb_thu, cb_fri, cb_sat, cb_sun;
@@ -138,10 +140,11 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                     selected_mentor_for=null;
                     selected_mentor_for = (String) parent.getItemAtPosition(position);
                     if(selected_mentor_for.equals(getResources().getString(R.string.child))){
-                       FragmentManager fragmentManager=getFragmentManager();
-                        ChildDOB childDOB=new ChildDOB();
-                        childDOB.scheduleNewClass=ScheduleNewClass.this;
-                        childDOB.show(fragmentManager,null);
+                        ll_child_dob.setVisibility(View.VISIBLE);
+
+
+                    }else{
+                        ll_child_dob.setVisibility(View.GONE);
                     }
                 }
 
@@ -623,6 +626,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         tv_from_date.setOnClickListener(this);
         tv_to_date = (TextView) findViewById(R.id.tv_date_to_dp);
         tv_to_date.setOnClickListener(this);
+        tv_child_dob= (TextView) findViewById(R.id.tv_child_dob);
+        tv_child_dob.setOnClickListener(this);
+        ll_child_dob= (LinearLayout) findViewById(R.id.ll_child_dob);
         sp_mentor_for = (Spinner) findViewById(R.id.sp_mentor_for);
         cb_mon = (CheckBox) findViewById(R.id.cb_m);
         cb_tue = (CheckBox) findViewById(R.id.cb_t);
@@ -637,6 +643,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         rb_pay_personally = (RadioButton) findViewById(R.id.pay_personally);
         b_payment = (Button) findViewById(R.id.b_proceed_to_payment);
         b_payment.setOnClickListener(this);
+
+
         populateFields();
     }
 
@@ -695,6 +703,13 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 //                tillDateDialogFragment.setArguments(bundle1);
                 tillDateDialogFragment.scheduleNewClass = this;
                 tillDateDialogFragment.show(fragmentManager1, null);
+                break;
+
+            case R.id.tv_child_dob:
+                FragmentManager fragmentManager2=getFragmentManager();
+                ChildDOB childDOB=new ChildDOB();
+                childDOB.scheduleNewClass=ScheduleNewClass.this;
+                childDOB.show(fragmentManager2,null);
                 break;
         }
     }

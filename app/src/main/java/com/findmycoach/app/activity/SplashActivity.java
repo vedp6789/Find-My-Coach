@@ -35,17 +35,17 @@ public class SplashActivity extends Activity implements Callback{
         Category categoryFromDb = dataBase.selectAllSubCategory();
 
 
-        /*
 
-        *//** If sub category is not present then call api to get *//*
+
+        //** If sub category is not present then call api to get *//*
         if(categoryFromDb.getData().size() < 1)
             getCategories();
 
-        *//** Subcategories is present *//*
+        //** Subcategories is present *//*
         else
             runHoldThread();
 
-        */
+
 
 
         runHoldThread();
