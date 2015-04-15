@@ -757,8 +757,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
 
         /** Restarting the LoginActivity */
-        finish();
-        startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+//        finish();
+//        startActivity(new Intent(LoginActivity.this, LoginActivity.class));
     }
 
 }
