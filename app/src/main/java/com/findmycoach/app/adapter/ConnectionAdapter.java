@@ -77,10 +77,12 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
                 if(DashboardActivity.dashboardActivity.user_group == 3){
                     chatWidgetIntent.putExtra("receiver_id", singleConnection.getOwnerId()+"");
                     chatWidgetIntent.putExtra("receiver_name", singleConnection.getOwnerName());
+                    chatWidgetIntent.putExtra("receiver_image", singleConnection.getOwnerImage());
                     context.startActivity(chatWidgetIntent);
                 }else if(DashboardActivity.dashboardActivity.user_group == 2){
                     chatWidgetIntent.putExtra("receiver_id", singleConnection.getInviteeId()+"");
                     chatWidgetIntent.putExtra("receiver_name", singleConnection.getInviteeName());
+                    chatWidgetIntent.putExtra("receiver_image", singleConnection.getInviteeImage());
                     context.startActivity(chatWidgetIntent);
                 }
             }
@@ -90,7 +92,7 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
         TextView lastMsgTV = (TextView) view.findViewById(R.id.lastMsgTV);
         ImageButton connectionButton = (ImageButton) view.findViewById(R.id.detailsTV);
 
-        // Called to show respective row for mentee and mentor
+        /** Called to show respective row for mentee and mentor */
         populateSingleRow(imageView, nameTV, lastMsgTV, connectionButton, DashboardActivity.dashboardActivity.user_group, singleConnection, position);
         return view;
     }

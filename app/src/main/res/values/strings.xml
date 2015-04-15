@@ -371,6 +371,8 @@
         <item>Notifications</item>
         <item>My Connections</item>
         <item>My Schedule</item>
+        <item>Settings</item>
+        <item>Logout</item>
     </string-array>
     <string-array name="gender">
         <item>Male</item>

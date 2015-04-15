@@ -137,6 +137,11 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         /** Opens Dashboard activity*/
         finish();
         startActivity(new Intent(this, DashboardActivity.class));
+
+        /** If newly registered user is mentee then open PaymentDetail Activity for getting card details */
+        if(user_group == 2){
+            startActivity(new Intent(this, PaymentDetailsActivity.class));
+        }
     }
 
     @Override

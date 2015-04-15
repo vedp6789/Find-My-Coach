@@ -43,6 +43,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     private int user_group=0;
     private TextView countryCodeTV;
     private String[] country_code;
+    private String email, phoneNumber;
 
 
     @Override
@@ -150,6 +151,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
                 requestParams.add("user_group", String.valueOf(user_group));
                 StorageHelper.storePreference(this, "phone_number", phone);
                 callApiToRegister(requestParams);
+                this.email = email;
+                phoneNumber = phone;
             }
 
         }
@@ -256,11 +259,13 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         progressDialog.dismiss();
         Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
 
-        /** If newly registered user is mentee then open PaymentDetail Activity for getting card details */
-        if(user_group == 2){
-            startActivity(new Intent(this, PaymentDetailsActivity.class));
-        }
+        saveUserEmail(email);
+        saveUserPhoneNumber(phoneNumber);
+        StorageHelper.storePreference(this, "user_group", String.valueOf(user_group));
+        startActivity(new Intent(this, ValidatePhoneActivity.class));
+
         finish();
+        LoginActivity.loginActivity.finish();
     }
 
     /** If registration is not successful */
@@ -285,5 +290,15 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             }
         }
         return CountryZipCode;
+    }
+
+    /** Saving email of user in shared preferences*/
+    private void saveUserEmail(String emailId) {
+        StorageHelper.storePreference(this, "user_email", emailId);
+    }
+
+    /** Saving user's phone number in shared preferences */
+    private void saveUserPhoneNumber(String phoneNumber) {
+        StorageHelper.storePreference(this, "phone_number", phoneNumber);
     }
 }

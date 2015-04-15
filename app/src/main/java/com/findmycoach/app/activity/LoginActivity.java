@@ -78,6 +78,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private SignInButton mSignInButton;
     private LinearLayout mSignOutButtons;
 
+    public static LoginActivity loginActivity;
+
     /** Log tags*/
     private static final String TAG = "FMC";
     private static final String TAG1 = "FMC: Permissions:";
@@ -86,6 +88,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        loginActivity = this;
+
         final String userToken = StorageHelper.getUserDetails(this, "auth_token");
         String phnVerified = StorageHelper.getUserDetails(this, "phone_verified");
 
@@ -752,8 +757,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
 
         /** Restarting the LoginActivity */
-        finish();
-        startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+//        finish();
+//        startActivity(new Intent(LoginActivity.this, LoginActivity.class));
     }
 
 }

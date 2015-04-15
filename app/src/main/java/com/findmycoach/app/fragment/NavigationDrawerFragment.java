@@ -11,17 +11,23 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.SkewAnimation.Flip3dAnimation;
+import com.findmycoach.app.activity.DashboardActivity;
 
 
 /**
@@ -30,6 +36,8 @@ import com.findmycoach.app.R;
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
 public class NavigationDrawerFragment extends Fragment {
+
+    private boolean isDrawerClosed, isSliding;
 
     /**
      * Remember the position of the selected item.
@@ -119,15 +127,18 @@ public class NavigationDrawerFragment extends Fragment {
      * @param fragmentId   The android:id of this fragment in its activity's layout.
      * @param drawerLayout The DrawerLayout containing this fragment's UI.
      */
-    public void setUp(int fragmentId, DrawerLayout drawerLayout) {
+    public void setUp(int fragmentId, DrawerLayout drawerLayout, final RelativeLayout container, final ImageView drawerIcon) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        isDrawerClosed = true;
+        isSliding = false;
 
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        mDrawerLayout.setScrimColor(getResources().getColor(android.R.color.transparent));
         // set up the drawer's list view with items and click listener
-
-
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -136,11 +147,11 @@ public class NavigationDrawerFragment extends Fragment {
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
         mDrawerToggle = new ActionBarDrawerToggle(
-                getActivity(),                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
-                R.string.navigation_drawer_open,  /* "open drawer" description */
-                R.string.navigation_drawer_close  /* "close drawer" description */
+                getActivity(),                    /* host Activity */
+                mDrawerLayout,                    /* DrawerLayout object */
+                R.drawable.ic_drawer,
+                R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
+                R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ) {
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -148,7 +159,8 @@ public class NavigationDrawerFragment extends Fragment {
                 if (!isAdded()) {
                     return;
                 }
-
+                isSliding = false;
+                isDrawerClosed = true;
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
 
@@ -158,7 +170,8 @@ public class NavigationDrawerFragment extends Fragment {
                 if (!isAdded()) {
                     return;
                 }
-
+                isSliding = false;
+                isDrawerClosed = false;
                 if (!mUserLearnedDrawer) {
                     // The user manually opened the drawer; store this flag to prevent auto-showing
                     // the navigation drawer automatically in the future.
@@ -169,13 +182,31 @@ public class NavigationDrawerFragment extends Fragment {
                 }
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset){
+                if (isDrawerClosed && !isSliding) {
+                    isSliding = true;
+                    applyRotation(0, 35, container, 0, container.getPivotY(), 400);
+                    applyRotation(-45, 0, mDrawerListView, mDrawerListView.getX(), container.getPivotY(), 400);
+                } else if (!isDrawerClosed && !isSliding) {
+                    isSliding = true;
+                    applyRotation(35, 0, container, 0, container.getPivotY(), 300);
+                    applyRotation(0, -45, mDrawerListView, mDrawerListView.getX(), container.getPivotY(), 200);
+                }
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                super.onDrawerStateChanged(newState);
+            }
         };
 
         // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
         // per the navigation drawer design guidelines.
-        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
+        /*if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
             mDrawerLayout.openDrawer(mFragmentContainerView);
-        }
+        }*/
 
         // Defer code dependent on restoration of previous instance state.
         mDrawerLayout.post(new Runnable() {
@@ -185,7 +216,26 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
+        drawerIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
+                    mDrawerLayout.closeDrawer(Gravity.END);
+                } else {
+                    mDrawerLayout.openDrawer(Gravity.END);
+                }
+            }
+        });
+
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+
+    private void applyRotation(float start, float end, View container, float centerX, float centerY, long duration) {
+        final Flip3dAnimation rotation = new Flip3dAnimation(start, end, centerX, centerY);
+        rotation.setDuration(duration);
+        rotation.setFillAfter(true);
+        rotation.setInterpolator(new AccelerateInterpolator());
+        container.startAnimation(rotation);
     }
 
     private void selectItem(int position) {
@@ -240,7 +290,12 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        if (item != null && item.getItemId() == android.R.id.home) {
+            if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
+                mDrawerLayout.closeDrawer(Gravity.END);
+            } else {
+                mDrawerLayout.openDrawer(Gravity.END);
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -251,10 +306,7 @@ public class NavigationDrawerFragment extends Fragment {
      * 'context', rather than just what's in the current screen.
      */
     private void showGlobalContextActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setTitle(R.string.app_name);
+        DashboardActivity.customTitle.setText(R.string.app_name);
     }
 
     private ActionBar getActionBar() {
