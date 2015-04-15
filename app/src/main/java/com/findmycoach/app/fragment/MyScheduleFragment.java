@@ -216,7 +216,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public void initialize(final View view) {
 
         tv_location_for_calendar= (TextView) view.findViewById(R.id.tv_location_for_calendar);
+        tv_location_for_calendar.setOnClickListener(this);
+
         ll_location_for_calendar= (LinearLayout) view.findViewById(R.id.ll_location_for_calendar);
+        ll_location_for_calendar.setVisibility(View.GONE);
 
         add_slot = (TextView) view.findViewById(R.id.tv_add_new_slot);
         add_slot.setOnClickListener(this);
@@ -268,7 +271,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         LocationForSchedule locationForSchedule = new LocationForSchedule();
         locationForSchedule.myScheduleFragment = MyScheduleFragment.this;
         locationForSchedule.show(fragmentManager, null);
-        tv_location_for_calendar.setText("");
+
 
     }
 
@@ -400,6 +403,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 datePickerDialog.show();
 */
             }
+
+            if(v==tv_location_for_calendar){
+                getLocationFromDialog();
+            }
+
         }
         if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 2) {
             if(v == currentMonth){
