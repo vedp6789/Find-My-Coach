@@ -437,6 +437,7 @@
     <!-- Unique strings block-->
     <string name="app_name">Find My Coach</string>
     <string name="action_settings">Settings</string>
+    <string name="action_scan_card">Scan card</string>
     <string name="set_schedule">Schedule</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_enter_code">Enter 6 character code here.</string>
@@ -460,6 +461,7 @@
     <string name="profile">Profile</string>
     <string name="change_password">Change password</string>
     <string name="change_phone">Change phone number</string>
+    <string name="payment">Payment</string>
     <string name="no_new_request">No new request for you.</string>
     <string name="not_connected">Not connected to anyone.</string>
     <string name="yes">YES</string>

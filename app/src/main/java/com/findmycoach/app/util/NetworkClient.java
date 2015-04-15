@@ -928,6 +928,7 @@ public class NetworkClient {
                     @Override
                     public void onFailure(int statusCode, Header[] headers,
                                           byte[] responseBody, Throwable error) {
+                        callback.failureOperation("", statusCode, calledApiValue);
                     }
                 }
 

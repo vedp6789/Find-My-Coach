@@ -3,8 +3,10 @@ package com.findmycoach.app.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +17,9 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.fragment.DatePickerFragment;
 
+import io.card.payment.CardIOActivity;
+import io.card.payment.CreditCard;
+
 /**
  * Created by prem on 9/3/15.
  */
@@ -22,6 +27,8 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
 
     private EditText inputCardNumber, inputCardName, inputCardCVV;
     public static EditText inputCardExpiry;
+    private final int MY_SCAN_REQUEST_CODE = 10001;
+    private final String TAG = "FMC";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +58,7 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_signup, menu);
+        getMenuInflater().inflate(R.menu.menu_payment, menu);
         return true;
     }
 
@@ -60,8 +67,18 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
         int id = item.getItemId();
         if (id == android.R.id.home) {
             finish();
+        }else if(id == R.id.action_scan_card){
+            Intent scanIntent = new Intent(this, CardIOActivity.class);
+
+            // customize these values to suit your needs.
+            scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, true); // default: false
+            scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, false); // default: false
+            scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, false); // default: false
+
+            // MY_SCAN_REQUEST_CODE is arbitrary and is only used within this activity.
+            startActivityForResult(scanIntent, MY_SCAN_REQUEST_CODE);
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override
@@ -131,5 +148,40 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
                 view.setError(null);
             }
         }, 3500);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == MY_SCAN_REQUEST_CODE && resultCode == RESULT_OK) {
+            String resultDisplayStr;
+            if (data != null && data.hasExtra(CardIOActivity.EXTRA_SCAN_RESULT)) {
+                CreditCard scanResult = data.getParcelableExtra(CardIOActivity.EXTRA_SCAN_RESULT);
+
+                // Never log a raw card number. Avoid displaying it, but if necessary use getFormattedCardNumber()
+                resultDisplayStr = "Card Number: " + scanResult.getRedactedCardNumber() + "\n";
+
+                // Do something with the raw number, e.g.:
+                // myService.setCardNumber( scanResult.cardNumber );
+
+                if (scanResult.isExpiryValid()) {
+                    resultDisplayStr += "Expiration Date: " + scanResult.expiryMonth + "/" + scanResult.expiryYear + "\n";
+                }
+
+                if (scanResult.cvv != null) {
+                    // Never log or display a CVV
+                    resultDisplayStr += "CVV has " + scanResult.cvv.length() + " digits.\n";
+                }
+
+                if (scanResult.postalCode != null) {
+                    resultDisplayStr += "Postal Code: " + scanResult.postalCode + "\n";
+                }
+            }
+            else {
+                resultDisplayStr = "Scan was canceled.";
+            }
+            Log.d(TAG, resultDisplayStr);
+        }
     }
 }
