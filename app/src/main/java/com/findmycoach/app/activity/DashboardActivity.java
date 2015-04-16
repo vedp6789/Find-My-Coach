@@ -29,6 +29,8 @@ import com.findmycoach.app.fragment.MyConnectionsFragment;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.fragment.NotificationsFragment;
 import com.findmycoach.app.fragment_mentee.HomeFragment;
+import com.findmycoach.app.reside_menu.ResideMenu;
+import com.findmycoach.app.reside_menu.ResideMenuItem;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
@@ -37,8 +39,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.loopj.android.http.RequestParams;
-import com.special.ResideMenu.ResideMenu;
-import com.special.ResideMenu.ResideMenuItem;
 
 import java.io.IOException;
 
@@ -438,11 +438,11 @@ public class DashboardActivity extends FragmentActivity
 
         // create menu items;
         itemHome     = new ResideMenuItem(this, R.drawable.icon_home, navigationTitle[0]);
-        itemNotification  = new ResideMenuItem(this, R.drawable.icon_profile, navigationTitle[1]);
-        itemConnection = new ResideMenuItem(this, android.R.drawable.ic_dialog_alert, navigationTitle[2]);
+        itemNotification  = new ResideMenuItem(this, android.R.drawable.stat_notify_chat, navigationTitle[1]);
+        itemConnection = new ResideMenuItem(this, R.drawable.icon_profile, navigationTitle[2]);
         itemSchedule = new ResideMenuItem(this, R.drawable.icon_calendar, navigationTitle[3]);
         itemSettings = new ResideMenuItem(this, R.drawable.icon_settings, navigationTitle[4]);
-        itemLogout = new ResideMenuItem(this, android.R.drawable.ic_dialog_email, navigationTitle[5]);
+        itemLogout = new ResideMenuItem(this, android.R.drawable.ic_menu_close_clear_cancel, navigationTitle[5]);
 
         itemHome.setOnClickListener(this);
         itemNotification.setOnClickListener(this);
