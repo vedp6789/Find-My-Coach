@@ -96,7 +96,7 @@ public class MyConnectionsFragment extends Fragment implements Callback {
         for(Data d : data){
             boolean flag = false;
             for(Data d1 : dataToShow){
-                if(d1.getInviteeId().equals(d.getInviteeId())){
+                if(d1.getInviteeId().equals(d.getInviteeId()) && d1.getOwnerId().equals(d.getOwnerId())){
                     flag = true;
                 }
             }

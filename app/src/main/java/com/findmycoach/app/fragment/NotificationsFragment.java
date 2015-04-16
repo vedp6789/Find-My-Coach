@@ -18,10 +18,14 @@ import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.StudentDetailActivity;
 import com.findmycoach.app.adapter.NotificationAdapter;
 import com.findmycoach.app.beans.requests.ConnectionRequestsResponse;
+import com.findmycoach.app.beans.requests.Data;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NotificationsFragment extends Fragment implements Callback {
 
@@ -113,7 +117,23 @@ public class NotificationsFragment extends Fragment implements Callback {
             if(object instanceof ConnectionRequestsResponse){
                 connectionRequestsResponse = (ConnectionRequestsResponse) object;
                 if(connectionRequestsResponse.getData() != null && connectionRequestsResponse.getData().size() > 0) {
-                    notificationAdapter = new NotificationAdapter(getActivity(), connectionRequestsResponse.getData(), this, progressDialog);
+
+                    List<Data> tempData = connectionRequestsResponse.getData();
+                    List<Data> data = new ArrayList<Data>();
+
+                    for(Data d : tempData){
+                        boolean flag = false;
+
+                        for(Data d1 : data){
+                            if(d1.getInviteeId().equals(d.getInviteeId()) && d1.getOwnerId().equals(d.getOwnerId()))
+                                flag = true;
+                        }
+
+                        if(!flag)
+                            data.add(d);
+                    }
+
+                    notificationAdapter = new NotificationAdapter(getActivity(), data, this, progressDialog);
                     notificationListView.setAdapter(notificationAdapter);
                 }else {
                     notificationAdapter = new NotificationAdapter(getActivity());
