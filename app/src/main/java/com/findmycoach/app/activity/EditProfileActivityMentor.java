@@ -6,9 +6,11 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -75,11 +77,13 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
     private String city=null;
     private String last_city_selected=null;
     private String TAG="FMC";
+    private String newUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile_mentor);
+        newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
         initialize();
         applyActionbarProperties();
         populateUserData();
@@ -406,10 +410,21 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
     }
 
     @Override
+    public void onBackPressed() {
+        if (newUser == null || !newUser.contains(userInfo.getId()))
+            finish();
+        else
+            Toast.makeText(this, R.string.prompt_update_profile, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            finish();
+            if (newUser == null || !newUser.contains(userInfo.getId()))
+                finish();
+            else
+                Toast.makeText(this, R.string.prompt_update_profile, Toast.LENGTH_LONG).show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -463,6 +478,13 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             intent.putExtra("user_info", new Gson().toJson(userInfo));
             setResult(Activity.RESULT_OK, intent);
             finish();
+
+            if (newUser != null && newUser.contains(userInfo.getId())){
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.remove(getResources().getString(R.string.new_user));
+                editor.apply();
+            }
         }
     }
 

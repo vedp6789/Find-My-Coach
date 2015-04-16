@@ -18,12 +18,13 @@ import com.loopj.android.http.RequestParams;
 public class SplashActivity extends Activity implements Callback{
 
     private DataBase dataBase;
-
+    private boolean isStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        isStart = true;
         getDataFromServer();
     }
 
@@ -34,21 +35,12 @@ public class SplashActivity extends Activity implements Callback{
         dataBase = DataBase.singleton(this);
         Category categoryFromDb = dataBase.selectAllSubCategory();
 
-
-
-
         //** If sub category is not present then call api to get *//*
         if(categoryFromDb.getData().size() < 1)
             getCategories();
-
         //** Subcategories is present *//*
         else
             runHoldThread();
-
-
-
-
-        runHoldThread();
     }
 
     /** Thread to hold splash screen */
@@ -59,7 +51,9 @@ public class SplashActivity extends Activity implements Callback{
                 try {
                     synchronized (this) {
                         wait(getResources().getInteger(R.integer.splash_screen_hold_duration));
-                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                        if(isStart)
+                            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                        isStart = false;
                         finish();
                     }
                 } catch (InterruptedException ex) {

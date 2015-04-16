@@ -99,7 +99,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
             this.finish();
-
         }
         /** Else setup the login screen */
         else {
@@ -710,11 +709,21 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
             /** Login is successful but phone number not validated, open ValidatePhone Activity */
             else {
+                if(response.getData().getNewUser())
+                    StorageHelper.storePreference(this, "new_user", "true#" + response.getData().getId());
+
+                Log.e(TAG, response.getData().getNewUser() + " : " + response.getData().getId());
                 /** Saving phone number for validating purpose and starting ValidatePhoneActivity */
                 saveUserPhoneNumber(response.getData().getPhonenumber());
                 Intent intent = new Intent(this, ValidatePhoneActivity.class);
                 finish();
                 startActivity(intent);
+                fbClearToken();
+                if (!mGoogleApiClient.isConnecting()  && mGoogleApiClient.isConnected()) {
+                    Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                    mGoogleApiClient.disconnect();
+                    mGoogleApiClient.connect();
+                }
             }
 
         }

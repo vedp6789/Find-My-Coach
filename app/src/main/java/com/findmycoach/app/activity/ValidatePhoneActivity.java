@@ -56,6 +56,12 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         }
         setContentView(R.layout.activity_validate_phone);
         initView();
+
+        String isNewUser = StorageHelper.getUserDetails(this, "new_user");
+        if(isNewUser != null && isNewUser.contains("true")) {
+            Log.e(TAG, isNewUser);
+        }
+        Toast.makeText(this, isNewUser, Toast.LENGTH_LONG).show();
     }
 
     /** Getting references of view */
@@ -137,6 +143,9 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         /** Opens Dashboard activity*/
         finish();
         startActivity(new Intent(this, DashboardActivity.class));
+
+        String isNewUser = StorageHelper.getUserDetails(this, "new_user");
+        if(isNewUser != null && isNewUser.equals("true"))
 
         /** If newly registered user is mentee then open PaymentDetail Activity for getting card details */
         if(user_group == 2){

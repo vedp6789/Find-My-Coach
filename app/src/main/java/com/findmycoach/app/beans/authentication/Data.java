@@ -62,6 +62,17 @@ public class Data {
     @SerializedName("sub_category_name")
     @Expose
     private List<String> subCategoryName;
+    @SerializedName("new_user")
+    @Expose
+    private boolean newUser;
+
+    public boolean getNewUser() {
+        return newUser;
+    }
+
+    public void setNewUser(boolean newUser) {
+        this.newUser = newUser;
+    }
 
     public List<String> getSubCategoryName() {
         return subCategoryName;

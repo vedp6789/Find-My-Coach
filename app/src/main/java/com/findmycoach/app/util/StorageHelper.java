@@ -48,8 +48,7 @@ public class StorageHelper {
 
     public static String getGridClickDetails(Context context,String key){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String userToken = preferences.getString(key, null);
-        return userToken;
+        return preferences.getString(key, null);
     }
 
     public static void clearUser(Context context) {
@@ -59,14 +58,14 @@ public class StorageHelper {
         editor.remove("user_id");
         editor.remove("user_email");
         editor.remove("phone_verified");
-        editor.commit();
+        editor.apply();
     }
 
     public static void clearUserPhone(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove("phone_number");
-        editor.commit();
+        editor.apply();
     }
 
     public static void createAppMediaFolders(Context context) {

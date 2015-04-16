@@ -25,6 +25,8 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.findmycoach.app.R;
+import com.findmycoach.app.beans.authentication.Response;
+import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.fragment.MyConnectionsFragment;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.fragment.NotificationsFragment;
@@ -38,6 +40,7 @@ import com.findmycoach.app.util.StorageHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import java.io.IOException;
@@ -91,8 +94,21 @@ public class DashboardActivity extends FragmentActivity
 
         dashboardActivity = this;
 
+
+        String userId = StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id));
+        String newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
+
         try {
             user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
+            if(userId != null && newUser != null && userId.equals(newUser.split("#")[1])){
+                String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
+                RequestParams requestParams = new RequestParams();
+                Log.d(TAG, "Stored User Id:" + userId);
+                Log.d(TAG, "auth_token" + authToken);
+                requestParams.add("id", userId);
+                requestParams.add("user_group", user_group+"");
+                NetworkClient.getProfile(this, requestParams, authToken, this, 4);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             logout();
@@ -229,7 +245,19 @@ public class DashboardActivity extends FragmentActivity
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-
+        if(calledApiValue == 4){
+            if(user_group == 2){
+                ProfileResponse response = (ProfileResponse) object;
+                Intent intent = new Intent(this, EditProfileActivityMentee.class);
+                intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                startActivity(intent);
+            }else if(user_group == 3){
+                Response response = (Response) object;
+                Intent intent = new Intent(this, EditProfileActivityMentor.class);
+                intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                startActivity(intent);
+            }
+        }
     }
 
     @Override

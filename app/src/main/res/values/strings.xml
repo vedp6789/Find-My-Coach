@@ -487,7 +487,6 @@
     <string name="child_dob">Child Dob:</string>
 
 
-
     <!-- end of unique strings block-->
 
     <!-- Toast message strings-->
@@ -540,7 +539,6 @@
     <string name="select_end_date_of_vacation">Select completion date of vacation.</string>
 
 
-
     <!-- Dialog message strings-->
     <string name="connecting">Connecting...</string>
     <string name="sending">Sending...</string>
@@ -551,7 +549,7 @@
     <string name="logging_in">Logging in...</string>
     <string name="verifying">Verifying...</string>
     <string name="verify">Verify</string>
-<string name="sending_code">Sending code...</string>
+    <string name="sending_code">Sending code...</string>
 
 
     <!--Exception message-->
@@ -580,12 +578,13 @@
 
     <!-- String s related to Prompting -->
     <string name="prompt_email">User Id</string>
+    <string name="prompt_update_profile">Please update your profile</string>
     <string name="prompt_enter_phone">Enter phone number</string>
     <string name="prompt_email_id">Email Id</string>
     <string name="prompt_password">Password</string>
     <string name="old_password">Old password:</string>
     <string name="new_password">New password:</string>
-<string name="new_phone_no">Mobile Number:</string>
+    <string name="new_phone_no">Mobile Number:</string>
     <string name="prompt_confirm_password">Confirm Password</string>
     <string name="prompt_commit">Commit</string>
     <string name="prompt_first_name">First Name</string>
@@ -739,7 +738,7 @@
     <string name="personally">I\'ll pay the mentor personally</string>
     <string name="check_availability">Check for availability</string>
     <string name="event_desc">Event Description</string>
-  <string name="month">Month</string>
+    <string name="month">Month</string>
     <string name="year">Year</string>
     <string name="calendar_by_loc">Calendar by location</string>
     <string name="loc">Location</string>
@@ -773,6 +772,7 @@
     <string name="user_email">user_email</string>
     <string name="phone_number">phone_number</string>
     <string name="reg_id_saved_to_server">reg_id_saved</string>
+    <string name="new_user">new_user</string>
     <!-- -->
 
 
@@ -801,7 +801,7 @@
         <item>December</item>
     </string-array>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
 
 </resources>
