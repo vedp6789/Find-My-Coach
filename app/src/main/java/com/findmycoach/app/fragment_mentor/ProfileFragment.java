@@ -26,7 +26,6 @@ import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
-import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
@@ -46,7 +45,6 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView profileCharges;
     private TextView areaOfCoaching;
     private TextView profileTravelAvailable;
-    private TextView profileLocation;
     private TextView profilePhone;
     private Button googleLink;
     private Button facebookLink;
@@ -101,7 +99,6 @@ public class ProfileFragment extends Fragment implements Callback {
         profileAccomplishment = (TextView) view.findViewById(R.id.profile_accomplishment);
         profileCharges = (TextView) view.findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) view.findViewById(R.id.profile_travel_available);
-        profileLocation = (TextView) view.findViewById(R.id.profile_location);
         googleLink = (Button) view.findViewById(R.id.profile_google_button);
         facebookLink = (Button) view.findViewById(R.id.profile_facebook_button);
         areaOfCoaching = (TextView) view.findViewById(R.id.areas_of_coaching);
@@ -201,7 +198,6 @@ public class ProfileFragment extends Fragment implements Callback {
 
 
         profileRatting.setText(userInfo.getRating());
-        profileLocation.setText(NetworkManager.getCurrentLocation(getActivity()));
         if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {
             profileTravelAvailable.setText(getResources().getString(R.string.yes));
         } else {

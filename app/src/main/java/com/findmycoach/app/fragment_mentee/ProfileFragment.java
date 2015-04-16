@@ -24,7 +24,6 @@ import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
-import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
@@ -38,7 +37,6 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageView profileImage;
     private TextView profileName;
     private TextView profileAddress;
-    private TextView profileLocation;
     private TextView trainingLocation;
     private TextView mentorFor;
     private TextView coachingType;
@@ -95,7 +93,6 @@ public class ProfileFragment extends Fragment implements Callback {
         mentorFor = (TextView) view.findViewById(R.id.mentor_for);
         coachingType = (TextView) view.findViewById(R.id.coaching_type);
         areaOfInterest = (TextView) view.findViewById(R.id.areas_of_interest);
-        profileLocation = (TextView) view.findViewById(R.id.profile_location);
         profilePhone = (TextView) view.findViewById(R.id.profile_phone);
     }
 
@@ -167,7 +164,6 @@ public class ProfileFragment extends Fragment implements Callback {
             address = address + userInfo.getZip();
         }
         profileAddress.setText(address);
-        profileLocation.setText(NetworkManager.getCurrentLocation(getActivity()));
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
            imgLoader = new ImageLoader(profileImage);
            imgLoader.execute((String) userInfo.getPhotograph());
