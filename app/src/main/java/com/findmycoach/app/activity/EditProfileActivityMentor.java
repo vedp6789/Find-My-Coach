@@ -8,6 +8,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -42,8 +44,10 @@ import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class EditProfileActivityMentor extends Activity implements DatePickerDialog.OnDateSetListener, Callback {
 
@@ -220,6 +224,15 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 city = arrayAdapter.getItem(position).toString();
                 last_city_selected=city;
+
+                Geocoder geocoder=new Geocoder(EditProfileActivityMentor.this, Locale.getDefault());
+                try {
+                    Address address= (Address) geocoder.getFromLocationName(city.toString(),1);
+                    Log.i(TAG,"address according to Geo coder : "+"\n postal code : "+address.getPostalCode()+"\n country name : "+address.getCountryName()+"\n address line 0 : "+address.getAddressLine(0)+ "\n address line 1 : "+address.getAddressLine(1));
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
