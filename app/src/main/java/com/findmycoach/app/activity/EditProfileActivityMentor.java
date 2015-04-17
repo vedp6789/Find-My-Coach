@@ -119,8 +119,9 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         last_city_selected=city;
         profileDOB.setText((String) userInfo.getDob());
         pinCode.setText((String) userInfo.getZip());
-        chargeInput.setText(userInfo.getCharges());
+        chargeInput.setText(userInfo.getCharges().equals("0") ? userInfo.getChargesClass() : userInfo.getCharges());
         chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"hour","class"}));
+        chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 1 : 0);
         experienceInput.setText(userInfo.getExperience());
         facebookLink.setText(userInfo.getFacebookLink());
         googlePlusLink.setText(userInfo.getGoogleLink());
@@ -462,6 +463,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
 
            /* requestParams.add("charges", chargeInput.getText().toString());
             requestParams.add("charges_unit", chargesPerUnit.getSelectedItemPosition() + "");*/
+
             requestParams.add("experience", experienceInput.getText().toString());
             requestParams.add("profession", profession.getText().toString());
             requestParams.add("accomplishments", accomplishment.getText().toString());
