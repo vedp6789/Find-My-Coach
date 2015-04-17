@@ -96,7 +96,11 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         if (getUserIntent != null) {
             receiverId = getUserIntent.getStringExtra("receiver_id").trim();
             receiverName = getUserIntent.getStringExtra("receiver_name").trim();
-            receiverImage = getUserIntent.getStringExtra("receiver_image").trim();
+            try{
+                receiverImage = getUserIntent.getStringExtra("receiver_image").trim();
+            }catch (Exception e){
+                receiverImage = "";
+            }
         }
         chatWidgetLv = (ListView) findViewById(R.id.chatWidgetLv);
         msgToSend = (EditText) findViewById(R.id.msgToSendET);

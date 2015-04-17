@@ -53,6 +53,9 @@ public class Data {
     @SerializedName("facebook_link")
     @Expose
     private String facebookLink;
+    @SerializedName("charges_class")
+    @Expose
+    private String chargesClass;
     @Expose
     private String charges;
     @Expose
@@ -65,6 +68,14 @@ public class Data {
     @SerializedName("new_user")
     @Expose
     private boolean newUser;
+
+    public String getChargesClass() {
+        return chargesClass;
+    }
+
+    public void setChargesClass(String chargesClass) {
+        this.chargesClass = chargesClass;
+    }
 
     public boolean getNewUser() {
         return newUser;
