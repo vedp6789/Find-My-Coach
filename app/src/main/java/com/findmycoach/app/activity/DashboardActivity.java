@@ -429,7 +429,7 @@ public class DashboardActivity extends FragmentActivity
     private void logout() {
         String loginWith = StorageHelper.getUserDetails(this, "login_with");
         if (loginWith == null || loginWith.equals("G+")) {
-//            LoginActivity.doLogout = true;
+            LoginActivity.doLogout = true;
         }
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
