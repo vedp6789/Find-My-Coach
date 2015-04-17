@@ -357,12 +357,79 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         requestParams.add("last_name", user.getLastName());
         requestParams.add("dob", user.getBirthday());
         requestParams.add("facebook_link", user.getLink());
-        requestParams.add("email", (String) user.getProperty("email"));
         requestParams.add("gender", (String) user.getProperty("gender"));
         requestParams.add("photograph", "http://graph.facebook.com/" + user.getId() + "/picture?type=large");
         requestParams.add("user_group", String.valueOf(user_group));
         saveUserEmail((String) user.getProperty("email"));
+        try{
+            String email = (String) user.getProperty("email");
+            if(email == null || email.trim().equals("")) {
+                showEmailDialog(requestParams);
+                return;
+            }else
+                requestParams.add("email", email);
+        }catch (Exception e){
+            showEmailDialog(requestParams);
+            return;
+        }
         NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
+    }
+
+    /**Dialog to manually get email from user*/
+    private void showEmailDialog(final RequestParams requestParams) {
+
+        progressDialog.dismiss();
+        final Dialog dialog = new Dialog(this);
+        dialog.setTitle(getResources().getString(R.string.prompt_email_id));
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.email_id_dialog);
+        final EditText emailET = (EditText) dialog.findViewById(R.id.emailEditText);
+
+        /** Ok button clicked */
+        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String email = emailET.getText().toString();
+
+                boolean isValid = false;
+                String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+                Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+                Matcher matcher = pattern.matcher(email);
+                if (matcher.matches()) {
+                    isValid = true;
+                }
+
+                /** If email number is null or invalid */
+                if (email.equals("") || !isValid) {
+                    emailET.setError(getResources().getString(R.string.enter_valid_email));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            emailET.setError(null);
+                        }
+                    }, 3500);
+                }
+
+                /** email is correct */
+                else {
+                    dialog.dismiss();
+                    requestParams.add("email",email);
+                    NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
+                    progressDialog.show();
+                }
+            }
+        });
+
+        /** Cancel button clicked */
+        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fbClearToken();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
     }
 
     /** Calling socialAuthentication api with user's G+ account details */
