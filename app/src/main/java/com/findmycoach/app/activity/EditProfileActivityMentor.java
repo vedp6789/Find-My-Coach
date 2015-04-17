@@ -460,8 +460,8 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
                 requestParams.add("charges_class", chargeInput.getText().toString());
             }
 
-            requestParams.add("charges", chargeInput.getText().toString());
-            requestParams.add("charges_unit", chargesPerUnit.getSelectedItemPosition() + "");
+           /* requestParams.add("charges", chargeInput.getText().toString());
+            requestParams.add("charges_unit", chargesPerUnit.getSelectedItemPosition() + "");*/
             requestParams.add("experience", experienceInput.getText().toString());
             requestParams.add("profession", profession.getText().toString());
             requestParams.add("accomplishments", accomplishment.getText().toString());
