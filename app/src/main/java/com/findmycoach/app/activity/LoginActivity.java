@@ -168,6 +168,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 logIn();
                 break;
             case R.id.sign_in_button:
+                progressDialog.show();
                 if (!mGoogleApiClient.isConnecting()) {
                     resolveSignInError();
                 }
