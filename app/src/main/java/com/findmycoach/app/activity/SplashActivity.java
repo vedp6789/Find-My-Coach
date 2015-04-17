@@ -20,6 +20,7 @@ public class SplashActivity extends Activity implements Callback{
     private DataBase dataBase;
     private boolean isStart;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
