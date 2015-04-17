@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -44,10 +45,17 @@ import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
+import org.xml.sax.InputSource;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 public class EditProfileActivityMentor extends Activity implements DatePickerDialog.OnDateSetListener, Callback {
 
@@ -227,8 +235,79 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
 
                 Geocoder geocoder=new Geocoder(EditProfileActivityMentor.this, Locale.getDefault());
                 try {
-                    Address address= (Address) geocoder.getFromLocationName(city.toString(),1);
+                    ArrayList<Address> addresses= (ArrayList<Address>) geocoder.getFromLocationName(city.toString(),1);
+                    Address address=addresses.get(0);
                     Log.i(TAG,"address according to Geo coder : "+"\n postal code : "+address.getPostalCode()+"\n country name : "+address.getCountryName()+"\n address line 0 : "+address.getAddressLine(0)+ "\n address line 1 : "+address.getAddressLine(1));
+                    for(int i=0 ; i < address.getMaxAddressLineIndex();i++){
+                        Log.i(TAG,"address line "+ i +" : "+address.getAddressLine(i));
+                    }
+                    Log.i(TAG,"address locality " + address.getLocality() + "latitude : "+ address.getLatitude()+ "longitude : "+ address.getLongitude());
+
+
+                   double latitude=address.getLatitude();
+                    double longitude=address.getLongitude();
+
+                    final ArrayList<Double> doubles=new ArrayList<Double>();
+                    doubles.add(latitude);
+                    doubles.add(longitude);
+
+
+
+                    new AsyncTask<ArrayList,Void,String>(){
+
+                        @Override
+                        protected String doInBackground(ArrayList... params) {
+                            ArrayList<Double> doubles1=params[0];
+                            XPath xpath = XPathFactory.newInstance().newXPath();
+                            String expression = "//GeocodeResponse/result/address_component[type=\"postal_code\"]/long_name/text()";
+                            Log.d(TAG,"lat in async "+doubles1.get(0));
+                            Log.d(TAG,"long in async "+doubles1.get(1));
+
+                            InputSource inputSource = new InputSource("https://maps.googleapis.com/maps/api/geocode/xml?latlng="+doubles1.get(0)+","+doubles1.get(1)+"&sensor=true");
+                            String zipcode = null;
+                            try {
+                                zipcode = (String) xpath.evaluate(expression, inputSource, XPathConstants.STRING);
+                            } catch (XPathExpressionException e) {
+                                e.printStackTrace();
+                            }
+
+
+                            Log.i(TAG,"zip code 1 : "+ zipcode);
+
+
+                            return zipcode;
+                        }
+
+
+                        @Override
+                        protected void onPostExecute(String s) {
+                            super.onPostExecute(s);
+                            if(s != null){
+                                pinCode.setText(s);
+                            }else{
+                                pinCode.setText("");
+                            }
+
+
+                        }
+                    }.execute(doubles);
+
+
+
+
+
+
+
+                   /* Geocoder geocoder1 = new Geocoder(EditProfileActivityMentor.this, Locale.getDefault());
+                    List<Address> addresses1 = geocoder1.getFromLocation(latitude, longitude, 1);
+                    Address address1=addresses1.get(0);
+                    Log.i(TAG,"zip code 2 : "+ address1.getPostalCode());*/
+
+
+
+
+
+
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -325,6 +404,14 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
                 }
             }
         }
+
+
+        if(areaOfCoaching.getText().toString().trim().equals("")){
+            showErrorMessage(areaOfCoaching,getResources().getString(R.string.error_field_required));
+            Toast.makeText(EditProfileActivityMentor.this,getResources().getString(R.string.error_field_required),Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true;
     }
 
