@@ -276,17 +276,6 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
 
 
 
-                   /* Geocoder geocoder1 = new Geocoder(EditProfileActivityMentor.this, Locale.getDefault());
-                    List<Address> addresses1 = geocoder1.getFromLocation(latitude, longitude, 1);
-                    Address address1=addresses1.get(0);
-                    Log.i(TAG,"zip code 2 : "+ address1.getPostalCode());*/
-
-
-
-
-
-
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -392,7 +381,21 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
                 }
             }
         }
+
+        if(areasOfInterest.getText().toString().trim().equals("")){
+            showErrorMessage(areasOfInterest,getResources().getString(R.string.error_field_required));
+            Toast.makeText(EditProfileActivityMentee.this,getResources().getString(R.string.error_field_required),Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+
+
         return true;
+
+
+
+
+
     }
 
     private void showErrorMessage(final TextView view, String string) {

@@ -120,7 +120,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         profileDOB.setText((String) userInfo.getDob());
         pinCode.setText((String) userInfo.getZip());
         chargeInput.setText(userInfo.getCharges());
-        chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"hour", "30 mins", "class"}));
+        chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"hour","class"}));
         experienceInput.setText(userInfo.getExperience());
         facebookLink.setText(userInfo.getFacebookLink());
         googlePlusLink.setText(userInfo.getGoogleLink());
@@ -448,6 +448,18 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             requestParams.add("address", profileAddress.getText().toString());
             requestParams.add("city", profileAddress1.getText().toString());
             requestParams.add("zip", pinCode.getText().toString());
+
+
+            if(chargesPerUnit.getSelectedItemPosition() == 0){
+                Log.i(TAG,"select charges unit : "+ chargesPerUnit.getSelectedItemPosition());
+                requestParams.add("charges", chargeInput.getText().toString());
+                requestParams.add("charges_class", "0");
+            }else {
+                Log.i(TAG,"select charges unit : "+ chargesPerUnit.getSelectedItemPosition());
+                requestParams.add("charges", "0");
+                requestParams.add("charges_class", chargeInput.getText().toString());
+            }
+
             requestParams.add("charges", chargeInput.getText().toString());
             requestParams.add("charges_unit", chargesPerUnit.getSelectedItemPosition() + "");
             requestParams.add("experience", experienceInput.getText().toString());
