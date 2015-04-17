@@ -143,11 +143,11 @@ public class DashboardActivity extends FragmentActivity
                 if (StorageHelper.getUserDetails(this, "terms") == null || !StorageHelper.getUserDetails(this, "terms").equals("yes")) {
                     showTermsAndConditions();
                 }
-                initialize();
             } else {
                 Toast.makeText(DashboardActivity.this, getResources().getString(R.string.google_play_services_not_supported), Toast.LENGTH_LONG).show();
                 Log.i(TAG, "No valid Google Play Services APK found.");
             }
+            initialize();
 
         } else {
             initialize();
