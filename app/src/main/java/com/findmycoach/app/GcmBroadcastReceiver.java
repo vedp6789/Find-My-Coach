@@ -17,6 +17,8 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
 // Explicitly specify that GcmIntentService will handle the intent.
+        Log.e(TAG,"Broadcastreciver :  GCM Message arrived ");
+
         String x=intent.getStringExtra("NOT_GCM");
 
 
