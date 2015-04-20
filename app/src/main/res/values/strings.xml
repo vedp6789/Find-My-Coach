@@ -528,6 +528,7 @@
     <string name="stop_time_should_be_grater">Completion time should be greater than start time !</string>
     <string name="class_is_available">Class is available</string>
     <string name="select_suggested_location"> Select one of the suggested locations</string>
+    <string name="quantized_timing">Minute is selected as per your selected start time!</string>
 
 
     <!--  Minimum time difference between start time and stop time of a slot   i.e in hours-->

@@ -158,7 +158,12 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
             public void onClick(View v) {
                 if (tv_start_time.getText().length() > 0) {
                     FragmentManager fragmentManager = getFragmentManager();
+                    Bundle bundle=new Bundle();
+                    bundle.putString("from","AddNewSlotActivity");
+                    bundle.putString("hour",String.valueOf(start_hour));
+                    bundle.putString("minute",String.valueOf(start_min));
                     StopTimeDialogFragment timeDialogFragment = new StopTimeDialogFragment();
+                    timeDialogFragment.setArguments(bundle);
                     timeDialogFragment.show(fragmentManager, null);
                 } else {
                     Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.start_time_first), Toast.LENGTH_SHORT).show();
@@ -1153,11 +1158,19 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
     @Override
     public void setSelectedStartTime(Object o1, Object o2) {
         String hour = (String) o1;
-        AddNewSlotActivity.start_hour = Integer.parseInt(hour);
+        start_hour = Integer.parseInt(hour);
         String minute = (String) o2;
-        AddNewSlotActivity.start_min = Integer.parseInt(minute);
-        AddNewSlotActivity.time_from = hour + ":" + minute;
+        start_min = Integer.parseInt(minute);
+        time_from = hour + ":" + minute;
         tv_start_time.setText(hour + ":" + minute);
+
+        if(tv_stop_time.getText().toString() != null && tv_stop_time.getText().toString().contains(":")){
+
+            stop_min=start_min;
+            tv_stop_time.setText(stop_hour + ":"+ stop_min);
+
+        }
+
 
     }
 
@@ -1165,10 +1178,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
     @Override
     public void setSelectedTillTime(Object o1, Object o2) {
         String hour = (String) o1;
-        AddNewSlotActivity.stop_hour = Integer.parseInt(hour);
+        stop_hour = Integer.parseInt(hour);
         String minute = (String) o2;
-        AddNewSlotActivity.stop_min = Integer.parseInt(minute);
-        AddNewSlotActivity.time_to = hour + ":" + minute;
+        stop_min = Integer.parseInt(minute);
+        time_to = hour + ":" + minute;
         tv_stop_time.setText(hour + ":" + minute);
     }
 }

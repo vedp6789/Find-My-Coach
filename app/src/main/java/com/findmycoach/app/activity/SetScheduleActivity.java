@@ -44,7 +44,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     private WeekView mWeekView;
     private String date;
     private Calendar cal;
-private static final String TAG = "FMC";
+    private static final String TAG = "FMC";
     private static int day;
     private static int month;
     private static int year;
