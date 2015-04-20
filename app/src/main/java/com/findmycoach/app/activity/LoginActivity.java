@@ -768,8 +768,11 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
 
         else {
+            if(response.getData().getNewUser())
+                StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getData().getId());
+
             /** Login is successful but phone number not present, open dialog to get phone number */
-            if (response.getData().getPhonenumber() == null) {
+            if (response.getData().getPhonenumber() == null || response.getData().getPhonenumber().equals("0")) {
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("email", response.getData().getEmail());
                 getPhoneNumber(requestParams);
@@ -777,9 +780,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
             /** Login is successful but phone number not validated, open ValidatePhone Activity */
             else {
-                if(response.getData().getNewUser())
-                    StorageHelper.storePreference(this, "new_user", "true#" + response.getData().getId());
-
                 Log.e(TAG, response.getData().getNewUser() + " : " + response.getData().getId());
                 /** Saving phone number for validating purpose and starting ValidatePhoneActivity */
                 saveUserPhoneNumber(response.getData().getPhonenumber());

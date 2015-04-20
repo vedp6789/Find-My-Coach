@@ -13,8 +13,6 @@ import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.findmycoach.app.activity.DashboardActivity;
-
 import java.util.List;
 import java.util.Locale;
 
@@ -24,13 +22,13 @@ import java.util.Locale;
 public class NetworkManager {
 
     private static final String TAG="FMC:";
-    public static int counter;
+//    public static int counter;
 
     public static String getCurrentLocation(Context context) {
-        if(counter == 0 && context instanceof DashboardActivity){
-            counter++;
-            return "";
-        }
+//        if(counter == 0 && context instanceof DashboardActivity){
+//            counter++;
+//            return "";
+//        }
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         Location currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());

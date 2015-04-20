@@ -409,7 +409,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
 
         if(areaOfCoaching.getText().toString().trim().equals("")){
             showErrorMessage(areaOfCoaching,getResources().getString(R.string.error_field_required));
-            Toast.makeText(EditProfileActivityMentor.this,getResources().getString(R.string.error_field_required),Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditProfileActivityMentor.this,getResources().getString(R.string.please_add_area_of_coaching),Toast.LENGTH_SHORT).show();
             return false;
         }
 

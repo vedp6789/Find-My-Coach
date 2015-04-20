@@ -419,8 +419,10 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             getMenuInflater().inflate(R.menu.menu_mentor_details_not_connected, menu);
         }else if(connectionStatus.equals("accepted")) {
             getMenuInflater().inflate(R.menu.menu_connected, menu);
+        }else if(connectionStatus.equals("mentor-mentee")) {
+            getMenuInflater().inflate(R.menu.menu_connected, menu);
             menu.add(0, Menu.FIRST, Menu.NONE, R.string.rate);
-        }if(connectionStatus.equals("pending")) {
+        }else if(connectionStatus.equals("pending")) {
             getMenuInflater().inflate(R.menu.menu_mentor_details_pending, menu);
         }
         return true;
@@ -468,7 +470,14 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             @Override
             public void onClick(View v) {
                 Toast.makeText(MentorDetailsActivity.this,getResources().getString(R.string.rating_for) + userInfo.getFirstName() + getResources().getString(R.string.is) + ratingBar.getRating() +getResources().getString(R.string.will_be_submitted), Toast.LENGTH_LONG).show();
+                RequestParams requestParams = new RequestParams();
+                requestParams.add("id", userInfo.getConnectionId());
+                requestParams.add("mentor_id", userInfo.getId());
+                requestParams.add("mentee_id", StorageHelper.getUserDetails(MentorDetailsActivity.this, getResources().getString(R.string.user_id)));
+                requestParams.add("rating", ratingBar.getRating()+"");
+                NetworkClient.rateMentor(MentorDetailsActivity.this, requestParams, MentorDetailsActivity.this, 12);
                 dialog.dismiss();
+                Log.e(TAG, userInfo.getConnectionId() + " : " + userInfo.getId() + " : " + StorageHelper.getUserDetails(MentorDetailsActivity.this, getResources().getString(R.string.user_id)) + " : " + ratingBar.getRating());
             }
         });
 

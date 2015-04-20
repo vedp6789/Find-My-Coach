@@ -517,8 +517,8 @@
     <string name="vacation_scheduled_success">Your vacation get scheduled successfully.</string>
     <string name="no_notification">No notification for you.</string>
     <string name="rating_for">Rating for </string>
-    <string name="is">is</string>
-    <string name="will_be_submitted">will be submitted</string>
+    <string name="is"> is </string>
+    <string name="will_be_submitted"> will be submitted.</string>
     <string name="your_address_please">Your Address please!</string>
     <string name="atleast_a_week_day">Select at least one week-day.</string>
     <string name="duration_please">Select the duration for this schedule.</string>
@@ -593,7 +593,9 @@
     <string name="prompt_date_of_birth">Date Of Birth</string>
     <string name="prompt_gender">Gender</string>
     <string name="prompt_area_of_interest">Area of Interests</string>
-    <string name="prompt_area_of_coaching">Area of Coachings</string>
+    <string name="prompt_area_of_coaching">Area of Coaching</string>
+    <string name="please_add_area_of_interest">Please add area of interest.</string>
+    <string name="please_add_area_of_coaching">Please add area of coaching.</string>
     <string name="prompt_coaching_type">Coaching Type</string>
     <string name="prompt_training_location">Training Location</string>
     <string name="prompt_male">Male</string>
