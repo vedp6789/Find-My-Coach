@@ -440,6 +440,7 @@
     <string name="app_name">Chizzle</string>
     <string name="action_settings">Settings</string>
     <string name="action_scan_card">Scan card</string>
+    <string name="action_add_paypal">Add paypal</string>
     <string name="set_schedule">Schedule</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_enter_code">Enter 6 character code here.</string>

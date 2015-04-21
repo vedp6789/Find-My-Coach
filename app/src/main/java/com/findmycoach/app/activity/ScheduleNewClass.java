@@ -3,14 +3,11 @@ package com.findmycoach.app.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.app.FragmentManager;
 import android.os.Handler;
-import android.provider.*;
-import android.provider.Settings;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +24,6 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.fragment_mentee.ChildDOB;
-import com.findmycoach.app.fragment_mentor.Schedule;
 import com.findmycoach.app.fragment_mentor.StartDateDialogFragment;
 import com.findmycoach.app.fragment_mentor.TillDateDialogFragment;
 import com.findmycoach.app.util.Callback;
@@ -45,9 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Locale;
-import java.util.SimpleTimeZone;
 import java.util.TreeSet;
 
 /**
@@ -940,12 +934,11 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             */
             Log.d(TAG, "start time: hour " + start_time);
             Log.d(TAG, "start_time : " + start_time + "stop_time : " + stop_time + ", Selected start time: " + start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00");
-            /*requestParams.add("start_time", start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00");
+            requestParams.add("start_time", start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00");
             requestParams.add("stop_time", stop_time.split(":")[0] + ":" + stop_time.split(":")[1] + ":00");
-*/
-            requestParams.add("start_time", start_time);
+           /* requestParams.add("start_time", start_time);
             requestParams.add("stop_time", stop_time);
-
+*/
             StringBuilder stringBuilder1 = new StringBuilder();
 
 
