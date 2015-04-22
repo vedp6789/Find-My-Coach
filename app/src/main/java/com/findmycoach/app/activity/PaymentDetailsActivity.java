@@ -3,10 +3,13 @@ package com.findmycoach.app.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +20,9 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.fragment.DatePickerFragment;
+import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.StorageHelper;
+import com.loopj.android.http.RequestParams;
 import com.paypal.android.sdk.payments.PayPalAuthorization;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalFuturePaymentActivity;
@@ -28,13 +34,16 @@ import io.card.payment.CreditCard;
 /**
  * Created by prem on 9/3/15.
  */
-public class PaymentDetailsActivity extends Activity implements View.OnClickListener {
+public class PaymentDetailsActivity extends Activity implements View.OnClickListener, Callback {
 
     private EditText inputCardNumber, inputCardName, inputCardCVV;
     public static EditText inputCardExpiry;
     private final int MY_SCAN_REQUEST_CODE = 10001;
     private final int REQUEST_CODE_FUTURE_PAYMENT = 11111;
     private final String TAG = "FMC";
+    private boolean isConsentPresent;
+    private MenuItem payPalMenuItem;
+    private ProgressDialog progressDialog;
 
     private static PayPalConfiguration config = new PayPalConfiguration()
 
@@ -80,8 +89,32 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
     }
 
 
+    public void onFuturePaymentPurchasePressed() {
+        // Get the Client Metadata ID from the PayPal SDK
+        String metadataId = PayPalConfiguration.getClientMetadataId(this);
+        String amount = "11111";
+        String mentorId = "xxx";
+        Log.d(TAG, "User's MetaData ID : " + metadataId);
+        Toast.makeText(this, "MetaData : " + metadataId, Toast.LENGTH_LONG).show();
+
+//        progressDialog.show();
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("id", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
+        requestParams.add("mentor_id", mentorId);
+        requestParams.add("user_group", String.valueOf(DashboardActivity.dashboardActivity.user_group));
+        requestParams.add("meta_data", metadataId);
+        requestParams.add("amount", amount);
+//        NetworkClient.payMentor(this, requestParams, this, 48);
+    }
+
+
 
     private void initialize() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        isConsentPresent = preferences.getBoolean(getResources().getString(R.string.customer_consent), false);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
         inputCardNumber = (EditText) findViewById(R.id.editTextCard);
         inputCardName = (EditText) findViewById(R.id.editTextName);
         inputCardExpiry = (EditText) findViewById(R.id.editTextDate);
@@ -100,6 +133,9 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_payment, menu);
+        payPalMenuItem = menu.findItem(R.id.action_add_paypal);
+        if(isConsentPresent)
+            payPalMenuItem.setTitle("Pay by PayPal");
         return true;
     }
 
@@ -122,8 +158,11 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
 
         }
         else if(id == R.id.action_add_paypal){
-            // Call paypal service to get customer consent
-            onFuturePaymentPressed();
+            // Call PayPal service to get customer consent
+            if(!isConsentPresent)
+                onFuturePaymentPressed();
+            else
+                onFuturePaymentPurchasePressed();
         }
         return true;
     }
@@ -232,7 +271,7 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
             Log.d(TAG, resultDisplayStr);
         }
 
-        // Received customer consent from paypal
+        // Received customer consent from PayPal
         else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_FUTURE_PAYMENT)  {
             PayPalAuthorization auth = data
                     .getParcelableExtra(PayPalFuturePaymentActivity.EXTRA_RESULT_AUTHORIZATION);
@@ -241,6 +280,18 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
                 Log.d(TAG, authorization_code);
                 Toast.makeText(this, authorization_code, Toast.LENGTH_LONG).show();
 
+                PreferenceManager.getDefaultSharedPreferences(this).edit()
+                        .putBoolean(getResources().getString(R.string.customer_consent), true).apply();
+                isConsentPresent = true;
+                payPalMenuItem.setTitle("Pay by PayPal");
+
+//                progressDialog.show();
+                RequestParams requestParams = new RequestParams();
+                requestParams.add("id", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
+                requestParams.add("email", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_email)));
+                requestParams.add("user_group", String.valueOf(DashboardActivity.dashboardActivity.user_group));
+                requestParams.add("paypal_consent", authorization_code);
+//                NetworkClient.getCardDetails(this, requestParams, this, 47);
             }
         }
 
@@ -249,6 +300,37 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
         } else if (resultCode == PayPalFuturePaymentActivity.RESULT_EXTRAS_INVALID) {
             Log.i("FuturePaymentExample",
                     "Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
+        }
+    }
+
+    @Override
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
+//        progressDialog.dismiss();
+
+        // Get details of user's saved card and PayPal account
+        if(calledApiValue == 47){
+            isConsentPresent = true;
+            payPalMenuItem.setTitle("Pay by PayPal");
+        }
+
+        // Get details of last transaction done
+        else if(calledApiValue == 48){
+            //TODO with the transaction details received with status
+        }
+    }
+
+    @Override
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
+//        progressDialog.dismiss();
+        // Get details of user's saved card and PayPal account
+        if(calledApiValue == 47){
+            isConsentPresent = true;
+            payPalMenuItem.setTitle("Add PayPal");
+        }
+
+        // Get details of last transaction done
+        else if(calledApiValue == 48){
+            //TODO with the transaction details received with status
         }
     }
 }
