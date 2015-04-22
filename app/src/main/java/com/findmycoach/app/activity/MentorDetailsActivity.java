@@ -289,14 +289,15 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         String jsonData = getIntent().getStringExtra("mentorDetails");
-        connectionStatus = getIntent().getStringExtra("connection_status");
+        Response mentorDetails = new Gson().fromJson(jsonData, Response.class);
+        userInfo = mentorDetails.getData();
+        connectionStatus = userInfo.getConnectionStatus();
         if(connectionStatus == null)
             connectionStatus = "not connected";
         if(connectionStatus.equals("broken"))
             connectionStatus = "not connected";
         Log.d(TAG, jsonData);
-        Response mentorDetails = new Gson().fromJson(jsonData, Response.class);
-        userInfo = mentorDetails.getData();
+
         profileImage = (ImageView) findViewById(R.id.profile_image);
         profileName = (TextView) findViewById(R.id.profile_name);
         profileAddress = (TextView) findViewById(R.id.profile_address);
@@ -419,7 +420,7 @@ public class MentorDetailsActivity extends Activity implements Callback,Button.O
             getMenuInflater().inflate(R.menu.menu_mentor_details_not_connected, menu);
         }else if(connectionStatus.equals("accepted")) {
             getMenuInflater().inflate(R.menu.menu_connected, menu);
-        }else if(connectionStatus.equals("mentor-mentee")) {
+        }else if(connectionStatus.contains("mentor_mentee")) {
             getMenuInflater().inflate(R.menu.menu_connected, menu);
             menu.add(0, Menu.FIRST, Menu.NONE, R.string.rate);
         }else if(connectionStatus.equals("pending")) {

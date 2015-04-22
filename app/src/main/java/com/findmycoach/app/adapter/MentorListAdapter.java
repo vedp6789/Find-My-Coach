@@ -83,7 +83,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
                     .into(imageView);
         }
         if(user.getConnectionStatus() != null && !user.getConnectionStatus().equals("broken") && !user.getConnectionStatus().equals("rejected")){
-            if(user.getConnectionStatus().equals("accepted")){
+            if(user.getConnectionStatus().equals("accepted") || user.getConnectionStatus().contains("mentor_mentee")){
                 imageConnect.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_menu_close_clear_cancel));
             }else if(user.getConnectionStatus().equals("pending")) {
                 imageConnect.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_notification_clear_all));

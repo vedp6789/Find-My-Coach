@@ -427,7 +427,6 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             progressDialog.dismiss();
             Intent intent = new Intent(this, MentorDetailsActivity.class);
             intent.putExtra("mentorDetails", (String) object);
-            intent.putExtra("connection_status", "accepted");
             startActivityForResult(intent, PROFILE_DETAILS);
             isGettingProfile = false;
             return;
