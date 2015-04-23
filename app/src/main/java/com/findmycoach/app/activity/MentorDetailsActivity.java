@@ -677,6 +677,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
                                 dates[week_day]=week_days_jsonArray.getString(week_day);
                             }
                             daySlot.setSlot_week_days(dates);
+                            daySlot.setSlot_id(day_slot.getString("id"));
 
                             daySlots.add(daySlot);
                         }
@@ -740,6 +741,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
                                 dates[week_day]=week_days_jsonArray.getString(week_day);
                             }
                             daySlot.setSlot_week_days(dates);
+                            daySlot.setSlot_id(day_slot.getString("id"));
 
                             daySlots.add(daySlot);
                         }
@@ -811,6 +813,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
                                 dates[week_day]=week_days_jsonArray.getString(week_day);
                             }
                             daySlot.setSlot_week_days(dates);
+                            daySlot.setSlot_id(day_slot.getString("id"));
 
                             daySlots.add(daySlot);
                         }
@@ -920,6 +923,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
                                 dates[week_day]=week_days_jsonArray.getString(week_day);
                             }
                             daySlot.setSlot_week_days(dates);
+                            daySlot.setSlot_id(day_slot.getString("id"));
 
 
                             daySlots.add(daySlot);
@@ -1023,7 +1027,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
                                 dates[week_day]=week_days_jsonArray.getString(week_day);
                             }
                             daySlot.setSlot_week_days(dates);
-
+                            daySlot.setSlot_id(day_slot.getString("id"));
 
                             daySlots.add(daySlot);
                         }

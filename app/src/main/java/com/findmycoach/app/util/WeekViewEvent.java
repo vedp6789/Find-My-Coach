@@ -73,7 +73,7 @@ public class WeekViewEvent {
             this.mName = name;
             this.mStartTime = startTime;
             this.mEndTime = endTime;
-            this.eventType=event_type;
+            this.eventType = event_type;
 
         }
 

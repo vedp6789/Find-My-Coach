@@ -18,6 +18,15 @@ public class DaySlot implements Parcelable{
     public String slot_type;
     public String slot_max_users;
     public String [] slot_week_days;
+    public String slot_id;
+
+    public String getSlot_id() {
+        return slot_id;
+    }
+
+    public void setSlot_id(String slot_id) {
+        this.slot_id = slot_id;
+    }
 
     public String[] getSlot_week_days() {
         return slot_week_days;
@@ -89,6 +98,7 @@ public class DaySlot implements Parcelable{
         dest.writeString(this.slot_type);
         dest.writeString(this.slot_max_users);
         dest.writeStringArray(this.slot_week_days);
+        dest.writeString(this.slot_id);
     }
 
 
@@ -103,6 +113,7 @@ public class DaySlot implements Parcelable{
         this.slot_type=source.readString();
         this.slot_max_users=source.readString();
         this.slot_week_days=source.createStringArray();
+        this.slot_id=source.readString();
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
