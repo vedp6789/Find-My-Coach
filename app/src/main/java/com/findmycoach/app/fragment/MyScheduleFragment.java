@@ -99,7 +99,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     void startPointForCalendar(){
         _calendar = Calendar.getInstance(Locale.getDefault());
         month = _calendar.get(Calendar.MONTH) + 1;   /* current month*/
-        year = _calendar.get(Calendar.YEAR); /* current year */
+        year = _calendar.get(Calendar.YEAR);         /* current year */
 
     }
 

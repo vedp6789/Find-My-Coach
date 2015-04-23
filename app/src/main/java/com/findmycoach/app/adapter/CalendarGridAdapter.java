@@ -12,9 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.MentorDetailsActivity;
 import com.findmycoach.app.activity.SetScheduleActivity;
 import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
+import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 
 import java.util.ArrayList;
@@ -46,20 +48,26 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private static int CURRENT_YEAR_OF_CALENDAR;
     private static int month_in_foreground;
     private static final String TAG = "FMC:";
-    private MyScheduleFragment myScheduleFragment;
+    private MyScheduleFragment myScheduleFragment = null;
+    private MentorDetailsActivity mentorDetailsActivity = null;
 
-
-
-    private static ArrayList<Day> prev_month_data=null;
-    private static ArrayList<Day> current_month_data=null;
-    private static ArrayList<Day> coming_month_data=null;
+    private String mentor_id;
+    private String availability;
+    private String mentor_address;
+    private static ArrayList<Day> prev_month_data = null;
+    private static ArrayList<Day> current_month_data = null;
+    private static ArrayList<Day> coming_month_data = null;
     private static int day_schedule_index = 0;
     Day day = null;
     DayEvent dayEvent = null;
 
 
     // Days in Current Month
-    public CalendarGridAdapter(Context context, int month, int year, MyScheduleFragment myScheduleFragment, ArrayList<Day> prev_month_data, ArrayList<Day> current_month_data,ArrayList<Day> coming_month_data) {
+    /*
+    * This constructor is called from MyScheduleFragment
+    *
+    * */
+    public CalendarGridAdapter(Context context, int month, int year, MyScheduleFragment myScheduleFragment, ArrayList<Day> prev_month_data, ArrayList<Day> current_month_data, ArrayList<Day> coming_month_data) {
         super();
         this.context = context;
         weekdays = context.getResources().getStringArray(R.array.week_days);
@@ -77,24 +85,54 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         CURRENT_YEAR_OF_CALENDAR = calendar.get(Calendar.YEAR);
         month_in_foreground = month - 1;
 
-        /*Log.d(TAG, "Current Month of Calendar : " + CURRENT_MONTH_OF_CALENDAR);
-        Log.d(TAG, "Current Year of Calendar : " + CURRENT_YEAR_OF_CALENDAR);
-        Log.d(TAG, "Current day of month : " + currentDayOfMonth);
-        Log.d(TAG, "Current week day : "  + currentWeekDay);
-*/
-
-        CalendarGridAdapter.prev_month_data=new ArrayList<Day>();
-        CalendarGridAdapter.current_month_data=new ArrayList<Day>();
-        CalendarGridAdapter.coming_month_data=new ArrayList<Day>();
-        CalendarGridAdapter.prev_month_data=prev_month_data;
-        CalendarGridAdapter.current_month_data=current_month_data;
-        CalendarGridAdapter.coming_month_data=coming_month_data;
+        CalendarGridAdapter.prev_month_data = new ArrayList<Day>();
+        CalendarGridAdapter.current_month_data = new ArrayList<Day>();
+        CalendarGridAdapter.coming_month_data = new ArrayList<Day>();
+        CalendarGridAdapter.prev_month_data = prev_month_data;
+        CalendarGridAdapter.current_month_data = current_month_data;
+        CalendarGridAdapter.coming_month_data = coming_month_data;
 
         printMonth(month, year);
 
         eventsPerMonthMap = findNumberOfEventsPerMonth(year, month);
     }
 
+    /*
+        * This constructor is called from MyScheduleFragment
+        *
+        * */
+    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Day> prev_month_data, ArrayList<Day> current_month_data, ArrayList<Day> coming_month_data,String mentor_id,String availability_yn) {
+        super();
+        this.context = context;
+        weekdays = context.getResources().getStringArray(R.array.week_days);
+        months = context.getResources().getStringArray(R.array.months);
+        this.list = new ArrayList<String>();
+        this.mentorDetailsActivity = mentorDetailsActivity;
+        this.mentor_id=mentor_id;
+        this.availability=availability_yn;
+
+
+
+        Calendar calendar = Calendar.getInstance();
+        setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
+        setCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
+
+
+        CURRENT_MONTH_OF_CALENDAR = calendar.get(Calendar.MONTH);
+        CURRENT_YEAR_OF_CALENDAR = calendar.get(Calendar.YEAR);
+        month_in_foreground = month - 1;
+
+        CalendarGridAdapter.prev_month_data = new ArrayList<Day>();
+        CalendarGridAdapter.current_month_data = new ArrayList<Day>();
+        CalendarGridAdapter.coming_month_data = new ArrayList<Day>();
+        CalendarGridAdapter.prev_month_data = prev_month_data;
+        CalendarGridAdapter.current_month_data = current_month_data;
+        CalendarGridAdapter.coming_month_data = coming_month_data;
+
+        printMonth(month, year);
+
+        eventsPerMonthMap = findNumberOfEventsPerMonth(year, month);
+    }
 
 
     private String getMonthAsString(int i) {
@@ -232,6 +270,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         gridcell.setTag(theday + "-" + themonth + "-" + theyear);
 
 
+
         if (day_color[1].equals("GREY")) {
             gridcell.setTextColor(context.getResources().getColor(R.color.caldroid_darker_gray));
             gridcell.setBackgroundResource(R.drawable.abc_btn_check_material);
@@ -250,13 +289,140 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         day_schedule_index = Integer.parseInt(theday) - 1;
         if (allow_schedule_population) {
             if (day_schedule_index < current_month_data.size()) {
-                day = current_month_data.get(day_schedule_index);
-                List<DayEvent> dayEvents = day.getDayEvents();
-                if (dayEvents.size() > 0) {
-                    gridcell.setBackgroundColor(new Color().CYAN);
 
+                day = current_month_data.get(day_schedule_index);
+
+                /*
+                *
+                *
+                * success when CalendarGridAdapter is used by MyScheduleFragment class
+                * */
+                if (myScheduleFragment != null) {
+                    List<DayEvent> dayEvents = day.getDayEvents();
+                    if (dayEvents.size() > 0) {
+
+                        if (day_color[1].equals("BLUE")) {
+                            gridcell.setBackgroundColor(new Color().CYAN);
+                        } else {
+                            gridcell.setBackgroundColor(new Color().YELLOW);
+                        }
+                    }
+
+                } else {/*
+                *
+                *
+                *
+                * success when CalendarGridAdapter is used by MentorDetailsActivity class
+                * */
+                    List<DayEvent> dayEvents = day.getDayEvents();
+                    List<DaySlot> daySlots = day.getDaySlots();
+
+                    if (daySlots.size() > 0 && dayEvents.size() <= 0) {
+                        /*  success when this day has only slots and there is no event coming from server*/
+                        if (day_color[1].equals("BLUE")) {
+                            gridcell.setBackgroundColor(new Color().CYAN);
+                        } else {
+                            gridcell.setBackgroundColor(new Color().YELLOW);
+                        }
+                    } else {
+                        if (daySlots.size() <= 0) {
+                            /*   success when there is no slots i.e. slots array size is zero
+                            *    In this condition, grid click event should be handled like we do not open week-view and give a message that mentor is not free on this day.
+                            * */
+                        } else {
+                            /*
+                            * success when this day his having slots.
+                            * Now to decide any slot is free or not
+                            * */
+                            int free_slot = 0;
+                            /*
+                             * matching each slot of the day with all possible events, and on this match deciding whether this slot come as free slot or not.
+                             * */
+                            for (int day_slot = 0; day_slot < daySlots.size(); day_slot++) {
+                                DaySlot daySlot = daySlots.get(day_slot);
+                                String slot_start_date = daySlot.getSlot_start_date();
+                                String slot_stop_date = daySlot.getSlot_stop_date();
+                                String slot_start_time = daySlot.getSlot_start_time();
+                                String slot_stop_time = daySlot.getSlot_stop_time();
+                                String slot_type = daySlot.getSlot_type();
+                                int slot_max_users = Integer.parseInt(daySlot.getSlot_max_users());
+                                /*
+                                *
+                                * For slot which are selected as Group
+                                * */
+                                if (slot_type.equalsIgnoreCase("Group")) {
+                                    boolean slot_match_with_event = false;
+                                    for (int day_event = 0; day_event < dayEvents.size(); day_event++) {    /* dayEvents is a list of DayEvent bean*/
+                                        DayEvent dayEvent1 = dayEvents.get(day_event);
+                                        String event_start_date = dayEvent1.getEvent_start_date();
+                                        String event_stop_date = dayEvent1.getEvent_stop_date();
+                                        String event_start_time = dayEvent1.getEvent_start_time();
+                                        String event_stop_time = dayEvent1.getEvent_stop_time();
+                                        int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
+                                        /* checking whether this particular event is similar to slot or not */
+                                        if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
+                                            slot_match_with_event = true;
+                                            /* if found similar then check whether the event_totoal_mentees from slot_max_users*/
+                                            if (event_total_mentees < slot_max_users) {
+                                                free_slot++;
+                                            }
+                                        }
+                                    }
+
+                                    if (!slot_match_with_event)
+                                        free_slot++;
+
+
+                                }else {
+                                    /*
+                                    *
+                                    * For slot which are selected as solo
+                                    * */
+                                     boolean slot_match_with_event=false;
+                                     for(int day_event = 0; day_event < dayEvents.size(); day_event++){
+                                        DayEvent dayEvent1 =dayEvents.get(day_event);
+                                        String event_start_date = dayEvent1.getEvent_start_date();
+                                        String event_stop_date = dayEvent1.getEvent_stop_date();
+                                        String event_start_time = dayEvent1.getEvent_start_time();
+                                        String event_stop_time = dayEvent1.getEvent_stop_time();
+                                        int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
+                                        /* checking whether this particular event is similar to slot or not */
+                                        if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
+                                            slot_match_with_event = true;
+                                            /* if found similar then check whether the event_totoal_mentees from slot_max_users*/
+                                            if (event_total_mentees < slot_max_users) {
+                                                free_slot++;
+                                            }
+                                        }
+                                    }
+
+                                    if (!slot_match_with_event)
+                                        free_slot++;
+                                 }
+
+                            }
+
+                            /*
+                            *
+                            * if free_slot is having value greater than zero, it means this day has free slots and we have to populate calendar grid color
+                            * */
+                            if(free_slot > 0){
+                                if (day_color[1].equals("BLUE")) {
+                                    gridcell.setBackgroundColor(new Color().CYAN);
+                                } else {
+                                    gridcell.setBackgroundColor(new Color().YELLOW);
+                                }
+                            }
+
+
+                            gridcell.setTag(1,free_slot);
+
+
+                        }
+                    }
 
                 }
+
 
             }
 
@@ -270,17 +436,27 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         Intent intent = new Intent(context, SetScheduleActivity.class);
         String s = (String) view.getTag();
 
+        int no_of_free_slots= (int) view.getTag(1);
+
         int day = Integer.parseInt(s.split("-", 3)[0]);
 
         String month = s.split("-", 3)[1];
         String year = s.split("-", 3)[2];
+        if(myScheduleFragment != null){
+            intent.putExtra("for","ScheduleFragments");
+        }else{
+            intent.putExtra("for","MentorDetailsActivity");
+        }
         intent.putExtra("date", (String) view.getTag());
         intent.putExtra("day", Integer.parseInt(s.split("-", 3)[0]));
         intent.putExtra("year", Integer.parseInt(year));
         //Log.d(TAG, "three months data list size" + three_months_data.size());
         intent.putExtra("prev_month_data", prev_month_data);
         intent.putExtra("current_month_data", current_month_data);
-        intent.putExtra("coming_month_data",coming_month_data);
+        intent.putExtra("coming_month_data", coming_month_data);
+        intent.putExtra("mentor_id",mentor_id);
+        intent.putExtra("availability",availability);
+
 
         //intent.putExtra("day_bean", (android.os.Parcelable) three_months_data);
 
@@ -307,7 +483,6 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                 //myScheduleFragment.showPrevMonth();
                 myScheduleFragment.showNextMonth();
             }
-
 
 
         } else {

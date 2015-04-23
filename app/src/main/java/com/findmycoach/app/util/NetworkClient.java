@@ -1114,7 +1114,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-       // client.get(context, getAbsoluteURL("calenderDetails", context), requestParams, new AsyncHttpResponseHandler() {
+        // client.get(context, getAbsoluteURL("calenderDetails", context), requestParams, new AsyncHttpResponseHandler() {
             client.get(context, getAbsoluteURL("calenderDetails", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
