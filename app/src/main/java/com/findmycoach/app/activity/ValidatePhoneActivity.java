@@ -255,7 +255,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                     /** Phone number is provided with country code, updating user's phone number in server and sending OTP to that number */
                     else{
                         StorageHelper.storePreference(ValidatePhoneActivity.this, "phone_number", phnNum);
-                        requestParams.add("phone_number",countryCodeTV.getText().toString().trim()+ phnNum);
+                        requestParams.add("phone_number",countryCodeTV.getText().toString().trim() + "-" + phnNum);
                         Log.d(TAG, countryCodeTV.getText().toString().trim()+ phnNum);
                         progressDialog.show();
                         NetworkClient.updatePhoneForSocialMedia(ValidatePhoneActivity.this, requestParams, ValidatePhoneActivity.this, 26);
