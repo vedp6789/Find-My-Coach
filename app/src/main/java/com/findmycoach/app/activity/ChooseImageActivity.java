@@ -17,11 +17,19 @@ import com.edmodo.cropper.CropImageView;
 import com.findmycoach.app.R;
 import com.findmycoach.app.util.BinaryForImage;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 public class ChooseImageActivity extends Activity {
 
-    /** Static final constants */
+    /**
+     * Static final constants
+     */
     private static final int DEFAULT_ASPECT_RATIO_VALUES = 10;
-    /** Instance variables */
+    /**
+     * Instance variables
+     */
     private int mAspectRatioX = DEFAULT_ASPECT_RATIO_VALUES;
     private int mAspectRatioY = DEFAULT_ASPECT_RATIO_VALUES;
     private static final int ROTATE_NINETY_DEGREES = 90;
@@ -32,7 +40,9 @@ public class ChooseImageActivity extends Activity {
     private Button chooseImage;
     private Button rotateButton;
 
-    /** Saves the state upon rotating the screen/restarting the activity */
+    /**
+     * Saves the state upon rotating the screen/restarting the activity
+     */
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
@@ -40,7 +50,9 @@ public class ChooseImageActivity extends Activity {
         bundle.putInt(ASPECT_RATIO_Y, mAspectRatioY);
     }
 
-    /** Restores the state upon rotating the screen/restarting the activity */
+    /**
+     * Restores the state upon rotating the screen/restarting the activity
+     */
     @Override
     protected void onRestoreInstanceState(Bundle bundle) {
         super.onRestoreInstanceState(bundle);
@@ -56,13 +68,15 @@ public class ChooseImageActivity extends Activity {
         applyAction();
     }
 
-    /** Getting references of views */
+    /**
+     * Getting references of views
+     */
     private void initialize() {
         chooseImage = (Button) findViewById(R.id.select_picture);
         cropImageView = (CropImageView) findViewById(R.id.CropImageView);
-        try{
+        try {
             cropImageView.setImageBitmap(BinaryForImage.getBitmapFromBinaryString(getIntent().getStringExtra("BitMap")));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         cropImageView.setFixedAspectRatio(true);
@@ -95,7 +109,9 @@ public class ChooseImageActivity extends Activity {
         });
     }
 
-    /** Passing back cropped image to calling class */
+    /**
+     * Passing back cropped image to calling class
+     */
     private void passImage() {
         try {
             Bitmap croppedImage = cropImageView.getCroppedCircleImage();
@@ -110,7 +126,9 @@ public class ChooseImageActivity extends Activity {
         }
     }
 
-    /** Setting selected image from device in the image view */
+    /**
+     * Setting selected image from device in the image view
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -125,12 +143,35 @@ public class ChooseImageActivity extends Activity {
             String imgDecodableString = cursor.getString(columnIndex);
             cursor.close();
             /** Set the Image in ImageView after decoding the String */
-            cropImageView.setImageBitmap(BitmapFactory
-                    .decodeFile(imgDecodableString));
+            cropImageView.setImageBitmap(decodeFile(new File(imgDecodableString)));
         } else {
             Toast.makeText(this, getResources().getString(R.string.image_not_picked),
                     Toast.LENGTH_LONG).show();
         }
+    }
+
+    private Bitmap decodeFile(File f) {
+        try {
+            //Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+
+            //The new size we want to scale to
+            final int REQUIRED_SIZE = 225;
+
+            //Find the correct scale value. It should be the power of 2.
+            int scale = 1;
+            while (o.outWidth / scale / 2 >= REQUIRED_SIZE && o.outHeight / scale / 2 >= REQUIRED_SIZE)
+                scale *= 2;
+
+            //Decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+        } catch (FileNotFoundException e) {
+        }
+        return null;
     }
 }
 
