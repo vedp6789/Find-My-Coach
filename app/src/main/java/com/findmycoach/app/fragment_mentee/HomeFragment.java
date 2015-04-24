@@ -74,6 +74,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private boolean isSearching = false;
     private static final String TAG="FMC";
     ArrayAdapter<String> arrayAdapter;
+
     public HomeFragment() {
         // Required empty public constructor
         subCategoryIds = null;
@@ -410,12 +411,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             updateAutoSuggestion(suggestion);
         } else if (object instanceof Category) {
             setTabForCategory((Category) object);
-            DataBase dataBase = DataBase.singleton(getActivity());;
+            DataBase dataBase = DataBase.singleton(getActivity());
             dataBase.insertData((Category) object);
         } else {
             progressDialog.dismiss();
             Intent intent = new Intent(getActivity(), UserListActivity.class);
             intent.putExtra("list", (String) object);
+            intent.putExtra("searched_keyword", subCategoryIds[tabIndex]);
+            Log.e(TAG, subCategoryIds[tabIndex]);
             startActivity(intent);
             isSearching = false;
         }
