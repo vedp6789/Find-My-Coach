@@ -349,7 +349,25 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                     String slot_stop_time = daySlot.getSlot_stop_time();
                     String slot_type = daySlot.getSlot_type();
                     String slot_id=daySlot.getSlot_id();
+                    String [] slot_on_week_days=daySlot.getSlot_week_days();
                     int slot_max_users = Integer.parseInt(daySlot.getSlot_max_users());
+
+
+                    int slot_start_day=Integer.parseInt(slot_start_date.split("-",3)[2]);
+                    int slot_start_month=Integer.parseInt(slot_start_date.split("-",3)[1]);
+                    int slot_start_year=Integer.parseInt(slot_start_date.split("-",3)[0]);
+                    int slot_start_hour=Integer.parseInt(slot_start_time.split("-",3)[0]);
+                    int slot_start_minute=Integer.parseInt(slot_start_time.split("-",3)[1]);
+
+
+
+                    int slot_stop_day=Integer.parseInt(slot_stop_date.split("-",3)[2]);
+                    int slot_stop_month=Integer.parseInt(slot_stop_date.split("-",3)[1]);
+                    int slot_stop_year=Integer.parseInt(slot_stop_date.split("-",3)[0]);
+                    int slot_stop_hour=Integer.parseInt(slot_stop_time.split("-",3)[0]);
+                    int slot_stop_minute=Integer.parseInt(slot_stop_time.split("-",3)[1]);
+
+
                     /*
                      *
                      * For the slot which are selected as Group
@@ -360,6 +378,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             DayEvent dayEvent1 = dayEvents.get(day_event);
                             String event_start_date = dayEvent1.getEvent_start_date();
                             String event_stop_date = dayEvent1.getEvent_stop_date();
+
                             String event_start_time = dayEvent1.getEvent_start_time();
                             String event_stop_time = dayEvent1.getEvent_stop_time();
                             int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
@@ -390,7 +409,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                             endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
                                             endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                                             WeekViewEvent weekViewEvent;
-                                            weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(startTime,endTime,slot_type), startTime, endTime, event_type);
+                                            weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(slot_start_day,slot_start_month,slot_start_year,slot_stop_day,slot_stop_month,slot_stop_year,slot_start_hour,slot_start_minute,slot_stop_hour,slot_stop_minute,slot_type), startTime, endTime, slot_start_day,slot_start_month,slot_start_year,slot_stop_day,slot_stop_month,slot_stop_year,slot_start_hour,slot_start_minute,slot_stop_hour,slot_stop_minute,slot_type,mentor_id,mentor_availablity);
                                             weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
                                             events.add(weekViewEvent);
 
@@ -827,8 +846,9 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
 
 
-    private String getFreeSlotTitle(Calendar start_time,Calendar end_time,String slot_type){
-        return String.format("Free slot : %")
+    private String getFreeSlotTitle(int slot_start_day,int slot_start_month, int slot_start_year,int slot_stop_day,int slot_stop_month,int slot_stop_year,int slot_start_hour,int slot_start_min,int slot_stop_hour,int slot_stop_min,String slot_type){
+
+        return String.format("Free slot: %02d-%02d-%d to %02d-%02d-%d \n Timing: %02d:%02d to %02d:%02d \n ", slot_start_day, slot_start_month, slot_start_year, slot_stop_day,slot_stop_month,slot_stop_year)+"Slot type: "+slot_type;
     }
 
     @Override
