@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.fragment_mentee.ChildDOB;
-import com.findmycoach.app.fragment_mentor.Schedule;
 import com.findmycoach.app.fragment_mentor.StartDateDialogFragment;
 import com.findmycoach.app.fragment_mentor.TillDateDialogFragment;
 import com.findmycoach.app.util.Callback;
@@ -45,9 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Locale;
-import java.util.SimpleTimeZone;
 import java.util.TreeSet;
 
 /**
@@ -433,7 +430,13 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                                 String stop_time = jsonArray.getString(1);
                                 String startTime = start_time.split(":", 3)[0] + ":" + start_time.split(":", 3)[1];
                                 String stopTime = stop_time.split(":", 3)[0] + ":" + stop_time.split(":", 3)[1];
-                                if (startTime.equals(selected_start_time) && stopTime.equals(selected_stop_time)) {
+                                if (startTime.equals( Toast.makeText(MentorDetailsActivity.this, getResources().getString(R.string.rating_for) + userInfo.getFirstName() + getResources().getString(R.string.is) + ratingBar.getRating() + getResources().getString(R.string.will_be_submitted), Toast.LENGTH_LONG).show();
+                RequestParams requestParams = new RequestParams();
+                requestParams.add("id", userInfo.getConnectionId());
+                requestParams.add("mentor_id", userInfo.getId());
+                requestParams.add("mentee_id", StorageHelper.getUserDetails(MentorDetailsActivity.this, getResources().getString(R.string.user_id)));
+                requestParams.add("rating", ratingBar.getRating() + "");
+                NetworkClient.rateMentor(MentorDetailsActivity.this, requestParams, MentorDetailsActivity.this, 12);selected_start_time) && stopTime.equals(selected_stop_time)) {
                                     b_s = true;
                                 } else {
                                 }
@@ -942,6 +945,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             Log.d(TAG, "start_time : " + start_time + "stop_time : " + stop_time + ", Selected start time: " + start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00");
             requestParams.add("start_time", start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00");
             requestParams.add("stop_time", stop_time.split(":")[0] + ":" + stop_time.split(":")[1] + ":00");
+           /* requestParams.add("start_time", start_time);
 
 
            /*

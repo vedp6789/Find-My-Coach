@@ -67,6 +67,13 @@ public class DataBase extends SQLiteOpenHelper {
         }
     }
 
+    /** Select sub category with id */
+    public String getSubCategory(String id){
+        Cursor c = db.query(TABLE_NAME, new String[]{SUBCATEGORY}, SUBCATEGORY_ID + " = ?", new String[]{id}, null, null, null);
+        c.moveToFirst();
+        return c.getString(0);
+    }
+
     /** Selecting all sub categories from database */
     public Category selectAllSubCategory(){
         /** Selecting all from table*/

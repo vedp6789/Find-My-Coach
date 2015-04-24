@@ -658,7 +658,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 /** Phone number is provided with country code, updating user's phone number in server */
                 else {
                     dialog.dismiss();
-                    requestParams.add("phone_number",countryCodeTV.getText().toString().trim() + phnNum);
+                    requestParams.add("phone_number",countryCodeTV.getText().toString().trim() + "-" + phnNum);
                     requestParams.add("user_group", String.valueOf(user_group));
                     saveUserPhoneNumber(phnNum);
                     NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 26);
@@ -672,13 +672,16 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             @Override
             public void onClick(View v) {
                 fbClearToken();
-                finish();
+                if (!mGoogleApiClient.isConnecting()  && mGoogleApiClient.isConnected()) {
+                    Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                    mGoogleApiClient.disconnect();
+                    mGoogleApiClient.connect();
+                }
                 dialog.dismiss();
                 String user_group_saved = StorageHelper.getUserGroup(LoginActivity.this, "user_group");
                 if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group))) {
                     StorageHelper.storePreference(LoginActivity.this, "user_group", String.valueOf(user_group));
                 }
-                startActivity(new Intent(LoginActivity.this, LoginActivity.class));
             }
         });
         dialog.show();
@@ -761,15 +764,18 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
 
         /** Login is successful start DashBoard Activity */
-        if (response.getMessage() != null && response.getMessage().equals("Success")) {
+        if (response.getMessage() != null && response.getMessage().equals("Success") && !response.getData().getPhonenumber().equals("0")) {
             saveUserPhn("True");
             finish();
             startActivity(new Intent(this, DashboardActivity.class));
         }
 
         else {
+            if(response.getData().getNewUser())
+                StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getData().getId());
+
             /** Login is successful but phone number not present, open dialog to get phone number */
-            if (response.getData().getPhonenumber() == null) {
+            if (response.getData().getPhonenumber() == null || response.getData().getPhonenumber().equals("0")) {
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("email", response.getData().getEmail());
                 getPhoneNumber(requestParams);
@@ -777,9 +783,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
             /** Login is successful but phone number not validated, open ValidatePhone Activity */
             else {
-                if(response.getData().getNewUser())
-                    StorageHelper.storePreference(this, "new_user", "true#" + response.getData().getId());
-
                 Log.e(TAG, response.getData().getNewUser() + " : " + response.getData().getId());
                 /** Saving phone number for validating purpose and starting ValidatePhoneActivity */
                 saveUserPhoneNumber(response.getData().getPhonenumber());

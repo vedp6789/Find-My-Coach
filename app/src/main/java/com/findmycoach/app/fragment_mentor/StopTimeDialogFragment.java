@@ -5,7 +5,6 @@ import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,7 +96,7 @@ public class StopTimeDialogFragment extends DialogFragment implements View.OnCli
         Dialog dialog = getDialog();
         dialog.setTitle(getString(R.string.set_time));
         dialog.setCanceledOnTouchOutside(false);
-
+        Toast.makeText(getActivity(),getResources().getString(R.string.quantized_timing),Toast.LENGTH_SHORT).show();
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minuteL) {

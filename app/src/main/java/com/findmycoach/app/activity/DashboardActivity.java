@@ -35,7 +35,6 @@ import com.findmycoach.app.reside_menu.ResideMenu;
 import com.findmycoach.app.reside_menu.ResideMenuItem;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
-import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -440,7 +439,6 @@ public class DashboardActivity extends FragmentActivity
         fbClearToken();
         this.finish();
         startActivity(new Intent(this, LoginActivity.class));
-        NetworkManager.counter = 0;
     }
 
     private void updateTermsAndConditionsStatus() {

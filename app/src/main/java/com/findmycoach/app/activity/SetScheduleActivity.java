@@ -53,6 +53,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     private static ArrayList<Day> coming_month = null;
     private static final int slot_event_type = 0;
     private static final int event_type = 1;
+    private static final int free_slot_event_type=2;
     private static String this_activity_for = null;
     private static ProgressDialog progressDialog;
     private String mentor_id = null;
@@ -404,7 +405,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                     endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
                                     endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                                     WeekViewEvent weekViewEvent;
-                                    weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type), startTime, endTime, slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, mentor_id, mentor_availablity);
+                                    weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type), startTime, endTime, slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, mentor_id, mentor_availablity,free_slot_event_type);
                                     weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
                                     events.add(weekViewEvent);
 
@@ -433,7 +434,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
                             endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                             WeekViewEvent weekViewEvent;
-                            weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type), startTime, endTime, slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, mentor_id, mentor_availablity);
+                            weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type), startTime, endTime, slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, mentor_id, mentor_availablity,free_slot_event_type);
                             weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
                             events.add(weekViewEvent);
                         }
@@ -477,7 +478,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
                             endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                             WeekViewEvent weekViewEvent;
-                            weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type), startTime, endTime, slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, mentor_id, mentor_availablity);
+                            weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type), startTime, endTime, slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, mentor_id, mentor_availablity,free_slot_event_type);
                             weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
                             events.add(weekViewEvent);
 
@@ -811,7 +812,13 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             requestParams.add("id", String.valueOf(event.getId()));
             progressDialog.show();
             NetworkClient.getCalenderEvent(SetScheduleActivity.this, requestParams, StorageHelper.getUserDetails(SetScheduleActivity.this, "auth_token"), this, 43);
+        }else{
+            if(event_type == 2){
+                /* ScheduleNewClass activity will open now */
+                
+            }
         }
+
 
 
     }

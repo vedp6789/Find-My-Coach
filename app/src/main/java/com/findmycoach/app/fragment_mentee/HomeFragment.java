@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -69,9 +70,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private String location_auto_suggested_temp,location_auto_suggested;
     boolean flag_change_location=false;
 
+    private CheckBox mon, tue, wed, thr, fri, sat, sun;
     private boolean isSearching = false;
     private static final String TAG="FMC";
     ArrayAdapter<String> arrayAdapter;
+
     public HomeFragment() {
         // Required empty public constructor
         subCategoryIds = null;
@@ -272,6 +275,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         tabHost = (TabHost) view.findViewById(R.id.tabhost);
         localActivityManager = new LocalActivityManager(getActivity(), false);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
+
+        mon = (CheckBox) view.findViewById(R.id.mon);
+        tue = (CheckBox) view.findViewById(R.id.tue);
+        wed = (CheckBox) view.findViewById(R.id.wed);
+        thr = (CheckBox) view.findViewById(R.id.thu);
+        fri = (CheckBox) view.findViewById(R.id.fri);
+        sat = (CheckBox) view.findViewById(R.id.sat);
+        sun = (CheckBox) view.findViewById(R.id.sun);
     }
 
     private void getAutoSuggestions(String input) {
@@ -330,8 +341,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             e.printStackTrace();
         }
         requestParams.add("keyword", name);
-        requestParams.add("timing_from", fromTiming);
-        requestParams.add("timing_to", toTiming);
+       if(timeBarrier.isChecked()){
+           requestParams.add("timing_from", fromTiming);
+           requestParams.add("timing_to", toTiming);
+
+           String week = (mon.isChecked() ? "1," : "0,") +
+                   (tue.isChecked() ? "1," : "0,") +
+                   (wed.isChecked() ? "1," : "0,") +
+                   (thr.isChecked() ? "1," : "0,") +
+                   (fri.isChecked() ? "1," : "0,") +
+                   (sat.isChecked() ? "1," : "0,") +
+                   (sun.isChecked() ? "1" : "0");
+           requestParams.add("weeks", week);
+           Log.d(TAG, "Selected weekdays : " + week);
+       }
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
@@ -388,12 +411,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             updateAutoSuggestion(suggestion);
         } else if (object instanceof Category) {
             setTabForCategory((Category) object);
-            DataBase dataBase = DataBase.singleton(getActivity());;
+            DataBase dataBase = DataBase.singleton(getActivity());
             dataBase.insertData((Category) object);
         } else {
             progressDialog.dismiss();
             Intent intent = new Intent(getActivity(), UserListActivity.class);
             intent.putExtra("list", (String) object);
+            intent.putExtra("searched_keyword", subCategoryIds[tabIndex]);
+            Log.e(TAG, subCategoryIds[tabIndex]);
             startActivity(intent);
             isSearching = false;
         }

@@ -384,7 +384,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
 
         if(areasOfInterest.getText().toString().trim().equals("")){
             showErrorMessage(areasOfInterest,getResources().getString(R.string.error_field_required));
-            Toast.makeText(EditProfileActivityMentee.this,getResources().getString(R.string.error_field_required),Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditProfileActivityMentee.this,getResources().getString(R.string.please_add_area_of_interest),Toast.LENGTH_SHORT).show();
             return false;
         }
 

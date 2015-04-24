@@ -28,8 +28,149 @@ public class WeekViewEvent {
     private String mentor_availablity;
 
 
+    public long getmId() {
+        return mId;
+    }
 
+    public void setmId(long mId) {
+        this.mId = mId;
+    }
 
+    public Calendar getmStartTime() {
+        return mStartTime;
+    }
+
+    public void setmStartTime(Calendar mStartTime) {
+        this.mStartTime = mStartTime;
+    }
+
+    public Calendar getmEndTime() {
+        return mEndTime;
+    }
+
+    public void setmEndTime(Calendar mEndTime) {
+        this.mEndTime = mEndTime;
+    }
+
+    public String getmName() {
+        return mName;
+    }
+
+    public void setmName(String mName) {
+        this.mName = mName;
+    }
+
+    public int getmColor() {
+        return mColor;
+    }
+
+    public void setmColor(int mColor) {
+        this.mColor = mColor;
+    }
+
+    public int getSlot_start_day() {
+        return slot_start_day;
+    }
+
+    public void setSlot_start_day(int slot_start_day) {
+        this.slot_start_day = slot_start_day;
+    }
+
+    public int getSlot_start_month() {
+        return slot_start_month;
+    }
+
+    public void setSlot_start_month(int slot_start_month) {
+        this.slot_start_month = slot_start_month;
+    }
+
+    public int getSlot_start_year() {
+        return slot_start_year;
+    }
+
+    public void setSlot_start_year(int slot_start_year) {
+        this.slot_start_year = slot_start_year;
+    }
+
+    public int getSlot_start_hour() {
+        return slot_start_hour;
+    }
+
+    public void setSlot_start_hour(int slot_start_hour) {
+        this.slot_start_hour = slot_start_hour;
+    }
+
+    public int getSlot_start_minute() {
+        return slot_start_minute;
+    }
+
+    public void setSlot_start_minute(int slot_start_minute) {
+        this.slot_start_minute = slot_start_minute;
+    }
+
+    public int getSlot_stop_day() {
+        return slot_stop_day;
+    }
+
+    public void setSlot_stop_day(int slot_stop_day) {
+        this.slot_stop_day = slot_stop_day;
+    }
+
+    public int getSlot_stop_month() {
+        return slot_stop_month;
+    }
+
+    public void setSlot_stop_month(int slot_stop_month) {
+        this.slot_stop_month = slot_stop_month;
+    }
+
+    public int getSlot_stop_year() {
+        return slot_stop_year;
+    }
+
+    public void setSlot_stop_year(int slot_stop_year) {
+        this.slot_stop_year = slot_stop_year;
+    }
+
+    public int getSlot_stop_hour() {
+        return slot_stop_hour;
+    }
+
+    public void setSlot_stop_hour(int slot_stop_hour) {
+        this.slot_stop_hour = slot_stop_hour;
+    }
+
+    public int getSlot_stop_minute() {
+        return slot_stop_minute;
+    }
+
+    public void setSlot_stop_minute(int slot_stop_minute) {
+        this.slot_stop_minute = slot_stop_minute;
+    }
+
+    public String getSlot_type() {
+        return slot_type;
+    }
+
+    public void setSlot_type(String slot_type) {
+        this.slot_type = slot_type;
+    }
+
+    public String getMentor_id() {
+        return mentor_id;
+    }
+
+    public void setMentor_id(String mentor_id) {
+        this.mentor_id = mentor_id;
+    }
+
+    public String getMentor_availablity() {
+        return mentor_availablity;
+    }
+
+    public void setMentor_availablity(String mentor_availablity) {
+        this.mentor_availablity = mentor_availablity;
+    }
 
     public int getEventType() {
         return eventType;
@@ -97,11 +238,28 @@ public class WeekViewEvent {
     }
 
     /**
-     *Initializes the event for week view, this week-view will display free slots available and mentee can select one free slot for his schedule request with mentor.
-     *
+     * Initializes the event for week view, this week-view will display free slots available and mentee can select one free slot for his schedule request with mentor.
      */
 
-    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime, int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_day, int slot_stop_month, int slot_stop_year, int slot_start_hour, int slot_start_minute, int slot_stop_hour, int slot_stop_minute, String slot_type, String mentor_id, String mentor_availability) {
+    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime, int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_day, int slot_stop_month, int slot_stop_year, int slot_start_hour, int slot_start_minute, int slot_stop_hour, int slot_stop_minute, String slot_type, String mentor_id, String mentor_availability,int free_slot_event_type) {
+        this.mId = id;
+        this.mName = name;
+        this.mStartTime = startTime;
+        this.mEndTime = endTime;
+        this.slot_start_day = slot_start_day;
+        this.slot_start_month = slot_start_month;
+        this.slot_start_year = slot_start_year;
+        this.slot_stop_day = slot_stop_day;
+        this.slot_stop_month = slot_stop_month;
+        this.slot_stop_year = slot_stop_year;
+        this.slot_start_hour = slot_start_hour;
+        this.slot_start_minute = slot_start_minute;
+        this.slot_stop_hour = slot_stop_hour;
+        this.slot_stop_minute = slot_stop_minute;
+        this.slot_type = slot_type;
+        this.mentor_id = mentor_id;
+        this.mentor_availablity = mentor_availability;
+        this.eventType=free_slot_event_type;
 
     }
 
