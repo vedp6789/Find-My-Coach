@@ -631,7 +631,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
 
         switch (calledApiValue) {
             case 37:
-                Log.d(TAG, " API 37 success");
+                Log.d(TAG, " API 37 success");Log.d(TAG,"call for api 37");
                 threeMonthsData(object);
                 break;
             case 38:
@@ -655,6 +655,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
 
     private void threeMonthsData(Object object) {
 
+
         Log.d(TAG,"inside three months data population");
             Log.d(TAG, "INside threeMonthData method ");
             progressDialog.dismiss();
@@ -662,6 +663,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
 
                 JSONObject jsonObject = new JSONObject((String) object);
                 JSONArray jsonArray_data = jsonObject.getJSONArray("data");
+                Log.d(TAG,"json array size : "+jsonArray_data.length());
+                Log.d(TAG,"Object got for three months data "+jsonObject.toString());
 
                 for (int i = 0; i < days_in_prev_month; i++) {
                     Day day1 = new Day();
@@ -875,6 +878,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
                     }
 
                 }else{
+                    Log.d(TAG,"three months data population");
                     adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList,userInfo.getId(),userInfo.getAvailabilityYn(),charges);
                     calendarView.setAdapter(adapter1);
                     adapter1.notifyDataSetChanged();
