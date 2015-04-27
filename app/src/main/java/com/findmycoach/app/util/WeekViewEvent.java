@@ -26,7 +26,16 @@ public class WeekViewEvent {
     private String slot_type;
     private String mentor_id;
     private String mentor_availablity;
+    private String [] slot_on_week_days;
+    private String charges;
 
+    public String getCharges() {
+        return charges;
+    }
+
+    public String[] getSlot_on_week_days() {
+        return slot_on_week_days;
+    }
 
     public long getmId() {
         return mId;
@@ -241,7 +250,7 @@ public class WeekViewEvent {
      * Initializes the event for week view, this week-view will display free slots available and mentee can select one free slot for his schedule request with mentor.
      */
 
-    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime, int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_day, int slot_stop_month, int slot_stop_year, int slot_start_hour, int slot_start_minute, int slot_stop_hour, int slot_stop_minute, String slot_type, String mentor_id, String mentor_availability,int free_slot_event_type) {
+    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime, int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_day, int slot_stop_month, int slot_stop_year, int slot_start_hour, int slot_start_minute, int slot_stop_hour, int slot_stop_minute, String slot_type,String [] slot_on_week_days, String mentor_id, String mentor_availability,int free_slot_event_type,String charges) {
         this.mId = id;
         this.mName = name;
         this.mStartTime = startTime;
@@ -257,9 +266,11 @@ public class WeekViewEvent {
         this.slot_stop_hour = slot_stop_hour;
         this.slot_stop_minute = slot_stop_minute;
         this.slot_type = slot_type;
+        this.slot_on_week_days=slot_on_week_days;
         this.mentor_id = mentor_id;
         this.mentor_availablity = mentor_availability;
         this.eventType=free_slot_event_type;
+        this.charges=charges;
 
     }
 

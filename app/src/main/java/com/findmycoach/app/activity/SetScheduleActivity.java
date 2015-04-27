@@ -58,6 +58,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     private static ProgressDialog progressDialog;
     private String mentor_id = null;
     private String mentor_availablity = null;
+    private String charges;
 
 
     @Override
@@ -72,6 +73,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             if (this_activity_for.equals("MentorDetailsActivity")) {
                 mentor_id = getIntent.getStringExtra("mentor_id");
                 mentor_availablity = getIntent.getStringExtra("availability");
+                charges=getIntent.getStringExtra("charges");
             }
 
             date_for_grid_selected_from_calendar = getIntent.getStringExtra("date");
@@ -321,6 +323,11 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     }
 
+
+    /**
+     *This will populate week_view for free slot representation in mentee's calendar
+     */
+
     private void poplateWeekView(ArrayList<Day> month, List<WeekViewEvent> events, int newYear, int newMonth) {
         for (Day d : month) {
             String date_for_d = d.getDate();
@@ -405,7 +412,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                     endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
                                     endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                                     WeekViewEvent weekViewEvent;
-                                    weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type), startTime, endTime, slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, mentor_id, mentor_availablity,free_slot_event_type);
+                                    weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type), startTime, endTime, slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type,slot_on_week_days, mentor_id, mentor_availablity,free_slot_event_type,charges);
                                     weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
                                     events.add(weekViewEvent);
 
@@ -434,7 +441,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
                             endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                             WeekViewEvent weekViewEvent;
-                            weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type), startTime, endTime, slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, mentor_id, mentor_availablity,free_slot_event_type);
+                            weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type), startTime, endTime, slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type,slot_on_week_days, mentor_id, mentor_availablity,free_slot_event_type,charges);
                             weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
                             events.add(weekViewEvent);
                         }
@@ -478,7 +485,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
                             endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                             WeekViewEvent weekViewEvent;
-                            weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type), startTime, endTime, slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, mentor_id, mentor_availablity,free_slot_event_type);
+                            weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type), startTime, endTime, slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type,slot_on_week_days, mentor_id, mentor_availablity,free_slot_event_type,charges);
                             weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
                             events.add(weekViewEvent);
 
@@ -796,7 +803,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     private String getFreeSlotTitle(int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_day, int slot_stop_month, int slot_stop_year, int slot_start_hour, int slot_start_min, int slot_stop_hour, int slot_stop_min, String slot_type) {
 
-        return String.format("Free slot: %02d-%02d-%d to %02d-%02d-%d \n Timing: %02d:%02d to %02d:%02d \n ", slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year) + "Slot type: " + slot_type;
+        return String.format("Free slot: %02d-%02d-%d to %02d-%02d-%d \n Timing: %02d:%02d to %02d:%02d \n ", slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year,slot_start_hour,slot_start_min,slot_stop_hour,slot_stop_min) + "Slot type: " + slot_type;
     }
 
     @Override
@@ -813,9 +820,30 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             progressDialog.show();
             NetworkClient.getCalenderEvent(SetScheduleActivity.this, requestParams, StorageHelper.getUserDetails(SetScheduleActivity.this, "auth_token"), this, 43);
         }else{
-            if(event_type == 2){
-                /* ScheduleNewClass activity will open now */
-                
+            if(event_type == 2){    /* envent_type 2 is for free slot duration*/
+                /* ScheduleNewClass activity will open now, and SetScheduleActivity will send all desired data for this free slot to ScheduleNewClass */
+                Intent intent=new Intent(SetScheduleActivity.this,ScheduleNewClass.class);
+                Bundle bundle=new Bundle();
+                bundle.putLong("slot_id",event.getId());
+                bundle.putString("mentor_id",event.getMentor_id());
+                bundle.putString("mentor_availability",event.getMentor_availablity());
+                bundle.putInt("slot_start_day",event.getSlot_start_day());
+                bundle.putInt("slot_start_month",event.getSlot_start_month());
+                bundle.putInt("slot_start_year",event.getSlot_start_year());
+                bundle.putInt("slot_stop_day",event.getSlot_stop_day());
+                bundle.putInt("slot_stop_month",event.getSlot_stop_month());
+                bundle.putInt("slot_stop_year",event.getSlot_stop_year());
+                bundle.putInt("slot_start_hour",event.getSlot_start_hour());
+                bundle.putInt("slot_start_minute",event.getSlot_start_minute());
+                bundle.putInt("slot_stop_hour",event.getSlot_stop_hour());
+                bundle.putInt("slot_stop_minute",event.getSlot_stop_minute());
+                bundle.putStringArray("slot_on_week_days",event.getSlot_on_week_days());
+                bundle.putString("charges",event.getCharges());
+                intent.putExtra("slot_bundle",bundle);
+                startActivity(intent);
+
+
+
             }
         }
 

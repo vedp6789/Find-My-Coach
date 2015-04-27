@@ -79,8 +79,10 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private static int till_month;//completion month of the schedule
     private static int till_year;//completion year of the schedule
     private ProgressDialog progressDialog;
-    public static String child_DOB=null;
+    public static String child_DOB = null;
     private Date newDate;
+    Bundle bundle;
+    Calendar calendar_current_date;
 
 
     @Override
@@ -91,10 +93,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         progressDialog = new ProgressDialog(ScheduleNewClass.this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         applyActionbarProperties(fname);
-
         initialize();
-
-
+        bundle = getIntent().getBundleExtra("slot_bundle");
     }
 
     /* Populate the respective layout */
@@ -102,12 +102,40 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         sub_category_name = new ArrayList<String>();
 
         try {
-            parseJSON();
 
-            /* creating array of subcategories to populate subcategory/subject spinner */
-            for (int i = 0; i < jsonArray_sub_category_name.length(); i++) {
+
+
+            /* Schedule through calendar  */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            /*parseJSON();*/     /* commented to test calendar feature*/
+
+           /* *//* creating array of subcategories to populate subcategory/subject spinner *//*
+           *//* for (int i = 0; i < jsonArray_sub_category_name.length(); i++) {
                 sub_category_name.add(jsonArray_sub_category_name.getString(i));
-            }
+            }*//*
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ScheduleNewClass.this, android.R.layout.simple_spinner_item, sub_category_name.toArray(new String[sub_category_name.size()]));
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             sp_subjects.setAdapter(arrayAdapter);
@@ -123,7 +151,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
                 }
             });
-
+*/
             /* Mentor-for spinner data */
             String[] mentor_for = {getResources().getString(R.string.self), getResources().getString(R.string.child)};
             ArrayAdapter arrayAdapter1_mentor_for = new ArrayAdapter(this, android.R.layout.simple_spinner_item, mentor_for);
@@ -132,22 +160,22 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             sp_mentor_for.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(ScheduleNewClass.this,"onItemSelected",Toast.LENGTH_SHORT).show();
-                    child_DOB=null;
-                    selected_mentor_for=null;
+                    Toast.makeText(ScheduleNewClass.this, "onItemSelected", Toast.LENGTH_SHORT).show();
+                    child_DOB = null;
+                    selected_mentor_for = null;
                     selected_mentor_for = (String) parent.getItemAtPosition(position);
-                    if(selected_mentor_for.equals(getResources().getString(R.string.child))){
+                    if (selected_mentor_for.equals(getResources().getString(R.string.child))) {
                         ll_child_dob.setVisibility(View.VISIBLE);
 
 
-                    }else{
+                    } else {
                         ll_child_dob.setVisibility(View.GONE);
                     }
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
-                    Toast.makeText(ScheduleNewClass.this,"onNothingSelected",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ScheduleNewClass.this, "onNothingSelected", Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -210,7 +238,15 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 */
 
 
-            ArrayList<String> timings=new ArrayList<String>();
+
+
+
+            /*
+            * Below code is commented to make Calendar availability selection
+            * */
+
+ /* *******************************************************************************/
+           /* ArrayList<String> timings = new ArrayList<String>();
             timings.add("00:00 - 01:00");
             timings.add("01:00 - 02:00");
             timings.add("02:00 - 03:00");
@@ -242,7 +278,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             sp_class_timing.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    selected_time=parent.getItemAtPosition(position).toString();
+                    selected_time = parent.getItemAtPosition(position).toString();
                     cb_mon.setChecked(true);
                     cb_tue.setChecked(true);
                     cb_wed.setChecked(true);
@@ -258,7 +294,13 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
                 }
             });
+*/
+/* ****************************************************************************************/
 
+
+
+
+    /* ##############################################*/
 
             /* Populating timing spinner and according to time selection, a filter over days availability is going to be applied. *//*
             ArrayAdapter arrayAdapter1 = new ArrayAdapter(this, android.R.layout.simple_spinner_item, slot_timings);
@@ -516,6 +558,11 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 }
             });
 */
+
+  /* ###################################################################################*/
+
+
+
             /*Checking mentor's availability to mentee location, if mentor is not going to be available then address is not going to be needed from mentee so disabling it*/
             mentor_availability = mentor_data.getString("availability_yn");
             if (!mentor_availability.equals("1")) {
@@ -530,9 +577,12 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
     }
 
-    /* Picking different start-time of slot, from different days */
+/*
+  * commented to check calendar feature
+   *
+   * *//* Picking different start-time of slot, from different days *//*
     private void createTreeSetOfSlotStartTime() {
-        slotsTimeTreeSet = new TreeSet<Float>();  /* Purpose of using TreeSet is to store slot start-time and in ascending order */
+        slotsTimeTreeSet = new TreeSet<Float>();  *//* Purpose of using TreeSet is to store slot start-time and in ascending order *//*
         try {
             for (int m = 0; m < mon_slots.length(); m++) {
                 jsonArray = mon_slots.getJSONArray(m);
@@ -596,9 +646,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             e.printStackTrace();
         }
 
-    }
+    }*/
 
-    /* parsing JSON string */
+   /*  commented to test Calendar feature   *//* parsing JSON string *//*
     private void parseJSON() {
         try {
             mentor_Details = new JSONObject(getIntent().getStringExtra("mentor_details"));
@@ -620,7 +670,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         }
 
     }
-
+*/
     private void initialize() {
         sp_subjects = (Spinner) findViewById(R.id.sp_subjects);
         sp_class_timing = (Spinner) findViewById(R.id.sp_class_time);
@@ -629,9 +679,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         tv_from_date.setOnClickListener(this);
         tv_to_date = (TextView) findViewById(R.id.tv_date_to_dp);
         tv_to_date.setOnClickListener(this);
-        tv_child_dob= (TextView) findViewById(R.id.tv_child_dob);
+        tv_child_dob = (TextView) findViewById(R.id.tv_child_dob);
         tv_child_dob.setOnClickListener(this);
-        ll_child_dob= (LinearLayout) findViewById(R.id.ll_child_dob);
+        ll_child_dob = (LinearLayout) findViewById(R.id.ll_child_dob);
         sp_mentor_for = (Spinner) findViewById(R.id.sp_mentor_for);
         cb_mon = (CheckBox) findViewById(R.id.cb_m);
         cb_tue = (CheckBox) findViewById(R.id.cb_t);
@@ -709,10 +759,10 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 break;
 
             case R.id.tv_child_dob:
-                FragmentManager fragmentManager2=getFragmentManager();
-                ChildDOB childDOB=new ChildDOB();
-                childDOB.scheduleNewClass=ScheduleNewClass.this;
-                childDOB.show(fragmentManager2,null);
+                FragmentManager fragmentManager2 = getFragmentManager();
+                ChildDOB childDOB = new ChildDOB();
+                childDOB.scheduleNewClass = ScheduleNewClass.this;
+                childDOB.show(fragmentManager2, null);
                 break;
         }
     }
@@ -871,7 +921,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private void scheduleValidation() {
         if (dates_valid) {
             if (days_checked()) {
-                if(checkDaysAvailability(tv_from_date.getText().toString(),tv_to_date.getText().toString())){
+                if (checkDaysAvailability(tv_from_date.getText().toString(), tv_to_date.getText().toString())) {
                     if (mentor_availability.equals("1")) {
                         Log.d(TAG, "mentor_availability equals 1");
                         String location = et_location.getText().toString();
@@ -910,29 +960,29 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     }
 
     private void checkForValidity() {
-        if(selected_mentor_for.equals("Child")){
+        if (selected_mentor_for.equals("Child")) {
 
-            Log.i(TAG,"child dob "+child_DOB);
-            if(child_DOB != null){
-                Log.d(TAG,"Child DOB :"+child_DOB);
+            Log.i(TAG, "child dob " + child_DOB);
+            if (child_DOB != null) {
+                Log.d(TAG, "Child DOB :" + child_DOB);
                 proceedWithValidity();
-            }else{
-                Toast.makeText(ScheduleNewClass.this,"Child's date of birth please! ",Toast.LENGTH_LONG).show();
-                FragmentManager fragmentManager=getFragmentManager();
-                ChildDOB childDOB=new ChildDOB();
-                childDOB.show(fragmentManager,null);
+            } else {
+                Toast.makeText(ScheduleNewClass.this, "Child's date of birth please! ", Toast.LENGTH_LONG).show();
+                FragmentManager fragmentManager = getFragmentManager();
+                ChildDOB childDOB = new ChildDOB();
+                childDOB.show(fragmentManager, null);
             }
-        }else{
+        } else {
             proceedWithValidity();
         }
 
-}
+    }
 
     private void proceedWithValidity() {
         try {
             requestParams = new RequestParams();
-            requestParams.add("student_id", StorageHelper.getUserDetails(ScheduleNewClass.this,"user_id"));
-            Log.i(TAG,"mentor_id"+mentor_data.getString("id"));
+            requestParams.add("student_id", StorageHelper.getUserDetails(ScheduleNewClass.this, "user_id"));
+            Log.i(TAG, "mentor_id" + mentor_data.getString("id"));
             requestParams.add("mentor_id", mentor_data.getString("id"));
             Log.d(TAG, "Timing selected :" + String.valueOf(selected_time));
             String timing_selected = String.valueOf(selected_time);
@@ -955,7 +1005,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             StringBuilder stringBuilder1 = new StringBuilder();
 
 
-            ArrayList<String> a_days=getListForCheckedDays1();
+            ArrayList<String> a_days = getListForCheckedDays1();
             if (a_days.size() > 0) {
                 stringBuilder1.append(a_days.get(0));
                 for (int i = 1; i < a_days.size(); i++) {
@@ -975,43 +1025,40 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 stringBuilder1.append(arrayList_days.get(0));
             }*/
 
-            String start_date=tv_from_date.getText().toString();
-            String stop_date=tv_to_date.getText().toString();
+            String start_date = tv_from_date.getText().toString();
+            String stop_date = tv_to_date.getText().toString();
 
             requestParams.add("dates", stringBuilder1.toString());
-            requestParams.add("start_date", start_date.split("-")[2]+"-"+start_date.split("-")[1]+"-"+start_date.split("-")[0]);
-            requestParams.add("stop_date", stop_date.split("-")[2]+"-"+stop_date.split("-")[1]+"-"+stop_date.split("-")[0]);
-            Log.i(TAG,"Student id"+StorageHelper.getUserDetails(ScheduleNewClass.this,"user_id"));
-            Log.d(TAG,"start_date ::::"+start_date.split("-")[2]+"-"+start_date.split("-")[1]+"-"+start_date.split("-")[0]+"stop_Date:::"+stop_date.split("-")[2]+"-"+stop_date.split("-")[1]+"-"+stop_date.split("-")[0]);
+            requestParams.add("start_date", start_date.split("-")[2] + "-" + start_date.split("-")[1] + "-" + start_date.split("-")[0]);
+            requestParams.add("stop_date", stop_date.split("-")[2] + "-" + stop_date.split("-")[1] + "-" + stop_date.split("-")[0]);
+            Log.i(TAG, "Student id" + StorageHelper.getUserDetails(ScheduleNewClass.this, "user_id"));
+            Log.d(TAG, "start_date ::::" + start_date.split("-")[2] + "-" + start_date.split("-")[1] + "-" + start_date.split("-")[0] + "stop_Date:::" + stop_date.split("-")[2] + "-" + stop_date.split("-")[1] + "-" + stop_date.split("-")[0]);
             requestParams.add("sub_category_name", selected_subject);
-            requestParams.add("availability",mentor_availability);
+            requestParams.add("availability", mentor_availability);
             if (mentor_availability.equals("1")) {
                 requestParams.add("location", et_location.getText().toString());
             }
-            if(selected_mentor_for.equals("Child")){
-                requestParams.add("date_of_birth_kid",child_DOB);
+            if (selected_mentor_for.equals("Child")) {
+                requestParams.add("date_of_birth_kid", child_DOB);
             }
             //requestParams.add("mentor_for", selected_mentor_for);
 
 
+            if (rb_pay_now.isChecked()) {
+                requestParams.add("payment", "1");  /* Flag is 1 if mentee  selected pay now*/
 
-            if(rb_pay_now.isChecked()){
-                requestParams.add("payment","1");  /* Flag is 1 if mentee  selected pay now*/
-
-            }else{
-                requestParams.add("payment","0");  /* Flag is 0 if mentee selected payment personally */
+            } else {
+                requestParams.add("payment", "0");  /* Flag is 0 if mentee selected payment personally */
             }
 
 
-
-
-            Log.d(TAG, "Data going to be validated at the time of successful date selection \n id : " + mentor_data.get("id") + ", start time : " + start_time + ", stop time :" +stop_time +" , days : " + stringBuilder1.toString() + " , start date : " + start_date.split("-")[2]+"-"+start_date.split("-")[1]+"-"+start_date.split("-")[0] + ", stop_date : " + stop_date.split("-")[2]+"-"+stop_date.split("-")[1]+"-"+stop_date.split("-")[0] + ", sub category name : " + selected_subject.toString() + "mentee address : " + et_location.getText().toString());
+            Log.d(TAG, "Data going to be validated at the time of successful date selection \n id : " + mentor_data.get("id") + ", start time : " + start_time + ", stop time :" + stop_time + " , days : " + stringBuilder1.toString() + " , start date : " + start_date.split("-")[2] + "-" + start_date.split("-")[1] + "-" + start_date.split("-")[0] + ", stop_date : " + stop_date.split("-")[2] + "-" + stop_date.split("-")[1] + "-" + stop_date.split("-")[0] + ", sub category name : " + selected_subject.toString() + "mentee address : " + et_location.getText().toString());
 
             progressDialog.show();
             NetworkClient.validateMenteeEvent(ScheduleNewClass.this, requestParams, this, 46);
 
 
-          //  Log.d(TAG, "Data going to be validated at the time of successful date selection \n id : " + mentor_data.get("id") + ", start time : " + start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00" + ", stop time :" + stop_time.split(":")[0] + ":" + stop_time.split(":")[1] + ":00 " + " , days : " + stringBuilder1.toString() + " , start date : " + tv_from_date.getText().toString() + ", stop_date : " + tv_to_date.getText().toString() + ", sub category name : " + selected_subject.toString() + "mentee address : " + et_location.getText().toString());
+            //  Log.d(TAG, "Data going to be validated at the time of successful date selection \n id : " + mentor_data.get("id") + ", start time : " + start_time.split(":")[0] + ":" + start_time.split(":")[1] + ":00" + ", stop time :" + stop_time.split(":")[0] + ":" + stop_time.split(":")[1] + ":00 " + " , days : " + stringBuilder1.toString() + " , start date : " + tv_from_date.getText().toString() + ", stop_date : " + tv_to_date.getText().toString() + ", sub category name : " + selected_subject.toString() + "mentee address : " + et_location.getText().toString());
 
             Log.d(TAG, "Can start network communication");
 
@@ -1176,12 +1223,12 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                         stringBuilder.append("Sorry, there is already a class between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + String.valueOf(start_time).replace(".", ":") + " to " + String.valueOf(stop_time).replace(".", ":") + " for " + stringBuilder1.toString() + " \n So this class cannot be scheduled!");
                         showCoincidingAlertMessage(stringBuilder.toString(), flag);
                         Log.d(TAG, "Message for coinciding class schedule : " + stringBuilder.toString());
-                    }else{
-                        if(flag == 1){
+                    } else {
+                        if (flag == 1) {
                             stringBuilder.append("Hi, your class is successfully scheduled but mentor will not be available between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + String.valueOf(start_time).replace(".", ":") + " to " + String.valueOf(stop_time).replace(".", ":") + " for " + stringBuilder1.toString() + " \n !");
                             showCoincidingAlertMessage(stringBuilder.toString(), flag);
                             Log.d(TAG, "Message for coinciding exception : " + stringBuilder.toString());
-                        }else{
+                        } else {
                             stringBuilder.append("Sorry, mentor is not available as per your desired schedule.\n You can schedule your class in between " + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + String.valueOf(start_time).replace(".", ":") + " to " + String.valueOf(stop_time).replace(".", ":") + " for " + stringBuilder1.toString());
                             showCoincidingAlertMessage(stringBuilder.toString(), flag);
                             Log.d(TAG, "Message for availability of class that can be possible to schedule : " + stringBuilder.toString());
@@ -1192,16 +1239,16 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 } else {
                     /* if condition is checking whether the flag is 0 or 1 in case of multiple coincidiing slots with no week-days, or in case of multiple coinciding exceptions  in Json string .*/
                     if (flag == 0) {
-                        stringBuilder.append("Sorry, there is already a class between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + String.valueOf(start_time).replace(".", ":") + " to " + String.valueOf(stop_time).replace(".", ":") +" \n So this class cannot be scheduled!");
+                        stringBuilder.append("Sorry, there is already a class between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + String.valueOf(start_time).replace(".", ":") + " to " + String.valueOf(stop_time).replace(".", ":") + " \n So this class cannot be scheduled!");
                         showCoincidingAlertMessage(stringBuilder.toString(), flag);
                         Log.d(TAG, "Message for coinciding class schedule : " + stringBuilder.toString());
-                    }else{
-                        if(flag == 1){
-                            stringBuilder.append("Hi, your class is successfully scheduled but mentor will not be available between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + String.valueOf(start_time).replace(".", ":") + " to " + String.valueOf(stop_time).replace(".", ":") +" !");
+                    } else {
+                        if (flag == 1) {
+                            stringBuilder.append("Hi, your class is successfully scheduled but mentor will not be available between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + String.valueOf(start_time).replace(".", ":") + " to " + String.valueOf(stop_time).replace(".", ":") + " !");
                             showCoincidingAlertMessage(stringBuilder.toString(), flag);
                             Log.d(TAG, "Message for coinciding exception : " + stringBuilder.toString());
-                        }else{
-                            stringBuilder.append("Sorry, mentor is not available as per your desired schedule.\n You can schedule your class in between " + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + String.valueOf(start_time).replace(".", ":") + " to " + String.valueOf(stop_time).replace(".", ":") +"!");
+                        } else {
+                            stringBuilder.append("Sorry, mentor is not available as per your desired schedule.\n You can schedule your class in between " + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + String.valueOf(start_time).replace(".", ":") + " to " + String.valueOf(stop_time).replace(".", ":") + "!");
                             showCoincidingAlertMessage(stringBuilder.toString(), flag);
                             Log.d(TAG, "Message for availability of class that can be possible to schedule : " + stringBuilder.toString());
                         }
@@ -1298,38 +1345,36 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                     /* if condition is checking whether the flag is 0 or 1 in case of single coinciding slot with Week-days mentioned, or in case of single coinciding exception with Week-days in Json string .*/
 
                         if (flag == 0) {
-                            stringBuilder.append("Sorry, there is already a class between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + st_time.substring(0, 5) + " for " + stringBuilder1.toString() +  " \n So this class cannot be scheduled!");
+                            stringBuilder.append("Sorry, there is already a class between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + st_time.substring(0, 5) + " for " + stringBuilder1.toString() + " \n So this class cannot be scheduled!");
                             showCoincidingAlertMessage(stringBuilder.toString(), flag);
                             Log.d(TAG, "Message for coinciding class schedule : " + stringBuilder.toString());
-                        }else{
-                            if(flag == 1){
-                                stringBuilder.append("Hi, your class is successfully scheduled but mentor will not be available between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0,5) + " to " + s_time.substring(0,5) + " for " + stringBuilder1.toString() + " \n !");
+                        } else {
+                            if (flag == 1) {
+                                stringBuilder.append("Hi, your class is successfully scheduled but mentor will not be available between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + s_time.substring(0, 5) + " for " + stringBuilder1.toString() + " \n !");
                                 showCoincidingAlertMessage(stringBuilder.toString(), flag);
                                 Log.d(TAG, "Message for coinciding exception : " + stringBuilder.toString());
-                            }else{
-                                stringBuilder.append("Sorry, mentor is not available as per your desired schedule.\n You can schedule your class in between " + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0,5) + " to " + st_time.substring(0,5)+ " for " + stringBuilder1.toString());
+                            } else {
+                                stringBuilder.append("Sorry, mentor is not available as per your desired schedule.\n You can schedule your class in between " + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + st_time.substring(0, 5) + " for " + stringBuilder1.toString());
                                 showCoincidingAlertMessage(stringBuilder.toString(), flag);
                                 Log.d(TAG, "Message for availability of class that can be possible to schedule : " + stringBuilder.toString());
                             }
                         }
 
 
-
-
                     } else {
 
                     /* if condition is checking whether the flag is 0 or 1 in case of single coinciding slot,or in case of single coinciding exception in Json string.*/
                         if (flag == 0) {
-                            stringBuilder.append("Sorry, there is already a class between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + st_time.substring(0, 5) +" \n So this class cannot be scheduled!");
+                            stringBuilder.append("Sorry, there is already a class between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + st_time.substring(0, 5) + " \n So this class cannot be scheduled!");
                             showCoincidingAlertMessage(stringBuilder.toString(), flag);
                             Log.d(TAG, "Message for coinciding class schedule : " + stringBuilder.toString());
-                        }else{
-                            if(flag == 1){
-                                stringBuilder.append("Hi, your class is successfully scheduled but mentor will not be available between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0,5) + " to " + s_time.substring(0,5) + " \n !");
+                        } else {
+                            if (flag == 1) {
+                                stringBuilder.append("Hi, your class is successfully scheduled but mentor will not be available between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + s_time.substring(0, 5) + " \n !");
                                 showCoincidingAlertMessage(stringBuilder.toString(), flag);
                                 Log.d(TAG, "Message for coinciding exception : " + stringBuilder.toString());
-                            }else{
-                                stringBuilder.append("Sorry, mentor is not available as per your desired schedule.\n You can schedule your class in between " + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0,5) + " to " + st_time.substring(0,5)+ " ! ");
+                            } else {
+                                stringBuilder.append("Sorry, mentor is not available as per your desired schedule.\n You can schedule your class in between " + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + st_time.substring(0, 5) + " ! ");
                                 showCoincidingAlertMessage(stringBuilder.toString(), flag);
                                 Log.d(TAG, "Message for availability of class that can be possible to schedule : " + stringBuilder.toString());
                             }
@@ -1360,7 +1405,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         } else {
-            if(flag == 1){
+            if (flag == 1) {
                 new AlertDialog.Builder(this)
                         .setTitle("Mentor unavailability")
                         .setMessage(message)
@@ -1372,7 +1417,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-            }else{
+            } else {
                 new AlertDialog.Builder(this)
                         .setTitle("Schedule availabilty")
                         .setMessage(message)
@@ -1545,7 +1590,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
 
                     }
-                    Toast.makeText(ScheduleNewClass.this, stringBuilder.toString() +" "+ getResources().getString(R.string.out_of_duration), Toast.LENGTH_LONG).show();
+                    Toast.makeText(ScheduleNewClass.this, stringBuilder.toString() + " " + getResources().getString(R.string.out_of_duration), Toast.LENGTH_LONG).show();
                     return false;
                 } else
                     return true;
@@ -1614,7 +1659,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     }
 
 
-
     @Override
     public void setStartInitialLimit(Object o1, Object o2, Object o3) {
 
@@ -1641,13 +1685,13 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
 
-        if(statusCode == 200){
-            Log.d(TAG,"success response : "+String.valueOf(object));
+        if (statusCode == 200) {
+            Log.d(TAG, "success response : " + String.valueOf(object));
             try {
-                JSONObject jO_response=new JSONObject(String.valueOf(object));
-                String message=jO_response.getString("message");
-                if(message.equalsIgnoreCase("success")) {
-                    Toast.makeText(ScheduleNewClass.this,"Your schedule request get submitted.",Toast.LENGTH_SHORT).show();
+                JSONObject jO_response = new JSONObject(String.valueOf(object));
+                String message = jO_response.getString("message");
+                if (message.equalsIgnoreCase("success")) {
+                    Toast.makeText(ScheduleNewClass.this, "Your schedule request get submitted.", Toast.LENGTH_SHORT).show();
                     /*Log.d(TAG,"success");
                     JSONArray jA_exceptions=jO_response.getJSONArray("coincidingExceptions");
                     if(jA_exceptions.length() > 0){
@@ -1657,8 +1701,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                     }
 */
 
-                }else {
-                    Toast.makeText(ScheduleNewClass.this,"Mentor is not available for your requested schedule.",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ScheduleNewClass.this, "Mentor is not available for your requested schedule.", Toast.LENGTH_SHORT).show();
                    /* Log.d(TAG,"failure");
                     JSONArray jA_availability=jO_response.getJSONArray("availability");
                     if(jA_availability.length() > 0){
@@ -1677,15 +1721,15 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        Log.d(TAG,"failure response : "+String.valueOf(object));
-        if(statusCode == 403){
+        Log.d(TAG, "failure response : " + String.valueOf(object));
+        if (statusCode == 403) {
             try {
-                JSONObject jO_resp=new JSONObject(String.valueOf(object));
-                String message=jO_resp.getString("message");
-                if(message.equals("Success")){
-                    Toast.makeText(ScheduleNewClass.this,"Your schedule request get submitted.",Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(ScheduleNewClass.this,"Mentor is not available for your requested schedule.",Toast.LENGTH_SHORT).show();
+                JSONObject jO_resp = new JSONObject(String.valueOf(object));
+                String message = jO_resp.getString("message");
+                if (message.equals("Success")) {
+                    Toast.makeText(ScheduleNewClass.this, "Your schedule request get submitted.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ScheduleNewClass.this, "Mentor is not available for your requested schedule.", Toast.LENGTH_SHORT).show();
                 }
                 //JSONArray jA_Coinciding_Class=jO_resoponse.getJSONArray("coincidingEvents");
 
@@ -1696,11 +1740,11 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else{
-            Toast.makeText(ScheduleNewClass.this,getResources().getString(R.string.problem_in_connection_server),Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.problem_in_connection_server), Toast.LENGTH_SHORT).show();
         }
 
 
-      //  Toast.makeText(ScheduleNewClass.this,(String)object,Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(ScheduleNewClass.this,(String)object,Toast.LENGTH_SHORT).show();
     }
 }

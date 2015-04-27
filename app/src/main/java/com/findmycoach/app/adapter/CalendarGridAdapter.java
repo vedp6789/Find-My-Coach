@@ -53,6 +53,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
     private String mentor_id;
     private String availability;
+    private String charges;
     private String mentor_address;
     private static ArrayList<Day> prev_month_data = null;
     private static ArrayList<Day> current_month_data = null;
@@ -101,7 +102,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         * This constructor is called from MyScheduleFragment
         *
         * */
-    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Day> prev_month_data, ArrayList<Day> current_month_data, ArrayList<Day> coming_month_data,String mentor_id,String availability_yn) {
+    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Day> prev_month_data, ArrayList<Day> current_month_data, ArrayList<Day> coming_month_data,String mentor_id,String availability_yn,String charges) {
         super();
         this.context = context;
         weekdays = context.getResources().getStringArray(R.array.week_days);
@@ -110,6 +111,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         this.mentorDetailsActivity = mentorDetailsActivity;
         this.mentor_id=mentor_id;
         this.availability=availability_yn;
+        this.charges=charges;
 
 
 
@@ -436,6 +438,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         Intent intent = new Intent(context, SetScheduleActivity.class);
         String s = (String) view.getTag();
 
+
         int no_of_free_slots= (int) view.getTag(1);
 
         int day = Integer.parseInt(s.split("-", 3)[0]);
@@ -456,6 +459,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         intent.putExtra("coming_month_data", coming_month_data);
         intent.putExtra("mentor_id",mentor_id);
         intent.putExtra("availability",availability);
+        intent.putExtra("charges",charges);
 
 
         //intent.putExtra("day_bean", (android.os.Parcelable) three_months_data);
@@ -487,6 +491,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
         } else {
             if (month_in_foreground == month_index_of_grid_clicked) {
+
                 context.startActivity(intent);
 
 

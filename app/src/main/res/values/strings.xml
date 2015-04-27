@@ -474,7 +474,10 @@
     <string name="email_not_registered">Email is not registered.</string>
     <string name="problem_in_connection_server">Problem connecting to server.</string>
     <string name="problem_in_url">Not updated by mentor yet.</string>
-    <string name="pick_date">Pick date</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
+    <string name="slot_type">Slot type:</string>
+    <string name="max_students">Maximum students:</string>
     <string name="fmc_service">FMC Service</string>
     <string name="fmc_service_description">FMC running in service to allow push notification.</string>
     <string name="class_schedule">Class Schedule</string>
@@ -486,7 +489,8 @@
     <string name="select_card">Select a card</string>
     <string name="child">Child</string>
     <string name="child_dob">Child Dob:</string>
-
+    <string name="individual">Individual</string>
+    <string name="group">Group</string>
 
 
     <!-- end of unique strings block-->
@@ -530,6 +534,10 @@
     <string name="class_is_available">Class is available</string>
     <string name="select_suggested_location"> Select one of the suggested locations</string>
     <string name="quantized_timing">Minute is selected as per your selected start time!</string>
+    <string name="single_student_can_schedule_class">Single student can schedule class for this slot.</string>
+    <string name="multiple_student_can_schedule_class">Multiple student can schedule class for this slot.</string>
+    <string name="maximum_students">Please provide maximum students for this group.</string>
+    <string name="end_date_required">Please provide completion date of this slot.</string>
 
 
     <!--  Minimum time difference between start time and stop time of a slot   i.e in hours-->
@@ -627,9 +635,7 @@
     <string name="starting_from">Starting from:</string>
     <string name="from_date">From:</string>
     <string name="to_date">To:</string>
-    <string name="start_date">Start date:</string>
     <string name="start_date1">Start date</string>
-    <string name="end_date">Completion date:</string>
     <string name="till">Till:</string>
     <string name="select">Select</string>
     <string name="forever">Forever</string>

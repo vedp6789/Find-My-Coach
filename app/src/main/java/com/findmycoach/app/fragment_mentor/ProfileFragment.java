@@ -177,7 +177,9 @@ public class ProfileFragment extends Fragment implements Callback {
             profileAccomplishment.setText(userInfo.getAccomplishments());
         }
         if (userInfo.getCharges() != null) {
-            profileCharges.setText("\u20B9 " + (userInfo.getCharges().equals("0") ? userInfo.getChargesClass() + "/class": userInfo.getCharges() + "/hour"));
+            //profileCharges.setText("\u20B9 " + (userInfo.getCharges().equals("0") ? userInfo.getChargesClass() + "per class": userInfo.getCharges() + "per hour"));
+            profileCharges.setText("\u20B9 " + (userInfo.getCharges().equals("0") ?userInfo.getCharges() + " per hour": userInfo.getCharges() + " per hour"));
+
         }
 
         profilePhone.setText(userInfo.getPhonenumber());

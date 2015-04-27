@@ -35,6 +35,6 @@
         android:layout_below="@+id/ll_get_phone_no"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/prompt_commit"/>
+        android:text="@string/action_save"/>
 
 </RelativeLayout>

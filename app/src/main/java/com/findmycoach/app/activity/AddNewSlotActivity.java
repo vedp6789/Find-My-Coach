@@ -13,8 +13,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +56,9 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
             cb_wed, cb_thur,
             cb_fri, cb_sat,
             cb_sun;
-
+    Spinner sp_slot_type;
+    EditText et_maximum_students;
+    LinearLayout ll_slot_maximum_students;
     public static TextView tv_start_date, tv_till_date, tv_start_time, tv_stop_time;
     boolean boo_mon_checked, boo_tue_checked,
             boo_wed_checked, boo_thurs_checked,
@@ -72,6 +79,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
     private static int start_min;
     private static int stop_hour;
     private static int stop_min;
+    private String slot_type;
+    private int maximum_students;
 
     private Date newDate;
 
@@ -107,7 +116,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
 
         time_from = getResources().getString(R.string.select);
         time_to = getResources().getString(R.string.select);
-        date_to = getResources().getString(R.string.forever);
+        date_to = getResources().getString(R.string.end_date);
 
 
         from_day = 0;
@@ -136,8 +145,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
         from_month = Integer.parseInt(current_date.substring(2, 4));
         from_year = Integer.parseInt(current_date.substring(4, 8));
         tv_start_date.setText(date_from);
-        tv_till_date.setText(getResources().getString(R.string.forever));
-        date_to = getResources().getString(R.string.forever);
+        date_to = getResources().getString(R.string.end_date);
 
         allListeners();
 
@@ -275,6 +283,41 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
             }
         });
 
+        final String[] slot_types = {getResources().getString(R.string.individual), getResources().getString(R.string.group)};
+        ArrayAdapter arrayAdapter1_slot_types = new ArrayAdapter(this, android.R.layout.simple_spinner_item, slot_types);
+        arrayAdapter1_slot_types.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_slot_type.setAdapter(arrayAdapter1_slot_types);
+        sp_slot_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                slot_type=null;
+                slot_type = (String) parent.getItemAtPosition(position);
+                if(slot_type.equals(getResources().getString(R.string.individual))){
+                    Toast.makeText(AddNewSlotActivity.this,getResources().getString(R.string.single_student_can_schedule_class),Toast.LENGTH_SHORT).show();
+
+                    maximum_students=1;
+                    if(ll_slot_maximum_students.getVisibility() == View.VISIBLE)
+                    ll_slot_maximum_students.setVisibility(View.GONE);
+
+
+                }else{
+
+                    Toast.makeText(AddNewSlotActivity.this,getResources().getString(R.string.multiple_student_can_schedule_class),Toast.LENGTH_SHORT).show();
+                    ll_slot_maximum_students.setVisibility(View.VISIBLE);
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+
+            }
+        });
+
+
+
         b_create_slot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -394,6 +437,18 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
                         }
                         Log.d(TAG, "Slot time value from AddNewSlotActivity" + slot_time_value / (60 * 60));
                         requestParams.add("slot_time_value", String.valueOf(slot_time_value));
+                        requestParams.add("slot_type",slot_type);
+                        if(slot_type.equals(getResources().getString(R.string.group))){
+                            requestParams.add("max_users",et_maximum_students.getText().toString());
+                            Log.d(TAG,"slot_type :"+ slot_type);
+                            Log.d(TAG,"max users : "+et_maximum_students.getText().toString());
+                        }else{
+                            requestParams.add("max_users",String.valueOf(maximum_students));
+                            Log.d(TAG,"slot_type :"+ slot_type);
+                            Log.d(TAG,"max users : "+maximum_students);
+
+                        }
+
                         String auth_token = StorageHelper.getUserDetails(AddNewSlotActivity.this, "auth_token");
                         progressDialog.show();
                         NetworkClient.createNewSlot(AddNewSlotActivity.this, requestParams, auth_token, new Callback() {
@@ -816,10 +871,29 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
                                 String till_date_val = tv_till_date.getText().toString();
                                 String s = getResources().getString(R.string.forever);
                                 Log.d(TAG, " till date value : " + till_date_val + " forever string from resource : " + s);
-                                if (till_date_val.equals(s)) {
-                                    return true;
+                                if (till_date_val.trim().length() > 0) {
+                                    if (checkDaysAvailability(tv_start_date.getText().toString(), tv_till_date.getText().toString())) {
+                                        Log.d(TAG,"checkDaysAvailability return true");
+                                        if (slot_type.equals(getResources().getString(R.string.group))) {
+                                            if (et_maximum_students.getText().toString().trim().length() > 0){
+                                                return true;
+                                            }else{
+                                                Toast.makeText(this,getResources().getString(R.string.maximum_students),Toast.LENGTH_SHORT).show();
+                                                return false;
+                                            }
+
+
+
+                                        }else{
+                                            return true;
+                                        }
+                                    } else {
+                                        Log.d(TAG,"checkDaysAvailability return false");
+                                        return false;
+                                    }
                                 } else {
-                                    return checkDaysAvailability(tv_start_date.getText().toString(), tv_till_date.getText().toString());
+                                    Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.end_date_required), Toast.LENGTH_SHORT).show();
+                                    return false;
                                 }
                             } else {
                                 Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_start_date_of_slot), Toast.LENGTH_SHORT).show();
@@ -833,6 +907,9 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
 
 
             }
+
+
+
 
         } else {
             Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_at_least_one_day), Toast.LENGTH_SHORT).show();
@@ -1053,7 +1130,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
         tv_till_date = (TextView) findViewById(R.id.tv_slot_till_date);
         tv_start_time = (TextView) findViewById(R.id.tv_slot_start_time);
         tv_stop_time = (TextView) findViewById(R.id.tv_slot_stop_time);
-
+        sp_slot_type= (Spinner) findViewById(R.id.sp_slot_type);
+        ll_slot_maximum_students= (LinearLayout) findViewById(R.id.ll_max_students);
+        ll_slot_maximum_students.setVisibility(View.GONE);
+        et_maximum_students= (EditText) findViewById(R.id.et_maximum_students);
         b_create_slot = (Button) findViewById(R.id.b_create_slot);
 
     }
@@ -1096,7 +1176,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
         AddNewSlotActivity.tv_start_date.setText(stringBuilder.toString());
         AddNewSlotActivity.date_from = String.valueOf(stringBuilder);
 
-        AddNewSlotActivity.tv_till_date.setText(date_to);
+        AddNewSlotActivity.tv_till_date.setText("");
     }
 
 
@@ -1104,10 +1184,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
     @Override
     public void setSelectedTillDate(Object o1, Object o2, Object o3, boolean b) {
         Log.d(TAG, o1.toString() + "/" + o2.toString() + "/" + o3.toString());
-        if (b) {
-            AddNewSlotActivity.tv_till_date.setText(getResources().getString(R.string.forever));
 
-        } else {
             int day = Integer.parseInt(o1.toString());
             AddNewSlotActivity.till_day = day;
             int month = Integer.parseInt(o2.toString());
@@ -1128,7 +1205,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
             stringBuilder.append("-" + year);
             Log.d(TAG, "till date:" + stringBuilder.toString());
             AddNewSlotActivity.tv_till_date.setText(stringBuilder.toString());
-        }
+
 
     }
 

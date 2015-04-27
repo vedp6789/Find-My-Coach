@@ -119,9 +119,14 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         last_city_selected=city;
         profileDOB.setText((String) userInfo.getDob());
         pinCode.setText((String) userInfo.getZip());
-        chargeInput.setText(userInfo.getCharges().equals("0") ? userInfo.getChargesClass() : userInfo.getCharges());
-        chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"hour","class"}));
-        chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 1 : 0);
+        /*chargeInput.setText(userInfo.getCharges().equals("0") ? userInfo.getChargesClass() : userInfo.getCharges());*/
+        /*chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"hour","class"}));
+        chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 1 : 0);*/
+
+        chargeInput.setText(userInfo.getCharges());
+        chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"hour"}));
+        chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
+
         experienceInput.setText(userInfo.getExperience());
         facebookLink.setText(userInfo.getFacebookLink());
         googlePlusLink.setText(userInfo.getGoogleLink());
@@ -451,7 +456,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             requestParams.add("zip", pinCode.getText().toString());
 
 
-            if(chargesPerUnit.getSelectedItemPosition() == 0){
+            /*if(chargesPerUnit.getSelectedItemPosition() == 0){
                 Log.i(TAG,"select charges unit : "+ chargesPerUnit.getSelectedItemPosition());
                 requestParams.add("charges", chargeInput.getText().toString());
                 requestParams.add("charges_class", "0");
@@ -459,7 +464,15 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
                 Log.i(TAG,"select charges unit : "+ chargesPerUnit.getSelectedItemPosition());
                 requestParams.add("charges", "0");
                 requestParams.add("charges_class", chargeInput.getText().toString());
+            }*/
+
+            if(chargesPerUnit.getSelectedItemPosition() == 0){
+                Log.i(TAG,"select charges unit : "+ chargesPerUnit.getSelectedItemPosition());
+                requestParams.add("charges", chargeInput.getText().toString());
+                requestParams.add("charges_class", "0");
             }
+
+
 
            /* requestParams.add("charges", chargeInput.getText().toString());
             requestParams.add("charges_unit", chargesPerUnit.getSelectedItemPosition() + "");*/
@@ -587,6 +600,8 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             progressDialog.dismiss();
             Response response = (Response) object;
             userInfo = response.getData();
+            Log.d(TAG,"success response message : in EditProfileActivity : "+response.getMessage());
+            if(!response.getMessage().equals("false"))
             Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
             Intent intent = new Intent();
             intent.putExtra("user_info", new Gson().toJson(userInfo));
@@ -606,6 +621,8 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         String message = (String) object;
         progressDialog.dismiss();
+        if(!message.equals("false"))
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        Log.d(TAG,"success response message : in EditProfileActivity : "+message );
     }
 }
