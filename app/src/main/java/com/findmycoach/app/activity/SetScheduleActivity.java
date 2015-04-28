@@ -364,15 +364,15 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                     int slot_start_day = Integer.parseInt(slot_start_date.split("-", 3)[2]);
                     int slot_start_month = Integer.parseInt(slot_start_date.split("-", 3)[1]);
                     int slot_start_year = Integer.parseInt(slot_start_date.split("-", 3)[0]);
-                    int slot_start_hour = Integer.parseInt(slot_start_time.split("-", 3)[0]);
-                    int slot_start_minute = Integer.parseInt(slot_start_time.split("-", 3)[1]);
+                    int slot_start_hour = Integer.parseInt(slot_start_time.split(":", 3)[0]);
+                    int slot_start_minute = Integer.parseInt(slot_start_time.split(":", 3)[1]);
 
 
                     int slot_stop_day = Integer.parseInt(slot_stop_date.split("-", 3)[2]);
                     int slot_stop_month = Integer.parseInt(slot_stop_date.split("-", 3)[1]);
                     int slot_stop_year = Integer.parseInt(slot_stop_date.split("-", 3)[0]);
-                    int slot_stop_hour = Integer.parseInt(slot_stop_time.split("-", 3)[0]);
-                    int slot_stop_minute = Integer.parseInt(slot_stop_time.split("-", 3)[1]);
+                    int slot_stop_hour = Integer.parseInt(slot_stop_time.split(":", 3)[0]);
+                    int slot_stop_minute = Integer.parseInt(slot_stop_time.split(":", 3)[1]);
 
 
                     /*

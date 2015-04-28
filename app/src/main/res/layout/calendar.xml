@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="450dp">
+    <LinearLayout
+        android:id="@+id/ll_calendar_week_days"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonlayout"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/calendarheader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:background="@drawable/calendar_days" />
+    </LinearLayout>
+
+    <com.findmycoach.app.util.ScrollableGridView
+        android:id="@+id/calendar_mentor_availability"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:layout_below="@+id/ll_calendar_week_days"
+        android:numColumns="7" />
+
+
+</LinearLayout>

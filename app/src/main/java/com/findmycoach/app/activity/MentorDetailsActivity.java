@@ -35,6 +35,7 @@ import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
+import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
@@ -49,7 +50,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MentorDetailsActivity extends FragmentActivity implements Callback, View.OnClickListener {
+public class MentorDetailsActivity extends FragmentActivity implements Callback {
 
     private ImageView profileImage;
     private TextView profileName;
@@ -64,7 +65,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
     private Button googleLink;
     private Button facebookLink;
     private Data userInfo = null;
-    private Button b_schedule_class;
     private String connectionStatus;
 
     JSONObject jsonObject, jsonObject_Data, jsonObject_slots;
@@ -74,7 +74,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
     private TextView tv_currentMonth;
     private ImageView iv_prevMonth;
     private ImageView iv_nextMonth;
-    private GridView calendarView;
+    private ScrollableGridView calendarView;
     private CalendarGridAdapter adapter1, adapter2, adapter3;
     private Calendar _calendar;
     protected static int month, year;
@@ -145,7 +145,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
             }
         });
 
-        calendarView = (GridView) findViewById(R.id.calendar_mentor_availability);
+        calendarView = (ScrollableGridView) findViewById(R.id.calendar_mentor_availability);
         getCalendarDetailsAPICall();    /* API call for 3 months data */
 
 
@@ -220,22 +220,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
 
     }
 
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-
-
-            case R.id.b_schedule_class:
-                Log.d(TAG, "Start Scheduling activity");
-               /* Intent intent = new Intent(MentorDetailsActivity.this, ScheduleNewClass.class);
-                intent.putExtra("fname", userInfo.getFirstName());
-                intent.putExtra("mentor_details", jsonObject.toString());
-                startActivity(intent);*/
-                break;
-
-        }
-    }
 
 
     public void showPrevMonth() {
@@ -408,19 +392,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         iv_prevMonth = (ImageView) findViewById(R.id.iv_prevMonth);
 
 
-        b_schedule_class = (Button) findViewById(R.id.b_schedule_class);
-        b_schedule_class.setOnClickListener(this);
-
-       /* Log.d(TAG, "sub category length : " + jsonArray_sub_category.length() + "");
-        if (jsonArray_sub_category.length() > 0) {
-            Log.i(TAG, "sub_category size not null");
-        }
-        if (jsonArray_sub_category.length() <= 0) {
-            Log.i(TAG, "sub_category size is null");
-        }*/
-
-        if (connectionStatus.equals("not connected") || connectionStatus.equals("pending") || jsonArray_sub_category.length() <= 0)
-            b_schedule_class.setVisibility(View.GONE);
 
 
     }
@@ -664,7 +635,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
     }
 
 

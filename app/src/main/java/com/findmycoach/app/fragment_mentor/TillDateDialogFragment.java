@@ -44,8 +44,6 @@ public class TillDateDialogFragment extends DialogFragment implements View.OnCli
                 dismiss();
                 if(addNewSlotActivity != null ){
                     addNewSlotActivity.setSelectedTillDate(day,month,year,allow_forever);
-                }else if(scheduleNewClass != null){
-                    scheduleNewClass.setSelectedTillDate(day,month,year,allow_forever);   // allow_forever i.e. fourth parameter is not being used here
                 }
 
                 break;
@@ -69,11 +67,9 @@ public class TillDateDialogFragment extends DialogFragment implements View.OnCli
 //            date=scheduleNewClass.getTillInitialLimit();
 //        }
         allow_forever=false;
+        date = addNewSlotActivity.getTillInitialLimit();
 
-        if(addNewSlotActivity == null)
-            date = scheduleNewClass.getTillInitialLimit();
-        else
-            date = addNewSlotActivity.getTillInitialLimit();
+
         calendar = Calendar.getInstance();
         calendar.set(date[2], date[1], date[0], 0, 0, 0);
         time = calendar.getTimeInMillis();

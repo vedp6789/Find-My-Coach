@@ -50,9 +50,7 @@ public class StartDateDialogFragment extends DialogFragment implements View.OnCl
                     addNewSlotActivity.setSelectedStartDate(day, month, year);
                 }
 
-                if(scheduleNewClass != null){
-                    scheduleNewClass.setSelectedStartDate(day, month, year);
-                }
+
 
 
 
