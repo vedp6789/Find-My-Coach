@@ -369,11 +369,12 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             if (!session.isClosed()) {
                 session.closeAndClearTokenInformation();
             }
-        } else {
-            session = new Session(this);
-            Session.setActiveSession(session);
-            session.closeAndClearTokenInformation();
         }
+//        else {
+//            session = new Session(this);
+//            Session.setActiveSession(session);
+//            session.closeAndClearTokenInformation();
+//        }
     }
 
     /**
@@ -430,7 +431,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                     isValid = true;
                 }
 
-                /** If email number is null or invalid */
+                /** If email is null or invalid */
                 if (email.equals("") || !isValid) {
                     emailET.setError(getResources().getString(R.string.enter_valid_email));
                     new Handler().postDelayed(new Runnable() {
