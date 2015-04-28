@@ -62,7 +62,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
 
     int year = 1990, month = 1, day = 1;
     int REQUEST_CODE = 100;
-    private TextView dateOfBirthInput;
     private ImageView profilePicture;
     private TextView profileEmail;
     private TextView profilePhone;
@@ -186,7 +185,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
 
     private void initialize() {
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
-        dateOfBirthInput = (TextView) findViewById(R.id.input_date_of_birth);
         profileGender = (Spinner) findViewById(R.id.input_gender);
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
@@ -589,8 +587,8 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
     }
 
     private void showDate(int year, int month, int day) {
-        dateOfBirthInput.setText(new StringBuilder().append(year).append("-")
-                .append(month).append("-").append(day));
+        profileDOB.setText(new StringBuilder().append(day).append("-")
+                .append(month).append("-").append(year));
     }
 
 

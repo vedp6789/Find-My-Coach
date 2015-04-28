@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string-array name="coaching_type">
+        <item>Individual</item>
+        <item>Multiple</item>
+    </string-array>
+
     <string-array name="year_of_experience">
         <item>Select</item>
         <item>1</item>
