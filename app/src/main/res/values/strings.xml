@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string-array name="year_of_experience">
+        <item>Select</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+    </string-array>
+
     <!-- Countries -->
 
     <string-array name="countries">
@@ -621,7 +640,7 @@
     <string name="prompt_pin">Pin Code</string>
     <string name="prompt_passion">Passion</string>
     <string name="prompt_profession">Profession</string>
-    <string name="prompt_accomplishment">Accomplishment</string>
+    <string name="prompt_accomplishment">Qualification</string>
     <string name="prompt_willing_to_travel">Available to travel trainee location</string>
     <string name="prompt_charges">Charges</string>
     <string name="prompt_experience">Experience</string>

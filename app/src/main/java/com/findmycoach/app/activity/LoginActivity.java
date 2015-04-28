@@ -848,7 +848,10 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             else {
                 Log.e(TAG, response.getData().getNewUser() + " : " + response.getData().getId());
                 /** Saving phone number for validating purpose and starting ValidatePhoneActivity */
-                saveUserPhoneNumber(response.getData().getPhonenumber());
+                try {
+                    saveUserPhoneNumber(response.getData().getPhonenumber().split("-")[1]);
+                } catch (Exception ignored) {
+                }
                 Intent intent = new Intent(this, ValidatePhoneActivity.class);
                 finish();
                 startActivity(intent);

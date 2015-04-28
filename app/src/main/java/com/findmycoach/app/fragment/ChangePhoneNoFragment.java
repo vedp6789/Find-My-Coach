@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,7 +31,7 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
     Spinner sp_country_code;
     EditText et_mobile_no;
     Button b_reset_mobile_no;
-    private String country_code = "Select";
+    private String[] country_code;
     private String phone_number;
     private ProgressDialog progressDialog;
     private final String TAG = "FMC";
@@ -42,12 +41,12 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
         switch (v.getId()) {
             case R.id.b_commit:
                 if (validate()) {
-
+                    String countryCode = sp_country_code.getSelectedItem().toString().split(",")[0].trim();
                     RequestParams requestParams = new RequestParams();
                     requestParams.add("user_group", StorageHelper.getUserGroup(getActivity(), "user_group"));
-                    Log.d(TAG, "Phone no. to get update : " + country_code.split(",", 2)[0] + phone_number);
+                    Log.d(TAG, "Phone no. to get update : " + countryCode + "-" + phone_number);
                     requestParams.add("email", StorageHelper.getUserDetails(getActivity(), "user_email"));
-                    requestParams.add("phone_number", country_code.split(",", 2)[0] + phone_number);
+                    requestParams.add("phone_number", countryCode + "-" + phone_number);
                     progressDialog.show();
                     NetworkClient.setNewPhoneNumber(getActivity(), requestParams, this, 45);
                 }
@@ -56,7 +55,7 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
 
     private boolean validate() {
         phone_number = et_mobile_no.getText().toString();
-        if (country_code.equals(getResources().getString(R.string.select))) {
+        if (sp_country_code.getSelectedItem().toString().contains("Select")) {
             Toast.makeText(getActivity(), getResources().getString(R.string.select_country_code), Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -97,23 +96,12 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
         b_reset_mobile_no = (Button) view.findViewById(R.id.b_commit);
         b_reset_mobile_no.setOnClickListener(this);
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.country_codes));
+        country_code = getResources().getStringArray(R.array.country_codes);
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, country_code);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_country_code.setAdapter(arrayAdapter);
         int index_to_show = getCountryZipCode();
-
-
-        sp_country_code.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                country_code = (String) parent.getItemAtPosition(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         sp_country_code.setSelection(index_to_show);
 

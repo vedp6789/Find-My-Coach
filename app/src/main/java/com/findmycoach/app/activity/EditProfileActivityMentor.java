@@ -73,10 +73,9 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
     private EditText profileAddress;
     private AutoCompleteTextView profileAddress1;
     private EditText pinCode;
-    private EditText profession;
     private EditText accomplishment;
     private EditText chargeInput;
-    private EditText experienceInput;
+    private Spinner experienceInput;
     private EditText facebookLink;
     private EditText googlePlusLink;
     private CheckBox isReadyToTravel;
@@ -127,7 +126,11 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"hour"}));
         chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
 
-        experienceInput.setText(userInfo.getExperience());
+        try{
+            experienceInput.setSelection(Integer.parseInt(userInfo.getExperience()));
+        }catch (Exception e){
+            experienceInput.setSelection(0);
+        }
         facebookLink.setText(userInfo.getFacebookLink());
         googlePlusLink.setText(userInfo.getGoogleLink());
         if(userInfo.getGender() != null){
@@ -138,9 +141,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         }
         if (userInfo.getAccomplishments() != null) {
             accomplishment.setText(userInfo.getAccomplishments());
-        }
-        if (userInfo.getProfession() != null) {
-            profession.setText(userInfo.getProfession());
         }
         if (userInfo.getAvailabilityYn().equals("1")) {
             isReadyToTravel.setChecked(true);
@@ -199,9 +199,10 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         facebookLink = (EditText) findViewById(R.id.input_facebook);
         googlePlusLink = (EditText) findViewById(R.id.input_google_plus);
         chargeInput = (EditText) findViewById(R.id.input_charges);
-        profession = (EditText) findViewById(R.id.input_profession);
         accomplishment = (EditText) findViewById(R.id.input_accomplishment);
-        experienceInput = (EditText) findViewById(R.id.input_experience);
+        experienceInput = (Spinner) findViewById(R.id.input_experience);
+        experienceInput.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1,
+                getResources().getStringArray(R.array.year_of_experience)));
         isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
         updateAction = (Button) findViewById(R.id.button_update);
         chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
@@ -477,8 +478,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
            /* requestParams.add("charges", chargeInput.getText().toString());
             requestParams.add("charges_unit", chargesPerUnit.getSelectedItemPosition() + "");*/
 
-            requestParams.add("experience", experienceInput.getText().toString());
-            requestParams.add("profession", profession.getText().toString());
+            requestParams.add("experience", experienceInput.getSelectedItemPosition() + "");
             requestParams.add("accomplishments", accomplishment.getText().toString());
             requestParams.add("google_link", googlePlusLink.getText().toString());
             requestParams.add("facebook_link", facebookLink.getText().toString());

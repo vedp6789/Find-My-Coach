@@ -40,7 +40,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView profileName;
     private TextView profileAddress;
     private TextView profileRatting;
-    private TextView profileProfession;
+    private TextView profileExperience;
     private TextView profileAccomplishment;
     private TextView profileCharges;
     private TextView areaOfCoaching;
@@ -95,7 +95,7 @@ public class ProfileFragment extends Fragment implements Callback {
         profileName = (TextView) view.findViewById(R.id.profile_name);
         profileAddress = (TextView) view.findViewById(R.id.profile_address);
         profileRatting = (TextView) view.findViewById(R.id.profile_rating);
-        profileProfession = (TextView) view.findViewById(R.id.profile_profession);
+        profileExperience = (TextView) view.findViewById(R.id.profile_experience);
         profileAccomplishment = (TextView) view.findViewById(R.id.profile_accomplishment);
         profileCharges = (TextView) view.findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) view.findViewById(R.id.profile_travel_available);
@@ -170,11 +170,11 @@ public class ProfileFragment extends Fragment implements Callback {
             address = address + userInfo.getZip();
         }
         profileAddress.setText(address);
-        if (userInfo.getProfession() != null) {
-            profileProfession.setText(userInfo.getProfession());
-        }
         if (userInfo.getAccomplishments() != null) {
             profileAccomplishment.setText(userInfo.getAccomplishments());
+        }
+        if (userInfo.getExperience() != null) {
+            profileExperience.setText(userInfo.getExperience() + " year(s)");
         }
         if (userInfo.getCharges() != null) {
             //profileCharges.setText("\u20B9 " + (userInfo.getCharges().equals("0") ? userInfo.getChargesClass() + "per class": userInfo.getCharges() + "per hour"));
