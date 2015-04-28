@@ -427,6 +427,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             progressDialog.dismiss();
             Intent intent = new Intent(this, MentorDetailsActivity.class);
             intent.putExtra("mentorDetails", (String) object);
+            intent.putExtra("searched_keyword", "-1");
             startActivityForResult(intent, PROFILE_DETAILS);
             isGettingProfile = false;
             return;
