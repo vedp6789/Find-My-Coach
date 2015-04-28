@@ -51,6 +51,7 @@ import java.util.TreeSet;
  * Created by praka_000 on 3/4/2015.
  */
 public class ScheduleNewClass extends Activity implements Button.OnClickListener {
+
     private LinearLayout ll_child_dob;
     public static TextView tv_child_dob;
     private static TextView tv_from_date, tv_to_date;
@@ -58,13 +59,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     CheckBox cb_mon, cb_tue, cb_wed, cb_thu, cb_fri, cb_sat, cb_sun;
     EditText et_location;
     RadioButton rb_pay_now, rb_pay_personally;
-    private boolean dates_valid = false;
     private static Button b_payment;
     private final String TAG = "FMC";
-    private ArrayList<String> sub_category_name, slot_timings;
-    private String selected_time, selected_subject, selected_mentor_for;
-    private JSONArray jsonArray;
-    private static String mentor_availability;
+    private String selected_mentor_for;
     RequestParams requestParams;
     private ProgressDialog progressDialog;
     public static String child_DOB = null;
@@ -87,8 +84,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
 
     private void populateFields() {
-        sub_category_name = new ArrayList<String>();
-
 
 
 
