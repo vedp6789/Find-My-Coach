@@ -1,7 +1,6 @@
 package com.findmycoach.app.activity;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -9,18 +8,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -39,6 +33,7 @@ import com.findmycoach.app.beans.mentor.Response;
 import com.findmycoach.app.fragment.CustomDatePickerFragment;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
@@ -384,6 +379,15 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         Log.d(TAG,"json data :" +jsonData);
         Response mentorDetails = new Gson().fromJson(jsonData, Response.class);
         userInfo = mentorDetails.getData();
+
+        String searchedKeyWord = getIntent().getStringExtra("searched_keyword");
+        if(searchedKeyWord != null && !searchedKeyWord.equals("-1")){
+            searchedKeyWord = DataBase.singleton(this).getSubCategory(searchedKeyWord);
+            List<String> newSubCategory = new ArrayList<String>();
+            newSubCategory.add(searchedKeyWord);
+            userInfo.setSubCategoryName(newSubCategory);
+        }
+
         profileImage = (ImageView) findViewById(R.id.profile_image);
         profileName = (TextView) findViewById(R.id.profile_name);
         profileAddress = (TextView) findViewById(R.id.profile_address);
@@ -626,8 +630,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
             intent.putExtra("connectionStatus", calledApiValue == 17 ? "pending" : "broken");
             setResult(RESULT_OK, intent);
             finish();
+            Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
         }
-        Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
 
         switch (calledApiValue) {
             case 37:
