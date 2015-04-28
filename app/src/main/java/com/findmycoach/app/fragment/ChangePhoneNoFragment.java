@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.facebook.Request;
 import com.findmycoach.app.R;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
@@ -29,39 +28,44 @@ import com.loopj.android.http.RequestParams;
 /**
  * Created by ved on 18/3/15.
  */
-public class ChangePhoneNoFragment extends DialogFragment implements View.OnClickListener ,Callback{
+public class ChangePhoneNoFragment extends DialogFragment implements View.OnClickListener, Callback {
     Spinner sp_country_code;
     EditText et_mobile_no;
     Button b_reset_mobile_no;
-    private String country_code="Select";
+    private String country_code = "Select";
     private String phone_number;
-private ProgressDialog progressDialog;
-    private final String TAG="FMC";
+    private ProgressDialog progressDialog;
+    private final String TAG = "FMC";
+
     @Override
     public void onClick(View v) {
-switch (v.getId()){
-    case R.id.b_commit:
-        if(validate()){
+        switch (v.getId()) {
+            case R.id.b_commit:
+                if (validate()) {
 
-            RequestParams requestParams=new RequestParams();
-            requestParams.add("user_group",StorageHelper.getUserGroup(getActivity(),"user_group"));
-            Log.d(TAG, "Phone no. to get update : " + country_code.split(",", 2)[0] + phone_number);
-            requestParams.add("email",StorageHelper.getUserDetails(getActivity(),"user_email"));
-            requestParams.add("phone_number", country_code.split(",", 2)[0] + phone_number);
-            progressDialog.show();
-            NetworkClient.setNewPhoneNumber(getActivity(),requestParams,this,45);
+                    RequestParams requestParams = new RequestParams();
+                    requestParams.add("user_group", StorageHelper.getUserGroup(getActivity(), "user_group"));
+                    Log.d(TAG, "Phone no. to get update : " + country_code.split(",", 2)[0] + phone_number);
+                    requestParams.add("email", StorageHelper.getUserDetails(getActivity(), "user_email"));
+                    requestParams.add("phone_number", country_code.split(",", 2)[0] + phone_number);
+                    progressDialog.show();
+                    NetworkClient.setNewPhoneNumber(getActivity(), requestParams, this, 45);
+                }
         }
-}
     }
 
     private boolean validate() {
-        phone_number=et_mobile_no.getText().toString();
-        if(country_code.equals(getResources().getString(R.string.select))){
-            Toast.makeText(getActivity(),getResources().getString(R.string.select_country_code),Toast.LENGTH_SHORT).show();
+        phone_number = et_mobile_no.getText().toString();
+        if (country_code.equals(getResources().getString(R.string.select))) {
+            Toast.makeText(getActivity(), getResources().getString(R.string.select_country_code), Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(phone_number.equals("")){
-            showErrorMessage(et_mobile_no,getResources().getString(R.string.error_field_required));
+        if (phone_number.equals("")) {
+            showErrorMessage(et_mobile_no, getResources().getString(R.string.error_field_required));
+            return false;
+        }
+        if (phone_number.equals(phone_number.length() < 8)) {
+            showErrorMessage(et_mobile_no, getResources().getString(R.string.enter_valid_phone_no));
             return false;
         }
         return true;
@@ -80,20 +84,20 @@ switch (v.getId()){
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        progressDialog=new ProgressDialog(getActivity());
+        progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_reset_phone_no,container,false);
-        sp_country_code= (Spinner) view.findViewById(R.id.sp_country_code);
-        et_mobile_no= (EditText) view.findViewById(R.id.et_new_phone_no);
-        b_reset_mobile_no= (Button) view.findViewById(R.id.b_commit);
+        View view = inflater.inflate(R.layout.fragment_reset_phone_no, container, false);
+        sp_country_code = (Spinner) view.findViewById(R.id.sp_country_code);
+        et_mobile_no = (EditText) view.findViewById(R.id.et_new_phone_no);
+        b_reset_mobile_no = (Button) view.findViewById(R.id.b_commit);
         b_reset_mobile_no.setOnClickListener(this);
 
-        ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.country_codes));
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.country_codes));
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_country_code.setAdapter(arrayAdapter);
         int index_to_show = getCountryZipCode();
@@ -102,7 +106,7 @@ switch (v.getId()){
         sp_country_code.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                country_code= (String) parent.getItemAtPosition(position);
+                country_code = (String) parent.getItemAtPosition(position);
             }
 
             @Override
@@ -116,7 +120,7 @@ switch (v.getId()){
         Dialog dialog = getDialog();
         dialog.setTitle(getString(R.string.change_phone));
         dialog.setCanceledOnTouchOutside(true);
-       return view;
+        return view;
     }
 
     public int getCountryZipCode() {
@@ -136,14 +140,14 @@ switch (v.getId()){
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        Toast.makeText(getActivity(), (String) object,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
         dismiss();
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        Toast.makeText(getActivity(), (String) object,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
         dismiss();
     }
 }
