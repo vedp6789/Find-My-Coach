@@ -20,6 +20,7 @@ import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -55,6 +56,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private String mentor_id;
     private String availability;
     private String charges;
+    private ArrayList<String> arrayList_subcategory=null;
     private String mentor_address;
     private static ArrayList<Day> prev_month_data = null;
     private static ArrayList<Day> current_month_data = null;
@@ -103,7 +105,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         * This constructor is called from MyScheduleFragment
         *
         * */
-    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Day> prev_month_data, ArrayList<Day> current_month_data, ArrayList<Day> coming_month_data, String mentor_id, String availability_yn, String charges) {
+    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Day> prev_month_data, ArrayList<Day> current_month_data, ArrayList<Day> coming_month_data, String mentor_id, String availability_yn, String charges,ArrayList<String> arraylist_subcategory) {
         super();
         this.context = context;
         weekdays = context.getResources().getStringArray(R.array.week_days);
@@ -113,6 +115,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         this.mentor_id = mentor_id;
         this.availability = availability_yn;
         this.charges = charges;
+        this.arrayList_subcategory=arraylist_subcategory;
 
 
         Calendar calendar = Calendar.getInstance();
@@ -465,6 +468,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         intent.putExtra("mentor_id", mentor_id);
         intent.putExtra("availability", availability);
         intent.putExtra("charges", charges);
+        intent.putStringArrayListExtra("arrayList_category",arrayList_subcategory);
 
 
         //intent.putExtra("day_bean", (android.os.Parcelable) three_months_data);
@@ -497,7 +501,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         } else {
             if (month_in_foreground == month_index_of_grid_clicked) {
                 if (no_of_free_slots <=0 ){
-                    Toast.makeText(context,"Mentor is not free on this day. ",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,context.getResources().getString(R.string.mentor_is_not_free),Toast.LENGTH_SHORT).show();
                 }else{
                     context.startActivity(intent);
 

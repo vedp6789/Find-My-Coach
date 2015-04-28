@@ -68,6 +68,24 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     Bundle bundle;
     Calendar calendar_current_date;
 
+    private Long slot_id;
+    private String mentor_id;
+    private String mentor_availability;
+    private int slot_start_day;
+    private int slot_start_month;
+    private int slot_start_year;
+    private int slot_stop_day;
+    private int slot_stop_month;
+    private int slot_stop_year;
+    private int slot_start_hour;
+    private int slot_start_minute;
+    private int slot_stop_hour;
+    private int slot_stop_minute;
+    private ArrayList<String> arrayList_subcategory=null;
+    private String [] slot_on_week_days;
+    private String charges;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +102,23 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     }
 
     private void finalizeDateTimeAndCharges() {
-       // slot_start_date=
+        slot_id=bundle.getLong("slot_id");
+        mentor_id=bundle.getString("mentor_id");
+        mentor_availability=bundle.getString("mentor_availability");
+        slot_start_day=bundle.getInt("slot_start_day");
+        slot_start_month=bundle.getInt("slot_start_month");
+        slot_start_year=bundle.getInt("slot_start_year");
+        slot_stop_day=bundle.getInt("slot_stop_day");
+        slot_stop_month=bundle.getInt("slot_stop_month");
+        slot_stop_year=bundle.getInt("slot_stop_year");
+        slot_start_hour=bundle.getInt("slot_start_hour");
+        slot_start_minute=bundle.getInt("slot_start_minute");
+        slot_stop_hour=bundle.getInt("slot_stop_hour");
+        slot_stop_minute=bundle.getInt("slot_stop_minute");
+        slot_on_week_days=bundle.getStringArray("slot_on_week_days");
+        charges=bundle.getString("charges");
+        arrayList_subcategory=bundle.getStringArrayList("arrayList_sub_category");
+
     }
 
 

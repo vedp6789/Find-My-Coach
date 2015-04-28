@@ -93,12 +93,14 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private String charges;
 
     private static final String TAG = "FMC";
+    private ArrayList<String> array_list_subCategory=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mentor_details);
         Log.d(TAG, "inside mentor details acitivity");
+        array_list_subCategory=new ArrayList<String>();
         initialize();
         mentorDetailsActivity = this;
         Log.d(TAG, connectionStatus);
@@ -373,6 +375,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             newSubCategory.add(searchedKeyWord);
             userInfo.setSubCategoryName(newSubCategory);
         }
+
+        array_list_subCategory= (ArrayList<String>) userInfo.getSubCategoryName();
 
         profileImage = (ImageView) findViewById(R.id.profile_image);
         profileName = (TextView) findViewById(R.id.profile_name);
@@ -856,7 +860,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             Log.d(TAG, "previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
             if (b_three_months_data) {   /*  program will come in this scope when user selects date from dialog i.e. user randomly selects a year and month */
                 Log.d(TAG, "Three months data get changed");
-                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, userInfo.getId(), userInfo.getAvailabilityYn(), charges);
+                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, userInfo.getId(), userInfo.getAvailabilityYn(), charges,array_list_subCategory);
                 calendarView.setAdapter(adapter1);
                 adapter1.notifyDataSetChanged();
                 if (month_from_dialog == 0 && year_from_dialog == 0) {
@@ -865,7 +869,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
             } else {
                 Log.d(TAG, "three months data population");
-                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, userInfo.getId(), userInfo.getAvailabilityYn(), charges);
+                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, userInfo.getId(), userInfo.getAvailabilityYn(), charges,array_list_subCategory);
                 calendarView.setAdapter(adapter1);
                 adapter1.notifyDataSetChanged();
             }
@@ -966,7 +970,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 Log.d(TAG, "date from new comingMonthArrayList" + day1.getDate());
             }
 
-            adapter2 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, userInfo.getId(), userInfo.getAvailabilityYn(), charges);
+            adapter2 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, userInfo.getId(), userInfo.getAvailabilityYn(), charges,array_list_subCategory);
             _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
             tv_currentMonth.setText(DateFormat.format(dateTemplate,
                     _calendar.getTime()));
@@ -1059,7 +1063,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 previousMonthArrayList.add(day1);
 
             }
-            adapter3 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, userInfo.getId(), userInfo.getAvailabilityYn(), charges);
+            adapter3 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, userInfo.getId(), userInfo.getAvailabilityYn(), charges,array_list_subCategory);
             _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
             tv_currentMonth.setText(DateFormat.format(dateTemplate,
                     _calendar.getTime()));

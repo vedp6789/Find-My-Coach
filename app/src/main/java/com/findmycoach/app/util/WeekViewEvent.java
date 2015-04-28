@@ -1,5 +1,6 @@
 package com.findmycoach.app.util;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -28,6 +29,11 @@ public class WeekViewEvent {
     private String mentor_availablity;
     private String [] slot_on_week_days;
     private String charges;
+    private ArrayList<String> arrayList_sub_category;
+
+    public ArrayList<String> getArrayList_sub_category() {
+        return arrayList_sub_category;
+    }
 
     public String getCharges() {
         return charges;
@@ -250,7 +256,7 @@ public class WeekViewEvent {
      * Initializes the event for week view, this week-view will display free slots available and mentee can select one free slot for his schedule request with mentor.
      */
 
-    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime, int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_day, int slot_stop_month, int slot_stop_year, int slot_start_hour, int slot_start_minute, int slot_stop_hour, int slot_stop_minute, String slot_type,String [] slot_on_week_days, String mentor_id, String mentor_availability,int free_slot_event_type,String charges) {
+    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime, int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_day, int slot_stop_month, int slot_stop_year, int slot_start_hour, int slot_start_minute, int slot_stop_hour, int slot_stop_minute, String slot_type,String [] slot_on_week_days, String mentor_id, String mentor_availability,int free_slot_event_type,String charges,ArrayList<String> arrayList_sub_category) {
         this.mId = id;
         this.mName = name;
         this.mStartTime = startTime;
@@ -271,6 +277,7 @@ public class WeekViewEvent {
         this.mentor_availablity = mentor_availability;
         this.eventType=free_slot_event_type;
         this.charges=charges;
+        this.arrayList_sub_category=arrayList_sub_category;
 
     }
 
