@@ -40,6 +40,7 @@ import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
+import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
@@ -173,6 +174,30 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
         updateAction = (Button) findViewById(R.id.button_update);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
+
+        if (userInfo.getAddress().toString().trim().equals("")) {
+            try {
+                Address fullAddress = NetworkManager.getFullAddres(this);
+                if (fullAddress != null) {
+                    int len = fullAddress.getMaxAddressLineIndex() - 1;
+                    StringBuilder address = new StringBuilder();
+                    for (int i = 0; i < len; i++) {
+                        address.append(fullAddress.getAddressLine(i));
+                        if (i != len - 1)
+                            address.append(", \n");
+                    }
+                    if (!address.toString().replace(",", "").trim().equals(""))
+                        userInfo.setAddress(address.toString());
+                    if (fullAddress.getLocality() != null || fullAddress.getAdminArea() != null)
+                        userInfo.setCity(fullAddress.getLocality() + ", " + fullAddress.getAdminArea());
+                    String zip = fullAddress.getPostalCode();
+                    if (zip != null)
+                        userInfo.setZip(zip);
+                }
+            } catch (Exception ignored) {
+            }
+        }
+
         applyAction();
     }
 
@@ -211,37 +236,36 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
                 city = arrayAdapter.getItem(position).toString();
                 last_city_selected = city;
 
-                Geocoder geocoder=new Geocoder(EditProfileActivityMentee.this, Locale.getDefault());
+                Geocoder geocoder = new Geocoder(EditProfileActivityMentee.this, Locale.getDefault());
                 try {
-                    ArrayList<Address> addresses= (ArrayList<Address>) geocoder.getFromLocationName(city.toString(),1);
-                    Address address=addresses.get(0);
-                    Log.i(TAG,"address according to Geo coder : "+"\n postal code : "+address.getPostalCode()+"\n country name : "+address.getCountryName()+"\n address line 0 : "+address.getAddressLine(0)+ "\n address line 1 : "+address.getAddressLine(1));
-                    for(int i=0 ; i < address.getMaxAddressLineIndex();i++){
-                        Log.i(TAG,"address line "+ i +" : "+address.getAddressLine(i));
+                    ArrayList<Address> addresses = (ArrayList<Address>) geocoder.getFromLocationName(city.toString(), 1);
+                    Address address = addresses.get(0);
+                    Log.i(TAG, "address according to Geo coder : " + "\n postal code : " + address.getPostalCode() + "\n country name : " + address.getCountryName() + "\n address line 0 : " + address.getAddressLine(0) + "\n address line 1 : " + address.getAddressLine(1));
+                    for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                        Log.i(TAG, "address line " + i + " : " + address.getAddressLine(i));
                     }
-                    Log.i(TAG,"address locality " + address.getLocality() + "latitude : "+ address.getLatitude()+ "longitude : "+ address.getLongitude());
+                    Log.i(TAG, "address locality " + address.getLocality() + "latitude : " + address.getLatitude() + "longitude : " + address.getLongitude());
 
 
-                    double latitude=address.getLatitude();
-                    double longitude=address.getLongitude();
+                    double latitude = address.getLatitude();
+                    double longitude = address.getLongitude();
 
-                    final ArrayList<Double> doubles=new ArrayList<Double>();
+                    final ArrayList<Double> doubles = new ArrayList<Double>();
                     doubles.add(latitude);
                     doubles.add(longitude);
 
 
-
-                    new AsyncTask<ArrayList,Void,String>(){
+                    new AsyncTask<ArrayList, Void, String>() {
 
                         @Override
                         protected String doInBackground(ArrayList... params) {
-                            ArrayList<Double> doubles1=params[0];
+                            ArrayList<Double> doubles1 = params[0];
                             XPath xpath = XPathFactory.newInstance().newXPath();
                             String expression = "//GeocodeResponse/result/address_component[type=\"postal_code\"]/long_name/text()";
-                            Log.d(TAG,"lat in async "+doubles1.get(0));
-                            Log.d(TAG,"long in async "+doubles1.get(1));
+                            Log.d(TAG, "lat in async " + doubles1.get(0));
+                            Log.d(TAG, "long in async " + doubles1.get(1));
 
-                            InputSource inputSource = new InputSource("https://maps.googleapis.com/maps/api/geocode/xml?latlng="+doubles1.get(0)+","+doubles1.get(1)+"&sensor=true");
+                            InputSource inputSource = new InputSource("https://maps.googleapis.com/maps/api/geocode/xml?latlng=" + doubles1.get(0) + "," + doubles1.get(1) + "&sensor=true");
                             String zipcode = null;
                             try {
                                 zipcode = (String) xpath.evaluate(expression, inputSource, XPathConstants.STRING);
@@ -250,7 +274,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
                             }
 
 
-                            Log.i(TAG,"zip code 1 : "+ zipcode);
+                            Log.i(TAG, "zip code 1 : " + zipcode);
 
 
                             return zipcode;
@@ -260,20 +284,15 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
                         @Override
                         protected void onPostExecute(String s) {
                             super.onPostExecute(s);
-                            if(s != null){
+                            if (s != null) {
                                 pinCode.setText(s);
-                            }else{
+                            } else {
                                 pinCode.setText("");
                             }
 
 
                         }
                     }.execute(doubles);
-
-
-
-
-
 
 
                 } catch (IOException e) {
@@ -382,18 +401,14 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             }
         }
 
-        if(areasOfInterest.getText().toString().trim().equals("")){
-            showErrorMessage(areasOfInterest,getResources().getString(R.string.error_field_required));
-            Toast.makeText(EditProfileActivityMentee.this,getResources().getString(R.string.please_add_area_of_interest),Toast.LENGTH_SHORT).show();
+        if (areasOfInterest.getText().toString().trim().equals("")) {
+            showErrorMessage(areasOfInterest, getResources().getString(R.string.error_field_required));
+            Toast.makeText(EditProfileActivityMentee.this, getResources().getString(R.string.please_add_area_of_interest), Toast.LENGTH_SHORT).show();
             return false;
         }
 
 
-
         return true;
-
-
-
 
 
     }
@@ -545,7 +560,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             setResult(Activity.RESULT_OK, intent);
             finish();
 
-            if (newUser != null && newUser.contains(userInfo.getId())){
+            if (newUser != null && newUser.contains(userInfo.getId())) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.remove(getResources().getString(R.string.new_user));

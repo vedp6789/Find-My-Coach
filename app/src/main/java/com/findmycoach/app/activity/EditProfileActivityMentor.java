@@ -41,6 +41,7 @@ import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
+import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
@@ -85,9 +86,9 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
     private Data userInfo;
     private String imageInBinary = "";
     ArrayAdapter<String> arrayAdapter;
-    private String city=null;
-    private String last_city_selected=null;
-    private String TAG="FMC";
+    private String city = null;
+    private String last_city_selected = null;
+    private String TAG = "FMC";
     private String newUser;
 
     @Override
@@ -114,8 +115,8 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         profileLastName.setText(userInfo.getLastName());
         profileAddress.setText((String) userInfo.getAddress());
         profileAddress1.setText((String) userInfo.getCity());
-        city=(String)userInfo.getCity();                 /* city string initially set to the city i.e. earlier get updated*/
-        last_city_selected=city;
+        city = (String) userInfo.getCity();                 /* city string initially set to the city i.e. earlier get updated*/
+        last_city_selected = city;
         profileDOB.setText((String) userInfo.getDob());
         pinCode.setText((String) userInfo.getZip());
         /*chargeInput.setText(userInfo.getCharges().equals("0") ? userInfo.getChargesClass() : userInfo.getCharges());*/
@@ -126,15 +127,15 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"hour"}));
         chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
 
-        try{
+        try {
             experienceInput.setSelection(Integer.parseInt(userInfo.getExperience()));
-        }catch (Exception e){
+        } catch (Exception e) {
             experienceInput.setSelection(0);
         }
         facebookLink.setText(userInfo.getFacebookLink());
         googlePlusLink.setText(userInfo.getGoogleLink());
-        if(userInfo.getGender() != null){
-            if(userInfo.getGender().equals("M"))
+        if (userInfo.getGender() != null) {
+            if (userInfo.getGender().equals("M"))
                 profileGender.setSelection(0);
             else
                 profileGender.setSelection(1);
@@ -148,9 +149,9 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             isReadyToTravel.setChecked(false);
         }
 
-        try{
+        try {
             List<String> areaOfInterests = userInfo.getSubCategoryName();
-            if (areaOfInterests.size() > 0 && areaOfInterests.get(0)!=null && !areaOfInterests.get(0).equals(" ")) {
+            if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).equals(" ")) {
                 String areaOfInterest = "";
                 for (int index = 0; index < areaOfInterests.size(); index++) {
                     if (index != 0) {
@@ -161,7 +162,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
                 }
                 areaOfCoaching.setText(areaOfInterest);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -171,7 +172,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
                 String interests = areaOfCoaching.getText().toString();
                 Log.d("FMC", "Area of Interests:" + interests);
                 Intent intent = new Intent(getApplicationContext(), AreasOfInterestActivity.class);
-                if(!interests.trim().equals(""))
+                if (!interests.trim().equals(""))
                     intent.putExtra("interests", interests);
                 startActivityForResult(intent, 500);
             }
@@ -209,6 +210,30 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         areaOfCoaching = (TextView) findViewById(R.id.input_areas_of_coaching);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
+
+        if (userInfo.getAddress().toString().trim().equals("")) {
+            try {
+                Address fullAddress = NetworkManager.getFullAddres(this);
+                if (fullAddress != null) {
+                    int len = fullAddress.getMaxAddressLineIndex() - 1;
+                    StringBuilder address = new StringBuilder();
+                    for (int i = 0; i < len; i++) {
+                        address.append(fullAddress.getAddressLine(i));
+                        if (i != len - 1)
+                            address.append(", \n");
+                    }
+                    if (!address.toString().replace(",", "").trim().equals(""))
+                        userInfo.setAddress(address.toString());
+                    if (fullAddress.getLocality() != null || fullAddress.getAdminArea() != null)
+                        userInfo.setCity(fullAddress.getLocality() + ", " + fullAddress.getAdminArea());
+                    String zip = fullAddress.getPostalCode();
+                    if (zip != null)
+                        userInfo.setZip(zip);
+                }
+            } catch (Exception ignored) {
+            }
+        }
+
         applyAction();
     }
 
@@ -224,7 +249,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
 
             @Override
             public void afterTextChanged(Editable s) {
-                city=null; /* making city null because if user do changes in city and does not select city from suggested city then this city string should be null which is used to validate the city */
+                city = null; /* making city null because if user do changes in city and does not select city from suggested city then this city string should be null which is used to validate the city */
                 String input = profileAddress1.getText().toString();
                 if (input.length() >= 2) {
                     getAutoSuggestions(input);
@@ -233,44 +258,42 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         });
 
 
-
         profileAddress1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 city = arrayAdapter.getItem(position).toString();
-                last_city_selected=city;
+                last_city_selected = city;
 
-                Geocoder geocoder=new Geocoder(EditProfileActivityMentor.this, Locale.getDefault());
+                Geocoder geocoder = new Geocoder(EditProfileActivityMentor.this, Locale.getDefault());
                 try {
-                    ArrayList<Address> addresses= (ArrayList<Address>) geocoder.getFromLocationName(city.toString(),1);
-                    Address address=addresses.get(0);
-                    Log.i(TAG,"address according to Geo coder : "+"\n postal code : "+address.getPostalCode()+"\n country name : "+address.getCountryName()+"\n address line 0 : "+address.getAddressLine(0)+ "\n address line 1 : "+address.getAddressLine(1));
-                    for(int i=0 ; i < address.getMaxAddressLineIndex();i++){
-                        Log.i(TAG,"address line "+ i +" : "+address.getAddressLine(i));
+                    ArrayList<Address> addresses = (ArrayList<Address>) geocoder.getFromLocationName(city.toString(), 1);
+                    Address address = addresses.get(0);
+                    Log.i(TAG, "address according to Geo coder : " + "\n postal code : " + address.getPostalCode() + "\n country name : " + address.getCountryName() + "\n address line 0 : " + address.getAddressLine(0) + "\n address line 1 : " + address.getAddressLine(1));
+                    for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                        Log.i(TAG, "address line " + i + " : " + address.getAddressLine(i));
                     }
-                    Log.i(TAG,"address locality " + address.getLocality() + "latitude : "+ address.getLatitude()+ "longitude : "+ address.getLongitude());
+                    Log.i(TAG, "address locality " + address.getLocality() + "latitude : " + address.getLatitude() + "longitude : " + address.getLongitude());
 
 
-                   double latitude=address.getLatitude();
-                    double longitude=address.getLongitude();
+                    double latitude = address.getLatitude();
+                    double longitude = address.getLongitude();
 
-                    final ArrayList<Double> doubles=new ArrayList<Double>();
+                    final ArrayList<Double> doubles = new ArrayList<Double>();
                     doubles.add(latitude);
                     doubles.add(longitude);
 
 
-
-                    new AsyncTask<ArrayList,Void,String>(){
+                    new AsyncTask<ArrayList, Void, String>() {
 
                         @Override
                         protected String doInBackground(ArrayList... params) {
-                            ArrayList<Double> doubles1=params[0];
+                            ArrayList<Double> doubles1 = params[0];
                             XPath xpath = XPathFactory.newInstance().newXPath();
                             String expression = "//GeocodeResponse/result/address_component[type=\"postal_code\"]/long_name/text()";
-                            Log.d(TAG,"lat in async "+doubles1.get(0));
-                            Log.d(TAG,"long in async "+doubles1.get(1));
+                            Log.d(TAG, "lat in async " + doubles1.get(0));
+                            Log.d(TAG, "long in async " + doubles1.get(1));
 
-                            InputSource inputSource = new InputSource("https://maps.googleapis.com/maps/api/geocode/xml?latlng="+doubles1.get(0)+","+doubles1.get(1)+"&sensor=true");
+                            InputSource inputSource = new InputSource("https://maps.googleapis.com/maps/api/geocode/xml?latlng=" + doubles1.get(0) + "," + doubles1.get(1) + "&sensor=true");
                             String zipcode = null;
                             try {
                                 zipcode = (String) xpath.evaluate(expression, inputSource, XPathConstants.STRING);
@@ -279,7 +302,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
                             }
 
 
-                            Log.i(TAG,"zip code 1 : "+ zipcode);
+                            Log.i(TAG, "zip code 1 : " + zipcode);
 
 
                             return zipcode;
@@ -289,9 +312,9 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
                         @Override
                         protected void onPostExecute(String s) {
                             super.onPostExecute(s);
-                            if(s != null){
+                            if (s != null) {
                                 pinCode.setText(s);
-                            }else{
+                            } else {
                                 pinCode.setText("");
                             }
 
@@ -311,11 +334,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
                     Log.i(TAG,"zip code 2 : "+ address1.getPostalCode());*/
 
 
-
-
-
-
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -328,7 +346,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
                 Intent intent = new Intent(getApplicationContext(), ChooseImageActivity.class);
                 profilePicture.buildDrawingCache();
                 Bitmap bitMap = profilePicture.getDrawingCache();
-                intent.putExtra("BitMap",BinaryForImage.getBinaryStringFromBitmap(bitMap));
+                intent.putExtra("BitMap", BinaryForImage.getBinaryStringFromBitmap(bitMap));
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
@@ -336,7 +354,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         updateAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(validateUserUpdate())
+                if (validateUserUpdate())
                     callUpdateService();
             }
         });
@@ -347,9 +365,9 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
     // Validate user first name, last name and address
     private boolean validateUserUpdate() {
 
-        if(profileAddress1.getText().toString() != null){
-            if(profileAddress1.getText().toString().trim().equals("")){
-                Toast.makeText(EditProfileActivityMentor.this,getResources().getString(R.string.choose_suggested_city),Toast.LENGTH_LONG).show();
+        if (profileAddress1.getText().toString() != null) {
+            if (profileAddress1.getText().toString().trim().equals("")) {
+                Toast.makeText(EditProfileActivityMentor.this, getResources().getString(R.string.choose_suggested_city), Toast.LENGTH_LONG).show();
                 profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -359,9 +377,9 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
                 }, 3500);
                 return false;
             }
-            if(!profileAddress1.getText().toString().equalsIgnoreCase(city)){
-                if(!profileAddress1.getText().toString().equalsIgnoreCase(last_city_selected)){
-                    Toast.makeText(EditProfileActivityMentor.this,getResources().getString(R.string.choose_suggested_city),Toast.LENGTH_LONG).show();
+            if (!profileAddress1.getText().toString().equalsIgnoreCase(city)) {
+                if (!profileAddress1.getText().toString().equalsIgnoreCase(last_city_selected)) {
+                    Toast.makeText(EditProfileActivityMentor.this, getResources().getString(R.string.choose_suggested_city), Toast.LENGTH_LONG).show();
                     profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -373,8 +391,8 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
                 }
 
             }
-        }else{
-            Toast.makeText(EditProfileActivityMentor.this,getResources().getString(R.string.choose_suggested_city),Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(EditProfileActivityMentor.this, getResources().getString(R.string.choose_suggested_city), Toast.LENGTH_LONG).show();
             profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -390,7 +408,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         if (firstName.equals("")) {
             showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
             return false;
-        }else{
+        } else {
             for (int i = 0; i < firstName.length(); i++) {
                 if (!Character.isLetter(firstName.charAt(i))) {
                     showErrorMessage(profileFirstName, getResources().getString(R.string.error_not_a_name));
@@ -403,7 +421,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         if (lastName.equals("")) {
             showErrorMessage(profileLastName, getResources().getString(R.string.error_field_required));
             return false;
-        }else{
+        } else {
             for (int i = 0; i < lastName.length(); i++) {
                 if (!Character.isLetter(lastName.charAt(i))) {
                     showErrorMessage(profileLastName, getResources().getString(R.string.error_not_a_name));
@@ -413,9 +431,9 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         }
 
 
-        if(areaOfCoaching.getText().toString().trim().equals("")){
-            showErrorMessage(areaOfCoaching,getResources().getString(R.string.error_field_required));
-            Toast.makeText(EditProfileActivityMentor.this,getResources().getString(R.string.please_add_area_of_coaching),Toast.LENGTH_SHORT).show();
+        if (areaOfCoaching.getText().toString().trim().equals("")) {
+            showErrorMessage(areaOfCoaching, getResources().getString(R.string.error_field_required));
+            Toast.makeText(EditProfileActivityMentor.this, getResources().getString(R.string.please_add_area_of_coaching), Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -436,7 +454,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         RequestParams requestParams = new RequestParams();
         requestParams.add("input", input);
         requestParams.add("key", getResources().getString(R.string.google_location_api_key));
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
         NetworkClient.autoComplete(getApplicationContext(), requestParams, this, 32);
     }
 
@@ -447,7 +465,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             requestParams.add("first_name", profileFirstName.getText().toString());
             requestParams.add("last_name", profileLastName.getText().toString());
             String sex = profileGender.getSelectedItem().toString();
-            if(sex.equals("Male") )
+            if (sex.equals("Male"))
                 requestParams.add("gender", "M");
             else
                 requestParams.add("gender", "F");
@@ -467,8 +485,8 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
                 requestParams.add("charges_class", chargeInput.getText().toString());
             }*/
 
-            if(chargesPerUnit.getSelectedItemPosition() == 0){
-                Log.i(TAG,"select charges unit : "+ chargesPerUnit.getSelectedItemPosition());
+            if (chargesPerUnit.getSelectedItemPosition() == 0) {
+                Log.i(TAG, "select charges unit : " + chargesPerUnit.getSelectedItemPosition());
                 requestParams.add("charges", chargeInput.getText().toString());
                 requestParams.add("charges_class", "0");
             }
@@ -489,11 +507,11 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             else
                 requestParams.add("availability_yn", "0");
 
-            requestParams.add("sub_category", areaOfCoaching.getText().toString().length()<2 ? " " : areaOfCoaching.getText().toString());
+            requestParams.add("sub_category", areaOfCoaching.getText().toString().length() < 2 ? " " : areaOfCoaching.getText().toString());
 
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
-            requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+            requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
 
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
@@ -587,7 +605,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         for (int index = 0; index < suggestions.size(); index++) {
             list.add(suggestions.get(index).getDescription());
         }
-        arrayAdapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
         profileAddress1.setAdapter(arrayAdapter);
     }
 
@@ -600,15 +618,15 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             progressDialog.dismiss();
             Response response = (Response) object;
             userInfo = response.getData();
-            Log.d(TAG,"success response message : in EditProfileActivity : "+response.getMessage());
-            if(!response.getMessage().equals("false"))
-            Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
+            Log.d(TAG, "success response message : in EditProfileActivity : " + response.getMessage());
+            if (!response.getMessage().equals("false"))
+                Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
             Intent intent = new Intent();
             intent.putExtra("user_info", new Gson().toJson(userInfo));
             setResult(Activity.RESULT_OK, intent);
             finish();
 
-            if (newUser != null && newUser.contains(userInfo.getId())){
+            if (newUser != null && newUser.contains(userInfo.getId())) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.remove(getResources().getString(R.string.new_user));
@@ -621,8 +639,8 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         String message = (String) object;
         progressDialog.dismiss();
-        if(!message.equals("false"))
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-        Log.d(TAG,"success response message : in EditProfileActivity : "+message );
+        if (!message.equals("false"))
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        Log.d(TAG, "success response message : in EditProfileActivity : " + message);
     }
 }
