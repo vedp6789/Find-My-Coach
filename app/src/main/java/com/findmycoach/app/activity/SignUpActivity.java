@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -274,6 +275,11 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
+
+        try{
+            Response response = (Response) object;
+            StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getData().getId());
+        }catch (Exception ignored){}
 
         saveUserEmail(email);
         saveUserPhoneNumber(phoneNumber);
