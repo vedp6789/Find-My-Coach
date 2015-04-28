@@ -24,6 +24,8 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        if(DashboardActivity.dashboardActivity.user_group == 2)
+            findViewById(R.id.paymentOption).setVisibility(View.VISIBLE);
         initView();
     }
 

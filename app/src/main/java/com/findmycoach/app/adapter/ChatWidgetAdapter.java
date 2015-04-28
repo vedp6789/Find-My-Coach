@@ -136,6 +136,7 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
                 });
             }
         } else {
+            imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.image_thumb));
             final File imageFile = new File(messageList.get(position));
             ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.mediaProgressBar);
             progressBar.setVisibility(View.VISIBLE);
@@ -225,6 +226,7 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
             }
 
         } else {
+            imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.video_thumb));
             final File videoFile = new File(messageList.get(position));
             ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.mediaProgressBar);
             progressBar.setVisibility(View.VISIBLE);
