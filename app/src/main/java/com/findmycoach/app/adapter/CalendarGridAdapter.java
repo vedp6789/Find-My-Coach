@@ -439,7 +439,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         String s = (String) view.getTag();
 
 
-        int no_of_free_slots= (int) view.getTag(1);
+        int no_of_free_slots= (Integer) view.getTag(1);
 
         int day = Integer.parseInt(s.split("-", 3)[0]);
 
