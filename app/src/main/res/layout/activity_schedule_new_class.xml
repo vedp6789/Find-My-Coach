@@ -65,8 +65,8 @@
             android:textColor="#000000"
             android:textSize="15dp" />
 
-        <Spinner
-            android:id="@+id/sp_class_time"
+        <TextView
+            android:id="@+id/tv_class_timing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"/>

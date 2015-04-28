@@ -54,8 +54,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
     private LinearLayout ll_child_dob;
     public static TextView tv_child_dob;
-    private static TextView tv_from_date, tv_to_date;
-    Spinner sp_subjects, sp_class_timing, sp_mentor_for;
+    private static TextView tv_from_date, tv_to_date,tv_class_timing,tv_subject;
+    Spinner sp_subjects,  sp_mentor_for;
     CheckBox cb_mon, cb_tue, cb_wed, cb_thu, cb_fri, cb_sat, cb_sun;
     EditText et_location;
     RadioButton rb_pay_now, rb_pay_personally;
@@ -65,7 +65,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     RequestParams requestParams;
     private ProgressDialog progressDialog;
     public static String child_DOB = null;
-    private Date newDate;
     Bundle bundle;
     Calendar calendar_current_date;
 
@@ -80,6 +79,12 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         applyActionbarProperties(fname);
         initialize();
         bundle = getIntent().getBundleExtra("slot_bundle");
+        finalizeDateTimeAndCharges();
+        populateFields();
+    }
+
+    private void finalizeDateTimeAndCharges() {
+       // slot_start_date=
     }
 
 
@@ -123,8 +128,10 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
     private void initialize() {
         sp_subjects = (Spinner) findViewById(R.id.sp_subjects);
-        sp_class_timing = (Spinner) findViewById(R.id.sp_class_time);
-
+        tv_class_timing= (TextView) findViewById(R.id.tv_class_timing);
+        tv_subject= (TextView) findViewById(R.id.tv_subject);
+        tv_subject.setVisibility(View.GONE);
+        sp_subjects.setVisibility(View.GONE);
         tv_from_date = (TextView) findViewById(R.id.tv_date_from_dp);
         tv_from_date.setOnClickListener(this);
         tv_to_date = (TextView) findViewById(R.id.tv_date_to_dp);
@@ -148,7 +155,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         b_payment.setOnClickListener(this);
 
 
-        populateFields();
+
     }
 
 

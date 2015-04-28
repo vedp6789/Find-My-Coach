@@ -736,7 +736,7 @@
     <string name="action_pending">Disconnect (Request already sent)</string>
     <string name="set_time">Set time</string>
     <string name="schedule_vacation_note">A note for vacation schedule</string>
-    <string name="classes_availability">Next 7 days availability</string>
+    <string name="classes_availability">Mentor\'s availability</string>
     <string name="subject">Subject: </string>
     <string name="days_of_week">Days of week</string>
     <string name="week_days">Week days:</string>
