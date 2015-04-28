@@ -930,6 +930,7 @@ public class NetworkClient {
                     @Override
                     public void onFailure(int statusCode, Header[] headers,
                                           byte[] responseBody, Throwable error) {
+                        Log.d(TAG, "Success: Response:" + statusCode);
                         callback.failureOperation("", statusCode, calledApiValue);
                     }
                 }
