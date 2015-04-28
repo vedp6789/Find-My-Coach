@@ -174,7 +174,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
 
-        if (userInfo.getAddress().toString().trim().equals("")) {
+        if (userInfo == null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals("")) {
             try {
                 Address fullAddress = NetworkManager.getFullAddres(this);
                 if (fullAddress != null) {
