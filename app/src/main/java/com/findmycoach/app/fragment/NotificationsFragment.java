@@ -3,6 +3,7 @@ package com.findmycoach.app.fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -98,6 +99,7 @@ public class NotificationsFragment extends Fragment implements Callback {
         }else if(DashboardActivity.dashboardActivity.user_group == 2){
             progressDialog.dismiss();
             notificationListView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.no_data_found, new String[]{getActivity().getResources().getString(R.string.no_notification)}));
+            notificationListView.setSelector(new ColorDrawable(0));
         }
     }
 
@@ -138,6 +140,7 @@ public class NotificationsFragment extends Fragment implements Callback {
                 }else {
                     notificationAdapter = new NotificationAdapter(getActivity());
                     notificationListView.setAdapter(notificationAdapter);
+                    notificationListView.setSelector(new ColorDrawable(0));
                 }
             }else {
                 if(notificationAdapter != null && notificationAdapter.positionToRemove != -1 && connectionRequestsResponse != null){

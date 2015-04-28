@@ -2,6 +2,7 @@ package com.findmycoach.app.fragment;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -131,8 +132,10 @@ public class MyConnectionsFragment extends Fragment implements Callback {
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         String msg = (String) object;
-        if(msg.equals("Success"))
-            connectionListView.setAdapter(new ArrayAdapter<String>(getActivity(),R.layout.no_data_found, new String[]{getResources().getString(R.string.not_connected)}));
+        if(msg.equals("Success")) {
+            connectionListView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.no_data_found, new String[]{getResources().getString(R.string.not_connected)}));
+            connectionListView.setSelector(new ColorDrawable(0));
+        }
         else
             Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
     }
