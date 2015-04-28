@@ -44,6 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TreeSet;
 
@@ -118,6 +119,21 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         slot_on_week_days=bundle.getStringArray("slot_on_week_days");
         charges=bundle.getString("charges");
         arrayList_subcategory=bundle.getStringArrayList("arrayList_sub_category");
+
+        Calendar cal = new GregorianCalendar();
+        cal.set(2012, 11, 26);
+        Long slot_start_date=cal.getTimeInMillis();
+
+
+        Calendar rightNow = Calendar.getInstance();
+        Long current_date=rightNow.getTimeInMillis();
+
+        if(current_date > slot_start_date){
+
+        }else{
+
+        }
+
 
     }
 
