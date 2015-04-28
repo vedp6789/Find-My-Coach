@@ -67,7 +67,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private ProgressDialog progressDialog;
     public static String child_DOB = null;
     Bundle bundle;
-    Calendar calendar_current_date;
+    private String selected_subject=null;
 
     private Long slot_id;
     private String mentor_id;
@@ -120,19 +120,97 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         charges=bundle.getString("charges");
         arrayList_subcategory=bundle.getStringArrayList("arrayList_sub_category");
 
+
+        if(arrayList_subcategory.size() > 1){
+            sp_subjects.setVisibility(View.VISIBLE);
+            ArrayAdapter arrayAdapter_sub_category = new ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayList_subcategory);
+            arrayAdapter_sub_category.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sp_subjects.setAdapter(arrayAdapter_sub_category);
+            sp_subjects.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    selected_subject = (String) parent.getItemAtPosition(position);
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    Toast.makeText(ScheduleNewClass.this, "onNothingSelected", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+        }else{
+            tv_subject.setVisibility(View.VISIBLE);
+            selected_subject=arrayList_subcategory.get(0);
+            tv_subject.setText(selected_subject);
+        }
+
+        String timing=String.format("%02d:%02d to %02d:%02d",slot_start_hour,slot_start_minute,slot_stop_hour,slot_stop_minute);
+        tv_class_timing.setText(timing);
+
+
+        for(int slot_week_day=0; slot_week_day <slot_on_week_days.length ; slot_week_day++ ){
+            String day=slot_on_week_days[slot_week_day];
+            if(day.equals("M")){
+                cb_mon.setChecked(true);
+            }
+            if(day.equals("T")){
+                cb_tue.setChecked(true);
+            }
+            if(day.equals("W")){
+                cb_wed.setChecked(true);
+            }
+            if(day.equals("Th")){
+                cb_thu.setChecked(true);
+            }
+            if (day.equals("F")){
+                cb_fri.setChecked(true);
+            }if (day.equals("S")){
+                cb_sat.setChecked(true);
+            }
+            if(day.equals("Su")){
+                cb_sun.setChecked(true);
+            }
+        }
+
+        cb_mon.setEnabled(false);
+        cb_tue.setEnabled(false);
+        cb_wed.setEnabled(false);
+        cb_thu.setEnabled(false);
+        cb_fri.setEnabled(false);
+        cb_sat.setEnabled(false);
+        cb_sun.setEnabled(false);
+
+        Log.d(TAG,"mentor availability : "+bundle.getString("mentor_availability"));
+
+
+
+
+
+
+
+
         Calendar cal = new GregorianCalendar();
-        cal.set(2012, 11, 26);
-        Long slot_start_date=cal.getTimeInMillis();
+        cal.set(slot_start_year,slot_start_month, slot_start_day);
+        long slot_start_date=cal.getTimeInMillis();
 
 
         Calendar rightNow = Calendar.getInstance();
-        Long current_date=rightNow.getTimeInMillis();
+        long current_date=rightNow.getTimeInMillis();
+        long time= System.currentTimeMillis();
 
-        if(current_date > slot_start_date){
+        Log.d(TAG,"current date time in millis:"+current_date+" slot start date time in millis : "+slot_start_date);
 
+        if(time > slot_start_date){
+            String from_date=String.format("%02d-%02d-%d",rightNow.get(Calendar.DAY_OF_MONTH),(rightNow.get(Calendar.MONTH)+1),rightNow.get(Calendar.YEAR));
+            tv_from_date.setText(from_date);
         }else{
-
+            String to_date=String.format("%02d-%02d-%d",slot_start_day,slot_start_month,slot_start_year);
+            tv_from_date.setText(to_date);
         }
+
+
 
 
     }
@@ -191,12 +269,22 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         ll_child_dob = (LinearLayout) findViewById(R.id.ll_child_dob);
         sp_mentor_for = (Spinner) findViewById(R.id.sp_mentor_for);
         cb_mon = (CheckBox) findViewById(R.id.cb_m);
+        cb_mon.setChecked(false);
         cb_tue = (CheckBox) findViewById(R.id.cb_t);
+        cb_tue.setChecked(false);
         cb_wed = (CheckBox) findViewById(R.id.cb_w);
+        cb_wed.setChecked(false);
         cb_thu = (CheckBox) findViewById(R.id.cb_th);
+        cb_thu.setChecked(false);
         cb_fri = (CheckBox) findViewById(R.id.cb_f);
+        cb_fri.setChecked(false);
         cb_sat = (CheckBox) findViewById(R.id.cb_s);
+        cb_sat.setChecked(false);
         cb_sun = (CheckBox) findViewById(R.id.cb_su);
+        cb_sun.setChecked(false);
+
+
+
         et_location = (EditText) findViewById(R.id.et_location);
 
         rb_pay_now = (RadioButton) findViewById(R.id.rb_pay_now);
