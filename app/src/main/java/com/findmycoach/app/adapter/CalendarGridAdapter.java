@@ -118,6 +118,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         this.arrayList_subcategory=arraylist_subcategory;
 
 
+
         Calendar calendar = Calendar.getInstance();
         setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
         setCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
@@ -273,6 +274,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         // Set the Day GridCell
         gridcell.setText(theday);
         gridcell.setTag(theday + "-" + themonth + "-" + theyear);
+
 
 
         if (day_color[1].equals("GREY")) {
