@@ -37,11 +37,10 @@ public class SplashActivity extends Activity implements Callback{
         Category categoryFromDb = dataBase.selectAllSubCategory();
 
         //** If sub category is not present then call api to get *//*
-        if(categoryFromDb.getData().size() < 1)
             getCategories();
-        //** Subcategories is present *//*
-        else
-            runHoldThread();
+//        //** Subcategories is present *//*
+//        if(categoryFromDb.getData().size() > 0)
+//            runHoldThread();
     }
 
     /** Thread to hold splash screen */
@@ -68,12 +67,13 @@ public class SplashActivity extends Activity implements Callback{
     /** Get Sub Categories */
     private void getCategories() {
         /* TODO remove hard coded auth token */
-        NetworkClient.getCategories(this, new RequestParams(), "916bb76e90beb6f87a97e6d3de1daebff6859d58", this, 34);
+        NetworkClient.getCategories(this, new RequestParams(), "b9b7343df07ad409f469df66375171dcf29189c0", this, 34);
     }
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         /** Caching subcategories into database */
+        dataBase.clearDatabase();
         dataBase.insertData((Category) object);
         runHoldThread();
     }
