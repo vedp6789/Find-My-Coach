@@ -649,7 +649,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
     }
 
 
