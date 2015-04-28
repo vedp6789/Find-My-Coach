@@ -73,7 +73,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
     private EditText profileAddress;
     private AutoCompleteTextView profileAddress1;
     private EditText pinCode;
-    private EditText profession;
     private EditText accomplishment;
     private EditText chargeInput;
     private EditText experienceInput;
@@ -139,9 +138,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         if (userInfo.getAccomplishments() != null) {
             accomplishment.setText(userInfo.getAccomplishments());
         }
-        if (userInfo.getProfession() != null) {
-            profession.setText(userInfo.getProfession());
-        }
         if (userInfo.getAvailabilityYn().equals("1")) {
             isReadyToTravel.setChecked(true);
         } else {
@@ -199,7 +195,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         facebookLink = (EditText) findViewById(R.id.input_facebook);
         googlePlusLink = (EditText) findViewById(R.id.input_google_plus);
         chargeInput = (EditText) findViewById(R.id.input_charges);
-        profession = (EditText) findViewById(R.id.input_profession);
         accomplishment = (EditText) findViewById(R.id.input_accomplishment);
         experienceInput = (EditText) findViewById(R.id.input_experience);
         isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
@@ -478,7 +473,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             requestParams.add("charges_unit", chargesPerUnit.getSelectedItemPosition() + "");*/
 
             requestParams.add("experience", experienceInput.getText().toString());
-            requestParams.add("profession", profession.getText().toString());
             requestParams.add("accomplishments", accomplishment.getText().toString());
             requestParams.add("google_link", googlePlusLink.getText().toString());
             requestParams.add("facebook_link", facebookLink.getText().toString());

@@ -55,6 +55,8 @@ public class Data {
     private String facebookLink;
     @Expose
     private String charges;
+    @Expose
+    private String accomplishments;
 
     @SerializedName("connection_id")
     @Expose
@@ -90,6 +92,14 @@ public class Data {
 
     public void setConnectionStatus(String connectionStatus) {
         this.connectionStatus = connectionStatus;
+    }
+
+    public String getAccomplishments() {
+        return accomplishments;
+    }
+
+    public void setAccomplishments(String accomplishments) {
+        this.accomplishments = accomplishments;
     }
 
     /**

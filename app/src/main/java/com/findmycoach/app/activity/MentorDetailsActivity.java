@@ -57,6 +57,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
     private TextView profileRatting;
     private TextView profileCharges;
     private TextView profileExperience;
+    private TextView profileQualification;
     private TextView profileTravelAvailable;
     private TextView profilePhone;
     private TextView areaOfCoaching;
@@ -394,6 +395,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         profileAddress = (TextView) findViewById(R.id.profile_address);
         profileExperience = (TextView) findViewById(R.id.profile_experience);
         profileRatting = (TextView) findViewById(R.id.profile_rating);
+        profileQualification = (TextView) findViewById(R.id.profile_accomplishment);
         profileCharges = (TextView) findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) findViewById(R.id.profile_travel_available);
         areaOfCoaching = (TextView) findViewById(R.id.areas_of_coaching);
@@ -441,6 +443,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         }
         if (userInfo.getExperience() != null) {
             profileExperience.setText(userInfo.getExperience() + " year(s)");
+        }
+        if (userInfo.getAccomplishments() != null) {
+            profileQualification.setText(userInfo.getAccomplishments());
         }
         profileAddress.setText(address);
         if (userInfo.getCharges() != null) {
