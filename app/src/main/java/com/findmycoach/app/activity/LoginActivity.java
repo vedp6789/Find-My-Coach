@@ -55,7 +55,9 @@ import java.util.regex.Pattern;
 public class LoginActivity extends Activity implements OnClickListener, Callback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    /** Request code used to invoke sign in user interactions. */
+    /**
+     * Request code used to invoke sign in user interactions.
+     */
     public static boolean doLogout = false;
     private EditText inputUserName;
     private EditText inputPassword;
@@ -64,7 +66,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private TextView countryCodeTV;
     private String[] country_code;
 
-    /** Related to G+ */
+    /**
+     * Related to G+
+     */
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
     private static final int STATE_IN_PROGRESS = 2;
@@ -80,7 +84,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
     public static LoginActivity loginActivity;
 
-    /** Log tags*/
+    /**
+     * Log tags
+     */
     private static final String TAG = "FMC";
     private static final String TAG1 = "FMC: Permissions:";
 
@@ -121,7 +127,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     }
 
 
-    /** This method get references of all views */
+    /**
+     * This method get references of all views
+     */
     private void initialize(Bundle savedInstanceState) {
 
         /** G+ related */
@@ -201,20 +209,26 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
     }
 
-    /** Opens register activity */
+    /**
+     * Opens register activity
+     */
     private void callSignUpActivity() {
         Intent signUpIntent = new Intent(this, SignUpActivity.class);
         startActivity(signUpIntent);
     }
 
-    /** Opens forget password activity */
+    /**
+     * Opens forget password activity
+     */
     private void callForgotPasswordActivity() {
         Intent intent = new Intent(this, ForgotPasswordActivity.class);
         startActivity(intent);
     }
 
 
-    /** Called when user clicks the generic login button */
+    /**
+     * Called when user clicks the generic login button
+     */
     private void logIn() {
         String userId = inputUserName.getText().toString();              /** Getting user's email id */
         String userPassword = inputPassword.getText().toString();        /** Getting entered password */
@@ -235,7 +249,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         StorageHelper.storePreference(this, "login_with", "Login");
     }
 
-    /** Validating login details i.e email and password */
+    /**
+     * Validating login details i.e email and password
+     */
     private boolean validateLoginForm(String userId, String userPassword) {
         boolean isValid = true;
         if (!isEmailValid(userId)) {
@@ -252,7 +268,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     }
 
 
-    /** Checking entered email is valid email or not */
+    /**
+     * Checking entered email is valid email or not
+     */
     public boolean isEmailValid(String email) {
         boolean isValid = false;
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
@@ -264,7 +282,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         return isValid;
     }
 
-    /** Used to show error for empty or wrong entered details in corresponding EditText with error message*/
+    /**
+     * Used to show error for empty or wrong entered details in corresponding EditText with error message
+     */
     private void showErrorMessage(final EditText editText, String errorMessage) {
         editText.setError(errorMessage);
         new Handler().postDelayed(new Runnable() {
@@ -276,7 +296,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     }
 
 
-    /** Called when user wants to login using G+ or fb */
+    /**
+     * Called when user wants to login using G+ or fb
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -293,7 +315,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             if (!mGoogleApiClient.isConnecting()) {
                 mGoogleApiClient.connect();
             }
-            Log.d(TAG,"request code : "+ RC_SIGN_IN);
+            Log.d(TAG, "request code : " + RC_SIGN_IN);
             StorageHelper.storePreference(this, "login_with", "G+");
         }
 
@@ -308,7 +330,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
     }
 
-    /** Getting Facebook Session */
+    /**
+     * Getting Facebook Session
+     */
     private void getSession() {
         Session.openActiveSession(this, true, new Session.StatusCallback() {
             @Override
@@ -336,7 +360,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         });
     }
 
-    /** Clearing Fb user if exists */
+    /**
+     * Clearing Fb user if exists
+     */
     public void fbClearToken() {
         Session session = Session.getActiveSession();
         if (session != null) {
@@ -350,7 +376,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
     }
 
-    /** Calling socialAuthentication api with user's fb details */
+    /**
+     * Calling socialAuthentication api with user's fb details
+     */
     private void callWebservice(GraphUser user) {
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
@@ -362,21 +390,23 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         requestParams.add("photograph", "http://graph.facebook.com/" + user.getId() + "/picture?type=large");
         requestParams.add("user_group", String.valueOf(user_group));
         saveUserEmail((String) user.getProperty("email"));
-        try{
+        try {
             String email = (String) user.getProperty("email");
-            if(email == null || email.trim().equals("")) {
+            if (email == null || email.trim().equals("")) {
                 showEmailDialog(requestParams);
                 return;
-            }else
+            } else
                 requestParams.add("email", email);
-        }catch (Exception e){
+        } catch (Exception e) {
             showEmailDialog(requestParams);
             return;
         }
         NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
     }
 
-    /**Dialog to manually get email from user*/
+    /**
+     * Dialog to manually get email from user
+     */
     private void showEmailDialog(final RequestParams requestParams) {
 
         progressDialog.dismiss();
@@ -414,7 +444,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 /** email is correct */
                 else {
                     dialog.dismiss();
-                    requestParams.add("email",email);
+                    requestParams.add("email", email);
                     NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
                     progressDialog.show();
                 }
@@ -433,7 +463,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
     }
 
-    /** Calling socialAuthentication api with user's G+ account details */
+    /**
+     * Calling socialAuthentication api with user's G+ account details
+     */
     private void getProfileInformation(Person currentPerson) {
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
@@ -447,45 +479,47 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         try {
             requestParams.add("first_name", currentPerson.getDisplayName().split(" ")[0]);
             requestParams.add("last_name", currentPerson.getDisplayName().split(" ")[1]);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        try{
+        try {
             requestParams.add("dob", currentPerson.getBirthday());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        try{
+        try {
             requestParams.add("gender", currentPerson.getGender() == 0 ? "M" : "F");
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        try{
+        try {
             requestParams.add("google_link", currentPerson.getUrl());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        try{
-            requestParams.add("photograph",currentPerson.getImage().getUrl());
-        }catch (Exception e){
+        try {
+            requestParams.add("photograph", currentPerson.getImage().getUrl());
+        } catch (Exception e) {
             e.printStackTrace();
         }
         requestParams.add("user_group", String.valueOf(user_group));
         NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, this, 23);
     }
 
-    /** G+ account is connected */
+    /**
+     * G+ account is connected
+     */
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.d(TAG, "onConnected");
 
         /** If G+ logged in user logged out (DashBoard Activity) */
-        if(doLogout){
-            try{
+        if (doLogout) {
+            try {
                 Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
                 mGoogleApiClient.disconnect();
                 mGoogleApiClient.connect();
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             doLogout = false;
@@ -502,13 +536,17 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         mSignInProgress = STATE_DEFAULT;
     }
 
-    /** if suspended the reconnect G+ user*/
+    /**
+     * if suspended the reconnect G+ user
+     */
     @Override
     public void onConnectionSuspended(int cause) {
         mGoogleApiClient.connect();
     }
 
-    /** When G+ connection failed */
+    /**
+     * When G+ connection failed
+     */
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         Log.d(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
@@ -525,7 +563,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         onSignedOut();
     }
 
-    /** Getting reference of Google Api client into mGoogleApiClient */
+    /**
+     * Getting reference of Google Api client into mGoogleApiClient
+     */
     private GoogleApiClient buildGoogleApiClient() {
         return new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -535,14 +575,18 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 .build();
     }
 
-    /** On next start, if G+ user is already provide access then connect client  */
+    /**
+     * On next start, if G+ user is already provide access then connect client
+     */
     @Override
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
     }
 
-    /** Disconnecting G+ connection if connected*/
+    /**
+     * Disconnecting G+ connection if connected
+     */
     @Override
     protected void onStop() {
         super.onStop();
@@ -551,14 +595,18 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
     }
 
-    /** Saving G+ client state */
+    /**
+     * Saving G+ client state
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(SAVED_PROGRESS, mSignInProgress);
     }
 
-    /** Used to resolve G+ connection error */
+    /**
+     * Used to resolve G+ connection error
+     */
     private void resolveSignInError() {
         if (mSignInIntent != null) {
             try {
@@ -575,7 +623,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
     }
 
-    /** Updating G+ sign in and sign out UI*/
+    /**
+     * Updating G+ sign in and sign out UI
+     */
     private void onSignedOut() {
         mSignInButton.setVisibility(View.VISIBLE);
         mSignOutButtons.setVisibility(View.GONE);
@@ -615,7 +665,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
     }
 
-    /** Dialog to get phone number if not present in case of Social registration  */
+    /**
+     * Dialog to get phone number if not present in case of Social registration
+     */
     private void getPhoneNumber(final RequestParams requestParams) {
         progressDialog.dismiss();
         final Dialog dialog = new Dialog(this);
@@ -634,7 +686,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 final String phnNum = phoneEditText.getText().toString();
 
                 /** If phone number is null */
-                if (phnNum.equals("") || phnNum.length() < 10) {
+                if (phnNum.equals("") || phnNum.length() < 8) {
                     phoneEditText.setError(getResources().getString(R.string.enter_valid_phone_no));
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -658,7 +710,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 /** Phone number is provided with country code, updating user's phone number in server */
                 else {
                     dialog.dismiss();
-                    requestParams.add("phone_number",countryCodeTV.getText().toString().trim() + "-" + phnNum);
+                    requestParams.add("phone_number", countryCodeTV.getText().toString().trim() + "-" + phnNum);
                     requestParams.add("user_group", String.valueOf(user_group));
                     saveUserPhoneNumber(phnNum);
                     NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 26);
@@ -672,7 +724,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             @Override
             public void onClick(View v) {
                 fbClearToken();
-                if (!mGoogleApiClient.isConnecting()  && mGoogleApiClient.isConnected()) {
+                if (!mGoogleApiClient.isConnecting() && mGoogleApiClient.isConnected()) {
                     Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
                     mGoogleApiClient.disconnect();
                     mGoogleApiClient.connect();
@@ -687,7 +739,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         dialog.show();
     }
 
-    /** Dialog for selecting country code */
+    /**
+     * Dialog for selecting country code
+     */
     private void showCountryCodeDialog() {
         final Dialog countryDialog = new Dialog(this);
         countryDialog.setCanceledOnTouchOutside(true);
@@ -705,7 +759,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         });
     }
 
-    /** Getting country code using TelephonyManager */
+    /**
+     * Getting country code using TelephonyManager
+     */
     public String getCountryZipCode() {
         String CountryID = "";
         String CountryZipCode = "Select";
@@ -722,23 +778,31 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         return CountryZipCode;
     }
 
-    /** Saving logged in user's id and auth token in shared preferences */
+    /**
+     * Saving logged in user's id and auth token in shared preferences
+     */
     private void saveUser(String authToken, String userId) {
         StorageHelper.storePreference(this, "auth_token", authToken);
         StorageHelper.storePreference(this, "user_id", userId);
     }
 
-    /** Saving whether phone is verified or not in shared preferences */
+    /**
+     * Saving whether phone is verified or not in shared preferences
+     */
     private void saveUserPhn(String isPhnVerified) {
         StorageHelper.storePreference(this, "phone_verified", isPhnVerified);
     }
 
-    /** Saving email of user in shared preferences*/
+    /**
+     * Saving email of user in shared preferences
+     */
     private void saveUserEmail(String emailId) {
         StorageHelper.storePreference(this, "user_email", emailId);
     }
 
-    /** Saving user's phone number in shared preferences */
+    /**
+     * Saving user's phone number in shared preferences
+     */
     private void saveUserPhoneNumber(String phoneNumber) {
         StorageHelper.storePreference(this, "phone_number", phoneNumber);
     }
@@ -768,10 +832,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             saveUserPhn("True");
             finish();
             startActivity(new Intent(this, DashboardActivity.class));
-        }
-
-        else {
-            if(response.getData().getNewUser())
+        } else {
+            if (response.getData().getNewUser())
                 StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getData().getId());
 
             /** Login is successful but phone number not present, open dialog to get phone number */
@@ -790,7 +852,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 finish();
                 startActivity(intent);
                 fbClearToken();
-                if (!mGoogleApiClient.isConnecting()  && mGoogleApiClient.isConnected()) {
+                if (!mGoogleApiClient.isConnecting() && mGoogleApiClient.isConnected()) {
                     Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
                     mGoogleApiClient.disconnect();
                     mGoogleApiClient.connect();
@@ -830,7 +892,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         /** Clearing facebook token and G+ user if connected */
         fbClearToken();
-        if (!mGoogleApiClient.isConnecting()  && mGoogleApiClient.isConnected()) {
+        if (!mGoogleApiClient.isConnecting() && mGoogleApiClient.isConnected()) {
             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
             mGoogleApiClient.disconnect();
             mGoogleApiClient.connect();

@@ -40,7 +40,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     private EditText phoneNumberInput;
     private ProgressDialog progressDialog;
     private RadioButton radioButton_mentee_signup, radioButton_mentor_signup;
-    private int user_group=0;
+    private int user_group = 0;
     private TextView countryCodeTV;
     private String[] country_code;
     private String email, phoneNumber;
@@ -56,14 +56,16 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
 
     private void applyActionbarProperties() {
         ActionBar actionBar = getActionBar();
-        if(actionBar != null)
+        if (actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    /** Getting references of views */
+    /**
+     * Getting references of views
+     */
     private void initialize() {
-        radioButton_mentee_signup= (RadioButton) findViewById(R.id.radio_button_mentee_signup);
-        radioButton_mentor_signup= (RadioButton) findViewById(R.id.radio_button_mentor_signup);
+        radioButton_mentee_signup = (RadioButton) findViewById(R.id.radio_button_mentee_signup);
+        radioButton_mentor_signup = (RadioButton) findViewById(R.id.radio_button_mentor_signup);
         firstNameInput = (EditText) findViewById(R.id.input_first_name);
         lastNameInput = (EditText) findViewById(R.id.input_last_name);
         emailInput = (EditText) findViewById(R.id.input_email);
@@ -98,12 +100,14 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         int id = v.getId();
         if (id == R.id.button_signup) {
             registerUser();
-        }else if(id == R.id.countryCodeTV){
+        } else if (id == R.id.countryCodeTV) {
             showCountryCodeDialog();
         }
     }
 
-    /** Dialog for selecting country code */
+    /**
+     * Dialog for selecting country code
+     */
     private void showCountryCodeDialog() {
         final Dialog countryDialog = new Dialog(this);
         countryDialog.setCanceledOnTouchOutside(true);
@@ -121,7 +125,9 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         });
     }
 
-    /** Registering user with FMC */
+    /**
+     * Registering user with FMC
+     */
     private void registerUser() {
         String firstName = firstNameInput.getText().toString();
         String lastName = lastNameInput.getText().toString();
@@ -135,13 +141,13 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         boolean isValid = validate(firstName, lastName, phone, email, password, confirmPassword, countryCode);
 
         if (isValid) {
-            if(radioButton_mentee_signup.isChecked())
+            if (radioButton_mentee_signup.isChecked())
                 user_group = 2;
-            else if(radioButton_mentor_signup.isChecked())
+            else if (radioButton_mentor_signup.isChecked())
                 user_group = 3;
-            if(user_group == 0){
-                Toast.makeText(SignUpActivity.this,"Please select user type.",Toast.LENGTH_SHORT).show();
-            }else{
+            if (user_group == 0) {
+                Toast.makeText(SignUpActivity.this, "Please select user type.", Toast.LENGTH_SHORT).show();
+            } else {
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("first_name", firstName);
                 requestParams.add("last_name", lastName);
@@ -158,20 +164,24 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         }
     }
 
-    /** Sending data to server for new registration */
+    /**
+     * Sending data to server for new registration
+     */
     private void callApiToRegister(RequestParams requestParams) {
         progressDialog.show();
         NetworkClient.register(this, requestParams, this, 2);
     }
 
-    /** validating inserted user details */
+    /**
+     * validating inserted user details
+     */
     private boolean validate(String firstName, String lastName, String phone, String email, String password, String confirmPassword, String countryCode) {
 
         if (firstName.equals("")) {
             showErrorMessage(firstNameInput, getResources().getString(R.string.error_field_required));
             return false;
-        }else{
-            for (int i = 0; i < firstName.length()-1; i++) {
+        } else {
+            for (int i = 0; i < firstName.length() - 1; i++) {
                 if (!Character.isLetter(firstName.charAt(i))) {
                     showErrorMessage(firstNameInput, getResources().getString(R.string.error_not_a_name));
                     return false;
@@ -182,8 +192,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         if (lastName.equals("")) {
             showErrorMessage(lastNameInput, getResources().getString(R.string.error_field_required));
             return false;
-        }else{
-            for (int i = 0; i < lastName.length()-1; i++) {
+        } else {
+            for (int i = 0; i < lastName.length() - 1; i++) {
                 if (!Character.isLetter(lastName.charAt(i))) {
                     showErrorMessage(lastNameInput, getResources().getString(R.string.error_not_a_name));
                     return false;
@@ -191,7 +201,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             }
         }
 
-        if(countryCode.trim().equals("")){
+        if (countryCode.trim().equals("")) {
             showErrorMessage(countryCodeTV, getResources().getString(R.string.select_country_code));
             return false;
         }
@@ -199,7 +209,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         if (phone.equals("")) {
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_field_required));
             return false;
-        }else if (phone.length() < 10) {
+        } else if (phone.length() < 8) {
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_phone_number_invalid));
             return false;
         }
@@ -212,7 +222,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         if (password.equals("")) {
             showErrorMessage(passwordInput, getResources().getString(R.string.error_field_required));
             return false;
-        }else if (password.length() < 5) {
+        } else if (password.length() < 5) {
             showErrorMessage(passwordInput, getResources().getString(R.string.error_password_size));
             return false;
         }
@@ -220,7 +230,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         if (confirmPassword.equals("")) {
             showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_required));
             return false;
-        }else if (!password.equals(confirmPassword)) {
+        } else if (!password.equals(confirmPassword)) {
             showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_not_match));
             return false;
         }
@@ -229,7 +239,9 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         return true;
     }
 
-    /** Checking entered email is valid email or not */
+    /**
+     * Checking entered email is valid email or not
+     */
     public boolean isEmailValid(String email) {
         boolean isValid = false;
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
@@ -242,7 +254,9 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         return isValid;
     }
 
-    /** Displaying error is any detail is wrong */
+    /**
+     * Displaying error is any detail is wrong
+     */
     private void showErrorMessage(final TextView view, String string) {
         view.setError(string);
         new Handler().postDelayed(new Runnable() {
@@ -253,7 +267,9 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         }, 3500);
     }
 
-    /** If user registered successfully close activity */
+    /**
+     * If user registered successfully close activity
+     */
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
@@ -268,36 +284,44 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         LoginActivity.loginActivity.finish();
     }
 
-    /** If registration is not successful */
+    /**
+     * If registration is not successful
+     */
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
     }
 
-    /** Automatic detect country code */
-    public String getCountryZipCode(){
+    /**
+     * Automatic detect country code
+     */
+    public String getCountryZipCode() {
         String CountryID = "";
         String CountryZipCode = "";
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        CountryID= manager.getSimCountryIso().toUpperCase();
+        CountryID = manager.getSimCountryIso().toUpperCase();
         country_code = this.getResources().getStringArray(R.array.country_codes);
-        for(int i=1;i< country_code.length;i++){
+        for (int i = 1; i < country_code.length; i++) {
             String[] g = country_code[i].split(",");
-            if(g[1].trim().equals(CountryID.trim())){
-                CountryZipCode=g[0];
+            if (g[1].trim().equals(CountryID.trim())) {
+                CountryZipCode = g[0];
                 break;
             }
         }
         return CountryZipCode;
     }
 
-    /** Saving email of user in shared preferences*/
+    /**
+     * Saving email of user in shared preferences
+     */
     private void saveUserEmail(String emailId) {
         StorageHelper.storePreference(this, "user_email", emailId);
     }
 
-    /** Saving user's phone number in shared preferences */
+    /**
+     * Saving user's phone number in shared preferences
+     */
     private void saveUserPhoneNumber(String phoneNumber) {
         StorageHelper.storePreference(this, "phone_number", phoneNumber);
     }
