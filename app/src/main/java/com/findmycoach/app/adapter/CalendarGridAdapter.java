@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.MentorDetailsActivity;
@@ -102,17 +103,16 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         * This constructor is called from MyScheduleFragment
         *
         * */
-    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Day> prev_month_data, ArrayList<Day> current_month_data, ArrayList<Day> coming_month_data,String mentor_id,String availability_yn,String charges) {
+    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Day> prev_month_data, ArrayList<Day> current_month_data, ArrayList<Day> coming_month_data, String mentor_id, String availability_yn, String charges) {
         super();
         this.context = context;
         weekdays = context.getResources().getStringArray(R.array.week_days);
         months = context.getResources().getStringArray(R.array.months);
         this.list = new ArrayList<String>();
         this.mentorDetailsActivity = mentorDetailsActivity;
-        this.mentor_id=mentor_id;
-        this.availability=availability_yn;
-        this.charges=charges;
-
+        this.mentor_id = mentor_id;
+        this.availability = availability_yn;
+        this.charges = charges;
 
 
         Calendar calendar = Calendar.getInstance();
@@ -272,7 +272,6 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         gridcell.setTag(theday + "-" + themonth + "-" + theyear);
 
 
-
         if (day_color[1].equals("GREY")) {
             gridcell.setTextColor(context.getResources().getColor(R.color.caldroid_darker_gray));
             gridcell.setBackgroundResource(R.drawable.abc_btn_check_material);
@@ -310,7 +309,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                         }
                     }
 
-                } else {/*
+                } else {
+                /*
                 *
                 *
                 *
@@ -319,14 +319,19 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                     List<DayEvent> dayEvents = day.getDayEvents();
                     List<DaySlot> daySlots = day.getDaySlots();
 
-                    if (daySlots.size() > 0 && dayEvents.size() <= 0) {
-                        /*  success when this day has only slots and there is no event coming from server*/
+                    /*if (daySlots.size() > 0 && dayEvents.size() <= 0) {
+                        *//*  success when this day has only slots and there is no event coming from server*//*
                         if (day_color[1].equals("BLUE")) {
                             gridcell.setBackgroundColor(new Color().CYAN);
                         } else {
                             gridcell.setBackgroundColor(new Color().YELLOW);
                         }
-                    } else {
+                        Toast.makeText(context, "free slots : " + free_slot, Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "free_slots : " + free_slot);
+                        gridcell.setTag(1, String.valueOf(free_slot));
+
+                    } else {*/
+                    int free_slot = 0;
                         if (daySlots.size() <= 0) {
                             /*   success when there is no slots i.e. slots array size is zero
                             *    In this condition, grid click event should be handled like we do not open week-view and give a message that mentor is not free on this day.
@@ -336,7 +341,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             * success when this day his having slots.
                             * Now to decide any slot is free or not
                             * */
-                            int free_slot = 0;
+
                             /*
                              * matching each slot of the day with all possible events, and on this match deciding whether this slot come as free slot or not.
                              * */
@@ -375,14 +380,14 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                         free_slot++;
 
 
-                                }else {
+                                } else {
                                     /*
                                     *
                                     * For slot which are selected as solo
                                     * */
-                                     boolean slot_match_with_event=false;
-                                     for(int day_event = 0; day_event < dayEvents.size(); day_event++){
-                                        DayEvent dayEvent1 =dayEvents.get(day_event);
+                                    boolean slot_match_with_event = false;
+                                    for (int day_event = 0; day_event < dayEvents.size(); day_event++) {
+                                        DayEvent dayEvent1 = dayEvents.get(day_event);
                                         String event_start_date = dayEvent1.getEvent_start_date();
                                         String event_stop_date = dayEvent1.getEvent_stop_date();
                                         String event_start_time = dayEvent1.getEvent_start_time();
@@ -391,37 +396,36 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                         /* checking whether this particular event is similar to slot or not */
                                         if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
                                             slot_match_with_event = true;
-                                            /* if found similar then check whether the event_totoal_mentees from slot_max_users*/
-                                            if (event_total_mentees < slot_max_users) {
-                                                free_slot++;
-                                            }
+
                                         }
                                     }
 
                                     if (!slot_match_with_event)
                                         free_slot++;
-                                 }
-
-                            }
-
-                            /*
-                            *
-                            * if free_slot is having value greater than zero, it means this day has free slots and we have to populate calendar grid color
-                            * */
-                            if(free_slot > 0){
-                                if (day_color[1].equals("BLUE")) {
-                                    gridcell.setBackgroundColor(new Color().CYAN);
-                                } else {
-                                    gridcell.setBackgroundColor(new Color().YELLOW);
                                 }
+
                             }
-
-
-                            gridcell.setTag(1,free_slot);
 
 
                         }
+                   /* }*/
+                    /*
+                            *
+                            * if free_slot is having value greater than zero, it means this day has free slots and we have to populate calendar grid color
+                            * */
+                    if (free_slot > 0) {
+                        if (day_color[1].equals("BLUE")) {
+
+                            gridcell.setBackgroundColor(new Color().CYAN);
+                        } else {
+                            gridcell.setBackgroundColor(new Color().YELLOW);
+                        }
                     }
+
+
+                    gridcell.setTag(R.id.TAG_FREE_SLOT, String.valueOf(free_slot));
+
+
 
                 }
 
@@ -439,17 +443,17 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         String s = (String) view.getTag();
 
 
-        int no_of_free_slots=0;
-        no_of_free_slots=(int) view.getTag(1);
+        int no_of_free_slots = 0;
+        no_of_free_slots = Integer.parseInt((String)view.getTag(R.id.TAG_FREE_SLOT));
 
         int day = Integer.parseInt(s.split("-", 3)[0]);
 
         String month = s.split("-", 3)[1];
         String year = s.split("-", 3)[2];
-        if(myScheduleFragment != null){
-            intent.putExtra("for","ScheduleFragments");
-        }else{
-            intent.putExtra("for","MentorDetailsActivity");
+        if (myScheduleFragment != null) {
+            intent.putExtra("for", "ScheduleFragments");
+        } else {
+            intent.putExtra("for", "MentorDetailsActivity");
         }
         intent.putExtra("date", (String) view.getTag());
         intent.putExtra("day", Integer.parseInt(s.split("-", 3)[0]));
@@ -458,9 +462,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         intent.putExtra("prev_month_data", prev_month_data);
         intent.putExtra("current_month_data", current_month_data);
         intent.putExtra("coming_month_data", coming_month_data);
-        intent.putExtra("mentor_id",mentor_id);
-        intent.putExtra("availability",availability);
-        intent.putExtra("charges",charges);
+        intent.putExtra("mentor_id", mentor_id);
+        intent.putExtra("availability", availability);
+        intent.putExtra("charges", charges);
 
 
         //intent.putExtra("day_bean", (android.os.Parcelable) three_months_data);
@@ -492,8 +496,12 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
         } else {
             if (month_in_foreground == month_index_of_grid_clicked) {
+                if (no_of_free_slots <=0 ){
+                    Toast.makeText(context,"Mentor is not free on this day. ",Toast.LENGTH_SHORT).show();
+                }else{
+                    context.startActivity(intent);
 
-                context.startActivity(intent);
+                }
 
 
             } else {
