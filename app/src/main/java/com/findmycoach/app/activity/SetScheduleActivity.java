@@ -892,6 +892,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                 bundle.putInt("slot_stop_minute",event.getSlot_stop_minute());
                 bundle.putStringArray("slot_on_week_days",event.getSlot_on_week_days());
                 bundle.putString("charges",event.getCharges());
+                bundle.putString("slot_type",event.getSlot_type());
                 bundle.putStringArrayList("arrayList_sub_category",arrayList_subcategory);
 
                 intent.putExtra("slot_bundle",bundle);

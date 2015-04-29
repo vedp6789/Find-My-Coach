@@ -133,6 +133,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             public void onClick(View v) {
                 android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
                 CustomDatePickerFragment customDatePickerFragment = new CustomDatePickerFragment();
+                
                 customDatePickerFragment.show(fragmentManager, null);
                 month_from_dialog = 0;
                 year_from_dialog = 0;
