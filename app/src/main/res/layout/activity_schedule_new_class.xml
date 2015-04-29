@@ -69,7 +69,7 @@
             android:id="@+id/tv_class_timing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"/>
+            android:gravity="center"/>
 
 
     </LinearLayout>
@@ -304,6 +304,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/address"
                 android:gravity="center"
+               android:maxLength="200"
             />
 
         </LinearLayout>
@@ -395,11 +396,56 @@
 
     </LinearLayout>
 
+
+    <LinearLayout
+        android:id="@+id/ll_total_charges"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_child_dob"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/total_charges"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/tv_total_charge"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="15sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
     <LinearLayout
         android:id="@+id/ll_payment_option"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_child_dob"
+        android:layout_below="@+id/ll_total_charges"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="4dp"
         android:layout_marginRight="5dp"
@@ -413,6 +459,7 @@
             android:textSize="15sp"
             android:textColor="#000000" />
     </LinearLayout>
+
 
     <RadioGroup
         android:id="@+id/rg_payment_option"
@@ -437,12 +484,17 @@
             android:text="@string/personally" />
     </RadioGroup>
 
+
+
+
+
+
     <Button
         android:id="@+id/b_proceed_to_payment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="@string/check_availability"
+        android:text="@string/post_schedule_request"
         android:background="@color/accent_material_light"/>
 
 

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,10 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.fragment_mentee.ChildDOB;
 import com.findmycoach.app.fragment_mentor.StartDateDialogFragment;
 import com.findmycoach.app.fragment_mentor.TillDateDialogFragment;
+import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.DataBase;
+import com.findmycoach.app.util.NetworkClient;
+import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
@@ -33,11 +38,11 @@ import java.util.List;
 /**
  * Created by praka_000 on 3/4/2015.
  */
-public class ScheduleNewClass extends Activity implements Button.OnClickListener {
+public class ScheduleNewClass extends Activity implements Button.OnClickListener, Callback  {
 
-    private LinearLayout ll_child_dob,ll_location;
+    private LinearLayout ll_child_dob, ll_location;
     public static TextView tv_child_dob;
-    private static TextView tv_from_date, tv_to_date, tv_class_timing, tv_subject;
+    private static TextView tv_from_date, tv_to_date, tv_class_timing, tv_subject,tv_total_charges;
     Spinner sp_subjects, sp_mentor_for;
     CheckBox cb_mon, cb_tue, cb_wed, cb_thu, cb_fri, cb_sat, cb_sun;
     EditText et_location;
@@ -65,8 +70,11 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private int slot_stop_hour;
     private int slot_stop_minute;
     private ArrayList<String> arrayList_subcategory = null;
+    private String slot_type;
     private String[] slot_on_week_days;
     private String charges;
+
+
 
 
     @Override
@@ -100,6 +108,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         slot_on_week_days = bundle.getStringArray("slot_on_week_days");
         charges = bundle.getString("charges");
         arrayList_subcategory = bundle.getStringArrayList("arrayList_sub_category");
+        slot_type=bundle.getString("slot_type");
 
 
         if (arrayList_subcategory.size() > 1) {
@@ -126,6 +135,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             selected_subject = arrayList_subcategory.get(0);
             tv_subject.setText(selected_subject);
         }
+
+
+
 
         String timing = String.format("%02d:%02d to %02d:%02d", slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute);
         tv_class_timing.setText(timing);
@@ -176,7 +188,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         long rightNow_in_millis = rightNow.getTimeInMillis();
 
 
-
         if (rightNow_in_millis > slot_start_date) {
             String from_date = String.format("%02d-%02d-%d", rightNow.get(Calendar.DAY_OF_MONTH), (rightNow.get(Calendar.MONTH) + 1), rightNow.get(Calendar.YEAR));
             tv_from_date.setText(from_date);
@@ -186,67 +197,60 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         }
 
 
-        String to_date=String.format("%02d-%02d-%d", slot_stop_day,slot_stop_month,slot_stop_year);
+        String to_date = String.format("%02d-%02d-%d", slot_stop_day, slot_stop_month, slot_stop_year);
         tv_to_date.setText(to_date);
 
 
-        if(mentor_availability !=null && mentor_availability.equals("1"))
+        if (mentor_availability != null && mentor_availability.equals("1"))
             ll_location.setVisibility(View.VISIBLE);
 
 
-        int current_hour=rightNow.get(Calendar.HOUR_OF_DAY);
-        int current_minute=rightNow.get(Calendar.MINUTE);
+        int current_hour = rightNow.get(Calendar.HOUR_OF_DAY);
+        int current_minute = rightNow.get(Calendar.MINUTE);
 
 
-        boolean include_class_start_date_for_charge=false;
-        if( (current_hour<slot_stop_hour) ){
-            include_class_start_date_for_charge=true;
-        }else {
-            if(current_hour == slot_stop_hour && current_minute < slot_stop_minute)
-                include_class_start_date_for_charge=true;
+        boolean include_class_start_date_for_charge = false;
+        if ((current_hour < slot_stop_hour)) {
+            include_class_start_date_for_charge = true;
+        } else {
+            if (current_hour == slot_stop_hour && current_minute < slot_stop_minute)
+                include_class_start_date_for_charge = true;
 
         }
 
 
-        String class_schedule_start_date=tv_from_date.getText().toString();   /* Date which is getting prompted to student, from where student class schedule starts */
-        int class_schedule_start_day=Integer.parseInt(class_schedule_start_date.split("-",3)[0]);
-        int class_schedule_start_month=Integer.parseInt(class_schedule_start_date.split("-",3)[1]);
-        int class_schedule_start_year= Integer.parseInt(class_schedule_start_date.split("-",3)[2]);
+        String class_schedule_start_date = tv_from_date.getText().toString();   /* Date which is getting prompted to student, from where student class schedule starts */
+        int class_schedule_start_day = Integer.parseInt(class_schedule_start_date.split("-", 3)[0]);
+        int class_schedule_start_month = Integer.parseInt(class_schedule_start_date.split("-", 3)[1]);
+        int class_schedule_start_year = Integer.parseInt(class_schedule_start_date.split("-", 3)[2]);
 
 
-        Calendar calendar_stop_date_of_schedule=Calendar.getInstance();
-        calendar_stop_date_of_schedule.set(slot_stop_year,slot_stop_month-1,slot_stop_day);
+        Calendar calendar_stop_date_of_schedule = Calendar.getInstance();
+        calendar_stop_date_of_schedule.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
 
-        Calendar calendar_schedule_start_date=Calendar.getInstance();
-        calendar_schedule_start_date.set(class_schedule_start_year,class_schedule_start_month-1,class_schedule_start_day);
+        Calendar calendar_schedule_start_date = Calendar.getInstance();
+        calendar_schedule_start_date.set(class_schedule_start_year, class_schedule_start_month - 1, class_schedule_start_day);
 
-        int valid_class_days=0;
+        int valid_class_days = 0;
         /* Calculation of charge to pay */
-        if(include_class_start_date_for_charge){
+        if (include_class_start_date_for_charge) {
             /* It means that if a class is on start day of the schedule, then it is going to be count as class */
-
-
-              valid_class_days=calculateNoOfTotalClassDays(calendar_schedule_start_date,calendar_stop_date_of_schedule,slot_on_week_days);
-        }else{
+            valid_class_days = calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_stop_date_of_schedule, slot_on_week_days);
+        } else {
             /* class is not going to be count for first day of schedule as current time is greater than slot_stop_time*/
-            calendar_schedule_start_date.add(Calendar.DATE,1);
-            valid_class_days=calculateNoOfTotalClassDays(calendar_schedule_start_date,calendar_stop_date_of_schedule,slot_on_week_days);
+            calendar_schedule_start_date.add(Calendar.DATE, 1);
+            valid_class_days = calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_stop_date_of_schedule, slot_on_week_days);
         }
 
 
-        Log.d(TAG,"valid days "+valid_class_days);
+        Log.d(TAG, "valid days " + valid_class_days);
 
-
-
-
-
-
-
-
-
+        int single_class_charge=Integer.parseInt(charges.split("per",2)[0]);
+        int total_amount=valid_class_days*single_class_charge;
+        tv_total_charges.setText("\u20B9 " +total_amount);
     }
 
-    private int calculateNoOfTotalClassDays(Calendar calendar_schedule_start_date, Calendar calendar_stop_date_of_schedule,String [] slot_on_week_days) {
+    private int calculateNoOfTotalClassDays(Calendar calendar_schedule_start_date, Calendar calendar_stop_date_of_schedule, String[] slot_on_week_days) {
 
         int workDays = 0;
 
@@ -256,20 +260,20 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         }
 
         List<Integer> selectedDays = new ArrayList<Integer>();
-        for(String d : slot_on_week_days){
-            if(d.equalsIgnoreCase("su"))
+        for (String d : slot_on_week_days) {
+            if (d.equalsIgnoreCase("su"))
                 selectedDays.add(1);
-            if(d.equalsIgnoreCase("m"))
+            if (d.equalsIgnoreCase("m"))
                 selectedDays.add(2);
-            if(d.equalsIgnoreCase("t"))
+            if (d.equalsIgnoreCase("t"))
                 selectedDays.add(3);
-            if(d.equalsIgnoreCase("w"))
+            if (d.equalsIgnoreCase("w"))
                 selectedDays.add(4);
-            if(d.equalsIgnoreCase("th"))
+            if (d.equalsIgnoreCase("th"))
                 selectedDays.add(5);
-            if(d.equalsIgnoreCase("f"))
+            if (d.equalsIgnoreCase("f"))
                 selectedDays.add(6);
-            if(d.equalsIgnoreCase("s"))
+            if (d.equalsIgnoreCase("s"))
                 selectedDays.add(7);
         }
 
@@ -278,13 +282,13 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
             if (selectedDays.contains(calendar_schedule_start_date.get(Calendar.DAY_OF_WEEK))) {
                 ++workDays;
-                Log.d(TAG,"Selected wee day : "+calendar_schedule_start_date.get(Calendar.DAY_OF_WEEK));
+                Log.d(TAG, "Selected wee day : " + calendar_schedule_start_date.get(Calendar.DAY_OF_WEEK));
             }
             calendar_schedule_start_date.add(Calendar.DAY_OF_MONTH, 1);
 
 
-
-        } while (calendar_schedule_start_date.getTimeInMillis() <= calendar_stop_date_of_schedule.getTimeInMillis()); //excluding end date
+        }
+        while (calendar_schedule_start_date.getTimeInMillis() <= calendar_stop_date_of_schedule.getTimeInMillis()); //excluding end date
 
         return workDays;
     }
@@ -336,7 +340,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         tv_child_dob = (TextView) findViewById(R.id.tv_child_dob);
         tv_child_dob.setOnClickListener(this);
         ll_child_dob = (LinearLayout) findViewById(R.id.ll_child_dob);
-        ll_location= (LinearLayout) findViewById(R.id.ll_location);
+        ll_location = (LinearLayout) findViewById(R.id.ll_location);
         ll_location.setVisibility(View.GONE);
         sp_mentor_for = (Spinner) findViewById(R.id.sp_mentor_for);
         cb_mon = (CheckBox) findViewById(R.id.cb_m);
@@ -392,20 +396,37 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.b_proceed_to_payment:
-                Log.d(TAG, "inside button action case");
+                if(rb_pay_now.isChecked()){
+                    if(validate()){
+                         Toast.makeText(ScheduleNewClass.this,"Waiting for payment gateway integration. ",Toast.LENGTH_SHORT).show();
+                    }
+                }
+                if(rb_pay_personally.isChecked()){
+                    if(validate()){
+                        RequestParams requestParams1=new RequestParams();
+                        requestParams1.add("id",slot_id.toString());
+                        requestParams1.add("mentor_id",mentor_id);
+                        String student_id=StorageHelper.getUserDetails(ScheduleNewClass.this,"user_id");
+                        requestParams1.add("student_id", StorageHelper.getUserDetails(ScheduleNewClass.this,student_id));
+                        String from_date=tv_from_date.getText().toString();
+                        requestParams1.add("start_date",from_date.split("-",3)[2]+"-"+from_date.split("-",3)[1]+"-"+from_date.split("-",3)[0]);
+                        requestParams1.add("slot_type",slot_type);
+                        if(mentor_availability.equals("1")){
+                            requestParams1.add("location",et_location.getText().toString());
+                        }
+                        int sub_category_id=DataBase.singleton(this).getSubCategoryId(selected_subject);
+                        requestParams1.add("sub_category_id",String.valueOf(sub_category_id));
+                        if(selected_mentor_for.equalsIgnoreCase("child")){
+                            String date_of_birth_kid=tv_child_dob.getText().toString().split("-",3)[2]+"-"+tv_child_dob.getText().toString().split("-",3)[1]+"-"+tv_child_dob.getText().toString().split("-",3)[0];
+                                    requestParams1.add("date_of_birth_kid",date_of_birth_kid);
+                        }
+                        requestParams1.add("total_price",tv_total_charges.getText().toString());
+                        progressDialog.show();
+                        NetworkClient.postScheduleRequest(ScheduleNewClass.this,requestParams1,this,46);
 
-                break;
-            case R.id.tv_date_from_dp:
-                FragmentManager fragmentManager = getFragmentManager();
-                StartDateDialogFragment startDateDialogFragment = new StartDateDialogFragment();
-                startDateDialogFragment.scheduleNewClass = this;
-                startDateDialogFragment.show(fragmentManager, null);
-                break;
-            case R.id.tv_date_to_dp:
-                FragmentManager fragmentManager1 = getFragmentManager();
-                TillDateDialogFragment tillDateDialogFragment = new TillDateDialogFragment();
-                tillDateDialogFragment.scheduleNewClass = this;
-                tillDateDialogFragment.show(fragmentManager1, null);
+
+                    }
+                }
                 break;
 
             case R.id.tv_child_dob:
@@ -417,4 +438,49 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         }
     }
 
+    private boolean validate() {
+
+        if(mentor_availability.equals("1")){
+            if(et_location.getText().toString().trim().length() <= 0){
+                Toast.makeText(this,getResources().getString(R.string.your_address_please),Toast.LENGTH_SHORT).show();
+                showErrorMessage(et_location,getResources().getString(R.string.your_address_please));
+                return false;
+
+            }
+        }
+        if(selected_mentor_for.equalsIgnoreCase("child")){
+            if(tv_child_dob.getText().toString().trim().length() <= 0){
+                Toast.makeText(this,getResources().getString(R.string.child_date_of_birth_please),Toast.LENGTH_SHORT).show();
+                showErrorMessage(et_location,getResources().getString(R.string.child_date_of_birth_please));
+                return false;
+            }
+        }
+        return true;
+
+    }
+
+
+    /**
+     * Displaying error is any detail is wrong
+     */
+    private void showErrorMessage(final TextView view, String string) {
+        view.setError(string);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.setError(null);
+            }
+        }, 3500);
+    }
+
+
+    @Override
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
+       progressDialog.dismiss();
+    }
+
+    @Override
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
+       progressDialog.dismiss();
+    }
 }
