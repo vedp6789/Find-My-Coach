@@ -831,7 +831,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
 
         /** Login is successful start DashBoard Activity */
-        if (response.getMessage() != null && response.getMessage().equals("Success") && !response.getData().getPhonenumber().equals("0")) {
+        if (response.getMessage() != null && response.getMessage().equals("Success") &&
+                response.getData().getPhonenumber() != null && !response.getData().getPhonenumber().equals("0")) {
             saveUserPhn("True");
             finish();
             startActivity(new Intent(this, DashboardActivity.class));

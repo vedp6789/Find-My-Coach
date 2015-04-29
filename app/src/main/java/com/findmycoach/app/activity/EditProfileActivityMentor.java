@@ -127,7 +127,10 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
 
         try {
-            experienceInput.setSelection(Integer.parseInt(userInfo.getExperience()));
+            int index = Integer.parseInt(userInfo.getExperience());
+            if(index > 16)
+                index = 0;
+            experienceInput.setSelection(index);
         } catch (Exception e) {
             experienceInput.setSelection(0);
         }
@@ -210,27 +213,32 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
 
-        if (userInfo == null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals("")) {
-            try {
-                Address fullAddress = NetworkManager.getFullAddres(this);
-                if (fullAddress != null) {
-                    int len = fullAddress.getMaxAddressLineIndex() - 1;
-                    StringBuilder address = new StringBuilder();
-                    for (int i = 0; i < len; i++) {
-                        address.append(fullAddress.getAddressLine(i));
-                        if (i != len - 1)
-                            address.append(", \n");
+        try{
+            if (userInfo == null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals("")) {
+                try {
+                    Address fullAddress = NetworkManager.getFullAddres(this);
+                    if (fullAddress != null) {
+                        int len = fullAddress.getMaxAddressLineIndex() - 1;
+                        StringBuilder address = new StringBuilder();
+                        for (int i = 0; i < len; i++) {
+                            address.append(fullAddress.getAddressLine(i));
+                            if (i != len - 1)
+                                address.append(", \n");
+                        }
+                        if (!address.toString().replace(",", "").trim().equals(""))
+                            userInfo.setAddress(address.toString());
+                        if (fullAddress.getLocality() != null || fullAddress.getAdminArea() != null)
+                            userInfo.setCity(fullAddress.getLocality() + ", " + fullAddress.getAdminArea());
+                        String zip = fullAddress.getPostalCode();
+                        if (zip != null)
+                            userInfo.setZip(zip);
                     }
-                    if (!address.toString().replace(",", "").trim().equals(""))
-                        userInfo.setAddress(address.toString());
-                    if (fullAddress.getLocality() != null || fullAddress.getAdminArea() != null)
-                        userInfo.setCity(fullAddress.getLocality() + ", " + fullAddress.getAdminArea());
-                    String zip = fullAddress.getPostalCode();
-                    if (zip != null)
-                        userInfo.setZip(zip);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception ignored) {
             }
+        }catch (Exception  e){
+            e.printStackTrace();
         }
 
         applyAction();
