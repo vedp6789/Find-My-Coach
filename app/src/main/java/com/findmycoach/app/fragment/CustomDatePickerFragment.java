@@ -89,7 +89,6 @@ public class CustomDatePickerFragment extends android.support.v4.app.DialogFragm
                 if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 3) {
 
                     if(for_which_activity.equals("MyScheduleFragment")){
-                        Toast.makeText(getActivity(),"Month : "+ tv_month.getText().toString()+" month no : "+temp +"year : "+tv_selected_year.getText().toString(),Toast.LENGTH_LONG).show();
                         MyScheduleFragment.month_from_dialog=temp;
                         MyScheduleFragment.year_from_dialog=Integer.parseInt(tv_selected_year.getText().toString());
 
@@ -101,7 +100,6 @@ public class CustomDatePickerFragment extends android.support.v4.app.DialogFragm
 
                 }else{
                     if(for_which_activity.equals("MyScheduleFragment")){
-                        Toast.makeText(getActivity(),"Month : "+ tv_month.getText().toString()+" month no : "+temp +"year : "+tv_selected_year.getText().toString(),Toast.LENGTH_LONG).show();
                         MyScheduleFragment.month_from_dialog=temp;
                         MyScheduleFragment.year_from_dialog=Integer.parseInt(tv_selected_year.getText().toString());
 
@@ -110,7 +108,7 @@ public class CustomDatePickerFragment extends android.support.v4.app.DialogFragm
                     }
 
                     if(for_which_activity.equals("MentorDetailsActivity")){
-                        Toast.makeText(getActivity(),"Month : "+ tv_month.getText().toString()+" month no : "+temp +"year : "+tv_selected_year.getText().toString(),Toast.LENGTH_LONG).show();
+
                         MentorDetailsActivity.month_from_dialog=temp;
                         MentorDetailsActivity.year_from_dialog=Integer.parseInt(tv_selected_year.getText().toString());
 

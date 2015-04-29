@@ -125,7 +125,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
-                    Toast.makeText(ScheduleNewClass.this, "onNothingSelected", Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -311,7 +310,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         sp_mentor_for.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(ScheduleNewClass.this, "onItemSelected", Toast.LENGTH_SHORT).show();
+
                 child_DOB = null;
                 selected_mentor_for = null;
                 selected_mentor_for = (String) parent.getItemAtPosition(position);
