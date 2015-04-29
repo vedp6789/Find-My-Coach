@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.findmycoach.app.beans.attachment.Attachment;
 import com.findmycoach.app.beans.chats.Chats;
 import com.findmycoach.app.beans.chats.Data;
 import com.findmycoach.app.fragment.MyConnectionsFragment;
+import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -97,7 +99,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             receiverId = getUserIntent.getStringExtra("receiver_id").trim();
             receiverName = getUserIntent.getStringExtra("receiver_name").trim();
             try{
-                receiverImage = getUserIntent.getStringExtra("receiver_image").trim();
+                receiverImage = getUserIntent.getStringExtra("receiver_image");
             }catch (Exception e){
                 receiverImage = "";
             }
@@ -161,6 +163,13 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             });
             actionBar.setCustomView(customView);
             Log.v(TAG, receiverImage);
+
+            try{
+                BitmapDrawable icon = new BitmapDrawable(getResources(), BinaryForImage.getBitmapFromBinaryString(receiverImage));
+                actionBar.setIcon(icon);
+            }catch (Exception e){
+                actionBar.setIcon(R.drawable.user_icon);
+            }
         }
     }
 
