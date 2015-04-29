@@ -34,7 +34,7 @@ public class SplashActivity extends Activity implements Callback{
     private void getDataFromServer() {
         /** Checking if sub categories are already present */
         dataBase = DataBase.singleton(this);
-        Category categoryFromDb = dataBase.selectAllSubCategory();
+//        Category categoryFromDb = dataBase.selectAllSubCategory();
 
         //** If sub category is not present then call api to get *//*
             getCategories();
@@ -67,7 +67,7 @@ public class SplashActivity extends Activity implements Callback{
     /** Get Sub Categories */
     private void getCategories() {
         /* TODO remove hard coded auth token */
-        NetworkClient.getCategories(this, new RequestParams(), null, this, 34);
+        NetworkClient.getSubCategories(this, new RequestParams(), null, this, 34);
     }
 
     @Override

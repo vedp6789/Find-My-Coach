@@ -12,7 +12,6 @@ import com.findmycoach.app.beans.chats.Chats;
 import com.findmycoach.app.beans.requests.ConnectionRequestsResponse;
 import com.findmycoach.app.beans.search.SearchResponse;
 import com.findmycoach.app.beans.student.ProfileResponse;
-import com.findmycoach.app.beans.subcategory.SubCategory;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
@@ -821,9 +820,13 @@ public class NetworkClient {
 
 
     public static void getSubCategories(Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
+        if (!NetworkManager.isNetworkConnected(context)) {
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.get(context, getAbsoluteURL("subCategories", context), requestParams, new AsyncHttpResponseHandler() {
+        client.get(context, getAuthAbsoluteURL("metaData", context), requestParams, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         try {
@@ -832,8 +835,12 @@ public class NetworkClient {
                                 Log.d(TAG, "Success: Response:" + responseJson);
                                 Log.d(TAG, "Success: Response Code:" + statusCode);
                                 if (statusCode == 200) {
-                                    SubCategory categories = new Gson().fromJson(responseJson, SubCategory.class);
-                                    callback.successOperation(categories, statusCode, calledApiValue);
+                                    try {
+                                        Category categories = new Gson().fromJson(responseJson, Category.class);
+                                        callback.successOperation(categories, statusCode, calledApiValue);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
                         } catch (Exception e) {
@@ -844,8 +851,11 @@ public class NetworkClient {
                     @Override
                     public void onFailure(int statusCode, Header[] headers,
                                           byte[] responseBody, Throwable error) {
+                        Log.d(TAG, "Success: Response:" + statusCode);
+                        callback.failureOperation("", statusCode, calledApiValue);
                     }
                 }
+
         );
     }
 
@@ -1433,7 +1443,6 @@ public class NetworkClient {
             }
         });
     }
-
 
 
     public static void getCardDetails(final Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
