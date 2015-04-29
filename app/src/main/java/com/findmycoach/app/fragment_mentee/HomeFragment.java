@@ -34,6 +34,7 @@ import com.findmycoach.app.activity.UserListActivity;
 import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
+import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
@@ -67,12 +68,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private int tabIndex;
     private View fragmentView;
     private String location;
-    private String location_auto_suggested_temp,location_auto_suggested;
-    boolean flag_change_location=false;
+    private String location_auto_suggested_temp, location_auto_suggested;
+    boolean flag_change_location = false;
 
     private CheckBox mon, tue, wed, thr, fri, sat, sun;
     private boolean isSearching = false;
-    private static final String TAG="FMC";
+    private static final String TAG = "FMC";
     ArrayAdapter<String> arrayAdapter;
 
     public HomeFragment() {
@@ -88,8 +89,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        location_auto_suggested_temp=null;
-        location_auto_suggested=null;
+        location_auto_suggested_temp = null;
+        location_auto_suggested = null;
     }
 
     @Override
@@ -103,25 +104,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         location = NetworkManager.getCurrentLocation(getActivity());
-        location_auto_suggested_temp=location;
-        location_auto_suggested=location_auto_suggested_temp;
+        location_auto_suggested_temp = location;
+        location_auto_suggested = location_auto_suggested_temp;
 
         initialize(fragmentView);
-        if(location.equals("")){
-            flag_change_location=true;
+        if (location.equals("")) {
+            flag_change_location = true;
             locationInput.setVisibility(View.VISIBLE);
             locationLayout.setVisibility(View.GONE);
         }
         applyActions();
         localActivityManager.dispatchCreate(savedInstanceState);
 
-        DataBase dataBase = DataBase.singleton(getActivity());;
+        DataBase dataBase = DataBase.singleton(getActivity());
+        ;
         Category categoryFromDb = dataBase.selectAllSubCategory();
-        if(categoryFromDb.getData().size() < 1) {
+        if (categoryFromDb.getData().size() < 1) {
             getCategories();
             Log.d(TAG, "sub category api called");
-        }
-        else {
+        } else {
             setTabForCategory(categoryFromDb);
             Log.d(TAG, "sub category api not called");
         }
@@ -130,24 +131,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     private void setTabForCategory(Category categoryResponse) {
         this.category = categoryResponse;
-        if(categoryResponse.getData().size() < 1 || FLAG > 0)
+        if (categoryResponse.getData().size() < 1 || FLAG > 0)
             return;
 
         tabHost.setup(localActivityManager);
         subCategoryIds = new String[category.getData().size()];
-        for(int i=0; i<category.getData().size(); i++){
+        for (int i = 0; i < category.getData().size(); i++) {
             com.findmycoach.app.beans.category.Datum datum = category.getData().get(i);
 
-            TabHost.TabSpec singleCategory = tabHost.newTabSpec(i+"");
+            TabHost.TabSpec singleCategory = tabHost.newTabSpec(i + "");
             singleCategory.setIndicator(datum.getName());
 
             Intent intent = new Intent(getActivity(), SubCategoryActivity.class);
             StringBuilder subCategory = new StringBuilder();
             StringBuilder subCategoryId = new StringBuilder();
-            int row = datum.getDataSub().size()+1;
+            int row = datum.getDataSub().size() + 1;
             subCategory.append("Select one#");
             subCategoryId.append("-1#");
-            for(int x=0; x<row-1; x++) {
+            for (int x = 0; x < row - 1; x++) {
                 subCategory.append(datum.getDataSub().get(x).getName() + "#");
                 subCategoryId.append(datum.getDataSub().get(x).getId() + "#");
             }
@@ -156,7 +157,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 //            Log.d(TAG, subCategoryId.toString());
             intent.putExtra("row", row);
             intent.putExtra("sub_category", subCategory.toString());
-            intent.putExtra("sub_category_id",subCategoryId.toString());
+            intent.putExtra("sub_category_id", subCategoryId.toString());
             intent.putExtra("column_index", i);
             singleCategory.setContent(intent);
             tabHost.addTab(singleCategory);
@@ -180,7 +181,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private void getCategories() {
         RequestParams requestParams = new RequestParams();
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
         NetworkClient.getCategories(getActivity(), requestParams, authToken, this, 34);
     }
 
@@ -196,19 +197,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
             @Override
             public void afterTextChanged(Editable s) {
-                location_auto_suggested_temp=null;
+                location_auto_suggested_temp = null;
                 String input = locationInput.getText().toString();
                 if (input.length() >= 2) {
-
                     getAutoSuggestions(input);
+                    if (input.length() > 4 && input.length() < 8) {
+                        try {
+                            int zipCode = Integer.parseInt(input);
+                            new AddressFromZip(getActivity(), locationInput).execute(zipCode + "");
+                        } catch (Exception e) {
+                        }
+                    }
                 }
             }
         });
         locationInput.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                location_auto_suggested_temp=arrayAdapter.getItem(position);
-                location_auto_suggested=location_auto_suggested_temp;
+                location_auto_suggested_temp = arrayAdapter.getItem(position);
+                location_auto_suggested = location_auto_suggested_temp;
             }
         });
         String[] period = getResources().getStringArray(R.array.time1);
@@ -299,32 +306,32 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             callSearchApi();
         }
         if (v.getId() == R.id.change_location) {
-            flag_change_location=true;
+            flag_change_location = true;
             locationInput.setVisibility(View.VISIBLE);
             locationLayout.setVisibility(View.GONE);
         }
     }
 
     private void callSearchApi() {
-        if(!NetworkManager.isNetworkConnected(getActivity())){
-            Toast.makeText(getActivity(), getResources().getString(R.string.check_network_connection),Toast.LENGTH_SHORT).show();
+        if (!NetworkManager.isNetworkConnected(getActivity())) {
+            Toast.makeText(getActivity(), getResources().getString(R.string.check_network_connection), Toast.LENGTH_SHORT).show();
             return;
         }
-        if(isSearching){
-            Toast.makeText(getActivity(), getResources().getString(R.string.search_is_already_called),Toast.LENGTH_SHORT).show();
+        if (isSearching) {
+            Toast.makeText(getActivity(), getResources().getString(R.string.search_is_already_called), Toast.LENGTH_SHORT).show();
             return;
         }
-        if(flag_change_location){
-            if(validateLocation()){
-               goForSearch();
+        if (flag_change_location) {
+            if (validateLocation()) {
+                goForSearch();
             }
-        }else{
-           goForSearch();
+        } else {
+            goForSearch();
         }
 
     }
 
-    void goForSearch(){
+    void goForSearch() {
         isSearching = true;
         progressDialog.show();
         String location = locationInput.getText().toString();
@@ -333,38 +340,38 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         String toTiming = toTimingInput.getText().toString();
         RequestParams requestParams = new RequestParams();
         requestParams.add("location", location);
-        try{
+        try {
             Log.d(TAG, "Sub category id : " + subCategoryIds[tabIndex]);
-            if(!subCategoryIds[tabIndex].trim().equals("-1"))
+            if (!subCategoryIds[tabIndex].trim().equals("-1"))
                 requestParams.add("subcategory_id", subCategoryIds[tabIndex]);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
         requestParams.add("keyword", name);
-       if(timeBarrier.isChecked()){
-           requestParams.add("timing_from", fromTiming);
-           requestParams.add("timing_to", toTiming);
+        if (timeBarrier.isChecked()) {
+            requestParams.add("timing_from", fromTiming);
+            requestParams.add("timing_to", toTiming);
 
-           String week = (mon.isChecked() ? "1," : "0,") +
-                   (tue.isChecked() ? "1," : "0,") +
-                   (wed.isChecked() ? "1," : "0,") +
-                   (thr.isChecked() ? "1," : "0,") +
-                   (fri.isChecked() ? "1," : "0,") +
-                   (sat.isChecked() ? "1," : "0,") +
-                   (sun.isChecked() ? "1" : "0");
-           requestParams.add("weeks", week);
-           Log.d(TAG, "Selected weekdays : " + week);
-       }
+            String week = (mon.isChecked() ? "1," : "0,") +
+                    (tue.isChecked() ? "1," : "0,") +
+                    (wed.isChecked() ? "1," : "0,") +
+                    (thr.isChecked() ? "1," : "0,") +
+                    (fri.isChecked() ? "1," : "0,") +
+                    (sat.isChecked() ? "1," : "0,") +
+                    (sun.isChecked() ? "1" : "0");
+            requestParams.add("weeks", week);
+            Log.d(TAG, "Selected weekdays : " + week);
+        }
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
         NetworkClient.search(getActivity(), requestParams, authToken, this, 6);
     }
 
-    boolean validateLocation(){
-        if(locationInput.getText().toString() != null){
-            if(locationInput.getText().toString().trim().equalsIgnoreCase("")){
-                Toast.makeText(getActivity(),getResources().getString(R.string.choose_suggested_location),Toast.LENGTH_LONG).show();
+    boolean validateLocation() {
+        if (locationInput.getText().toString() != null) {
+            if (locationInput.getText().toString().trim().equalsIgnoreCase("")) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.choose_suggested_location), Toast.LENGTH_LONG).show();
                 locationInput.setError(getResources().getString(R.string.choose_suggested_location));
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -374,9 +381,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 }, 3500);
                 return false;
             }
-            if(!locationInput.getText().toString().equalsIgnoreCase(location_auto_suggested_temp)){
-                if(!locationInput.getText().toString().equalsIgnoreCase(location_auto_suggested)){
-                    Toast.makeText(getActivity(),getResources().getString(R.string.choose_suggested_location),Toast.LENGTH_LONG).show();
+            if (!locationInput.getText().toString().equalsIgnoreCase(location_auto_suggested_temp)) {
+                if (!locationInput.getText().toString().equalsIgnoreCase(location_auto_suggested)) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.choose_suggested_location), Toast.LENGTH_LONG).show();
                     locationInput.setError(getResources().getString(R.string.choose_suggested_location));
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -388,8 +395,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 }
 
             }
-        }else{
-            Toast.makeText(getActivity(),getResources().getString(R.string.choose_suggested_location),Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getActivity(), getResources().getString(R.string.choose_suggested_location), Toast.LENGTH_LONG).show();
             locationInput.setError(getResources().getString(R.string.choose_suggested_location));
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -430,7 +437,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         for (int index = 0; index < suggestions.size(); index++) {
             list.add(suggestions.get(index).getDescription());
         }
-        arrayAdapter=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,list);
+        arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list);
         locationInput.setAdapter(arrayAdapter);
     }
 
