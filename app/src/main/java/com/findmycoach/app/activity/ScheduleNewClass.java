@@ -2,15 +2,9 @@ package com.findmycoach.app.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.os.Bundle;
 import android.app.FragmentManager;
-import android.os.Handler;
-import android.provider.*;
-import android.provider.Settings;
-import android.support.v4.app.Fragment;
+import android.app.ProgressDialog;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,25 +23,12 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.fragment_mentee.ChildDOB;
 import com.findmycoach.app.fragment_mentor.StartDateDialogFragment;
 import com.findmycoach.app.fragment_mentor.TillDateDialogFragment;
-import com.findmycoach.app.util.Callback;
-import com.findmycoach.app.util.NetworkClient;
-import com.findmycoach.app.util.SetDate;
-import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
-import java.util.TreeSet;
 
 /**
  * Created by praka_000 on 3/4/2015.
@@ -274,7 +255,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             return 0;
         }
 
-        List<Integer> selectedDays = new ArrayList<>();
+        List<Integer> selectedDays = new ArrayList<Integer>();
         for(String d : slot_on_week_days){
             if(d.equalsIgnoreCase("su"))
                 selectedDays.add(1);
