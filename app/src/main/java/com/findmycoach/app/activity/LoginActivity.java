@@ -474,34 +474,28 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
             requestParams.add("email", email);
             saveUserEmail(email);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         try {
             requestParams.add("first_name", currentPerson.getDisplayName().split(" ")[0]);
             requestParams.add("last_name", currentPerson.getDisplayName().split(" ")[1]);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         try {
             requestParams.add("dob", currentPerson.getBirthday());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         try {
             requestParams.add("gender", currentPerson.getGender() == 0 ? "M" : "F");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         try {
             requestParams.add("google_link", currentPerson.getUrl());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         try {
             requestParams.add("photograph", currentPerson.getImage().getUrl());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         requestParams.add("user_group", String.valueOf(user_group));
         NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, this, 23);
@@ -520,8 +514,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
                 mGoogleApiClient.disconnect();
                 mGoogleApiClient.connect();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ignored) {
             }
             doLogout = false;
             return;
@@ -813,15 +806,24 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
 
+        Response response = (Response) object;
+        if (response == null)
+            return;
+
+        if (statusCode == 206 || response.getMessage().contains("Phone number is not set")) {
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
+            getPhoneNumber(requestParams);
+            return;
+        }
+
+
         /** Saving user group */
         String user_group_saved = StorageHelper.getUserGroup(LoginActivity.this, "user_group");
         if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group))) {
             StorageHelper.storePreference(LoginActivity.this, "user_group", String.valueOf(user_group));
         }
 
-        Response response = (Response) object;
-        if (response == null)
-            return;
 
         /** Saving auth token and user id of user for further use */
         if (response.getAuthToken() != null && response.getData().getId() != null) {

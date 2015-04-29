@@ -180,7 +180,8 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
 
     private void applyActionbarProperties() {
         ActionBar actionbar = getActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
+        if (actionbar != null)
+            actionbar.setDisplayHomeAsUpEnabled(true);
     }
 
     private void initialize() {
