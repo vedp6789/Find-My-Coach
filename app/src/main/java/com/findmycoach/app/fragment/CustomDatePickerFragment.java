@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.MentorDetailsActivity;
 import com.findmycoach.app.util.StorageHelper;
 
 import java.lang.reflect.Field;
@@ -32,13 +33,29 @@ public class CustomDatePickerFragment extends android.support.v4.app.DialogFragm
     int init_month, init_year,temp;
     String [] month;
     private String TAG="FMC";
+    private String for_which_activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        init_month=MyScheduleFragment.month;
-        temp=init_month;
-        init_year=MyScheduleFragment.year;
+
+        Bundle bundle=this.getArguments();
+        for_which_activity=bundle.getString("for");
+
+        if(for_which_activity.equals("MentorDetailsActivity")){
+            init_month= MentorDetailsActivity.month;
+            temp=init_month;
+            init_year=MentorDetailsActivity.year;
+        }
+
+        if(for_which_activity.equals("MyScheduleFragment")){
+            init_month=MyScheduleFragment.month;
+            temp=init_month;
+            init_year=MyScheduleFragment.year;
+        }
+
+
+
         month=getResources().getStringArray(R.array.months);
 
 
@@ -70,12 +87,26 @@ public class CustomDatePickerFragment extends android.support.v4.app.DialogFragm
             @Override
             public void onClick(View v) {
                 if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 3) {
-                    Toast.makeText(getActivity(),"Month : "+ tv_month.getText().toString()+" month no : "+temp +"year : "+tv_selected_year.getText().toString(),Toast.LENGTH_LONG).show();
-                    MyScheduleFragment.month_from_dialog=temp;
-                    MyScheduleFragment.year_from_dialog=Integer.parseInt(tv_selected_year.getText().toString());
+                    if(for_which_activity.equals("MentorDetailsActivity")){
+                        Toast.makeText(getActivity(),"Month : "+ tv_month.getText().toString()+" month no : "+temp +"year : "+tv_selected_year.getText().toString(),Toast.LENGTH_LONG).show();
+                        MentorDetailsActivity.month_from_dialog=temp;
+                        MentorDetailsActivity.year_from_dialog=Integer.parseInt(tv_selected_year.getText().toString());
 
-                    dismiss();
-                    MyScheduleFragment.myScheduleFragment.getCalendarDetailsAPICall();
+                        dismiss();
+                        MentorDetailsActivity.mentorDetailsActivity.getCalendarDetailsAPICall();
+                    }
+
+                    if(for_which_activity.equals("MyScheduleFragment")){
+                        Toast.makeText(getActivity(),"Month : "+ tv_month.getText().toString()+" month no : "+temp +"year : "+tv_selected_year.getText().toString(),Toast.LENGTH_LONG).show();
+                        MyScheduleFragment.month_from_dialog=temp;
+                        MyScheduleFragment.year_from_dialog=Integer.parseInt(tv_selected_year.getText().toString());
+
+                        dismiss();
+                        MyScheduleFragment.myScheduleFragment.getCalendarDetailsAPICall();
+                    }
+
+
+
                 }else{
                     Toast.makeText(getActivity(),"Month : "+ tv_month.getText().toString()+" month no : "+temp +"year : "+tv_selected_year.getText().toString(),Toast.LENGTH_LONG).show();
                     MyScheduleFragment.month_from_dialog=temp;

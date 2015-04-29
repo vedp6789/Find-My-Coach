@@ -414,6 +414,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 Log.d(TAG,"currentMonth clicked");
                 FragmentManager fragmentManager=getFragmentManager();
                 CustomDatePickerFragment customDatePickerFragment=new CustomDatePickerFragment();
+                Bundle bundle=new Bundle();
+                bundle.putString("for","MyScheduleFragment");
+                customDatePickerFragment.setArguments(bundle);
+
                 customDatePickerFragment.show(fragmentManager,null);
                 month_from_dialog=0;
                 year_from_dialog=0;

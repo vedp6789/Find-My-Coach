@@ -77,9 +77,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private ScrollableGridView calendarView;
     private CalendarGridAdapter adapter1, adapter2, adapter3;
     private Calendar _calendar;
-    protected static int month, year;
+    public static int month, year;
     private static final String dateTemplate = "MMMM yyyy";
-    protected static MentorDetailsActivity mentorDetailsActivity;
+    public static MentorDetailsActivity mentorDetailsActivity;
     private int days_in_current_month, days_in_prev_month, days_in_next_month;
     ProgressDialog progressDialog;
     private int days_in_new_prev_month, days_in_new_next_month;
@@ -89,7 +89,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     public JSONArray prev_json, current_json, next_json;
     public String calendar_by_location = null;
     public boolean b_three_months_data;
-    protected static int month_from_dialog, year_from_dialog;
+    public  static int month_from_dialog, year_from_dialog;
     private String charges;
 
     private static final String TAG = "FMC";
@@ -133,7 +133,10 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             public void onClick(View v) {
                 android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
                 CustomDatePickerFragment customDatePickerFragment = new CustomDatePickerFragment();
-                
+                Bundle bundle=new Bundle();
+                bundle.putString("for","MentorDetailsActivity");
+                customDatePickerFragment.setArguments(bundle);
+
                 customDatePickerFragment.show(fragmentManager, null);
                 month_from_dialog = 0;
                 year_from_dialog = 0;
@@ -154,7 +157,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
     }
 
-    private void getCalendarDetailsAPICall() {
+    public void getCalendarDetailsAPICall() {
         Log.d(TAG, "state 1");
         previousMonthArrayList = new ArrayList<Day>();
         currentMonthArrayList = new ArrayList<Day>();
