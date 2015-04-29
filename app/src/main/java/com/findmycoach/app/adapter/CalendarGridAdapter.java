@@ -248,7 +248,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
+        Log.d(TAG,"insided getView method of CalendarGridAdapter");
 
         View row = convertView;
         if (row == null) {
@@ -289,9 +289,12 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             allow_schedule_population = true;
 
         }
+        Log.d(TAG,"insided getView method of CalendarGridAdapter  2");
 
         day_schedule_index = Integer.parseInt(theday) - 1;
         if (allow_schedule_population) {
+            Log.d(TAG,"insided getView method of CalendarGridAdapter 3");
+
             if (day_schedule_index < current_month_data.size()) {
 
                 day = current_month_data.get(day_schedule_index);
@@ -303,7 +306,11 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                 * */
                 if (myScheduleFragment != null) {
                     List<DayEvent> dayEvents = day.getDayEvents();
+                    Log.d(TAG,"insided getView method of CalendarGridAdapter4");
+
+
                     if (dayEvents.size() > 0) {
+                        Log.d(TAG,"insided getView method of CalendarGridAdapter 5");
 
                         if (day_color[1].equals("BLUE")) {
                             gridcell.setBackgroundColor(new Color().CYAN);
@@ -481,10 +488,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     public void onClick(View view) {
         Intent intent = new Intent(context, SetScheduleActivity.class);
         String s = (String) view.getTag();
-
-
         int no_of_free_slots = 0;
-        no_of_free_slots = Integer.parseInt((String) view.getTag(R.id.TAG_FREE_SLOT));
+
 
         int day = Integer.parseInt(s.split("-", 3)[0]);
 
@@ -494,6 +499,14 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             intent.putExtra("for", "ScheduleFragments");
         } else {
             intent.putExtra("for", "MentorDetailsActivity");
+
+            no_of_free_slots = Integer.parseInt((String) view.getTag(R.id.TAG_FREE_SLOT));
+            intent.putExtra("mentor_id", mentor_id);
+            intent.putExtra("availability", availability);
+            intent.putExtra("charges", charges);
+            intent.putStringArrayListExtra("arrayList_category", arrayList_subcategory);
+
+
         }
         intent.putExtra("date", (String) view.getTag());
         intent.putExtra("day", Integer.parseInt(s.split("-", 3)[0]));
@@ -502,10 +515,6 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         intent.putExtra("prev_month_data", prev_month_data);
         intent.putExtra("current_month_data", current_month_data);
         intent.putExtra("coming_month_data", coming_month_data);
-        intent.putExtra("mentor_id", mentor_id);
-        intent.putExtra("availability", availability);
-        intent.putExtra("charges", charges);
-        intent.putStringArrayListExtra("arrayList_category", arrayList_subcategory);
 
 
         //intent.putExtra("day_bean", (android.os.Parcelable) three_months_data);
@@ -537,12 +546,20 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
         } else {
             if (month_in_foreground == month_index_of_grid_clicked) {
-                if (no_of_free_slots <= 0) {
-                    Toast.makeText(context, context.getResources().getString(R.string.mentor_is_not_free), Toast.LENGTH_SHORT).show();
-                } else {
+                if(myScheduleFragment != null){
                     context.startActivity(intent);
+                }else{
+                    if(mentorDetailsActivity != null){
+                        if (no_of_free_slots <= 0) {
+                            Toast.makeText(context, context.getResources().getString(R.string.mentor_is_not_free), Toast.LENGTH_SHORT).show();
+                        } else {
+                            context.startActivity(intent);
 
+                        }
+                    }
                 }
+
+
 
 
             } else {
