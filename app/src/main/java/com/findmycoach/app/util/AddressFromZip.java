@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.findmycoach.app.fragment_mentee.HomeFragment;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -65,6 +67,8 @@ public class AddressFromZip extends AsyncTask<String, Void, String> {
         if(address != null && !address.trim().equals("") && address.trim().length() > 5){
             try{
                 editText.setText(address);
+                HomeFragment.location_auto_suggested = address;
+                HomeFragment.location_auto_suggested_temp = address;
             }catch (Exception e){
 
             }

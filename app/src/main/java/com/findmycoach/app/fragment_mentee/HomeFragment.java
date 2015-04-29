@@ -68,7 +68,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private int tabIndex;
     private View fragmentView;
     private String location;
-    private String location_auto_suggested_temp, location_auto_suggested;
+    public static String location_auto_suggested_temp, location_auto_suggested;
     boolean flag_change_location = false;
 
     private CheckBox mon, tue, wed, thr, fri, sat, sun;
@@ -103,6 +103,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        location_auto_suggested_temp = null;
+        location_auto_suggested = null;
+
         location = NetworkManager.getCurrentLocation(getActivity());
         location_auto_suggested_temp = location;
         location_auto_suggested = location_auto_suggested_temp;
@@ -381,7 +385,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 }, 3500);
                 return false;
             }
-            if (!locationInput.getText().toString().equalsIgnoreCase(location_auto_suggested_temp)) {
+            if (!locationInput.getText().toString().trim().equalsIgnoreCase(location_auto_suggested_temp)) {
                 if (!locationInput.getText().toString().equalsIgnoreCase(location_auto_suggested)) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.choose_suggested_location), Toast.LENGTH_LONG).show();
                     locationInput.setError(getResources().getString(R.string.choose_suggested_location));
