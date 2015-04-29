@@ -3,6 +3,8 @@ package com.findmycoach.app.adapter;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.activity.ChatWidgetActivity;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.beans.requests.Data;
+import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.loopj.android.http.RequestParams;
@@ -67,30 +70,33 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.connection_single_row_mentor, null);
         RelativeLayout singleRow = (RelativeLayout) view.findViewById(R.id.singleRow);
+        final ImageView imageView = (ImageView) view.findViewById(R.id.studentImageView);
+        TextView nameTV = (TextView) view.findViewById(R.id.nameTV);
+        TextView lastMsgTV = (TextView) view.findViewById(R.id.lastMsgTV);
+        ImageButton connectionButton = (ImageButton) view.findViewById(R.id.detailsTV);
 
         singleRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(status.equals("pending") || status.equals("broken"))
                     return;
+                Bitmap userBitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+
                 Intent chatWidgetIntent = new Intent(context, ChatWidgetActivity.class);
                 if(DashboardActivity.dashboardActivity.user_group == 3){
                     chatWidgetIntent.putExtra("receiver_id", singleConnection.getOwnerId()+"");
                     chatWidgetIntent.putExtra("receiver_name", singleConnection.getOwnerName());
-                    chatWidgetIntent.putExtra("receiver_image", singleConnection.getOwnerImage());
+                    chatWidgetIntent.putExtra("receiver_image", BinaryForImage.getBinaryStringFromBitmap(userBitmap));
                     context.startActivity(chatWidgetIntent);
                 }else if(DashboardActivity.dashboardActivity.user_group == 2){
                     chatWidgetIntent.putExtra("receiver_id", singleConnection.getInviteeId()+"");
                     chatWidgetIntent.putExtra("receiver_name", singleConnection.getInviteeName());
-                    chatWidgetIntent.putExtra("receiver_image", singleConnection.getInviteeImage());
+                    chatWidgetIntent.putExtra("receiver_image", BinaryForImage.getBinaryStringFromBitmap(userBitmap));
                     context.startActivity(chatWidgetIntent);
                 }
             }
         });
-        ImageView imageView = (ImageView) view.findViewById(R.id.studentImageView);
-        TextView nameTV = (TextView) view.findViewById(R.id.nameTV);
-        TextView lastMsgTV = (TextView) view.findViewById(R.id.lastMsgTV);
-        ImageButton connectionButton = (ImageButton) view.findViewById(R.id.detailsTV);
+
 
         /** Called to show respective row for mentee and mentor */
         populateSingleRow(imageView, nameTV, lastMsgTV, connectionButton, DashboardActivity.dashboardActivity.user_group, singleConnection, position);

@@ -144,7 +144,7 @@ public class NotificationsFragment extends Fragment implements Callback {
                 }
             }else {
                 if(notificationAdapter != null && notificationAdapter.positionToRemove != -1 && connectionRequestsResponse != null){
-                    connectionRequestsResponse.getData().remove(notificationAdapter.positionToRemove);
+                    notificationAdapter.notifications.remove(notificationAdapter.positionToRemove);
                     notificationAdapter.notifyDataSetChanged();
                     notificationAdapter.positionToRemove = -1;
                     Toast.makeText(getActivity(),getResources().getString(R.string.success),Toast.LENGTH_LONG).show();
