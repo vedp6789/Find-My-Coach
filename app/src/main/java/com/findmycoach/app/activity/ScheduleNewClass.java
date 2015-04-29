@@ -245,9 +245,16 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         Log.d(TAG, "valid days " + valid_class_days);
 
-        int single_class_charge=Integer.parseInt(charges.split("per",2)[0]);
-        int total_amount=valid_class_days*single_class_charge;
-        tv_total_charges.setText("\u20B9 " +total_amount);
+        int single_class_charge=Integer.parseInt(charges.split(" per ",2)[0]);
+        int total_amount=0;
+                total_amount=valid_class_days*single_class_charge;
+        Log.d(TAG,"Total amount :"+total_amount);
+        try{
+            tv_total_charges.setText("\u20B9 " +String.valueOf(total_amount));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     private int calculateNoOfTotalClassDays(Calendar calendar_schedule_start_date, Calendar calendar_stop_date_of_schedule, String[] slot_on_week_days) {
@@ -339,6 +346,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         tv_to_date.setOnClickListener(this);
         tv_child_dob = (TextView) findViewById(R.id.tv_child_dob);
         tv_child_dob.setOnClickListener(this);
+        tv_total_charges= (TextView) findViewById(R.id.tv_total_charge);
         ll_child_dob = (LinearLayout) findViewById(R.id.ll_child_dob);
         ll_location = (LinearLayout) findViewById(R.id.ll_location);
         ll_location.setVisibility(View.GONE);

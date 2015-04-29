@@ -626,8 +626,8 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             Response response = (Response) object;
             userInfo = response.getData();
             Log.d(TAG, "success response message : in EditProfileActivity : " + response.getMessage());
-            if (!response.getMessage().equals("false"))
-                Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
+
+            Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
             Intent intent = new Intent();
             intent.putExtra("user_info", new Gson().toJson(userInfo));
             setResult(Activity.RESULT_OK, intent);

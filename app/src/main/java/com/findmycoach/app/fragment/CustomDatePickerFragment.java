@@ -87,14 +87,6 @@ public class CustomDatePickerFragment extends android.support.v4.app.DialogFragm
             @Override
             public void onClick(View v) {
                 if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 3) {
-                    if(for_which_activity.equals("MentorDetailsActivity")){
-                        Toast.makeText(getActivity(),"Month : "+ tv_month.getText().toString()+" month no : "+temp +"year : "+tv_selected_year.getText().toString(),Toast.LENGTH_LONG).show();
-                        MentorDetailsActivity.month_from_dialog=temp;
-                        MentorDetailsActivity.year_from_dialog=Integer.parseInt(tv_selected_year.getText().toString());
-
-                        dismiss();
-                        MentorDetailsActivity.mentorDetailsActivity.getCalendarDetailsAPICall();
-                    }
 
                     if(for_which_activity.equals("MyScheduleFragment")){
                         Toast.makeText(getActivity(),"Month : "+ tv_month.getText().toString()+" month no : "+temp +"year : "+tv_selected_year.getText().toString(),Toast.LENGTH_LONG).show();
@@ -108,12 +100,25 @@ public class CustomDatePickerFragment extends android.support.v4.app.DialogFragm
 
 
                 }else{
-                    Toast.makeText(getActivity(),"Month : "+ tv_month.getText().toString()+" month no : "+temp +"year : "+tv_selected_year.getText().toString(),Toast.LENGTH_LONG).show();
-                    MyScheduleFragment.month_from_dialog=temp;
-                    MyScheduleFragment.year_from_dialog=Integer.parseInt(tv_selected_year.getText().toString());
+                    if(for_which_activity.equals("MyScheduleFragment")){
+                        Toast.makeText(getActivity(),"Month : "+ tv_month.getText().toString()+" month no : "+temp +"year : "+tv_selected_year.getText().toString(),Toast.LENGTH_LONG).show();
+                        MyScheduleFragment.month_from_dialog=temp;
+                        MyScheduleFragment.year_from_dialog=Integer.parseInt(tv_selected_year.getText().toString());
 
-                    dismiss();
-                    MyScheduleFragment.myScheduleFragment.getCalendarDetailsForMentee();
+                        dismiss();
+                        MyScheduleFragment.myScheduleFragment.getCalendarDetailsForMentee();
+                    }
+
+                    if(for_which_activity.equals("MentorDetailsActivity")){
+                        Toast.makeText(getActivity(),"Month : "+ tv_month.getText().toString()+" month no : "+temp +"year : "+tv_selected_year.getText().toString(),Toast.LENGTH_LONG).show();
+                        MentorDetailsActivity.month_from_dialog=temp;
+                        MentorDetailsActivity.year_from_dialog=Integer.parseInt(tv_selected_year.getText().toString());
+
+                        dismiss();
+                        MentorDetailsActivity.mentorDetailsActivity.getCalendarDetailsAPICall();
+                    }
+
+
                 }
 
             }
