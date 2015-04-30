@@ -438,6 +438,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
                         Log.d(TAG, "Slot time value from AddNewSlotActivity" + slot_time_value / (60 * 60));
                         requestParams.add("slot_time_value", String.valueOf(slot_time_value));
                         requestParams.add("slot_type",slot_type);
+                        Log.d(TAG,"slot_type : "+slot_type);
                         if(slot_type.equals(getResources().getString(R.string.group))){
                             requestParams.add("max_users",et_maximum_students.getText().toString());
                             Log.d(TAG,"slot_type :"+ slot_type);

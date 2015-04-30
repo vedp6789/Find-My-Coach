@@ -449,7 +449,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         isSearching = false;
-        Toast.makeText(getActivity(), (String) object, Toast.LENGTH_LONG).show();
+        if(calledApiValue != 34)
+            Toast.makeText(getActivity(), (String) object, Toast.LENGTH_LONG).show();
     }
 
 

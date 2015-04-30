@@ -248,8 +248,6 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.d(TAG,"insided getView method of CalendarGridAdapter");
-
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context
@@ -289,12 +287,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             allow_schedule_population = true;
 
         }
-        Log.d(TAG,"insided getView method of CalendarGridAdapter  2");
-
         day_schedule_index = Integer.parseInt(theday) - 1;
         if (allow_schedule_population) {
-            Log.d(TAG,"insided getView method of CalendarGridAdapter 3");
-
             if (day_schedule_index < current_month_data.size()) {
 
                 day = current_month_data.get(day_schedule_index);
@@ -306,12 +300,10 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                 * */
                 if (myScheduleFragment != null) {
                     List<DayEvent> dayEvents = day.getDayEvents();
-                    Log.d(TAG,"insided getView method of CalendarGridAdapter4");
+
 
 
                     if (dayEvents.size() > 0) {
-                        Log.d(TAG,"insided getView method of CalendarGridAdapter 5");
-
                         if (day_color[1].equals("BLUE")) {
                             gridcell.setBackgroundColor(new Color().CYAN);
                         } else {
