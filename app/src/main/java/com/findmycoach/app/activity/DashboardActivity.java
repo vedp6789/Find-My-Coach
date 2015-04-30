@@ -97,6 +97,9 @@ public class DashboardActivity extends FragmentActivity
         String userId = StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id));
         String newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
 
+
+        Log.e("SignUp", StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user)) + "");
+
         try {
             user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
             if(userId != null && newUser != null && userId.equals(newUser.split("#")[1])){

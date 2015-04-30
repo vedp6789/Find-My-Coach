@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -274,12 +275,15 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
 
         try{
             Response response = (Response) object;
+            Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
             StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getData().getId());
-        }catch (Exception ignored){}
+            Log.e("SignUp", StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user)) + "");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         saveUserEmail(email);
         saveUserPhoneNumber(phoneNumber);
