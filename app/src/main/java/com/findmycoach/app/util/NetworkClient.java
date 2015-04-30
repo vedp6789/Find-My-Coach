@@ -1410,8 +1410,11 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.post(context, getAbsoluteURL("event", context), requestParams, new AsyncHttpResponseHandler() {
-            @Override
+        client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, context.getString(R.string.auth_token)));
+       client.post(context, getAbsoluteURL("event", context), requestParams, new AsyncHttpResponseHandler() {
+//            client.post(context, getAbsoluteURL("event", context), requestParams, new AsyncHttpResponseHandler() {
+
+                @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
                     Log.d(TAG, "Success : Status code : " + statusCode);
@@ -1435,7 +1438,7 @@ public class NetworkClient {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Failure : Response : " + responseJson);
                     Response response = new Gson().fromJson(responseJson, Response.class);
-                    callback.failureOperation(new String(responseBody), statusCode, calledApiValue);
+                    callback.failureOperation(new JSONObject(new String(responseBody)).get("message"), statusCode, calledApiValue);
                 } catch (Exception e) {
                     e.printStackTrace();
                     callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);

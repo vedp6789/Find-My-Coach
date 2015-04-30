@@ -565,6 +565,7 @@
     <string name="end_date_required">Please provide completion date of this slot.</string>
     <string name="mentor_is_not_free">Mentor is not free on this day.</string>
     <string name="child_date_of_birth_please">please provide child date of birth.</string>
+    <string name="please_provide_location_to_access_details">Please provide location to access calendar details</string>
 
 
     <!--  Minimum time difference between start time and stop time of a slot   i.e in hours-->

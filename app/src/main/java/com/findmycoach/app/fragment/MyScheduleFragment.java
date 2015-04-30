@@ -195,7 +195,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         }
 
         days_in_current_month = new GregorianCalendar(year, month - 1, 1).getActualMaximum(Calendar.DAY_OF_MONTH);
-        Toast.makeText(getActivity(), getResources().getString(R.string.start_date1) + String.valueOf(stringBuilder), Toast.LENGTH_SHORT).show();
+
         requestParams.add("start_date", String.valueOf(stringBuilder));
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
         networkCallForMentee(requestParams);
@@ -276,7 +276,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     }
 
     public void getCalendarDetailsAPICall() {
-        Log.d(TAG,"state 1");
+
         previousMonthArrayList = new ArrayList<Day>();
         currentMonthArrayList = new ArrayList<Day>();
         comingMonthArrayList = new ArrayList<Day>();
@@ -327,13 +327,13 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
         days_in_current_month = new GregorianCalendar(year, month - 1, 1).getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        Toast.makeText(getActivity(), getResources().getString(R.string.start_date1) + String.valueOf(stringBuilder), Toast.LENGTH_SHORT).show();
+
         requestParams.add("start_date", String.valueOf(stringBuilder));
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
-        Log.d(TAG, "state 2");
+
 
         if (cb_calendar_by_location_is_checked) {
-            Log.d(TAG,"state 3");
+
 
             Log.d(TAG,"calendar_by_location is checked true");
             if (calendar_by_location != null && !calendar_by_location.trim().equals("")) {
@@ -347,7 +347,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 cb_calendar_by_location.setChecked(false);
             }
         } else {
-            Log.d(TAG,"state 4");
+
 
             Log.d(TAG," Data getting requested for three months : "+ "start date : "+String.valueOf(stringBuilder)+ " limit : "+String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month) );
             Log.d(TAG,"start networkCall1");
@@ -542,7 +542,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     Log.d(TAG," Request for calendar details for prev month "+"start _date: "+String.valueOf(stringBuilder)+ " limit : "+String.valueOf(days_in_new_prev_month)+" calendar by location : "+calendar_by_location);
                     networkCall2(requestParams);
                 } else {
-                    Toast.makeText(getActivity(), "Please provide location to access calendar details", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getResources().getString(R.string.please_provide_location_to_access_details), Toast.LENGTH_SHORT).show();
                     getLocationFromDialog();  /* start LocationFromDialog to get the location */
                 }
             } else {
@@ -625,7 +625,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     Log.d(TAG," Request for calendar details for prev month "+"start _date: "+String.valueOf(stringBuilder)+ " limit : "+String.valueOf(days_in_new_next_month)+ " location : "+ calendar_by_location);
                     networkCall3(requestParams);
                 } else {
-                    Toast.makeText(getActivity(), "Please provide location to access calendar details", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getResources().getString(R.string.please_provide_location_to_access_details), Toast.LENGTH_SHORT).show();
                     getLocationFromDialog();  /* start LocationFromDialog to get the location */
                 }
             } else {
@@ -877,7 +877,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         }
         if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 2) {
             progressDialog.dismiss();
-            Log.d(TAG, "INside threeMonthData method for user_group 2");
+
             try {
 
                 JSONObject jsonObject = new JSONObject((String) object);
@@ -1050,7 +1050,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
                 Log.d(TAG, "comingMonthArrayList size" + comingMonthArrayList.size());
                 for (Day day1 : comingMonthArrayList) {
-                    Log.d(TAG, "date from new comingMonthArrayList" + day1.getDate());
+                    //Log.d(TAG, "date from new comingMonthArrayList" + day1.getDate());
                 }
 
                 adapter2 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
@@ -1113,7 +1113,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
                 Log.d(TAG, "comingMonthArrayList size" + comingMonthArrayList.size());
                 for (Day day1 : comingMonthArrayList) {
-                    Log.d(TAG, "date from new comingMonthArrayList" + day1.getDate());
+                 //   Log.d(TAG, "date from new comingMonthArrayList" + day1.getDate());
                 }
 
                 adapter2 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);

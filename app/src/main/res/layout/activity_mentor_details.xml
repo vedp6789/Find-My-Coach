@@ -296,34 +296,39 @@
                     android:layout_height="50dp"
                     android:height="6dp"
                     android:layout_below="@id/tv_classes_abailability"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:background="@color/caldroid_gray">
 
                     <ImageView
                         android:id="@+id/iv_prevMonth"
-                        android:layout_width="wrap_content"
+                        android:layout_width="40dp"
                         android:layout_height="fill_parent"
                         android:layout_gravity="start"
                         android:layout_marginLeft="10sp"
+                        android:paddingRight="10dp"
                         android:src="@drawable/calendar_left_arrow_selector"
-                        android:background="@color/caldroid_gray"/>
+                        />
 
                     <TextView
                         android:id="@+id/tv_currentMonth"
                         android:layout_width="wrap_content"
                         android:layout_height="60dp"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
                         android:gravity="center"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="#000000" />
 
                     <ImageView
                         android:id="@+id/iv_nextMonth"
-                        android:layout_width="wrap_content"
+                        android:layout_width="40dp"
                         android:layout_height="fill_parent"
-                        android:layout_gravity="center"
+                        android:layout_gravity="start"
+                        android:paddingLeft="10dp"
                         android:layout_marginRight="10sp"
-                        android:background="@color/caldroid_gray"
-                        android:src="@drawable/calendar_right_arrow_selector" />
+                        android:src="@drawable/calendar_right_arrow_selector"
+                       />
                 </LinearLayout>
 
                 <include layout="@layout/calendar"

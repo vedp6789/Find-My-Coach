@@ -30,6 +30,9 @@ import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -430,7 +433,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                         requestParams1.add("total_price",tv_total_charges.getText().toString());
                         progressDialog.show();
                         NetworkClient.postScheduleRequest(ScheduleNewClass.this,requestParams1,this,46);
-
+                        Log.d(TAG,"id : "+slot_id.toString()+"student_id"+student_id+"mentor_id: "+mentor_id+" start_date : "+from_date.split("-",3)[2]+"-"+from_date.split("-",3)[1]+"-"+from_date.split("-",3)[0]+"slot_type : "+slot_type+" sub_category_id : "+sub_category_id+" total_price : "+tv_total_charges.getText().toString()+"date_of_birth_kid"+tv_child_dob.getText().toString().split("-",3)[2]+"-"+tv_child_dob.getText().toString().split("-",3)[1]+"-"+tv_child_dob.getText().toString().split("-",3)[0]);
 
                     }
                 }
@@ -484,10 +487,26 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
        progressDialog.dismiss();
+        try {
+            JSONObject jsonObject=new JSONObject((String)object);
+            String message=jsonObject.getString("message");
+            Toast.makeText(ScheduleNewClass.this,(String)object,Toast.LENGTH_SHORT).show();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
        progressDialog.dismiss();
+        try {
+            JSONObject jsonObject=new JSONObject((String)object);
+            String message=jsonObject.getString("message");
+            Toast.makeText(ScheduleNewClass.this,(String)object,Toast.LENGTH_SHORT).show();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 }
