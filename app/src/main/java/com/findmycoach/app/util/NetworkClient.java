@@ -109,7 +109,7 @@ public class NetworkClient {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Success : Response : " + responseJson);
                     Response response = new Gson().fromJson(responseJson, Response.class);
-                    callback.successOperation(response.getMessage(), statusCode, calledApiValue);
+                    callback.successOperation(response, statusCode, calledApiValue);
                 } catch (Exception e) {
                     e.printStackTrace();
                     onFailure(statusCode, headers, responseBody, null);
