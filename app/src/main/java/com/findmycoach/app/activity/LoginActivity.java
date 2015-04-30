@@ -837,11 +837,12 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             finish();
             startActivity(new Intent(this, DashboardActivity.class));
         } else {
-            if (response.getData().getNewUser())
+            if (response.getData() != null && response.getData().getNewUser())
                 StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getData().getId());
 
             /** Login is successful but phone number not present, open dialog to get phone number */
-            if (response.getData().getPhonenumber() == null || response.getData().getPhonenumber().equals("0")) {
+            if ((response.getData() != null && response.getData().getPhonenumber() == null) ||
+                    (response.getData() != null && response.getData().getPhonenumber() != null && response.getData().getPhonenumber().equals("0"))) {
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("email", response.getData().getEmail());
                 getPhoneNumber(requestParams);
@@ -849,10 +850,10 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
             /** Login is successful but phone number not validated, open ValidatePhone Activity */
             else {
-                Log.e(TAG, response.getData().getNewUser() + " : " + response.getData().getId());
                 /** Saving phone number for validating purpose and starting ValidatePhoneActivity */
                 try {
                     saveUserPhoneNumber(response.getData().getPhonenumber().split("-")[1]);
+                    Log.e(TAG, response.getData().getNewUser() + " : " + response.getData().getId());
                 } catch (Exception ignored) {
                 }
                 Intent intent = new Intent(this, ValidatePhoneActivity.class);
