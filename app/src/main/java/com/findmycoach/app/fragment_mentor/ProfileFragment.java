@@ -236,7 +236,7 @@ public class ProfileFragment extends Fragment implements Callback {
             }
         } catch (Exception e) {
             Log.d(TAG, "Error while redirecting:" + e.getMessage());
-            Toast.makeText(getActivity(), getResources().getString(R.string.update_profile), Toast.LENGTH_LONG).show();
+//            Toast.makeText(getActivity(), getResources().getString(R.string.update_profile), Toast.LENGTH_LONG).show();
         }
     }
 
