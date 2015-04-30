@@ -1422,7 +1422,7 @@ public class NetworkClient {
                     Log.d(TAG, "Success : Response : " + responseJson);
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     if (statusCode == 200)
-                        callback.successOperation(new String(responseBody), statusCode, calledApiValue);
+                        callback.successOperation(response.getMessage(), statusCode, calledApiValue);
                     else
                         callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {

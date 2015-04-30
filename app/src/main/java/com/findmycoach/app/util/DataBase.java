@@ -55,7 +55,7 @@ public class DataBase extends SQLiteOpenHelper {
     }
 
     /** Inserting sub categories into table TableSubCategory */
-    public void insertData(Category category){
+    public long insertData(Category category){
         ContentValues contentValues = new ContentValues();
         for(Datum datum : category.getData()) {
             for(DatumSub datumSub : datum.getDataSub()){
@@ -66,6 +66,7 @@ public class DataBase extends SQLiteOpenHelper {
                 db.insert(TABLE_NAME,null,contentValues);
             }
         }
+        return 0;
     }
 
     /** Select sub category with id */
