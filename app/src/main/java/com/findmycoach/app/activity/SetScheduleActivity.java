@@ -270,6 +270,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         String slot_stop_date = daySlot.getSlot_stop_date();
                         String[] slot_on_week_days = daySlot.getSlot_week_days();
                         String slot_type = daySlot.getSlot_type();
+                        String slot_max_users=daySlot.getSlot_max_users();
                         //String event_name=dayEvent.getEvent_name();
                         startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_start_time.split(":", 3)[0]));
                         startTime.set(Calendar.MINUTE, Integer.parseInt(slot_start_time.split(":", 3)[1]));
@@ -280,7 +281,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
                         endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                         WeekViewEvent weekViewEvent;
-                        weekViewEvent = new WeekViewEvent(4, getSlotTitle(slot_start_date, slot_stop_date, slot_start_time, slot_stop_time, slot_type, slot_on_week_days), startTime, endTime, slot_event_type)
+                        weekViewEvent = new WeekViewEvent(4, getSlotTitle(slot_start_date, slot_stop_date, slot_start_time, slot_stop_time, slot_type, slot_on_week_days,slot_max_users), startTime, endTime, slot_event_type)
                         ;
                         weekViewEvent.setColor(getResources().getColor(R.color.event_color_02));
                         events.add(weekViewEvent);
@@ -578,6 +579,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         String slot_stop_date = daySlot.getSlot_stop_date();
                         String[] slot_on_week_days = daySlot.getSlot_week_days();
                         String slot_type = daySlot.getSlot_type();
+                        String slot_max_users=daySlot.getSlot_max_users();
 
                         startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_start_time.split(":", 3)[0]));
                         startTime.set(Calendar.MINUTE, Integer.parseInt(slot_start_time.split(":", 3)[1]));
@@ -588,7 +590,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
                         endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                         WeekViewEvent weekViewEvent;
-                        weekViewEvent = new WeekViewEvent(4, getSlotTitle(slot_start_date,slot_stop_date,slot_start_time,slot_stop_time,slot_type,slot_on_week_days), startTime, endTime, slot_event_type);
+                        weekViewEvent = new WeekViewEvent(4, getSlotTitle(slot_start_date,slot_stop_date,slot_start_time,slot_stop_time,slot_type,slot_on_week_days,slot_max_users), startTime, endTime, slot_event_type);
                         weekViewEvent.setColor(getResources().getColor(R.color.event_color_02));
                         events.add(weekViewEvent);
 
@@ -700,6 +702,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         String slot_stop_date = daySlot.getSlot_stop_date();
                         String[] slot_on_week_days = daySlot.getSlot_week_days();
                         String slot_type = daySlot.getSlot_type();
+                        String slot_max_users=daySlot.getSlot_max_users();
                         //String event_name=dayEvent.getEvent_name();
                         startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_start_time.split(":", 3)[0]));
                         startTime.set(Calendar.MINUTE, Integer.parseInt(slot_start_time.split(":", 3)[1]));
@@ -710,7 +713,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
                         endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                         WeekViewEvent weekViewEvent;
-                        weekViewEvent = new WeekViewEvent(4, getSlotTitle(slot_start_date, slot_stop_date, slot_start_time, slot_stop_time, slot_type, slot_on_week_days), startTime, endTime, slot_event_type);
+                        weekViewEvent = new WeekViewEvent(4, getSlotTitle(slot_start_date, slot_stop_date, slot_start_time, slot_stop_time, slot_type, slot_on_week_days,slot_max_users), startTime, endTime, slot_event_type);
                         weekViewEvent.setColor(getResources().getColor(R.color.event_color_02));
                         events.add(weekViewEvent);
 
@@ -806,7 +809,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     }
 
-    private String getSlotTitle(String slot_start_date, String slot_stop_date, String slot_start_time, String slot_stop_time, String slot_type, String[] slot_on_week_days) {
+    private String getSlotTitle(String slot_start_date, String slot_stop_date, String slot_start_time, String slot_stop_time, String slot_type, String[] slot_on_week_days,String slot_max_users) {
 
         StringBuilder stringBuilder = new StringBuilder();
         for (int slot_week_day = 0; slot_week_day < slot_on_week_days.length; slot_week_day++) {
@@ -866,7 +869,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                 Integer.parseInt(slot_stop_date.split("-", 3)[2]), Integer.parseInt(slot_stop_date.split("-", 3)[1]), Integer.parseInt(slot_stop_date.split("-", 3)[0]),
                 Integer.parseInt(slot_start_time.split(":", 3)[0]), Integer.parseInt(slot_start_time.split(":", 3)[1]),
                 Integer.parseInt(slot_stop_time.split(":", 3)[0]), Integer.parseInt(slot_stop_time.split(":", 3)[1])) +
-                "Slot type: " + slot_type + "\n" + "Week-days: " + stringBuilder.toString();
+                "Slot type: " + slot_type +" ("+slot_max_users+")" +"\n" + "Week-days: " + stringBuilder.toString();
 
     }
 
@@ -939,6 +942,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             RequestParams requestParams = new RequestParams();
             requestParams.add("user_group", StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group"));
             requestParams.add("id", String.valueOf(event.getId()));
+            Log.d(TAG,"event_id :"+String.valueOf(event.getId()));
             progressDialog.show();
             NetworkClient.getCalenderEvent(SetScheduleActivity.this, requestParams, StorageHelper.getUserDetails(SetScheduleActivity.this, "auth_token"), this, 43);
         } else {
@@ -988,6 +992,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         progressDialog.dismiss();
         Intent intent = new Intent(SetScheduleActivity.this, AboutEvent.class);
         intent.putExtra("about_event", (String) object);
+        Log.d(TAG,"event id data for event : "+(String)object);
         startActivity(intent);
     }
 

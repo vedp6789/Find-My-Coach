@@ -731,6 +731,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             }
                             daySlot.setSlot_week_days(dates);
                             daySlot.setSlot_id(day_slot.getString("id"));
+                            daySlot.setSlot_max_users(day_slot.getString("max_users"));
                             daySlots.add(daySlot);
                         }
                         day1.setDaySlots(daySlots);
@@ -787,6 +788,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             }
                             daySlot.setSlot_week_days(dates);
                             daySlot.setSlot_id(day_slot.getString("id"));
+                            daySlot.setSlot_max_users(day_slot.getString("max_users"));
                             daySlots.add(daySlot);
                         }
                         day1.setDaySlots(daySlots);
@@ -851,6 +853,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             }
                             daySlot.setSlot_week_days(dates);
                             daySlot.setSlot_id(day_slot.getString("id"));
+                            daySlot.setSlot_max_users(day_slot.getString("max_users"));
                             daySlots.add(daySlot);
                         }
                         day1.setDaySlots(daySlots);
@@ -1058,6 +1061,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             }
                             daySlot.setSlot_week_days(dates);
                             daySlot.setSlot_id(day_slot.getString("id"));
+                            daySlot.setSlot_max_users(day_slot.getString("max_users"));
                             daySlots.add(daySlot);
                         }
                         day1.setDaySlots(daySlots);
@@ -1213,6 +1217,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             }
                             daySlot.setSlot_week_days(dates);
                             daySlot.setSlot_id(day_slot.getString("id"));
+                            daySlot.setSlot_max_users(day_slot.getString("max_users"));
 
                             daySlots.add(daySlot);
                         }
