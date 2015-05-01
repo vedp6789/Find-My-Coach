@@ -85,6 +85,7 @@ public class GcmFmcService extends IntentService {
     private void sendNotification(String push_message) {
 
         String userToken = StorageHelper.getUserDetails(this, "auth_token");
+
         //String phnVerified = StorageHelper.getUserDetails(this, "phone_verified");  // commented as it is not working from server side
 
 

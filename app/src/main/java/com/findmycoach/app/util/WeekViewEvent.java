@@ -243,12 +243,13 @@ public class WeekViewEvent {
      * @param startTime The time when the event starts.
      * @param endTime   The time when the event ends.
      */
-    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime, int event_type) {
+    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime,String slot_type, int event_type) {
         this.mId = id;
         this.mName = name;
         this.mStartTime = startTime;
         this.mEndTime = endTime;
         this.eventType = event_type;
+        this.slot_type=slot_type;
 
     }
 

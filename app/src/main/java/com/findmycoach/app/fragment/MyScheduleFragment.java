@@ -750,6 +750,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
                             dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                            dayEvent.setEvent_type(day_event.getString("slot_type"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -808,6 +809,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
                             dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                            dayEvent.setEvent_type(day_event.getString("slot_type"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -873,6 +875,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
                             dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                            dayEvent.setEvent_type(day_event.getString("slot_type"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -932,6 +935,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
                             dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                            dayEvent.setEvent_type(day_event.getString("slot_type"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -963,6 +967,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
                             dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                            dayEvent.setEvent_type(day_event.getString("slot_type"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -991,6 +996,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
+                            dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                            dayEvent.setEvent_type(day_event.getString("slot_type"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -1081,6 +1088,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
                             dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                            dayEvent.setEvent_type(day_event.getString("slot_type"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -1144,6 +1152,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
                             dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                            dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                            dayEvent.setEvent_type(day_event.getString("slot_type"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -1238,6 +1248,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
                             dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                            dayEvent.setEvent_type(day_event.getString("slot_type"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);
@@ -1292,6 +1303,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
                             dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                            dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                            dayEvent.setEvent_type(day_event.getString("slot_type"));
                             dayEvents.add(dayEvent);
                         }
                         day1.setDayEvents(dayEvents);

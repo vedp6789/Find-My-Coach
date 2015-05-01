@@ -19,21 +19,14 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver{
 // Explicitly specify that GcmIntentService will handle the intent.
         Log.e(TAG,"Broadcastreciver :  GCM Message arrived ");
 
-        String x=intent.getStringExtra("NOT_GCM");
 
-
-        if(x!=null && x.length() > 0){
-            if(x.equals("true")){
-
-            }
-        }else{
             Log.d(TAG, "Inside GCM Broadcast receiver");
             ComponentName comp = new ComponentName(context.getPackageName(),
                     GcmFmcService.class.getName());
             // Start the service, keeping the device awake while it is launching.
             startWakefulService(context, (intent.setComponent(comp)));
             setResultCode(Activity.RESULT_OK);
-        }
+
 
 
 
