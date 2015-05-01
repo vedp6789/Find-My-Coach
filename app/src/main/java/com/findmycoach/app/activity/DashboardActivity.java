@@ -31,6 +31,7 @@ import com.findmycoach.app.fragment.MyConnectionsFragment;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.fragment.NotificationsFragment;
 import com.findmycoach.app.fragment_mentee.HomeFragment;
+import com.findmycoach.app.fragment_mentor.GCMScheduleRequestDialogFragment;
 import com.findmycoach.app.reside_menu.ResideMenu;
 import com.findmycoach.app.reside_menu.ResideMenuItem;
 import com.findmycoach.app.util.Callback;
@@ -77,7 +78,9 @@ public class DashboardActivity extends FragmentActivity
     int fragment_to_launch_from_notification = 0;  ///  On a tap over Push notification, then it will be used to identify which operation to perform
     int group_push_notification = 0;      /// it will identify push notification for which type of user.
 
-    /**Related to reside menu*/
+    /**
+     * Related to reside menu
+     */
     private ResideMenu resideMenu;
     private ResideMenuItem itemHome;
     private ResideMenuItem itemNotification;
@@ -102,13 +105,13 @@ public class DashboardActivity extends FragmentActivity
 
         try {
             user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
-            if(userId != null && newUser != null && userId.equals(newUser.split("#")[1])){
+            if (userId != null && newUser != null && userId.equals(newUser.split("#")[1])) {
                 String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
                 RequestParams requestParams = new RequestParams();
                 Log.d(TAG, "Stored User Id:" + userId);
                 Log.d(TAG, "auth_token" + authToken);
                 requestParams.add("id", userId);
-                requestParams.add("user_group", user_group+"");
+                requestParams.add("user_group", user_group + "");
                 NetworkClient.getProfile(this, requestParams, authToken, this, 4);
             }
         } catch (Exception e) {
@@ -127,6 +130,7 @@ public class DashboardActivity extends FragmentActivity
 
         fragment_to_launch_from_notification = getIntent().getIntExtra("fragment", 0);
         group_push_notification = getIntent().getIntExtra("group", 0);
+
 
         if (fragment_to_launch_from_notification == 0) {
             // Check device for Play Services APK.
@@ -168,7 +172,6 @@ public class DashboardActivity extends FragmentActivity
             resideMenu.openMenu(ResideMenu.DIRECTION_RIGHT);
         return true;
     }
-
 
 
     /**
@@ -247,13 +250,13 @@ public class DashboardActivity extends FragmentActivity
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        if(calledApiValue == 4){
-            if(user_group == 2){
+        if (calledApiValue == 4) {
+            if (user_group == 2) {
                 ProfileResponse response = (ProfileResponse) object;
                 Intent intent = new Intent(this, EditProfileActivityMentee.class);
                 intent.putExtra("user_info", new Gson().toJson(response.getData()));
                 startActivity(intent);
-            }else if(user_group == 3){
+            } else if (user_group == 3) {
                 Response response = (Response) object;
                 Intent intent = new Intent(this, EditProfileActivityMentor.class);
                 intent.putExtra("user_info", new Gson().toJson(response.getData()));
@@ -351,21 +354,37 @@ public class DashboardActivity extends FragmentActivity
                 ResideMenuItem item = null;
 
                 switch (fragment_to_launch_from_notification) {
-                    case 1:case 2:case 3:case 4:case 5:case 6:
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 5:
+                    case 6:
                         item = itemNotification;
                         break;
-                    case 7:case 8:case 9:
+                    case 7:
+                    case 8:
+                    case 9:
                         item = itemConnection;
                         break;
-//                    case 4:case 5:case 6:
-//                        item = itemSchedule;
-//                        break;
+                    case 4:
+                        String slot_type = getIntent().getExtras().getString("slot_type");
+                        String event_id = getIntent().getExtras().getString("event_id");
+                        String student_id = getIntent().getExtras().getString("student_id");
+                        android.app.FragmentManager fragmentManager = getFragmentManager();
+                        GCMScheduleRequestDialogFragment gcmScheduleRequestDialogFragment = new GCMScheduleRequestDialogFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("slot_type", slot_type);
+                        bundle.putString("event_id", event_id);
+                        bundle.putString("student_id", student_id);
+                        gcmScheduleRequestDialogFragment.setArguments(bundle);
+                        gcmScheduleRequestDialogFragment.show(fragmentManager, null);
+                        break;
                 }
                 fragment_to_launch_from_notification = 0;
 
-                if(resideMenu == null)
+                if (resideMenu == null)
                     setUpMenu(item);
-                else if(item != null)
+                else if (item != null)
                     item.callOnClick();
 
                 setTitle(mTitle);
@@ -451,7 +470,7 @@ public class DashboardActivity extends FragmentActivity
     private void initialize() {
         navigationTitle = getResources().getStringArray(R.array.navigation_items);
         mTitle = getResources().getString(R.string.app_name);
-        if(resideMenu == null)
+        if (resideMenu == null)
             setUpMenu(null);
     }
 
@@ -466,8 +485,8 @@ public class DashboardActivity extends FragmentActivity
         resideMenu.setScaleValue(0.6f);
 
         // create menu items;
-        itemHome     = new ResideMenuItem(this, R.drawable.icon_home, navigationTitle[0]);
-        itemNotification  = new ResideMenuItem(this, android.R.drawable.stat_notify_chat, navigationTitle[1]);
+        itemHome = new ResideMenuItem(this, R.drawable.icon_home, navigationTitle[0]);
+        itemNotification = new ResideMenuItem(this, android.R.drawable.stat_notify_chat, navigationTitle[1]);
         itemConnection = new ResideMenuItem(this, R.drawable.icon_profile, navigationTitle[2]);
         itemSchedule = new ResideMenuItem(this, R.drawable.icon_calendar, navigationTitle[3]);
         itemSettings = new ResideMenuItem(this, R.drawable.icon_settings, navigationTitle[4]);
@@ -492,7 +511,7 @@ public class DashboardActivity extends FragmentActivity
         resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_LEFT);
 
 
-        if(item != null)
+        if (item != null)
             item.callOnClick();
         else
             itemHome.callOnClick();
@@ -509,16 +528,13 @@ public class DashboardActivity extends FragmentActivity
             if (view == itemHome) {
                 fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentor.HomeFragment());
                 position = 0;
-            }
-            else if (view == itemNotification) {
+            } else if (view == itemNotification) {
                 fragmentTransaction.replace(R.id.container, new NotificationsFragment());
                 position = 1;
-            }
-            else if (view == itemConnection) {
+            } else if (view == itemConnection) {
                 fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
                 position = 2;
-            }
-            else if (view == itemSchedule) {
+            } else if (view == itemSchedule) {
                 fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
                 position = 3;
             }
@@ -528,23 +544,20 @@ public class DashboardActivity extends FragmentActivity
             if (view == itemHome) {
                 fragmentTransaction.replace(R.id.container, new HomeFragment());
                 position = 0;
-            }
-            else if (view == itemNotification) {
+            } else if (view == itemNotification) {
                 fragmentTransaction.replace(R.id.container, new NotificationsFragment());
                 position = 1;
-            }
-            else if (view == itemConnection) {
+            } else if (view == itemConnection) {
                 fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
                 position = 2;
-            }
-            else if (view == itemSchedule) {
+            } else if (view == itemSchedule) {
                 fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
                 position = 3;
             }
             fragmentTransaction.commit();
         }
 
-        if(position > -1)
+        if (position > -1)
             onSectionAttached(position);
 
 
@@ -552,7 +565,7 @@ public class DashboardActivity extends FragmentActivity
             startActivity(new Intent(this, Settings.class));
         else if (view == itemLogout)
             logout();
-        if(resideMenu != null && resideMenu.isOpened())
+        if (resideMenu != null && resideMenu.isOpened())
             resideMenu.closeMenu();
     }
 

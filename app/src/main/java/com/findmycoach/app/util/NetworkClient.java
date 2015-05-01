@@ -78,6 +78,7 @@ import org.json.JSONObject;
     *       event                           46     // used when Mentee go for all details validation for a schedule
     *       getCardDetails                  47     // used to get saved card and PayPal details from server
     *       payMentor                       48
+    *       eventFinalize                   49
     * */
 
 
@@ -1404,6 +1405,13 @@ public class NetworkClient {
     }
 
 
+
+
+
+
+
+
+
     public static void postScheduleRequest(final Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
         if (!NetworkManager.isNetworkConnected(context)) {
             callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
@@ -1507,6 +1515,48 @@ public class NetworkClient {
 //                        callback.successOperation(response, statusCode, calledApiValue);
 //                    else
 //                        callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseBody, null);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    Log.d(TAG, "Failure : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                }
+            }
+        });
+    }
+
+
+    public static void finalizeEvent(final Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
+        if (!NetworkManager.isNetworkConnected(context)) {
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, context.getString(R.string.auth_token)));
+        client.post(getAbsoluteURL("eventFinalize", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    Log.d(TAG, "Success : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    if (statusCode == 200)
+                        callback.successOperation(response, statusCode, calledApiValue);
+                    else
+                        callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
                     e.printStackTrace();
                     onFailure(statusCode, headers, responseBody, null);

@@ -488,26 +488,29 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
        progressDialog.dismiss();
-        try {
-            JSONObject jsonObject=new JSONObject((String)object);
-            String message=jsonObject.getString("message");
-            Toast.makeText(ScheduleNewClass.this,(String)object,Toast.LENGTH_SHORT).show();
+        /*try {
+           // JSONObject jsonObject=new JSONObject((String)object);
+           // String message=jsonObject.getString("message");
+
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
+        Toast.makeText(ScheduleNewClass.this,(String)object,Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
        progressDialog.dismiss();
-        try {
+        /*try {
             JSONObject jsonObject=new JSONObject((String)object);
             String message=jsonObject.getString("message");
-            Toast.makeText(ScheduleNewClass.this,(String)object,Toast.LENGTH_SHORT).show();
+
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
+
+        Toast.makeText(ScheduleNewClass.this,(String)object,Toast.LENGTH_SHORT).show();
 
     }
 }

@@ -123,6 +123,12 @@ public class GcmFmcService extends IntentService {
                         message="Hi, you have a new class schedule from "+f_name;
                         Intent intent=new Intent(this,DashboardActivity.class);
                         intent.putExtra("fragment",4);
+                        String slot_type=jsonObject1.getString("slot_type");
+                        String event_id=jsonObject1.getString("event_id");
+                        String student_id=jsonObject1.getString("student_id");
+                        intent.putExtra("slot_type",slot_type);
+                        intent.putExtra("event_id",event_id);
+                        intent.putExtra("student_id",student_id);
                         intent.putExtra("group",3);
                         intent.setAction("" + Math.random());
 
