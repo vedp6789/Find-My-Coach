@@ -823,7 +823,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
 
         /**phone number not present*/
-        if (statusCode == 206) {
+        if (statusCode == 206 || calledApiValue == 26) {
           RequestParams requestParams = new RequestParams();
           requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
           getPhoneNumber(requestParams);
