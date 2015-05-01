@@ -823,7 +823,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
 
         /**phone number not present*/
-        if (statusCode == 206 || calledApiValue == 26) {
+        if (statusCode == 206) {
           RequestParams requestParams = new RequestParams();
           requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
           getPhoneNumber(requestParams);
@@ -831,7 +831,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
 
         /** If phone number is not verified then starting ValidatePhoneActivity */
-        if (statusCode == 400) {
+        if (statusCode == 400 || calledApiValue == 26) {
           startActivity(new Intent(this, ValidatePhoneActivity.class));
           finish();
           fbClearToken();
