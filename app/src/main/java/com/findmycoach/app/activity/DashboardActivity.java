@@ -351,15 +351,15 @@ public class DashboardActivity extends FragmentActivity
                 ResideMenuItem item = null;
 
                 switch (fragment_to_launch_from_notification) {
-                    case 1:case 2:case 3:
+                    case 1:case 2:case 3:case 4:case 5:case 6:
                         item = itemNotification;
                         break;
                     case 7:case 8:case 9:
                         item = itemConnection;
                         break;
-                    case 4:case 5:case 6:
-                        item = itemSchedule;
-                        break;
+//                    case 4:case 5:case 6:
+//                        item = itemSchedule;
+//                        break;
                 }
                 fragment_to_launch_from_notification = 0;
 
