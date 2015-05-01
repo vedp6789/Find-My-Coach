@@ -810,14 +810,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         if (response == null)
             return;
 
-        if (statusCode == 206 || response.getMessage().contains("Phone number is not set")) {
-            RequestParams requestParams = new RequestParams();
-            requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
-            getPhoneNumber(requestParams);
-            return;
-        }
-
-
         /** Saving user group */
         String user_group_saved = StorageHelper.getUserGroup(LoginActivity.this, "user_group");
         if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group))) {
@@ -830,43 +822,31 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             saveUser(response.getAuthToken(), response.getData().getId());
         }
 
+        /**phone number not present*/
+        if (statusCode == 206) {
+          RequestParams requestParams = new RequestParams();
+          requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
+          getPhoneNumber(requestParams);
+          return;
+        }
+
+        /** If phone number is not verified then starting ValidatePhoneActivity */
+        if (statusCode == 400) {
+          startActivity(new Intent(this, ValidatePhoneActivity.class));
+          finish();
+          fbClearToken();
+          if (!mGoogleApiClient.isConnecting() && mGoogleApiClient.isConnected()) {
+            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+            mGoogleApiClient.disconnect();
+            mGoogleApiClient.connect();
+          }
+        }
+
         /** Login is successful start DashBoard Activity */
-        if (response.getMessage() != null && response.getMessage().equals("Success") &&
-                response.getData().getPhonenumber() != null && !response.getData().getPhonenumber().equals("0")) {
+        if (statusCode == 200) {
             saveUserPhn("True");
             finish();
             startActivity(new Intent(this, DashboardActivity.class));
-        } else {
-            if (response.getData() != null && response.getData().getNewUser())
-                StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getData().getId());
-
-            /** Login is successful but phone number not present, open dialog to get phone number */
-            if ((response.getData() != null && response.getData().getPhonenumber() == null) ||
-                    (response.getData() != null && response.getData().getPhonenumber() != null && response.getData().getPhonenumber().equals("0"))) {
-                RequestParams requestParams = new RequestParams();
-                requestParams.add("email", response.getData().getEmail());
-                getPhoneNumber(requestParams);
-            }
-
-            /** Login is successful but phone number not validated, open ValidatePhone Activity */
-            else {
-                /** Saving phone number for validating purpose and starting ValidatePhoneActivity */
-                try {
-                    saveUserPhoneNumber(response.getData().getPhonenumber().split("-")[1]);
-                    Log.e(TAG, response.getData().getNewUser() + " : " + response.getData().getId());
-                } catch (Exception ignored) {
-                }
-                Intent intent = new Intent(this, ValidatePhoneActivity.class);
-                finish();
-                startActivity(intent);
-                fbClearToken();
-                if (!mGoogleApiClient.isConnecting() && mGoogleApiClient.isConnected()) {
-                    Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                    mGoogleApiClient.disconnect();
-                    mGoogleApiClient.connect();
-                }
-            }
-
         }
     }
 
@@ -880,7 +860,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group)))
             StorageHelper.storePreference(LoginActivity.this, "user_group", String.valueOf(user_group));
 
-        if (msg.equals("Phone number is not set")) {
+        if (statusCode == 206) {
             RequestParams requestParams = new RequestParams();
             requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
             getPhoneNumber(requestParams);
@@ -888,8 +868,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
 
         /** If phone number is not verified then starting ValidatePhoneActivity */
-        if (msg.equals("Validate Phone number to login") || msg.equals("Validate Phone number and Email to Login ")
-                || msg.equals("Validate phone number to activate account")) {
+        if (statusCode == 400) {
             startActivity(new Intent(this, ValidatePhoneActivity.class));
             finish();
             return;
