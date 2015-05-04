@@ -134,7 +134,11 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
 
         /** Entered OTP is verified successful */
         else if (calledApiValue == 27) {
-            if (response.getAuthToken() != null)
+            if(response.getData() == null){
+                Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
+                return;
+            }
+            else if (response.getAuthToken() != null && !response.getAuthToken().equals(""))
                 saveUser(response.getAuthToken(), response.getData().getId());
         }
 
@@ -273,6 +277,8 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                         NetworkClient.updatePhoneForSocialMedia(ValidatePhoneActivity.this, requestParams, ValidatePhoneActivity.this, 26);
                     }
                 }
+
+                Log.e(TAG, countryCodeTV.getText().toString().trim() + "-" + phnNum);
             }
         });
 

@@ -9,6 +9,7 @@
         android:id="@+id/verificationCodeET"
         android:hint="@string/hint_enter_code"
         android:layout_marginTop="122dp"
+        android:inputType="number"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 

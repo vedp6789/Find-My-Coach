@@ -806,6 +806,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
 
+        Log.e(TAG, statusCode + " : " + calledApiValue);
+
         Response response = (Response) object;
         if (response == null)
             return;
@@ -818,28 +820,29 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
 
         /** Saving auth token and user id of user for further use */
-        if (response.getAuthToken() != null && response.getData().getId() != null) {
+        if (response.getAuthToken() != null && response.getData() != null && response.getData().getId() != null) {
             saveUser(response.getAuthToken(), response.getData().getId());
         }
 
         /**phone number not present*/
         if (statusCode == 206) {
-          RequestParams requestParams = new RequestParams();
-          requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
-          getPhoneNumber(requestParams);
-          return;
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
+            getPhoneNumber(requestParams);
+            return;
         }
 
         /** If phone number is not verified then starting ValidatePhoneActivity */
         if (statusCode == 400 || calledApiValue == 26) {
-          startActivity(new Intent(this, ValidatePhoneActivity.class));
-          finish();
-          fbClearToken();
-          if (!mGoogleApiClient.isConnecting() && mGoogleApiClient.isConnected()) {
-            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-            mGoogleApiClient.disconnect();
-            mGoogleApiClient.connect();
-          }
+            startActivity(new Intent(this, ValidatePhoneActivity.class));
+            finish();
+            fbClearToken();
+            if (!mGoogleApiClient.isConnecting() && mGoogleApiClient.isConnected()) {
+                Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                mGoogleApiClient.disconnect();
+                mGoogleApiClient.connect();
+            }
+            return;
         }
 
         /** Login is successful start DashBoard Activity */
