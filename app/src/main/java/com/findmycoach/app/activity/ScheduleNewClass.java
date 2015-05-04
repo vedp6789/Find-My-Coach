@@ -291,7 +291,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
             if (selectedDays.contains(calendar_schedule_start_date.get(Calendar.DAY_OF_WEEK))) {
                 ++workDays;
-                Log.d(TAG, "Selected wee day : " + calendar_schedule_start_date.get(Calendar.DAY_OF_WEEK));
+
             }
             calendar_schedule_start_date.add(Calendar.DAY_OF_MONTH, 1);
 
@@ -434,7 +434,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                         requestParams1.add("total_price",tv_total_charges.getText().toString());
                         progressDialog.show();
                         NetworkClient.postScheduleRequest(ScheduleNewClass.this,requestParams1,this,46);
-                        Log.d(TAG,"id : "+slot_id.toString()+"student_id"+student_id+"mentor_id: "+mentor_id+" start_date : "+from_date.split("-",3)[2]+"-"+from_date.split("-",3)[1]+"-"+from_date.split("-",3)[0]+"slot_type : "+slot_type+" sub_category_id : "+sub_category_id+" total_price : "+tv_total_charges.getText().toString()+"date_of_birth_kid"+tv_child_dob.getText().toString().split("-",3)[2]+"-"+tv_child_dob.getText().toString().split("-",3)[1]+"-"+tv_child_dob.getText().toString().split("-",3)[0]);
+                       // Log.d(TAG,"id : "+slot_id.toString()+"student_id"+student_id+"mentor_id: "+mentor_id+" start_date : "+from_date.split("-",3)[2]+"-"+from_date.split("-",3)[1]+"-"+from_date.split("-",3)[0]+"slot_type : "+slot_type+" sub_category_id : "+sub_category_id+" total_price : "+tv_total_charges.getText().toString()+"date_of_birth_kid"+tv_child_dob.getText().toString().split("-",3)[2]+"-"+tv_child_dob.getText().toString().split("-",3)[1]+"-"+tv_child_dob.getText().toString().split("-",3)[0]);
 
                     }
                 }

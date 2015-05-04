@@ -456,13 +456,14 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
 
                             @Override
                             public void successOperation(Object object, int statusCode, int calledApiValue) {
-                                Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully), Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
 
                                 String success_response=(String) object;
                                 Log.d(TAG, "success response for add new slot activity : " + success_response);
                                 JSONObject jO_success_response =null;
                                 JSONArray jA_coinciding_Exceptions=null;
+                                JSONArray jA_coinciding_Slots=null;
 
                                 if (success_response.equals(getResources().getString(R.string.problem_in_connection_server))) {
                                     Toast.makeText(AddNewSlotActivity.this, (String) object, Toast.LENGTH_SHORT).show();
@@ -470,17 +471,28 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
                                 }else{
                                     try {
                                         jO_success_response=new JSONObject(success_response);
+                                        jA_coinciding_Slots=jO_success_response.getJSONArray("coincidingSlots");
                                         jA_coinciding_Exceptions=jO_success_response.getJSONArray("coincidingExceptions");
                                         String message=jO_success_response.getString("message");
-                                        if(message.equals("Success")){
-                                            if(jA_coinciding_Exceptions.length() > 0){
-                                                coincideOf(jA_coinciding_Exceptions,1);
+                                        if(message.equalsIgnoreCase("Success")){
+                                            if(jA_coinciding_Slots.length() > 0){
+                                                coincideOf(jA_coinciding_Slots,0);
                                             }else{
+                                                if(jA_coinciding_Exceptions.length() > 0){
+                                                    coincideOf(jA_coinciding_Exceptions,1);
 
-                                                setResult(500);
-                                                finish();
+                                                }else{
+                                                    Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully), Toast.LENGTH_SHORT).show();
+                                                    setResult(500);
+                                                    finish();
+                                                }
 
 
+
+                                            }
+                                        }else{
+                                            if(jA_coinciding_Slots.length() > 0){
+                                                coincideOf(jA_coinciding_Slots,0);
                                             }
                                         }
                                     } catch (JSONException e) {
