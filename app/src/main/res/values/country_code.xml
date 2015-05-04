@@ -3,10 +3,10 @@
 
     <string-array name="country_codes">
         <item>Select</item>
-        <item>61,AUSTRALIA</item>
-        <item>91,INDIA</item>
-        <item>65,SINGAPORE</item>
-        <item>46,SWEDEN</item>
+        <item>61,AU</item>
+        <item>91,IN</item>
+        <item>65,SG</item>
+        <item>46,SE</item>
         <item>44,UK</item>
     </string-array>
 

@@ -3,6 +3,7 @@ package com.findmycoach.app.fragment_mentee;
 import android.app.Activity;
 import android.app.LocalActivityManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -190,6 +192,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     }
 
     private void applyActions() {
+        locationInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(locationInput.getWindowToken(), 0);
+                }
+            }
+        });
+
         locationInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -294,6 +306,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         fri = (CheckBox) view.findViewById(R.id.fri);
         sat = (CheckBox) view.findViewById(R.id.sat);
         sun = (CheckBox) view.findViewById(R.id.sun);
+
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View innerView = ((ViewGroup) view).getChildAt(i);
+                DashboardActivity.dashboardActivity.setupUIForShowHideKeyBoard(innerView);
+            }
+        }
     }
 
     private void getAutoSuggestions(String input) {
@@ -449,7 +468,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         isSearching = false;
-        if(calledApiValue != 34)
+        if (calledApiValue != 34)
             Toast.makeText(getActivity(), (String) object, Toast.LENGTH_LONG).show();
     }
 
