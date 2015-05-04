@@ -41,11 +41,11 @@ import java.util.List;
 /**
  * Created by praka_000 on 3/4/2015.
  */
-public class ScheduleNewClass extends Activity implements Button.OnClickListener, Callback  {
+public class ScheduleNewClass extends Activity implements Button.OnClickListener, Callback {
 
     private LinearLayout ll_child_dob, ll_location;
     public static TextView tv_child_dob;
-    private static TextView tv_from_date, tv_to_date, tv_class_timing, tv_subject,tv_total_charges;
+    private static TextView tv_from_date, tv_to_date, tv_class_timing, tv_subject, tv_total_charges;
     Spinner sp_subjects, sp_mentor_for;
     CheckBox cb_mon, cb_tue, cb_wed, cb_thu, cb_fri, cb_sat, cb_sun;
     EditText et_location;
@@ -76,9 +76,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private String slot_type;
     private String[] slot_on_week_days;
     private String charges;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +108,17 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         slot_on_week_days = bundle.getStringArray("slot_on_week_days");
         charges = bundle.getString("charges");
         arrayList_subcategory = bundle.getStringArrayList("arrayList_sub_category");
-        slot_type=bundle.getString("slot_type");
+        slot_type = bundle.getString("slot_type");
+
+        /*
+        * IN CASE OF GROUP SLOT_TYPE THERE IS NO NEED TO TAKE ADDRESS FROM USERS AS IT IS ASSUMED THAT GROUP CLASS WILL BE SCHEDULED AT MENTOR'S ADDRESS
+        *
+        *
+        *
+        * */
+        if (slot_type.equalsIgnoreCase("group")) {
+            ll_location.setVisibility(View.GONE);
+        }
 
 
         if (arrayList_subcategory.size() > 1) {
@@ -137,8 +144,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             selected_subject = arrayList_subcategory.get(0);
             tv_subject.setText(selected_subject);
         }
-
-
 
 
         String timing = String.format("%02d:%02d to %02d:%02d", slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute);
@@ -180,7 +185,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         Log.d(TAG, "mentor availability : " + bundle.getString("mentor_availability"));
 
-
+/* Here i'm checking whether the current date is ahead of class start time or not , If ahead then this mentee's class schedule will start from the current date */
         Calendar cal = new GregorianCalendar();
         cal.set(slot_start_year, slot_start_month - 1, slot_start_day);
         long slot_start_date = cal.getTimeInMillis();
@@ -247,13 +252,13 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         Log.d(TAG, "valid days " + valid_class_days);
 
-        int single_class_charge=Integer.parseInt(charges.split(" per ",2)[0]);
-        int total_amount=0;
-                total_amount=valid_class_days*single_class_charge;
-        Log.d(TAG,"Total amount :"+total_amount);
-        try{
-            tv_total_charges.setText("\u20B9 " +String.valueOf(total_amount));
-        }catch (Exception e){
+        int single_class_charge = Integer.parseInt(charges.split(" per ", 2)[0]);
+        int total_amount = 0;
+        total_amount = valid_class_days * single_class_charge;
+        Log.d(TAG, "Total amount :" + total_amount);
+        try {
+            tv_total_charges.setText("\u20B9 " + String.valueOf(total_amount));
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -319,8 +324,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 selected_mentor_for = (String) parent.getItemAtPosition(position);
                 if (selected_mentor_for.equals(getResources().getString(R.string.child))) {
                     ll_child_dob.setVisibility(View.VISIBLE);
-
-
                 } else {
                     ll_child_dob.setVisibility(View.GONE);
                 }
@@ -348,7 +351,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         tv_to_date.setOnClickListener(this);
         tv_child_dob = (TextView) findViewById(R.id.tv_child_dob);
         tv_child_dob.setOnClickListener(this);
-        tv_total_charges= (TextView) findViewById(R.id.tv_total_charge);
+        tv_total_charges = (TextView) findViewById(R.id.tv_total_charge);
         ll_child_dob = (LinearLayout) findViewById(R.id.ll_child_dob);
         ll_location = (LinearLayout) findViewById(R.id.ll_location);
         ll_location.setVisibility(View.GONE);
@@ -406,35 +409,35 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.b_proceed_to_payment:
-                if(rb_pay_now.isChecked()){
-                    if(validate()){
-                         Toast.makeText(ScheduleNewClass.this,"Waiting for payment gateway integration. ",Toast.LENGTH_SHORT).show();
+                if (rb_pay_now.isChecked()) {
+                    if (validate()) {
+                        Toast.makeText(ScheduleNewClass.this, "Waiting for payment gateway integration. ", Toast.LENGTH_SHORT).show();
                     }
                 }
-                if(rb_pay_personally.isChecked()){
-                    if(validate()){
-                        RequestParams requestParams1=new RequestParams();
-                        requestParams1.add("id",slot_id.toString());
-                        requestParams1.add("mentor_id",mentor_id);
-                        String student_id=StorageHelper.getUserDetails(ScheduleNewClass.this,"user_id");
-                        Log.d(TAG,"student_id what getting sent to server : "+student_id);
+                if (rb_pay_personally.isChecked()) {
+                    if (validate()) {
+                        RequestParams requestParams1 = new RequestParams();
+                        requestParams1.add("id", slot_id.toString());
+                        requestParams1.add("mentor_id", mentor_id);
+                        String student_id = StorageHelper.getUserDetails(ScheduleNewClass.this, "user_id");
+                        Log.d(TAG, "student_id what getting sent to server : " + student_id);
                         requestParams1.add("student_id", student_id);
-                        String from_date=tv_from_date.getText().toString();
-                        requestParams1.add("start_date",from_date.split("-",3)[2]+"-"+from_date.split("-",3)[1]+"-"+from_date.split("-",3)[0]);
-                        requestParams1.add("slot_type",slot_type);
-                        if(mentor_availability.equals("1")){
-                            requestParams1.add("location",et_location.getText().toString());
+                        String from_date = tv_from_date.getText().toString();
+                        requestParams1.add("start_date", from_date.split("-", 3)[2] + "-" + from_date.split("-", 3)[1] + "-" + from_date.split("-", 3)[0]);
+                        requestParams1.add("slot_type", slot_type);
+                        if (mentor_availability.equals("1")) {
+                            requestParams1.add("location", et_location.getText().toString());
                         }
-                        int sub_category_id=DataBase.singleton(this).getSubCategoryId(selected_subject);
-                        requestParams1.add("sub_category_id",String.valueOf(sub_category_id));
-                        if(selected_mentor_for.equalsIgnoreCase("child")){
-                            String date_of_birth_kid=tv_child_dob.getText().toString().split("-",3)[2]+"-"+tv_child_dob.getText().toString().split("-",3)[1]+"-"+tv_child_dob.getText().toString().split("-",3)[0];
-                                    requestParams1.add("date_of_birth_kid",date_of_birth_kid);
+                        int sub_category_id = DataBase.singleton(this).getSubCategoryId(selected_subject);
+                        requestParams1.add("sub_category_id", String.valueOf(sub_category_id));
+                        if (selected_mentor_for.equalsIgnoreCase("child")) {
+                            String date_of_birth_kid = tv_child_dob.getText().toString().split("-", 3)[2] + "-" + tv_child_dob.getText().toString().split("-", 3)[1] + "-" + tv_child_dob.getText().toString().split("-", 3)[0];
+                            requestParams1.add("date_of_birth_kid", date_of_birth_kid);
                         }
-                        requestParams1.add("total_price",tv_total_charges.getText().toString());
+                        requestParams1.add("total_price", tv_total_charges.getText().toString());
                         progressDialog.show();
-                        NetworkClient.postScheduleRequest(ScheduleNewClass.this,requestParams1,this,46);
-                       // Log.d(TAG,"id : "+slot_id.toString()+"student_id"+student_id+"mentor_id: "+mentor_id+" start_date : "+from_date.split("-",3)[2]+"-"+from_date.split("-",3)[1]+"-"+from_date.split("-",3)[0]+"slot_type : "+slot_type+" sub_category_id : "+sub_category_id+" total_price : "+tv_total_charges.getText().toString()+"date_of_birth_kid"+tv_child_dob.getText().toString().split("-",3)[2]+"-"+tv_child_dob.getText().toString().split("-",3)[1]+"-"+tv_child_dob.getText().toString().split("-",3)[0]);
+                        NetworkClient.postScheduleRequest(ScheduleNewClass.this, requestParams1, this, 46);
+                        // Log.d(TAG,"id : "+slot_id.toString()+"student_id"+student_id+"mentor_id: "+mentor_id+" start_date : "+from_date.split("-",3)[2]+"-"+from_date.split("-",3)[1]+"-"+from_date.split("-",3)[0]+"slot_type : "+slot_type+" sub_category_id : "+sub_category_id+" total_price : "+tv_total_charges.getText().toString()+"date_of_birth_kid"+tv_child_dob.getText().toString().split("-",3)[2]+"-"+tv_child_dob.getText().toString().split("-",3)[1]+"-"+tv_child_dob.getText().toString().split("-",3)[0]);
 
                     }
                 }
@@ -451,18 +454,18 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
     private boolean validate() {
 
-        if(mentor_availability.equals("1")){
-            if(et_location.getText().toString().trim().length() <= 0){
-                Toast.makeText(this,getResources().getString(R.string.your_address_please),Toast.LENGTH_SHORT).show();
-                showErrorMessage(et_location,getResources().getString(R.string.your_address_please));
+        if (mentor_availability.equals("1")) {
+            if (et_location.getText().toString().trim().length() <= 0) {
+                Toast.makeText(this, getResources().getString(R.string.your_address_please), Toast.LENGTH_SHORT).show();
+                showErrorMessage(et_location, getResources().getString(R.string.your_address_please));
                 return false;
 
             }
         }
-        if(selected_mentor_for.equalsIgnoreCase("child")){
-            if(tv_child_dob.getText().toString().trim().length() <= 0){
-                Toast.makeText(this,getResources().getString(R.string.child_date_of_birth_please),Toast.LENGTH_SHORT).show();
-                showErrorMessage(et_location,getResources().getString(R.string.child_date_of_birth_please));
+        if (selected_mentor_for.equalsIgnoreCase("child")) {
+            if (tv_child_dob.getText().toString().trim().length() <= 0) {
+                Toast.makeText(this, getResources().getString(R.string.child_date_of_birth_please), Toast.LENGTH_SHORT).show();
+                showErrorMessage(et_location, getResources().getString(R.string.child_date_of_birth_please));
                 return false;
             }
         }
@@ -487,7 +490,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-       progressDialog.dismiss();
+        progressDialog.dismiss();
         /*try {
            // JSONObject jsonObject=new JSONObject((String)object);
            // String message=jsonObject.getString("message");
@@ -495,13 +498,13 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         } catch (JSONException e) {
             e.printStackTrace();
         }*/
-        Toast.makeText(ScheduleNewClass.this,(String)object,Toast.LENGTH_SHORT).show();
+        Toast.makeText(ScheduleNewClass.this, (String) object, Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
-       progressDialog.dismiss();
+        progressDialog.dismiss();
         /*try {
             JSONObject jsonObject=new JSONObject((String)object);
             String message=jsonObject.getString("message");
@@ -510,7 +513,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             e.printStackTrace();
         }*/
 
-        Toast.makeText(ScheduleNewClass.this,(String)object,Toast.LENGTH_SHORT).show();
+        Toast.makeText(ScheduleNewClass.this, (String) object, Toast.LENGTH_SHORT).show();
 
     }
 }
