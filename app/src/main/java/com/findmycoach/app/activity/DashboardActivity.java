@@ -1,5 +1,6 @@
 package com.findmycoach.app.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -18,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -168,8 +171,14 @@ public class DashboardActivity extends FragmentActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.drawer)
+        if (item.getItemId() == R.id.drawer) {
             resideMenu.openMenu(ResideMenu.DIRECTION_RIGHT);
+            try {
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(DashboardActivity.this.getCurrentFocus().getWindowToken(), 0);
+            } catch (Exception e) {
+            }
+        }
         return true;
     }
 
@@ -515,7 +524,6 @@ public class DashboardActivity extends FragmentActivity
             item.callOnClick();
         else
             itemHome.callOnClick();
-
     }
 
     @Override
@@ -608,6 +616,24 @@ public class DashboardActivity extends FragmentActivity
             session = new Session(this);
             Session.setActiveSession(session);
             session.closeAndClearTokenInformation();
+        }
+    }
+
+    /**Hide keyboard on touch view*/
+    public void setupUIForShowHideKeyBoard(View view) {
+        //Set up touch listener for non-text box views to hide keyboard.
+        if (!(view instanceof EditText)) {
+            view.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    try {
+                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                        inputMethodManager.hideSoftInputFromWindow(DashboardActivity.this.getCurrentFocus().getWindowToken(), 0);
+                    } catch (Exception e) {
+                    }
+                    return false;
+                }
+
+            });
         }
     }
 }

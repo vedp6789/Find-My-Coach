@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.fragment.ChangePasswordFragment;
 import com.findmycoach.app.fragment.ChangePhoneNoFragment;
+import com.findmycoach.app.util.StorageHelper;
 
 /**
  * Created by prem on 29/1/15.
@@ -24,6 +26,10 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        String loginWith = StorageHelper.getUserDetails(this, "login_with");
+        Log.e("LOGIN", loginWith);
+        if(loginWith.equalsIgnoreCase("Login"))
+            findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
         if(DashboardActivity.dashboardActivity.user_group == 2)
             findViewById(R.id.paymentOption).setVisibility(View.VISIBLE);
         initView();

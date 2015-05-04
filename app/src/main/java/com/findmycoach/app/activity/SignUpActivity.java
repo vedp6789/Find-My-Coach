@@ -66,6 +66,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
      * Getting references of views
      */
     private void initialize() {
+        country_code = this.getResources().getStringArray(R.array.country_codes);
         radioButton_mentee_signup = (RadioButton) findViewById(R.id.radio_button_mentee_signup);
         radioButton_mentor_signup = (RadioButton) findViewById(R.id.radio_button_mentor_signup);
         firstNameInput = (EditText) findViewById(R.id.input_first_name);
@@ -75,7 +76,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         confirmPasswordInput = (EditText) findViewById(R.id.input_confirm_password);
         phoneNumberInput = (EditText) findViewById(R.id.input_phone);
         countryCodeTV = (TextView) findViewById(R.id.countryCodeTV);
-        countryCodeTV.setText(getCountryZipCode());
+        String code = getCountryZipCode();
+        countryCodeTV.setText(code.equals("") ? country_code[0] : code);
         countryCodeTV.setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
@@ -292,6 +294,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
 
         finish();
         LoginActivity.loginActivity.finish();
+        StorageHelper.storePreference(this, "login_with", "Login");
     }
 
     /**
@@ -311,7 +314,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         String CountryZipCode = "";
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         CountryID = manager.getSimCountryIso().toUpperCase();
-        country_code = this.getResources().getStringArray(R.array.country_codes);
         for (int i = 1; i < country_code.length; i++) {
             String[] g = country_code[i].split(",");
             if (g[1].trim().equals(CountryID.trim())) {
