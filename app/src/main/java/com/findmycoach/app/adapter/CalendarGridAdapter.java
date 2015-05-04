@@ -432,6 +432,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                         /* checking whether this particular event is similar to slot or not */
                                     if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
                                         slot_match_with_event = true;
+                                        if (event_total_mentees < slot_max_users) {
+                                            free_slot++;
+                                        }
 
                                     }
                                 }
