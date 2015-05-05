@@ -3,6 +3,7 @@ package com.findmycoach.app.fragment;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.ValidatePhoneActivity;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -154,7 +156,13 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
+        String message= (String) object;
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        if(message.equalsIgnoreCase("Successfully changed , please validate phone number to continue")){
+            Intent intent=new Intent(getActivity(),ValidatePhoneActivity.class);
+            intent.putExtra("from","ChangePhoneNoFragment");
+            startActivity(intent);
+        }
         dismiss();
     }
 

@@ -393,7 +393,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                 *
                                 * For slot which are selected as Group
                                 * */
-                            if (slot_type.equalsIgnoreCase("Group")) {
+                            if (slot_type.equalsIgnoreCase(context.getResources().getString(R.string.group))) {
                                 boolean slot_match_with_event = false;
                                 for (int day_event = 0; day_event < dayEvents.size(); day_event++) {    /* dayEvents is a list of DayEvent bean*/
                                     DayEvent dayEvent1 = dayEvents.get(day_event);

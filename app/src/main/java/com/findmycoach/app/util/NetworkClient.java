@@ -1283,9 +1283,9 @@ public class NetworkClient {
                         Log.d(TAG, "Success: Response Code:" + statusCode);
                         JSONObject jsonObject = new JSONObject(new String(responseBody));
                         if (statusCode == 200) {
-                            callback.successOperation(jsonObject.get("message"), statusCode, calledApiValue);
+                            callback.successOperation(jsonObject.getString("message"), statusCode, calledApiValue);
                         } else {
-                            callback.failureOperation(jsonObject.get("message"), statusCode, calledApiValue);
+                            callback.failureOperation(jsonObject.getString("message"), statusCode, calledApiValue);
                         }
                     } catch (Exception e) {
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
@@ -1326,10 +1326,11 @@ public class NetworkClient {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Success : Response : " + responseJson);
                     Response response = new Gson().fromJson(responseJson, Response.class);
+                    JSONObject jsonObject = new JSONObject(new String(responseBody));
                     if (statusCode == 200)
-                        callback.successOperation(response, statusCode, calledApiValue);
+                        callback.successOperation(jsonObject.getString("message"), statusCode, calledApiValue);
                     else
-                        callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                        callback.failureOperation(jsonObject.getString("message"), statusCode, calledApiValue);
                 } catch (Exception e) {
                     e.printStackTrace();
                     onFailure(statusCode, headers, responseBody, null);

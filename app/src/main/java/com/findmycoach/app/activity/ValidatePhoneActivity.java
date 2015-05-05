@@ -41,11 +41,13 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     private String[] country_code;
 
     private static final String TAG = "FMC";
+    private String from=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        from=getIntent().getStringExtra("from");
         /** Getting user group of user, logout and close if user group not present **/
         try {
             user_group = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
@@ -148,7 +150,15 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
 
         /** If newly registered user is mentee then open PaymentDetail Activity for getting card details */
         if (user_group == 2) {
-            startActivity(new Intent(this, PaymentDetailsActivity.class));
+            Log.d(TAG,"user_group and payment initiate :"+user_group);
+            Log.d(TAG,"Launched from : "+from);
+            if(from != null && from.equals("ChangePhoneNoFragment")){
+                finish();
+            }else{
+                startActivity(new Intent(this, PaymentDetailsActivity.class));
+            }
+
+
         }
     }
 

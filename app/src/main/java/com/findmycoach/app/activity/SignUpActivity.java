@@ -290,7 +290,9 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         saveUserEmail(email);
         saveUserPhoneNumber(phoneNumber);
         StorageHelper.storePreference(this, "user_group", String.valueOf(user_group));
-        startActivity(new Intent(this, ValidatePhoneActivity.class));
+        Intent intent=new Intent(SignUpActivity.this,ValidatePhoneActivity.class);
+        intent.putExtra("from","SignUpActivity");
+        startActivity(intent);
 
         finish();
         LoginActivity.loginActivity.finish();

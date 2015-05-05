@@ -389,7 +389,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                      *
                      * For the slot which are selected as Group
                      * */
-                    if (slot_type.equalsIgnoreCase("Group")) {
+                    if (slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
                         boolean slot_match_with_any_event = false;
                         for (int day_event = 0; day_event < dayEvents.size(); day_event++) {    /* dayEvents is a list of DayEvent bean*/
                             DayEvent dayEvent1 = dayEvents.get(day_event);
@@ -796,7 +796,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
             } else {
                 if (lname.equals("")) {
-                    if (slot_type.equalsIgnoreCase("group")){
+                    if (slot_type.equalsIgnoreCase(getResources().getString(R.string.group))){
                         if (sub_category_name != null) {
                             return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) +"Subject: "+ sub_category_name;
                         } else {
@@ -813,7 +813,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                 }
             }
             if(fname.trim().length() > 0 && lname.trim().length() > 0){
-                if(slot_type.equalsIgnoreCase("group")){
+                if(slot_type.equalsIgnoreCase(getResources().getString(R.string.group))){
                     if (sub_category_name != null) {
                         return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) +"Subject: "+ sub_category_name;
                     } else {
@@ -840,7 +840,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                     return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
                 }
             } else {
-                if(slot_type.equalsIgnoreCase("group")){
+                if(slot_type.equalsIgnoreCase(getResources().getString(R.string.group))){
                     if (lname.equals("0")) {
                         if (sub_category_name != null) {
                             return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) +"Subject: "+ sub_category_name;
@@ -860,7 +860,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
             }
             if(fname.trim().length() > 0 && lname.trim().length() > 0){
-                if(slot_type.equalsIgnoreCase("group")){
+                if(slot_type.equalsIgnoreCase(getResources().getString(R.string.group))){
                     if (sub_category_name != null) {
                         return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min)  +"Subject: "+sub_category_name;
                     } else {

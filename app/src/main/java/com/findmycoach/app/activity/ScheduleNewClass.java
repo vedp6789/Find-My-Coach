@@ -111,7 +111,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         *
         *
         * */
-        if (slot_type.equalsIgnoreCase("group")) {
+        if (slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
             ll_location.setVisibility(View.GONE);
         }
 
@@ -127,7 +127,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                     selected_subject = (String) parent.getItemAtPosition(position);
 
                 }
-
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
 
@@ -139,8 +138,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             selected_subject = arrayList_subcategory.get(0);
             tv_subject.setText(selected_subject);
         }
-
-
         String timing = String.format("%02d:%02d to %02d:%02d", slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute);
         tv_class_timing.setText(timing);
 

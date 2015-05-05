@@ -57,7 +57,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     private ImageView prevMonth;
     private ImageView nextMonth;
     private GridView calendarView;
-    private CalendarGridAdapter adapter1, adapter2, adapter3;
+    private CalendarGridAdapter adapter1;
     private Calendar _calendar;
     protected static int month, year;
     private static final String dateTemplate = "MMMM yyyy";
@@ -249,7 +249,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     cb_calendar_by_location_is_checked = false;
 
                     if (calendar_by_location != null && calendar_by_location.trim().length() > 0) {
-                        Log.d(TAG, "calendar_by_location strig size :" + calendar_by_location.trim().length());
+                        Log.d(TAG, "calendar_by_location string size :" + calendar_by_location.trim().length());
                         ll_location_for_calendar.setVisibility(View.GONE);
                         getCalendarDetailsAPICall();
                     }
@@ -1108,12 +1108,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     //Log.d(TAG, "date from new comingMonthArrayList" + day1.getDate());
                 }
 
-                adapter2 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
+                adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
                 _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
                 currentMonth.setText(DateFormat.format(dateTemplate,
                         _calendar.getTime()));
-                adapter2.notifyDataSetChanged();
-                calendarView.setAdapter(adapter2);
+                adapter1.notifyDataSetChanged();
+                calendarView.setAdapter(adapter1);
 
 
             } catch (JSONException e) {
@@ -1173,12 +1173,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     //   Log.d(TAG, "date from new comingMonthArrayList" + day1.getDate());
                 }
 
-                adapter2 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
+                adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
                 _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
                 currentMonth.setText(DateFormat.format(dateTemplate,
                         _calendar.getTime()));
-                adapter2.notifyDataSetChanged();
-                calendarView.setAdapter(adapter2);
+                adapter1.notifyDataSetChanged();
+                calendarView.setAdapter(adapter1);
 
 
             } catch (JSONException e) {
@@ -1261,12 +1261,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     previousMonthArrayList.add(day1);
 
                 }
-                adapter3 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
+                adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
                 _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
                 currentMonth.setText(DateFormat.format(dateTemplate,
                         _calendar.getTime()));
-                adapter3.notifyDataSetChanged();
-                calendarView.setAdapter(adapter3);
+                adapter1.notifyDataSetChanged();
+                calendarView.setAdapter(adapter1);
 
 
             } catch (JSONException e) {
@@ -1317,13 +1317,13 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     previousMonthArrayList.add(day1);
 
                 }
-                adapter3 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
+                adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
 
                 _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
                 currentMonth.setText(DateFormat.format(dateTemplate,
                         _calendar.getTime()));
-                adapter3.notifyDataSetChanged();
-                calendarView.setAdapter(adapter3);
+                adapter1.notifyDataSetChanged();
+                calendarView.setAdapter(adapter1);
 
 
             } catch (JSONException e) {
