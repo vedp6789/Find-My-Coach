@@ -28,7 +28,7 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
         setContentView(R.layout.activity_settings);
         String loginWith = StorageHelper.getUserDetails(this, "login_with");
         Log.e("LOGIN", loginWith);
-        if(loginWith.equalsIgnoreCase("Login"))
+        if(!loginWith.equalsIgnoreCase("Login"))
             findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
         if(DashboardActivity.dashboardActivity.user_group == 2)
             findViewById(R.id.paymentOption).setVisibility(View.VISIBLE);

@@ -232,6 +232,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 location_auto_suggested_temp = arrayAdapter.getItem(position);
                 location_auto_suggested = location_auto_suggested_temp;
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(locationInput.getWindowToken(), 0);
             }
         });
         String[] period = getResources().getStringArray(R.array.time1);
