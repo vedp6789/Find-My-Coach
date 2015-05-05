@@ -198,7 +198,6 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
      */
     private void logout() {
         StorageHelper.clearUser(this);
-        LoginActivity.doLogout = true;
         fbClearToken();
 
         /** Setting flag is G+ user signing out */

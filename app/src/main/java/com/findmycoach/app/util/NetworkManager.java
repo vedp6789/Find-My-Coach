@@ -32,13 +32,18 @@ public class NetworkManager {
 //            return "";
 //        }
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        Location currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        if (currentLocation == null)
+            currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        StringBuilder address = new StringBuilder();
+        address.append("");
         try {
             List<Address> addresses = geocoder.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
             Address currentAddress = addresses.get(0);
 
-            StringBuilder address = new StringBuilder();
             // Fetch the address lines using getAddressLine,
             // join them, and send them to the thread.
             int len = 0;
@@ -58,8 +63,12 @@ public class NetworkManager {
             return address.toString();
         } catch (Exception e) {
             Log.d(TAG, "Exception: " + e.getMessage());
+        }
+
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && address.toString().trim().equals("")) {
             showGpsDialog(context);
         }
+
         return "";
     }
 
