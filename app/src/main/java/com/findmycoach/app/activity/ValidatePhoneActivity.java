@@ -249,23 +249,11 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                 /** If phone number is null */
                 if (phnNum.equals("") || phnNum.length() < 8) {
                     phoneEditText.setError(getResources().getString(R.string.enter_valid_phone_no));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            phoneEditText.setError(null);
-                        }
-                    }, 3500);
                 }
 
                 /** if country code is not update automatically or not selected */
                 else if (countryCodeTV.getText().toString().trim().equals("Select")) {
                     countryCodeTV.setError(getResources().getString(R.string.select_country_code));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            countryCodeTV.setError(null);
-                        }
-                    }, 3500);
                 } else {
                     dialog.dismiss();
                     requestParams.add("user_group", user_group + "");
@@ -315,6 +303,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                countryCodeTV.setError(null);
                 countryCodeTV.setText(country_code[position].split(",")[0]);
                 countryDialog.dismiss();
             }
