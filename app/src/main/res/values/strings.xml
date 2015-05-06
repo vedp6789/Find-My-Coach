@@ -761,7 +761,7 @@
     <string name="or">OR</string>
     <string name="add_new_slot">Add new slot</string>
     <string name="add_new_card">Add new card</string>
-    <string name="mentee">Mentee</string>
+    <string name="mentee">Student</string>
     <string name="mentor">Mentor</string>
     <string name="action_connect">Connect</string>
     <string name="action_disconnect">Disconnect</string>

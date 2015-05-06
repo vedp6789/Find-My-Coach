@@ -17,8 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/margin_top"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
@@ -26,16 +26,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="@string/welcome_to"
-            android:textColor="#B1D9FF"
-            android:textSize="24sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
             android:text="@string/find_my_coach"
-            android:textColor="#E6F3FD"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
             android:textSize="26sp" />
 
     </LinearLayout>
@@ -53,6 +46,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:layout_marginTop="@dimen/margin_top"
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -76,45 +70,49 @@
                 android:text="@string/action_register"
                 android:textColor="#FFFFFE"
                 android:textSize="18sp" />
+
             <RadioGroup
                 android:id="@+id/radio_group_user_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="5dp"
-                android:checkedButton="@+id/radio_button_mentee_login">
-                <RadioButton android:id="@+id/radio_button_mentee_login"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mentee"
-                    android:layout_weight="1"/>
-                <RadioButton android:id="@+id/radio_button_mentor_login"
+                android:checkedButton="@+id/radio_button_mentor_login">
+
+                <RadioButton
+                    android:button="@drawable/custom_check_box"
+                    android:id="@+id/radio_button_mentor_login"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/mentor"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:button="@drawable/custom_check_box"
+                    android:id="@+id/radio_button_mentee_login"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mentee"
+                    android:layout_weight="1" />
             </RadioGroup>
 
             <EditText
                 android:id="@+id/input_login_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/custom_edittext"
                 android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:minHeight="@dimen/abc_action_bar_stacked_max_height"
-                android:padding="4dp"
+                style="@style/EditTextCustomHolo"
                 android:singleLine="true" />
 
             <EditText
                 android:id="@+id/input_login_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/custom_edittext"
                 android:hint="@string/prompt_password"
+                style="@style/EditTextCustomHolo"
                 android:imeActionId="@+id/login"
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified"
@@ -124,16 +122,15 @@
                 android:singleLine="true" />
 
 
-
             <Button
                 android:id="@+id/email_sign_in_button"
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
+                android:layout_height="@dimen/login_button_height"
                 android:layout_marginTop="16dp"
-                android:background="#3257A7"
+                android:background="#ffffff"
                 android:text="@string/action_sign_in"
                 android:textAllCaps="false"
-                android:textColor="#FFFFFF"
+                android:textColor="#3257A7"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -145,7 +142,7 @@
             android:layout_marginTop="8dp"
             android:gravity="center_horizontal"
             android:text="@string/or"
-            android:textColor="#BBDFFF"
+            android:textColor="#ffffff"
             android:textSize="18sp" />
 
         <LinearLayout
@@ -226,7 +223,7 @@
         android:gravity="center_horizontal"
         android:text="@string/action_forgot_password"
         android:textAlignment="center"
-        android:textColor="#AEDAFF"
+        android:textColor="#ffffff"
         android:textSize="18sp" />
 
 
