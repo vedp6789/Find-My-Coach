@@ -35,7 +35,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
     private final Context context;
 
-    private final List<String> list;
+    private List<String> list;
     private static final int DAY_OFFSET = 1;
     private String[] weekdays;
     private String[] months;
@@ -45,7 +45,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private int currentWeekDay;
     private Button gridcell;
     private TextView num_events_per_day;
-    private final HashMap<String, Integer> eventsPerMonthMap;
+    private HashMap<String, Integer> eventsPerMonthMap;
     private static int CURRENT_MONTH_OF_CALENDAR;
     private static int CURRENT_YEAR_OF_CALENDAR;
     private static int month_in_foreground;
@@ -64,6 +64,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private static int day_schedule_index = 0;
     Day day = null;
     DayEvent dayEvent = null;
+    private boolean allow_data_population_from_server_data=true;
 
 
     // Days in Current Month
@@ -96,6 +97,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         CalendarGridAdapter.current_month_data = current_month_data;
         CalendarGridAdapter.coming_month_data = coming_month_data;
 
+        allow_data_population_from_server_data=true;   /* This constructor get called when there is successful network communication so data from server helps in calendar population*/
         printMonth(month, year);
 
         eventsPerMonthMap = findNumberOfEventsPerMonth(year, month);
@@ -134,10 +136,42 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         CalendarGridAdapter.current_month_data = current_month_data;
         CalendarGridAdapter.coming_month_data = coming_month_data;
 
-        printMonth(month, year);
+        allow_data_population_from_server_data=true;
+        printMonth(month, year);         /* This constructor get called when there is successful network communication so data from server helps in calendar population*/
 
         eventsPerMonthMap = findNumberOfEventsPerMonth(year, month);
     }
+
+
+    public CalendarGridAdapter(Context context,int month, int year,MentorDetailsActivity mentorDetailsActivity){
+        super();
+        this.context=context;
+        this.mentorDetailsActivity=mentorDetailsActivity;
+        this.list = new ArrayList<String>();
+        weekdays = context.getResources().getStringArray(R.array.week_days);
+        months = context.getResources().getStringArray(R.array.months);
+        Calendar calendar = Calendar.getInstance();
+        setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
+        setCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
+        allow_data_population_from_server_data=false;
+        printMonth(month,year);   /* This constructor get called when there is some problem to get data from network communication so data from server helps in calendar population*/
+    }
+
+
+    public CalendarGridAdapter(Context context,int month, int year,MyScheduleFragment myScheduleFragment){
+        super();
+        this.context=context;
+        weekdays = context.getResources().getStringArray(R.array.week_days);
+        months = context.getResources().getStringArray(R.array.months);
+        this.myScheduleFragment=myScheduleFragment;
+        this.list = new ArrayList<String>();
+        Calendar calendar = Calendar.getInstance();
+        setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
+        setCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
+    allow_data_population_from_server_data=false;  /* This constructor get called when there is some problem to get data from network communication so data from server helps in calendar population*/
+        printMonth(month,year);
+    }
+
 
 
     private String getMonthAsString(int i) {
@@ -159,6 +193,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
     private void printMonth(int mm, int yy) {
+
         int trailingSpaces = 0;
         int daysInPrevMonth = 0;
         int prevMonth = 0;
@@ -288,38 +323,39 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
         }
         day_schedule_index = Integer.parseInt(theday) - 1;
-        if (allow_schedule_population) {
-            if (day_schedule_index < current_month_data.size()) {
+        if(allow_data_population_from_server_data){
+            if (allow_schedule_population) {
+                if (day_schedule_index < current_month_data.size()) {
 
-                day = current_month_data.get(day_schedule_index);
+                    day = current_month_data.get(day_schedule_index);
 
                 /*
                 *
                 *
                 * success when CalendarGridAdapter is used by MyScheduleFragment class
                 * */
-                if (myScheduleFragment != null) {
-                    List<DayEvent> dayEvents = day.getDayEvents();
+                    if (myScheduleFragment != null) {
+                        List<DayEvent> dayEvents = day.getDayEvents();
 
 
 
-                    if (dayEvents.size() > 0) {
-                        if (day_color[1].equals("BLUE")) {
-                            gridcell.setBackgroundColor(new Color().CYAN);
-                        } else {
-                            gridcell.setBackgroundColor(new Color().YELLOW);
+                        if (dayEvents.size() > 0) {
+                            if (day_color[1].equals("BLUE")) {
+                                gridcell.setBackgroundColor(new Color().CYAN);
+                            } else {
+                                gridcell.setBackgroundColor(new Color().YELLOW);
+                            }
                         }
-                    }
 
-                } else {
+                    } else {
                 /*
                 *
                 *
                 *
                 * success when CalendarGridAdapter is used by MentorDetailsActivity class
                 * */
-                    List<DayEvent> dayEvents = day.getDayEvents();
-                    List<DaySlot> daySlots = day.getDaySlots();
+                        List<DayEvent> dayEvents = day.getDayEvents();
+                        List<DaySlot> daySlots = day.getDaySlots();
 
                     /*if (daySlots.size() > 0 && dayEvents.size() <= 0) {
                         *//*  success when this day has only slots and there is no event coming from server*//*
@@ -333,14 +369,14 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                         gridcell.setTag(1, String.valueOf(free_slot));
 
                     } else {*/
-                    int free_slot = 0;
-                    if (daySlots.size() <= 0) {
+                        int free_slot = 0;
+                        if (daySlots.size() <= 0) {
                             /*   success when there is no slots i.e. slots array size is zero
                             *    In this condition, grid click event should be handled like we do not open week-view and give a message that mentor is not free on this day.
                             * */
-                          free_slot =-1;
+                            free_slot =-1;
 
-                     } else {
+                        } else {
                             /*
                             * success when this day his having slots.
                             * Now to decide any slot is free or not
@@ -349,134 +385,136 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             /*
                              * matching each slot of the day with all possible events, and on this match deciding whether this slot come as free slot or not.
                              * */
-                        for (int day_slot = 0; day_slot < daySlots.size(); day_slot++) {
-                            DaySlot daySlot = daySlots.get(day_slot);
-                            String slot_start_date = daySlot.getSlot_start_date();
-                            String slot_stop_date = daySlot.getSlot_stop_date();
-                            String slot_start_time = daySlot.getSlot_start_time();
-                            String slot_stop_time = daySlot.getSlot_stop_time();
-                            String slot_type = daySlot.getSlot_type();
-                            int slot_max_users = Integer.parseInt(daySlot.getSlot_max_users());
+                            for (int day_slot = 0; day_slot < daySlots.size(); day_slot++) {
+                                DaySlot daySlot = daySlots.get(day_slot);
+                                String slot_start_date = daySlot.getSlot_start_date();
+                                String slot_stop_date = daySlot.getSlot_stop_date();
+                                String slot_start_time = daySlot.getSlot_start_time();
+                                String slot_stop_time = daySlot.getSlot_stop_time();
+                                String slot_type = daySlot.getSlot_type();
+                                int slot_max_users = Integer.parseInt(daySlot.getSlot_max_users());
 
-                            int slot_stop_day = Integer.parseInt(slot_stop_date.split("-", 3)[2]);
-                            int slot_stop_month = Integer.parseInt(slot_stop_date.split("-", 3)[1]);
-                            int slot_stop_year = Integer.parseInt(slot_stop_date.split("-", 3)[0]);
+                                int slot_stop_day = Integer.parseInt(slot_stop_date.split("-", 3)[2]);
+                                int slot_stop_month = Integer.parseInt(slot_stop_date.split("-", 3)[1]);
+                                int slot_stop_year = Integer.parseInt(slot_stop_date.split("-", 3)[0]);
 
-                            long current_date_in_millis = System.currentTimeMillis();
+                                long current_date_in_millis = System.currentTimeMillis();
 
-                            Calendar calendar = new GregorianCalendar();
-                            calendar.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
-                            long slot_stop_date_in_millis = calendar.getTimeInMillis();
-
-
-                            String grid_date = (String) gridcell.getTag();
-                            int grid_day = Integer.parseInt(grid_date.split("-", 3)[0]);
-                            String grid_month = grid_date.split("-", 3)[1];
-                            int month_index_of_grid = Arrays.asList(months).indexOf(grid_month);
-                            int grid_year = Integer.parseInt(grid_date.split("-", 3)[2]);
+                                Calendar calendar = new GregorianCalendar();
+                                calendar.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
+                                long slot_stop_date_in_millis = calendar.getTimeInMillis();
 
 
-                            Calendar calendar1=new GregorianCalendar();
-                            calendar1.set(grid_year,month_index_of_grid,grid_day);
-                            long grid_day_in_millis=calendar1.getTimeInMillis();
+                                String grid_date = (String) gridcell.getTag();
+                                int grid_day = Integer.parseInt(grid_date.split("-", 3)[0]);
+                                String grid_month = grid_date.split("-", 3)[1];
+                                int month_index_of_grid = Arrays.asList(months).indexOf(grid_month);
+                                int grid_year = Integer.parseInt(grid_date.split("-", 3)[2]);
 
-                            if(current_date_in_millis > grid_day_in_millis)
-                                break;
 
+                                Calendar calendar1=new GregorianCalendar();
+                                calendar1.set(grid_year,month_index_of_grid,grid_day);
+                                long grid_day_in_millis=calendar1.getTimeInMillis();
 
+                                if(current_date_in_millis > grid_day_in_millis)
+                                    break;
 
 
 
 
-                            if (current_date_in_millis > slot_stop_date_in_millis)
-                                break;
+
+
+                                if (current_date_in_millis > slot_stop_date_in_millis)
+                                    break;
 
                                 /*
                                 *
                                 * For slot which are selected as Group
                                 * */
-                            if (slot_type.equalsIgnoreCase(context.getResources().getString(R.string.group))) {
-                                boolean slot_match_with_event = false;
-                                for (int day_event = 0; day_event < dayEvents.size(); day_event++) {    /* dayEvents is a list of DayEvent bean*/
-                                    DayEvent dayEvent1 = dayEvents.get(day_event);
-                                    String event_start_date = dayEvent1.getEvent_start_date();
-                                    String event_stop_date = dayEvent1.getEvent_stop_date();
-                                    String event_start_time = dayEvent1.getEvent_start_time();
-                                    String event_stop_time = dayEvent1.getEvent_stop_time();
-                                    int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
+                                if (slot_type.equalsIgnoreCase(context.getResources().getString(R.string.group))) {
+                                    boolean slot_match_with_event = false;
+                                    for (int day_event = 0; day_event < dayEvents.size(); day_event++) {    /* dayEvents is a list of DayEvent bean*/
+                                        DayEvent dayEvent1 = dayEvents.get(day_event);
+                                        String event_start_date = dayEvent1.getEvent_start_date();
+                                        String event_stop_date = dayEvent1.getEvent_stop_date();
+                                        String event_start_time = dayEvent1.getEvent_start_time();
+                                        String event_stop_time = dayEvent1.getEvent_stop_time();
+                                        int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
                                         /* checking whether this particular event is similar to slot or not */
-                                    if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
-                                        slot_match_with_event = true;
+                                        if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
+                                            slot_match_with_event = true;
                                             /* if found similar then check whether the event_totoal_mentees from slot_max_users*/
-                                        if (event_total_mentees < slot_max_users) {
-                                            free_slot++;
+                                            if (event_total_mentees < slot_max_users) {
+                                                free_slot++;
+                                            }
                                         }
                                     }
-                                }
 
-                                if (!slot_match_with_event)
-                                    free_slot++;
+                                    if (!slot_match_with_event)
+                                        free_slot++;
 
 
-                            } else {
+                                } else {
                                     /*
                                     *
                                     * For slot which are selected as solo
                                     * */
-                                boolean slot_match_with_event = false;
-                                for (int day_event = 0; day_event < dayEvents.size(); day_event++) {
-                                    DayEvent dayEvent1 = dayEvents.get(day_event);
-                                    String event_start_date = dayEvent1.getEvent_start_date();
-                                    String event_stop_date = dayEvent1.getEvent_stop_date();
-                                    String event_start_time = dayEvent1.getEvent_start_time();
-                                    String event_stop_time = dayEvent1.getEvent_stop_time();
-                                    int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
+                                    boolean slot_match_with_event = false;
+                                    for (int day_event = 0; day_event < dayEvents.size(); day_event++) {
+                                        DayEvent dayEvent1 = dayEvents.get(day_event);
+                                        String event_start_date = dayEvent1.getEvent_start_date();
+                                        String event_stop_date = dayEvent1.getEvent_stop_date();
+                                        String event_start_time = dayEvent1.getEvent_start_time();
+                                        String event_stop_time = dayEvent1.getEvent_stop_time();
+                                        int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
                                         /* checking whether this particular event is similar to slot or not */
-                                    if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
-                                        slot_match_with_event = true;
-                                        if (event_total_mentees < slot_max_users) {
-                                            free_slot++;
-                                        }
+                                        if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
+                                            slot_match_with_event = true;
+                                            if (event_total_mentees < slot_max_users) {
+                                                free_slot++;
+                                            }
 
+                                        }
                                     }
+
+                                    if (!slot_match_with_event)
+                                        free_slot++;
                                 }
 
-                                if (!slot_match_with_event)
-                                    free_slot++;
                             }
 
+
                         }
-
-
-                    }
                    /* }*/
                     /*
                             *
                             * if free_slot is having value greater than zero, it means this day has free slots and we have to populate calendar grid color
                             * */
-                    if (free_slot > 0) {
-                        if (day_color[1].equals("BLUE")) {
+                        if (free_slot > 0) {
+                            if (day_color[1].equals("BLUE")) {
 
-                            gridcell.setBackgroundColor(new Color().CYAN);
+                                gridcell.setBackgroundColor(new Color().CYAN);
+                            } else {
+                                gridcell.setBackgroundColor(new Color().YELLOW);
+                            }
                         } else {
-                            gridcell.setBackgroundColor(new Color().YELLOW);
+                            if (day_color[1].equals("BLUE")) {
+                                gridcell.setBackgroundColor(new Color().CYAN);
+                            }
                         }
-                    } else {
-                        if (day_color[1].equals("BLUE")) {
-                            gridcell.setBackgroundColor(new Color().CYAN);
-                        }
+
+
+                        gridcell.setTag(R.id.TAG_FREE_SLOT, String.valueOf(free_slot));
+
+
                     }
-
-
-                    gridcell.setTag(R.id.TAG_FREE_SLOT, String.valueOf(free_slot));
 
 
                 }
 
-
             }
-
         }
+
 
         return row;
     }
