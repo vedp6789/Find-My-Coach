@@ -28,7 +28,7 @@
             android:gravity="center_horizontal"
             android:text="@string/find_my_coach"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
+            android:textColor="#ffffff"
             android:textSize="26sp" />
 
     </LinearLayout>
@@ -181,7 +181,6 @@
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:visibility="gone" />
 
         <LinearLayout
@@ -211,11 +210,10 @@
 
 
     <TextView
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:id="@+id/action_forgot_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:clickable="true"
         android:drawableLeft="@drawable/forget_password"
@@ -224,7 +222,9 @@
         android:text="@string/action_forgot_password"
         android:textAlignment="center"
         android:textColor="#ffffff"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_below="@+id/authentication_layout"
+        android:layout_centerHorizontal="true" />
 
 
     <!--</RelativeLayout>-->
