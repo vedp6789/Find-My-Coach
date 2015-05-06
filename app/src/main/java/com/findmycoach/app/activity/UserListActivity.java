@@ -36,6 +36,7 @@ public class UserListActivity extends Activity implements Callback {
     private static final int NEED_TO_REFRESH = 100;
     private MentorListAdapter mentorListAdapter;
     private int selectedPosition = -1;
+    private String connection_status_for_Selected_mentor;
 
 
     @Override
@@ -51,10 +52,12 @@ public class UserListActivity extends Activity implements Callback {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                connection_status_for_Selected_mentor=null;
                 if (users != null) {
                     Log.d(TAG,"ListView click");
                     selectedPosition = position;
                     datum = users.get(position);
+                    connection_status_for_Selected_mentor=datum.getConnectionStatus();
                     getMentorDetails(datum.getId());
                 }
             }
@@ -138,6 +141,7 @@ public class UserListActivity extends Activity implements Callback {
             Intent intent = new Intent(getApplicationContext(), MentorDetailsActivity.class);
             intent.putExtra("mentorDetails", (String) object);
             intent.putExtra("searched_keyword", getIntent().getStringExtra("searched_keyword"));
+            intent.putExtra("connection_status",connection_status_for_Selected_mentor);
             datum = null;
             startActivityForResult(intent, NEED_TO_REFRESH);
             isGettingMentor = false;

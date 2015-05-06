@@ -52,7 +52,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private static final String TAG = "FMC:";
     private MyScheduleFragment myScheduleFragment = null;
     private MentorDetailsActivity mentorDetailsActivity = null;
-
+    private String connection_status=null;
     private String mentor_id;
     private String availability;
     private String charges;
@@ -105,7 +105,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         * This constructor is called from MyScheduleFragment
         *
         * */
-    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Day> prev_month_data, ArrayList<Day> current_month_data, ArrayList<Day> coming_month_data, String mentor_id, String availability_yn, String charges, ArrayList<String> arraylist_subcategory) {
+    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Day> prev_month_data, ArrayList<Day> current_month_data, ArrayList<Day> coming_month_data, String mentor_id, String availability_yn, String charges, ArrayList<String> arraylist_subcategory,String connection_status) {
         super();
         this.context = context;
         weekdays = context.getResources().getStringArray(R.array.week_days);
@@ -116,7 +116,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         this.availability = availability_yn;
         this.charges = charges;
         this.arrayList_subcategory = arraylist_subcategory;
-
+        this.connection_status=connection_status;
 
         Calendar calendar = Calendar.getInstance();
         setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
@@ -338,7 +338,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             /*   success when there is no slots i.e. slots array size is zero
                             *    In this condition, grid click event should be handled like we do not open week-view and give a message that mentor is not free on this day.
                             * */
-                    } else {
+                          free_slot =-1;
+
+                     } else {
                             /*
                             * success when this day his having slots.
                             * Now to decide any slot is free or not
@@ -545,12 +547,25 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                     context.startActivity(intent);
                 }else{
                     if(mentorDetailsActivity != null){
-                        if (no_of_free_slots <= 0) {
-                            Toast.makeText(context, context.getResources().getString(R.string.mentor_is_not_free), Toast.LENGTH_SHORT).show();
-                        } else {
-                            context.startActivity(intent);
+                        Log.d(TAG,"connection status on mentor details activity calendar grid click "+connection_status);
+                        if(connection_status.equalsIgnoreCase("pending") || connection_status.equalsIgnoreCase("not connected")){
+                            Toast.makeText(context,context.getResources().getString(R.string.you_are_not_connected),Toast.LENGTH_SHORT).show();
+                        }else{
+                            if (no_of_free_slots <= 0) {
+                                if(no_of_free_slots == 0) {
+                                    Toast.makeText(context, context.getResources().getString(R.string.mentor_is_not_free), Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    if(no_of_free_slots == -1)
+                                        Toast.makeText(context, context.getResources().getString(R.string.no_slot_from_mentor), Toast.LENGTH_SHORT).show();
+                                }
 
+                            } else {
+                                context.startActivity(intent);
+
+                            }
                         }
+
                     }
                 }
 

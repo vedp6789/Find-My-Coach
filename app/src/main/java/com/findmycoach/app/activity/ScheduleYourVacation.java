@@ -379,7 +379,23 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
 
                             @Override
                             public void successOperation(Object object, int statusCode, int calledApiValue) {
-                                Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.vacation_scheduled_success), Toast.LENGTH_SHORT).show();
+                                String response= (String) object;
+                                try {
+                                    JSONObject jsonObject=new JSONObject(response);
+                                    if(jsonObject.getString("message").equalsIgnoreCase("success")){
+                                        Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.vacation_scheduled_success), Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }else{
+                                        if(jsonObject.getString("message").equalsIgnoreCase("failure")){
+                                            JSONArray jsonArray_coinciding_exceptions=jsonObject.getJSONArray("coincidingExceptions");
+                                            coincidingExceptionMessage(jsonArray_coinciding_exceptions);
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+
                                 progressDialog.dismiss();
                             }
 
