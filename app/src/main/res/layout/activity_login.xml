@@ -222,9 +222,6 @@
         android:layout_below="@+id/authentication_layout"
         android:layout_centerHorizontal="true" />
 
-
-    <!--</RelativeLayout>-->
-
 </RelativeLayout>
 
 

@@ -487,18 +487,18 @@ public class DashboardActivity extends FragmentActivity
 
         // attach to current activity;
         resideMenu = new ResideMenu(this);
-        resideMenu.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
+        resideMenu.setBackground(R.drawable.bg);
         resideMenu.attachToActivity(this);
         resideMenu.setMenuListener(menuListener);
         //valid scale factor is between 0.0f and 1.0f. leftmenu'width is 150dip.
         resideMenu.setScaleValue(0.6f);
 
         // create menu items;
-        itemHome = new ResideMenuItem(this, R.drawable.icon_home, navigationTitle[0]);
-        itemNotification = new ResideMenuItem(this, android.R.drawable.stat_notify_chat, navigationTitle[1]);
-        itemConnection = new ResideMenuItem(this, R.drawable.icon_profile, navigationTitle[2]);
-        itemSchedule = new ResideMenuItem(this, R.drawable.icon_calendar, navigationTitle[3]);
-        itemSettings = new ResideMenuItem(this, R.drawable.icon_settings, navigationTitle[4]);
+        itemHome = new ResideMenuItem(this, R.drawable.home_selected, navigationTitle[0]);
+        itemNotification = new ResideMenuItem(this, R.drawable.notifications_outlined, navigationTitle[1]);
+        itemConnection = new ResideMenuItem(this, R.drawable.my_connections_outlined, navigationTitle[2]);
+        itemSchedule = new ResideMenuItem(this, R.drawable.my_schedules_outlined, navigationTitle[3]);
+        itemSettings = new ResideMenuItem(this, R.drawable.settings_outlined, navigationTitle[4]);
         itemLogout = new ResideMenuItem(this, android.R.drawable.ic_menu_close_clear_cancel, navigationTitle[5]);
 
         itemHome.setOnClickListener(this);

@@ -457,12 +457,16 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private boolean validate() {
 
         if (mentor_availability.equals("1")) {
-            if (et_location.getText().toString().trim().length() <= 0) {
-                Toast.makeText(this, getResources().getString(R.string.your_address_please), Toast.LENGTH_SHORT).show();
-                showErrorMessage(et_location, getResources().getString(R.string.your_address_please));
-                return false;
+            if(!slot_type.equalsIgnoreCase(getResources().getString(R.string.group))){
+                if (et_location.getText().toString().trim().length() <= 0) {
 
+                    Toast.makeText(this, getResources().getString(R.string.your_address_please), Toast.LENGTH_SHORT).show();
+                    showErrorMessage(et_location, getResources().getString(R.string.your_address_please));
+                    return false;
+
+                }
             }
+
         }
         if (selected_mentor_for.equalsIgnoreCase("child")) {
             if (tv_child_dob.getText().toString().trim().length() <= 0) {
