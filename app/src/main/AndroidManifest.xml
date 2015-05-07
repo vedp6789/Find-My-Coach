@@ -84,6 +84,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.findmycoach.app.activity.ForgotPasswordActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:label="@string/title_activity_forgot_password"
             android:noHistory="true"
             android:screenOrientation="portrait" />

@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:clickable="true"
-                android:drawableLeft="@drawable/register"
+                android:drawableLeft="@drawable/register_small"
                 android:drawablePadding="6dp"
                 android:gravity="center"
                 android:padding="4dp"
@@ -76,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:checkedButton="@+id/radio_button_mentor_login">
 
                 <RadioButton
@@ -162,11 +162,12 @@
                 fb:login_text=""
                 fb:logout_text="" />
 
-            <com.google.android.gms.common.SignInButton
+            <ImageButton
                 android:id="@+id/sign_in_button"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_button_height"
                 android:layout_marginLeft="4dp"
+                android:background="@drawable/google_plus"
                 android:layout_weight="1"
                 android:textAllCaps="false" />
         </LinearLayout>
@@ -211,7 +212,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:clickable="true"
-        android:drawableLeft="@drawable/forget_password"
+        android:drawableLeft="@drawable/forget_password_small"
         android:drawablePadding="6dp"
         android:gravity="center_horizontal"
         android:text="@string/action_forgot_password"
