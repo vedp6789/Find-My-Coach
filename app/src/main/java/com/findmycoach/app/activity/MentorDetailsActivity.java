@@ -651,12 +651,14 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             case 38:
                 Log.d(TAG, " API 38 success");
                 updateMonthAndYearOnNextMonthClick();
+                updateArrayListsForNextMonth();
                 Toast.makeText(MentorDetailsActivity.this, (String) object, Toast.LENGTH_SHORT).show();
                 updateCalendarOnFailure();
                 break;
             case 39:
                 Log.d(TAG, " API 39 success");
                 updateMonthAndYearOnPreviousMonthClick();
+                updateArrayListsForPreviousMonth();
                 Toast.makeText(MentorDetailsActivity.this, (String) object, Toast.LENGTH_SHORT).show();
                 updateCalendarOnFailure();
                 break;
@@ -664,6 +666,23 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
         //Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
     }
+
+    public void updateArrayListsForNextMonth(){
+        previousMonthArrayList = currentMonthArrayList;
+        currentMonthArrayList = comingMonthArrayList;
+        comingMonthArrayList = null;
+        comingMonthArrayList = new ArrayList<Day>();
+    }
+
+    public void updateArrayListsForPreviousMonth(){
+        comingMonthArrayList = currentMonthArrayList;
+        currentMonthArrayList = previousMonthArrayList;
+        previousMonthArrayList = null;
+        previousMonthArrayList = new ArrayList<Day>();
+    }
+
+
+
 
 
     private void updateCalendarOnFailure() {

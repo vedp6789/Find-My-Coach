@@ -111,7 +111,10 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         *
         *
         * */
-        if (slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
+
+        Log.d(TAG,"slot_type : "+slot_type);
+
+         if (slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
             ll_location.setVisibility(View.GONE);
         }
 
@@ -200,8 +203,15 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         tv_to_date.setText(to_date);
 
 
-        if (mentor_availability != null && mentor_availability.equals("1"))
-            ll_location.setVisibility(View.VISIBLE);
+        if (mentor_availability != null && mentor_availability.equals("1")){
+            if(slot_type.equalsIgnoreCase(getResources().getString(R.string.group))){
+                ll_location.setVisibility(View.GONE);
+            }else{
+                ll_location.setVisibility(View.VISIBLE);
+            }
+        }
+
+
 
 
         int current_hour = rightNow.get(Calendar.HOUR_OF_DAY);

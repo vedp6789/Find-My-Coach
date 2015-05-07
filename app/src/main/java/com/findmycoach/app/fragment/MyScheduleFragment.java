@@ -708,11 +708,13 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 Log.d(TAG, " API 38 success");
                 updateMonthAndYearOnNextMonthClick();
                 Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
+                updateArrayListsForNextMonth();
                 updateCalendarOnFailure();
                 break;
             case 39:
                 Log.d(TAG, " API 39 success");
                 updateMonthAndYearOnPreviousMonthClick();
+                updateArrayListsForPreviousMonth();
                 Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
                 updateCalendarOnFailure();
                 break;
@@ -724,18 +726,35 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             case 41:
                 Log.d(TAG, " API 41 success");
                 updateMonthAndYearOnNextMonthClick();
+                updateArrayListsForNextMonth();
                 Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
                 updateCalendarOnFailure();
                 break;
             case 42:
                 Log.d(TAG, " API 42 success");
                 updateMonthAndYearOnPreviousMonthClick();
+                updateArrayListsForPreviousMonth();
                 Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
                 updateCalendarOnFailure();
                 break;
         }
 
     }
+
+    public void updateArrayListsForNextMonth(){
+        previousMonthArrayList = currentMonthArrayList;
+        currentMonthArrayList = comingMonthArrayList;
+        comingMonthArrayList = null;
+        comingMonthArrayList = new ArrayList<Day>();
+    }
+
+    public void updateArrayListsForPreviousMonth(){
+        comingMonthArrayList = currentMonthArrayList;
+        currentMonthArrayList = previousMonthArrayList;
+        previousMonthArrayList = null;
+        previousMonthArrayList = new ArrayList<Day>();
+    }
+
 
 
     private void updateCalendarOnFailure() {
