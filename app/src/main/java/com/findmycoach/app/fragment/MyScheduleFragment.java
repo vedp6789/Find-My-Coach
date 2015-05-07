@@ -34,6 +34,7 @@ import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
 import com.findmycoach.app.fragment_mentor.LocationForSchedule;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
+import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
@@ -69,7 +70,6 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public ArrayList<Day> previousMonthArrayList = null;
     public ArrayList<Day> currentMonthArrayList = null;
     public ArrayList<Day> comingMonthArrayList = null;
-    public JSONArray prev_json, current_json, next_json;
     public String calendar_by_location = null;
     public boolean cb_calendar_by_location_is_checked = false, b_three_months_data;
     private int NEW_SLT = 0, VAC_SCH = 1, RESULT_OK = 500;
@@ -100,7 +100,6 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         _calendar = Calendar.getInstance(Locale.getDefault());
         month = _calendar.get(Calendar.MONTH) + 1;   /* current month*/
         year = _calendar.get(Calendar.YEAR);         /* current year */
-
     }
 
 
@@ -484,7 +483,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     public void showPrevMonth() {
         newPreviousMonth();
+        Log.d(TAG, "after newPreviousMonth call");
 
+
+    }
+
+    public void updateMonthAndYearOnPreviousMonthClick() {
         if (month <= 1) {
             month = 12;
             year--;
@@ -492,8 +496,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         } else {
             month--;
         }
-
     }
+
 
     private void newPreviousMonth() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -570,13 +574,17 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     public void showNextMonth() {
         newNextMonth();
+
+
+    }
+
+    public void updateMonthAndYearOnNextMonthClick() {
         if (month > 11) {
             month = 1;
             year++;
         } else {
             month++;
         }
-
     }
 
     private void newNextMonth() {
@@ -662,10 +670,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 break;
             case 38:
                 Log.d(TAG, " API 38 success");
+                updateMonthAndYearOnNextMonthClick();
                 nextMonthData(object);
                 break;
             case 39:
                 Log.d(TAG, " API 39 success");
+                updateMonthAndYearOnPreviousMonthClick();
                 previousMonthData(object);
                 break;
             case 40:
@@ -674,10 +684,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 break;
             case 41:
                 Log.d(TAG, " API 41 success");
+                updateMonthAndYearOnNextMonthClick();
                 nextMonthData(object);
                 break;
             case 42:
                 Log.d(TAG, " API 42 success");
+                updateMonthAndYearOnPreviousMonthClick();
                 previousMonthData(object);
                 break;
         }
@@ -686,7 +698,74 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         Log.d(TAG, "API " + calledApiValue + " failure");
-        Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
+        switch (calledApiValue) {
+            case 37:
+                Log.d(TAG, " API 37 success");
+                Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
+                updateCalendarOnFailure();
+                break;
+            case 38:
+                Log.d(TAG, " API 38 success");
+                updateMonthAndYearOnNextMonthClick();
+                Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
+                updateArrayListsForNextMonth();
+                updateCalendarOnFailure();
+                break;
+            case 39:
+                Log.d(TAG, " API 39 success");
+                updateMonthAndYearOnPreviousMonthClick();
+                updateArrayListsForPreviousMonth();
+                Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
+                updateCalendarOnFailure();
+                break;
+            case 40:
+                Log.d(TAG, " API 40 success");
+                Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
+                updateCalendarOnFailure();
+                break;
+            case 41:
+                Log.d(TAG, " API 41 success");
+                updateMonthAndYearOnNextMonthClick();
+                updateArrayListsForNextMonth();
+                Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
+                updateCalendarOnFailure();
+                break;
+            case 42:
+                Log.d(TAG, " API 42 success");
+                updateMonthAndYearOnPreviousMonthClick();
+                updateArrayListsForPreviousMonth();
+                Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
+                updateCalendarOnFailure();
+                break;
+        }
+
+    }
+
+    public void updateArrayListsForNextMonth(){
+        previousMonthArrayList = currentMonthArrayList;
+        currentMonthArrayList = comingMonthArrayList;
+        comingMonthArrayList = null;
+        comingMonthArrayList = new ArrayList<Day>();
+    }
+
+    public void updateArrayListsForPreviousMonth(){
+        comingMonthArrayList = currentMonthArrayList;
+        currentMonthArrayList = previousMonthArrayList;
+        previousMonthArrayList = null;
+        previousMonthArrayList = new ArrayList<Day>();
+    }
+
+
+
+    private void updateCalendarOnFailure() {
+
+        adapter1 = new CalendarGridAdapter(getActivity(), month, year, this);
+        _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
+        currentMonth.setText(DateFormat.format(dateTemplate,
+                _calendar.getTime()));
+
+        calendarView.setAdapter(adapter1);
+        adapter1.notifyDataSetChanged();
         progressDialog.dismiss();
     }
 

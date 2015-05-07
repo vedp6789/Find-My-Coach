@@ -1117,9 +1117,9 @@ public class NetworkClient {
                         Log.d(TAG, "Success: Response Code:" + statusCode);
                         JSONObject jsonObject = new JSONObject(new String(responseBody));
                         if (statusCode == 200) {
-                            callback.successOperation(jsonObject.get("message"), statusCode, calledApiValue);
+                            callback.successOperation(jsonObject.toString(), statusCode, calledApiValue);
                         } else {
-                            callback.failureOperation(jsonObject.get("message"), statusCode, calledApiValue);
+                            callback.failureOperation(jsonObject.toString(), statusCode, calledApiValue);
                         }
                     } catch (Exception e) {
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);

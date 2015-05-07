@@ -437,6 +437,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             Intent intent = new Intent(this, MentorDetailsActivity.class);
             intent.putExtra("mentorDetails", (String) object);
             intent.putExtra("searched_keyword", "-1");
+            intent.putExtra("connection_status","accepted");
             startActivityForResult(intent, PROFILE_DETAILS);
             isGettingProfile = false;
             return;

@@ -177,6 +177,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
                 }
             }
         }
+        firstNameInput.setError(null);
 
         if (lastName.equals("")) {
             showErrorMessage(lastNameInput, getResources().getString(R.string.error_field_required));
@@ -189,6 +190,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
                 }
             }
         }
+        lastNameInput.setError(null);
 
         if (countryCode.trim().equalsIgnoreCase("Select")) {
             showErrorMessage(countryCodeTV, getResources().getString(R.string.select_country_code));
@@ -202,11 +204,13 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_phone_number_invalid));
             return false;
         }
+        phoneNumberInput.setError(null);
 
         if (!isEmailValid(email)) {
             showErrorMessage(emailInput, getResources().getString(R.string.enter_valid_email));
             return false;
         }
+        emailInput.setError(null);
 
         if (password.equals("")) {
             showErrorMessage(passwordInput, getResources().getString(R.string.error_field_required));
@@ -215,6 +219,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             showErrorMessage(passwordInput, getResources().getString(R.string.error_password_size));
             return false;
         }
+        passwordInput.setError(null);
 
         if (confirmPassword.equals("")) {
             showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_required));
@@ -223,6 +228,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_not_match));
             return false;
         }
+        confirmPasswordInput.setError(null);
 
 
         return true;
