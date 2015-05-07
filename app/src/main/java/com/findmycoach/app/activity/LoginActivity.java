@@ -134,6 +134,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         /** G+ related */
         mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        mSignInButton.setBackgroundResource(R.drawable.google_plus);
         Button mSignOutButton = (Button) findViewById(R.id.sign_out_button);
         Button mRevokeButton = (Button) findViewById(R.id.revoke_access_button);
         mSignOutButtons = (LinearLayout) findViewById(R.id.plus_sign_out_buttons);
@@ -149,6 +150,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         /** FB related */
         LoginButton actionFacebook = (LoginButton) findViewById(R.id.facebook_login_button);
         actionFacebook.setReadPermissions(Arrays.asList("user_location", "user_birthday", "email"));
+        actionFacebook.setBackgroundResource(R.drawable.facebook);
 
         /** Other views related to generic login, sign up, forget password */
         TextView registerAction = (TextView) findViewById(R.id.action_register);

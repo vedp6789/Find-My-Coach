@@ -82,6 +82,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         findViewById(R.id.button_signup).setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
+        findViewById(R.id.action_login).setOnClickListener(this);
     }
 
     @Override
@@ -106,7 +107,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             registerUser();
         } else if (id == R.id.countryCodeTV) {
             showCountryCodeDialog();
-        }
+        } else if(id == R.id.action_login)
+            finish();
     }
 
     /**

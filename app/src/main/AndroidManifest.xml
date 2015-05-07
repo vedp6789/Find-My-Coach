@@ -72,6 +72,7 @@
             android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name="com.findmycoach.app.activity.SignUpActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:label="@string/title_activity_signup"
             android:noHistory="true"
             android:screenOrientation="portrait"
