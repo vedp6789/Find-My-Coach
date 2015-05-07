@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
@@ -125,6 +124,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                countryCodeTV.setError(null);
                 countryCodeTV.setText(country_code[position].split(",")[0]);
                 countryDialog.dismiss();
             }
@@ -207,7 +207,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             }
         }
 
-        if (countryCode.trim().equals("")) {
+        if (countryCode.trim().equalsIgnoreCase("Select")) {
             showErrorMessage(countryCodeTV, getResources().getString(R.string.select_country_code));
             return false;
         }
@@ -265,12 +265,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
      */
     private void showErrorMessage(final TextView view, String string) {
         view.setError(string);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                view.setError(null);
-            }
-        }, 3500);
     }
 
     /**
