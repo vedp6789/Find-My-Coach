@@ -66,6 +66,19 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     DayEvent dayEvent = null;
     private boolean allow_data_population_from_server_data=true;
 
+    private boolean allow_once; /* this is a flag which is used to give message to the user that network communication is
+    successful but due to some reason there is no data to populate calendar ( it is happening in the case if wifi (i.e network )is disabled
+    then general calendar is getting populate with no schedule information but after some time device get network enabled in that case application
+    is requesting data from server for months like previous or next click
+             but as we are getting next to next month data and previous to privious month data on next and previous button click. So in this case
+             sometimes current month array is coming with no data but it is having some schedule data so for notifying this this thing to user we have
+              to use this flag. This flag help in showing message single time in loop
+         )*/
+
+    private int month_for_which_calendar_get_populated;
+    private int year_for_which_calendar_get_populated;
+
+
 
     // Days in Current Month
     /*
@@ -79,7 +92,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         months = context.getResources().getStringArray(R.array.months);
         this.list = new ArrayList<String>();
         this.myScheduleFragment = myScheduleFragment;
-
+        allow_once=true;
 
         Calendar calendar = Calendar.getInstance();
         setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
@@ -119,7 +132,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         this.charges = charges;
         this.arrayList_subcategory = arraylist_subcategory;
         this.connection_status=connection_status;
-
+        allow_once=true;
         Calendar calendar = Calendar.getInstance();
         setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
         setCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
@@ -147,6 +160,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         super();
         this.context=context;
         this.mentorDetailsActivity=mentorDetailsActivity;
+
         this.list = new ArrayList<String>();
         weekdays = context.getResources().getStringArray(R.array.week_days);
         months = context.getResources().getStringArray(R.array.months);
@@ -325,6 +339,27 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         day_schedule_index = Integer.parseInt(theday) - 1;
         if(allow_data_population_from_server_data){
             if (allow_schedule_population) {
+
+
+                if(current_month_data.size() <= 0){
+                    if(allow_once){
+                        Toast.makeText(context,"Please refresh the schedule !",Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,"current_month_date arraylist size: "+current_month_data.size() +" previous month arrayList size:  "+prev_month_data.size()+" next month arrayList size: "+coming_month_data.size());
+
+                        if(prev_month_data.size() > 0){
+                            Log.d(TAG,"date of the first day of previous month array List: "+prev_month_data.get(0).getDate());
+                        }else{
+                            if(coming_month_data.size() > 0){
+                                Log.d(TAG,"date of the first day of next month array List: "+coming_month_data.get(0).getDate());
+                            }
+                        }
+
+
+
+                    }
+                    allow_once=false;
+
+                }
                 if (day_schedule_index < current_month_data.size()) {
 
                     day = current_month_data.get(day_schedule_index);
@@ -521,38 +556,40 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        Intent intent = new Intent(context, SetScheduleActivity.class);
-        String s = (String) view.getTag();
-        int no_of_free_slots = 0;
+
+        if(allow_data_population_from_server_data){
+            Intent intent = new Intent(context, SetScheduleActivity.class);
+            String s = (String) view.getTag();
+            int no_of_free_slots = 0;
 
 
-        int day = Integer.parseInt(s.split("-", 3)[0]);
+            int day = Integer.parseInt(s.split("-", 3)[0]);
 
-        String month = s.split("-", 3)[1];
-        String year = s.split("-", 3)[2];
-        if (myScheduleFragment != null) {
-            intent.putExtra("for", "ScheduleFragments");
-        } else {
-            intent.putExtra("for", "MentorDetailsActivity");
+            String month = s.split("-", 3)[1];
+            String year = s.split("-", 3)[2];
+            if (myScheduleFragment != null) {
+                intent.putExtra("for", "ScheduleFragments");
+            } else {
+                intent.putExtra("for", "MentorDetailsActivity");
 
-            no_of_free_slots = Integer.parseInt((String) view.getTag(R.id.TAG_FREE_SLOT));
-            intent.putExtra("mentor_id", mentor_id);
-            intent.putExtra("availability", availability);
-            intent.putExtra("charges", charges);
-            intent.putStringArrayListExtra("arrayList_category", arrayList_subcategory);
-
-
-        }
-        intent.putExtra("date", (String) view.getTag());
-        intent.putExtra("day", Integer.parseInt(s.split("-", 3)[0]));
-        intent.putExtra("year", Integer.parseInt(year));
-        //Log.d(TAG, "three months data list size" + three_months_data.size());
-        intent.putExtra("prev_month_data", prev_month_data);
-        intent.putExtra("current_month_data", current_month_data);
-        intent.putExtra("coming_month_data", coming_month_data);
+                no_of_free_slots = Integer.parseInt((String) view.getTag(R.id.TAG_FREE_SLOT));
+                intent.putExtra("mentor_id", mentor_id);
+                intent.putExtra("availability", availability);
+                intent.putExtra("charges", charges);
+                intent.putStringArrayListExtra("arrayList_category", arrayList_subcategory);
 
 
-        //intent.putExtra("day_bean", (android.os.Parcelable) three_months_data);
+            }
+            intent.putExtra("date", (String) view.getTag());
+            intent.putExtra("day", Integer.parseInt(s.split("-", 3)[0]));
+            intent.putExtra("year", Integer.parseInt(year));
+            //Log.d(TAG, "three months data list size" + three_months_data.size());
+            intent.putExtra("prev_month_data", prev_month_data);
+            intent.putExtra("current_month_data", current_month_data);
+            intent.putExtra("coming_month_data", coming_month_data);
+
+
+            //intent.putExtra("day_bean", (android.os.Parcelable) three_months_data);
 
 
         /*for (Day d : day_schedule) {
@@ -565,67 +602,73 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         }
 */
 
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        int month_index_of_grid_clicked = Arrays.asList(months).indexOf(month);
-        intent.putExtra("month", month_index_of_grid_clicked);
-        Log.d(TAG, "1s1 :" + "month in foreground: " + month_in_foreground + ", Month_index_of_grid_clicked: " + month_index_of_grid_clicked);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            int month_index_of_grid_clicked = Arrays.asList(months).indexOf(month);
+            intent.putExtra("month", month_index_of_grid_clicked);
+            Log.d(TAG, "1s1 :" + "month in foreground: " + month_in_foreground + ", Month_index_of_grid_clicked: " + month_index_of_grid_clicked);
 
-        if (month_in_foreground < month_index_of_grid_clicked) {
-            if (month_in_foreground == 0 && month_index_of_grid_clicked == 11) {
-                myScheduleFragment.showPrevMonth();
-            } else {
-                //myScheduleFragment.showPrevMonth();
-                myScheduleFragment.showNextMonth();
-            }
-
-
-        } else {
-            if (month_in_foreground == month_index_of_grid_clicked) {
-                if(myScheduleFragment != null){
-                    context.startActivity(intent);
-                }else{
-                    if(mentorDetailsActivity != null){
-                        Log.d(TAG,"connection status on mentor details activity calendar grid click "+connection_status);
-                        if(connection_status.equalsIgnoreCase("pending") || connection_status.equalsIgnoreCase("not connected")){
-                            Toast.makeText(context,context.getResources().getString(R.string.you_are_not_connected),Toast.LENGTH_SHORT).show();
-                        }else{
-                            if (no_of_free_slots <= 0) {
-                                if(no_of_free_slots == 0) {
-                                    Toast.makeText(context, context.getResources().getString(R.string.mentor_is_not_free), Toast.LENGTH_SHORT).show();
-                                }
-                                else {
-                                    if(no_of_free_slots == -1)
-                                        Toast.makeText(context, context.getResources().getString(R.string.no_slot_from_mentor), Toast.LENGTH_SHORT).show();
-                                }
-
-                            } else {
-                                context.startActivity(intent);
-
-                            }
-                        }
-
-                    }
+            if (month_in_foreground < month_index_of_grid_clicked) {
+                if (month_in_foreground == 0 && month_index_of_grid_clicked == 11) {
+                    myScheduleFragment.showPrevMonth();
+                } else {
+                    //myScheduleFragment.showPrevMonth();
+                    myScheduleFragment.showNextMonth();
                 }
 
 
-
-
             } else {
-                if (month_in_foreground == 11 && month_index_of_grid_clicked == 0) {
-                    myScheduleFragment.showNextMonth();
+                if (month_in_foreground == month_index_of_grid_clicked) {
+                    if(myScheduleFragment != null){
+                        context.startActivity(intent);
+                    }else{
+                        if(mentorDetailsActivity != null){
+                            Log.d(TAG,"connection status on mentor details activity calendar grid click "+connection_status);
+                            if(connection_status.equalsIgnoreCase("pending") || connection_status.equalsIgnoreCase("not connected")){
+                                Toast.makeText(context,context.getResources().getString(R.string.you_are_not_connected),Toast.LENGTH_SHORT).show();
+                            }else{
+                                if (no_of_free_slots <= 0) {
+                                    if(no_of_free_slots == 0) {
+                                        Toast.makeText(context, context.getResources().getString(R.string.mentor_is_not_free), Toast.LENGTH_SHORT).show();
+                                    }
+                                    else {
+                                        if(no_of_free_slots == -1)
+                                            Toast.makeText(context, context.getResources().getString(R.string.no_slot_from_mentor), Toast.LENGTH_SHORT).show();
+                                    }
+
+                                } else {
+                                    context.startActivity(intent);
+
+                                }
+                            }
+
+                        }
+                    }
+
+
+
 
                 } else {
-                    if (month_in_foreground > month_index_of_grid_clicked) {
+                    if (month_in_foreground == 11 && month_index_of_grid_clicked == 0) {
+                        myScheduleFragment.showNextMonth();
 
-                        //myScheduleFragment.showNextMonth();
-                        myScheduleFragment.showPrevMonth();
+                    } else {
+                        if (month_in_foreground > month_index_of_grid_clicked) {
+
+                            //myScheduleFragment.showNextMonth();
+                            myScheduleFragment.showPrevMonth();
 
 
+                        }
                     }
-                }
 
+                }
             }
+        }else{
+Toast.makeText(context,context.getResources().getString(R.string.check_network_connection),Toast.LENGTH_SHORT).show();
         }
+
+
+
 
     }
 

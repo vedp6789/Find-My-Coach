@@ -191,8 +191,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         int current_hour = rightNow.get(Calendar.HOUR_OF_DAY);
         int current_minute = rightNow.get(Calendar.MINUTE);
 
-
-        if (rightNow_in_millis > slot_start_date) {
+        Log.d(TAG,"right now in millis: "+rightNow_in_millis+" slot_start_date in millis: "+slot_start_date);
+        if (rightNow_in_millis >= slot_start_date) {
 
             /* Mentee is looking to schedule when class slot is already behind the current date i.e. he is looking to join class in mid of class schedule  */
 

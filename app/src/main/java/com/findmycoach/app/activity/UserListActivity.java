@@ -77,8 +77,15 @@ public class UserListActivity extends Activity implements Callback {
         int limit = 7;                                          //  This is a limit for getting free slots details for this mentor in terms of limit days from current date
         requestParams.add("limit", String.valueOf(limit));
         String authToken = StorageHelper.getUserDetails(this, "auth_token");
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
-        NetworkClient.getMentorDetails(this, requestParams, authToken, this, 24);
+        String user_group=StorageHelper.getUserGroup(UserListActivity.this,"user_group");
+        if(user_group != null){
+            requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+            NetworkClient.getMentorDetails(this, requestParams, authToken, this, 24);
+        }else{
+            Toast.makeText(UserListActivity.this,getResources().getString(R.string.check_network_connection),Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
     private void applyActionbarProperties() {
