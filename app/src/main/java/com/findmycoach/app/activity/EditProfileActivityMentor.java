@@ -216,7 +216,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         try{
             if (userInfo == null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals("")) {
                 try {
-                    Address fullAddress = NetworkManager.getFullAddres(this);
+                    Address fullAddress = NetworkManager.getFullAddress(this);
                     if (fullAddress != null) {
                         int len = fullAddress.getMaxAddressLineIndex() - 1;
                         StringBuilder address = new StringBuilder();
