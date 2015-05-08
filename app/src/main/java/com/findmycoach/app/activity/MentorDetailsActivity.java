@@ -174,6 +174,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         RequestParams requestParams = new RequestParams();
         requestParams.add("user_group", String.valueOf("3"));
         requestParams.add("mentor_id", userInfo.getId());
+        Log.d(TAG,"mentor_id : "+userInfo.getId());
 
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -218,6 +219,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     void networkCall1(RequestParams requestParams) {
         progressDialog.show();
         NetworkClient.getCalendarDetails(MentorDetailsActivity.this, requestParams, StorageHelper.getUserDetails(MentorDetailsActivity.this, "auth_token"), this, 37); /* Network operation for getting details for three months */
+        Log.d(TAG,"FMC auth token :"+StorageHelper.getUserDetails(MentorDetailsActivity.this, "auth_token"));
 
     }
 
@@ -247,7 +249,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             month_for_this = 11;
         } else {
             if (month == 2) {
-
                 year_for_this--;
                 month_for_this = 12;
 
@@ -642,7 +643,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
-        switch (calledApiValue){
+        switch (calledApiValue) {
             case 37:
                 Log.d(TAG, " API 37 success");
                 Toast.makeText(MentorDetailsActivity.this, (String) object, Toast.LENGTH_SHORT).show();
@@ -667,22 +668,19 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         //Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
     }
 
-    public void updateArrayListsForNextMonth(){
+    public void updateArrayListsForNextMonth() {
         previousMonthArrayList = currentMonthArrayList;
         currentMonthArrayList = comingMonthArrayList;
         comingMonthArrayList = null;
         comingMonthArrayList = new ArrayList<Day>();
     }
 
-    public void updateArrayListsForPreviousMonth(){
+    public void updateArrayListsForPreviousMonth() {
         comingMonthArrayList = currentMonthArrayList;
         currentMonthArrayList = previousMonthArrayList;
         previousMonthArrayList = null;
         previousMonthArrayList = new ArrayList<Day>();
     }
-
-
-
 
 
     private void updateCalendarOnFailure() {
@@ -696,7 +694,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         adapter1.notifyDataSetChanged();
         progressDialog.dismiss();
     }
-
 
 
     private void threeMonthsData(Object object) {
@@ -852,10 +849,14 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 Day day1 = new Day();
                 JSONObject unique_day = jsonArray_data.getJSONObject(i);
                 day1.setDate(unique_day.getString("date"));
+
                 JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
+
+
                 List<DayEvent> dayEvents = new ArrayList<DayEvent>();
 
                 JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
+                Log.d(TAG, "for third month date :" + unique_day.getString("date") + " for third month event size : " + jsonArray_of_events.length() + " for third month slot size : " + jsonArray_of_slots.length());
                 List<DaySlot> daySlots = new ArrayList<DaySlot>();
                 if (jsonArray_of_slots.length() > 0) {
                     for (int s = 0; s < jsonArray_of_slots.length(); s++) {
@@ -875,6 +876,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                         }
                         daySlot.setSlot_week_days(dates);
                         daySlot.setSlot_id(day_slot.getString("id"));
+                        Log.d(TAG,"Slot info "+" for date : "+unique_day.getString("date")+" start_date : "+day_slot.getString("start_date")+" stop_date : "+day_slot.getString("stop_date")+" start_time : "+day_slot.getString("start_time")+" max users : "+day_slot.getString("max_users"));
 
                         daySlots.add(daySlot);
                     }
@@ -903,6 +905,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                         }
 
                         dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                        Log.d(TAG,"Event info "+" for date : "+unique_day.getString("date")+" start_date : "+day_event.getString("start_date")+" stop_date : "+day_event.getString("stop_date")+" start_time : "+day_event.getString("start_time")+" no of users : "+day_event.getString("number_of_users"));
                         dayEvents.add(dayEvent);
                     }
                     day1.setDayEvents(dayEvents);
@@ -962,6 +965,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 List<DayEvent> dayEvents = new ArrayList<DayEvent>();
 
                 JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
+                Log.d(TAG, "for third month date 2:" + unique_day.getString("date") + " for third month event size 2: " + jsonArray_of_events.length() + " for third month slot size : " + jsonArray_of_slots.length());
+
                 List<DaySlot> daySlots = new ArrayList<DaySlot>();
                 if (jsonArray_of_slots.length() > 0) {
                     for (int s = 0; s < jsonArray_of_slots.length(); s++) {
@@ -1063,6 +1068,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 List<DayEvent> dayEvents = new ArrayList<DayEvent>();
 
                 JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
+
+                Log.d(TAG, "for third month date 3:" + unique_day.getString("date") + " for third month event size 3: " + jsonArray_of_events.length() + " for third month slot size : " + jsonArray_of_slots.length());
+
                 List<DaySlot> daySlots = new ArrayList<DaySlot>();
                 if (jsonArray_of_slots.length() > 0) {
                     for (int s = 0; s < jsonArray_of_slots.length(); s++) {

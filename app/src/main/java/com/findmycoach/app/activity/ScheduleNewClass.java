@@ -180,7 +180,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         Log.d(TAG, "mentor availability : " + bundle.getString("mentor_availability"));
 
-/* Here i'm checking whether the current date is ahead of class start time or not , If ahead then this mentee's class schedule will start from the current date */
+        /* Here i'm checking whether the current date is ahead of class start time or not , If ahead then this mentee's class schedule will start from the current date or next to current date */
         Calendar cal = new GregorianCalendar();
         cal.set(slot_start_year, slot_start_month - 1, slot_start_day);
         long slot_start_date = cal.getTimeInMillis();
@@ -188,10 +188,26 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         Calendar rightNow = Calendar.getInstance();
         long rightNow_in_millis = rightNow.getTimeInMillis();
+        int current_hour = rightNow.get(Calendar.HOUR_OF_DAY);
+        int current_minute = rightNow.get(Calendar.MINUTE);
 
 
         if (rightNow_in_millis > slot_start_date) {
-            String from_date = String.format("%02d-%02d-%d", rightNow.get(Calendar.DAY_OF_MONTH), (rightNow.get(Calendar.MONTH) + 1), rightNow.get(Calendar.YEAR));
+
+            /* Mentee is looking to schedule when class slot is already behind the current date i.e. he is looking to join class in mid of class schedule  */
+
+            String from_date;
+            if(current_hour > slot_start_hour){
+                /* increasing schedule start date by one day i.e. slot_start_date is before current date and current time is also greater than slot_start_time*/
+                from_date = String.format("%02d-%02d-%d", rightNow.get(Calendar.DAY_OF_MONTH)+1, (rightNow.get(Calendar.MONTH) + 1), rightNow.get(Calendar.YEAR));
+            }else{
+
+                    /* if current hour is behing slot start hour or it is equal to it , then start day of class schedule will be from this current date */
+                    from_date = String.format("%02d-%02d-%d", rightNow.get(Calendar.DAY_OF_MONTH), (rightNow.get(Calendar.MONTH) + 1), rightNow.get(Calendar.YEAR));
+
+            }
+
+
             tv_from_date.setText(from_date);
         } else {
             String to_date = String.format("%02d-%02d-%d", slot_start_day, slot_start_month, slot_start_year);
@@ -214,25 +230,25 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
 
 
-        int current_hour = rightNow.get(Calendar.HOUR_OF_DAY);
-        int current_minute = rightNow.get(Calendar.MINUTE);
 
 
-        boolean include_class_start_date_for_charge = false;
-        if ((current_hour < slot_stop_hour)) {
+        /*boolean include_class_start_date_for_charge = false;
+
+        if (current_hour < slot_stop_hour) {
             include_class_start_date_for_charge = true;
         } else {
             if (current_hour == slot_stop_hour && current_minute < slot_stop_minute)
                 include_class_start_date_for_charge = true;
 
         }
+*/
+
 
 
         String class_schedule_start_date = tv_from_date.getText().toString();   /* Date which is getting prompted to student, from where student class schedule starts */
         int class_schedule_start_day = Integer.parseInt(class_schedule_start_date.split("-", 3)[0]);
         int class_schedule_start_month = Integer.parseInt(class_schedule_start_date.split("-", 3)[1]);
         int class_schedule_start_year = Integer.parseInt(class_schedule_start_date.split("-", 3)[2]);
-
 
         Calendar calendar_stop_date_of_schedule = Calendar.getInstance();
         calendar_stop_date_of_schedule.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
@@ -242,21 +258,35 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         int valid_class_days = 0;
         /* Calculation of charge to pay */
-        if (include_class_start_date_for_charge) {
-            /* It means that if a class is on start day of the schedule, then it is going to be count as class */
+
+        valid_class_days = calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_stop_date_of_schedule, slot_on_week_days);
+
+        /*if (include_class_start_date_for_charge) {
+            *//* It means that if a class is on start day of the schedule, then it is going to be count as class *//*
             valid_class_days = calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_stop_date_of_schedule, slot_on_week_days);
         } else {
-            /* class is not going to be count for first day of schedule as current time is greater than slot_stop_time*/
+            *//* class is not going to be count for first day of schedule as current time is greater than slot_stop_time*//*
             calendar_schedule_start_date.add(Calendar.DATE, 1);
             valid_class_days = calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_stop_date_of_schedule, slot_on_week_days);
         }
-
+*/
 
         Log.d(TAG, "valid days " + valid_class_days);
-
-        int single_class_charge = Integer.parseInt(charges.split(" per ", 2)[0]);
         int total_amount = 0;
-        total_amount = valid_class_days * single_class_charge;
+        int cost = Integer.parseInt(charges.split(" per ", 2)[0]);
+        String cost_basis=charges.split(" per ",2)[1];
+        if(cost_basis.equalsIgnoreCase("hour")){
+            if(valid_class_days == 0)
+                valid_class_days=1;
+            int no_of_hours_in_a_day=slot_stop_hour-slot_start_hour;
+            int no_of_total_hours= valid_class_days * no_of_hours_in_a_day;
+            total_amount=no_of_total_hours*cost;
+        }else{
+            /*  this will not allowed now as there is only cost_basis that is per hour*/
+        }
+
+
+
         Log.d(TAG, "Total amount :" + total_amount);
         try {
             tv_total_charges.setText("\u20B9 " + String.valueOf(total_amount));
@@ -457,12 +487,15 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private boolean validate() {
 
         if (mentor_availability.equals("1")) {
-            if (et_location.getText().toString().trim().length() <= 0) {
-                Toast.makeText(this, getResources().getString(R.string.your_address_please), Toast.LENGTH_SHORT).show();
-                showErrorMessage(et_location, getResources().getString(R.string.your_address_please));
-                return false;
+            if(!slot_type.equalsIgnoreCase(getResources().getString(R.string.group))){
+                if (et_location.getText().toString().trim().length() <= 0) {
+                    Toast.makeText(this, getResources().getString(R.string.your_address_please), Toast.LENGTH_SHORT).show();
+                    showErrorMessage(et_location, getResources().getString(R.string.your_address_please));
+                    return false;
 
+                }
             }
+
         }
         if (selected_mentor_for.equalsIgnoreCase("child")) {
             if (tv_child_dob.getText().toString().trim().length() <= 0) {
