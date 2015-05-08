@@ -81,7 +81,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     private static int stop_min;
     private String slot_type;
     private int maximum_students;
-
+    private boolean allow_slot_type_message;
     private Date newDate;
 
 
@@ -113,6 +113,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_avail_slot);
+
+        allow_slot_type_message=false;
 
         time_from = getResources().getString(R.string.select);
         time_to = getResources().getString(R.string.select);
@@ -294,8 +296,9 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 slot_type = null;
                 slot_type = (String) parent.getItemAtPosition(position);
                 if (slot_type.equals(getResources().getString(R.string.individual))) {
+                    if(allow_slot_type_message)
                     Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.single_student_can_schedule_class), Toast.LENGTH_SHORT).show();
-
+                    allow_slot_type_message=true;
                     maximum_students = 1;
                     if (ll_slot_maximum_students.getVisibility() == View.VISIBLE)
                         ll_slot_maximum_students.setVisibility(View.GONE);

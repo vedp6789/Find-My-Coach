@@ -217,7 +217,7 @@ public class GcmFmcService extends IntentService {
                     }
                     if (opcode == 6) {
                         contentTitle = "Find My Coach";
-                        message = "Hi, your schedule get rejected by " + f_name;
+                        message = "Sorry, your schedule get rejected by " + f_name;
                         Intent intent = new Intent(this, DashboardActivity.class);
                         intent.putExtra("fragment", 6);
                         intent.putExtra("group",2);

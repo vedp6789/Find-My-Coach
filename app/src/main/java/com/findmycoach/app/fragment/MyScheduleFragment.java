@@ -353,7 +353,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     void networkCall1(RequestParams requestParams) {
         progressDialog.show();
         NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 37); /* Network operation for getting details for three months */
-
+        Log.d(TAG,"FMC auth token :"+StorageHelper.getUserDetails(getActivity(), "auth_token"));
     }
 
 
