@@ -521,18 +521,32 @@ public class DashboardActivity extends FragmentActivity
 
 
         if (item != null)
-            item.callOnClick();
+            updateUI(item);
         else
-            itemHome.callOnClick();
+            updateUI(itemHome);
     }
 
     @Override
-    public void onClick(View view) {
-
+    public void onClick(final View view) {
 
         if (resideMenu != null && resideMenu.isOpened())
             resideMenu.closeMenu();
 
+
+        resideMenu.setMenuListener(new ResideMenu.OnMenuListener() {
+            @Override
+            public void openMenu() {
+
+            }
+
+            @Override
+            public void closeMenu() {
+                updateUI(view);
+            }
+        });
+    }
+
+    private void updateUI(View view){
         int position = -1;
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -579,6 +593,7 @@ public class DashboardActivity extends FragmentActivity
         else if (view == itemLogout)
             logout();
     }
+
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {

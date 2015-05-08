@@ -39,6 +39,7 @@ import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
+import com.findmycoach.app.util.GetLocationAsync;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
@@ -69,7 +70,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     public static String[] subCategoryIds;
     private int tabIndex;
     private View fragmentView;
-    private String location;
+    private String location = "";
     public static String location_auto_suggested_temp, location_auto_suggested;
     boolean flag_change_location = false;
 
@@ -106,24 +107,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        location_auto_suggested_temp = null;
-        location_auto_suggested = null;
-
-        location = NetworkManager.getCurrentLocation(getActivity());
-        location_auto_suggested_temp = location;
-        location_auto_suggested = location_auto_suggested_temp;
-
         initialize(fragmentView);
-        if (location.equals("")) {
-            flag_change_location = true;
-            locationInput.setVisibility(View.VISIBLE);
-            locationLayout.setVisibility(View.GONE);
-        }
+        updateLocationUI();
         applyActions();
+
         localActivityManager.dispatchCreate(savedInstanceState);
 
         DataBase dataBase = DataBase.singleton(getActivity());
-        ;
+
         Category categoryFromDb = dataBase.selectAllSubCategory();
         if (categoryFromDb.getData().size() < 1) {
             getCategories();
@@ -132,6 +123,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             setTabForCategory(categoryFromDb);
             Log.d(TAG, "sub category api not called");
         }
+
+        new GetLocationAsync(this, getActivity()).execute();
+    }
+
+    public void updateLocationFromAsync(String loc){
+
+        location = loc;
+        location_auto_suggested_temp = location;
+        location_auto_suggested = location_auto_suggested_temp;
+        updateLocationUI();
+
     }
 
 
@@ -280,6 +282,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     }
 
     private void initialize(View view) {
+
+        location_auto_suggested_temp = null;
+        location_auto_suggested = null;
+
         locationInput = (AutoCompleteTextView) view.findViewById(R.id.input_location);
         nameInput = (EditText) view.findViewById(R.id.input_name);
         fromTimingInput = (AutoCompleteTextView) view.findViewById(R.id.from_timing);
@@ -291,8 +297,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         searchButton.setOnClickListener(this);
         radioGroup = (RadioGroup) view.findViewById(R.id.radio_group);
         progressDialog = new ProgressDialog(getActivity());
-        currentLocationText.setText(location);
-        locationInput.setText(location);
         locationLayout = (LinearLayout) view.findViewById(R.id.current_location_layout);
         timeBarrierLayout = (LinearLayout) view.findViewById(R.id.time_barrier_layout);
         timeBarrier = (RadioButton) view.findViewById(R.id.on_time);
@@ -314,6 +318,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 View innerView = ((ViewGroup) view).getChildAt(i);
                 DashboardActivity.dashboardActivity.setupUIForShowHideKeyBoard(innerView);
             }
+        }
+    }
+
+    private void updateLocationUI(){
+        if (location.trim().equals("")) {
+            flag_change_location = true;
+            locationInput.setVisibility(View.VISIBLE);
+            locationLayout.setVisibility(View.GONE);
+        } else {
+            currentLocationText.setText(location);
+            locationInput.setText(location);
+            flag_change_location = false;
+            locationInput.setVisibility(View.GONE);
+            locationLayout.setVisibility(View.VISIBLE);
         }
     }
 
