@@ -7,12 +7,16 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 
 import java.util.List;
@@ -27,15 +31,8 @@ public class NetworkManager {
 //    public static int counter;
 
     public static String getCurrentLocation(Context context) {
-//        if(counter == 0 && context instanceof DashboardActivity){
-//            counter++;
-//            return "";
-//        }
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-        if (currentLocation == null)
-            currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        Location currentLocation = getLocation(context);
 
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         StringBuilder address = new StringBuilder();
@@ -63,10 +60,6 @@ public class NetworkManager {
             return address.toString();
         } catch (Exception e) {
             Log.d(TAG, "Exception: " + e.getMessage());
-        }
-
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && address.toString().trim().equals("")) {
-            showGpsDialog(context);
         }
 
         return "";
@@ -100,9 +93,10 @@ public class NetworkManager {
         builder.create().show();
     }
 
-    public static Address getFullAddres(Context context) {
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        Location currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+    public static Address getFullAddress(Context context) {
+
+        Location currentLocation = getLocation(context);
+
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
@@ -111,6 +105,83 @@ public class NetworkManager {
             Log.d(TAG, "Exception: " + e.getMessage());
         }
         return null;
+    }
+
+    public static Location getLocation(Context context) {
+        final LocationManager locationManager = (LocationManager) context
+                .getSystemService(Context.LOCATION_SERVICE);
+
+        final LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                locationManager.removeUpdates(this);
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
+
+        Location location = null;
+        try {
+
+            // getting GPS status
+            boolean isGPSEnabled = locationManager
+                    .isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+            // getting network status
+            boolean isNetworkEnabled = locationManager
+                    .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+            if (!isGPSEnabled) {
+                showGpsDialog(context);
+            } else if (!isNetworkEnabled) {
+                Toast.makeText(context, context.getResources().getString(R.string.check_network_connection), Toast.LENGTH_LONG).show();
+            } else {
+                if (isNetworkEnabled) {
+                    locationManager.requestLocationUpdates(
+                            LocationManager.NETWORK_PROVIDER,
+                            10,
+                            60000, locationListener);
+                    Log.d("Network", "Network Enabled");
+                    if (locationManager != null) {
+                        location = locationManager
+                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    }
+                }
+                // if GPS Enabled get lat/long using GPS Services
+                if (isGPSEnabled) {
+                    if (location == null) {
+                        locationManager.requestLocationUpdates(
+                                LocationManager.GPS_PROVIDER,
+                                10,
+                                60000, locationListener);
+                        Log.d("GPS", "GPS Enabled");
+                        if (locationManager != null) {
+                            location = locationManager
+                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return location;
     }
 
 }

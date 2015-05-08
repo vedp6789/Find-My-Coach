@@ -528,6 +528,11 @@ public class DashboardActivity extends FragmentActivity
 
     @Override
     public void onClick(View view) {
+
+
+        if (resideMenu != null && resideMenu.isOpened())
+            resideMenu.closeMenu();
+
         int position = -1;
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -573,8 +578,6 @@ public class DashboardActivity extends FragmentActivity
             startActivity(new Intent(this, Settings.class));
         else if (view == itemLogout)
             logout();
-        if (resideMenu != null && resideMenu.isOpened())
-            resideMenu.closeMenu();
     }
 
     @Override

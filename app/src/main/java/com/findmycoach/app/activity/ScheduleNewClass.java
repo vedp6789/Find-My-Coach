@@ -180,7 +180,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         Log.d(TAG, "mentor availability : " + bundle.getString("mentor_availability"));
 
-        /* Here i'm checking whether the current date is ahead of class start time or not , If ahead then this mentee's class schedule will start from the current date or next to current date */
+/* Here i'm checking whether the current date is ahead of class start time or not , If ahead then this mentee's class schedule will start from the current date */
         Calendar cal = new GregorianCalendar();
         cal.set(slot_start_year, slot_start_month - 1, slot_start_day);
         long slot_start_date = cal.getTimeInMillis();
@@ -249,6 +249,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         int class_schedule_start_day = Integer.parseInt(class_schedule_start_date.split("-", 3)[0]);
         int class_schedule_start_month = Integer.parseInt(class_schedule_start_date.split("-", 3)[1]);
         int class_schedule_start_year = Integer.parseInt(class_schedule_start_date.split("-", 3)[2]);
+
 
         Calendar calendar_stop_date_of_schedule = Calendar.getInstance();
         calendar_stop_date_of_schedule.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
@@ -489,6 +490,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         if (mentor_availability.equals("1")) {
             if(!slot_type.equalsIgnoreCase(getResources().getString(R.string.group))){
                 if (et_location.getText().toString().trim().length() <= 0) {
+
                     Toast.makeText(this, getResources().getString(R.string.your_address_please), Toast.LENGTH_SHORT).show();
                     showErrorMessage(et_location, getResources().getString(R.string.your_address_please));
                     return false;
