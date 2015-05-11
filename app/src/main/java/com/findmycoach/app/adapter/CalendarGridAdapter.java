@@ -19,6 +19,8 @@ import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
 import com.findmycoach.app.fragment.MyScheduleFragment;
+import com.findmycoach.app.util.NetworkManager;
+import com.findmycoach.app.util.StorageHelper;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -52,7 +54,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private static final String TAG = "FMC:";
     private MyScheduleFragment myScheduleFragment = null;
     private MentorDetailsActivity mentorDetailsActivity = null;
-    private String connection_status=null;
+    private String connection_status = null;
     private String mentor_id;
     private String availability;
     private String charges;
@@ -64,7 +66,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private static int day_schedule_index = 0;
     Day day = null;
     DayEvent dayEvent = null;
-    private boolean allow_data_population_from_server_data=true;
+    private boolean allow_data_population_from_server_data = true;
 
     private boolean allow_once; /* this is a flag which is used to give message to the user that network communication is
     successful but due to some reason there is no data to populate calendar ( it is happening in the case if wifi (i.e network )is disabled
@@ -79,7 +81,6 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private int year_for_which_calendar_get_populated;
 
 
-
     // Days in Current Month
     /*
     * This constructor is called from MyScheduleFragment
@@ -92,7 +93,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         months = context.getResources().getStringArray(R.array.months);
         this.list = new ArrayList<String>();
         this.myScheduleFragment = myScheduleFragment;
-        allow_once=true;
+        allow_once = true;
 
         Calendar calendar = Calendar.getInstance();
         setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
@@ -110,7 +111,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         CalendarGridAdapter.current_month_data = current_month_data;
         CalendarGridAdapter.coming_month_data = coming_month_data;
 
-        allow_data_population_from_server_data=true;   /* This constructor get called when there is successful network communication so data from server helps in calendar population*/
+        month_for_which_calendar_get_populated = month;
+        year_for_which_calendar_get_populated = year;
+        allow_data_population_from_server_data = true;   /* This constructor get called when there is successful network communication so data from server helps in calendar population*/
         printMonth(month, year);
 
         eventsPerMonthMap = findNumberOfEventsPerMonth(year, month);
@@ -120,7 +123,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         * This constructor is called from MyScheduleFragment
         *
         * */
-    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Day> prev_month_data, ArrayList<Day> current_month_data, ArrayList<Day> coming_month_data, String mentor_id, String availability_yn, String charges, ArrayList<String> arraylist_subcategory,String connection_status) {
+    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Day> prev_month_data, ArrayList<Day> current_month_data, ArrayList<Day> coming_month_data, String mentor_id, String availability_yn, String charges, ArrayList<String> arraylist_subcategory, String connection_status) {
         super();
         this.context = context;
         weekdays = context.getResources().getStringArray(R.array.week_days);
@@ -131,8 +134,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         this.availability = availability_yn;
         this.charges = charges;
         this.arrayList_subcategory = arraylist_subcategory;
-        this.connection_status=connection_status;
-        allow_once=true;
+        this.connection_status = connection_status;
+        allow_once = true;
         Calendar calendar = Calendar.getInstance();
         setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
         setCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
@@ -149,17 +152,19 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         CalendarGridAdapter.current_month_data = current_month_data;
         CalendarGridAdapter.coming_month_data = coming_month_data;
 
-        allow_data_population_from_server_data=true;
+        month_for_which_calendar_get_populated = month;
+        year_for_which_calendar_get_populated = year;
+        allow_data_population_from_server_data = true;
         printMonth(month, year);         /* This constructor get called when there is successful network communication so data from server helps in calendar population*/
 
         eventsPerMonthMap = findNumberOfEventsPerMonth(year, month);
     }
 
 
-    public CalendarGridAdapter(Context context,int month, int year,MentorDetailsActivity mentorDetailsActivity){
+    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity) {
         super();
-        this.context=context;
-        this.mentorDetailsActivity=mentorDetailsActivity;
+        this.context = context;
+        this.mentorDetailsActivity = mentorDetailsActivity;
 
         this.list = new ArrayList<String>();
         weekdays = context.getResources().getStringArray(R.array.week_days);
@@ -167,25 +172,30 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         Calendar calendar = Calendar.getInstance();
         setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
         setCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
-        allow_data_population_from_server_data=false;
-        printMonth(month,year);   /* This constructor get called when there is some problem to get data from network communication so data from server helps in calendar population*/
+
+        month_for_which_calendar_get_populated = month;
+        year_for_which_calendar_get_populated = year;
+        allow_data_population_from_server_data = false;
+        printMonth(month, year);   /* This constructor get called when there is some problem to get data from network communication so data from server helps in calendar population*/
     }
 
 
-    public CalendarGridAdapter(Context context,int month, int year,MyScheduleFragment myScheduleFragment){
+    public CalendarGridAdapter(Context context, int month, int year, MyScheduleFragment myScheduleFragment) {
         super();
-        this.context=context;
+        this.context = context;
         weekdays = context.getResources().getStringArray(R.array.week_days);
         months = context.getResources().getStringArray(R.array.months);
-        this.myScheduleFragment=myScheduleFragment;
+        this.myScheduleFragment = myScheduleFragment;
         this.list = new ArrayList<String>();
         Calendar calendar = Calendar.getInstance();
         setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
         setCurrentWeekDay(calendar.get(Calendar.DAY_OF_WEEK));
-    allow_data_population_from_server_data=false;  /* This constructor get called when there is some problem to get data from network communication so data from server helps in calendar population*/
-        printMonth(month,year);
-    }
 
+        month_for_which_calendar_get_populated = month;
+        year_for_which_calendar_get_populated = year;
+        allow_data_population_from_server_data = false;  /* This constructor get called when there is some problem to get data from network communication so data from server helps in calendar population*/
+        printMonth(month, year);
+    }
 
 
     private String getMonthAsString(int i) {
@@ -337,27 +347,41 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
         }
         day_schedule_index = Integer.parseInt(theday) - 1;
-        if(allow_data_population_from_server_data){
+        if (allow_data_population_from_server_data) {
             if (allow_schedule_population) {
 
 
-                if(current_month_data.size() <= 0){
-                    if(allow_once){
-                        Toast.makeText(context,"Please refresh the schedule !",Toast.LENGTH_SHORT).show();
-                        Log.d(TAG,"current_month_date arraylist size: "+current_month_data.size() +" previous month arrayList size:  "+prev_month_data.size()+" next month arrayList size: "+coming_month_data.size());
+                if (current_month_data.size() <= 0) {
+                    if (allow_once) {
+                        Toast.makeText(context, "Please refresh the schedule !", Toast.LENGTH_SHORT).show();
+                        if (myScheduleFragment != null) {
+                            String user_group = StorageHelper.getUserGroup(context, "user_group");
+                            myScheduleFragment.populate_calendar_from_adapter = true;
+                            MyScheduleFragment.month = month_for_which_calendar_get_populated;
+                            MyScheduleFragment.year = year_for_which_calendar_get_populated;
+                            if (user_group.equals("3")) {
+                                myScheduleFragment.getCalendarDetailsAPICall();
 
-                        if(prev_month_data.size() > 0){
-                            Log.d(TAG,"date of the first day of previous month array List: "+prev_month_data.get(0).getDate());
-                        }else{
-                            if(coming_month_data.size() > 0){
-                                Log.d(TAG,"date of the first day of next month array List: "+coming_month_data.get(0).getDate());
+                            } else {
+                                if (user_group.equals("2")) {
+                                   /*mentee three months data will get called from here */
+                                    myScheduleFragment.getCalendarDetailsForMentee();
+                                }
                             }
+
+                        }
+
+                        if (mentorDetailsActivity != null) {
+                            mentorDetailsActivity.populate_calendar_from_adapter = true;
+                            MyScheduleFragment.month = month_for_which_calendar_get_populated;
+                            MyScheduleFragment.year = year_for_which_calendar_get_populated;
+                            mentorDetailsActivity.getCalendarDetailsAPICall();
+
                         }
 
 
-
                     }
-                    allow_once=false;
+                    allow_once = false;
 
                 }
                 if (day_schedule_index < current_month_data.size()) {
@@ -371,7 +395,6 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                 * */
                     if (myScheduleFragment != null) {
                         List<DayEvent> dayEvents = day.getDayEvents();
-
 
 
                         if (dayEvents.size() > 0) {
@@ -409,7 +432,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             /*   success when there is no slots i.e. slots array size is zero
                             *    In this condition, grid click event should be handled like we do not open week-view and give a message that mentor is not free on this day.
                             * */
-                            free_slot =-1;
+                            free_slot = -1;
 
                         } else {
                             /*
@@ -447,16 +470,12 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                 int grid_year = Integer.parseInt(grid_date.split("-", 3)[2]);
 
 
-                                Calendar calendar1=new GregorianCalendar();
-                                calendar1.set(grid_year,month_index_of_grid,grid_day);
-                                long grid_day_in_millis=calendar1.getTimeInMillis();
+                                Calendar calendar1 = new GregorianCalendar();
+                                calendar1.set(grid_year, month_index_of_grid, grid_day);
+                                long grid_day_in_millis = calendar1.getTimeInMillis();
 
-                                if(current_date_in_millis > grid_day_in_millis)
+                                if (current_date_in_millis > grid_day_in_millis)
                                     break;
-
-
-
-
 
 
                                 if (current_date_in_millis > slot_stop_date_in_millis)
@@ -557,7 +576,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     @Override
     public void onClick(View view) {
 
-        if(allow_data_population_from_server_data){
+        if (allow_data_population_from_server_data) {
             Intent intent = new Intent(context, SetScheduleActivity.class);
             String s = (String) view.getTag();
             int no_of_free_slots = 0;
@@ -618,20 +637,19 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
             } else {
                 if (month_in_foreground == month_index_of_grid_clicked) {
-                    if(myScheduleFragment != null){
+                    if (myScheduleFragment != null) {
                         context.startActivity(intent);
-                    }else{
-                        if(mentorDetailsActivity != null){
-                            Log.d(TAG,"connection status on mentor details activity calendar grid click "+connection_status);
-                            if(connection_status.equalsIgnoreCase("pending") || connection_status.equalsIgnoreCase("not connected")){
-                                Toast.makeText(context,context.getResources().getString(R.string.you_are_not_connected),Toast.LENGTH_SHORT).show();
-                            }else{
+                    } else {
+                        if (mentorDetailsActivity != null) {
+                            Log.d(TAG, "connection status on mentor details activity calendar grid click " + connection_status);
+                            if (connection_status.equalsIgnoreCase("pending") || connection_status.equalsIgnoreCase("not connected")) {
+                                Toast.makeText(context, context.getResources().getString(R.string.you_are_not_connected), Toast.LENGTH_SHORT).show();
+                            } else {
                                 if (no_of_free_slots <= 0) {
-                                    if(no_of_free_slots == 0) {
+                                    if (no_of_free_slots == 0) {
                                         Toast.makeText(context, context.getResources().getString(R.string.mentor_is_not_free), Toast.LENGTH_SHORT).show();
-                                    }
-                                    else {
-                                        if(no_of_free_slots == -1)
+                                    } else {
+                                        if (no_of_free_slots == -1)
                                             Toast.makeText(context, context.getResources().getString(R.string.no_slot_from_mentor), Toast.LENGTH_SHORT).show();
                                     }
 
@@ -643,8 +661,6 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                         }
                     }
-
-
 
 
                 } else {
@@ -663,11 +679,37 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                 }
             }
-        }else{
-Toast.makeText(context,context.getResources().getString(R.string.check_network_connection),Toast.LENGTH_SHORT).show();
+        } else {
+            if (!NetworkManager.isNetworkConnected(context)) {
+                Toast.makeText(context, context.getResources().getString(R.string.check_network_connection), Toast.LENGTH_SHORT).show();
+
+            } else {
+                if (myScheduleFragment != null) {
+                    String user_group = StorageHelper.getUserGroup(context, "user_group");
+                    myScheduleFragment.populate_calendar_from_adapter = true;
+                    MyScheduleFragment.month = month_for_which_calendar_get_populated;
+                    MyScheduleFragment.year = year_for_which_calendar_get_populated;
+                    if (user_group.equals("3")) {
+                        myScheduleFragment.getCalendarDetailsAPICall();
+
+                    } else {
+                        if (user_group.equals("2")) {
+                                   /*mentee three months data will get called from here */
+                            myScheduleFragment.getCalendarDetailsForMentee();
+                        }
+                    }
+
+                }
+
+                if (mentorDetailsActivity != null) {
+                    mentorDetailsActivity.populate_calendar_from_adapter = true;
+                    MyScheduleFragment.month = month_for_which_calendar_get_populated;
+                    MyScheduleFragment.year = year_for_which_calendar_get_populated;
+                    mentorDetailsActivity.getCalendarDetailsAPICall();
+
+                }
+            }
         }
-
-
 
 
     }

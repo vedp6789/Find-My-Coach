@@ -60,7 +60,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     private GridView calendarView;
     private CalendarGridAdapter adapter1;
     private Calendar _calendar;
-    protected static int month, year;
+    public static int month, year;
     private static final String dateTemplate = "MMMM yyyy";
     protected static MyScheduleFragment myScheduleFragment;
     private int days_in_current_month, days_in_prev_month, days_in_next_month;
@@ -74,7 +74,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public boolean cb_calendar_by_location_is_checked = false, b_three_months_data;
     private int NEW_SLT = 0, VAC_SCH = 1, RESULT_OK = 500;
     protected static int month_from_dialog, year_from_dialog;
-
+    public boolean populate_calendar_from_adapter;
 
     public MyScheduleFragment() {
         // Required empty public constructor
@@ -93,6 +93,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         year_from_dialog = 0;
         startPointForCalendar();
         b_three_months_data = false;
+        populate_calendar_from_adapter=false;
     }
 
     /* Get Calendar current instance*/
@@ -146,7 +147,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         comingMonthArrayList = new ArrayList<Day>();
 
         if (month_from_dialog == 0 && year_from_dialog == 0) {
-            startPointForCalendar();
+            if(populate_calendar_from_adapter){
+                populate_calendar_from_adapter=false;
+
+            }else {
+                startPointForCalendar();
+            }
         } else {
             month = month_from_dialog;
             year = year_from_dialog;
@@ -163,7 +169,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         StringBuilder stringBuilder = new StringBuilder();
 
         /*Checking previous month possibilities for month and year as we have to get no. of days from previous month and adding this with current and coming month */
+        /* Foreground month over calendar will be always similar according to this class local month and year variable . That means when we change month and year from any place this month and year variable get updated*/
+        /* Days for the previous month of the calendar from foreground month over calendar. */
         if (month == 1) {
+            /*
+            Start date for three months data request from server get build
+            */
             Calendar calendar = new GregorianCalendar(year - 1, 11, 1);
             stringBuilder.append((year - 1));
             stringBuilder.append("/" + 12);
@@ -172,6 +183,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             days_in_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         } else {
             Calendar calendar = new GregorianCalendar(year, (month - 1) - 1, 1);
+            /*
+            Start date for three months data request from server get build
+            */
             stringBuilder.append(year);
             stringBuilder.append("/" + (month - 1));
             stringBuilder.append("/" + 1);
@@ -180,6 +194,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         }
 
 
+        /*Days for the month which is going to be foreground on calendar */
+        days_in_current_month = new GregorianCalendar(year, month - 1, 1).getActualMaximum(Calendar.DAY_OF_MONTH);
+
+
+        /* Days for the next month of current foreground month on calendar */
         if (month == 12) {
             Calendar calendar = new GregorianCalendar(year + 1, 0, 1);
             days_in_next_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -187,8 +206,6 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             Calendar calendar = new GregorianCalendar(year, (month - 1) + 1, 1);
             days_in_next_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         }
-
-        days_in_current_month = new GregorianCalendar(year, month - 1, 1).getActualMaximum(Calendar.DAY_OF_MONTH);
 
         requestParams.add("start_date", String.valueOf(stringBuilder));
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
@@ -276,7 +293,13 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
 
         if (month_from_dialog == 0 && year_from_dialog == 0) {
-            startPointForCalendar();
+            if(populate_calendar_from_adapter){
+                populate_calendar_from_adapter=false;
+
+            }else {
+                startPointForCalendar();
+            }
+
         } else {
             month = month_from_dialog;
             year = year_from_dialog;
@@ -290,11 +313,17 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         RequestParams requestParams = new RequestParams();
         requestParams.add("user_group", String.valueOf("3"));
         requestParams.add("mentor_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
+
         StringBuilder stringBuilder = new StringBuilder();
 
         /*Checking previous month possibilities for month and year as we have to get no. of days from previous month and adding this with current and coming month */
+        /* Foreground month over calendar will be always similar according to this class local month and year variable . That means when we change month and year from any place this month and year variable get updated*/
+        /* Days for the previous month of the calendar from foreground month over calendar. */
         if (month == 1) {
             Calendar calendar = new GregorianCalendar(year - 1, 11, 1);
+            /*
+            Start date for three months data request from server get build
+            */
             stringBuilder.append((year - 1));
             stringBuilder.append("/" + 12);
             stringBuilder.append("/" + 1);
@@ -302,6 +331,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             days_in_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         } else {
             Calendar calendar = new GregorianCalendar(year, (month - 1) - 1, 1);
+            /*
+            Start date for three months data request from server get build
+            */
             stringBuilder.append(year);
             stringBuilder.append("/" + (month - 1));
             stringBuilder.append("/" + 1);
@@ -309,6 +341,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             days_in_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         }
 
+        /*Days for the month which is going to be foreground on calendar */
+        days_in_current_month = new GregorianCalendar(year, month - 1, 1).getActualMaximum(Calendar.DAY_OF_MONTH);
+
+
+        /* Days for the next month of current foreground month on calendar */
 
         if (month == 12) {
             Calendar calendar = new GregorianCalendar(year + 1, 0, 1);
@@ -318,7 +355,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             days_in_next_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         }
 
-        days_in_current_month = new GregorianCalendar(year, month - 1, 1).getActualMaximum(Calendar.DAY_OF_MONTH);
+
 
 
         requestParams.add("start_date", String.valueOf(stringBuilder));
@@ -336,7 +373,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 networkCall1(requestParams);
             } else {
 
-//                getLocationFromDialog();  /* start LocationFromDialog to get the location */
+
                 cb_calendar_by_location.setChecked(false);
             }
         } else {
@@ -350,7 +387,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     }
 
-    void networkCall1(RequestParams requestParams) {
+    public void networkCall1(RequestParams requestParams) {
         progressDialog.show();
         NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 37); /* Network operation for getting details for three months */
         Log.d(TAG,"FMC auth token :"+StorageHelper.getUserDetails(getActivity(), "auth_token"));

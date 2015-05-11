@@ -86,6 +86,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     public boolean b_three_months_data;
     public static int month_from_dialog, year_from_dialog;
     private String charges;
+    public boolean populate_calendar_from_adapter;
 
     private static final String TAG = "FMC";
     private ArrayList<String> array_list_subCategory = null;
@@ -160,7 +161,12 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
 
         if (month_from_dialog == 0 && year_from_dialog == 0) {
-            startPointForCalendar();
+            if(populate_calendar_from_adapter){
+                populate_calendar_from_adapter=false;
+
+            }else {
+                startPointForCalendar();
+            }
         } else {
             month = month_from_dialog;
             year = year_from_dialog;
