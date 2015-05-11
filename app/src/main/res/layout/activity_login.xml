@@ -126,11 +126,11 @@
                 android:id="@+id/email_sign_in_button"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_button_height"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/back_margin"
                 android:background="@color/white"
                 android:text="@string/action_sign_in"
                 android:textAllCaps="false"
-                android:textColor="@color/blue"
+                android:textColor="@color/purple"
                 android:textStyle="bold" />
         </LinearLayout>
 

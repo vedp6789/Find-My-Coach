@@ -471,8 +471,7 @@
     <string name="resend_code">Resend verification code</string>
     <string name="find_mentor">Find Mentor</string>
     <string name="change_location">Change</string>
-    <string name="no_time_barrier">No Time Barrier</string>
-    <string name="time_barrier">Time Barrier</string>
+    <string name="preferred_time">Preferred Time</string>
     <string name="search">Search</string>
     <string name="hint_enter_card_number">Card number</string>
     <string name="hint_name_on_card">Name on card</string>

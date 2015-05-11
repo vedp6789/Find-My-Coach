@@ -200,7 +200,7 @@
                     android:background="@color/white"
                     android:text="@string/action_sign_up"
                     android:textAllCaps="false"
-                    android:textColor="@color/blue"
+                    android:textColor="@color/purple"
                     android:textStyle="bold" />
             </LinearLayout>
 

@@ -107,7 +107,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         /** Else setup the login screen */
         else {
             setContentView(R.layout.activity_login);
-            user_group = 2;
+            user_group = 3;
             RadioGroup radioGroup_user_login = (RadioGroup) findViewById(R.id.radio_group_user_login);
             radioGroup_user_login.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override

@@ -1,7 +1,6 @@
 package com.findmycoach.app.fragment_mentee;
 
 import android.app.Activity;
-import android.app.LocalActivityManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,15 +22,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TabHost;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
-import com.findmycoach.app.activity.SubCategoryActivity;
 import com.findmycoach.app.activity.UserListActivity;
 import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.suggestion.Prediction;
@@ -50,8 +46,6 @@ import java.util.List;
 public class HomeFragment extends Fragment implements View.OnClickListener, Callback {
 
     private AutoCompleteTextView locationInput;
-    private TabHost tabHost;
-    private LocalActivityManager localActivityManager;
     private Category category;
     private EditText nameInput;
     private AutoCompleteTextView fromTimingInput;
@@ -60,18 +54,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private ProgressDialog progressDialog;
     private TextView currentLocationText;
     private Button changeLocation;
-    private LinearLayout locationLayout;
+    private RelativeLayout locationLayout;
     private LinearLayout timeBarrierLayout;
-    private RadioButton timeBarrier;
-    private RadioButton noTimeBarrier;
-    private RadioGroup radioGroup;
     private int FLAG;
     public static String[] subCategoryIds;
-    private int tabIndex;
     private View fragmentView;
     private String location;
     public static String location_auto_suggested_temp, location_auto_suggested;
     boolean flag_change_location = false;
+    private boolean timeBarrier;
 
     private CheckBox mon, tue, wed, thr, fri, sat, sun;
     private boolean isSearching = false;
@@ -120,7 +111,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             locationLayout.setVisibility(View.GONE);
         }
         applyActions();
-        localActivityManager.dispatchCreate(savedInstanceState);
 
         DataBase dataBase = DataBase.singleton(getActivity());
         ;
@@ -136,19 +126,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
 
     private void setTabForCategory(Category categoryResponse) {
+
+        LinearLayout subCategoryLayout = (LinearLayout) fragmentView.findViewById(R.id.subCategoryLayout);
+        final List<Button> categoriesButtons = new ArrayList<Button>();
+
         this.category = categoryResponse;
         if (categoryResponse.getData().size() < 1 || FLAG > 0)
             return;
 
-        tabHost.setup(localActivityManager);
         subCategoryIds = new String[category.getData().size()];
         for (int i = 0; i < category.getData().size(); i++) {
             com.findmycoach.app.beans.category.Datum datum = category.getData().get(i);
 
-            TabHost.TabSpec singleCategory = tabHost.newTabSpec(i + "");
-            singleCategory.setIndicator(datum.getName());
-
-            Intent intent = new Intent(getActivity(), SubCategoryActivity.class);
             StringBuilder subCategory = new StringBuilder();
             StringBuilder subCategoryId = new StringBuilder();
             int row = datum.getDataSub().size() + 1;
@@ -158,25 +147,36 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 subCategory.append(datum.getDataSub().get(x).getName() + "#");
                 subCategoryId.append(datum.getDataSub().get(x).getId() + "#");
             }
-//            Log.d(TAG, datum.getDataSub().size()+"");
-//            Log.d(TAG, subCategory.toString());
-//            Log.d(TAG, subCategoryId.toString());
-            intent.putExtra("row", row);
-            intent.putExtra("sub_category", subCategory.toString());
-            intent.putExtra("sub_category_id", subCategoryId.toString());
-            intent.putExtra("column_index", i);
-            singleCategory.setContent(intent);
-            tabHost.addTab(singleCategory);
+            Log.d(TAG, datum.getDataSub().size() + "");
+            Log.d(TAG, subCategory.toString());
+            Log.d(TAG, subCategoryId.toString());
+
+            Button button = new Button(getActivity());
+            button.setTextColor(getActivity().getResources().getColor(R.color.white));
+            button.setBackground(getActivity().getResources().getDrawable(R.drawable.button_unselected));
+            button.setText(datum.getName());
+            subCategoryLayout.addView(button);
+            categoriesButtons.add(button);
         }
 
-        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String tabId) {
-                tabIndex = Integer.parseInt(tabId);
-            }
-        });
+        for(final Button btn : categoriesButtons){
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    for(Button button : categoriesButtons){
+                        button.setBackground(getActivity().getResources().getDrawable(R.drawable.button_unselected));
+                        button.setTextColor(getActivity().getResources().getColor(R.color.white));
+                    }
+                    btn.setBackground(getActivity().getResources().getDrawable(R.drawable.button_selected));
+                    btn.setTextColor(getActivity().getResources().getColor(R.color.purple));
+                }
+            });
+        }
+
 
         FLAG = 1;
+
+        fragmentView.findViewById(R.id.subCategoryLayoutParent).setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -257,26 +257,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 return view;
             }
         });
-        timeBarrier.setOnClickListener(new View.OnClickListener() {
+
+
+       final TextView preferredTimeTv = (TextView) fragmentView.findViewById(R.id.preferredTime);
+        preferredTimeTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (timeBarrier.isChecked()) {
-                    timeBarrier.setChecked(true);
-                    noTimeBarrier.setChecked(false);
-                    timeBarrierLayout.setVisibility(View.VISIBLE);
-                }
+                timeBarrierLayout.setVisibility(View.VISIBLE);
+                timeBarrier = true;
+                preferredTimeTv.setVisibility(View.GONE);
             }
         });
-        noTimeBarrier.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (noTimeBarrier.isChecked()) {
-                    noTimeBarrier.setChecked(true);
-                    timeBarrier.setChecked(false);
-                    timeBarrierLayout.setVisibility(View.GONE);
-                }
-            }
-        });
+
     }
 
     private void initialize(View view) {
@@ -289,17 +281,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         changeLocation = (Button) view.findViewById(R.id.change_location);
         changeLocation.setOnClickListener(this);
         searchButton.setOnClickListener(this);
-        radioGroup = (RadioGroup) view.findViewById(R.id.radio_group);
         progressDialog = new ProgressDialog(getActivity());
         currentLocationText.setText(location);
         locationInput.setText(location);
-        locationLayout = (LinearLayout) view.findViewById(R.id.current_location_layout);
+        locationLayout = (RelativeLayout) view.findViewById(R.id.current_location_layout);
         timeBarrierLayout = (LinearLayout) view.findViewById(R.id.time_barrier_layout);
-        timeBarrier = (RadioButton) view.findViewById(R.id.on_time);
-        noTimeBarrier = (RadioButton) view.findViewById(R.id.no_time);
-        tabHost = (TabHost) view.findViewById(R.id.tabhost);
-        localActivityManager = new LocalActivityManager(getActivity(), false);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
+        timeBarrier = false;
 
         mon = (CheckBox) view.findViewById(R.id.mon);
         tue = (CheckBox) view.findViewById(R.id.tue);
@@ -366,14 +354,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         RequestParams requestParams = new RequestParams();
         requestParams.add("location", location);
         try {
-            Log.d(TAG, "Sub category id : " + subCategoryIds[tabIndex]);
-            if (!subCategoryIds[tabIndex].trim().equals("-1"))
-                requestParams.add("subcategory_id", subCategoryIds[tabIndex]);
+
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
         requestParams.add("keyword", name);
-        if (timeBarrier.isChecked()) {
+        if (timeBarrier) {
             requestParams.add("timing_from", fromTiming);
             requestParams.add("timing_to", toTiming);
 
@@ -449,8 +435,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             progressDialog.dismiss();
             Intent intent = new Intent(getActivity(), UserListActivity.class);
             intent.putExtra("list", (String) object);
-            intent.putExtra("searched_keyword", subCategoryIds[tabIndex]);
-            Log.e(TAG, subCategoryIds[tabIndex]);
+            intent.putExtra("searched_keyword", -1);
+
             startActivity(intent);
             isSearching = false;
         }
