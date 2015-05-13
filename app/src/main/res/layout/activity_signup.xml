@@ -179,6 +179,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
+                        android:paddingLeft="@dimen/radio_button_padding"
                         android:text="@string/mentor"
                         android:layout_weight="1" />
 
@@ -187,6 +188,7 @@
                         android:button="@drawable/custom_check_box"
                         android:layout_width="0dp"
                         android:textColor="@color/white"
+                        android:paddingLeft="@dimen/radio_button_padding"
                         android:layout_height="wrap_content"
                         android:text="@string/mentee"
                         android:layout_weight="1" />

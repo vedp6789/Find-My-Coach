@@ -85,6 +85,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/mentor"
+                    android:paddingLeft="@dimen/radio_button_padding"
                     android:layout_weight="1" />
 
                 <RadioButton
@@ -93,6 +94,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/mentee"
+                    android:paddingLeft="@dimen/radio_button_padding"
                     android:layout_weight="1" />
             </RadioGroup>
 
