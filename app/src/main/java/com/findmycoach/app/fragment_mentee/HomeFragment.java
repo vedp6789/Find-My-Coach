@@ -102,8 +102,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         updateLocationUI();
         applyActions();
 
-        localActivityManager.dispatchCreate(savedInstanceState);
-
         DataBase dataBase = DataBase.singleton(getActivity());
 
         Category categoryFromDb = dataBase.selectAllSubCategory();
@@ -292,7 +290,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         currentLocationText.setText(location);
         locationInput.setText(location);
         locationLayout = (RelativeLayout) view.findViewById(R.id.current_location_layout);
-        locationLayout = (LinearLayout) view.findViewById(R.id.current_location_layout);
+        locationLayout = (RelativeLayout) view.findViewById(R.id.current_location_layout);
         timeBarrierLayout = (LinearLayout) view.findViewById(R.id.time_barrier_layout);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         timeBarrier = false;
