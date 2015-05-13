@@ -1,15 +1,15 @@
 <!-- A DrawerLayout is intended to be used as the top-level content view using match_parent for both width and height to consume the full space available. -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.findmycoach.app.activity.DashboardActivity">
 
-        <FrameLayout
+        <RelativeLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:background="@android:color/white"
             android:layout_height="match_parent" />
 
-</FrameLayout>
+</RelativeLayout>
