@@ -26,7 +26,7 @@ public class TillDateDialogFragment extends DialogFragment implements View.OnCli
     Button b_ok,b_can;
     public AddNewSlotActivity addNewSlotActivity;
     public ScheduleNewClass scheduleNewClass;
-    CheckBox cb_till_date;
+    //CheckBox cb_till_date;
     Calendar calendar;
     long time;
     static boolean allow_forever =false;// for making user select forever option for till date
@@ -44,8 +44,6 @@ public class TillDateDialogFragment extends DialogFragment implements View.OnCli
                 dismiss();
                 if(addNewSlotActivity != null ){
                     addNewSlotActivity.setSelectedTillDate(day,month,year,allow_forever);
-                }else if(scheduleNewClass != null){
-                    scheduleNewClass.setSelectedTillDate(day,month,year,allow_forever);   // allow_forever i.e. fourth parameter is not being used here
                 }
 
                 break;
@@ -69,11 +67,9 @@ public class TillDateDialogFragment extends DialogFragment implements View.OnCli
 //            date=scheduleNewClass.getTillInitialLimit();
 //        }
         allow_forever=false;
+        date = addNewSlotActivity.getTillInitialLimit();
 
-        if(addNewSlotActivity == null)
-            date = scheduleNewClass.getTillInitialLimit();
-        else
-            date = addNewSlotActivity.getTillInitialLimit();
+
         calendar = Calendar.getInstance();
         calendar.set(date[2], date[1], date[0], 0, 0, 0);
         time = calendar.getTimeInMillis();
@@ -87,10 +83,10 @@ public class TillDateDialogFragment extends DialogFragment implements View.OnCli
         datePicker= (DatePicker) view.findViewById(R.id.slotdatePicker);
         b_ok= (Button) view.findViewById(R.id.b_ok);
         b_can= (Button) view.findViewById(R.id.b_cancel);
-        cb_till_date= (CheckBox) view.findViewById(R.id.cb_till_date);
+        //cb_till_date= (CheckBox) view.findViewById(R.id.cb_till_date);
         datePicker.setMinDate(time);
 
-        cb_till_date.setOnClickListener(new View.OnClickListener() {
+        /*cb_till_date.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -103,11 +99,11 @@ public class TillDateDialogFragment extends DialogFragment implements View.OnCli
                     Log.d(TAG,"Forever allowed:"+allow_forever);
                 }
             }
-        });
+        });*/
 
         if(scheduleNewClass != null){
 
-            cb_till_date.setVisibility(View.GONE);
+            //cb_till_date.setVisibility(View.GONE);
         }
 
         b_ok.setOnClickListener(this);

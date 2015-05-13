@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.AddNewSlotActivity;
@@ -23,16 +24,11 @@ public class StopTimeDialogFragment extends DialogFragment implements View.OnCli
     public static TimePicker timePicker;
     Button b_ok, b_can;
     AddNewSlotActivity addNewSlotActivity;
-    /*Calendar calendar;
-    long time;
-*/
-
     private int hour;
     private int minute;
     private static final String selected_date = null;
 
     private static final String TAG = "FMC";
-
 
 
     @Override
@@ -41,11 +37,8 @@ public class StopTimeDialogFragment extends DialogFragment implements View.OnCli
             case R.id.b_ok:
                 String hour = String.valueOf(timePicker.getCurrentHour());
                 String minute = String.valueOf(timePicker.getCurrentMinute());
-
-
                 dismiss();
-                addNewSlotActivity.setSelectedTillTime(hour,minute);
-
+                addNewSlotActivity.setSelectedTillTime(hour, minute);
                 break;
             case R.id.b_cancel:
                 dismiss();
@@ -57,49 +50,38 @@ public class StopTimeDialogFragment extends DialogFragment implements View.OnCli
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addNewSlotActivity = new AddNewSlotActivity();
-        /*calendar = Calendar.getInstance();
-        Log.d(TAG, "Current year:" + calendar.get(Calendar.YEAR));
-        Log.d(TAG, "Current month:" + calendar.get(Calendar.MONTH));
-        Log.d(TAG, "Current day:" + calendar.get(Calendar.DAY_OF_MONTH));
-        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-        time = calendar.getTimeInMillis();*/
+        String from = getArguments().getString("from");
+        if (from.equals("AddNewSlotActivity")) {
+            final Calendar c = Calendar.getInstance();
+            hour = Integer.parseInt(getArguments().getString("hour"));
+            minute = Integer.parseInt(getArguments().getString("minute"));
+        } else {
+            final Calendar c = Calendar.getInstance();
+            hour = c.get(Calendar.HOUR_OF_DAY);
+            minute = c.get(Calendar.MINUTE);
+        }
 
-        final Calendar c = Calendar.getInstance();
-        hour = c.get(Calendar.HOUR_OF_DAY);
-        minute = c.get(Calendar.MINUTE);
+/*
 
-        /*// set current time into textview
-        tvDisplayTime.setText(
-                new StringBuilder().append(pad(hour))
-                        .append(":").append(pad(minute)));*/
-
-        // set current time into timepicker
-        /*timePicker.setCurrentHour(hour);
+        timePicker.setCurrentHour(hour);
         timePicker.setCurrentMinute(minute);
+
 */
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private TimePickerDialog.OnTimeSetListener timePickerListener =
             new TimePickerDialog.OnTimeSetListener() {
                 public void onTimeSet(TimePicker view, int selectedHour,
                                       int selectedMinute) {
-                   // hour = selectedHour;
-                   // minute = selectedMinute;
-
-                    // set current time into textview
-                    /*tvDisplayTime.setText(new StringBuilder().append(pad(hour))
-                            .append(":").append(pad(minute)));*/
-
-                    // set current time into timepicker
-
-
-                    final Calendar c = Calendar.getInstance();
-                    hour = c.get(Calendar.HOUR_OF_DAY);
-                    minute = c.get(Calendar.MINUTE);
-
                     timePicker.setCurrentHour(hour);
                     timePicker.setCurrentMinute(minute);
-
                 }
             };
 
@@ -114,6 +96,16 @@ public class StopTimeDialogFragment extends DialogFragment implements View.OnCli
         Dialog dialog = getDialog();
         dialog.setTitle(getString(R.string.set_time));
         dialog.setCanceledOnTouchOutside(false);
+        Toast.makeText(getActivity(),getResources().getString(R.string.quantized_timing),Toast.LENGTH_SHORT).show();
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minuteL) {
+                if (minuteL != minute) {
+                    timePicker.setCurrentMinute(minute);
+                }
+            }
+        });
+
         return view;
     }
 

@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string-array name="coaching_type">
+        <item>Individual</item>
+        <item>Multiple</item>
+    </string-array>
+
+    <string-array name="year_of_experience">
+        <item>Select</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+    </string-array>
+
     <!-- Countries -->
 
     <string-array name="countries">
@@ -440,12 +464,13 @@
     <string name="app_name">Chizzle</string>
     <string name="action_settings">Settings</string>
     <string name="action_scan_card">Scan card</string>
+    <string name="action_add_paypal">Add paypal</string>
     <string name="set_schedule">Schedule</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="hint_enter_code">Enter 6 character code here.</string>
+    <string name="hint_enter_code">Enter 6 characters code here.</string>
     <string name="resend_code">Resend verification code</string>
     <string name="find_mentor">Find Mentor</string>
-    <string name="change_location">Change Location</string>
+    <string name="change_location">Change</string>
     <string name="no_time_barrier">No Time Barrier</string>
     <string name="time_barrier">Time Barrier</string>
     <string name="search">Search</string>
@@ -473,7 +498,10 @@
     <string name="email_not_registered">Email is not registered.</string>
     <string name="problem_in_connection_server">Problem connecting to server.</string>
     <string name="problem_in_url">Not updated by mentor yet.</string>
-    <string name="pick_date">Pick date</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
+    <string name="slot_type">Slot type:</string>
+    <string name="max_students">Maximum students:</string>
     <string name="fmc_service">FMC Service</string>
     <string name="fmc_service_description">FMC running in service to allow push notification.</string>
     <string name="class_schedule">Class Schedule</string>
@@ -485,6 +513,9 @@
     <string name="select_card">Select a card</string>
     <string name="child">Child</string>
     <string name="child_dob">Child Dob:</string>
+    <string name="total_charges">Total charges:</string>
+    <string name="individual">Individual</string>
+    <string name="group">Group</string>
 
 
 
@@ -517,8 +548,8 @@
     <string name="vacation_scheduled_success">Your vacation get scheduled successfully.</string>
     <string name="no_notification">No notification for you.</string>
     <string name="rating_for">Rating for </string>
-    <string name="is">is</string>
-    <string name="will_be_submitted">will be submitted</string>
+    <string name="is"> is </string>
+    <string name="will_be_submitted"> will be submitted.</string>
     <string name="your_address_please">Your Address please!</string>
     <string name="atleast_a_week_day">Select at least one week-day.</string>
     <string name="duration_please">Select the duration for this schedule.</string>
@@ -528,6 +559,17 @@
     <string name="stop_time_should_be_grater">Completion time should be greater than start time !</string>
     <string name="class_is_available">Class is available</string>
     <string name="select_suggested_location"> Select one of the suggested locations</string>
+    <string name="quantized_timing">Minute is selected as per your selected start time!</string>
+    <string name="single_student_can_schedule_class">Single student can schedule class for this slot.</string>
+    <string name="multiple_student_can_schedule_class">Multiple student can schedule class for this slot.</string>
+    <string name="maximum_students">Please provide maximum students for this group.</string>
+    <string name="end_date_required">Please provide completion date of this slot.</string>
+    <string name="mentor_is_not_free">Mentor is not free on this day.</string>
+    <string name="you_are_not_connected">You are not connected with the mentor yet.</string>
+    <string name="no_slot_from_mentor">Mentor has not scheduled any class slot for this day.</string>
+    <string name="child_date_of_birth_please">please provide child date of birth.</string>
+    <string name="please_provide_location_to_access_details">Please provide location to access calendar details</string>
+    <string name="response_message">Please give a reason why you are rejecting this request.</string>
 
 
     <!--  Minimum time difference between start time and stop time of a slot   i.e in hours-->
@@ -540,7 +582,6 @@
     <string name="select_end_date_of_vacation">Select completion date of vacation.</string>
 
 
-
     <!-- Dialog message strings-->
     <string name="connecting">Connecting...</string>
     <string name="sending">Sending...</string>
@@ -551,7 +592,7 @@
     <string name="logging_in">Logging in...</string>
     <string name="verifying">Verifying...</string>
     <string name="verify">Verify</string>
-<string name="sending_code">Sending code...</string>
+    <string name="sending_code">Sending code...</string>
 
 
     <!--Exception message-->
@@ -580,12 +621,13 @@
 
     <!-- String s related to Prompting -->
     <string name="prompt_email">User Id</string>
+    <string name="prompt_update_profile">Please update your profile</string>
     <string name="prompt_enter_phone">Enter phone number</string>
     <string name="prompt_email_id">Email Id</string>
     <string name="prompt_password">Password</string>
     <string name="old_password">Old password:</string>
     <string name="new_password">New password:</string>
-<string name="new_phone_no">Mobile Number:</string>
+    <string name="new_phone_no">Mobile Number:</string>
     <string name="prompt_confirm_password">Confirm Password</string>
     <string name="prompt_commit">Commit</string>
     <string name="prompt_first_name">First Name</string>
@@ -593,7 +635,9 @@
     <string name="prompt_date_of_birth">Date Of Birth</string>
     <string name="prompt_gender">Gender</string>
     <string name="prompt_area_of_interest">Area of Interests</string>
-    <string name="prompt_area_of_coaching">Area of Coachings</string>
+    <string name="prompt_area_of_coaching">Area of Coaching</string>
+    <string name="please_add_area_of_interest">Please add area of interest.</string>
+    <string name="please_add_area_of_coaching">Please add area of coaching.</string>
     <string name="prompt_coaching_type">Coaching Type</string>
     <string name="prompt_training_location">Training Location</string>
     <string name="prompt_male">Male</string>
@@ -609,10 +653,11 @@
     <string name="prompt_pin">Pin Code</string>
     <string name="prompt_passion">Passion</string>
     <string name="prompt_profession">Profession</string>
-    <string name="prompt_accomplishment">Accomplishment</string>
+    <string name="prompt_accomplishment">Qualification</string>
     <string name="prompt_willing_to_travel">Available to travel trainee location</string>
     <string name="prompt_charges">Charges</string>
     <string name="prompt_experience">Experience</string>
+    <string name="prompt_experience_in_years">Experience in year(s)</string>
     <string name="prompt_facebook">Facebook</string>
     <string name="prompt_google_plus">Google +</string>
     <string name="days">Days</string>
@@ -623,10 +668,8 @@
     <string name="starting_from">Starting from:</string>
     <string name="from_date">From:</string>
     <string name="to_date">To:</string>
-    <string name="start_date">Start date:</string>
     <string name="start_date1">Start date</string>
-    <string name="end_date">Completion date:</string>
-    <string name="till">Till:</string>
+    <string name="till">Until:</string>
     <string name="select">Select</string>
     <string name="forever">Forever</string>
     <string name="how_long">How long?</string>
@@ -685,6 +728,7 @@
     <string name="add_available_slots">Add available slots</string>
     <string name="add_vacation">Schedule vacation</string>
     <string name="create_slot">Create Slot</string>
+    <string name="post_schedule_request">Post schedule request</string>
     <string name="schedule">Schedule</string>
     <string name="schedule_class">Schedule a class</string>
     <string name="schedule_vacation">Vacation schedule</string>
@@ -725,8 +769,8 @@
     <string name="action_disconnect">Disconnect</string>
     <string name="action_pending">Disconnect (Request already sent)</string>
     <string name="set_time">Set time</string>
-    <string name="schedule_vacation_note">A note for vacation schedule</string>
-    <string name="classes_availability">Next 7 days availability</string>
+    <string name="schedule_vacation_note">Out of class</string>
+    <string name="classes_availability">Mentor\'s availability</string>
     <string name="subject">Subject: </string>
     <string name="days_of_week">Days of week</string>
     <string name="week_days">Week days:</string>
@@ -738,6 +782,10 @@
     <string name="pay_now">Pay now</string>
     <string name="personally">I\'ll pay the mentor personally</string>
     <string name="check_availability">Check for availability</string>
+    <string name="new_schedule_req">New schedule request</string>
+    <string name="schedule_request">Post schedule request</string>
+    <string name="accept_req">Accept</string>
+    <string name="reject_req">Reject</string>
     <string name="event_desc">Event Description</string>
   <string name="month">Month</string>
     <string name="year">Year</string>
@@ -773,6 +821,8 @@
     <string name="user_email">user_email</string>
     <string name="phone_number">phone_number</string>
     <string name="reg_id_saved_to_server">reg_id_saved</string>
+    <string name="new_user">new_user</string>
+    <string name="customer_consent">customer_consent</string>
     <!-- -->
 
 

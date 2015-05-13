@@ -49,8 +49,7 @@ public class SubCategoryActivity extends Activity{
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try{
                     HomeFragment.subCategoryIds[columnNumber] = subCategoryId[position];
-                }catch (Exception e){
-                    e.printStackTrace();
+                }catch (Exception ignored){
                 }
 
                 try{
@@ -58,8 +57,7 @@ public class SubCategoryActivity extends Activity{
                         AreasOfInterestActivity.list.add(rowValue[position]);
                         AreasOfInterestActivity.notifyAdapter();
                     }
-                }catch (Exception e){
-                    e.printStackTrace();
+                }catch (Exception ignored){
                 }
             }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.category.Datum;
@@ -54,7 +55,7 @@ public class DataBase extends SQLiteOpenHelper {
     }
 
     /** Inserting sub categories into table TableSubCategory */
-    public void insertData(Category category){
+    public long insertData(Category category){
         ContentValues contentValues = new ContentValues();
         for(Datum datum : category.getData()) {
             for(DatumSub datumSub : datum.getDataSub()){
@@ -65,6 +66,21 @@ public class DataBase extends SQLiteOpenHelper {
                 db.insert(TABLE_NAME,null,contentValues);
             }
         }
+        return 0;
+    }
+
+    /** Select sub category with id */
+    public String getSubCategory(String id){
+        Cursor c = db.query(TABLE_NAME, new String[]{SUBCATEGORY}, SUBCATEGORY_ID + " = ?", new String[]{id}, null, null, null);
+        c.moveToFirst();
+        return c.getString(0);
+    }
+
+    /** Select id with sub category */
+    public int getSubCategoryId(String subCategory){
+        Cursor c = db.query(TABLE_NAME, new String[]{SUBCATEGORY_ID}, SUBCATEGORY + " = ?", new String[]{subCategory}, null, null, null);
+        c.moveToFirst();
+        return c.getInt(0);
     }
 
     /** Selecting all sub categories from database */
@@ -103,6 +119,11 @@ public class DataBase extends SQLiteOpenHelper {
         category.setData(datums);
         category.setMessage("From db");
         return category;
+    }
+
+    public void clearDatabase(){
+        db.delete(TABLE_NAME, null, null);
+        Log.e("FMC","DELTETED");
     }
 
 

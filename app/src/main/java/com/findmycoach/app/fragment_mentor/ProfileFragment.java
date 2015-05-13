@@ -26,7 +26,6 @@ import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
-import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
@@ -41,12 +40,11 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView profileName;
     private TextView profileAddress;
     private TextView profileRatting;
-    private TextView profileProfession;
+    private TextView profileExperience;
     private TextView profileAccomplishment;
     private TextView profileCharges;
     private TextView areaOfCoaching;
     private TextView profileTravelAvailable;
-    private TextView profileLocation;
     private TextView profilePhone;
     private Button googleLink;
     private Button facebookLink;
@@ -97,11 +95,10 @@ public class ProfileFragment extends Fragment implements Callback {
         profileName = (TextView) view.findViewById(R.id.profile_name);
         profileAddress = (TextView) view.findViewById(R.id.profile_address);
         profileRatting = (TextView) view.findViewById(R.id.profile_rating);
-        profileProfession = (TextView) view.findViewById(R.id.profile_profession);
+        profileExperience = (TextView) view.findViewById(R.id.profile_experience);
         profileAccomplishment = (TextView) view.findViewById(R.id.profile_accomplishment);
         profileCharges = (TextView) view.findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) view.findViewById(R.id.profile_travel_available);
-        profileLocation = (TextView) view.findViewById(R.id.profile_location);
         googleLink = (Button) view.findViewById(R.id.profile_google_button);
         facebookLink = (Button) view.findViewById(R.id.profile_facebook_button);
         areaOfCoaching = (TextView) view.findViewById(R.id.areas_of_coaching);
@@ -173,14 +170,16 @@ public class ProfileFragment extends Fragment implements Callback {
             address = address + userInfo.getZip();
         }
         profileAddress.setText(address);
-        if (userInfo.getProfession() != null) {
-            profileProfession.setText(userInfo.getProfession());
-        }
         if (userInfo.getAccomplishments() != null) {
             profileAccomplishment.setText(userInfo.getAccomplishments());
         }
+        if (userInfo.getExperience() != null) {
+            profileExperience.setText(userInfo.getExperience() + " year(s)");
+        }
         if (userInfo.getCharges() != null) {
-            profileCharges.setText("\u20B9 " + userInfo.getCharges());
+            //profileCharges.setText("\u20B9 " + (userInfo.getCharges().equals("0") ? userInfo.getChargesClass() + "per class": userInfo.getCharges() + "per hour"));
+            profileCharges.setText("\u20B9 " + (userInfo.getCharges().equals("0") ?userInfo.getCharges() + " per hour": userInfo.getCharges() + " per hour"));
+
         }
 
         profilePhone.setText(userInfo.getPhonenumber());
@@ -201,7 +200,6 @@ public class ProfileFragment extends Fragment implements Callback {
 
 
         profileRatting.setText(userInfo.getRating());
-        profileLocation.setText(NetworkManager.getCurrentLocation(getActivity()));
         if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {
             profileTravelAvailable.setText(getResources().getString(R.string.yes));
         } else {
@@ -238,7 +236,7 @@ public class ProfileFragment extends Fragment implements Callback {
             }
         } catch (Exception e) {
             Log.d(TAG, "Error while redirecting:" + e.getMessage());
-            Toast.makeText(getActivity(), getResources().getString(R.string.update_profile), Toast.LENGTH_LONG).show();
+//            Toast.makeText(getActivity(), getResources().getString(R.string.update_profile), Toast.LENGTH_LONG).show();
         }
     }
 

@@ -85,6 +85,7 @@ public class GcmFmcService extends IntentService {
     private void sendNotification(String push_message) {
 
         String userToken = StorageHelper.getUserDetails(this, "auth_token");
+
         //String phnVerified = StorageHelper.getUserDetails(this, "phone_verified");  // commented as it is not working from server side
 
 
@@ -122,6 +123,12 @@ public class GcmFmcService extends IntentService {
                         message="Hi, you have a new class schedule from "+f_name;
                         Intent intent=new Intent(this,DashboardActivity.class);
                         intent.putExtra("fragment",4);
+                        String slot_type=jsonObject1.getString("slot_type");
+                        String event_id=jsonObject1.getString("event_id");
+                        String student_id=jsonObject1.getString("student_id");
+                        intent.putExtra("slot_type",slot_type);
+                        intent.putExtra("event_id",event_id);
+                        intent.putExtra("student_id",student_id);
                         intent.putExtra("group",3);
                         intent.setAction("" + Math.random());
 
@@ -210,7 +217,7 @@ public class GcmFmcService extends IntentService {
                     }
                     if (opcode == 6) {
                         contentTitle = "Find My Coach";
-                        message = "Hi, your schedule get rejected by " + f_name;
+                        message = "Sorry, your schedule get rejected by " + f_name;
                         Intent intent = new Intent(this, DashboardActivity.class);
                         intent.putExtra("fragment", 6);
                         intent.putExtra("group",2);

@@ -13,8 +13,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,12 +51,14 @@ import java.util.TreeSet;
 /**
  * Created by praka_000 on 2/12/2015.
  */
-public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
+public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     CheckBox cb_mon, cb_tue,
             cb_wed, cb_thur,
             cb_fri, cb_sat,
             cb_sun;
-
+    Spinner sp_slot_type;
+    EditText et_maximum_students;
+    LinearLayout ll_slot_maximum_students;
     public static TextView tv_start_date, tv_till_date, tv_start_time, tv_stop_time;
     boolean boo_mon_checked, boo_tue_checked,
             boo_wed_checked, boo_thurs_checked,
@@ -72,7 +79,9 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
     private static int start_min;
     private static int stop_hour;
     private static int stop_min;
-
+    private String slot_type;
+    private int maximum_students;
+    private boolean allow_slot_type_message;
     private Date newDate;
 
 
@@ -105,9 +114,11 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_avail_slot);
 
+        allow_slot_type_message=false;
+
         time_from = getResources().getString(R.string.select);
         time_to = getResources().getString(R.string.select);
-        date_to = getResources().getString(R.string.forever);
+        date_to = getResources().getString(R.string.end_date);
 
 
         from_day = 0;
@@ -136,8 +147,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
         from_month = Integer.parseInt(current_date.substring(2, 4));
         from_year = Integer.parseInt(current_date.substring(4, 8));
         tv_start_date.setText(date_from);
-        tv_till_date.setText(getResources().getString(R.string.forever));
-        date_to = getResources().getString(R.string.forever);
+        date_to = getResources().getString(R.string.end_date);
 
         allListeners();
 
@@ -158,7 +168,12 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
             public void onClick(View v) {
                 if (tv_start_time.getText().length() > 0) {
                     FragmentManager fragmentManager = getFragmentManager();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("from", "AddNewSlotActivity");
+                    bundle.putString("hour", String.valueOf(start_hour));
+                    bundle.putString("minute", String.valueOf(start_min));
                     StopTimeDialogFragment timeDialogFragment = new StopTimeDialogFragment();
+                    timeDialogFragment.setArguments(bundle);
                     timeDialogFragment.show(fragmentManager, null);
                 } else {
                     Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.start_time_first), Toast.LENGTH_SHORT).show();
@@ -269,6 +284,41 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
                 }
             }
         });
+
+        final String[] slot_types = {getResources().getString(R.string.individual), getResources().getString(R.string.group)};
+        ArrayAdapter arrayAdapter1_slot_types = new ArrayAdapter(this, android.R.layout.simple_spinner_item, slot_types);
+        arrayAdapter1_slot_types.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_slot_type.setAdapter(arrayAdapter1_slot_types);
+        sp_slot_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                slot_type = null;
+                slot_type = (String) parent.getItemAtPosition(position);
+                if (slot_type.equals(getResources().getString(R.string.individual))) {
+                    if(allow_slot_type_message)
+                    Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.single_student_can_schedule_class), Toast.LENGTH_SHORT).show();
+                    allow_slot_type_message=true;
+                    maximum_students = 1;
+                    if (ll_slot_maximum_students.getVisibility() == View.VISIBLE)
+                        ll_slot_maximum_students.setVisibility(View.GONE);
+
+
+                } else {
+
+                    Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.multiple_student_can_schedule_class), Toast.LENGTH_SHORT).show();
+                    ll_slot_maximum_students.setVisibility(View.VISIBLE);
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+
+            }
+        });
+
 
         b_create_slot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -389,37 +439,61 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
                         }
                         Log.d(TAG, "Slot time value from AddNewSlotActivity" + slot_time_value / (60 * 60));
                         requestParams.add("slot_time_value", String.valueOf(slot_time_value));
+                        requestParams.add("slot_type", slot_type);
+                        Log.d(TAG, "slot_type : " + slot_type);
+                        if (slot_type.equals(getResources().getString(R.string.group))) {
+                            requestParams.add("max_users", et_maximum_students.getText().toString());
+                            Log.d(TAG, "slot_type :" + slot_type);
+                            Log.d(TAG, "max users : " + et_maximum_students.getText().toString());
+                        } else {
+                            requestParams.add("max_users", String.valueOf(maximum_students));
+                            Log.d(TAG, "slot_type :" + slot_type);
+                            Log.d(TAG, "max users : " + maximum_students);
+
+                        }
+
                         String auth_token = StorageHelper.getUserDetails(AddNewSlotActivity.this, "auth_token");
                         progressDialog.show();
                         NetworkClient.createNewSlot(AddNewSlotActivity.this, requestParams, auth_token, new Callback() {
 
                             @Override
                             public void successOperation(Object object, int statusCode, int calledApiValue) {
-                                Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully), Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
 
-                                String success_response=(String) object;
+                                String success_response = (String) object;
                                 Log.d(TAG, "success response for add new slot activity : " + success_response);
-                                JSONObject jO_success_response =null;
-                                JSONArray jA_coinciding_Exceptions=null;
+                                JSONObject jO_success_response = null;
+                                JSONArray jA_coinciding_Exceptions = null;
+                                JSONArray jA_coinciding_Slots = null;
 
                                 if (success_response.equals(getResources().getString(R.string.problem_in_connection_server))) {
                                     Toast.makeText(AddNewSlotActivity.this, (String) object, Toast.LENGTH_SHORT).show();
                                     // progressDialog.dismiss();
-                                }else{
+                                } else {
                                     try {
-                                        jO_success_response=new JSONObject(success_response);
-                                        jA_coinciding_Exceptions=jO_success_response.getJSONArray("coincidingExceptions");
-                                        String message=jO_success_response.getString("message");
-                                        if(message.equals("Success")){
-                                            if(jA_coinciding_Exceptions.length() > 0){
-                                                coincideOf(jA_coinciding_Exceptions,1);
-                                            }else{
+                                        jO_success_response = new JSONObject(success_response);
+                                        jA_coinciding_Slots = jO_success_response.getJSONArray("coincidingSlots");
+                                        jA_coinciding_Exceptions = jO_success_response.getJSONArray("coincidingExceptions");
+                                        String message = jO_success_response.getString("message");
+                                        if (message.equalsIgnoreCase("Success")) {
+                                            if (jA_coinciding_Slots.length() > 0) {
+                                                coincideOf(jA_coinciding_Slots, 0);
+                                            } else {
+                                                if (jA_coinciding_Exceptions.length() > 0) {
+                                                    coincideOf(jA_coinciding_Exceptions, 1);
 
-                                                setResult(500);
-                                                finish();
+                                                } else {
+                                                    Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully), Toast.LENGTH_SHORT).show();
+                                                    setResult(500);
+                                                    finish();
+                                                }
 
 
+                                            }
+                                        } else {
+                                            if (jA_coinciding_Slots.length() > 0) {
+                                                coincideOf(jA_coinciding_Slots, 0);
                                             }
                                         }
                                     } catch (JSONException e) {
@@ -438,7 +512,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
                                 JSONArray jA_coinciding_slots = null, jA_coinciding_Exceptions = null;
                                 if (failure_response.equals(getResources().getString(R.string.problem_in_connection_server))) {
                                     Toast.makeText(AddNewSlotActivity.this, (String) object, Toast.LENGTH_SHORT).show();
-                                   // progressDialog.dismiss();
+                                    // progressDialog.dismiss();
                                 } else {
                                     try {
                                         jO_failure_resp = new JSONObject(failure_response);
@@ -456,8 +530,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-
-
                                 }
 
 
@@ -790,9 +862,9 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
                 int start_time = ((start_hour * 60) + start_min) * 60;
                 int stop_time = ((stop_hour * 60) + stop_min) * 60;
 
-                int slot_time_value=0;
+                int slot_time_value = 0;
                 if (start_time > stop_time) {
-                    Toast.makeText(AddNewSlotActivity.this,getResources().getString(R.string.stop_time_should_be_grater), Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.stop_time_should_be_grater), Toast.LENGTH_LONG).show();
                     return false;
 
                 } else {
@@ -811,10 +883,28 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
                                 String till_date_val = tv_till_date.getText().toString();
                                 String s = getResources().getString(R.string.forever);
                                 Log.d(TAG, " till date value : " + till_date_val + " forever string from resource : " + s);
-                                if (till_date_val.equals(s)) {
-                                    return true;
+                                if (till_date_val.trim().length() > 0) {
+                                    if (checkDaysAvailability(tv_start_date.getText().toString(), tv_till_date.getText().toString())) {
+                                        Log.d(TAG, "checkDaysAvailability return true");
+                                        if (slot_type.equals(getResources().getString(R.string.group))) {
+                                            if (et_maximum_students.getText().toString().trim().length() > 0) {
+                                                return true;
+                                            } else {
+                                                Toast.makeText(this, getResources().getString(R.string.maximum_students), Toast.LENGTH_SHORT).show();
+                                                return false;
+                                            }
+
+
+                                        } else {
+                                            return true;
+                                        }
+                                    } else {
+                                        Log.d(TAG, "checkDaysAvailability return false");
+                                        return false;
+                                    }
                                 } else {
-                                    return checkDaysAvailability(tv_start_date.getText().toString(), tv_till_date.getText().toString());
+                                    Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.end_date_required), Toast.LENGTH_SHORT).show();
+                                    return false;
                                 }
                             } else {
                                 Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_start_date_of_slot), Toast.LENGTH_SHORT).show();
@@ -828,6 +918,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
 
 
             }
+
 
         } else {
             Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_at_least_one_day), Toast.LENGTH_SHORT).show();
@@ -1048,7 +1139,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
         tv_till_date = (TextView) findViewById(R.id.tv_slot_till_date);
         tv_start_time = (TextView) findViewById(R.id.tv_slot_start_time);
         tv_stop_time = (TextView) findViewById(R.id.tv_slot_stop_time);
-
+        sp_slot_type = (Spinner) findViewById(R.id.sp_slot_type);
+        ll_slot_maximum_students = (LinearLayout) findViewById(R.id.ll_max_students);
+        ll_slot_maximum_students.setVisibility(View.GONE);
+        et_maximum_students = (EditText) findViewById(R.id.et_maximum_students);
         b_create_slot = (Button) findViewById(R.id.b_create_slot);
 
     }
@@ -1091,7 +1185,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
         AddNewSlotActivity.tv_start_date.setText(stringBuilder.toString());
         AddNewSlotActivity.date_from = String.valueOf(stringBuilder);
 
-        AddNewSlotActivity.tv_till_date.setText(date_to);
+        AddNewSlotActivity.tv_till_date.setText("");
     }
 
 
@@ -1099,31 +1193,28 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
     @Override
     public void setSelectedTillDate(Object o1, Object o2, Object o3, boolean b) {
         Log.d(TAG, o1.toString() + "/" + o2.toString() + "/" + o3.toString());
-        if (b) {
-            AddNewSlotActivity.tv_till_date.setText(getResources().getString(R.string.forever));
 
+        int day = Integer.parseInt(o1.toString());
+        AddNewSlotActivity.till_day = day;
+        int month = Integer.parseInt(o2.toString());
+        AddNewSlotActivity.till_month = month;
+        int year = Integer.parseInt(o3.toString());
+        AddNewSlotActivity.till_year = year;
+        StringBuilder stringBuilder = new StringBuilder();
+        if ((day / 10) > 0) {
+            stringBuilder.append(day);
         } else {
-            int day = Integer.parseInt(o1.toString());
-            AddNewSlotActivity.till_day = day;
-            int month = Integer.parseInt(o2.toString());
-            AddNewSlotActivity.till_month = month;
-            int year = Integer.parseInt(o3.toString());
-            AddNewSlotActivity.till_year = year;
-            StringBuilder stringBuilder = new StringBuilder();
-            if ((day / 10) > 0) {
-                stringBuilder.append(day);
-            } else {
-                stringBuilder.append("" + 0 + day);
-            }
-            if ((month / 10) > 0) {
-                stringBuilder.append("-" + month);
-            } else {
-                stringBuilder.append("-" + 0 + month);
-            }
-            stringBuilder.append("-" + year);
-            Log.d(TAG, "till date:" + stringBuilder.toString());
-            AddNewSlotActivity.tv_till_date.setText(stringBuilder.toString());
+            stringBuilder.append("" + 0 + day);
         }
+        if ((month / 10) > 0) {
+            stringBuilder.append("-" + month);
+        } else {
+            stringBuilder.append("-" + 0 + month);
+        }
+        stringBuilder.append("-" + year);
+        Log.d(TAG, "till date:" + stringBuilder.toString());
+        AddNewSlotActivity.tv_till_date.setText(stringBuilder.toString());
+
 
     }
 
@@ -1153,11 +1244,19 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
     @Override
     public void setSelectedStartTime(Object o1, Object o2) {
         String hour = (String) o1;
-        AddNewSlotActivity.start_hour = Integer.parseInt(hour);
+        start_hour = Integer.parseInt(hour);
         String minute = (String) o2;
-        AddNewSlotActivity.start_min = Integer.parseInt(minute);
-        AddNewSlotActivity.time_from = hour + ":" + minute;
+        start_min = Integer.parseInt(minute);
+        time_from = hour + ":" + minute;
         tv_start_time.setText(hour + ":" + minute);
+
+        if (tv_stop_time.getText().toString() != null && tv_stop_time.getText().toString().contains(":")) {
+
+            stop_min = start_min;
+            tv_stop_time.setText(stop_hour + ":" + stop_min);
+
+        }
+
 
     }
 
@@ -1165,10 +1264,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime{
     @Override
     public void setSelectedTillTime(Object o1, Object o2) {
         String hour = (String) o1;
-        AddNewSlotActivity.stop_hour = Integer.parseInt(hour);
+        stop_hour = Integer.parseInt(hour);
         String minute = (String) o2;
-        AddNewSlotActivity.stop_min = Integer.parseInt(minute);
-        AddNewSlotActivity.time_to = hour + ":" + minute;
+        stop_min = Integer.parseInt(minute);
+        time_to = hour + ":" + minute;
         tv_stop_time.setText(hour + ":" + minute);
     }
 }

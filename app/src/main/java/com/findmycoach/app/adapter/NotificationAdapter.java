@@ -27,7 +27,7 @@ import java.util.List;
 public class NotificationAdapter extends BaseAdapter {
 
     private Context context;
-    private List<Data> notifications;
+    public List<Data> notifications;
     private Callback callback;
     private ProgressDialog progressDialog;
     public int positionToRemove = -1;

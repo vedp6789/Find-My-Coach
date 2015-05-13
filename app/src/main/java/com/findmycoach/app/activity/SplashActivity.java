@@ -18,12 +18,14 @@ import com.loopj.android.http.RequestParams;
 public class SplashActivity extends Activity implements Callback{
 
     private DataBase dataBase;
+    private boolean isStart;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        isStart = true;
         getDataFromServer();
     }
 
@@ -32,23 +34,13 @@ public class SplashActivity extends Activity implements Callback{
     private void getDataFromServer() {
         /** Checking if sub categories are already present */
         dataBase = DataBase.singleton(this);
-        Category categoryFromDb = dataBase.selectAllSubCategory();
-
-
-
+//        Category categoryFromDb = dataBase.selectAllSubCategory();
 
         //** If sub category is not present then call api to get *//*
-        if(categoryFromDb.getData().size() < 1)
             getCategories();
-
-        //** Subcategories is present *//*
-        else
-            runHoldThread();
-
-
-
-
-        runHoldThread();
+//        //** Subcategories is present *//*
+//        if(categoryFromDb.getData().size() > 0)
+//            runHoldThread();
     }
 
     /** Thread to hold splash screen */
@@ -59,7 +51,9 @@ public class SplashActivity extends Activity implements Callback{
                 try {
                     synchronized (this) {
                         wait(getResources().getInteger(R.integer.splash_screen_hold_duration));
-                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                        if(isStart)
+                            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                        isStart = false;
                         finish();
                     }
                 } catch (InterruptedException ex) {
@@ -73,13 +67,14 @@ public class SplashActivity extends Activity implements Callback{
     /** Get Sub Categories */
     private void getCategories() {
         /* TODO remove hard coded auth token */
-        NetworkClient.getCategories(this, new RequestParams(), "916bb76e90beb6f87a97e6d3de1daebff6859d58", this, 34);
+        NetworkClient.getSubCategories(this, new RequestParams(), null, this, 34);
     }
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         /** Caching subcategories into database */
-        dataBase.insertData((Category) object);
+        dataBase.clearDatabase();
+        long i = dataBase.insertData((Category) object);
         runHoldThread();
     }
 

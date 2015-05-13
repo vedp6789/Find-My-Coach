@@ -10,12 +10,52 @@ import java.io.Serializable;
  */
 public class DayEvent implements Parcelable{
     private String event_id;
+    private String event_start_date;
+    private String event_stop_date;
     private String event_start_time;
     private String event_stop_time;
-
-    private String fname;
-    private String lname;
+    private String event_type;
+    private String event_total_mentee;  /* Number of mentees having same event */
+    private String fname;/* fname when event_type is solo else not going to be used*/
+    private String lname;/* lname when event_type is solo else not going to be used*/
     private String sub_category_name;
+
+
+    public DayEvent() {
+
+    }
+
+    public String getEvent_start_date() {
+        return event_start_date;
+    }
+
+    public void setEvent_start_date(String event_start_date) {
+        this.event_start_date = event_start_date;
+    }
+
+    public String getEvent_stop_date() {
+        return event_stop_date;
+    }
+
+    public void setEvent_stop_date(String event_stop_date) {
+        this.event_stop_date = event_stop_date;
+    }
+
+    public String getEvent_type() {
+        return event_type;
+    }
+
+    public void setEvent_type(String event_type) {
+        this.event_type = event_type;
+    }
+
+    public String getEvent_total_mentee() {
+        return event_total_mentee;
+    }
+
+    public void setEvent_total_mentee(String event_total_mentee) {
+        this.event_total_mentee = event_total_mentee;
+    }
 
     public String getSub_category_name() {
         return sub_category_name;
@@ -49,11 +89,6 @@ public class DayEvent implements Parcelable{
         this.lname = lname;
     }
 
-    public DayEvent() {
-
-    }
-
-
 
     public String getEvent_start_time() {
         return event_start_time;
@@ -62,8 +97,6 @@ public class DayEvent implements Parcelable{
     public void setEvent_start_time(String event_start_time) {
         this.event_start_time = event_start_time;
     }
-
-
 
     public String getEvent_stop_time() {
         return event_stop_time;
@@ -85,12 +118,15 @@ public class DayEvent implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.event_id);
+        dest.writeString(this.event_start_date);
+        dest.writeString(this.event_stop_date);
         dest.writeString(this.event_start_time);
         dest.writeString(this.event_stop_time);
+        dest.writeString(this.event_type);
+        dest.writeString(this.event_total_mentee);
         dest.writeString(this.fname);
         dest.writeString(this.lname);
         dest.writeString(this.sub_category_name);
-
 
     }
 
@@ -100,8 +136,12 @@ public class DayEvent implements Parcelable{
      */
 
         this.event_id=source.readString();
+        this.event_start_date=source.readString();
+        this.event_stop_date=source.readString();
         this.event_start_time=source.readString();
         this.event_stop_time=source.readString();
+        this.event_type=source.readString();
+        this.event_total_mentee=source.readString();
         this.fname=source.readString();
         this.lname=source.readString();
         this.sub_category_name=source.readString();

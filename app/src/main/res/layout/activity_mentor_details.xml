@@ -7,6 +7,8 @@
     android:padding="8dp"
     tools:context="com.findmycoach.app.fragment_mentor.ProfileFragment">
 
+
+
     <ScrollView
         android:id="@+id/sv_profile"
         android:layout_alignParentTop="true"
@@ -104,13 +106,13 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
-                    android:text="@string/prompt_profession"
+                    android:text="@string/prompt_experience"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/profile_profession"
+                    android:id="@+id/profile_experience"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
@@ -287,185 +289,56 @@
                     android:textStyle="bold"
                     android:textColor="#000000"/>
 
+
                 <LinearLayout
-                    android:id="@+id/ll_mon_slots"
+                    android:id="@+id/buttonlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:height="6dp"
                     android:layout_below="@id/tv_classes_abailability"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:background="@color/caldroid_gray">
 
-                    <TextView
-                        android:id="@+id/tv_mon_slot"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                    <ImageView
+                        android:id="@+id/iv_prevMonth"
+                        android:layout_width="40dp"
+                        android:layout_height="fill_parent"
                         android:layout_gravity="start"
-                        android:gravity="center_vertical"
-                        android:text="@string/mon"
-                        android:textColor="#000000"
-                        android:textSize="18sp"/>
+                        android:layout_marginLeft="10sp"
+                        android:paddingRight="10dp"
+                        android:src="@drawable/calendar_left_arrow_selector"
+                        />
 
                     <TextView
-                        android:id="@+id/tv_mon_available_slots"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"/>
+                        android:id="@+id/tv_currentMonth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="#000000" />
+
+                    <ImageView
+                        android:id="@+id/iv_nextMonth"
+                        android:layout_width="40dp"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="start"
+                        android:paddingLeft="10dp"
+                        android:layout_marginRight="10sp"
+                        android:src="@drawable/calendar_right_arrow_selector"
+                       />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll_tue_slots"
-                    android:layout_below="@id/ll_mon_slots"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_tue_slot"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="start"
-                        android:gravity="center_vertical"
-                        android:text="@string/tue"
-                        android:textColor="#000000"
-                        android:textSize="18sp"/>
-
-                    <TextView
-                        android:id="@+id/tv_tue_available_slots"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_wed_slots"
-                    android:layout_below="@id/ll_tue_slots"
+                <include layout="@layout/calendar"
+                    android:id="@+id/cal"
+                    android:layout_below="@+id/buttonlayout"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"/>
 
-                    <TextView
-                        android:id="@+id/tv_wed_slot"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="start"
-                        android:gravity="center_vertical"
-                        android:text="@string/wed"
-                        android:textColor="#000000"
-                        android:textSize="18sp"/>
 
-                    <TextView
-                        android:id="@+id/tv_wed_available_slots"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"/>
-                </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll_thu_slots"
-                    android:layout_below="@id/ll_wed_slots"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_thur_slot"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="start"
-                        android:gravity="center_vertical"
-                        android:text="@string/thur"
-                        android:textColor="#000000"
-                        android:textSize="18sp"/>
-
-                    <TextView
-                        android:id="@+id/tv_thur_available_slots"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_fri_slots"
-                    android:layout_below="@+id/ll_thu_slots"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_fri_slot"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="start"
-                        android:gravity="center_vertical"
-                        android:text="@string/fri"
-                        android:textColor="#000000"
-                        android:textSize="18sp"/>
-
-                    <TextView
-                        android:id="@+id/tv_fri_available_slots"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_sat_slots"
-                    android:layout_below="@id/ll_fri_slots"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_sat_slot"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="start"
-                        android:gravity="center_vertical"
-                        android:text="@string/sat"
-                        android:textColor="#000000"
-                        android:textSize="18sp"/>
-
-                    <TextView
-                        android:id="@+id/tv_sat_available_slots"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_sun_slots"
-                    android:layout_below="@id/ll_sat_slots"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_sun_slot"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="start"
-                        android:gravity="center_vertical"
-                        android:text="@string/sun"
-                        android:textColor="#000000"
-                        android:textSize="18sp"/>
-
-                    <TextView
-                        android:id="@+id/tv_sun_available_slots"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"/>
-
-                </LinearLayout>
-                <Button
-                    android:id="@+id/b_schedule_class"
-                    android:layout_below="@id/ll_sun_slots"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="3dp"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/schedule_class"
-                    android:gravity="center"/>
 
             </RelativeLayout>
 
@@ -476,7 +349,6 @@
 
 
     </ScrollView>
-
 
 
 </RelativeLayout>

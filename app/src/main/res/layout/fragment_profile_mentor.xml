@@ -103,13 +103,13 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
-                    android:text="@string/prompt_profession"
+                    android:text="@string/prompt_experience"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/profile_profession"
+                    android:id="@+id/profile_experience"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
@@ -187,34 +187,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="2"
-                    android:text="@string/prompt_current_location"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/profile_location"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="2"
-                    android:gravity="center_vertical"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:orientation="horizontal"
-                android:weightSum="4">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="2"
                     android:text="@string/prompt_willing_to_travel"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
@@ -263,18 +235,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:orientation="horizontal"
                 android:weightSum="4">
 
-                <Button
-                    android:id="@+id/profile_google_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:text="@string/google_plus"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="18sp" />
 
                 <Button
                     android:id="@+id/profile_facebook_button"

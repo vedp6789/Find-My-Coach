@@ -57,7 +57,7 @@ public class ChildDOB extends DialogFragment {
                 String month = String.valueOf(dp_child_dob.getMonth() + 1);
                 String year = String.valueOf(dp_child_dob.getYear());
                 StringBuilder stringBuilder=new StringBuilder();
-                stringBuilder.append(day);stringBuilder.append("/"+month);stringBuilder.append("/"+year);
+                stringBuilder.append(day);stringBuilder.append("-"+month);stringBuilder.append("-"+year);
 
                 scheduleNewClass.child_DOB=stringBuilder.toString();
                 scheduleNewClass.tv_child_dob.setText(stringBuilder.toString());

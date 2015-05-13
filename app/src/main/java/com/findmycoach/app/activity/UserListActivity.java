@@ -36,6 +36,7 @@ public class UserListActivity extends Activity implements Callback {
     private static final int NEED_TO_REFRESH = 100;
     private MentorListAdapter mentorListAdapter;
     private int selectedPosition = -1;
+    private String connection_status_for_Selected_mentor;
 
 
     @Override
@@ -51,10 +52,12 @@ public class UserListActivity extends Activity implements Callback {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                connection_status_for_Selected_mentor=null;
                 if (users != null) {
                     Log.d(TAG,"ListView click");
                     selectedPosition = position;
                     datum = users.get(position);
+                    connection_status_for_Selected_mentor=datum.getConnectionStatus();
                     getMentorDetails(datum.getId());
                 }
             }
@@ -74,8 +77,15 @@ public class UserListActivity extends Activity implements Callback {
         int limit = 7;                                          //  This is a limit for getting free slots details for this mentor in terms of limit days from current date
         requestParams.add("limit", String.valueOf(limit));
         String authToken = StorageHelper.getUserDetails(this, "auth_token");
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
-        NetworkClient.getMentorDetails(this, requestParams, authToken, this, 24);
+        String user_group=StorageHelper.getUserGroup(UserListActivity.this,"user_group");
+        if(user_group != null){
+            requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+            NetworkClient.getMentorDetails(this, requestParams, authToken, this, 24);
+        }else{
+            Toast.makeText(UserListActivity.this,getResources().getString(R.string.check_network_connection),Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
     private void applyActionbarProperties() {
@@ -137,7 +147,8 @@ public class UserListActivity extends Activity implements Callback {
         if(calledApiValue == 24){
             Intent intent = new Intent(getApplicationContext(), MentorDetailsActivity.class);
             intent.putExtra("mentorDetails", (String) object);
-            intent.putExtra("connection_status", datum.getConnectionStatus());
+            intent.putExtra("searched_keyword", getIntent().getStringExtra("searched_keyword"));
+            intent.putExtra("connection_status",connection_status_for_Selected_mentor);
             datum = null;
             startActivityForResult(intent, NEED_TO_REFRESH);
             isGettingMentor = false;

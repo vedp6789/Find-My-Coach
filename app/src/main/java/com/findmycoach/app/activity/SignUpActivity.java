@@ -7,8 +7,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -40,7 +41,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     private EditText phoneNumberInput;
     private ProgressDialog progressDialog;
     private RadioButton radioButton_mentee_signup, radioButton_mentor_signup;
-    private int user_group=0;
+    private int user_group = 0;
     private TextView countryCodeTV;
     private String[] country_code;
     private String email, phoneNumber;
@@ -56,14 +57,17 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
 
     private void applyActionbarProperties() {
         ActionBar actionBar = getActionBar();
-        if(actionBar != null)
+        if (actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    /** Getting references of views */
+    /**
+     * Getting references of views
+     */
     private void initialize() {
-        radioButton_mentee_signup= (RadioButton) findViewById(R.id.radio_button_mentee_signup);
-        radioButton_mentor_signup= (RadioButton) findViewById(R.id.radio_button_mentor_signup);
+        country_code = this.getResources().getStringArray(R.array.country_codes);
+        radioButton_mentee_signup = (RadioButton) findViewById(R.id.radio_button_mentee_signup);
+        radioButton_mentor_signup = (RadioButton) findViewById(R.id.radio_button_mentor_signup);
         firstNameInput = (EditText) findViewById(R.id.input_first_name);
         lastNameInput = (EditText) findViewById(R.id.input_last_name);
         emailInput = (EditText) findViewById(R.id.input_email);
@@ -71,7 +75,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         confirmPasswordInput = (EditText) findViewById(R.id.input_confirm_password);
         phoneNumberInput = (EditText) findViewById(R.id.input_phone);
         countryCodeTV = (TextView) findViewById(R.id.countryCodeTV);
-        countryCodeTV.setText(getCountryZipCode());
+        String code = getCountryZipCode();
+        countryCodeTV.setText(code.equals("") ? country_code[0] : code);
         countryCodeTV.setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
@@ -98,12 +103,14 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         int id = v.getId();
         if (id == R.id.button_signup) {
             registerUser();
-        }else if(id == R.id.countryCodeTV){
+        } else if (id == R.id.countryCodeTV) {
             showCountryCodeDialog();
         }
     }
 
-    /** Dialog for selecting country code */
+    /**
+     * Dialog for selecting country code
+     */
     private void showCountryCodeDialog() {
         final Dialog countryDialog = new Dialog(this);
         countryDialog.setCanceledOnTouchOutside(true);
@@ -115,13 +122,16 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                countryCodeTV.setError(null);
                 countryCodeTV.setText(country_code[position].split(",")[0]);
                 countryDialog.dismiss();
             }
         });
     }
 
-    /** Registering user with FMC */
+    /**
+     * Registering user with FMC
+     */
     private void registerUser() {
         String firstName = firstNameInput.getText().toString();
         String lastName = lastNameInput.getText().toString();
@@ -135,19 +145,20 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         boolean isValid = validate(firstName, lastName, phone, email, password, confirmPassword, countryCode);
 
         if (isValid) {
-            if(radioButton_mentee_signup.isChecked())
+            if (radioButton_mentee_signup.isChecked())
                 user_group = 2;
-            else if(radioButton_mentor_signup.isChecked())
+            else if (radioButton_mentor_signup.isChecked())
                 user_group = 3;
-            if(user_group == 0){
-                Toast.makeText(SignUpActivity.this,"Please select user type.",Toast.LENGTH_SHORT).show();
-            }else{
+            if (user_group == 0) {
+                Toast.makeText(SignUpActivity.this, "Please select user type.", Toast.LENGTH_SHORT).show();
+            } else {
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("first_name", firstName);
                 requestParams.add("last_name", lastName);
                 requestParams.add("email", email);
                 requestParams.add("password", password);
-                requestParams.add("phone_number", countryCode + phone);
+                requestParams.add("phone_number", countryCode + "-" + phone);
+                Log.e("Login dialog : phone_number", countryCode.trim() + "-" + phone);
                 requestParams.add("user_group", String.valueOf(user_group));
                 StorageHelper.storePreference(this, "phone_number", phone);
                 callApiToRegister(requestParams);
@@ -158,40 +169,46 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         }
     }
 
-    /** Sending data to server for new registration */
+    /**
+     * Sending data to server for new registration
+     */
     private void callApiToRegister(RequestParams requestParams) {
         progressDialog.show();
         NetworkClient.register(this, requestParams, this, 2);
     }
 
-    /** validating inserted user details */
+    /**
+     * validating inserted user details
+     */
     private boolean validate(String firstName, String lastName, String phone, String email, String password, String confirmPassword, String countryCode) {
 
         if (firstName.equals("")) {
             showErrorMessage(firstNameInput, getResources().getString(R.string.error_field_required));
             return false;
-        }else{
-            for (int i = 0; i < firstName.length()-1; i++) {
+        } else {
+            for (int i = 0; i < firstName.length() - 1; i++) {
                 if (!Character.isLetter(firstName.charAt(i))) {
                     showErrorMessage(firstNameInput, getResources().getString(R.string.error_not_a_name));
                     return false;
                 }
             }
         }
+        firstNameInput.setError(null);
 
         if (lastName.equals("")) {
             showErrorMessage(lastNameInput, getResources().getString(R.string.error_field_required));
             return false;
-        }else{
-            for (int i = 0; i < lastName.length()-1; i++) {
+        } else {
+            for (int i = 0; i < lastName.length() - 1; i++) {
                 if (!Character.isLetter(lastName.charAt(i))) {
                     showErrorMessage(lastNameInput, getResources().getString(R.string.error_not_a_name));
                     return false;
                 }
             }
         }
+        lastNameInput.setError(null);
 
-        if(countryCode.trim().equals("")){
+        if (countryCode.trim().equalsIgnoreCase("Select")) {
             showErrorMessage(countryCodeTV, getResources().getString(R.string.select_country_code));
             return false;
         }
@@ -199,37 +216,43 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         if (phone.equals("")) {
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_field_required));
             return false;
-        }else if (phone.length() < 10) {
+        } else if (phone.length() < 8) {
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_phone_number_invalid));
             return false;
         }
+        phoneNumberInput.setError(null);
 
         if (!isEmailValid(email)) {
             showErrorMessage(emailInput, getResources().getString(R.string.enter_valid_email));
             return false;
         }
+        emailInput.setError(null);
 
         if (password.equals("")) {
             showErrorMessage(passwordInput, getResources().getString(R.string.error_field_required));
             return false;
-        }else if (password.length() < 5) {
+        } else if (password.length() < 5) {
             showErrorMessage(passwordInput, getResources().getString(R.string.error_password_size));
             return false;
         }
+        passwordInput.setError(null);
 
         if (confirmPassword.equals("")) {
             showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_required));
             return false;
-        }else if (!password.equals(confirmPassword)) {
+        } else if (!password.equals(confirmPassword)) {
             showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_not_match));
             return false;
         }
+        confirmPasswordInput.setError(null);
 
 
         return true;
     }
 
-    /** Checking entered email is valid email or not */
+    /**
+     * Checking entered email is valid email or not
+     */
     public boolean isEmailValid(String email) {
         boolean isValid = false;
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
@@ -242,62 +265,78 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         return isValid;
     }
 
-    /** Displaying error is any detail is wrong */
+    /**
+     * Displaying error is any detail is wrong
+     */
     private void showErrorMessage(final TextView view, String string) {
         view.setError(string);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                view.setError(null);
-            }
-        }, 3500);
     }
 
-    /** If user registered successfully close activity */
+    /**
+     * If user registered successfully close activity
+     */
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
+
+        try{
+            Response response = (Response) object;
+            Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
+            StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getData().getId());
+            Log.e("SignUp", StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user)) + "");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         saveUserEmail(email);
         saveUserPhoneNumber(phoneNumber);
         StorageHelper.storePreference(this, "user_group", String.valueOf(user_group));
-        startActivity(new Intent(this, ValidatePhoneActivity.class));
+        Intent intent=new Intent(SignUpActivity.this,ValidatePhoneActivity.class);
+        intent.putExtra("from","SignUpActivity");
+        startActivity(intent);
 
         finish();
         LoginActivity.loginActivity.finish();
+        StorageHelper.storePreference(this, "login_with", "Login");
     }
 
-    /** If registration is not successful */
+    /**
+     * If registration is not successful
+     */
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
     }
 
-    /** Automatic detect country code */
-    public String getCountryZipCode(){
+    /**
+     * Automatic detect country code
+     */
+    public String getCountryZipCode() {
         String CountryID = "";
         String CountryZipCode = "";
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        CountryID= manager.getSimCountryIso().toUpperCase();
-        country_code = this.getResources().getStringArray(R.array.country_codes);
-        for(int i=1;i< country_code.length;i++){
+        CountryID = manager.getSimCountryIso().toUpperCase();
+        for (int i = 1; i < country_code.length; i++) {
             String[] g = country_code[i].split(",");
-            if(g[1].trim().equals(CountryID.trim())){
-                CountryZipCode=g[0];
+            if (g[1].trim().equals(CountryID.trim())) {
+                CountryZipCode = g[0];
                 break;
             }
         }
         return CountryZipCode;
     }
 
-    /** Saving email of user in shared preferences*/
+    /**
+     * Saving email of user in shared preferences
+     */
     private void saveUserEmail(String emailId) {
         StorageHelper.storePreference(this, "user_email", emailId);
     }
 
-    /** Saving user's phone number in shared preferences */
+    /**
+     * Saving user's phone number in shared preferences
+     */
     private void saveUserPhoneNumber(String phoneNumber) {
         StorageHelper.storePreference(this, "phone_number", phoneNumber);
     }

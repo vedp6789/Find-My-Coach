@@ -2,10 +2,6 @@
 <resources>
 
     <!-- Facebook Credentials -->
-    <!-- <string name="facebook_app_id">835344249849377</string> -->
-    <!--<string name="facebook_app_id">1428925007356558</string>-->
-    <!--<string name="facebook_app_id">787953461258771</string>-->
-    <!--<string name="facebook_app_id">781014171968903</string>-->
     <string name="facebook_app_id">879635545420247</string>
 
     <!-- Google Location Api Key -->
@@ -20,7 +16,9 @@
     <string name="gcm_project_number">944443780210</string>
 
     <!--api urls-->
+    <!--<string name="BASE_URL_WITH_AUTH">http://10.1.1.110/fmcweb/www/api/auth/</string>-->
     <string name="BASE_URL_WITH_AUTH">http://demo.iglulabs.com/fmcweb/www/api/auth/</string>
+    <!--<string name="BASE_URL">http://10.1.1.110/fmcweb/www/api/v1/</string>-->
     <string name="BASE_URL">http://demo.iglulabs.com/fmcweb/www/api/v1/</string>
 
     <!--WEB SOCKET URL-->
