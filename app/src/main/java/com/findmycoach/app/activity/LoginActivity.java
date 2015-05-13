@@ -19,7 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -38,7 +38,6 @@ import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
@@ -79,8 +78,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private int mSignInProgress;
     private PendingIntent mSignInIntent;
     private int mSignInError;
-    private SignInButton mSignInButton;
-    private LinearLayout mSignOutButtons;
+    private ImageButton mSignInButton;
 
     public static LoginActivity loginActivity;
 
@@ -109,7 +107,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         /** Else setup the login screen */
         else {
             setContentView(R.layout.activity_login);
-            user_group = 2;
+            user_group = 3;
             RadioGroup radioGroup_user_login = (RadioGroup) findViewById(R.id.radio_group_user_login);
             radioGroup_user_login.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
@@ -133,13 +131,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private void initialize(Bundle savedInstanceState) {
 
         /** G+ related */
-        mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        Button mSignOutButton = (Button) findViewById(R.id.sign_out_button);
-        Button mRevokeButton = (Button) findViewById(R.id.revoke_access_button);
-        mSignOutButtons = (LinearLayout) findViewById(R.id.plus_sign_out_buttons);
+        mSignInButton = (ImageButton) findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(this);
-        mSignOutButton.setOnClickListener(this);
-        mRevokeButton.setOnClickListener(this);
         if (savedInstanceState != null) {
             mSignInProgress = savedInstanceState.getInt(SAVED_PROGRESS, STATE_DEFAULT);
         }
@@ -149,6 +142,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         /** FB related */
         LoginButton actionFacebook = (LoginButton) findViewById(R.id.facebook_login_button);
         actionFacebook.setReadPermissions(Arrays.asList("user_location", "user_birthday", "email"));
+        actionFacebook.setBackgroundResource(R.drawable.facebook);
 
         /** Other views related to generic login, sign up, forget password */
         TextView registerAction = (TextView) findViewById(R.id.action_register);
@@ -179,25 +173,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 progressDialog.show();
                 if (!mGoogleApiClient.isConnecting()) {
                     resolveSignInError();
-                }
-                break;
-
-            /** Signing out G+ user*/
-            case R.id.sign_out_button:
-                if (!mGoogleApiClient.isConnecting()) {
-                    Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                    mGoogleApiClient.disconnect();
-                    mGoogleApiClient.connect();
-                }
-                break;
-
-            /** Revoking access for G+ user*/
-            case R.id.revoke_access_button:
-                if (!mGoogleApiClient.isConnecting()) {
-                    Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                    Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient);
-                    mGoogleApiClient = buildGoogleApiClient();
-                    mGoogleApiClient.connect();
                 }
                 break;
             case R.id.action_forgot_password:
@@ -520,10 +495,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             return;
         }
 
-        /** G+ is connected, hide G+ login button and show sign out, revoke access button */
-        mSignInButton.setVisibility(View.GONE);
-        mSignOutButtons.setVisibility(View.VISIBLE);
-
         /** Getting details of connected G+ user and sending details to api for logging in */
         Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
         getProfileInformation(currentUser);
@@ -554,7 +525,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 resolveSignInError();
             }
         }
-        onSignedOut();
     }
 
     /**
@@ -617,13 +587,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
     }
 
-    /**
-     * Updating G+ sign in and sign out UI
-     */
-    private void onSignedOut() {
-        mSignInButton.setVisibility(View.VISIBLE);
-        mSignOutButtons.setVisibility(View.GONE);
-    }
 
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -707,6 +670,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                     requestParams.add("phone_number", countryCodeTV.getText().toString().trim() + "-" + phnNum);
                     requestParams.add("user_group", String.valueOf(user_group));
                     saveUserPhoneNumber(phnNum);
+                    Log.e("Login dialog : phone_number", countryCodeTV.getText().toString().trim() + "-" + phnNum);
                     NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 26);
                     progressDialog.show();
                 }

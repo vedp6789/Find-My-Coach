@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.category.Datum;
@@ -123,7 +122,6 @@ public class DataBase extends SQLiteOpenHelper {
 
     public void clearDatabase(){
         db.delete(TABLE_NAME, null, null);
-        Log.e("FMC","DELTETED");
     }
 
 

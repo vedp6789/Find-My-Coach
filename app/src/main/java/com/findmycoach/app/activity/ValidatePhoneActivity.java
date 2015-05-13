@@ -269,6 +269,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                     else {
                         StorageHelper.storePreference(ValidatePhoneActivity.this, "phone_number", phnNum);
                         requestParams.add("phone_number", countryCodeTV.getText().toString().trim() + "-" + phnNum);
+                        Log.e("Validate phone dialog : phone_number", countryCodeTV.getText().toString().trim() + "-" + phnNum);
                         Log.d(TAG, countryCodeTV.getText().toString().trim() + phnNum);
                         progressDialog.show();
                         NetworkClient.updatePhoneForSocialMedia(ValidatePhoneActivity.this, requestParams, ValidatePhoneActivity.this, 26);

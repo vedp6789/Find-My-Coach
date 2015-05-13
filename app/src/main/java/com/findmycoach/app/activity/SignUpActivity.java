@@ -1,6 +1,5 @@
 package com.findmycoach.app.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -9,8 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -51,15 +48,9 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        applyActionbarProperties();
         initialize();
     }
 
-    private void applyActionbarProperties() {
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(true);
-    }
 
     /**
      * Getting references of views
@@ -81,21 +72,14 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         findViewById(R.id.button_signup).setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
-    }
+        findViewById(R.id.action_login).setOnClickListener(this);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_signup, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override
@@ -105,7 +89,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             registerUser();
         } else if (id == R.id.countryCodeTV) {
             showCountryCodeDialog();
-        }
+        } else if(id == R.id.action_login)
+            finish();
     }
 
     /**
@@ -158,7 +143,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
                 requestParams.add("email", email);
                 requestParams.add("password", password);
                 requestParams.add("phone_number", countryCode + "-" + phone);
-                Log.e("Login dialog : phone_number", countryCode.trim() + "-" + phone);
+                Log.e("Sign up : phone_number", countryCode.trim() + "-" + phone);
                 requestParams.add("user_group", String.valueOf(user_group));
                 StorageHelper.storePreference(this, "phone_number", phone);
                 callApiToRegister(requestParams);

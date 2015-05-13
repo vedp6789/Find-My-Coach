@@ -5,7 +5,7 @@
     <item
         android:id="@+id/drawer"
         android:showAsAction="always"
-        android:icon="@drawable/ic_drawer"
+        android:icon="@drawable/side_menu_small"
         android:title="@string/navigation_drawer_open" />
 
 </menu>
