@@ -1,35 +1,20 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.findmycoach.app.fragment_mentor.HomeFragment">
 
-    <LinearLayout
-        android:id="@+id/heading"
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/mentor_notification_tab"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="24dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:layout_height="48dp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/welcome_to"
-            android:textColor="#000000"
-            android:textSize="24sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/find_my_coach"
-            android:textColor="#000000"
-            android:textSize="26sp" />
 
-    </LinearLayout>
-</FrameLayout>
+    <com.findmycoach.app.util.CustomViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/vp_mentor_notifications"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/mentor_notification_tab"/>
+
+</RelativeLayout>
