@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:clickable="true"
-                android:drawableLeft="@drawable/register_small"
+                android:drawableLeft="@drawable/login"
                 android:drawablePadding="6dp"
                 android:gravity="center"
                 android:padding="4dp"

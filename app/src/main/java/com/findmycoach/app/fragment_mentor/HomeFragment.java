@@ -17,16 +17,20 @@ import android.widget.Toast;
 import com.astuetz.PagerSlidingTabStrip;
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.MentorNotificationTabsPagerAdapter;
+import com.findmycoach.app.beans.UserNotifications.ConnectionRequest;
 import com.findmycoach.app.beans.UserNotifications.MentorNotifications;
+import com.findmycoach.app.beans.UserNotifications.ScheduleRequest;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class HomeFragment extends Fragment implements Callback {
@@ -34,7 +38,8 @@ public class HomeFragment extends Fragment implements Callback {
     private PagerSlidingTabStrip pagerSlidingTabStrip;
     private MentorNotificationTabsPagerAdapter mentorNotificationTabsPagerAdapter;
     private ProgressDialog progressDialog;
-    private ArrayList<MentorNotifications> arrayList_schedule_request_notifications;
+    MentorNotifications mentorNotifications;
+
 
 
     public HomeFragment() {
@@ -50,8 +55,9 @@ public class HomeFragment extends Fragment implements Callback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        arrayList_schedule_request_notifications=new ArrayList<MentorNotifications>();
-        mentorNotificationTabsPagerAdapter = new MentorNotificationTabsPagerAdapter(getActivity().getSupportFragmentManager(),arrayList_schedule_request_notifications);
+
+        mentorNotifications=new MentorNotifications();
+        mentorNotificationTabsPagerAdapter = new MentorNotificationTabsPagerAdapter(getActivity().getSupportFragmentManager(),mentorNotifications);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getActivity().getResources().getString(R.string.please_wait));
 
@@ -103,13 +109,66 @@ public class HomeFragment extends Fragment implements Callback {
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
+        progressDialog.dismiss();
         String mentor_notifications= (String) object;
         if(calledApiValue == 19){
             try {
                 JSONObject jsonObject=new JSONObject(mentor_notifications);
                 String status=jsonObject.getString("status");
                 if(status.equals("true")){
-                    for(int notification_no=0;)
+
+
+                    ArrayList<ConnectionRequest> connectionRequests=new ArrayList<ConnectionRequest>();
+                    ArrayList<ScheduleRequest>  scheduleRequests=new ArrayList<ScheduleRequest>();
+                    JSONArray jsonArray_notifications=jsonObject.getJSONArray("data");
+                    for(int notification_no=0;notification_no < jsonArray_notifications.length();notification_no++){
+
+                          JSONObject jsonObject_notification=jsonArray_notifications.getJSONObject(notification_no);
+                          String title=jsonObject_notification.getString("title");
+                          if(title.equalsIgnoreCase("Connection request")){
+                              ConnectionRequest connectionRequest=new ConnectionRequest();
+                              connectionRequest.setId(jsonObject_notification.getString("id"));
+                              connectionRequest.setMessage(jsonObject_notification.getString("message"));
+                              connectionRequest.setFirst_name(jsonObject_notification.getString("first_name"));
+                              connectionRequest.setLast_name(jsonObject_notification.getString("last_name"));
+                              connectionRequest.setStart_date(jsonObject_notification.getString("start_date"));
+                              connectionRequest.setStart_time(jsonObject_notification.getString("start_time"));
+                              connectionRequest.setSubject(jsonObject_notification.getString("subject"));
+                              connectionRequests.add(connectionRequest);
+                          }else {
+                              if(title.equalsIgnoreCase("Schedule request")){
+                                  ScheduleRequest scheduleRequest=new ScheduleRequest();
+                                  scheduleRequest.setId(jsonObject_notification.getString("id"));
+                                  scheduleRequest.setMessage(jsonObject_notification.getString("message"));
+                                  scheduleRequest.setFirst_name(jsonObject_notification.getString("first_name"));
+                                  scheduleRequest.setLast_name(jsonObject_notification.getString("last_name"));
+                                  scheduleRequest.setStart_date(jsonObject_notification.getString("start_date"));
+                                  scheduleRequest.setStop_date(jsonObject_notification.getString("stop_date"));
+                                  scheduleRequest.setStart_time(jsonObject_notification.getString("start_time"));
+                                  scheduleRequest.setStop_time(jsonObject_notification.getString("stop_time"));
+                                  scheduleRequest.setSubject(jsonObject_notification.getString("subject"));
+                                  scheduleRequest.setClass_type(jsonObject_notification.getString("class_type"));
+
+                                  JSONArray week_days_jsonArray = jsonObject.getJSONArray("week_days");
+                                  String[] week_days = new String[week_days_jsonArray.length()];
+                                  for (int week_day = 0; week_day < week_days_jsonArray.length(); week_day++) {
+                                      week_days[week_day] = week_days_jsonArray.getString(week_day);
+                                  }
+
+                                  scheduleRequest.setWeek_days(week_days);
+                                  scheduleRequests.add(scheduleRequest);
+                              }
+                          }
+                    }
+
+                    mentorNotifications.setList_of_connection_request(connectionRequests);
+                    mentorNotifications.setList_of_schedule_request(scheduleRequests);
+
+                    mentorNotificationTabsPagerAdapter = new MentorNotificationTabsPagerAdapter(getActivity().getSupportFragmentManager(),mentorNotifications);
+                    notifications_on_viewpager.setAdapter(mentorNotificationTabsPagerAdapter);
+                    pagerSlidingTabStrip.setViewPager(notifications_on_viewpager);
+
+
                 }else{
                     Toast.makeText(getActivity(),jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
                 }
@@ -123,6 +182,7 @@ public class HomeFragment extends Fragment implements Callback {
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
-
+        progressDialog.dismiss();
+        Toast.makeText(getActivity(),(String)object,Toast.LENGTH_SHORT).show();
     }
 }

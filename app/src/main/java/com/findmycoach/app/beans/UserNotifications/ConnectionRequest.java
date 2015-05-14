@@ -72,7 +72,25 @@ public class ConnectionRequest implements Parcelable {
         dest.writeString(this.message);
         dest.writeString(this.first_name);
         dest.writeString(this.last_name);
+        dest.writeString(this.start_date);
+        dest.writeString(this.start_time);
         dest.writeString(this.subject);
+    }
+
+    public String getStart_date() {
+        return start_date;
+    }
+
+    public void setStart_date(String start_date) {
+        this.start_date = start_date;
+    }
+
+    public String getStart_time() {
+        return start_time;
+    }
+
+    public void setStart_time(String start_time) {
+        this.start_time = start_time;
     }
 
     public ConnectionRequest(){
@@ -84,6 +102,8 @@ public class ConnectionRequest implements Parcelable {
         this.message=parcel.readString();
         this.first_name=parcel.readString();
         this.last_name=parcel.readString();
+        this.start_date=parcel.readString();
+        this.start_time=parcel.readString();
         this.subject=parcel.readString();
 
 

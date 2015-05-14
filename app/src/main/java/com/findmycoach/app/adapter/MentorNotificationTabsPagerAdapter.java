@@ -2,26 +2,31 @@ package com.findmycoach.app.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.findmycoach.app.beans.UserNotifications.ConnectionRequest;
 import com.findmycoach.app.beans.UserNotifications.MentorNotifications;
+import com.findmycoach.app.beans.UserNotifications.ScheduleRequest;
 import com.findmycoach.app.fragment_mentor.ConnectionRequestFragment;
 import com.findmycoach.app.fragment_mentor.ScheduleRequestFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ved on 13/5/15.
  */
 public class MentorNotificationTabsPagerAdapter extends FragmentStatePagerAdapter {
-    ArrayList<MentorNotifications> arrayList_mentor_notificaton;
+    MentorNotifications mentorNotifications;
+    ArrayList<ScheduleRequest> scheduleRequest_notification_list;
+    ArrayList<ConnectionRequest> connectionRequest_notificaton_list;
     private String [] titles = {"Connection request","Schedule request"};
-    public MentorNotificationTabsPagerAdapter(FragmentManager fm,ArrayList<MentorNotifications> arrayList_mentor_notifications) {
+    public MentorNotificationTabsPagerAdapter(FragmentManager fm,MentorNotifications mentorNotifications) {
         super(fm);
-        this.arrayList_mentor_notificaton=arrayList_mentor_notifications;
+        this.mentorNotifications=mentorNotifications;
+        scheduleRequest_notification_list=mentorNotifications.getList_of_schedule_request();
+        connectionRequest_notificaton_list=mentorNotifications.getList_of_connection_request();
     }
     private String TAG="FMC";
     @Override
@@ -29,15 +34,12 @@ public class MentorNotificationTabsPagerAdapter extends FragmentStatePagerAdapte
         switch (position) {
             case 0:
                 Log.d(TAG,"connection_request_notifications");
-                if(arrayList_mentor_notificaton.size() <=0){
-                    return ConnectionRequestFragment.newInstance();
-                }else{
-                    return ConnectionRequestFragment.newInstance(arrayList_mentor_notificaton);
-                }
+                return ConnectionRequestFragment.newInstance(connectionRequest_notificaton_list);
+
 
             case 1:
                 Log.d(TAG,"schedule_request_notifications");
-                return ScheduleRequestFragment.newInstance();
+                return ScheduleRequestFragment.newInstance(scheduleRequest_notification_list);
 
         }
         return null;

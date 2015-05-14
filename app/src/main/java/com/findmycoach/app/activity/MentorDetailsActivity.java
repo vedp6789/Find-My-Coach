@@ -29,6 +29,7 @@ import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
 import com.findmycoach.app.beans.mentor.Data;
 import com.findmycoach.app.beans.mentor.Response;
+import com.findmycoach.app.fragment.CustomDatePickerFragment;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
@@ -880,7 +881,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                         }
                         daySlot.setSlot_week_days(dates);
                         daySlot.setSlot_id(day_slot.getString("id"));
-                        Log.d(TAG,"Slot info "+" for date : "+unique_day.getString("date")+" start_date : "+day_slot.getString("start_date")+" stop_date : "+day_slot.getString("stop_date")+" start_time : "+day_slot.getString("start_time")+" max users : "+day_slot.getString("max_users"));
+                        Log.d(TAG, "Slot info " + " for date : " + unique_day.getString("date") + " start_date : " + day_slot.getString("start_date") + " stop_date : " + day_slot.getString("stop_date") + " start_time : " + day_slot.getString("start_time") + " max users : " + day_slot.getString("max_users"));
 
                         daySlots.add(daySlot);
                     }
@@ -909,7 +910,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                         }
 
                         dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
-                        Log.d(TAG,"Event info "+" for date : "+unique_day.getString("date")+" start_date : "+day_event.getString("start_date")+" stop_date : "+day_event.getString("stop_date")+" start_time : "+day_event.getString("start_time")+" no of users : "+day_event.getString("number_of_users"));
+                        Log.d(TAG, "Event info " + " for date : " + unique_day.getString("date") + " start_date : " + day_event.getString("start_date") + " stop_date : " + day_event.getString("stop_date") + " start_time : " + day_event.getString("start_time") + " no of users : " + day_event.getString("number_of_users"));
                         dayEvents.add(dayEvent);
                     }
                     day1.setDayEvents(dayEvents);

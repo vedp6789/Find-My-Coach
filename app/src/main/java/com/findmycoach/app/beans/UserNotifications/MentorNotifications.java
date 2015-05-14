@@ -13,22 +13,22 @@ import java.util.List;
  * Created by ved on 14/5/15.
  */
 public class MentorNotifications implements Parcelable{
-    private List<ScheduleRequest> list_of_schedule_request;
-    private List<ConnectionRequest> list_of_connection_request;
+    private ArrayList<ScheduleRequest> list_of_schedule_request;
+    private ArrayList<ConnectionRequest> list_of_connection_request;
 
-    public List<ScheduleRequest> getList_of_schedule_request() {
+    public ArrayList<ScheduleRequest> getList_of_schedule_request() {
         return list_of_schedule_request;
     }
 
-    public void setList_of_schedule_request(List<ScheduleRequest> list_of_schedule_request) {
+    public void setList_of_schedule_request(ArrayList<ScheduleRequest> list_of_schedule_request) {
         this.list_of_schedule_request = list_of_schedule_request;
     }
 
-    public List<ConnectionRequest> getList_of_connection_request() {
+    public ArrayList<ConnectionRequest> getList_of_connection_request() {
         return list_of_connection_request;
     }
 
-    public void setList_of_connection_request(List<ConnectionRequest> list_of_connection_request) {
+    public void setList_of_connection_request(ArrayList<ConnectionRequest> list_of_connection_request) {
         this.list_of_connection_request = list_of_connection_request;
     }
 

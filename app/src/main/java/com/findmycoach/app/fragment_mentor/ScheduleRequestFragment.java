@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.UserNotifications.MentorNotifications;
+import com.findmycoach.app.beans.UserNotifications.ScheduleRequest;
 
 import java.util.ArrayList;
 
@@ -18,12 +19,12 @@ import java.util.ArrayList;
  * Created by ved on 13/5/15.
  */
 public class ScheduleRequestFragment extends Fragment{
-ArrayList<MentorNotifications> arrayList_schedule_requests;
+ArrayList<ScheduleRequest> arrayList_schedule_requests;
     public ScheduleRequestFragment(){
         Log.d("FMC", "default ScheduleRequestFragment");
     }
 
-    public static ScheduleRequestFragment newInstance(ArrayList<MentorNotifications> arrayList_list_of_schedule_request){
+    public static ScheduleRequestFragment newInstance(ArrayList<ScheduleRequest> arrayList_list_of_schedule_request){
         ScheduleRequestFragment scheduleRequestFragment=new ScheduleRequestFragment();
         Log.d("FMC","static ConnectionRequestFragment");
         Bundle bundle=new Bundle();
@@ -37,7 +38,7 @@ ArrayList<MentorNotifications> arrayList_schedule_requests;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        arrayList_schedule_requests=new ArrayList<MentorNotifications>();
+        arrayList_schedule_requests=new ArrayList<ScheduleRequest>();
         if(getArguments()  != null){
             arrayList_schedule_requests=getArguments().getParcelableArrayList("schedule_requests");
         }
@@ -46,8 +47,22 @@ ArrayList<MentorNotifications> arrayList_schedule_requests;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_schedule_request,container,false);
-        Toast.makeText(getActivity(),"ScheduleRequest",Toast.LENGTH_SHORT).show();
+
         Log.d("FMC","scheduleRequestFragment view ");
         return view;
+
+
+
+
+    }
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(arrayList_schedule_requests.size() <=0){
+            Toast.makeText(getActivity(),"No ScheduleRequest",Toast.LENGTH_SHORT).show();
+        }
+        
     }
 }
