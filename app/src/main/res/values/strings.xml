@@ -569,6 +569,11 @@
     <string name="child_date_of_birth_please">please provide child date of birth.</string>
     <string name="please_provide_location_to_access_details">Please provide location to access calendar details</string>
     <string name="response_message">Please give a reason why you are rejecting this request.</string>
+    <string name="connection_request_message"> has requested to connect</string>
+    <string name="schedule_request_message"> has requested a schedule</string>
+    <string name="days_ago"> days ago</string>
+    <string name="no_connection_request">No new connection request</string>
+    <string name="no_schedule_request">No new schedule request</string>
 
 
     <!--  Minimum time difference between start time and stop time of a slot   i.e in hours-->

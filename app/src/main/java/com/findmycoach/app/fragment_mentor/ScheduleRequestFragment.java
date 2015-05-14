@@ -3,6 +3,8 @@ package com.findmycoach.app.fragment_mentor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.adapter.ConnectionRequestRecyclerViewAdapter;
+import com.findmycoach.app.adapter.ScheduleRequestRecyclerViewAdapter;
 import com.findmycoach.app.beans.UserNotifications.MentorNotifications;
 import com.findmycoach.app.beans.UserNotifications.ScheduleRequest;
+import com.findmycoach.app.util.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 
@@ -19,7 +24,10 @@ import java.util.ArrayList;
  * Created by ved on 13/5/15.
  */
 public class ScheduleRequestFragment extends Fragment{
-ArrayList<ScheduleRequest> arrayList_schedule_requests;
+    ArrayList<ScheduleRequest> arrayList_schedule_requests;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
     public ScheduleRequestFragment(){
         Log.d("FMC", "default ScheduleRequestFragment");
     }
@@ -49,6 +57,23 @@ ArrayList<ScheduleRequest> arrayList_schedule_requests;
         View view=inflater.inflate(R.layout.fragment_schedule_request,container,false);
 
         Log.d("FMC","scheduleRequestFragment view ");
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_schedule_requests);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new ScheduleRequestRecyclerViewAdapter(getActivity(), arrayList_schedule_requests);
+        recyclerView.setAdapter(adapter);
+
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        Toast.makeText(getActivity(),"position: "+position,Toast.LENGTH_SHORT).show();
+                    }
+                })
+        );
+
         return view;
 
 
@@ -60,9 +85,10 @@ ArrayList<ScheduleRequest> arrayList_schedule_requests;
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(arrayList_schedule_requests.size() <=0){
-            Toast.makeText(getActivity(),"No ScheduleRequest",Toast.LENGTH_SHORT).show();
-        }
+
         
     }
+
+
+
 }

@@ -552,8 +552,8 @@ public class DashboardActivity extends FragmentActivity
 
         if (user_group == 3) {
             if (view == itemHome) {
-//                fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentor.HomeFragment());
-                fragmentTransaction.replace(R.id.container, new NotificationsFragment());
+                fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentor.HomeFragment());
+                //fragmentTransaction.replace(R.id.container, new NotificationsFragment());
                 position = 0;
             } else if (view == itemNotification) {
                 fragmentTransaction.replace(R.id.container, new NotificationsFragment());
