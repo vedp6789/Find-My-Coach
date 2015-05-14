@@ -22,6 +22,9 @@ public class ConnectionRequestFragment extends Fragment {
     public ConnectionRequestFragment(){
         Log.d("FMC","default ConnectionRequestFragment");
     }
+
+
+
     public static ConnectionRequestFragment newInstance(ArrayList<MentorNotifications> arrayList_of_connection_request){
         Log.d("FMC","static ConnectionRequestFragment");
 
