@@ -2,13 +2,8 @@ package com.findmycoach.app.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.findmycoach.app.fragment_mentor.ConnectionRequestFragment;
-import com.findmycoach.app.fragment_mentor.ScheduleRequestFragment;
 
 /**
  * Created by ved on 13/5/15.
@@ -24,10 +19,10 @@ public class MentorNotificationTabsPagerAdapter extends FragmentStatePagerAdapte
         switch (position) {
             case 0:
                 Log.d(TAG,"connection_request_notifications");
-                return ConnectionRequestFragment.newInstance();
+//                return ConnectionRequestFragment.newInstance();
             case 1:
                 Log.d(TAG,"schedule_request_notifications");
-                return ScheduleRequestFragment.newInstance();
+//                return ScheduleRequestFragment.newInstance();
 
         }
         return null;
