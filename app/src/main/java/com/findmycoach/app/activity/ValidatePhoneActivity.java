@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -20,12 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Session;
+import com.findmycoach.app.R;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
-import com.findmycoach.app.R;
 import com.loopj.android.http.RequestParams;
 
 /**
@@ -70,6 +73,15 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         findViewById(R.id.btnVerify).setOnClickListener(this);
         findViewById(R.id.btnResend).setOnClickListener(this);
         Log.e(TAG, email);
+
+        verificationCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    sendVerificationCode();
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -137,7 +149,9 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         /** Entered OTP is verified successful */
         else if (calledApiValue == 27) {
             if(response.getData() == null){
-                Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
+                Toast toast =  Toast.makeText(ValidatePhoneActivity.this, response.getMessage(), Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
                 return;
             }
             else if (response.getAuthToken() != null && !response.getAuthToken().equals(""))

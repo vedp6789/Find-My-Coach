@@ -74,9 +74,6 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
     private Spinner mentorFor;
     private EditText trainingLocation;
     private Spinner coachingType;
-    private TextView areasOfInterest;
-    //    private EditText facebookLink;
-//    private EditText googlePlusLink;
     private Button updateAction;
     private ProgressDialog progressDialog;
     private Data userInfo;
@@ -131,18 +128,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
                 coachingType.setSelection(0);
             else
                 coachingType.setSelection(1);
-            List<String> areaOfInterests = userInfo.getSubCategoryName();
-            if (areaOfInterests.get(0) != null && !areaOfInterests.get(0).equals(" ")) {
-                String areaOfInterest = "";
-                for (int index = 0; index < areaOfInterests.size(); index++) {
-                    if (index != 0) {
-                        areaOfInterest = areaOfInterest + ", " + areaOfInterests.get(index);
-                    } else {
-                        areaOfInterest = areaOfInterest + areaOfInterests.get(index);
-                    }
-                }
-                areasOfInterest.setText(areaOfInterest);
-            }
+
         } catch (Exception e) {
 
         }
@@ -169,7 +155,6 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
         mentorFor = (Spinner) findViewById(R.id.input_mentor_for);
         trainingLocation = (EditText) findViewById(R.id.input_training_location);
         coachingType = (Spinner) findViewById(R.id.input_coaching_type);
-        areasOfInterest = (TextView) findViewById(R.id.input_areas_of_interest);
         updateAction = (Button) findViewById(R.id.button_update);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
@@ -319,18 +304,6 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             }
         });
 
-        areasOfInterest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String interests = areasOfInterest.getText().toString();
-                Log.d(TAG, "Area of Interests:" + interests);
-                Intent intent = new Intent(getApplicationContext(), AreasOfInterestActivity.class);
-                if (!interests.trim().equals(""))
-                    intent.putExtra("interests", interests);
-                startActivityForResult(intent, 500);
-            }
-        });
-
     }
 
     // Validate user first name, last name and address
@@ -400,12 +373,6 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             }
         }
 
-        if (areasOfInterest.getText().toString().trim().equals("")) {
-            showErrorMessage(areasOfInterest, getResources().getString(R.string.error_field_required));
-            Toast.makeText(EditProfileActivityMentee.this, getResources().getString(R.string.please_add_area_of_interest), Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
 
         return true;
 
@@ -440,8 +407,6 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             requestParams.add("mentor_for", mentorFor.getSelectedItem().toString());
             requestParams.add("training_location", trainingLocation.getText().toString());
             requestParams.add("coaching_type", coachingType.getSelectedItem().toString());
-//            requestParams.add("sub_category", areasOfInterest.getText().toString());
-            requestParams.add("sub_category", areasOfInterest.getText().toString().length() < 2 ? " " : areasOfInterest.getText().toString());
             if (!imageInBinary.equals(""))
                 requestParams.add("photograph", imageInBinary);
 
@@ -467,19 +432,6 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        if (requestCode == 500 && resultCode == RESULT_OK && data != null) {
-            String listJson = data.getStringExtra("interests");
-            List<String> list = new Gson().fromJson(listJson, List.class);
-            String interests = "";
-            for (int index = 0; index < list.size(); index++) {
-                if (interests.equalsIgnoreCase("")) {
-                    interests = list.get(index);
-                } else {
-                    interests = interests + ", " + list.get(index);
-                }
-            }
-            areasOfInterest.setText(interests);
         }
     }
 

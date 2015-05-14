@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:inputType="textPersonName"
+        android:inputType="textCapSentences"
         android:hint="@string/hint_name_on_card"
         android:ems="10"
         android:id="@+id/editTextName"
