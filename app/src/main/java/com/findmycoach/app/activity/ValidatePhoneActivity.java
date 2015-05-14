@@ -11,8 +11,6 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -80,6 +78,14 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                     sendVerificationCode();
                 }
                 return false;
+            }
+        });
+
+        findViewById(R.id.action_logout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+                startActivity(new Intent(ValidatePhoneActivity.this, LoginActivity.class));
             }
         });
     }
@@ -189,22 +195,6 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         StorageHelper.storePreference(this, "auth_token", authToken);
         StorageHelper.storePreference(this, "user_id", userId);
         StorageHelper.storePreference(this, "phone_verified", "True");
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.logout, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.log_out) {
-            logout();
-            startActivity(new Intent(this, LoginActivity.class));
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     /**

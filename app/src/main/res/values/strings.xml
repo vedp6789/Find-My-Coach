@@ -467,7 +467,7 @@
     <string name="action_add_paypal">Add paypal</string>
     <string name="set_schedule">Schedule</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="hint_enter_code">Enter 6 characters code here.</string>
+    <string name="hint_enter_code">Enter 6 digits code here.</string>
     <string name="resend_code">Resend verification code</string>
     <string name="find_mentor">Find Mentor</string>
     <string name="change_location">Change</string>
@@ -591,6 +591,7 @@
     <string name="logging_in">Logging in...</string>
     <string name="verifying">Verifying...</string>
     <string name="verify">Verify</string>
+    <string name="verify_phone">Verify phone</string>
     <string name="sending_code">Sending code...</string>
 
 

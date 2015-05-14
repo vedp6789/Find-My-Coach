@@ -124,6 +124,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.findmycoach.app.activity.ValidatePhoneActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:label="@string/title_validate_phone"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateVisible" />
