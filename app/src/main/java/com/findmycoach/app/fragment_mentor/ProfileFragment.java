@@ -3,7 +3,6 @@ package com.findmycoach.app.fragment_mentor;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,8 +44,6 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView areaOfCoaching;
     private TextView profileTravelAvailable;
     private TextView profilePhone;
-    private Button googleLink;
-    private Button facebookLink;
     private Data userInfo = null;
     private ImageLoader imgLoader;
 
@@ -99,8 +95,6 @@ public class ProfileFragment extends Fragment implements Callback {
         profileAccomplishment = (TextView) view.findViewById(R.id.profile_accomplishment);
         profileCharges = (TextView) view.findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) view.findViewById(R.id.profile_travel_available);
-        googleLink = (Button) view.findViewById(R.id.profile_google_button);
-        facebookLink = (Button) view.findViewById(R.id.profile_facebook_button);
         areaOfCoaching = (TextView) view.findViewById(R.id.areas_of_coaching);
         profilePhone = (TextView) view.findViewById(R.id.profile_phone);
     }
@@ -209,36 +203,8 @@ public class ProfileFragment extends Fragment implements Callback {
             imgLoader = new ImageLoader(profileImage);
             imgLoader.execute((String) userInfo.getPhotograph());
         }
-        applySocialLinks();
     }
 
-    private void applySocialLinks() {
-        try {
-            if (userInfo.getGoogleLink() != null && !userInfo.getGoogleLink().equals("")) {
-                googleLink.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(userInfo.getGoogleLink()));
-                        startActivity(intent);
-                    }
-                });
-            }
-            if (userInfo.getFacebookLink() != null && !userInfo.getFacebookLink().equals("")) {
-                facebookLink.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(userInfo.getFacebookLink()));
-                        startActivity(intent);
-                    }
-                });
-            }
-        } catch (Exception e) {
-            Log.d(TAG, "Error while redirecting:" + e.getMessage());
-//            Toast.makeText(getActivity(), getResources().getString(R.string.update_profile), Toast.LENGTH_LONG).show();
-        }
-    }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {

@@ -28,8 +28,6 @@ import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
-import java.util.List;
-
 public class ProfileFragment extends Fragment implements Callback {
 
     private final int REQUEST_CODE = 102;
@@ -40,7 +38,6 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView trainingLocation;
     private TextView mentorFor;
     private TextView coachingType;
-    private TextView areaOfInterest;
     private TextView profilePhone;
     private Data userInfo = null;
     private ImageLoader imgLoader;
@@ -92,7 +89,6 @@ public class ProfileFragment extends Fragment implements Callback {
         trainingLocation = (TextView) view.findViewById(R.id.training_location);
         mentorFor = (TextView) view.findViewById(R.id.mentor_for);
         coachingType = (TextView) view.findViewById(R.id.coaching_type);
-        areaOfInterest = (TextView) view.findViewById(R.id.areas_of_interest);
         profilePhone = (TextView) view.findViewById(R.id.profile_phone);
     }
 
@@ -172,20 +168,7 @@ public class ProfileFragment extends Fragment implements Callback {
         trainingLocation.setText((String) userInfo.getTrainingLocation());
         coachingType.setText((String) userInfo.getCoachingType());
         profilePhone.setText(userInfo.getPhonenumber());
-        List<String> areaOfInterests = userInfo.getSubCategoryName();
-        if (areaOfInterests.size() > 0 && areaOfInterests.get(0)!=null && !areaOfInterests.get(0).trim().equals("")) {
-            String areaOfInterestString = "";
-            for (int index = 0; index < areaOfInterests.size(); index++) {
-                if (index != 0) {
-                    areaOfInterestString = areaOfInterestString + ", " + areaOfInterests.get(index);
-                } else {
-                    areaOfInterestString = areaOfInterestString + areaOfInterests.get(index);
-                }
-            }
-            areaOfInterest.setText(areaOfInterestString);
-        }else{
-            areaOfInterest.setText("");
-        }
+
     }
 
 

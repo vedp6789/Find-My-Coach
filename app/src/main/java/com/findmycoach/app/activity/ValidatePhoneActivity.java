@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -20,12 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Session;
+import com.findmycoach.app.R;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
-import com.findmycoach.app.R;
 import com.loopj.android.http.RequestParams;
 
 /**
@@ -38,7 +41,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     private ProgressDialog progressDialog;
     private int user_group;
     private TextView countryCodeTV;
-    private String[] country_code;
+    private String[] country_code, country_name;
 
     private static final String TAG = "FMC";
     private String from=null;
@@ -70,6 +73,15 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         findViewById(R.id.btnVerify).setOnClickListener(this);
         findViewById(R.id.btnResend).setOnClickListener(this);
         Log.e(TAG, email);
+
+        verificationCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    sendVerificationCode();
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -137,7 +149,9 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         /** Entered OTP is verified successful */
         else if (calledApiValue == 27) {
             if(response.getData() == null){
-                Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
+                Toast toast =  Toast.makeText(ValidatePhoneActivity.this, response.getMessage(), Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
                 return;
             }
             else if (response.getAuthToken() != null && !response.getAuthToken().equals(""))
@@ -299,7 +313,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         countryDialog.setTitle(getResources().getString(R.string.select_country_code));
         countryDialog.setContentView(R.layout.dialog_country_code);
         ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
-        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, country_code));
+        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, country_name));
         countryDialog.show();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -320,6 +334,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         CountryID = manager.getSimCountryIso().toUpperCase();
         country_code = this.getResources().getStringArray(R.array.country_codes);
+        country_name = this.getResources().getStringArray(R.array.country_names);
         for (int i = 1; i < country_code.length; i++) {
             String[] g = country_code[i].split(",");
             if (g[1].trim().equals(CountryID.trim())) {

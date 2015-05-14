@@ -22,8 +22,6 @@ import com.findmycoach.app.util.NetworkClient;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
-import java.util.List;
-
 /**
  * Created by prem on 25/2/15.
  */
@@ -35,7 +33,6 @@ public class StudentDetailActivity  extends Activity implements Callback {
     private TextView trainingLocation;
     private TextView mentorFor;
     private TextView coachingType;
-    private TextView areaOfInterest;
     private TextView profilePhone;
     private Data studentDetails;
     private ProgressDialog progressDialog;
@@ -80,7 +77,6 @@ public class StudentDetailActivity  extends Activity implements Callback {
         trainingLocation = (TextView) findViewById(R.id.training_location);
         mentorFor = (TextView) findViewById(R.id.mentor_for);
         coachingType = (TextView) findViewById(R.id.coaching_type);
-        areaOfInterest = (TextView) findViewById(R.id.areas_of_interest);
         profilePhone = (TextView) findViewById(R.id.profile_phone);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
@@ -110,18 +106,6 @@ public class StudentDetailActivity  extends Activity implements Callback {
         trainingLocation.setText((String) studentDetails.getTrainingLocation());
         coachingType.setText((String) studentDetails.getCoachingType());
         profilePhone.setText(studentDetails.getPhonenumber());
-        List<String> areaOfInterests = studentDetails.getSubCategoryName();
-        if (areaOfInterests.size() > 0 && areaOfInterests.get(0)!=null && !areaOfInterests.get(0).trim().equals("")) {
-            String areaOfInterestString = "";
-            for (int index = 0; index < areaOfInterests.size(); index++) {
-                if (index != 0) {
-                    areaOfInterestString = areaOfInterestString + ", " + areaOfInterests.get(index);
-                } else {
-                    areaOfInterestString = areaOfInterestString + areaOfInterests.get(index);
-                }
-            }
-            areaOfInterest.setText(areaOfInterestString);
-        }
     }
 
     @Override

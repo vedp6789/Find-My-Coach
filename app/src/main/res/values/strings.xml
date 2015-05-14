@@ -654,7 +654,7 @@
     <string name="prompt_profession">Profession</string>
     <string name="prompt_accomplishment">Qualification</string>
     <string name="prompt_willing_to_travel">Available to travel trainee location</string>
-    <string name="prompt_charges">Charges</string>
+    <string name="prompt_charges">Coaching fee</string>
     <string name="prompt_experience">Experience</string>
     <string name="prompt_experience_in_years">Experience in year(s)</string>
     <string name="prompt_facebook">Facebook</string>
@@ -821,7 +821,6 @@
     <string name="phone_number">phone_number</string>
     <string name="reg_id_saved_to_server">reg_id_saved</string>
     <string name="new_user">new_user</string>
-    <string name="customer_consent">customer_consent</string>
     <!-- -->
 
 

@@ -33,24 +33,30 @@ public class DatePickerFragment  extends DialogFragment implements DatePickerDia
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
         // Do something with the date chosen by the user
-        String mon = null;
-        switch (month){
-            case 0: mon = "Jan"; break;
-            case 1: mon = "Feb"; break;
-            case 2: mon = "Mar"; break;
-            case 3: mon = "Apr"; break;
-            case 4: mon = "May"; break;
-            case 5: mon = "Jun"; break;
-            case 6: mon = "Jul"; break;
-            case 7: mon = "Aug"; break;
-            case 8: mon = "Sep"; break;
-            case 9: mon = "Oct"; break;
-            case 10: mon = "Nov"; break;
-            case 11: mon = "Dec"; break;
-        }
+        String mon = getMonth(month);
+
         if(mon != null)
             PaymentDetailsActivity.inputCardExpiry.setText(mon + " - " + year);
         else
             PaymentDetailsActivity.inputCardExpiry.setText((month + 1) + " - " + year);
+    }
+
+    public static String getMonth(int month){
+        switch (month){
+            case 0: return "Jan";
+            case 1: return "Feb";
+            case 2: return "Mar";
+            case 3: return "Apr";
+            case 4: return "May";
+            case 5: return "Jun";
+            case 6: return "Jul";
+            case 7: return "Aug";
+            case 8: return "Sep";
+            case 9: return "Oct";
+            case 10: return "Nov";
+            case 11: return "Dec";
+        }
+
+        return null;
     }
 }

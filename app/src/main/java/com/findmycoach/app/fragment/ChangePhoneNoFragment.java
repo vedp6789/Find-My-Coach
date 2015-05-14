@@ -34,7 +34,7 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
 
     private TextView countryCodeTV;
     private EditText phoneEditText;
-    private String[] country_code;
+    private String[] country_code, country_name;
     private ProgressDialog progressDialog;
     private final String TAG = "FMC";
 
@@ -105,6 +105,7 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
         dialog.setCanceledOnTouchOutside(true);
 
         country_code = this.getResources().getStringArray(R.array.country_codes);
+        country_name = this.getResources().getStringArray(R.array.country_names);
 
         countryCodeTV = (TextView) view.findViewById(R.id.countryCodeTV);
         countryCodeTV.setText(getCountryZipCode());
@@ -143,7 +144,7 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
         countryDialog.setTitle(getResources().getString(R.string.select_country_code));
         countryDialog.setContentView(R.layout.dialog_country_code);
         ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
-        listView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, country_code));
+        listView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, country_name));
         countryDialog.show();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
