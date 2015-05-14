@@ -10,21 +10,40 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.beans.UserNotifications.MentorNotifications;
+
+import java.util.ArrayList;
 
 /**
  * Created by ved on 13/5/15.
  */
 public class ConnectionRequestFragment extends Fragment {
-
+    private static ArrayList<MentorNotifications> arrayList_of_connection_request;
     public ConnectionRequestFragment(){
         Log.d("FMC","default ConnectionRequestFragment");
     }
-    public static ConnectionRequestFragment newInstance(){
+    public static ConnectionRequestFragment newInstance(ArrayList<MentorNotifications> arrayList_of_connection_request){
         Log.d("FMC","static ConnectionRequestFragment");
 
-        ConnectionRequestFragment connectionRequestFragment=new ConnectionRequestFragment();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList("connection_requests", arrayList_of_connection_request);
 
+        ConnectionRequestFragment connectionRequestFragment=new ConnectionRequestFragment();
+        connectionRequestFragment.setArguments(args);
         return connectionRequestFragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        arrayList_of_connection_request=new ArrayList<MentorNotifications>();
+        if(getArguments() != null){
+            arrayList_of_connection_request=getArguments().getParcelableArrayList("connection_requests");
+        }
+
+
+
+
     }
 
     @Override

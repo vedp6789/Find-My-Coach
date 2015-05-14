@@ -10,20 +10,37 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.beans.UserNotifications.MentorNotifications;
+
+import java.util.ArrayList;
 
 /**
  * Created by ved on 13/5/15.
  */
 public class ScheduleRequestFragment extends Fragment{
-
+ArrayList<MentorNotifications> arrayList_schedule_requests;
     public ScheduleRequestFragment(){
         Log.d("FMC", "default ScheduleRequestFragment");
     }
 
-    public static ScheduleRequestFragment newInstance(){
+    public static ScheduleRequestFragment newInstance(ArrayList<MentorNotifications> arrayList_list_of_schedule_request){
         ScheduleRequestFragment scheduleRequestFragment=new ScheduleRequestFragment();
         Log.d("FMC","static ConnectionRequestFragment");
+        Bundle bundle=new Bundle();
+        bundle.putParcelableArrayList("schedule_requests",arrayList_list_of_schedule_request);
+        scheduleRequestFragment.setArguments(bundle);
+
         return scheduleRequestFragment;
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        arrayList_schedule_requests=new ArrayList<MentorNotifications>();
+        if(getArguments()  != null){
+            arrayList_schedule_requests=getArguments().getParcelableArrayList("schedule_requests");
+        }
     }
 
     @Override
