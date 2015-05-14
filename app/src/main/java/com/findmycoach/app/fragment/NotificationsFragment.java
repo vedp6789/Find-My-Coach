@@ -1,11 +1,14 @@
 package com.findmycoach.app.fragment;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,7 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.StudentDetailActivity;
 import com.findmycoach.app.adapter.NotificationAdapter;
+import com.findmycoach.app.adapter.NotificationRecyclerViewAdapter;
 import com.findmycoach.app.beans.requests.ConnectionRequestsResponse;
 import com.findmycoach.app.beans.requests.Data;
 import com.findmycoach.app.util.Callback;
@@ -28,11 +32,12 @@ import com.loopj.android.http.RequestParams;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotificationsFragment extends Fragment implements Callback {
+public class NotificationsFragment extends Fragment implements Callback,ActionBar.TabListener {
 
-    private ListView notificationListView;
+    private RecyclerView rv_notifications;
+    private NotificationRecyclerViewAdapter notificationRecyclerViewAdapter;
+    private RecyclerView.LayoutManager layoutManager;
     private ProgressDialog progressDialog;
-    private NotificationAdapter notificationAdapter;
     private ConnectionRequestsResponse connectionRequestsResponse;
     private static final int REFRESH_PAGE = 100;
 
@@ -50,6 +55,7 @@ public class NotificationsFragment extends Fragment implements Callback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -61,7 +67,6 @@ public class NotificationsFragment extends Fragment implements Callback {
     }
 
     private void initialize(View view) {
-        notificationListView = (ListView) view.findViewById(R.id.notification_list);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
     }
@@ -98,8 +103,8 @@ public class NotificationsFragment extends Fragment implements Callback {
             NetworkClient.getConnectionRequests(getActivity(), requestParams, authToken, this, 22);
         }else if(DashboardActivity.dashboardActivity.user_group == 2){
             progressDialog.dismiss();
-            notificationListView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.no_data_found, new String[]{getActivity().getResources().getString(R.string.no_notification)}));
-            notificationListView.setSelector(new ColorDrawable(0));
+            /*notificationListView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.no_data_found, new String[]{getActivity().getResources().getString(R.string.no_notification)}));
+            notificationListView.setSelector(new ColorDrawable(0));*/
         }
     }
 
@@ -135,22 +140,22 @@ public class NotificationsFragment extends Fragment implements Callback {
                             data.add(d);
                     }
 
-                    notificationAdapter = new NotificationAdapter(getActivity(), data, this, progressDialog);
+                    /*notificationAdapter = new NotificationAdapter(getActivity(), data, this, progressDialog);
                     notificationListView.setAdapter(notificationAdapter);
-                }else {
-                    notificationAdapter = new NotificationAdapter(getActivity());
+*/                }else {
+                    /*notificationAdapter = new NotificationAdapter(getActivity());
                     notificationListView.setAdapter(notificationAdapter);
-                    notificationListView.setSelector(new ColorDrawable(0));
+                    notificationListView.setSelector(new ColorDrawable(0));*/
                 }
             }else {
-                if(notificationAdapter != null && notificationAdapter.positionToRemove != -1 && connectionRequestsResponse != null){
+                /*if(notificationAdapter != null && notificationAdapter.positionToRemove != -1 && connectionRequestsResponse != null){
                     notificationAdapter.notifications.remove(notificationAdapter.positionToRemove);
                     notificationAdapter.notifyDataSetChanged();
                     notificationAdapter.positionToRemove = -1;
                     Toast.makeText(getActivity(),getResources().getString(R.string.success),Toast.LENGTH_LONG).show();
                     return;
                 }
-
+*/
                 if(NotificationAdapter.connection_id == -1)
                     return;
                 Intent intent = new Intent(getActivity(), StudentDetailActivity.class);
@@ -171,5 +176,20 @@ public class NotificationsFragment extends Fragment implements Callback {
 //        }else if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")){
 //            //TODO for student notification
 //        }
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
     }
 }
