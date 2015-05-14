@@ -10,6 +10,15 @@
         <item>44,UK</item>
     </string-array>
 
+    <string-array name="country_names">
+        <item>Select</item>
+        <item>61, Australia</item>
+        <item>91, India</item>
+        <item>65, Singapore</item>
+        <item>46, Sweden</item>
+        <item>44, United Kingdom</item>
+    </string-array>
+
     <!--<string-array name="country_codes" >-->
     <!--<item>Select</item>-->
     <!--<item>93,AF</item>-->

@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
@@ -14,7 +13,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -61,8 +59,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private TextView profileTravelAvailable;
     private TextView profilePhone;
     private TextView areaOfCoaching;
-    private Button googleLink;
-    private Button facebookLink;
     private Data userInfo = null;
     private String connectionStatus;
 
@@ -397,8 +393,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         profileCharges = (TextView) findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) findViewById(R.id.profile_travel_available);
         areaOfCoaching = (TextView) findViewById(R.id.areas_of_coaching);
-        googleLink = (Button) findViewById(R.id.profile_google_button);
-        facebookLink = (Button) findViewById(R.id.profile_facebook_button);
         profilePhone = (TextView) findViewById(R.id.profile_phone);
 
         tv_currentMonth = (TextView) findViewById(R.id.tv_currentMonth);
@@ -463,37 +457,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             areaOfCoaching.setText("");
         }
         profilePhone.setText(userInfo.getPhonenumber());
-        applySocialLinks();
-    }
-
-    private void applySocialLinks() {
-        googleLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(userInfo.getGoogleLink()));
-                try {
-                    startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(MentorDetailsActivity.this, getResources().getString(R.string.problem_in_url), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        facebookLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(userInfo.getFacebookLink()));
-                try {
-                    startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(MentorDetailsActivity.this, getResources().getString(R.string.problem_in_url), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
     }
 
     @Override

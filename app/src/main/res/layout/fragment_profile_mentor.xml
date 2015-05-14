@@ -231,23 +231,6 @@
                     android:textSize="18sp" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:weightSum="4">
-
-
-                <Button
-                    android:id="@+id/profile_facebook_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:text="@string/facebook"
-                    android:textColor="@color/wallet_link_text_light"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
         </LinearLayout>
 
     </ScrollView>

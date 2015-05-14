@@ -38,7 +38,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     private ProgressDialog progressDialog;
     private int user_group;
     private TextView countryCodeTV;
-    private String[] country_code;
+    private String[] country_code, country_name;
 
     private static final String TAG = "FMC";
     private String from=null;
@@ -299,7 +299,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         countryDialog.setTitle(getResources().getString(R.string.select_country_code));
         countryDialog.setContentView(R.layout.dialog_country_code);
         ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
-        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, country_code));
+        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, country_name));
         countryDialog.show();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -320,6 +320,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         CountryID = manager.getSimCountryIso().toUpperCase();
         country_code = this.getResources().getStringArray(R.array.country_codes);
+        country_name = this.getResources().getStringArray(R.array.country_names);
         for (int i = 1; i < country_code.length; i++) {
             String[] g = country_code[i].split(",");
             if (g[1].trim().equals(CountryID.trim())) {

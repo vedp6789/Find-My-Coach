@@ -40,7 +40,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     private RadioButton radioButton_mentee_signup, radioButton_mentor_signup;
     private int user_group = 0;
     private TextView countryCodeTV;
-    private String[] country_code;
+    private String[] country_code, country_name;
     private String email, phoneNumber;
 
 
@@ -57,6 +57,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
      */
     private void initialize() {
         country_code = this.getResources().getStringArray(R.array.country_codes);
+        country_name = this.getResources().getStringArray(R.array.country_names);
         radioButton_mentee_signup = (RadioButton) findViewById(R.id.radio_button_mentee_signup);
         radioButton_mentor_signup = (RadioButton) findViewById(R.id.radio_button_mentor_signup);
         firstNameInput = (EditText) findViewById(R.id.input_first_name);
@@ -102,7 +103,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         countryDialog.setTitle(getResources().getString(R.string.select_country_code));
         countryDialog.setContentView(R.layout.dialog_country_code);
         ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
-        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, country_code));
+        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, country_name));
         countryDialog.show();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

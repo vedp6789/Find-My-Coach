@@ -76,8 +76,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
     private EditText accomplishment;
     private EditText chargeInput;
     private Spinner experienceInput;
-    private EditText facebookLink;
-    private EditText googlePlusLink;
     private CheckBox isReadyToTravel;
     private Button updateAction;
     private Spinner chargesPerUnit;
@@ -134,8 +132,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         } catch (Exception e) {
             experienceInput.setSelection(0);
         }
-        facebookLink.setText(userInfo.getFacebookLink());
-        googlePlusLink.setText(userInfo.getGoogleLink());
         if (userInfo.getGender() != null) {
             if (userInfo.getGender().equals("M"))
                 profileGender.setSelection(0);
@@ -199,8 +195,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         profileAddress1 = (AutoCompleteTextView) findViewById(R.id.input_address1);
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         pinCode = (EditText) findViewById(R.id.input_pin);
-        facebookLink = (EditText) findViewById(R.id.input_facebook);
-        googlePlusLink = (EditText) findViewById(R.id.input_google_plus);
         chargeInput = (EditText) findViewById(R.id.input_charges);
         accomplishment = (EditText) findViewById(R.id.input_accomplishment);
         experienceInput = (Spinner) findViewById(R.id.input_experience);
@@ -505,8 +499,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
 
             requestParams.add("experience", experienceInput.getSelectedItemPosition() + "");
             requestParams.add("accomplishments", accomplishment.getText().toString());
-            requestParams.add("google_link", googlePlusLink.getText().toString());
-            requestParams.add("facebook_link", facebookLink.getText().toString());
             if (!imageInBinary.equals(""))
                 requestParams.add("photograph", imageInBinary);
             if (isReadyToTravel.isChecked())

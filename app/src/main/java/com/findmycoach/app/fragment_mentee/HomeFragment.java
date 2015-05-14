@@ -42,6 +42,8 @@ import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, Callback {
@@ -116,7 +118,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         new GetLocationAsync(this, getActivity()).execute();
     }
 
-    public void updateLocationFromAsync(String loc){
+    public void updateLocationFromAsync(String loc) {
 
         location = loc;
         location_auto_suggested_temp = location;
@@ -135,10 +137,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         if (categoryResponse.getData().size() < 1 || FLAG > 0)
             return;
 
-        subCategoryIds = new String[category.getData().size()];
-        for (int i = 0; i < category.getData().size(); i++) {
-            com.findmycoach.app.beans.category.Datum datum = category.getData().get(i);
+        List<com.findmycoach.app.beans.category.Datum> data = category.getData();
 
+        Collections.sort(data, new Comparator<com.findmycoach.app.beans.category.Datum>() {
+            @Override
+            public int compare(com.findmycoach.app.beans.category.Datum lhs, com.findmycoach.app.beans.category.Datum rhs) {
+                return lhs.getName().compareToIgnoreCase(rhs.getName());
+            }
+        });
+
+        subCategoryIds = new String[data.size()];
+        for (int i = 0; i < data.size(); i++) {
+
+            com.findmycoach.app.beans.category.Datum datum = data.get(i);
             StringBuilder subCategory = new StringBuilder();
             StringBuilder subCategoryId = new StringBuilder();
             int row = datum.getDataSub().size() + 1;
@@ -160,11 +171,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             categoriesButtons.add(button);
         }
 
-        for(final Button btn : categoriesButtons){
+        for (final Button btn : categoriesButtons) {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    for(Button button : categoriesButtons){
+                    for (Button button : categoriesButtons) {
                         button.setBackground(getActivity().getResources().getDrawable(R.drawable.button_unselected));
                         button.setTextColor(getActivity().getResources().getColor(R.color.white));
                     }
@@ -260,7 +271,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         });
 
 
-       final TextView preferredTimeTv = (TextView) fragmentView.findViewById(R.id.preferredTime);
+        final TextView preferredTimeTv = (TextView) fragmentView.findViewById(R.id.preferredTime);
         preferredTimeTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -311,7 +322,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         }
     }
 
-    private void updateLocationUI(){
+    private void updateLocationUI() {
         if (location.trim().equals("")) {
             flag_change_location = true;
             locationInput.setVisibility(View.VISIBLE);

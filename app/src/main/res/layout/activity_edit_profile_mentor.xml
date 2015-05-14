@@ -461,60 +461,6 @@
                         android:singleLine="true" />
                 </LinearLayout>
 
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:text="@string/facebook"
-                        android:textColor="@color/wallet_link_text_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/input_facebook"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/custom_edittext"
-                        android:hint="@string/prompt_facebook"
-                        android:inputType="text"
-                        android:padding="4dp"
-                        android:singleLine="true" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:text="@string/google_plus"
-                        android:textColor="@android:color/holo_red_dark"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/input_google_plus"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/custom_edittext"
-                        android:hint="@string/prompt_google_plus"
-                        android:inputType="text"
-                        android:padding="4dp"
-                        android:singleLine="true" />
-                </LinearLayout>
-
                 <CheckBox
                     android:id="@+id/input_willing"
                     android:layout_width="match_parent"
