@@ -1,6 +1,7 @@
 package com.findmycoach.app.fragment_mentee;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,12 +16,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, Callback {
@@ -73,6 +77,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     ArrayAdapter<String> arrayAdapter;
     private static int widthSubCategoryButton;
     private List<Button> daysButton;
+    private Button selectedCategory;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -155,29 +160,35 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
         ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(widthSubCategoryButton, 90);
 
+        final HashMap<String, String[]> subCatNameMap = new HashMap<>();
+        final HashMap<String, String[]> subCatIdMap = new HashMap<>();
+
         for (Datum datum : data) {
 
-            StringBuilder subCategory = new StringBuilder();
-            StringBuilder subCategoryId = new StringBuilder();
             int row = datum.getDataSub().size() + 1;
-            subCategoryId.append("-1#");
+            String[] name = new String[row-1];
+            String[] id = new String[row-1];
             for (int x = 0; x < row - 1; x++) {
-                subCategory.append(datum.getDataSub().get(x).getName() + "#");
-                subCategoryId.append(datum.getDataSub().get(x).getId() + "#");
+                name[x] = datum.getDataSub().get(x).getName();
+                id[x] = datum.getDataSub().get(x).getId();
             }
             Log.d(TAG, datum.getDataSub().size() + "");
-            Log.d(TAG, subCategory.toString());
-            Log.d(TAG, subCategoryId.toString());
+
+            subCatNameMap.put(datum.getId(), name);
+            subCatIdMap.put(datum.getId(), id);
 
             Button button = new Button(getActivity());
             button.setTextColor(getActivity().getResources().getColor(R.color.white));
             button.setBackground(getActivity().getResources().getDrawable(R.drawable.button_unselected));
             button.setText(datum.getName());
             button.setLayoutParams(layoutParams);
+            button.setTag(datum.getId());
             button.setTextSize(9.0f);
             subCategoryLayout.addView(button);
             categoriesButtons.add(button);
         }
+
+        selectedCategory = null;
 
         for (final Button btn : categoriesButtons) {
             btn.setOnClickListener(new View.OnClickListener() {
@@ -189,17 +200,49 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                     }
                     btn.setBackground(getActivity().getResources().getDrawable(R.drawable.button_selected));
                     btn.setTextColor(getActivity().getResources().getColor(R.color.purple));
+
+
+                    String first = subCatNameMap.get(btn.getTag())[0];
+                    String next = "<font color='#AFA4C4'> - advance</font>";
+                    subCategoryTextView.setText(Html.fromHtml(first + next));
+                    subCategoryTextView.setTag(subCatIdMap.get(btn.getTag())[0]);
+
+                    selectedCategory = btn;
                 }
             });
         }
+
+        subCategoryTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(selectedCategory != null){
+                    final Dialog dialog = new Dialog(getActivity());
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    ListView listView = new ListView(getActivity());
+                    listView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subCatNameMap.get(selectedCategory.getTag())));
+
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            String first = subCatNameMap.get(selectedCategory.getTag())[position];
+                            String next = "<font color='#AFA4C4'> - advance</font>";
+                            subCategoryTextView.setText(Html.fromHtml(first + next));
+                            subCategoryTextView.setTag(subCatIdMap.get(selectedCategory.getTag())[position]);
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.setContentView(listView);
+                    dialog.show();
+                }
+            }
+        });
 
         if (categoriesButtons.size() > 0) {
             categoriesButtons.get(0).performClick();
         }
 
-        String first = "Dance ";
-        String next = "<font color='#AFA4C4'> - advance</font>";
-        subCategoryTextView.setText(Html.fromHtml(first + next));
+
 
         fragmentView.findViewById(R.id.subCategoryLayoutParent).setVisibility(View.VISIBLE);
     }
@@ -433,6 +476,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         String location = locationInput.getText().toString();
         RequestParams requestParams = new RequestParams();
         requestParams.add("location", location);
+        requestParams.add("subcategory_id", subCategoryTextView.getTag() + "");
 
         if (timeBarrier) {
             String fromTiming = fromTimingInput.getText().toString();
