@@ -2,7 +2,6 @@ package com.findmycoach.app.fragment_mentee;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -339,7 +338,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         fragmentView.findViewById(R.id.fromTime).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment timePicker = new TimePickerFragment(fromTimingInput);
+                TimePickerFragment timePicker = new TimePickerFragment();
+                timePicker.textView = fromTimingInput;
                 timePicker.show(getActivity().getFragmentManager(), "timePicker");
             }
         });
@@ -347,7 +347,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         fragmentView.findViewById(R.id.toTime).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment timePicker = new TimePickerFragment(toTimingInput);
+                TimePickerFragment timePicker = new TimePickerFragment();
+                timePicker.textView = toTimingInput;
                 timePicker.show(getActivity().getFragmentManager(), "timePicker");
             }
         });
