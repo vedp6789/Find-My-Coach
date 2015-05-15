@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg"
+    android:background="@android:color/transparent"
     android:padding="@dimen/activity_vertical_margin"
     tools:context="com.findmycoach.student.activity.SearchActivity">
 
@@ -150,7 +150,6 @@
                     android:layout_centerHorizontal="true" />
 
 
-
                 <LinearLayout
                     android:id="@+id/time_barrier_layout"
                     android:layout_width="match_parent"
@@ -234,57 +233,59 @@
 
                     </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_marginTop="@dimen/back_margin"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/days_button_height"
-                            android:orientation="horizontal"
-                            android:weightSum="4">
+                    <LinearLayout
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/back_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/days_button_height"
+                        android:orientation="horizontal"
+                        android:weightSum="4">
 
-                            <Button
-                                android:layout_margin="@dimen/days_margin"
-                                android:background="@color/white"
-                                android:textColor="@color/purple"
-                                android:text="@string/su"
-                                android:id="@+id/sun"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1" />
+                        <Button
+                            android:layout_margin="@dimen/days_margin"
+                            android:background="@color/white"
+                            android:textColor="@color/purple"
+                            android:text="@string/su"
+                            android:id="@+id/sun"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
 
-                            <Button
-                                android:layout_margin="@dimen/days_margin"
-                                android:background="@color/purple_light"
-                                android:textColor="@color/white"
-                                android:text="@string/m"
-                                android:id="@+id/mon"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1" />
+                        <Button
+                            android:layout_margin="@dimen/days_margin"
+                            android:background="@color/purple_light"
+                            android:textColor="@color/white"
+                            android:text="@string/m"
+                            android:id="@+id/mon"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
 
-                            <Button
-                                android:layout_margin="@dimen/days_margin"
-                                android:background="@color/white"
-                                android:textColor="@color/purple"
-                                android:text="@string/t"
-                                android:id="@+id/tue"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1" />
+                        <Button
+                            android:layout_margin="@dimen/days_margin"
+                            android:background="@color/white"
+                            android:textColor="@color/purple"
+                            android:text="@string/t"
+                            android:id="@+id/tue"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
 
-                            <Button
-                                android:layout_margin="@dimen/days_margin"
-                                android:background="@color/purple_light"
-                                android:textColor="@color/white"
-                                android:text="@string/w"
-                                android:id="@+id/wed"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1" />
+                        <Button
+                            android:layout_margin="@dimen/days_margin"
+                            android:background="@color/purple_light"
+                            android:textColor="@color/white"
+                            android:text="@string/w"
+                            android:id="@+id/wed"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
 
-                        </LinearLayout>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_gravity="center"
                         android:layout_height="@dimen/days_button_height"
                         android:orientation="horizontal"
                         android:weightSum="4">
@@ -320,12 +321,14 @@
                             android:layout_weight="1" />
 
                         <Button
+                            android:layout_gravity="center"
                             android:layout_margin="@dimen/days_margin"
                             android:background="@android:color/holo_red_light"
                             android:textStyle="bold"
                             android:textColor="@color/white"
                             android:textSize="22sp"
-                            android:text="x"
+                            android:text="X"
+                            android:id="@+id/clear"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1" />

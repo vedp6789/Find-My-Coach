@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -71,6 +72,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private TextView subCategoryTextView;
     ArrayAdapter<String> arrayAdapter;
     private static int widthSubCategoryButton;
+    private List<Button> daysButton;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -148,7 +150,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         subCategoryIds = new String[data.size()];
 
 
-        if(widthSubCategoryButton == 0)
+        if (widthSubCategoryButton == 0)
             widthSubCategoryButton = searchButton.getWidth() / (data.size() > 0 ? data.size() : 1);
 
         ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(widthSubCategoryButton, 90);
@@ -158,7 +160,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             StringBuilder subCategory = new StringBuilder();
             StringBuilder subCategoryId = new StringBuilder();
             int row = datum.getDataSub().size() + 1;
-            subCategory.append("Select one#");
             subCategoryId.append("-1#");
             for (int x = 0; x < row - 1; x++) {
                 subCategory.append(datum.getDataSub().get(x).getName() + "#");
@@ -191,6 +192,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 }
             });
         }
+
+        if (categoriesButtons.size() > 0) {
+            categoriesButtons.get(0).performClick();
+        }
+
+        String first = "Dance ";
+        String next = "<font color='#AFA4C4'> - advance</font>";
+        subCategoryTextView.setText(Html.fromHtml(first + next));
 
         fragmentView.findViewById(R.id.subCategoryLayoutParent).setVisibility(View.VISIBLE);
     }
@@ -252,10 +261,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 imm.hideSoftInputFromWindow(locationInput.getWindowToken(), 0);
             }
         });
-        String[] period = getResources().getStringArray(R.array.time1);
-
-
-
 
         final TextView preferredTimeTv = (TextView) fragmentView.findViewById(R.id.preferredTime);
         preferredTimeTv.setOnClickListener(new View.OnClickListener() {
@@ -271,6 +276,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 int hour = hourOfDay % 12;
                 fromTimingInput.setText(hour++ + ":" + minute + (hourOfDay > 11 ? " pm" : " am"));
                 toTimingInput.setText(hour + ":" + minute + (hourOfDay > 11 ? " pm" : " am"));
+
+                getSelectedButtons();
+            }
+        });
+
+        final Button clearFilter = (Button) fragmentView.findViewById(R.id.clear);
+        clearFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                daysButton = null;
+                timeBarrierLayout.setVisibility(View.GONE);
+                timeBarrier = false;
+                preferredTimeTv.setVisibility(View.VISIBLE);
             }
         });
 
@@ -290,6 +308,36 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 timePicker.show(getActivity().getFragmentManager(), "timePicker");
             }
         });
+
+    }
+
+    private void getSelectedButtons() {
+        daysButton = new ArrayList<>();
+
+        daysButton.add((Button) fragmentView.findViewById(R.id.sun));
+        daysButton.add((Button) fragmentView.findViewById(R.id.mon));
+        daysButton.add((Button) fragmentView.findViewById(R.id.tue));
+        daysButton.add((Button) fragmentView.findViewById(R.id.wed));
+        daysButton.add((Button) fragmentView.findViewById(R.id.thu));
+        daysButton.add((Button) fragmentView.findViewById(R.id.fri));
+        daysButton.add((Button) fragmentView.findViewById(R.id.sat));
+
+        for (final Button b : daysButton) {
+            b.setTag(b.getId(), 0);
+
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int tag = (Integer) b.getTag(b.getId());
+                    if (tag == 0)
+                        b.setTag(b.getId(), 1);
+                    else
+                        b.setTag(b.getId(), 0);
+
+                }
+            });
+        }
+
 
     }
 
@@ -385,26 +433,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         String location = locationInput.getText().toString();
         RequestParams requestParams = new RequestParams();
         requestParams.add("location", location);
-        try {
 
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
         if (timeBarrier) {
-//        String fromTiming = fromTimingInput.getText().toString();
-//        String toTiming = toTimingInput.getText().toString();
-//            requestParams.add("timing_from", fromTiming);
-//            requestParams.add("timing_to", toTiming);
-//
-//            String week = (mon.isChecked() ? "1," : "0,") +
-//                    (tue.isChecked() ? "1," : "0,") +
-//                    (wed.isChecked() ? "1," : "0,") +
-//                    (thr.isChecked() ? "1," : "0,") +
-//                    (fri.isChecked() ? "1," : "0,") +
-//                    (sat.isChecked() ? "1," : "0,") +
-//                    (sun.isChecked() ? "1" : "0");
-//            requestParams.add("weeks", week);
-//            Log.d(TAG, "Selected weekdays : " + week);
+            String fromTiming = fromTimingInput.getText().toString();
+            String toTiming = toTimingInput.getText().toString();
+            requestParams.add("timing_from", fromTiming);
+            requestParams.add("timing_to", toTiming);
+
+            String week = (daysButton.get(0).getTag(daysButton.get(0).getId())) + "," +
+                    (daysButton.get(1).getTag(daysButton.get(1).getId())) + "," +
+                    (daysButton.get(2).getTag(daysButton.get(2).getId())) + "," +
+                    (daysButton.get(3).getTag(daysButton.get(3).getId())) + "," +
+                    (daysButton.get(4).getTag(daysButton.get(4).getId())) + "," +
+                    (daysButton.get(5).getTag(daysButton.get(5).getId())) + "," +
+                    (daysButton.get(6).getTag(daysButton.get(6).getId()));
+            requestParams.add("weeks", week);
+            Log.d(TAG, "Selected weekdays : " + week + ", from time : " + fromTiming + ", to time : " + toTiming);
         }
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
