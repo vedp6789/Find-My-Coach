@@ -1,6 +1,7 @@
 package com.findmycoach.app.fragment_mentee;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,6 +31,7 @@ import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.category.Datum;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
+import com.findmycoach.app.fragment.TimePickerFragment;
 import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
@@ -41,6 +42,7 @@ import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -49,10 +51,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     private AutoCompleteTextView locationInput;
     private Category category;
-    private EditText nameInput;
     private Button searchButton;
     private ProgressDialog progressDialog;
     private TextView currentLocationText;
+    private TextView fromTimingInput;
+    private TextView toTimingInput;
     private Button changeLocation;
     private RelativeLayout locationLayout;
     private LinearLayout timeBarrierLayout;
@@ -261,6 +264,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 timeBarrierLayout.setVisibility(View.VISIBLE);
                 timeBarrier = true;
                 preferredTimeTv.setVisibility(View.GONE);
+
+                final Calendar c = Calendar.getInstance();
+                int hourOfDay = c.get(Calendar.HOUR_OF_DAY);
+                int minute = c.get(Calendar.MINUTE);
+                int hour = hourOfDay % 12;
+                fromTimingInput.setText(hour++ + ":" + minute + (hourOfDay > 11 ? " pm" : " am"));
+                toTimingInput.setText(hour + ":" + minute + (hourOfDay > 11 ? " pm" : " am"));
+            }
+        });
+
+
+        fragmentView.findViewById(R.id.fromTime).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment timePicker = new TimePickerFragment(fromTimingInput);
+                timePicker.show(getActivity().getFragmentManager(), "timePicker");
+            }
+        });
+
+        fragmentView.findViewById(R.id.toTime).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment timePicker = new TimePickerFragment(toTimingInput);
+                timePicker.show(getActivity().getFragmentManager(), "timePicker");
             }
         });
 
@@ -272,7 +299,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         location_auto_suggested = null;
 
         locationInput = (AutoCompleteTextView) view.findViewById(R.id.input_location);
-        nameInput = (EditText) view.findViewById(R.id.input_name);
         currentLocationText = (TextView) view.findViewById(R.id.current_location_text_view);
         searchButton = (Button) view.findViewById(R.id.action_search);
         changeLocation = (Button) view.findViewById(R.id.change_location);
@@ -288,6 +314,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         timeBarrier = false;
         subCategoryLayout = (LinearLayout) fragmentView.findViewById(R.id.subCategoryLayout);
         subCategoryTextView = (TextView) fragmentView.findViewById(R.id.subCategoryTextView);
+
+        toTimingInput = (TextView) fragmentView.findViewById(R.id.to_timing);
+        fromTimingInput = (TextView) fragmentView.findViewById(R.id.from_timing);
 
         if (view instanceof ViewGroup) {
             for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
@@ -354,9 +383,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         isSearching = true;
         progressDialog.show();
         String location = locationInput.getText().toString();
-        String name = nameInput.getText().toString();
-//        String fromTiming = fromTimingInput.getText().toString();
-//        String toTiming = toTimingInput.getText().toString();
         RequestParams requestParams = new RequestParams();
         requestParams.add("location", location);
         try {
@@ -364,8 +390,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-        requestParams.add("keyword", name);
         if (timeBarrier) {
+//        String fromTiming = fromTimingInput.getText().toString();
+//        String toTiming = toTimingInput.getText().toString();
 //            requestParams.add("timing_from", fromTiming);
 //            requestParams.add("timing_to", toTiming);
 //

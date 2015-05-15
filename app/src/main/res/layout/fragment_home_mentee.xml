@@ -169,6 +169,7 @@
                         android:weightSum="4">
 
                         <LinearLayout
+                            android:id="@+id/fromTime"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
@@ -199,6 +200,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/toTime"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
@@ -331,17 +333,6 @@
                     </LinearLayout>
 
                 </LinearLayout>
-
-
-                <EditText
-                    android:id="@+id/input_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:visibility="gone"
-                    android:background="@drawable/custom_edittext"
-                    android:hint="@string/prompt_name"
-                    android:maxLines="1" />
 
                 <Button
                     android:layout_marginTop="@dimen/activity_vertical_margin"
