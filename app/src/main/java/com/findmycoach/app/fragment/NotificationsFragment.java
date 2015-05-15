@@ -5,7 +5,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,20 +20,110 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.StudentDetailActivity;
+import com.findmycoach.app.adapter.ConnectionRequestRecyclerViewAdapter;
+import com.findmycoach.app.adapter.MenteeNotificationRecyclerViewAdapter;
 import com.findmycoach.app.adapter.NotificationAdapter;
 import com.findmycoach.app.beans.requests.ConnectionRequestsResponse;
 import com.findmycoach.app.beans.requests.Data;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
+import com.findmycoach.app.util.RecyclerItemClickListener;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationsFragment extends Fragment implements Callback {
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private ProgressDialog progressDialog;
+    private JSONArray jsonArray_notifications;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
+        jsonArray_notifications=new JSONArray();
+        getNotifications();
+    }
 
-    private ListView notificationListView;
+    private void getNotifications(){
+        progressDialog.show();
+        RequestParams requestParams=new RequestParams();
+        requestParams.add("user_id",StorageHelper.getUserDetails(getActivity(),"user_id"));
+        requestParams.add("user_group",StorageHelper.getUserGroup(getActivity(),"user_group"));
+        NetworkClient.getUserNotifications(getActivity(),requestParams,StorageHelper.getUserDetails(getActivity(),"auth_token"),this,19);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_notifications, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_mentee_notifications);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+
+        adapter = new MenteeNotificationRecyclerViewAdapter(getActivity(),jsonArray_notifications);
+        recyclerView.setAdapter(adapter);
+
+        /* on click listener */
+        /*recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        Toast.makeText(getActivity(),"position: "+position,Toast.LENGTH_SHORT).show();
+                    }
+                })
+        );*/
+
+        return view;
+    }
+
+    @Override
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
+          progressDialog.dismiss();
+        try {
+            JSONObject jsonObject=new JSONObject((String) object);
+            String status=jsonObject.getString("status");
+            if(Boolean.parseBoolean(status)){
+                jsonArray_notifications=jsonObject.getJSONArray("data");
+                if(jsonArray_notifications.length() >0){
+                    adapter=new MenteeNotificationRecyclerViewAdapter(getActivity(),jsonArray_notifications);
+                    recyclerView.setAdapter(adapter);
+                }
+
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
+         progressDialog.dismiss();
+         Toast.makeText(getActivity(),(String)object,Toast.LENGTH_SHORT).show();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*private ListView notificationListView;
     private ProgressDialog progressDialog;
     private NotificationAdapter notificationAdapter;
     private ConnectionRequestsResponse connectionRequestsResponse;
@@ -171,5 +264,5 @@ public class NotificationsFragment extends Fragment implements Callback {
 //        }else if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")){
 //            //TODO for student notification
 //        }
-    }
+    }*/
 }

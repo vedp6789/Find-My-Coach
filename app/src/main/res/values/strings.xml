@@ -574,6 +574,12 @@
     <string name="days_ago"> days ago</string>
     <string name="no_connection_request">No new connection request</string>
     <string name="no_schedule_request">No new schedule request</string>
+    <string name="no_notification_found">No notification found</string>
+    <string name="connection_request_accepted"> has confirmed connection</string>
+    <string name="connection_request_rejected"> has disconfirmed connection</string>
+    <string name="schedule_request_accepted"> has confirmed schedule</string>
+    <string name="schedule_request_rejected"> has disconfirmed schedule</string>
+
 
 
     <!--  Minimum time difference between start time and stop time of a slot   i.e in hours-->
