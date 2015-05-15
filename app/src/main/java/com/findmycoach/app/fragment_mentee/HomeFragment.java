@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -19,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -52,26 +50,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private AutoCompleteTextView locationInput;
     private Category category;
     private EditText nameInput;
-    private AutoCompleteTextView fromTimingInput;
-    private AutoCompleteTextView toTimingInput;
     private Button searchButton;
     private ProgressDialog progressDialog;
     private TextView currentLocationText;
     private Button changeLocation;
     private RelativeLayout locationLayout;
     private LinearLayout timeBarrierLayout;
-    private int FLAG;
     public static String[] subCategoryIds;
     private View fragmentView;
     private String location = "";
     public static String location_auto_suggested_temp, location_auto_suggested;
     boolean flag_change_location = false;
     private boolean timeBarrier;
-
-    private CheckBox mon, tue, wed, thr, fri, sat, sun;
     private boolean isSearching = false;
     private static final String TAG = "FMC";
+    private LinearLayout subCategoryLayout;
+    private TextView subCategoryTextView;
     ArrayAdapter<String> arrayAdapter;
+    private static int widthSubCategoryButton;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -131,12 +127,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     private void setTabForCategory(Category categoryResponse) {
 
-        LinearLayout subCategoryLayout = (LinearLayout) fragmentView.findViewById(R.id.subCategoryLayout);
+//        subCategoryLayout.removeAllViews();
+
         final List<Button> categoriesButtons = new ArrayList<Button>();
 
         this.category = categoryResponse;
-        if (categoryResponse.getData().size() < 1 || FLAG > 0)
-            return;
 
         List<com.findmycoach.app.beans.category.Datum> data = category.getData();
 
@@ -150,8 +145,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         subCategoryIds = new String[data.size()];
 
 
-        int width = searchButton.getWidth() / (data.size() > 0 ? data.size() : 1);
-        ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, 90);
+        if(widthSubCategoryButton == 0)
+            widthSubCategoryButton = searchButton.getWidth() / (data.size() > 0 ? data.size() : 1);
+
+        ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(widthSubCategoryButton, 90);
 
         for (Datum datum : data) {
 
@@ -191,9 +188,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 }
             });
         }
-
-
-        FLAG = 1;
 
         fragmentView.findViewById(R.id.subCategoryLayoutParent).setVisibility(View.VISIBLE);
     }
@@ -256,26 +250,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             }
         });
         String[] period = getResources().getStringArray(R.array.time1);
-        fromTimingInput.setThreshold(1);
-        fromTimingInput.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, period) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-                text1.setTextColor(Color.BLACK);
-                return view;
-            }
-        });
-        toTimingInput.setThreshold(1);
-        toTimingInput.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, period) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-                text1.setTextColor(Color.BLACK);
-                return view;
-            }
-        });
+
+
 
 
         final TextView preferredTimeTv = (TextView) fragmentView.findViewById(R.id.preferredTime);
@@ -297,8 +273,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
         locationInput = (AutoCompleteTextView) view.findViewById(R.id.input_location);
         nameInput = (EditText) view.findViewById(R.id.input_name);
-        fromTimingInput = (AutoCompleteTextView) view.findViewById(R.id.from_timing);
-        toTimingInput = (AutoCompleteTextView) view.findViewById(R.id.to_timing);
         currentLocationText = (TextView) view.findViewById(R.id.current_location_text_view);
         searchButton = (Button) view.findViewById(R.id.action_search);
         changeLocation = (Button) view.findViewById(R.id.change_location);
@@ -312,14 +286,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         timeBarrierLayout = (LinearLayout) view.findViewById(R.id.time_barrier_layout);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         timeBarrier = false;
-
-        mon = (CheckBox) view.findViewById(R.id.mon);
-        tue = (CheckBox) view.findViewById(R.id.tue);
-        wed = (CheckBox) view.findViewById(R.id.wed);
-        thr = (CheckBox) view.findViewById(R.id.thu);
-        fri = (CheckBox) view.findViewById(R.id.fri);
-        sat = (CheckBox) view.findViewById(R.id.sat);
-        sun = (CheckBox) view.findViewById(R.id.sun);
+        subCategoryLayout = (LinearLayout) fragmentView.findViewById(R.id.subCategoryLayout);
+        subCategoryTextView = (TextView) fragmentView.findViewById(R.id.subCategoryTextView);
 
         if (view instanceof ViewGroup) {
             for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
@@ -387,8 +355,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         progressDialog.show();
         String location = locationInput.getText().toString();
         String name = nameInput.getText().toString();
-        String fromTiming = fromTimingInput.getText().toString();
-        String toTiming = toTimingInput.getText().toString();
+//        String fromTiming = fromTimingInput.getText().toString();
+//        String toTiming = toTimingInput.getText().toString();
         RequestParams requestParams = new RequestParams();
         requestParams.add("location", location);
         try {
@@ -398,18 +366,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         }
         requestParams.add("keyword", name);
         if (timeBarrier) {
-            requestParams.add("timing_from", fromTiming);
-            requestParams.add("timing_to", toTiming);
-
-            String week = (mon.isChecked() ? "1," : "0,") +
-                    (tue.isChecked() ? "1," : "0,") +
-                    (wed.isChecked() ? "1," : "0,") +
-                    (thr.isChecked() ? "1," : "0,") +
-                    (fri.isChecked() ? "1," : "0,") +
-                    (sat.isChecked() ? "1," : "0,") +
-                    (sun.isChecked() ? "1" : "0");
-            requestParams.add("weeks", week);
-            Log.d(TAG, "Selected weekdays : " + week);
+//            requestParams.add("timing_from", fromTiming);
+//            requestParams.add("timing_to", toTiming);
+//
+//            String week = (mon.isChecked() ? "1," : "0,") +
+//                    (tue.isChecked() ? "1," : "0,") +
+//                    (wed.isChecked() ? "1," : "0,") +
+//                    (thr.isChecked() ? "1," : "0,") +
+//                    (fri.isChecked() ? "1," : "0,") +
+//                    (sat.isChecked() ? "1," : "0,") +
+//                    (sun.isChecked() ? "1" : "0");
+//            requestParams.add("weeks", week);
+//            Log.d(TAG, "Selected weekdays : " + week);
         }
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");

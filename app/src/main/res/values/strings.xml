@@ -672,7 +672,8 @@
     <string name="prompt_facebook">Facebook</string>
     <string name="prompt_google_plus">Google +</string>
     <string name="days">Days</string>
-    <string name="from">From:</string>
+    <string name="from">From :</string>
+    <string name="all">All</string>
     <string name="timing">Timing:</string>
     <string name="to">To:</string>
     <string name="to1">to</string>

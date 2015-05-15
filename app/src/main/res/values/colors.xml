@@ -9,6 +9,7 @@
 
     <color name="white">#ffffff</color>
     <color name="purple">#3f2771</color>
+    <color name="purple_light">#AFA4C4</color>
 
     <!-- The app wide background color -->
     <color name="background_color">#fafafa</color>
