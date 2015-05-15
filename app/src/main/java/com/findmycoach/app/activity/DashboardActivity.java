@@ -15,8 +15,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -161,25 +159,6 @@ public class DashboardActivity extends FragmentActivity
         } else {
             initialize();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.dashboard, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.drawer) {
-            resideMenu.openMenu(ResideMenu.DIRECTION_RIGHT);
-            try {
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(DashboardActivity.this.getCurrentFocus().getWindowToken(), 0);
-            } catch (Exception e) {
-            }
-        }
-        return true;
     }
 
     /**
@@ -518,11 +497,24 @@ public class DashboardActivity extends FragmentActivity
         // You can disable a direction by setting ->
         resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_LEFT);
 
+        findViewById(R.id.menuButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resideMenu.openMenu(ResideMenu.DIRECTION_RIGHT);
+                try {
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(DashboardActivity.this.getCurrentFocus().getWindowToken(), 0);
+                } catch (Exception e) {
+                }
+            }
+        });
+
 
         if (item != null)
             updateUI(item);
         else
             updateUI(itemHome);
+
     }
 
     @Override
@@ -553,7 +545,6 @@ public class DashboardActivity extends FragmentActivity
         if (user_group == 3) {
             if (view == itemHome) {
                 fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentor.HomeFragment());
-                //fragmentTransaction.replace(R.id.container, new NotificationsFragment());
                 position = 0;
             } else if (view == itemNotification) {
                 fragmentTransaction.replace(R.id.container, new NotificationsFragment());

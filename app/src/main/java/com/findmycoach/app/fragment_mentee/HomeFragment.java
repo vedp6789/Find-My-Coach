@@ -30,6 +30,7 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.UserListActivity;
 import com.findmycoach.app.beans.category.Category;
+import com.findmycoach.app.beans.category.Datum;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.util.AddressFromZip;
@@ -147,9 +148,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         });
 
         subCategoryIds = new String[data.size()];
-        for (int i = 0; i < data.size(); i++) {
 
-            com.findmycoach.app.beans.category.Datum datum = data.get(i);
+
+        int width = searchButton.getWidth() / (data.size() > 0 ? data.size() : 1);
+        ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, 90);
+
+        for (Datum datum : data) {
+
             StringBuilder subCategory = new StringBuilder();
             StringBuilder subCategoryId = new StringBuilder();
             int row = datum.getDataSub().size() + 1;
@@ -167,6 +172,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             button.setTextColor(getActivity().getResources().getColor(R.color.white));
             button.setBackground(getActivity().getResources().getDrawable(R.drawable.button_unselected));
             button.setText(datum.getName());
+            button.setLayoutParams(layoutParams);
+            button.setTextSize(9.0f);
             subCategoryLayout.addView(button);
             categoriesButtons.add(button);
         }
