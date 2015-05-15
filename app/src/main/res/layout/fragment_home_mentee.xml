@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg"
+    android:background="@android:color/transparent"
     android:padding="@dimen/activity_vertical_margin"
     tools:context="com.findmycoach.student.activity.SearchActivity">
 
@@ -17,27 +17,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/heading"
+            <TextView
+                android:layout_marginTop="@dimen/textView_padding_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/margin_top"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="@string/find_mentor"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:textSize="26sp" />
-
-            </LinearLayout>
+                android:text="@string/find_mentor"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="26sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -60,7 +48,6 @@
                         android:layout_alignParentLeft="@+id/change_location"
                         android:layout_alignParentStart="true"
                         android:textSize="18dp"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
                         android:layout_toLeftOf="@+id/change_location"
@@ -79,7 +66,6 @@
                     android:id="@+id/input_location"
                     android:layout_width="match_parent"
                     android:layout_height="72dp"
-                    android:layout_margin="8dp"
                     android:gravity="top"
                     style="@style/EditTextCustomHolo"
                     android:hint="@string/prompt_location"
@@ -109,16 +95,17 @@
                     </HorizontalScrollView>
 
                     <TextView
+                        android:layout_marginRight="@dimen/back_margin"
                         android:id="@+id/subCategoryTextView"
                         android:layout_marginTop="@dimen/back_margin"
-                        android:layout_width="243dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Dance - advance"
-                        android:textSize="18sp"
+                        android:textSize="12sp"
                         android:textColor="@color/white"
                         android:singleLine="true" />
 
                     <LinearLayout
+                        android:layout_marginTop="-8dp"
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -126,6 +113,7 @@
                         <ImageView
                             android:layout_gravity="end"
                             android:layout_width="wrap_content"
+                            android:layout_marginBottom="-1dp"
                             android:src="@drawable/drop_down_arrow_small"
                             android:layout_height="wrap_content" />
 
@@ -162,233 +150,192 @@
                     android:layout_centerHorizontal="true" />
 
 
-
                 <LinearLayout
                     android:id="@+id/time_barrier_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:orientation="vertical"
                     android:visibility="gone"
                     android:weightSum="4">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
+                        android:layout_height="@dimen/days_button_height"
+                        android:layout_marginLeft="@dimen/days_margin"
+                        android:layout_marginRight="@dimen/days_margin"
                         android:orientation="horizontal"
                         android:weightSum="4">
 
                         <LinearLayout
+                            android:id="@+id/fromTime"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
+                            android:background="@color/white"
                             android:layout_weight="2"
-                            android:orientation="horizontal">
+                            android:padding="@dimen/textView_padding_margin"
+                            android:orientation="horizontal"
+                            android:layout_marginRight="2dp">
 
                             <TextView
+                                android:textColor="@color/purple"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:layout_marginLeft="@dimen/textView_padding_margin"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:gravity="center"
                                 android:text="@string/from" />
 
-                            <AutoCompleteTextView
+                            <TextView
+                                android:textSize="16sp"
+                                android:text="@string/all"
+                                android:textColor="@color/purple"
                                 android:id="@+id/from_timing"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="8dp"
-                                android:hint="3pm"
-                                android:inputType="number"
-                                android:maxLines="1" />
+                                android:singleLine="true" />
 
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/toTime"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@color/white"
                             android:layout_weight="2"
-                            android:orientation="horizontal">
+                            android:padding="@dimen/textView_padding_margin"
+                            android:orientation="horizontal"
+                            android:layout_marginLeft="8dp">
 
                             <TextView
+                                android:textColor="@color/purple"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:layout_marginLeft="@dimen/textView_padding_margin"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:gravity="center"
                                 android:text="@string/to" />
 
-                            <AutoCompleteTextView
+                            <TextView
+                                android:textSize="16sp"
+                                android:text="@string/all"
+                                android:textColor="@color/purple"
                                 android:id="@+id/to_timing"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="8dp"
-                                android:hint="5pm"
-                                android:inputType="number"
-                                android:maxLines="1" />
+                                android:singleLine="true" />
+
+
                         </LinearLayout>
 
 
                     </LinearLayout>
 
-                    <HorizontalScrollView
+                    <LinearLayout
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/back_margin"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scrollbarAlwaysDrawHorizontalTrack="true"
-                        android:layout_gravity="center_horizontal">
+                        android:layout_height="@dimen/days_button_height"
+                        android:orientation="horizontal"
+                        android:weightSum="4">
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                        <Button
+                            android:layout_margin="@dimen/days_margin"
+                            android:background="@color/white"
+                            android:textColor="@color/purple"
+                            android:text="@string/su"
+                            android:id="@+id/sun"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:gravity="center"
-                                android:layout_margin="4dp">
+                        <Button
+                            android:layout_margin="@dimen/days_margin"
+                            android:background="@color/purple_light"
+                            android:textColor="@color/white"
+                            android:text="@string/m"
+                            android:id="@+id/mon"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
 
-                                <CheckBox
-                                    android:id="@+id/mon"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
+                        <Button
+                            android:layout_margin="@dimen/days_margin"
+                            android:background="@color/white"
+                            android:textColor="@color/purple"
+                            android:text="@string/t"
+                            android:id="@+id/tue"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/m" />
+                        <Button
+                            android:layout_margin="@dimen/days_margin"
+                            android:background="@color/purple_light"
+                            android:textColor="@color/white"
+                            android:text="@string/w"
+                            android:id="@+id/wed"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
 
-                            </LinearLayout>
+                    </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_height="@dimen/days_button_height"
+                        android:orientation="horizontal"
+                        android:weightSum="4">
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:gravity="center"
-                                android:layout_margin="4dp">
+                        <Button
+                            android:layout_margin="@dimen/days_margin"
+                            android:background="@color/white"
+                            android:textColor="@color/purple"
+                            android:text="@string/th"
+                            android:id="@+id/thu"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
 
-                                <CheckBox
-                                    android:id="@+id/tue"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
+                        <Button
+                            android:layout_margin="@dimen/days_margin"
+                            android:background="@color/purple_light"
+                            android:textColor="@color/white"
+                            android:text="@string/f"
+                            android:id="@+id/fri"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/t" />
+                        <Button
+                            android:layout_margin="@dimen/days_margin"
+                            android:background="@color/white"
+                            android:textColor="@color/purple"
+                            android:text="@string/s"
+                            android:id="@+id/sat"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
 
-                            </LinearLayout>
+                        <Button
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/days_margin"
+                            android:background="@android:color/holo_red_light"
+                            android:textStyle="bold"
+                            android:textColor="@color/white"
+                            android:textSize="22sp"
+                            android:text="X"
+                            android:id="@+id/clear"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:gravity="center"
-                                android:layout_margin="4dp">
+                    </LinearLayout>
 
-                                <CheckBox
-                                    android:id="@+id/wed"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/w" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:gravity="center"
-                                android:layout_margin="4dp">
-
-                                <CheckBox
-                                    android:id="@+id/thu"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/th" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:gravity="center"
-                                android:layout_margin="4dp">
-
-                                <CheckBox
-                                    android:id="@+id/fri"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/f" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:gravity="center"
-                                android:layout_margin="4dp">
-
-                                <CheckBox
-                                    android:id="@+id/sat"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/s" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:gravity="center"
-                                android:layout_margin="4dp">
-
-                                <CheckBox
-                                    android:id="@+id/sun"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/su" />
-
-                            </LinearLayout>
-
-
-                        </LinearLayout>
-                    </HorizontalScrollView>
                 </LinearLayout>
-
-
-                <EditText
-                    android:id="@+id/input_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:visibility="gone"
-                    android:background="@drawable/custom_edittext"
-                    android:hint="@string/prompt_name"
-                    android:maxLines="1" />
 
                 <Button
                     android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -399,7 +346,7 @@
                     android:textColor="@color/purple"
                     android:id="@+id/action_search"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/login_button_height"
                     android:text="@string/search"
                     android:textAllCaps="false" />
             </LinearLayout>

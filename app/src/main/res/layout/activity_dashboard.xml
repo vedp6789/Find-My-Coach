@@ -4,12 +4,22 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg"
     tools:context="com.findmycoach.app.activity.DashboardActivity">
 
+    <ImageView
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/side_menu_small"
+        android:layout_margin="@dimen/back_margin"
+        android:id="@+id/menuButton" />
+
         <RelativeLayout
+            android:layout_below="@id/menuButton"
             android:id="@+id/container"
             android:layout_width="match_parent"
-            android:background="@android:color/white"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"/>
 
 </RelativeLayout>

@@ -1,27 +1,28 @@
 package com.findmycoach.app.fragment_mentee;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,8 +31,10 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.UserListActivity;
 import com.findmycoach.app.beans.category.Category;
+import com.findmycoach.app.beans.category.Datum;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
+import com.findmycoach.app.fragment.TimePickerFragment;
 import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
@@ -42,35 +45,38 @@ import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, Callback {
 
     private AutoCompleteTextView locationInput;
     private Category category;
-    private EditText nameInput;
-    private AutoCompleteTextView fromTimingInput;
-    private AutoCompleteTextView toTimingInput;
     private Button searchButton;
     private ProgressDialog progressDialog;
     private TextView currentLocationText;
+    private TextView fromTimingInput;
+    private TextView toTimingInput;
     private Button changeLocation;
     private RelativeLayout locationLayout;
     private LinearLayout timeBarrierLayout;
-    private int FLAG;
     public static String[] subCategoryIds;
     private View fragmentView;
     private String location = "";
     public static String location_auto_suggested_temp, location_auto_suggested;
     boolean flag_change_location = false;
     private boolean timeBarrier;
-
-    private CheckBox mon, tue, wed, thr, fri, sat, sun;
     private boolean isSearching = false;
     private static final String TAG = "FMC";
+    private LinearLayout subCategoryLayout;
+    private TextView subCategoryTextView;
     ArrayAdapter<String> arrayAdapter;
+    private static int widthSubCategoryButton;
+    private List<Button> daysButton;
+    private Button selectedCategory;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -130,12 +136,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     private void setTabForCategory(Category categoryResponse) {
 
-        LinearLayout subCategoryLayout = (LinearLayout) fragmentView.findViewById(R.id.subCategoryLayout);
+//        subCategoryLayout.removeAllViews();
+
         final List<Button> categoriesButtons = new ArrayList<Button>();
 
         this.category = categoryResponse;
-        if (categoryResponse.getData().size() < 1 || FLAG > 0)
-            return;
 
         List<com.findmycoach.app.beans.category.Datum> data = category.getData();
 
@@ -147,29 +152,42 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         });
 
         subCategoryIds = new String[data.size()];
-        for (int i = 0; i < data.size(); i++) {
 
-            com.findmycoach.app.beans.category.Datum datum = data.get(i);
-            StringBuilder subCategory = new StringBuilder();
-            StringBuilder subCategoryId = new StringBuilder();
+
+        if (widthSubCategoryButton == 0)
+            widthSubCategoryButton = searchButton.getWidth() / (data.size() > 0 ? data.size() : 1);
+
+        ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(widthSubCategoryButton, 90);
+
+        final HashMap<String, String[]> subCatNameMap = new HashMap<>();
+        final HashMap<String, String[]> subCatIdMap = new HashMap<>();
+
+        for (Datum datum : data) {
+
             int row = datum.getDataSub().size() + 1;
-            subCategory.append("Select one#");
-            subCategoryId.append("-1#");
+            String[] name = new String[row-1];
+            String[] id = new String[row-1];
             for (int x = 0; x < row - 1; x++) {
-                subCategory.append(datum.getDataSub().get(x).getName() + "#");
-                subCategoryId.append(datum.getDataSub().get(x).getId() + "#");
+                name[x] = datum.getDataSub().get(x).getName();
+                id[x] = datum.getDataSub().get(x).getId();
             }
             Log.d(TAG, datum.getDataSub().size() + "");
-            Log.d(TAG, subCategory.toString());
-            Log.d(TAG, subCategoryId.toString());
+
+            subCatNameMap.put(datum.getId(), name);
+            subCatIdMap.put(datum.getId(), id);
 
             Button button = new Button(getActivity());
             button.setTextColor(getActivity().getResources().getColor(R.color.white));
             button.setBackground(getActivity().getResources().getDrawable(R.drawable.button_unselected));
             button.setText(datum.getName());
+            button.setLayoutParams(layoutParams);
+            button.setTag(datum.getId());
+            button.setTextSize(9.0f);
             subCategoryLayout.addView(button);
             categoriesButtons.add(button);
         }
+
+        selectedCategory = null;
 
         for (final Button btn : categoriesButtons) {
             btn.setOnClickListener(new View.OnClickListener() {
@@ -181,12 +199,49 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                     }
                     btn.setBackground(getActivity().getResources().getDrawable(R.drawable.button_selected));
                     btn.setTextColor(getActivity().getResources().getColor(R.color.purple));
+
+
+                    String first = subCatNameMap.get(btn.getTag())[0];
+                    String next = "<font color='#AFA4C4'> - advance</font>";
+                    subCategoryTextView.setText(Html.fromHtml(first + next));
+                    subCategoryTextView.setTag(subCatIdMap.get(btn.getTag())[0]);
+
+                    selectedCategory = btn;
                 }
             });
         }
 
+        subCategoryTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(selectedCategory != null){
+                    final Dialog dialog = new Dialog(getActivity());
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    ListView listView = new ListView(getActivity());
+                    listView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subCatNameMap.get(selectedCategory.getTag())));
 
-        FLAG = 1;
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            String first = subCatNameMap.get(selectedCategory.getTag())[position];
+                            String next = "<font color='#AFA4C4'> - advance</font>";
+                            subCategoryTextView.setText(Html.fromHtml(first + next));
+                            subCategoryTextView.setTag(subCatIdMap.get(selectedCategory.getTag())[position]);
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.setContentView(listView);
+                    dialog.show();
+                }
+            }
+        });
+
+        if (categoriesButtons.size() > 0) {
+            categoriesButtons.get(0).performClick();
+        }
+
+
 
         fragmentView.findViewById(R.id.subCategoryLayoutParent).setVisibility(View.VISIBLE);
     }
@@ -248,28 +303,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 imm.hideSoftInputFromWindow(locationInput.getWindowToken(), 0);
             }
         });
-        String[] period = getResources().getStringArray(R.array.time1);
-        fromTimingInput.setThreshold(1);
-        fromTimingInput.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, period) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-                text1.setTextColor(Color.BLACK);
-                return view;
-            }
-        });
-        toTimingInput.setThreshold(1);
-        toTimingInput.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, period) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-                text1.setTextColor(Color.BLACK);
-                return view;
-            }
-        });
-
 
         final TextView preferredTimeTv = (TextView) fragmentView.findViewById(R.id.preferredTime);
         preferredTimeTv.setOnClickListener(new View.OnClickListener() {
@@ -278,8 +311,77 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 timeBarrierLayout.setVisibility(View.VISIBLE);
                 timeBarrier = true;
                 preferredTimeTv.setVisibility(View.GONE);
+
+                final Calendar c = Calendar.getInstance();
+                int hourOfDay = c.get(Calendar.HOUR_OF_DAY);
+                int minute = c.get(Calendar.MINUTE);
+                int hour = hourOfDay % 12;
+                fromTimingInput.setText(hour++ + ":" + minute + (hourOfDay > 11 ? " pm" : " am"));
+                toTimingInput.setText(hour + ":" + minute + (hourOfDay > 11 ? " pm" : " am"));
+
+                getSelectedButtons();
             }
         });
+
+        final Button clearFilter = (Button) fragmentView.findViewById(R.id.clear);
+        clearFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                daysButton = null;
+                timeBarrierLayout.setVisibility(View.GONE);
+                timeBarrier = false;
+                preferredTimeTv.setVisibility(View.VISIBLE);
+            }
+        });
+
+
+        fragmentView.findViewById(R.id.fromTime).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerFragment timePicker = new TimePickerFragment();
+                timePicker.textView = fromTimingInput;
+                timePicker.show(getActivity().getFragmentManager(), "timePicker");
+            }
+        });
+
+        fragmentView.findViewById(R.id.toTime).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerFragment timePicker = new TimePickerFragment();
+                timePicker.textView = toTimingInput;
+                timePicker.show(getActivity().getFragmentManager(), "timePicker");
+            }
+        });
+
+    }
+
+    private void getSelectedButtons() {
+        daysButton = new ArrayList<>();
+
+        daysButton.add((Button) fragmentView.findViewById(R.id.sun));
+        daysButton.add((Button) fragmentView.findViewById(R.id.mon));
+        daysButton.add((Button) fragmentView.findViewById(R.id.tue));
+        daysButton.add((Button) fragmentView.findViewById(R.id.wed));
+        daysButton.add((Button) fragmentView.findViewById(R.id.thu));
+        daysButton.add((Button) fragmentView.findViewById(R.id.fri));
+        daysButton.add((Button) fragmentView.findViewById(R.id.sat));
+
+        for (final Button b : daysButton) {
+            b.setTag(b.getId(), 0);
+
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int tag = (Integer) b.getTag(b.getId());
+                    if (tag == 0)
+                        b.setTag(b.getId(), 1);
+                    else
+                        b.setTag(b.getId(), 0);
+
+                }
+            });
+        }
+
 
     }
 
@@ -289,9 +391,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         location_auto_suggested = null;
 
         locationInput = (AutoCompleteTextView) view.findViewById(R.id.input_location);
-        nameInput = (EditText) view.findViewById(R.id.input_name);
-        fromTimingInput = (AutoCompleteTextView) view.findViewById(R.id.from_timing);
-        toTimingInput = (AutoCompleteTextView) view.findViewById(R.id.to_timing);
         currentLocationText = (TextView) view.findViewById(R.id.current_location_text_view);
         searchButton = (Button) view.findViewById(R.id.action_search);
         changeLocation = (Button) view.findViewById(R.id.change_location);
@@ -305,14 +404,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         timeBarrierLayout = (LinearLayout) view.findViewById(R.id.time_barrier_layout);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         timeBarrier = false;
+        subCategoryLayout = (LinearLayout) fragmentView.findViewById(R.id.subCategoryLayout);
+        subCategoryTextView = (TextView) fragmentView.findViewById(R.id.subCategoryTextView);
 
-        mon = (CheckBox) view.findViewById(R.id.mon);
-        tue = (CheckBox) view.findViewById(R.id.tue);
-        wed = (CheckBox) view.findViewById(R.id.wed);
-        thr = (CheckBox) view.findViewById(R.id.thu);
-        fri = (CheckBox) view.findViewById(R.id.fri);
-        sat = (CheckBox) view.findViewById(R.id.sat);
-        sun = (CheckBox) view.findViewById(R.id.sun);
+        toTimingInput = (TextView) fragmentView.findViewById(R.id.to_timing);
+        fromTimingInput = (TextView) fragmentView.findViewById(R.id.from_timing);
 
         if (view instanceof ViewGroup) {
             for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
@@ -379,30 +475,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         isSearching = true;
         progressDialog.show();
         String location = locationInput.getText().toString();
-        String name = nameInput.getText().toString();
-        String fromTiming = fromTimingInput.getText().toString();
-        String toTiming = toTimingInput.getText().toString();
         RequestParams requestParams = new RequestParams();
         requestParams.add("location", location);
-        try {
+        requestParams.add("subcategory_id", subCategoryTextView.getTag() + "");
 
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-        requestParams.add("keyword", name);
         if (timeBarrier) {
+            String fromTiming = fromTimingInput.getText().toString();
+            String toTiming = toTimingInput.getText().toString();
             requestParams.add("timing_from", fromTiming);
             requestParams.add("timing_to", toTiming);
 
-            String week = (mon.isChecked() ? "1," : "0,") +
-                    (tue.isChecked() ? "1," : "0,") +
-                    (wed.isChecked() ? "1," : "0,") +
-                    (thr.isChecked() ? "1," : "0,") +
-                    (fri.isChecked() ? "1," : "0,") +
-                    (sat.isChecked() ? "1," : "0,") +
-                    (sun.isChecked() ? "1" : "0");
+            String week = (daysButton.get(0).getTag(daysButton.get(0).getId())) + "," +
+                    (daysButton.get(1).getTag(daysButton.get(1).getId())) + "," +
+                    (daysButton.get(2).getTag(daysButton.get(2).getId())) + "," +
+                    (daysButton.get(3).getTag(daysButton.get(3).getId())) + "," +
+                    (daysButton.get(4).getTag(daysButton.get(4).getId())) + "," +
+                    (daysButton.get(5).getTag(daysButton.get(5).getId())) + "," +
+                    (daysButton.get(6).getTag(daysButton.get(6).getId()));
             requestParams.add("weeks", week);
-            Log.d(TAG, "Selected weekdays : " + week);
+            Log.d(TAG, "Selected weekdays : " + week + ", from time : " + fromTiming + ", to time : " + toTiming);
         }
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
