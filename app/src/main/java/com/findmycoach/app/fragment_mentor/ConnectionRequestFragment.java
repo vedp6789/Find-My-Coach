@@ -1,5 +1,6 @@
 package com.findmycoach.app.fragment_mentor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.MentorNotificationActions;
 import com.findmycoach.app.adapter.ConnectionRequestRecyclerViewAdapter;
 import com.findmycoach.app.beans.UserNotifications.ConnectionRequest;
 import com.findmycoach.app.beans.UserNotifications.MentorNotifications;
@@ -70,7 +72,19 @@ public class ConnectionRequestFragment extends Fragment {
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        Toast.makeText(getActivity(),"position: "+position,Toast.LENGTH_SHORT).show();
+                        if(arrayList_of_connection_request.size() >0){
+
+                            Intent intent=new Intent(getActivity(), MentorNotificationActions.class);
+
+
+                              Bundle bundle=new Bundle();
+                              ConnectionRequest connectionRequest=arrayList_of_connection_request.get(position);
+                              bundle.putParcelable("conn_req_data",connectionRequest);
+
+                              intent.putExtra("for","connection_request");
+                              intent.putExtra("conn_req_bundle",bundle);
+                            startActivity(intent);
+                        }
                     }
                 })
         );

@@ -1,5 +1,6 @@
 package com.findmycoach.app.fragment_mentor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,8 +13,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.MentorNotificationActions;
 import com.findmycoach.app.adapter.ConnectionRequestRecyclerViewAdapter;
 import com.findmycoach.app.adapter.ScheduleRequestRecyclerViewAdapter;
+import com.findmycoach.app.beans.UserNotifications.ConnectionRequest;
 import com.findmycoach.app.beans.UserNotifications.MentorNotifications;
 import com.findmycoach.app.beans.UserNotifications.ScheduleRequest;
 import com.findmycoach.app.util.RecyclerItemClickListener;
@@ -23,20 +26,21 @@ import java.util.ArrayList;
 /**
  * Created by ved on 13/5/15.
  */
-public class ScheduleRequestFragment extends Fragment{
+public class ScheduleRequestFragment extends Fragment {
     ArrayList<ScheduleRequest> arrayList_schedule_requests;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    public ScheduleRequestFragment(){
+
+    public ScheduleRequestFragment() {
         Log.d("FMC", "default ScheduleRequestFragment");
     }
 
-    public static ScheduleRequestFragment newInstance(ArrayList<ScheduleRequest> arrayList_list_of_schedule_request){
-        ScheduleRequestFragment scheduleRequestFragment=new ScheduleRequestFragment();
-        Log.d("FMC","static ConnectionRequestFragment");
-        Bundle bundle=new Bundle();
-        bundle.putParcelableArrayList("schedule_requests",arrayList_list_of_schedule_request);
+    public static ScheduleRequestFragment newInstance(ArrayList<ScheduleRequest> arrayList_list_of_schedule_request) {
+        ScheduleRequestFragment scheduleRequestFragment = new ScheduleRequestFragment();
+        Log.d("FMC", "static ConnectionRequestFragment");
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("schedule_requests", arrayList_list_of_schedule_request);
         scheduleRequestFragment.setArguments(bundle);
 
         return scheduleRequestFragment;
@@ -46,17 +50,17 @@ public class ScheduleRequestFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        arrayList_schedule_requests=new ArrayList<ScheduleRequest>();
-        if(getArguments()  != null){
-            arrayList_schedule_requests=getArguments().getParcelableArrayList("schedule_requests");
+        arrayList_schedule_requests = new ArrayList<ScheduleRequest>();
+        if (getArguments() != null) {
+            arrayList_schedule_requests = getArguments().getParcelableArrayList("schedule_requests");
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_schedule_request,container,false);
+        View view = inflater.inflate(R.layout.fragment_schedule_request, container, false);
 
-        Log.d("FMC","scheduleRequestFragment view ");
+        Log.d("FMC", "scheduleRequestFragment view ");
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_schedule_requests);
         recyclerView.setHasFixedSize(true);
@@ -68,15 +72,22 @@ public class ScheduleRequestFragment extends Fragment{
 
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
-                        Toast.makeText(getActivity(),"position: "+position,Toast.LENGTH_SHORT).show();
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        if (arrayList_schedule_requests.size() > 0) {
+                            Intent intent = new Intent(getActivity(), MentorNotificationActions.class);
+                            Bundle bundle = new Bundle();
+                            ScheduleRequest scheduleRequest = arrayList_schedule_requests.get(position);
+                            bundle.putParcelable("schedule_req_data", scheduleRequest);
+                            intent.putExtra("for", "schedule_request");
+                            intent.putExtra("schedule_req_bundle", bundle);
+                            startActivity(intent);
+                        }
                     }
                 })
         );
 
         return view;
-
-
 
 
     }
@@ -86,9 +97,8 @@ public class ScheduleRequestFragment extends Fragment{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        
-    }
 
+    }
 
 
 }

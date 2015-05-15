@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <ImageView
+        android:id="@+id/iv_user_icon"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/user_icon"/>
+    <TextView
+        android:layout_toRightOf="@id/iv_user_icon"
+        android:id="@+id/tv_connection_request_title_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+         />
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/tv_connection_request_title_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
+        />
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_below="@id/tv_date"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <Button
+        android:id="@+id/b_profile"
+        android:layout_above="@id/ll_actions"
+        android:text="@string/view_profile"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
+    <LinearLayout
+        android:id="@+id/ll_actions"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/b_accept"
+            android:text="@string/action_accept"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/b_decline"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/action_decline"
+            android:layout_height="wrap_content" />
+        </LinearLayout>
+
+</RelativeLayout>

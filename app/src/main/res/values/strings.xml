@@ -515,6 +515,9 @@
     <string name="total_charges">Total charges:</string>
     <string name="individual">Individual</string>
     <string name="group">Group</string>
+    <string name="start_time_of_class">Start time</string>
+    <string name="stop_time_of_class">Stop time</string>
+    <string name="class_type">Type</string>
 
 
 
@@ -570,15 +573,17 @@
     <string name="please_provide_location_to_access_details">Please provide location to access calendar details</string>
     <string name="response_message">Please give a reason why you are rejecting this request.</string>
     <string name="connection_request_message"> has requested to connect</string>
+    <string name="connection_request_title">has sent a connection request</string>
+    <string name="schedule_request_title">has sent a class schedule request</string>
     <string name="schedule_request_message"> has requested a schedule</string>
     <string name="days_ago"> days ago</string>
-    <string name="no_connection_request">No new connection request</string>
-    <string name="no_schedule_request">No new schedule request</string>
-    <string name="no_notification_found">No notification found</string>
-    <string name="connection_request_accepted"> has confirmed connection</string>
-    <string name="connection_request_rejected"> has disconfirmed connection</string>
-    <string name="schedule_request_accepted"> has confirmed schedule</string>
-    <string name="schedule_request_rejected"> has disconfirmed schedule</string>
+    <string name="no_connection_request">Out of connection request</string>
+    <string name="no_schedule_request">Out of class request</string>
+    <string name="no_notification_found">Out of notification</string>
+    <string name="connection_request_accepted"> has accepted your connection request</string>
+    <string name="connection_request_rejected"> has rejected your connection request</string>
+    <string name="schedule_request_accepted"> has approved your class</string>
+    <string name="schedule_request_rejected"> has declined your class schedule</string>
 
 
 
@@ -712,6 +717,7 @@
     <string name="event_time">Time:</string>
     <string name="mentee_add">Mentee\'s address:</string>
     <string name="mentor_add">Mentor\'s address:</string>
+    <string name="requested_class_details">Requested class detail</string>
 
     <!-- Prompting -->
 
@@ -748,6 +754,9 @@
     <string name="start_time">Select</string>
     <string name="stop_time">Select</string>
     <string name="submit_rating">Submit Rating</string>
+    <string name="view_profile">View Profile</string>
+
+
     <!-- Actions -->
 
     <!-- String s related to Errors -->
@@ -802,6 +811,7 @@
     <string name="year">Year</string>
     <string name="calendar_by_loc">Calendar by location</string>
     <string name="loc">Location</string>
+    <string name="mentor_response_for_schedule_request_message">Your reply to mentee!</string>
     <!-- Static Text -->
 
     <!-- String s related to week days -->

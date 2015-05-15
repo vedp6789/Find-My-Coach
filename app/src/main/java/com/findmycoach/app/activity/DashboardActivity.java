@@ -509,7 +509,8 @@ public class DashboardActivity extends FragmentActivity
         resideMenu.setOnClickListener(this);
 
         resideMenu.addMenuItem(itemHome, ResideMenu.DIRECTION_RIGHT);
-        resideMenu.addMenuItem(itemNotification, ResideMenu.DIRECTION_RIGHT);
+        if(user_group == 2)
+            resideMenu.addMenuItem(itemNotification, ResideMenu.DIRECTION_RIGHT);
         resideMenu.addMenuItem(itemConnection, ResideMenu.DIRECTION_RIGHT);
         resideMenu.addMenuItem(itemSchedule, ResideMenu.DIRECTION_RIGHT);
         resideMenu.addMenuItem(itemSettings, ResideMenu.DIRECTION_RIGHT);

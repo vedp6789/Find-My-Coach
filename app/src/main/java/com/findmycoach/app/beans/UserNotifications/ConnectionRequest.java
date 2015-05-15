@@ -10,14 +10,43 @@ import java.util.ArrayList;
  */
 public class ConnectionRequest implements Parcelable {
     private String id;
+    private String image_url;
+    private String connection_id;
+    private String student_id;
     private String message;
     private String first_name;
     private String last_name;
     private String start_date;
     private String stop_date;
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
+
+    public String getStudent_id() {
+        return student_id;
+    }
+
+    public void setStudent_id(String student_id) {
+        this.student_id = student_id;
+    }
+
     private String start_time;
     private String stop_time;
     private String subject;
+
+    public String getConnection_id() {
+        return connection_id;
+    }
+
+    public void setConnection_id(String connection_id) {
+        this.connection_id = connection_id;
+    }
+
     private String class_type;
     private String [] week_days;
 
@@ -69,6 +98,9 @@ public class ConnectionRequest implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
+        dest.writeString(this.image_url);
+        dest.writeString(this.connection_id);
+        dest.writeString(this.student_id);
         dest.writeString(this.message);
         dest.writeString(this.first_name);
         dest.writeString(this.last_name);
@@ -99,6 +131,9 @@ public class ConnectionRequest implements Parcelable {
     public ConnectionRequest(Parcel parcel){
 
         this.id=parcel.readString();
+        this.image_url=parcel.readString();
+        this.connection_id=parcel.readString();
+        this.student_id=parcel.readString();
         this.message=parcel.readString();
         this.first_name=parcel.readString();
         this.last_name=parcel.readString();

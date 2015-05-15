@@ -8,10 +8,38 @@ import android.os.Parcelable;
  */
 public class ScheduleRequest implements Parcelable {
     private String id;
+    private String image_url;
+    private String student_id;
+    private String event_id;
     private String message;
     private String first_name;
     private String last_name;
     private String start_date;
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
+
+    public String getStudent_id() {
+        return student_id;
+    }
+
+    public void setStudent_id(String student_id) {
+        this.student_id = student_id;
+    }
+
+    public String getEvent_id() {
+        return event_id;
+    }
+
+    public void setEvent_id(String event_id) {
+        this.event_id = event_id;
+    }
+
     private String stop_date;
     private String start_time;
     private String stop_time;
@@ -114,6 +142,9 @@ public class ScheduleRequest implements Parcelable {
     public ScheduleRequest(Parcel parcel) {
 
         this.id = parcel.readString();
+        this.image_url=parcel.readString();
+        this.student_id=parcel.readString();
+        this.event_id=parcel.readString();
         this.message = parcel.readString();
         this.first_name = parcel.readString();
         this.last_name = parcel.readString();
@@ -147,6 +178,9 @@ public class ScheduleRequest implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
+        dest.writeString(this.image_url);
+        dest.writeString(this.student_id);
+        dest.writeString(this.event_id);
         dest.writeString(this.message);
         dest.writeString(this.first_name);
         dest.writeString(this.last_name);
