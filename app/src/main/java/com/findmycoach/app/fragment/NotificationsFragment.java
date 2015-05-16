@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
+import com.findmycoach.app.activity.MenteeNotificationActions;
 import com.findmycoach.app.activity.StudentDetailActivity;
 import com.findmycoach.app.adapter.ConnectionRequestRecyclerViewAdapter;
 import com.findmycoach.app.adapter.MenteeNotificationRecyclerViewAdapter;
@@ -44,21 +45,23 @@ public class NotificationsFragment extends Fragment implements Callback {
     private RecyclerView.LayoutManager layoutManager;
     private ProgressDialog progressDialog;
     private JSONArray jsonArray_notifications;
+    String action_for;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
-        jsonArray_notifications=new JSONArray();
+        jsonArray_notifications = new JSONArray();
         getNotifications();
     }
 
-    private void getNotifications(){
+    private void getNotifications() {
         progressDialog.show();
-        RequestParams requestParams=new RequestParams();
-        requestParams.add("user_id",StorageHelper.getUserDetails(getActivity(),"user_id"));
-        requestParams.add("user_group",StorageHelper.getUserGroup(getActivity(),"user_group"));
-        NetworkClient.getUserNotifications(getActivity(),requestParams,StorageHelper.getUserDetails(getActivity(),"auth_token"),this,19);
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("user_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
+        requestParams.add("user_group", StorageHelper.getUserGroup(getActivity(), "user_group"));
+        NetworkClient.getUserNotifications(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 19);
 
     }
 
@@ -70,31 +73,56 @@ public class NotificationsFragment extends Fragment implements Callback {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new MenteeNotificationRecyclerViewAdapter(getActivity(),jsonArray_notifications);
+        adapter = new MenteeNotificationRecyclerViewAdapter(getActivity(), jsonArray_notifications);
         recyclerView.setAdapter(adapter);
 
         /* on click listener */
-        /*recyclerView.addOnItemTouchListener(
+        recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
-                        Toast.makeText(getActivity(),"position: "+position,Toast.LENGTH_SHORT).show();
+                    @Override
+                    public void onItemClick(View view, int position) throws JSONException {
+                        if (jsonArray_notifications.length() > 0) {
+                            JSONObject jsonObject_notification = jsonArray_notifications.getJSONObject(position);
+                            String title = jsonObject_notification.getString("title");
+                            switch (title) {
+                                case "Connection accepted":
+                                    action_for = "connection_accepted";
+                                    break;
+                                case "Connection rejected":
+                                    action_for = "connection_rejected";
+                                    break;
+                                case "Schedule accepted":
+                                    action_for = "schedule_accepted";
+                                    break;
+                                case "Schedule rejected":
+                                    action_for = "schedule_rejected";
+                                    break;
+                            }
+                            Intent intent = new Intent(getActivity(), MenteeNotificationActions.class);
+                            intent.putExtra("action_for", action_for);
+                            intent.putExtra("json_string", jsonObject_notification.toString());
+                            startActivity(intent);
+
+                        }
+
+
                     }
                 })
-        );*/
+        );
 
         return view;
     }
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-          progressDialog.dismiss();
+        progressDialog.dismiss();
         try {
-            JSONObject jsonObject=new JSONObject((String) object);
-            String status=jsonObject.getString("status");
-            if(Boolean.parseBoolean(status)){
-                jsonArray_notifications=jsonObject.getJSONArray("data");
-                if(jsonArray_notifications.length() >0){
-                    adapter=new MenteeNotificationRecyclerViewAdapter(getActivity(),jsonArray_notifications);
+            JSONObject jsonObject = new JSONObject((String) object);
+            String status = jsonObject.getString("status");
+            if (Boolean.parseBoolean(status)) {
+                jsonArray_notifications = jsonObject.getJSONArray("data");
+                if (jsonArray_notifications.length() > 0) {
+                    adapter = new MenteeNotificationRecyclerViewAdapter(getActivity(), jsonArray_notifications);
                     recyclerView.setAdapter(adapter);
                 }
 
@@ -107,8 +135,8 @@ public class NotificationsFragment extends Fragment implements Callback {
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
-         progressDialog.dismiss();
-         Toast.makeText(getActivity(),(String)object,Toast.LENGTH_SHORT).show();
+        progressDialog.dismiss();
+        Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
     }
 
 

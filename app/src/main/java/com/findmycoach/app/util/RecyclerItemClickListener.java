@@ -8,6 +8,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 
+import org.json.JSONException;
+
 
 /**
  * Created by ved on 14/5/15.
@@ -16,7 +18,7 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
-        public void onItemClick(View view, int position);
+        public void onItemClick(View view, int position) throws JSONException;
     }
 
     GestureDetector mGestureDetector;
@@ -35,7 +37,12 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
     public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent e) {
         View childView = view.findChildViewUnder(e.getX(), e.getY());
         if (childView != null && mListener != null && mGestureDetector.onTouchEvent(e)) {
-            mListener.onItemClick(childView, view.getChildPosition(childView));
+            try{
+                mListener.onItemClick(childView, view.getChildPosition(childView));
+
+            }catch (Exception e1){
+                e1.printStackTrace();
+            }
         }
         return false;
     }

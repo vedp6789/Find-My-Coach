@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 
     <ImageView
@@ -15,14 +14,14 @@
         android:background="@drawable/user_icon" />
 
     <TextView
-        android:id="@+id/tv_connection_request_title_message"
+        android:id="@+id/tv_notification_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="30dp"
-        android:textStyle="bold"
-        android:layout_toRightOf="@id/iv_user_icon" />
+        android:layout_toRightOf="@id/iv_user_icon"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tv_date"
@@ -34,7 +33,7 @@
         android:layout_marginTop="5dp" />
 
     <TextView
-        android:id="@+id/tv_message"
+        android:id="@+id/tv_user_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_user_icon"
@@ -51,26 +50,6 @@
         android:text="@string/view_profile"
         android:visibility="gone" />
 
-    <LinearLayout
-        android:id="@+id/ll_actions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/b_accept"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/action_accept" />
-
-        <Button
-            android:id="@+id/b_decline"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/action_decline" />
-    </LinearLayout>
 
 </RelativeLayout>
