@@ -85,11 +85,11 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
     ProgressDialog progressDialog;
 
     private void applyActionbarProperties() {
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(getResources().getString(R.string.schedule_vacation));
-        }
+//        ActionBar actionBar = getActionBar();
+//        if (actionBar != null) {
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//            actionBar.setTitle(getResources().getString(R.string.schedule_vacation));
+//        }
     }
 
     @Override

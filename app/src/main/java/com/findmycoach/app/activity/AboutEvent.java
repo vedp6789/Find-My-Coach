@@ -242,11 +242,11 @@ public class AboutEvent extends Activity {
     }
 
     private void applyActionbarProperties() {
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(getResources().getString(R.string.event_desc));
-        }
+//        ActionBar actionBar = getActionBar();
+//        if (actionBar != null) {
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//            actionBar.setTitle(getResources().getString(R.string.event_desc));
+//        }
     }
 
     @Override

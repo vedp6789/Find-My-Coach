@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +47,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView profilePhone;
     private Data userInfo = null;
     private ImageLoader imgLoader;
+    private ImageButton editProfile;
 
     private static final String TAG="FMC:";
 
@@ -80,7 +82,7 @@ public class ProfileFragment extends Fragment implements Callback {
         Log.d(TAG, "Stored User Id:" + StorageHelper.getUserDetails(getActivity(), "user_id"));
         Log.d(TAG, "auth_token" + authToken);
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
         NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
     }
 
@@ -97,25 +99,7 @@ public class ProfileFragment extends Fragment implements Callback {
         profileTravelAvailable = (TextView) view.findViewById(R.id.profile_travel_available);
         areaOfCoaching = (TextView) view.findViewById(R.id.areas_of_coaching);
         profilePhone = (TextView) view.findViewById(R.id.profile_phone);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_profile_management, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_edit_profile) {
-            if (userInfo != null) {
-                Intent intent = new Intent(getActivity(), EditProfileActivityMentor.class);
-                intent.putExtra("user_info", new Gson().toJson(userInfo));
-                startActivityForResult(intent, REQUEST_CODE);
-            }
-        }
-        return super.onOptionsItemSelected(item);
+        editProfile = (ImageButton) view.findViewById(R.id.editProfile);
     }
 
     @Override
@@ -203,6 +187,18 @@ public class ProfileFragment extends Fragment implements Callback {
             imgLoader = new ImageLoader(profileImage);
             imgLoader.execute((String) userInfo.getPhotograph());
         }
+
+
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (userInfo != null) {
+                    Intent intent = new Intent(getActivity(), EditProfileActivityMentor.class);
+                    intent.putExtra("user_info", new Gson().toJson(userInfo));
+                    startActivityForResult(intent, REQUEST_CODE);
+                }
+            }
+        });
     }
 
 

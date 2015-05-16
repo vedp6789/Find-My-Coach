@@ -135,8 +135,8 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
     }
 
     private void applyActionbarProperties() {
-        ActionBar actionbar = getActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
+//        ActionBar actionbar = getActionBar();
+//        actionbar.setDisplayHomeAsUpEnabled(true);
     }
 
     private void initialize() {

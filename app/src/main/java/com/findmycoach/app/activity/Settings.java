@@ -20,7 +20,7 @@ import com.findmycoach.app.util.StorageHelper;
  */
 public class Settings extends FragmentActivity implements View.OnClickListener, FragmentManager.OnBackStackChangedListener {
 
-    private ActionBar actionbar;
+//    private ActionBar actionbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +44,9 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
     }
 
     private void applyActionbarProperties() {
-        actionbar = getActionBar();
-        if(actionbar != null)
-            actionbar.setDisplayHomeAsUpEnabled(true);
+//        actionbar = getActionBar();
+//        if(actionbar != null)
+//            actionbar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
                     getSupportFragmentManager().beginTransaction().add(R.id.profileContainer, new com.findmycoach.app.fragment_mentor.ProfileFragment()).addToBackStack("edit_profile").commit();
                 else if (DashboardActivity.dashboardActivity.user_group == 2)
                     getSupportFragmentManager().beginTransaction().add(R.id.profileContainer, new com.findmycoach.app.fragment_mentee.ProfileFragment()).addToBackStack("edit_profile").commit();
-                actionbar.setTitle(getResources().getString(R.string.profile));
+//                actionbar.setTitle(getResources().getString(R.string.profile));
                 getSupportFragmentManager().addOnBackStackChangedListener(this);
                 break;
             case R.id.change_password:
@@ -95,7 +95,7 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
     public void onBackStackChanged() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             setContentView(R.layout.activity_settings);
-            actionbar.setTitle(getResources().getString(R.string.action_settings));
+//            actionbar.setTitle(getResources().getString(R.string.action_settings));
             initView();
         }
 

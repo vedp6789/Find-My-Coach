@@ -89,9 +89,9 @@ public class UserListActivity extends Activity implements Callback {
     }
 
     private void applyActionbarProperties() {
-        ActionBar actionbar = getActionBar();
-        if(actionbar != null)
-            actionbar.setDisplayHomeAsUpEnabled(true);
+//        ActionBar actionbar = getActionBar();
+//        if(actionbar != null)
+//            actionbar.setDisplayHomeAsUpEnabled(true);
     }
 
     private void initialize() {
