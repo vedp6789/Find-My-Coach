@@ -43,11 +43,11 @@ public class SelectCardForPayment extends Activity implements ImageButton.OnClic
     }
 
     private void applyActionbarProperties() {
-        ActionBar actionBar = getActionBar();
-        if(actionBar != null){
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(getResources().getString(R.string.add_new_slot));
-        }
+//        ActionBar actionBar = getActionBar();
+//        if(actionBar != null){
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//            actionBar.setTitle(getResources().getString(R.string.add_new_slot));
+//        }
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -87,6 +87,14 @@ public class AreasOfInterestActivity extends Activity implements Callback {
                 finish();
             }
         });
+
+
+        findViewById(R.id.plus).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addInterest(category);
+            }
+        });
     }
 
     /** Getting references of views */
@@ -104,9 +112,9 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     }
 
     private void applyActionbarProperties() {
-        ActionBar actionbar = getActionBar();
-        if(actionbar != null)
-            actionbar.setDisplayHomeAsUpEnabled(true);
+//        ActionBar actionbar = getActionBar();
+//        if(actionbar != null)
+//            actionbar.setDisplayHomeAsUpEnabled(true);
     }
 
     /** Dialog to add sub category */

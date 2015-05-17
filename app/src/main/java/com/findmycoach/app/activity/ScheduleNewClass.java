@@ -417,11 +417,11 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
 
     private void applyActionbarProperties(String name) {
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(name);
-        }
+//        ActionBar actionBar = getActionBar();
+//        if (actionBar != null) {
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//            actionBar.setTitle(name);
+//        }
     }
 
 

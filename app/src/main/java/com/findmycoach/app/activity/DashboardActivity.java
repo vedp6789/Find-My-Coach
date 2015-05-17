@@ -109,8 +109,8 @@ public class DashboardActivity extends FragmentActivity
             if (userId != null && newUser != null && userId.equals(newUser.split("#")[1])) {
                 String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
                 RequestParams requestParams = new RequestParams();
-                Log.d(TAG, "Stored User Id:" + userId);
-                Log.d(TAG, "auth_token" + authToken);
+                Log.d(TAG2, "Stored User Id:" + userId);
+                Log.d(TAG2, "auth_token" + authToken);
                 requestParams.add("id", userId);
                 requestParams.add("user_group", user_group + "");
                 NetworkClient.getProfile(this, requestParams, authToken, this, 4);

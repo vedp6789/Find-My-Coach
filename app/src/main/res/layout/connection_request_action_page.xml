@@ -44,6 +44,9 @@
 
     <Button
         android:id="@+id/b_profile"
+        android:layout_above="@+id/ll_actions"
+        android:text="@string/view_profile"
+        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_message"

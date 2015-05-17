@@ -55,9 +55,9 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
     }
 
     private void applyActionbarProperties() {
-        ActionBar actionBar = getActionBar();
-        if(actionBar != null)
-        actionBar.setDisplayHomeAsUpEnabled(true);
+//        ActionBar actionBar = getActionBar();
+//        if(actionBar != null)
+//        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

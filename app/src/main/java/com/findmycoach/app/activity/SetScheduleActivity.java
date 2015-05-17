@@ -117,8 +117,8 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     }
 
     private void applyProperties() {
-        if (getActionBar() != null)
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+//        if (getActionBar() != null)
+//            getActionBar().setDisplayHomeAsUpEnabled(true);
         mWeekView.setOnEventClickListener(this);
         mWeekView.setMonthChangeListener(this);
         mWeekView.setEventLongPressListener(this);

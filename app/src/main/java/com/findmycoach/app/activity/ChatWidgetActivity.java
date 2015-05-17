@@ -144,33 +144,33 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
     /** Adding custom action bar to display Receiver name, add click listener to title */
     private void applyActionbarProperties() {
-        ActionBar actionBar = getActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
-            View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
-            TextView customTitle = (TextView) customView.findViewById(R.id.actionbarTitle);
-            if (receiverId != null)
-                customTitle.setText(receiverName);
-            customTitle.setTypeface(Typeface.MONOSPACE);
-            customTitle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getProfile();
-                    Log.d(TAG,receiverName + " <= Name : Id => " + receiverId);
-                }
-            });
-            actionBar.setCustomView(customView);
-            Log.v(TAG, receiverImage);
-
-            try{
-                BitmapDrawable icon = new BitmapDrawable(getResources(), BinaryForImage.getBitmapFromBinaryString(receiverImage));
-                actionBar.setIcon(icon);
-            }catch (Exception e){
-                actionBar.setIcon(R.drawable.user_icon);
-            }
-        }
+//        ActionBar actionBar = getActionBar();
+//        if(actionBar != null) {
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//            actionBar.setDisplayShowTitleEnabled(false);
+//            actionBar.setDisplayShowCustomEnabled(true);
+//            View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
+//            TextView customTitle = (TextView) customView.findViewById(R.id.actionbarTitle);
+//            if (receiverId != null)
+//                customTitle.setText(receiverName);
+//            customTitle.setTypeface(Typeface.MONOSPACE);
+//            customTitle.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    getProfile();
+//                    Log.d(TAG,receiverName + " <= Name : Id => " + receiverId);
+//                }
+//            });
+//            actionBar.setCustomView(customView);
+//            Log.v(TAG, receiverImage);
+//
+//            try{
+//                BitmapDrawable icon = new BitmapDrawable(getResources(), BinaryForImage.getBitmapFromBinaryString(receiverImage));
+//                actionBar.setIcon(icon);
+//            }catch (Exception e){
+//                actionBar.setIcon(R.drawable.user_icon);
+//            }
+//        }
     }
 
     /** Getting profile of receiver */

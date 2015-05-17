@@ -12,6 +12,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +43,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView profilePhone;
     private Data userInfo = null;
     private ImageLoader imgLoader;
+    private ImageButton editProfile;
 
     private static final String TAG="TAG";
 
@@ -90,26 +93,9 @@ public class ProfileFragment extends Fragment implements Callback {
         mentorFor = (TextView) view.findViewById(R.id.mentor_for);
         coachingType = (TextView) view.findViewById(R.id.coaching_type);
         profilePhone = (TextView) view.findViewById(R.id.profile_phone);
+        editProfile = (ImageButton) view.findViewById(R.id.editProfile);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_profile_management, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_edit_profile) {
-            if (userInfo != null) {
-                Intent intent = new Intent(getActivity(), EditProfileActivityMentee.class);
-                intent.putExtra("user_info", new Gson().toJson(userInfo));
-                startActivityForResult(intent, REQUEST_CODE);
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -168,6 +154,18 @@ public class ProfileFragment extends Fragment implements Callback {
         trainingLocation.setText((String) userInfo.getTrainingLocation());
         coachingType.setText((String) userInfo.getCoachingType());
         profilePhone.setText(userInfo.getPhonenumber());
+
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (userInfo != null) {
+                    Intent intent = new Intent(getActivity(), EditProfileActivityMentee.class);
+                    intent.putExtra("user_info", new Gson().toJson(userInfo));
+                    startActivityForResult(intent, REQUEST_CODE);
+                }
+            }
+        });
+
 
     }
 

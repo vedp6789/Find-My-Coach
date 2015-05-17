@@ -353,11 +353,11 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
 
     private void applyActionbarProperties() {
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(userInfo.getFirstName());
-        }
+//        ActionBar actionBar = getActionBar();
+//        if (actionBar != null) {
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//            actionBar.setTitle(userInfo.getFirstName());
+//        }
     }
 
     private void initialize() {

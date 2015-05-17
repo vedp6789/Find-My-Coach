@@ -63,11 +63,11 @@ public class StudentDetailActivity  extends Activity implements Callback {
     }
 
     private void applyActionbarProperties() {
-        ActionBar actionBar = getActionBar();
-        if(actionBar != null){
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(studentDetails.getFirstName());
-        }
+//        ActionBar actionBar = getActionBar();
+//        if(actionBar != null){
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//            actionBar.setTitle(studentDetails.getFirstName());
+//        }
     }
 
     private void initialize() {
