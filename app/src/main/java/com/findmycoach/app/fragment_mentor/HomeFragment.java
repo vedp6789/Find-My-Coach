@@ -89,6 +89,7 @@ public class HomeFragment extends Fragment implements Callback {
         notifications_on_viewpager = (ViewPager) view.findViewById(R.id.vp_mentor_notifications);
         notifications_on_viewpager.setAdapter(mentorNotificationTabsPagerAdapter);
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.mentor_notification_tab);
+        pagerSlidingTabStrip.setShouldExpand(true);
         pagerSlidingTabStrip.setViewPager(notifications_on_viewpager);
     }
 

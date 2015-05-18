@@ -584,6 +584,10 @@
     <string name="connection_request_rejected"> has rejected your connection request</string>
     <string name="schedule_request_accepted"> has approved your class</string>
     <string name="schedule_request_rejected"> has declined your class schedule</string>
+    <string name="is_in_connection"> is in connection</string>
+    <string name="request_declined">\'s request get declined</string>
+    <string name="schedule_accepted"> schedule get confirmed</string>
+    <string name="schedule_rejected"> schedule get rejected</string>
 
 
 

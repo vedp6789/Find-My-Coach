@@ -2,6 +2,7 @@ package com.findmycoach.app.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,8 @@ public class MenteeNotificationRecyclerViewAdapter extends RecyclerView.Adapter<
 private Context context;
     private JSONArray jsonArray_notifications;
     boolean notification_not_found;
+    private String start_date;
+    private  String TAG="FMC";
     public MenteeNotificationRecyclerViewAdapter(Context context,JSONArray jsonArray_notifications){
         notification_not_found=false;
         this.context=context;
@@ -49,10 +52,20 @@ private Context context;
         }else{
             try {
                 JSONObject jsonObject_notification=jsonArray_notifications.getJSONObject(position);
+                Log.d(TAG,"jsonobject to string : "+jsonObject_notification.toString());
                 String title=jsonObject_notification.getString("title");
-                String first_name=jsonObject_notification.getString("first_name");
-                String start_date=jsonObject_notification.getString("start_date");
 
+
+                //Connection accepted/Connection rejected/Schedule accepted/Schedule rejected
+                if(title.equals("Connection accepted") && title.equals("Connection rejected") ){
+                    start_date=jsonObject_notification.getString("created_date");
+                }else{
+                    start_date=jsonObject_notification.getString("start_date");
+                }
+
+                String first_name=jsonObject_notification.getString("first_name");
+
+                Log.d(TAG,"start_date string "+start_date.toString());
                 Calendar cal = new GregorianCalendar();
                 cal.set(Integer.parseInt(start_date.split("-")[0]),Integer.parseInt(start_date.split("-")[1])-1, Integer.parseInt(start_date.split("-")[2]));
                 long connection_request_start_date_in_millis = cal.getTimeInMillis();
