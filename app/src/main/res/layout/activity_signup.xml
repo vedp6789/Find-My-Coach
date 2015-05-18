@@ -145,6 +145,7 @@
                             android:minHeight="@dimen/abc_action_bar_stacked_max_height"
                             style="@style/EditTextCustomHolo"
                             android:gravity="center"
+                            android:textColor="@color/purple_light"
                             android:padding="4dp" />
 
                         <EditText

@@ -265,8 +265,8 @@
 
     <style name="EditTextCustomHolo" parent="android:Widget.EditText">
         <item name="android:background">@drawable/apptheme_textfield_activated_holo_light</item>
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:textColorHint">#ffffff</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/purple_light</item>
     </style>
 
 </resources>

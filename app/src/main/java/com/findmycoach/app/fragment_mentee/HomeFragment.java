@@ -203,7 +203,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
 
                     String first = subCatNameMap.get(btn.getTag())[0];
-                    String next = "<font color='#AFA4C4'> - advance</font>";
+                    String next = "<font color='#AFA4C4'> - beginner</font>";
                     subCategoryTextView.setText(Html.fromHtml(first + next));
                     subCategoryTextView.setTag(subCatIdMap.get(btn.getTag())[0]);
 
@@ -282,7 +282,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
                     ListView listView = (ListView) dialog.findViewById(R.id.subCategoryListView);
 
-                    listView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subCatNameMap.get(selectedCategory.getTag())));
+                    listView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.textview, subCatNameMap.get(selectedCategory.getTag())));
 
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
