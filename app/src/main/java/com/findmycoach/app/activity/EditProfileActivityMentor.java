@@ -1,6 +1,5 @@
 package com.findmycoach.app.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -64,7 +63,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
     int REQUEST_CODE = 100;
     private ImageView profilePicture;
     private TextView profileEmail;
-    private TextView profilePhone;
     private TextView areaOfCoaching;
     private EditText profileFirstName;
     private EditText profileLastName;
@@ -107,7 +105,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             imgLoader.execute((String) userInfo.getPhotograph());
         }
         profileEmail.setText(userInfo.getEmail());
-        profilePhone.setText(userInfo.getPhonenumber());
         profileFirstName.setText(userInfo.getFirstName());
         profileLastName.setText(userInfo.getLastName());
         profileAddress.setText((String) userInfo.getAddress());
@@ -188,7 +185,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         profileGender = (Spinner) findViewById(R.id.input_gender);
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
-        profilePhone = (TextView) findViewById(R.id.profile_phone);
         profileFirstName = (EditText) findViewById(R.id.input_first_name);
         profileLastName = (EditText) findViewById(R.id.input_last_name);
         profileAddress = (EditText) findViewById(R.id.input_address);
@@ -198,7 +194,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         chargeInput = (EditText) findViewById(R.id.input_charges);
         accomplishment = (EditText) findViewById(R.id.input_accomplishment);
         experienceInput = (Spinner) findViewById(R.id.input_experience);
-        experienceInput.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1,
+        experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview,
                 getResources().getStringArray(R.array.year_of_experience)));
         isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
         updateAction = (Button) findViewById(R.id.button_update);
@@ -206,6 +202,18 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         areaOfCoaching = (TextView) findViewById(R.id.input_areas_of_coaching);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
+
+        profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
+
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(getResources().getString(R.string.title_edit_profile_menu));
 
         try{
             if (userInfo == null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals("")) {
