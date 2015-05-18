@@ -61,7 +61,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none"
+            android:scrollbars="vertical"
             android:layout_below="@+id/heading"
             android:id="@+id/scrollView">
 
@@ -76,6 +76,38 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
+
+                    <RadioGroup
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/back_margin"
+                        android:id="@+id/radio_group_user_signup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:minHeight="@dimen/abc_action_bar_stacked_max_height"
+                        android:layout_gravity="center_horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radio_button_mentor_signup"
+                            android:button="@drawable/custom_check_box"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:paddingLeft="@dimen/radio_button_padding"
+                            android:text="@string/mentor"
+                            android:layout_weight="1" />
+
+                        <RadioButton
+                            android:id="@+id/radio_button_mentee_signup"
+                            android:button="@drawable/custom_check_box"
+                            android:layout_width="0dp"
+                            android:textColor="@color/white"
+                            android:paddingLeft="@dimen/radio_button_padding"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mentee"
+                            android:layout_weight="1" />
+
+                    </RadioGroup>
 
                     <EditText
                         android:id="@+id/input_first_name"
@@ -164,38 +196,9 @@
 
                 </LinearLayout>
 
-                <RadioGroup
-                    android:layout_marginTop="@dimen/back_margin"
-                    android:id="@+id/radio_group_user_signup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:minHeight="@dimen/abc_action_bar_stacked_max_height"
-                    android:layout_gravity="center_horizontal">
-
-                    <RadioButton
-                        android:id="@+id/radio_button_mentor_signup"
-                        android:button="@drawable/custom_check_box"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:paddingLeft="@dimen/radio_button_padding"
-                        android:text="@string/mentor"
-                        android:layout_weight="1" />
-
-                    <RadioButton
-                        android:id="@+id/radio_button_mentee_signup"
-                        android:button="@drawable/custom_check_box"
-                        android:layout_width="0dp"
-                        android:textColor="@color/white"
-                        android:paddingLeft="@dimen/radio_button_padding"
-                        android:layout_height="wrap_content"
-                        android:text="@string/mentee"
-                        android:layout_weight="1" />
-
-                </RadioGroup>
 
                 <Button
+                    android:layout_marginTop="@dimen/back_margin"
                     android:id="@+id/button_signup"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_button_height"

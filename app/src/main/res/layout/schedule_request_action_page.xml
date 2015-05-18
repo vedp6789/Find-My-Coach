@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
@@ -10,7 +11,8 @@
         android:layout_marginRight="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/user_icon"/>
+        android:background="@drawable/user_icon" />
+
     <TextView
         android:layout_toRightOf="@id/iv_user_icon"
         android:layout_alignParentTop="true"
@@ -20,8 +22,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginLeft="10dp"
         android:textStyle="bold"
-        android:layout_marginRight="10dp"
-        />
+        android:layout_marginRight="10dp" />
 
     <TextView
         android:id="@+id/tv_class_detail_title"
@@ -30,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/requested_class_details"/>
+        android:text="@string/requested_class_details" />
 
     <TextView
         android:layout_marginLeft="10dp"
@@ -40,6 +41,7 @@
         android:text="@string/start_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <TextView
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
@@ -51,7 +53,6 @@
         android:layout_height="wrap_content" />
 
 
-
     <TextView
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
@@ -60,6 +61,7 @@
         android:text="@string/end_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <TextView
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
@@ -71,8 +73,6 @@
         android:layout_height="wrap_content" />
 
 
-
-
     <TextView
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
@@ -81,6 +81,7 @@
         android:text="@string/start_time_of_class"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <TextView
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
@@ -92,8 +93,6 @@
         android:layout_height="wrap_content" />
 
 
-
-
     <TextView
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
@@ -102,6 +101,7 @@
         android:text="@string/stop_time_of_class"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <TextView
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
@@ -113,7 +113,6 @@
         android:layout_height="wrap_content" />
 
 
-
     <TextView
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
@@ -122,6 +121,7 @@
         android:text="@string/week_days"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <TextView
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
@@ -141,6 +141,7 @@
         android:text="@string/class_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <TextView
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
@@ -160,6 +161,7 @@
         android:text="@string/subject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <TextView
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
@@ -171,7 +173,6 @@
         android:layout_height="wrap_content" />
 
 
-
     <EditText
         android:layout_marginTop="20dp"
         android:id="@+id/et_mentor_response_message"
@@ -179,37 +180,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:hint="@string/mentor_response_for_schedule_request_message"/>
-
-
-
-
-
-
-
+        android:hint="@string/mentor_response_for_schedule_request_message" />
 
 
     <Button
         android:id="@+id/b_profile"
-        android:layout_above="@id/ll_actions"
+        android:layout_above="@+id/ll_actions"
         android:text="@string/view_profile"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/ll_actions"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/b_accept"
             android:text="@string/action_accept"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content" />
+
         <Button
             android:id="@+id/b_decline"
             android:layout_width="0dp"
