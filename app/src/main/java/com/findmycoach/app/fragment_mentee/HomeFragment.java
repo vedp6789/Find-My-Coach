@@ -77,6 +77,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private static int widthSubCategoryButton;
     private List<Button> daysButton;
     private Button selectedCategory;
+    private String type;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -155,7 +156,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
 
         if (widthSubCategoryButton == 0)
-            widthSubCategoryButton = searchButton.getWidth() / (data.size() > 0 ? data.size() : 1);
+            widthSubCategoryButton = (searchButton.getWidth() / (data.size() > 0 ? data.size() : 1)) + 25;
 
         ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(widthSubCategoryButton, 90);
 
@@ -182,7 +183,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             button.setText(datum.getName());
             button.setLayoutParams(layoutParams);
             button.setTag(datum.getId());
-            button.setTextSize(9.0f);
+            button.setTextSize(12.0f);
             subCategoryLayout.addView(button);
             categoriesButtons.add(button);
         }
@@ -215,26 +216,91 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             @Override
             public void onClick(View v) {
                 if(selectedCategory != null){
+
+                    type = getActivity().getResources().getString(R.string.beginner).toLowerCase();
+
+                    String selectedType = subCategoryTextView.getText().toString().toLowerCase();
+
+                    if(selectedType.contains(getActivity().getResources().getString(R.string.intermediate).toLowerCase()))
+                        type = getActivity().getResources().getString(R.string.intermediate).toLowerCase();
+
+                    if(selectedType.contains(getActivity().getResources().getString(R.string.advance).toLowerCase()))
+                        type = getActivity().getResources().getString(R.string.advance).toLowerCase();
+
+                    final int purple = getActivity().getResources().getColor(R.color.purple);
+                    final int purpleLight = getActivity().getResources().getColor(R.color.purple_light);
+
                     final Dialog dialog = new Dialog(getActivity());
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    ListView listView = new ListView(getActivity());
+                    dialog.setContentView(R.layout.sub_category_dialog);
+
+                    final Button beginner = (Button) dialog.findViewById(R.id.beginner);
+                    final Button intermediate = (Button) dialog.findViewById(R.id.intermediate);
+                    final Button advance = (Button) dialog.findViewById(R.id.advance);
+
+                    if(type.equalsIgnoreCase(getActivity().getResources().getString(R.string.beginner)))
+                        beginner.setBackgroundColor(purpleLight);
+                    else if(type.equalsIgnoreCase(getActivity().getResources().getString(R.string.intermediate)))
+                        intermediate.setBackgroundColor(purpleLight);
+                    else if(type.equalsIgnoreCase(getActivity().getResources().getString(R.string.advance)))
+                        advance.setBackgroundColor(purpleLight);
+
+                    View.OnClickListener listener = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int id = v.getId();
+
+                            if(id == R.id.beginner) {
+                                beginner.setBackgroundColor(purpleLight);
+                                type = getActivity().getResources().getString(R.string.beginner).toLowerCase();
+                            }
+                            else
+                                beginner.setBackgroundColor(purple);
+
+                            if(id == R.id.intermediate) {
+                                intermediate.setBackgroundColor(purpleLight);
+                                type = getActivity().getResources().getString(R.string.intermediate).toLowerCase();
+                            }
+                            else
+                                intermediate.setBackgroundColor(purple);
+
+                            if(id == R.id.advance) {
+                                advance.setBackgroundColor(purpleLight);
+                                type = getActivity().getResources().getString(R.string.advance).toLowerCase();
+                            }
+                            else
+                                advance.setBackgroundColor(purple);
+
+
+                        }
+                    };
+
+                    beginner.setOnClickListener(listener);
+                    intermediate.setOnClickListener(listener);
+                    advance.setOnClickListener(listener);
+
+
+                    ListView listView = (ListView) dialog.findViewById(R.id.subCategoryListView);
+
                     listView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subCatNameMap.get(selectedCategory.getTag())));
 
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             String first = subCatNameMap.get(selectedCategory.getTag())[position];
-                            String next = "<font color='#AFA4C4'> - advance</font>";
+                            String next = "<font color='#AFA4C4'> - " + type + "</font>";
                             subCategoryTextView.setText(Html.fromHtml(first + next));
                             subCategoryTextView.setTag(subCatIdMap.get(selectedCategory.getTag())[position]);
                             dialog.dismiss();
                         }
                     });
 
-                    dialog.setContentView(listView);
                     dialog.show();
+
                 }
             }
+
+
         });
 
         if (categoriesButtons.size() > 0) {
@@ -369,20 +435,40 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         for (final Button b : daysButton) {
             b.setTag(b.getId(), 0);
 
+            final int id = b.getId();
+
+           restoreButtonInitialState(b, id);
+
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int tag = (Integer) b.getTag(b.getId());
-                    if (tag == 0)
+                    if (tag == 0) {
                         b.setTag(b.getId(), 1);
-                    else
+                        b.setBackgroundColor(getActivity().getResources().getColor(R.color.purple));
+                        b.setTextColor(getActivity().getResources().getColor(R.color.white));
+                    }
+                    else {
                         b.setTag(b.getId(), 0);
+                       restoreButtonInitialState(b, id);
+                    }
 
                 }
             });
         }
 
+    }
 
+    private void restoreButtonInitialState(Button b, int id) {
+        switch (id){
+            case R.id.sun:case R.id.tue :case R.id.thu:case R.id.sat:
+                b.setBackgroundColor(getActivity().getResources().getColor(R.color.white));
+                b.setTextColor(getActivity().getResources().getColor(R.color.purple));
+                break;
+            case R.id.mon:case R.id.wed:case R.id.fri:
+                b.setBackgroundColor(getActivity().getResources().getColor(R.color.purple_light));
+                break;
+        }
     }
 
     private void initialize(View view) {

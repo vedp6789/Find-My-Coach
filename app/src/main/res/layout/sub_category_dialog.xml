@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_button_height"
+        android:weightSum="3">
+
+        <Button
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:id="@+id/beginner"
+            android:background="@color/purple"
+            android:textColor="@color/white"
+            android:text="@string/beginner"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <Button
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:id="@+id/intermediate"
+            android:background="@color/purple"
+            android:textColor="@color/white"
+            android:text="@string/intermediate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <Button
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:id="@+id/advance"
+            android:background="@color/purple"
+            android:textColor="@color/white"
+            android:text="@string/advance"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/subCategoryListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

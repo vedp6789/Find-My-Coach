@@ -757,6 +757,10 @@
     <string name="submit_rating">Submit Rating</string>
     <string name="view_profile">View Profile</string>
 
+    <string name="beginner">Beginner</string>
+    <string name="intermediate">Intermediate</string>
+    <string name="advance">Advance</string>
+
 
     <!-- Actions -->
 
