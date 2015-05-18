@@ -37,6 +37,7 @@ public class MentorNotificationActions extends Activity implements Callback{
     String[] week_days;
     String image_url;
     ProgressDialog progressDialog;
+    private String TAG="FMC";
 
 
     @Override
@@ -61,8 +62,8 @@ public class MentorNotificationActions extends Activity implements Callback{
                 String month = getResources().getStringArray(R.array.months)[Integer.parseInt(start_date.split("-")[1]) - 1];
                 int start_day = Integer.parseInt(start_date.split("-")[2]);
                 int start_year = Integer.parseInt(start_date.split("-")[0]);
-                int start_hour = Integer.parseInt(start_time.split("-")[0]);
-                int start_min = Integer.parseInt(start_time.split("-")[1]);
+                int start_hour = Integer.parseInt(start_time.split(":")[0]);
+                int start_min = Integer.parseInt(start_time.split(":")[1]);
                 tv_date.setText(String.format(month + " %02d,%d \t %02d:%02d", start_day,start_year, start_hour, start_min));
 
                 connection_request_message_from_mentee = connectionRequest.getMessage();
@@ -70,11 +71,14 @@ public class MentorNotificationActions extends Activity implements Callback{
                     tv_conn_req_message_from_mentee.setText(connection_request_message_from_mentee);
                 }
                 image_url=connectionRequest.getImage_url();
-                Picasso.with(MentorNotificationActions.this)
-                        .load(image_url)
-                        .placeholder(R.drawable.user_icon)
-                        .error(R.drawable.user_icon)
-                        .into(iv_user_icon);
+                if(image_url != null){
+                    Picasso.with(MentorNotificationActions.this)
+                            .load(image_url)
+                            .placeholder(R.drawable.user_icon)
+                            .error(R.drawable.user_icon)
+                            .into(iv_user_icon);
+
+                }
 
 
 
@@ -93,6 +97,8 @@ public class MentorNotificationActions extends Activity implements Callback{
                         requestParams.add("id",connectionRequest.getConnection_id());
                         requestParams.add("user_group", StorageHelper.getUserGroup(MentorNotificationActions.this, "user_group"));
                         requestParams.add("status","accepted");
+                        Log.d(TAG,"connection_id: "+connectionRequest.getConnection_id() );
+
                         progressDialog.show();
                         NetworkClient.respondToConnectionRequest(MentorNotificationActions.this,requestParams,MentorNotificationActions.this,18);
                     }
@@ -174,11 +180,14 @@ public class MentorNotificationActions extends Activity implements Callback{
                 tv_class_type.setText(scheduleRequest.getClass_type());
 
                 image_url=scheduleRequest.getImage_url();
-                Picasso.with(MentorNotificationActions.this)
-                        .load(image_url)
-                        .placeholder(R.drawable.user_icon)
-                        .error(R.drawable.user_icon)
-                        .into(iv_user_icon);
+                if(image_url != null){
+                    Picasso.with(MentorNotificationActions.this)
+                            .load(image_url)
+                            .placeholder(R.drawable.user_icon)
+                            .error(R.drawable.user_icon)
+                            .into(iv_user_icon);
+
+                }
 
 
                 b_profile_view.setOnClickListener(new View.OnClickListener() {

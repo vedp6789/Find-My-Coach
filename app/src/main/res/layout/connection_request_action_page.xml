@@ -50,8 +50,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_message"
-        android:layout_centerHorizontal="true"
-        android:text="@string/view_profile"
         android:visibility="gone" />
 
     <LinearLayout

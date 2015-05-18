@@ -59,7 +59,7 @@ public class NotificationsFragment extends Fragment implements Callback {
     private void getNotifications() {
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
-        requestParams.add("user_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
+        requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         requestParams.add("user_group", StorageHelper.getUserGroup(getActivity(), "user_group"));
         NetworkClient.getUserNotifications(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 19);
 

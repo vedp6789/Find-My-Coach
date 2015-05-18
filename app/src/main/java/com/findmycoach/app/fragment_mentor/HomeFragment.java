@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment implements Callback {
     private MentorNotificationTabsPagerAdapter mentorNotificationTabsPagerAdapter;
     private ProgressDialog progressDialog;
     MentorNotifications mentorNotifications;
-
+    private String TAG = "FMC";
 
     public HomeFragment() {
         // Required empty public constructor
@@ -68,8 +68,10 @@ public class HomeFragment extends Fragment implements Callback {
 
     private void getNotifications() {
         RequestParams requestParams = new RequestParams();
-        requestParams.add("user_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
+        requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         requestParams.add("user_group", StorageHelper.getUserDetails(getActivity(), "user_group"));
+        Log.d(TAG, "Notification data for: " + " user_id: " + StorageHelper.getUserDetails(getActivity(), "user_id") + " user_group: " + StorageHelper.getUserGroup(getActivity(), "user_group"));
+
         progressDialog.show();
         NetworkClient.getUserNotifications(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 19);
     }
@@ -128,8 +130,13 @@ public class HomeFragment extends Fragment implements Callback {
                         if (title.equalsIgnoreCase("Connection request")) {
                             ConnectionRequest connectionRequest = new ConnectionRequest();
                             connectionRequest.setId(jsonObject_notification.getString("id"));
+                            String image_url = jsonObject_notification.getString("image");
+                            Log.d(TAG,"image url not found");
+                            if (image_url != null) {
+                                connectionRequest.setImage_url(jsonObject_notification.getString("image"));
+                            }
                             connectionRequest.setImage_url(jsonObject_notification.getString("image"));
-                            connectionRequest.setConnection_id("connection_id");
+                            connectionRequest.setConnection_id(jsonObject_notification.getString("connection_id"));
                             connectionRequest.setStudent_id(jsonObject_notification.getString("student_id"));
                             connectionRequest.setMessage(jsonObject_notification.getString("message"));
                             connectionRequest.setFirst_name(jsonObject_notification.getString("first_name"));
@@ -168,6 +175,7 @@ public class HomeFragment extends Fragment implements Callback {
 
                     mentorNotifications.setList_of_connection_request(connectionRequests);
                     mentorNotifications.setList_of_schedule_request(scheduleRequests);
+                    Log.d(TAG,"update mentor notification");
 
                     mentorNotificationTabsPagerAdapter = new MentorNotificationTabsPagerAdapter(getActivity().getSupportFragmentManager(), mentorNotifications);
                     notifications_on_viewpager.setAdapter(mentorNotificationTabsPagerAdapter);

@@ -35,12 +35,16 @@ public class MenteeNotificationActions extends Activity {
         try {
             jsonObject_notification = new JSONObject(getIntent().getStringExtra("json_string"));
             first_name = jsonObject_notification.getString("first_name");
+
             image_url = jsonObject_notification.getString("image");
-            Picasso.with(MenteeNotificationActions.this)
-                    .load(image_url)
-                    .placeholder(R.drawable.user_icon)
-                    .error(R.drawable.user_icon)
-                    .into(imageView_user_icon);
+            if(image_url != null){
+                Picasso.with(MenteeNotificationActions.this)
+                        .load(image_url)
+                        .placeholder(R.drawable.user_icon)
+                        .error(R.drawable.user_icon)
+                        .into(imageView_user_icon);
+            }
+
 
 
             switch (action_for) {
