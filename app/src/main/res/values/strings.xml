@@ -518,6 +518,8 @@
     <string name="start_time_of_class">Start time</string>
     <string name="stop_time_of_class">Stop time</string>
     <string name="class_type">Type</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
 
 
 

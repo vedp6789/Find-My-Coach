@@ -134,8 +134,8 @@ public class MentorNotificationActions extends Activity implements Callback {
                 stop_time = scheduleRequest.getStop_time();
                 week_days = scheduleRequest.getWeek_days();
 
-                tv_start_date.setText(String.format("%02d-%02d-%2d", start_date.split("-")[2], start_date.split("-")[1], start_date.split("-")[0]));
-                tv_stop_date.setText(String.format("%02d-%02d-%2d", stop_date.split("-")[2], stop_date.split("-")[1], stop_date.split("-")[0]));
+                tv_start_date.setText(String.format("%02d-%02d-%d", Integer.parseInt(start_date.split("-")[2]), Integer.parseInt(start_date.split("-")[1]), Integer.parseInt(start_date.split("-")[0])));
+                tv_stop_date.setText(String.format("%02d-%02d-%d", Integer.parseInt(stop_date.split("-")[2]), Integer.parseInt(stop_date.split("-")[1]), Integer.parseInt(stop_date.split("-")[0])));
                 tv_start_time.setText(String.format("%02d:%02d", start_time.split(":")[0], start_time.split(":")[1]));
                 tv_stop_time.setText(String.format("%02d:%02d", stop_time.split(":")[0], stop_time.split(":")[1]));
 

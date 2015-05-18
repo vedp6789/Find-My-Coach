@@ -84,6 +84,7 @@ public class NotificationsFragment extends Fragment implements Callback {
                         if (jsonArray_notifications.length() > 0) {
                             JSONObject jsonObject_notification = jsonArray_notifications.getJSONObject(position);
                             String title = jsonObject_notification.getString("title");
+                            String status = jsonObject_notification.getString("status");
                             switch (title) {
                                 case "Connection accepted":
                                     action_for = "connection_accepted";
@@ -101,6 +102,7 @@ public class NotificationsFragment extends Fragment implements Callback {
                             Intent intent = new Intent(getActivity(), MenteeNotificationActions.class);
                             intent.putExtra("action_for", action_for);
                             intent.putExtra("json_string", jsonObject_notification.toString());
+                            if(status.equals("unread"))
                             startActivity(intent);
 
                         }

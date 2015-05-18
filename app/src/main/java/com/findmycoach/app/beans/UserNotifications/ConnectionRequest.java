@@ -18,6 +18,15 @@ public class ConnectionRequest implements Parcelable {
     private String last_name;
     private String start_date;
     private String stop_date;
+    private String status;   /*read or unread*/
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getImage_url() {
         return image_url;
@@ -107,6 +116,7 @@ public class ConnectionRequest implements Parcelable {
         dest.writeString(this.start_date);
         dest.writeString(this.start_time);
         dest.writeString(this.subject);
+        dest.writeString(this.status);
     }
 
     public String getStart_date() {
@@ -140,7 +150,7 @@ public class ConnectionRequest implements Parcelable {
         this.start_date=parcel.readString();
         this.start_time=parcel.readString();
         this.subject=parcel.readString();
-
+        this.status=parcel.readString();
 
     }
 

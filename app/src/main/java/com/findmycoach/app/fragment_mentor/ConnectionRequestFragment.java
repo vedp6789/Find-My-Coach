@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.findmycoach.app.activity.MentorNotificationActions;
 import com.findmycoach.app.adapter.ConnectionRequestRecyclerViewAdapter;
 import com.findmycoach.app.beans.UserNotifications.ConnectionRequest;
 import com.findmycoach.app.beans.UserNotifications.MentorNotifications;
+import com.findmycoach.app.util.DividerItemDecoration;
 import com.findmycoach.app.util.RecyclerItemClickListener;
 
 import java.util.ArrayList;
@@ -63,9 +65,12 @@ public class ConnectionRequestFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_connection_requests, container, false);
         Log.d("FMC", "ConnectionRequestFragment view creation ");
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_connection_requests);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
         recyclerView.setHasFixedSize(true);
+
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         adapter = new ConnectionRequestRecyclerViewAdapter(getActivity(), arrayList_of_connection_request);
         recyclerView.setAdapter(adapter);
@@ -79,10 +84,12 @@ public class ConnectionRequestFragment extends Fragment {
 
                               Bundle bundle=new Bundle();
                               ConnectionRequest connectionRequest=arrayList_of_connection_request.get(position);
+
                               bundle.putParcelable("conn_req_data",connectionRequest);
 
                               intent.putExtra("for","connection_request");
                               intent.putExtra("conn_req_bundle",bundle);
+                            if(connectionRequest.getStatus().equals("unread"))
                             startActivity(intent);
                         }
                     }

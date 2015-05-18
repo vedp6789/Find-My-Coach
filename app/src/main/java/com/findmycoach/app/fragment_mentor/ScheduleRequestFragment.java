@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.findmycoach.app.adapter.ScheduleRequestRecyclerViewAdapter;
 import com.findmycoach.app.beans.UserNotifications.ConnectionRequest;
 import com.findmycoach.app.beans.UserNotifications.MentorNotifications;
 import com.findmycoach.app.beans.UserNotifications.ScheduleRequest;
+import com.findmycoach.app.util.DividerItemDecoration;
 import com.findmycoach.app.util.RecyclerItemClickListener;
 
 import java.util.ArrayList;
@@ -63,9 +65,11 @@ public class ScheduleRequestFragment extends Fragment {
         Log.d("FMC", "scheduleRequestFragment view ");
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_schedule_requests);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         adapter = new ScheduleRequestRecyclerViewAdapter(getActivity(), arrayList_schedule_requests);
         recyclerView.setAdapter(adapter);
 
@@ -78,10 +82,15 @@ public class ScheduleRequestFragment extends Fragment {
                             Intent intent = new Intent(getActivity(), MentorNotificationActions.class);
                             Bundle bundle = new Bundle();
                             ScheduleRequest scheduleRequest = arrayList_schedule_requests.get(position);
+                            String status=scheduleRequest.getStatus();
+
                             bundle.putParcelable("schedule_req_data", scheduleRequest);
                             intent.putExtra("for", "schedule_request");
                             intent.putExtra("schedule_req_bundle", bundle);
+                            if(status.equals("unread"))
                             startActivity(intent);
+
+
                         }
                     }
                 })

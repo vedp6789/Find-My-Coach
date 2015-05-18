@@ -1,11 +1,13 @@
 package com.findmycoach.app.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,7 @@ private Context context;
     boolean notification_not_found;
     private String start_date;
     private  String TAG="FMC";
+    private long days;
     public MenteeNotificationRecyclerViewAdapter(Context context,JSONArray jsonArray_notifications){
         notification_not_found=false;
         this.context=context;
@@ -54,7 +57,8 @@ private Context context;
                 JSONObject jsonObject_notification=jsonArray_notifications.getJSONObject(position);
                 Log.d(TAG,"jsonobject to string : "+jsonObject_notification.toString());
                 String title=jsonObject_notification.getString("title");
-
+                String status=jsonObject_notification.getString("status");
+                holder.relativeLayout.setBackgroundColor(Color.LTGRAY);
 
                 //Connection accepted/Connection rejected/Schedule accepted/Schedule rejected
                 if(title.equals("Connection accepted") && title.equals("Connection rejected") ){
@@ -78,28 +82,40 @@ private Context context;
 
 
                 long difference=rightNow_in_millis-connection_request_start_date_in_millis;
-                long days = difference / (24 * 60 * 60 * 1000);
+                days = difference / (24 * 60 * 60 * 1000);
                 switch(title){
                     case "Connection accepted":
                         holder.tv_message.setText(first_name+context.getResources().getString(R.string.connection_request_accepted));
-                        holder.tv_message.setText(days+context.getResources().getString(R.string.days_ago));
+                        actionDay(holder);
                         break;
                     case "Connection rejected":
                         holder.tv_message.setText(first_name+context.getResources().getString(R.string.connection_request_rejected));
-                        holder.tv_message.setText(days+context.getResources().getString(R.string.days_ago));
+                        actionDay(holder);
                         break;
                     case "Schedule accepted":
                         holder.tv_message.setText(first_name+context.getResources().getString(R.string.schedule_request_accepted));
-                        holder.tv_message.setText(days+context.getResources().getString(R.string.days_ago));
+                        actionDay(holder);
                         break;
                     case "Schedule rejected":
                         holder.tv_message.setText(first_name+context.getResources().getString(R.string.schedule_request_rejected));
-                        holder.tv_message.setText(days+context.getResources().getString(R.string.days_ago));
+                        actionDay(holder);
                         break;
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    private void actionDay(ViewHolder holder) {
+        if(days == 0){
+            holder.tv_message.setText(context.getResources().getString(R.string.today));
+        }else{
+            if(days == 1){
+                holder.tv_message.setText(context.getResources().getString(R.string.yesterday));
+            }else{
+                holder.tv_message.setText(days+context.getResources().getString(R.string.days_ago));
             }
         }
     }
@@ -115,9 +131,11 @@ private Context context;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
+        RelativeLayout relativeLayout;
     TextView tv_message, tv_arrival_durations;
         public ViewHolder(View itemView) {
             super(itemView);
+            relativeLayout= (RelativeLayout) itemView.findViewById(R.id.rl_mentee_notification);
             tv_message= (TextView) itemView.findViewById(R.id.tv_mentee_notification_message);
             tv_arrival_durations= (TextView) itemView.findViewById(R.id.tv_mentee_message_duration);
         }

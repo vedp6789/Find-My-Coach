@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/caldroid_darker_gray">
+    android:background="@color/caldroid_darker_gray"
+    android:id="@+id/rl_connection_request_notification">
 
     <TextView
         android:id="@+id/tv_connection_request_message"
@@ -16,6 +17,7 @@
         />
     <TextView
         android:id="@+id/tv_how_old_message"
+        android:layout_below="@+id/tv_connection_request_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"

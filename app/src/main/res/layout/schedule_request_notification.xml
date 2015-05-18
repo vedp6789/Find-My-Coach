@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/rl_schedule_request_notification"
     android:background="@color/abc_search_url_text_normal">
 
     <TextView
@@ -20,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_below="@+id/tv_schedule_request_message"
         android:textSize="18dp"
         android:layout_marginRight="10dp"
         android:textColor="#000000"

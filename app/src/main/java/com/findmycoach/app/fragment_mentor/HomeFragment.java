@@ -127,6 +127,7 @@ public class HomeFragment extends Fragment implements Callback {
                     for (int notification_no = 0; notification_no < jsonArray_notifications.length(); notification_no++) {
 
                         JSONObject jsonObject_notification = jsonArray_notifications.getJSONObject(notification_no);
+                        Log.d(TAG,"jsonObject as string "+jsonObject_notification.toString());
                         String title = jsonObject_notification.getString("title");
                         if (title.equalsIgnoreCase("Connection request")) {
                             ConnectionRequest connectionRequest = new ConnectionRequest();
@@ -145,9 +146,12 @@ public class HomeFragment extends Fragment implements Callback {
                             connectionRequest.setStart_date(jsonObject_notification.getString("created_date"));
                             connectionRequest.setStart_time(jsonObject_notification.getString("created_time"));
                             connectionRequest.setSubject(jsonObject_notification.getString("subject"));
+                            connectionRequest.setStatus(jsonObject_notification.getString("status"));
+
                             connectionRequests.add(connectionRequest);
                         } else {
                             if (title.equalsIgnoreCase("Schedule request")) {
+                                Log.d(TAG,"Inside Schedule request type title");
                                 ScheduleRequest scheduleRequest = new ScheduleRequest();
                                 scheduleRequest.setId(jsonObject_notification.getString("id"));
                                 scheduleRequest.setImage_url(jsonObject_notification.getString("image"));
@@ -162,13 +166,15 @@ public class HomeFragment extends Fragment implements Callback {
                                 scheduleRequest.setStop_time(jsonObject_notification.getString("stop_time"));
                                 scheduleRequest.setSubject(jsonObject_notification.getString("subject"));
                                 scheduleRequest.setClass_type(jsonObject_notification.getString("class_type"));
-                                JSONArray week_days_jsonArray = jsonObject.getJSONArray("week_days");
+                                JSONArray week_days_jsonArray = jsonObject_notification.getJSONArray("week_days");
                                 String[] week_days = new String[week_days_jsonArray.length()];
                                 for (int week_day = 0; week_day < week_days_jsonArray.length(); week_day++) {
                                     week_days[week_day] = week_days_jsonArray.getString(week_day);
                                 }
 
                                 scheduleRequest.setWeek_days(week_days);
+                                scheduleRequest.setStatus(jsonObject_notification.getString("status"));
+
                                 scheduleRequests.add(scheduleRequest);
                             }
                         }

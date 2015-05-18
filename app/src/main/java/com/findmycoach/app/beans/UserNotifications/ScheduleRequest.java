@@ -15,6 +15,15 @@ public class ScheduleRequest implements Parcelable {
     private String first_name;
     private String last_name;
     private String start_date;
+    private String status; /* read or unread*/
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getImage_url() {
         return image_url;
@@ -155,7 +164,7 @@ public class ScheduleRequest implements Parcelable {
         this.subject = parcel.readString();
         this.class_type = parcel.readString();
         this.week_days = parcel.createStringArray();
-
+        this.status= parcel.readString();
 
     }
 
@@ -191,5 +200,6 @@ public class ScheduleRequest implements Parcelable {
         dest.writeString(this.subject);
         dest.writeString(this.class_type);
         dest.writeStringArray(this.week_days);
+        dest.writeString(this.status);
     }
 }
