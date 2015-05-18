@@ -3,6 +3,8 @@ package com.findmycoach.app.fragment_mentor;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,8 +36,10 @@ public class ProfileFragment extends Fragment implements Callback {
     private ProgressDialog progressDialog;
     private ImageView profileImage;
     private TextView profileName;
+    private TextView profileEmail;
+    private TextView profileDob;
     private TextView profileAddress;
-    private TextView profileRatting;
+    private RatingBar profileRatting;
     private TextView profileExperience;
     private TextView profileAccomplishment;
     private TextView profileCharges;
@@ -43,7 +48,6 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView profilePhone;
     private Data userInfo = null;
     private ImageLoader imgLoader;
-    private ImageView backButton;
     private ImageView editProfile;
     private TextView title;
 
@@ -90,17 +94,26 @@ public class ProfileFragment extends Fragment implements Callback {
         profileImage = (ImageView) view.findViewById(R.id.profile_image);
         profileName = (TextView) view.findViewById(R.id.profile_name);
         profileAddress = (TextView) view.findViewById(R.id.profile_address);
-        profileRatting = (TextView) view.findViewById(R.id.profile_rating);
+        profileRatting = (RatingBar) view.findViewById(R.id.profile_rating);
         profileExperience = (TextView) view.findViewById(R.id.profile_experience);
         profileAccomplishment = (TextView) view.findViewById(R.id.profile_accomplishment);
         profileCharges = (TextView) view.findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) view.findViewById(R.id.profile_travel_available);
         areaOfCoaching = (TextView) view.findViewById(R.id.areas_of_coaching);
+        profileEmail = (TextView) view.findViewById(R.id.profile_email);
+        profileDob = (TextView) view.findViewById(R.id.profile_dob);
         profilePhone = (TextView) view.findViewById(R.id.profile_phone);
         editProfile = (ImageView) view.findViewById(R.id.menuItem);
-        backButton = (ImageView) view.findViewById(R.id.backButton);
         title = (TextView) view.findViewById(R.id.title);
+        title.setText(getResources().getString(R.string.profile));
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
+
+        view.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
     }
 
     @Override
@@ -135,6 +148,14 @@ public class ProfileFragment extends Fragment implements Callback {
 
     private void populateFields() {
         profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
+        try{
+            profileEmail.setText(userInfo.getEmail());
+        }catch (Exception e){
+        }
+        try{
+            profileDob.setText((String) userInfo.getDob());
+        }catch (Exception e){
+        }
         String address = "";
         if (userInfo.getAddress() != null) {
             address = address + userInfo.getAddress() + ", ";
@@ -156,8 +177,7 @@ public class ProfileFragment extends Fragment implements Callback {
             profileExperience.setText(userInfo.getExperience() + " year(s)");
         }
         if (userInfo.getCharges() != null) {
-            //profileCharges.setText("\u20B9 " + (userInfo.getCharges().equals("0") ? userInfo.getChargesClass() + "per class": userInfo.getCharges() + "per hour"));
-            profileCharges.setText("\u20B9 " + (userInfo.getCharges().equals("0") ?userInfo.getCharges() + " per hour": userInfo.getCharges() + " per hour"));
+            profileCharges.setText("\u20B9 " + (userInfo.getCharges().equals("0") ?userInfo.getCharges() + "/hr": userInfo.getCharges() + "/hr"));
 
         }
 
@@ -178,7 +198,10 @@ public class ProfileFragment extends Fragment implements Callback {
         }
 
 
-        profileRatting.setText(userInfo.getRating());
+        profileRatting.setRating(3.5f);
+        LayerDrawable stars = (LayerDrawable) profileRatting.getProgressDrawable();
+        stars.getDrawable(2).setColorFilter(getActivity().getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);
+
         if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {
             profileTravelAvailable.setText(getResources().getString(R.string.yes));
         } else {

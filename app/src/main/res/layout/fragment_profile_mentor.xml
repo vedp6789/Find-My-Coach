@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context="com.findmycoach.app.fragment_mentor.ProfileFragment">
 
-    <include layout="@layout/header_back_name_menu"/>
+    <include layout="@layout/header_back_name_menu" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -17,220 +17,203 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="4">
-
-                <ImageView
-                    android:id="@+id/profile_image"
-                    android:layout_width="@dimen/user_image_height_width"
-                    android:layout_height="@dimen/user_image_height_width"
-                    android:layout_margin="8dp"
-                    android:src="@drawable/user_icon" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/profile_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/profile_phone"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:gravity="center_vertical"
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp" />
-                </LinearLayout>
-
-            </LinearLayout>
+            <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/profile_image"
+                android:layout_width="@dimen/user_image_height_width"
+                android:layout_height="@dimen/user_image_height_width"
+                android:layout_margin="8dp"
+                android:src="@drawable/user_icon" />
 
             <TextView
+                android:textStyle="bold"
+                android:id="@+id/profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_name" />
+
+            <RatingBar
+                android:layout_gravity="center"
+                android:id="@+id/profile_rating"
+                android:numStars="5"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_email_id"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_heading"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_gravity="center"
+                android:id="@+id/profile_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
+
+            <TextView
+                android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_phone"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_heading"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_gravity="center"
+                android:id="@+id/profile_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
+
+            <TextView
+                android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_date_of_birth"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_heading"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_gravity="center"
+                android:id="@+id/profile_dob"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
+
+            <TextView
+                android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_address"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_heading"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal" />
+
+
+            <TextView
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:textSize="@dimen/profile_details"
                 android:id="@+id/profile_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/purple" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:orientation="horizontal"
-                android:weightSum="4">
+                android:text="@string/prompt_experience"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_heading"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="2"
-                    android:text="@string/prompt_rating"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/profile_rating"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="2"
-                    android:gravity="center_vertical"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:id="@+id/profile_experience"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:orientation="horizontal"
-                android:weightSum="4">
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="2"
-                    android:text="@string/prompt_experience"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/profile_experience"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="2"
-                    android:gravity="center_vertical"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:orientation="horizontal"
-                android:weightSum="4">
+                android:text="@string/prompt_accomplishment"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_heading"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="2"
-                    android:text="@string/prompt_accomplishment"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/profile_accomplishment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="2"
-                    android:gravity="center_vertical"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_gravity="center"
+                android:id="@+id/profile_accomplishment"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:orientation="horizontal"
-                android:weightSum="4">
+                android:gravity="center_vertical"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="2"
-                    android:text="@string/prompt_charges"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/profile_charges"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="2"
-                    android:gravity="center_vertical"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:orientation="horizontal"
-                android:weightSum="4">
+                android:text="@string/prompt_area_of_coaching"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_heading"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="2"
-                    android:text="@string/prompt_willing_to_travel"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/profile_travel_available"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="2"
-                    android:gravity="center_vertical"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_gravity="center"
+                android:id="@+id/areas_of_coaching"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:orientation="horizontal"
-                android:weightSum="4">
+                android:gravity="center_vertical"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:text="@string/prompt_area_of_coaching"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:layout_weight="2"
-                    android:textStyle="bold" />
+            <TextView
+                android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_charges"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_heading"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/areas_of_coaching"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="2"
-                    android:gravity="center_vertical"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
-            </LinearLayout>
+            <TextView
+                android:layout_gravity="center"
+                android:id="@+id/profile_charges"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
+
+            <TextView
+                android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_willing_to_travel"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_heading"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_gravity="center"
+                android:id="@+id/profile_travel_available"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details"
+                android:layout_marginBottom="@dimen/back_margin"/>
+
 
         </LinearLayout>
 
