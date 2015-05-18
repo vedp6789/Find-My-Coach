@@ -1,7 +1,5 @@
 package com.findmycoach.app.activity;
 
-import android.app.ActionBar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -9,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.fragment.ChangePasswordFragment;
@@ -28,9 +27,9 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
         setContentView(R.layout.activity_settings);
         String loginWith = StorageHelper.getUserDetails(this, "login_with");
         Log.e("LOGIN", loginWith);
-        if(!loginWith.equalsIgnoreCase("Login"))
+        if (!loginWith.equalsIgnoreCase("Login"))
             findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
-        if(DashboardActivity.dashboardActivity.user_group == 2)
+        if (DashboardActivity.dashboardActivity.user_group == 2)
             findViewById(R.id.paymentOption).setVisibility(View.VISIBLE);
         initView();
     }
@@ -40,6 +39,11 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
         findViewById(R.id.change_password).setOnClickListener(this);
         findViewById(R.id.change_phone_no).setOnClickListener(this);
         findViewById(R.id.paymentMethods).setOnClickListener(this);
+        findViewById(R.id.backButton).setOnClickListener(this);
+
+        TextView textView = (TextView) findViewById(R.id.title);
+        textView.setText(getResources().getString(R.string.action_settings));
+
         applyActionbarProperties();
     }
 
@@ -76,6 +80,10 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
 
             case R.id.paymentMethods:
                 startActivity(new Intent(this, PaymentDetailsActivity.class));
+                break;
+
+            case R.id.backButton:
+                finish();
                 break;
         }
     }

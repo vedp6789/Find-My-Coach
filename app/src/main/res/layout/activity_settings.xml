@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <include layout="@layout/header_back_name_menu" />
+
 
     <TextView
         android:layout_width="match_parent"
@@ -11,13 +13,14 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/profile"
         android:padding="@dimen/textView_padding_margin"
+        android:textColor="@color/purple"
         android:id="@+id/profileSettings" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:orientation="vertical"
-        android:background="#000000" />
+        android:background="@color/purple_light" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,13 +34,14 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/change_password"
             android:padding="@dimen/textView_padding_margin"
+            android:textColor="@color/purple"
             android:id="@+id/change_password" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:orientation="vertical"
-            android:background="#000000" />
+            android:background="@color/purple_light" />
     </LinearLayout>
 
     <TextView
@@ -46,13 +50,14 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/change_phone"
         android:padding="@dimen/textView_padding_margin"
+        android:textColor="@color/purple"
         android:id="@+id/change_phone_no" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:orientation="vertical"
-        android:background="#000000" />
+        android:background="@color/purple_light" />
 
     <LinearLayout
         android:visibility="gone"
@@ -67,13 +72,14 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/payment"
             android:padding="@dimen/textView_padding_margin"
+            android:textColor="@color/purple"
             android:id="@+id/paymentMethods" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:orientation="vertical"
-            android:background="#000000" />
+            android:background="@color/purple_light" />
 
     </LinearLayout>
 
