@@ -253,8 +253,8 @@
 
                         <Button
                             android:layout_margin="@dimen/days_margin"
-                            android:background="@color/purple_light"
-                            android:textColor="@color/white"
+                            android:background="@color/white"
+                            android:textColor="@color/purple"
                             android:text="@string/m"
                             android:id="@+id/mon"
                             android:layout_width="0dp"
@@ -273,8 +273,8 @@
 
                         <Button
                             android:layout_margin="@dimen/days_margin"
-                            android:background="@color/purple_light"
-                            android:textColor="@color/white"
+                            android:background="@color/white"
+                            android:textColor="@color/purple"
                             android:text="@string/w"
                             android:id="@+id/wed"
                             android:layout_width="0dp"
@@ -302,8 +302,8 @@
 
                         <Button
                             android:layout_margin="@dimen/days_margin"
-                            android:background="@color/purple_light"
-                            android:textColor="@color/white"
+                            android:background="@color/white"
+                            android:textColor="@color/purple"
                             android:text="@string/f"
                             android:id="@+id/fri"
                             android:layout_width="0dp"

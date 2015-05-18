@@ -15,7 +15,10 @@
     <dimen name="days_margin">4dp</dimen>
 
 
+    <dimen name="profile_heading">12sp</dimen>
+    <dimen name="profile_details">16sp</dimen>
+    <dimen name="profile_name">20sp</dimen>
 
-    <dimen name="user_image_height_width">105dp</dimen>
+    <dimen name="user_image_height_width">80dp</dimen>
 
 </resources>

@@ -7,12 +7,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +43,9 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView profilePhone;
     private Data userInfo = null;
     private ImageLoader imgLoader;
-    private ImageButton editProfile;
+    private ImageView backButton;
+    private ImageView editProfile;
+    private TextView title;
 
     private static final String TAG="FMC:";
 
@@ -99,7 +97,10 @@ public class ProfileFragment extends Fragment implements Callback {
         profileTravelAvailable = (TextView) view.findViewById(R.id.profile_travel_available);
         areaOfCoaching = (TextView) view.findViewById(R.id.areas_of_coaching);
         profilePhone = (TextView) view.findViewById(R.id.profile_phone);
-        editProfile = (ImageButton) view.findViewById(R.id.editProfile);
+        editProfile = (ImageView) view.findViewById(R.id.menuItem);
+        backButton = (ImageView) view.findViewById(R.id.backButton);
+        title = (TextView) view.findViewById(R.id.title);
+        editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
     }
 
     @Override

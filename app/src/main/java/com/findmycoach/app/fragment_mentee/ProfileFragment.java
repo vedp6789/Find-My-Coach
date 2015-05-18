@@ -7,13 +7,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +31,8 @@ public class ProfileFragment extends Fragment implements Callback {
     private ProgressDialog progressDialog;
     private ImageView profileImage;
     private TextView profileName;
+    private TextView profileEmail;
+    private TextView profileDob;
     private TextView profileAddress;
     private TextView trainingLocation;
     private TextView mentorFor;
@@ -43,7 +40,8 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView profilePhone;
     private Data userInfo = null;
     private ImageLoader imgLoader;
-    private ImageButton editProfile;
+    private ImageView editProfile;
+    private TextView title;
 
     private static final String TAG="TAG";
 
@@ -93,7 +91,19 @@ public class ProfileFragment extends Fragment implements Callback {
         mentorFor = (TextView) view.findViewById(R.id.mentor_for);
         coachingType = (TextView) view.findViewById(R.id.coaching_type);
         profilePhone = (TextView) view.findViewById(R.id.profile_phone);
-        editProfile = (ImageButton) view.findViewById(R.id.editProfile);
+        profileEmail = (TextView) view.findViewById(R.id.profile_email);
+        profileDob = (TextView) view.findViewById(R.id.profile_dob);
+        editProfile = (ImageView) view.findViewById(R.id.menuItem);
+        title = (TextView) view.findViewById(R.id.title);
+        title.setText(getResources().getString(R.string.profile));
+        editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
+
+        view.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
     }
 
 
@@ -130,7 +140,14 @@ public class ProfileFragment extends Fragment implements Callback {
         try{
             profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
         }catch (Exception e){
-            e.printStackTrace();
+        }
+        try{
+            profileEmail.setText(userInfo.getEmail());
+        }catch (Exception e){
+        }
+        try{
+            profileDob.setText((String) userInfo.getDob());
+        }catch (Exception e){
         }
         String address = "";
         if (userInfo.getAddress() != null) {

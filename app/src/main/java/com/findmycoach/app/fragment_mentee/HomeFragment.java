@@ -156,7 +156,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
 
         if (widthSubCategoryButton == 0)
-            widthSubCategoryButton = (searchButton.getWidth() / (data.size() > 0 ? data.size() : 1)) + 25;
+            widthSubCategoryButton = searchButton.getWidth() / (data.size() > 0 ? data.size() : 1);
 
         ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(widthSubCategoryButton, 90);
 
@@ -166,8 +166,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         for (Datum datum : data) {
 
             int row = datum.getDataSub().size() + 1;
-            String[] name = new String[row-1];
-            String[] id = new String[row-1];
+            String[] name = new String[row - 1];
+            String[] id = new String[row - 1];
             for (int x = 0; x < row - 1; x++) {
                 name[x] = datum.getDataSub().get(x).getName();
                 id[x] = datum.getDataSub().get(x).getId();
@@ -215,16 +215,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         subCategoryTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(selectedCategory != null){
+                if (selectedCategory != null) {
 
                     type = getActivity().getResources().getString(R.string.beginner).toLowerCase();
 
                     String selectedType = subCategoryTextView.getText().toString().toLowerCase();
 
-                    if(selectedType.contains(getActivity().getResources().getString(R.string.intermediate).toLowerCase()))
+                    if (selectedType.contains(getActivity().getResources().getString(R.string.intermediate).toLowerCase()))
                         type = getActivity().getResources().getString(R.string.intermediate).toLowerCase();
 
-                    if(selectedType.contains(getActivity().getResources().getString(R.string.advance).toLowerCase()))
+                    if (selectedType.contains(getActivity().getResources().getString(R.string.advance).toLowerCase()))
                         type = getActivity().getResources().getString(R.string.advance).toLowerCase();
 
                     final int purple = getActivity().getResources().getColor(R.color.purple);
@@ -238,11 +238,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                     final Button intermediate = (Button) dialog.findViewById(R.id.intermediate);
                     final Button advance = (Button) dialog.findViewById(R.id.advance);
 
-                    if(type.equalsIgnoreCase(getActivity().getResources().getString(R.string.beginner)))
+                    if (type.equalsIgnoreCase(getActivity().getResources().getString(R.string.beginner)))
                         beginner.setBackgroundColor(purpleLight);
-                    else if(type.equalsIgnoreCase(getActivity().getResources().getString(R.string.intermediate)))
+                    else if (type.equalsIgnoreCase(getActivity().getResources().getString(R.string.intermediate)))
                         intermediate.setBackgroundColor(purpleLight);
-                    else if(type.equalsIgnoreCase(getActivity().getResources().getString(R.string.advance)))
+                    else if (type.equalsIgnoreCase(getActivity().getResources().getString(R.string.advance)))
                         advance.setBackgroundColor(purpleLight);
 
                     View.OnClickListener listener = new View.OnClickListener() {
@@ -250,25 +250,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                         public void onClick(View v) {
                             int id = v.getId();
 
-                            if(id == R.id.beginner) {
+                            if (id == R.id.beginner) {
                                 beginner.setBackgroundColor(purpleLight);
                                 type = getActivity().getResources().getString(R.string.beginner).toLowerCase();
-                            }
-                            else
+                            } else
                                 beginner.setBackgroundColor(purple);
 
-                            if(id == R.id.intermediate) {
+                            if (id == R.id.intermediate) {
                                 intermediate.setBackgroundColor(purpleLight);
                                 type = getActivity().getResources().getString(R.string.intermediate).toLowerCase();
-                            }
-                            else
+                            } else
                                 intermediate.setBackgroundColor(purple);
 
-                            if(id == R.id.advance) {
+                            if (id == R.id.advance) {
                                 advance.setBackgroundColor(purpleLight);
                                 type = getActivity().getResources().getString(R.string.advance).toLowerCase();
-                            }
-                            else
+                            } else
                                 advance.setBackgroundColor(purple);
 
 
@@ -306,7 +303,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         if (categoriesButtons.size() > 0) {
             categoriesButtons.get(0).performClick();
         }
-
 
 
         fragmentView.findViewById(R.id.subCategoryLayoutParent).setVisibility(View.VISIBLE);
@@ -435,9 +431,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         for (final Button b : daysButton) {
             b.setTag(b.getId(), 0);
 
-            final int id = b.getId();
-
-           restoreButtonInitialState(b, id);
+            b.setBackgroundColor(getActivity().getResources().getColor(R.color.white));
+            b.setTextColor(getActivity().getResources().getColor(R.color.purple));
 
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -445,30 +440,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                     int tag = (Integer) b.getTag(b.getId());
                     if (tag == 0) {
                         b.setTag(b.getId(), 1);
-                        b.setBackgroundColor(getActivity().getResources().getColor(R.color.purple));
+                        b.setBackgroundColor(getActivity().getResources().getColor(R.color.purple_light));
                         b.setTextColor(getActivity().getResources().getColor(R.color.white));
-                    }
-                    else {
+                    } else {
                         b.setTag(b.getId(), 0);
-                       restoreButtonInitialState(b, id);
+                        b.setBackgroundColor(getActivity().getResources().getColor(R.color.white));
+                        b.setTextColor(getActivity().getResources().getColor(R.color.purple));
                     }
 
                 }
             });
         }
 
-    }
-
-    private void restoreButtonInitialState(Button b, int id) {
-        switch (id){
-            case R.id.sun:case R.id.tue :case R.id.thu:case R.id.sat:
-                b.setBackgroundColor(getActivity().getResources().getColor(R.color.white));
-                b.setTextColor(getActivity().getResources().getColor(R.color.purple));
-                break;
-            case R.id.mon:case R.id.wed:case R.id.fri:
-                b.setBackgroundColor(getActivity().getResources().getColor(R.color.purple_light));
-                break;
-        }
     }
 
     private void initialize(View view) {
