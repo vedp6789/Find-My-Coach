@@ -2,16 +2,21 @@ package com.findmycoach.app.fragment_mentor;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +33,7 @@ import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileFragment extends Fragment implements Callback {
@@ -43,7 +49,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView profileExperience;
     private TextView profileAccomplishment;
     private TextView profileCharges;
-    private TextView areaOfCoaching;
+    private LinearLayout areaOfCoaching;
     private TextView profileTravelAvailable;
     private TextView profilePhone;
     private Data userInfo = null;
@@ -51,7 +57,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageView editProfile;
     private TextView title;
 
-    private static final String TAG="FMC:";
+    private static final String TAG = "FMC:";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -99,7 +105,7 @@ public class ProfileFragment extends Fragment implements Callback {
         profileAccomplishment = (TextView) view.findViewById(R.id.profile_accomplishment);
         profileCharges = (TextView) view.findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) view.findViewById(R.id.profile_travel_available);
-        areaOfCoaching = (TextView) view.findViewById(R.id.areas_of_coaching);
+        areaOfCoaching = (LinearLayout) view.findViewById(R.id.areas_of_coaching);
         profileEmail = (TextView) view.findViewById(R.id.profile_email);
         profileDob = (TextView) view.findViewById(R.id.profile_dob);
         profilePhone = (TextView) view.findViewById(R.id.profile_phone);
@@ -148,13 +154,13 @@ public class ProfileFragment extends Fragment implements Callback {
 
     private void populateFields() {
         profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
-        try{
+        try {
             profileEmail.setText(userInfo.getEmail());
-        }catch (Exception e){
+        } catch (Exception e) {
         }
-        try{
+        try {
             profileDob.setText((String) userInfo.getDob());
-        }catch (Exception e){
+        } catch (Exception e) {
         }
         String address = "";
         if (userInfo.getAddress() != null) {
@@ -177,26 +183,22 @@ public class ProfileFragment extends Fragment implements Callback {
             profileExperience.setText(userInfo.getExperience() + " year(s)");
         }
         if (userInfo.getCharges() != null) {
-            profileCharges.setText("\u20B9 " + (userInfo.getCharges().equals("0") ?userInfo.getCharges() + "/hr": userInfo.getCharges() + "/hr"));
+            profileCharges.setText("\u20B9 " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
 
         }
 
         profilePhone.setText(userInfo.getPhonenumber());
         List<String> areaOfInterests = userInfo.getSubCategoryName();
-        if (areaOfInterests.size() > 0 && areaOfInterests.get(0)!=null && !areaOfInterests.get(0).trim().equals("")) {
-            String areaOfInterest = "";
-            for (int index = 0; index < areaOfInterests.size(); index++) {
-                if (index != 0) {
-                    areaOfInterest = areaOfInterest + ", " + areaOfInterests.get(index);
-                } else {
-                    areaOfInterest = areaOfInterest + areaOfInterests.get(index);
-                }
+        if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).trim().equals("")) {
+            List<Button> buttons = new ArrayList<>();
+            LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            for (String areaOfInterest : areaOfInterests) {
+                Button button = (Button) inflater.inflate(R.layout.button, null);
+                button.setText(areaOfInterest);
+                buttons.add(button);
             }
-            areaOfCoaching.setText(areaOfInterest);
-        }else{
-            areaOfCoaching.setText("");
+            populateViews(areaOfCoaching, buttons, getActivity());
         }
-
 
         profileRatting.setRating(3.5f);
         LayerDrawable stars = (LayerDrawable) profileRatting.getProgressDrawable();
@@ -223,6 +225,51 @@ public class ProfileFragment extends Fragment implements Callback {
                 }
             }
         });
+    }
+
+
+    private void populateViews(LinearLayout linearLayout, List<Button> views, Context context) {
+
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        linearLayout.removeAllViews();
+        int maxWidth = display.getWidth() - 40;
+
+        LinearLayout.LayoutParams params;
+        LinearLayout newLL = new LinearLayout(context);
+        newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        newLL.setOrientation(LinearLayout.HORIZONTAL);
+        newLL.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        int widthSoFar = 0;
+
+        for (Button view : views) {
+            LinearLayout LL = new LinearLayout(context);
+            LL.setOrientation(LinearLayout.HORIZONTAL);
+            LL.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
+            LL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            view.measure(0, 0);
+            params = new LinearLayout.LayoutParams(view.getMeasuredWidth(), profileEmail.getHeight());
+            params.setMargins(2, 2, 2, 2);
+
+            LL.addView(view, params);
+            LL.measure(0, 0);
+            widthSoFar += view.getMeasuredWidth();
+            if (widthSoFar >= maxWidth) {
+                linearLayout.addView(newLL);
+
+                newLL = new LinearLayout(context);
+                newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, profileEmail.getHeight()));
+                newLL.setOrientation(LinearLayout.HORIZONTAL);
+                newLL.setGravity(Gravity.CENTER_HORIZONTAL);
+                params = new LinearLayout.LayoutParams(LL.getMeasuredWidth(), LL.getMeasuredHeight());
+                newLL.addView(LL, params);
+                widthSoFar = LL.getMeasuredWidth();
+            } else {
+                newLL.addView(LL);
+            }
+        }
+        linearLayout.addView(newLL);
     }
 
 

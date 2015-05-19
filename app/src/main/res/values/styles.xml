@@ -270,7 +270,7 @@
     </style>
 
     <style name="EditTextCustomHoloPurple" parent="android:Widget.EditText">
-        <!--<item name="android:background">@drawable/apptheme_textfield_activated_holo_light_purple</item>-->
+        <item name="android:background">@drawable/apptheme_textfield_activated_holo_light_purple</item>
         <item name="android:textColor">@color/purple</item>
         <item name="android:textColorHint">@color/purple_light</item>
     </style>

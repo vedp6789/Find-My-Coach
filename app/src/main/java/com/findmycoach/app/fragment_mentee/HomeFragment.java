@@ -639,7 +639,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         for (int index = 0; index < suggestions.size(); index++) {
             list.add(suggestions.get(index).getDescription());
         }
-        arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list);
+        arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.textview, list);
         locationInput.setAdapter(arrayAdapter);
     }
 

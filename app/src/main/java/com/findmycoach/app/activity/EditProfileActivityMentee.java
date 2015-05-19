@@ -1,6 +1,5 @@
 package com.findmycoach.app.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -63,7 +62,6 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
     int REQUEST_CODE = 100;
     private ImageView profilePicture;
     private TextView profileEmail;
-    private TextView profilePhone;
     private EditText profileFirstName;
     private EditText profileLastName;
     private Spinner profileGender;
@@ -91,7 +89,6 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
         setContentView(R.layout.activity_edit_profile_mentee);
         newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
         initialize();
-        applyActionbarProperties();
         populateUserData();
     }
 
@@ -101,42 +98,74 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             ImageLoader imgLoader = new ImageLoader(profilePicture);
             imgLoader.execute((String) userInfo.getPhotograph());
         }
+
+        try {
+            mentorFor.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, new String[]{"Self", "Kid"}));
+        } catch (Exception ignored) {
+        }
         try {
             profileEmail.setText(userInfo.getEmail());
-            profilePhone.setText(userInfo.getPhonenumber());
+        } catch (Exception ignored) {
+        }
+        try {
             profileFirstName.setText(userInfo.getFirstName());
+        } catch (Exception ignored) {
+        }
+        try {
             profileLastName.setText(userInfo.getLastName());
+        } catch (Exception ignored) {
+        }
+        try {
             profileAddress.setText((String) userInfo.getAddress());
+        } catch (Exception ignored) {
+        }
+        try {
             profileAddress1.setText((String) userInfo.getCity());
+        } catch (Exception ignored) {
+        }
+        try {
             city = (String) userInfo.getCity();  /* city string initially set to the city i.e. earlier get updated*/
+        } catch (Exception ignored) {
+        }
+        try {
             last_city_selected = city;
+        } catch (Exception ignored) {
+        }
+        try {
             profileDOB.setText((String) userInfo.getDob());
+        } catch (Exception ignored) {
+        }
+        try {
             pinCode.setText((String) userInfo.getZip());
-            mentorFor.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"Self", "Kid"}));
+        } catch (Exception ignored) {
+        }
+        try {
             if (userInfo.getMentorFor().equalsIgnoreCase("kid"))
                 mentorFor.setSelection(1);
-            if (userInfo.getGender() != null) {
-                if (userInfo.getGender().equals("M"))
-                    profileGender.setSelection(0);
-                else
-                    profileGender.setSelection(1);
-            }
+        } catch (Exception ignored) {
+        }
+
+        if (userInfo.getGender() != null) {
+            if (userInfo.getGender().equals("M"))
+                profileGender.setSelection(0);
+            else
+                profileGender.setSelection(1);
+        }
+        try {
             trainingLocation.setText((String) userInfo.getTrainingLocation());
+        } catch (Exception ignored) {
+        }
+        try {
             String selectedCoachingType = (String) userInfo.getCoachingType();
-            coachingType.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, coachingTypeOptions));
+            coachingType.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, coachingTypeOptions));
             if (selectedCoachingType.equalsIgnoreCase(coachingTypeOptions[0]))
                 coachingType.setSelection(0);
             else
                 coachingType.setSelection(1);
-
-        } catch (Exception e) {
-
+        } catch (Exception ignored) {
         }
-    }
 
-    private void applyActionbarProperties() {
-//        ActionBar actionbar = getActionBar();
-//        actionbar.setDisplayHomeAsUpEnabled(true);
+
     }
 
     private void initialize() {
@@ -145,7 +174,6 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
         profileGender = (Spinner) findViewById(R.id.input_gender);
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
-        profilePhone = (TextView) findViewById(R.id.profile_phone);
         profileFirstName = (EditText) findViewById(R.id.input_first_name);
         profileLastName = (EditText) findViewById(R.id.input_last_name);
         profileAddress = (AutoCompleteTextView) findViewById(R.id.input_address);
@@ -158,6 +186,15 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
         updateAction = (Button) findViewById(R.id.button_update);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
+
+        profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
+
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         if (userInfo == null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals("")) {
             try {
@@ -181,6 +218,9 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             } catch (Exception ignored) {
             }
         }
+
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(getResources().getString(R.string.title_edit_profile_menu));
 
         applyAction();
     }
@@ -492,7 +532,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
         for (int index = 0; index < suggestions.size(); index++) {
             list.add(suggestions.get(index).getDescription());
         }
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
+        arrayAdapter = new ArrayAdapter<String>(this, R.layout.textview, list);
         profileAddress1.setAdapter(arrayAdapter);
     }
 

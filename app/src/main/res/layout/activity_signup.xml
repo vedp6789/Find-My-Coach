@@ -203,10 +203,10 @@
                     android:id="@+id/button_signup"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_button_height"
-                    android:background="@color/white"
+                    android:background="@drawable/custom_button_click"
+                    android:textColor="@color/custom_button_text_color_click"
                     android:text="@string/action_sign_up"
                     android:textAllCaps="false"
-                    android:textColor="@color/purple"
                     android:textStyle="bold" />
             </LinearLayout>
 

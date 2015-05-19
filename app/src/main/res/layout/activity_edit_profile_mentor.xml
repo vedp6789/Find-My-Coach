@@ -15,7 +15,7 @@
         android:layout_below="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="52dp">
+        android:layout_marginBottom="@dimen/back_margin">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,14 +54,29 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_marginTop="@dimen/back_margin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/purple_light"
-                    android:text="@string/prompt_first_name"
-                    android:textSize="@dimen/profile_heading"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/purple_light"
+                        android:text="@string/prompt_first_name"
+                        android:textSize="@dimen/profile_heading"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/purple"
+                        android:text=" *"
+                        android:textSize="@dimen/profile_heading"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/input_first_name"
@@ -72,14 +87,29 @@
                     android:textSize="@dimen/profile_details"
                     android:singleLine="true" />
 
-                <TextView
+                <LinearLayout
                     android:layout_marginTop="@dimen/back_margin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/prompt_last_name"
-                    android:textSize="@dimen/profile_heading"
-                    android:textColor="@color/purple_light"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/purple_light"
+                        android:text="@string/prompt_last_name"
+                        android:textSize="@dimen/profile_heading"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/purple"
+                        android:text=" *"
+                        android:textSize="@dimen/profile_heading"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/input_last_name"
@@ -193,14 +223,29 @@
                     android:inputType="textAutoComplete" />
 
 
-                <TextView
+                <LinearLayout
                     android:layout_marginTop="@dimen/back_margin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/prompt_city"
-                    android:textSize="@dimen/profile_heading"
-                    android:textColor="@color/purple_light"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/purple_light"
+                        android:text="@string/prompt_city"
+                        android:textSize="@dimen/profile_heading"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/purple"
+                        android:text=" *"
+                        android:textSize="@dimen/profile_heading"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
                 <AutoCompleteTextView
                     android:textSize="@dimen/profile_details"
@@ -254,6 +299,96 @@
                     android:singleLine="true" />
 
 
+                <LinearLayout
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/purple_light"
+                        android:text="@string/prompt_area_of_coaching"
+                        android:textSize="@dimen/profile_heading"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/purple"
+                        android:text=" *"
+                        android:textSize="@dimen/profile_heading"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_marginTop="@dimen/textView_padding_margin"
+                    android:id="@+id/input_areas_of_coaching"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/purple"
+                    android:textColorHint="@color/purple_light"
+                    android:hint="Click Here"
+                    android:inputType="number"
+                    android:textSize="@dimen/profile_details"
+                    android:singleLine="true" />
+
+                <LinearLayout
+                    android:layout_marginTop="-6dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_gravity="end"
+                        android:layout_width="wrap_content"
+                        android:layout_marginBottom="-1dp"
+                        android:src="@drawable/drop_down_arrow_purple_small"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_height="1dp"
+                        android:background="@color/purple_light" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/checkboxTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/prompt_willing_to_travel"
+                        android:textSize="@dimen/profile_details"
+                        android:textColor="@color/purple"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/input_willing"
+                        android:layout_toStartOf="@+id/input_willing"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+
+                    <CheckBox
+                        android:layout_margin="@dimen/textView_padding_margin"
+                        android:button="@drawable/custom_check_box"
+                        android:id="@+id/input_willing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/purple"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+
+                </RelativeLayout>
+
+
                 <TextView
                     android:layout_marginTop="@dimen/back_margin"
                     android:layout_width="match_parent"
@@ -286,7 +421,7 @@
                         android:id="@+id/chargesPerUnit"
                         android:background="@android:color/transparent"
                         android:layout_width="100dp"
-                        android:layout_height="40dp"
+                        android:layout_height="@dimen/login_button_height"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
                         android:layout_alignBottom="@+id/input_charges" />
@@ -356,67 +491,18 @@
                 </LinearLayout>
 
 
-                <TextView
-                    android:layout_marginTop="@dimen/back_margin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/prompt_area_of_coaching"
-                    android:textSize="@dimen/profile_heading"
-                    android:textColor="@color/purple_light"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_marginTop="@dimen/textView_padding_margin"
-                    android:id="@+id/input_areas_of_coaching"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/purple"
-                    android:textColorHint="@color/purple_light"
-                    android:hint="Click Here"
-                    android:inputType="number"
-                    android:textSize="@dimen/profile_details"
-                    android:singleLine="true" />
-
-                <LinearLayout
-                    android:layout_marginTop="-6dp"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_gravity="end"
-                        android:layout_width="wrap_content"
-                        android:layout_marginBottom="-1dp"
-                        android:src="@drawable/drop_down_arrow_purple_small"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_alignParentLeft="true"
-                        android:layout_height="1dp"
-                        android:background="@color/purple_light" />
-
-                </LinearLayout>
-
-                <CheckBox
-                    android:layout_marginTop="@dimen/back_margin"
-                    android:id="@+id/input_willing"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/purple"
-                    android:text="@string/prompt_willing_to_travel" />
-
                 <Button
                     android:id="@+id/button_update"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_button_height"
-                    android:layout_margin="@dimen/textView_padding_margin"
-                    android:background="@color/purple_light"
+                    android:layout_marginLeft="@dimen/textView_padding_margin"
+                    android:layout_marginRight="@dimen/textView_padding_margin"
                     android:text="@string/action_save"
                     android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:layout_marginTop="@dimen/back_margin"
-                    android:layout_marginBottom="@dimen/back_margin"/>
+                    android:background="@drawable/custom_button_click_white_bg"
+                    android:textColor="@color/custom_button_text_color_click_white_bg"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginBottom="@dimen/back_margin" />
 
             </LinearLayout>
         </LinearLayout>

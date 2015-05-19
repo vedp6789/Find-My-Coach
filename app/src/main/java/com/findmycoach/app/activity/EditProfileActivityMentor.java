@@ -105,25 +105,56 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             imgLoader.execute((String) userInfo.getPhotograph());
         }
         profileEmail.setText(userInfo.getEmail());
-        profileFirstName.setText(userInfo.getFirstName());
-        profileLastName.setText(userInfo.getLastName());
-        profileAddress.setText((String) userInfo.getAddress());
-        profileAddress1.setText((String) userInfo.getCity());
-        city = (String) userInfo.getCity();                 /* city string initially set to the city i.e. earlier get updated*/
-        last_city_selected = city;
-        profileDOB.setText((String) userInfo.getDob());
-        pinCode.setText((String) userInfo.getZip());
+
+        try {
+            profileFirstName.setText(userInfo.getFirstName());
+        } catch (Exception ignored) {
+        }
+        try {
+            profileLastName.setText(userInfo.getLastName());
+        } catch (Exception ignored) {
+        }
+        try {
+            profileAddress.setText((String) userInfo.getAddress());
+        } catch (Exception ignored) {
+        }
+        try {
+            profileAddress1.setText((String) userInfo.getCity());
+        } catch (Exception ignored) {
+        }
+        try {
+            city = (String) userInfo.getCity();                 /* city string initially set to the city i.e. earlier get updated*/
+        } catch (Exception ignored) {
+        }
+        try {
+            last_city_selected = city;
+        } catch (Exception ignored) {
+        }
+        try {
+            profileDOB.setText((String) userInfo.getDob());
+        } catch (Exception ignored) {
+        }
+        try {
+            pinCode.setText((String) userInfo.getZip());
+        } catch (Exception ignored) {
+        }
         /*chargeInput.setText(userInfo.getCharges().equals("0") ? userInfo.getChargesClass() : userInfo.getCharges());*/
         /*chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"hour","class"}));
         chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 1 : 0);*/
 
-        chargeInput.setText(userInfo.getCharges());
-        chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"hour"}));
-        chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
+        try {
+            chargeInput.setText(userInfo.getCharges());
+        } catch (Exception ignored) {
+        }
+        try {
+            chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, new String[]{"hour"}));
+            chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
+        } catch (Exception ignored) {
+        }
 
         try {
             int index = Integer.parseInt(userInfo.getExperience());
-            if(index > 16)
+            if (index > 16)
                 index = 0;
             experienceInput.setSelection(index);
         } catch (Exception e) {
@@ -215,7 +246,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(getResources().getString(R.string.title_edit_profile_menu));
 
-        try{
+        try {
             if (userInfo == null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals("")) {
                 try {
                     Address fullAddress = NetworkManager.getFullAddress(this);
@@ -239,7 +270,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
                     e.printStackTrace();
                 }
             }
-        }catch (Exception  e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -365,6 +396,14 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             public void onClick(View v) {
                 if (validateUserUpdate())
                     callUpdateService();
+            }
+        });
+
+
+        findViewById(R.id.checkboxTextView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isReadyToTravel.setChecked(!isReadyToTravel.isChecked());
             }
         });
 
@@ -612,7 +651,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         for (int index = 0; index < suggestions.size(); index++) {
             list.add(suggestions.get(index).getDescription());
         }
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
+        arrayAdapter = new ArrayAdapter<String>(this, R.layout.textview, list);
         profileAddress1.setAdapter(arrayAdapter);
     }
 
