@@ -86,9 +86,17 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         Collections.sort(list, new Comparator<InterestsAdapter.SubCategoryItems>() {
             @Override
             public int compare(InterestsAdapter.SubCategoryItems lhs, InterestsAdapter.SubCategoryItems rhs) {
+                return lhs.getItemName().compareToIgnoreCase(rhs.getItemName());
+            }
+        });
+
+        Collections.sort(list, new Comparator<InterestsAdapter.SubCategoryItems>() {
+            @Override
+            public int compare(InterestsAdapter.SubCategoryItems lhs, InterestsAdapter.SubCategoryItems rhs) {
                 return rhs.isSelected() - lhs.isSelected();
             }
         });
+
 
         adapter = new InterestsAdapter(this, list);
         listView.setAdapter(adapter);

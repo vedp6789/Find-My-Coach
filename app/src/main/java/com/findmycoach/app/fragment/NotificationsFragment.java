@@ -1,31 +1,20 @@
 package com.findmycoach.app.fragment;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
-import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.MenteeNotificationActions;
-import com.findmycoach.app.activity.StudentDetailActivity;
-import com.findmycoach.app.adapter.ConnectionRequestRecyclerViewAdapter;
 import com.findmycoach.app.adapter.MenteeNotificationRecyclerViewAdapter;
-import com.findmycoach.app.adapter.NotificationAdapter;
-import com.findmycoach.app.beans.requests.ConnectionRequestsResponse;
-import com.findmycoach.app.beans.requests.Data;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.RecyclerItemClickListener;
@@ -35,9 +24,6 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class NotificationsFragment extends Fragment implements Callback {
     private RecyclerView recyclerView;
@@ -102,8 +88,8 @@ public class NotificationsFragment extends Fragment implements Callback {
                             Intent intent = new Intent(getActivity(), MenteeNotificationActions.class);
                             intent.putExtra("action_for", action_for);
                             intent.putExtra("json_string", jsonObject_notification.toString());
-                            if(status.equals("unread"))
-                            startActivity(intent);
+                            if (status.equals("unread"))
+                                startActivity(intent);
 
                         }
 
