@@ -16,8 +16,6 @@ import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -192,7 +190,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
 
@@ -476,12 +474,6 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_edit_profile, menu);
-        return true;
-    }
-
-    @Override
     public void onBackPressed() {
         if (newUser == null || !newUser.contains(userInfo.getId()))
             finish();
@@ -489,17 +481,6 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             Toast.makeText(this, R.string.prompt_update_profile, Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            if (newUser == null || !newUser.contains(userInfo.getId()))
-                finish();
-            else
-                Toast.makeText(this, R.string.prompt_update_profile, Toast.LENGTH_LONG).show();
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     public void setDate(View view) {
         showDialog(999);

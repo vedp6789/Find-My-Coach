@@ -333,6 +333,9 @@ public class DashboardActivity extends FragmentActivity
     @Override
     protected void onResume() {
         super.onResume();
+
+        Log.e("VED", user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification);
+
         if (fragment_to_launch_from_notification == 0) {
             if (!checkPlayServices()) {
                 Toast.makeText(DashboardActivity.this, getResources().getString(R.string.google_play_services_not_supported), Toast.LENGTH_LONG).show();
@@ -340,20 +343,22 @@ public class DashboardActivity extends FragmentActivity
             }
         } else {
 
-            if (Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group")) == group_push_notification) {
-                user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
+            user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
+            if (user_group == group_push_notification) {
 
                 ResideMenuItem item = null;
 
                 switch (fragment_to_launch_from_notification) {
                     case 1:
                     case 4:
+                        Log.e("VED", user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 1,4");
                         item = itemHome;
                         break;
                     case 2:
                     case 3:
                     case 5:
                     case 6:
+                        Log.e("VED", user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 2,3,5,6");
                         item = itemNotification;
                         break;
                     case 7:
@@ -364,12 +369,14 @@ public class DashboardActivity extends FragmentActivity
                 }
                 fragment_to_launch_from_notification = 0;
 
-                if (resideMenu == null)
+                if (resideMenu == null) {
                     setUpMenu(item);
-                else if (item != null)
+                    Log.e("VED", "reside null");
+                }
+                else if (item != null) {
                     item.callOnClick();
-
-                setTitle(mTitle);
+                    Log.e("VED", "item not null");
+                }
             } else {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.switch_login), Toast.LENGTH_SHORT).show();
             }
@@ -566,6 +573,7 @@ public class DashboardActivity extends FragmentActivity
         }
         if (user_group == 2) {
             if (view == itemHome) {
+                titleTV.setText("");
                 fragmentTransaction.replace(R.id.container, new HomeFragment());
                 position = 0;
             } else if (view == itemNotification) {
