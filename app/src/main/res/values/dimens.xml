@@ -9,6 +9,7 @@
     <dimen name="back_margin">16dp</dimen>
     <dimen name="margin_top">50dp</dimen>
     <dimen name="login_button_height">40dp</dimen>
+    <dimen name="sliding_tab_height">48dp</dimen>
     <dimen name="days_button_height">35dp</dimen>
     <dimen name="radio_button_padding">10dp</dimen>
 
