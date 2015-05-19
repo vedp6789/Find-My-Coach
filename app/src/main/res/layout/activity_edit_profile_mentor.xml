@@ -496,10 +496,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_button_height"
                     android:layout_margin="@dimen/textView_padding_margin"
-                    android:background="@color/purple_light"
                     android:text="@string/action_save"
                     android:textAllCaps="false"
-                    android:textColor="@color/white"
+                    android:background="@drawable/custom_button_click_white_bg"
+                    android:textColor="@color/custom_button_text_color_click_white_bg"
                     android:layout_marginTop="@dimen/back_margin"
                     android:layout_marginBottom="@dimen/back_margin" />
 

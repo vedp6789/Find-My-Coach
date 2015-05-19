@@ -53,8 +53,8 @@
         android:layout_height="@dimen/login_button_height"
         android:text="@string/verify"
         android:id="@+id/btnVerify"
-        android:background="@color/white"
-        android:textColor="@color/purple"
+        android:background="@drawable/custom_button_click"
+        android:textColor="@color/custom_button_text_color_click"
         android:layout_below="@+id/verificationCodeET"
         android:layout_centerHorizontal="true" />
 
@@ -63,8 +63,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_button_height"
         android:text="@string/resend_code"
-        android:background="@color/white"
-        android:textColor="@color/purple"
+        android:background="@drawable/custom_button_click"
+        android:textColor="@color/custom_button_text_color_click"
         android:id="@+id/btnResend"
         android:layout_below="@+id/btnVerify" />
 
