@@ -72,7 +72,7 @@ public class ConnectionRequestRecyclerViewAdapter extends RecyclerView.Adapter<C
             long difference=rightNow_in_millis-connection_request_start_date_in_millis;
             days = difference / (24 * 60 * 60 * 1000);
 
-            holder.tv_connection_request_message.setText(first_name+context.getResources().getString(R.string.connection_request_message));
+            holder.tv_connection_request_message.setText(first_name.trim()+" "+context.getResources().getString(R.string.connection_request_message));
             actionDay(holder);
 
         }

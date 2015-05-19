@@ -68,12 +68,13 @@ public class ScheduleRequestRecyclerViewAdapter extends RecyclerView.Adapter<Sch
             String start_date=scheduleRequests.get(position).getStart_date();
             String start_time=scheduleRequests.get(position).getStart_time();
             String status=scheduleRequests.get(position).getStatus();
+            String created_date=scheduleRequests.get(position).getCreated_date();
 
             if(status.equals("read"))
                 holder.relativeLayout.setBackgroundColor(Color.LTGRAY);
 
             Calendar cal = new GregorianCalendar();
-            cal.set(Integer.parseInt(start_date.split("-")[0]),Integer.parseInt(start_date.split("-")[1])-1, Integer.parseInt(start_date.split("-")[2]));
+            cal.set(Integer.parseInt(created_date.split("-")[0]),Integer.parseInt(created_date.split("-")[1])-1, Integer.parseInt(created_date.split("-")[2]));
             long connection_request_start_date_in_millis = cal.getTimeInMillis();
 
 
@@ -86,7 +87,7 @@ public class ScheduleRequestRecyclerViewAdapter extends RecyclerView.Adapter<Sch
             long difference=rightNow_in_millis-connection_request_start_date_in_millis;
             days = difference / (24 * 60 * 60 * 1000);
 
-            holder.tv_schedule_request_message.setText(first_name + context.getResources().getString(R.string.schedule_request_message));
+            holder.tv_schedule_request_message.setText(first_name.trim() +" "+ context.getResources().getString(R.string.schedule_request_message));
             actionDay(holder);
 
         }

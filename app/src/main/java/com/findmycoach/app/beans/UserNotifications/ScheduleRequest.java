@@ -52,9 +52,27 @@ public class ScheduleRequest implements Parcelable {
     private String stop_date;
     private String start_time;
     private String stop_time;
+    private String created_date;
+    private String created_time;
     private String subject;
     private String class_type;
     private String[] week_days;
+
+    public String getCreated_date() {
+        return created_date;
+    }
+
+    public void setCreated_date(String created_date) {
+        this.created_date = created_date;
+    }
+
+    public String getCreated_time() {
+        return created_time;
+    }
+
+    public void setCreated_time(String created_time) {
+        this.created_time = created_time;
+    }
 
     public String getId() {
         return id;
@@ -165,6 +183,8 @@ public class ScheduleRequest implements Parcelable {
         this.class_type = parcel.readString();
         this.week_days = parcel.createStringArray();
         this.status= parcel.readString();
+        this.created_date=parcel.readString();
+        this.created_time=parcel.readString();
 
     }
 
@@ -201,5 +221,7 @@ public class ScheduleRequest implements Parcelable {
         dest.writeString(this.class_type);
         dest.writeStringArray(this.week_days);
         dest.writeString(this.status);
+        dest.writeString(this.created_date);
+        dest.writeString(this.created_time);
     }
 }

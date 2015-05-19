@@ -49,30 +49,30 @@ public class MenteeNotificationActions extends Activity {
 
             switch (action_for) {
                 case "connection_accepted":
-                    tv_notification_message.setText(first_name + getResources().getString(R.string.connection_request_accepted));
+                    tv_notification_message.setText(first_name.trim() +" "+ getResources().getString(R.string.connection_request_accepted));
                     date = jsonObject_notification.getString("created_date");
                     time = jsonObject_notification.getString("created_time");
                     tv_date.setText(getDate_Time_String(date,time));
                     tv_user_message.setText(jsonObject_notification.getString("message"));
                     break;
                 case "connection_rejected":
-                    tv_notification_message.setText(first_name + getResources().getString(R.string.connection_request_rejected));
+                    tv_notification_message.setText(first_name.trim()+" " + getResources().getString(R.string.connection_request_rejected));
                     date = jsonObject_notification.getString("created_date");
                     time = jsonObject_notification.getString("created_time");
                     tv_date.setText(getDate_Time_String(date,time));
                     tv_user_message.setText(jsonObject_notification.getString("message"));
                     break;
                 case "schedule_accepted":
-                    tv_notification_message.setText(first_name + getResources().getString(R.string.schedule_request_accepted));
-                    date = jsonObject_notification.getString("start_date");
-                    time = jsonObject_notification.getString("start_time");
+                    tv_notification_message.setText(first_name.trim()+" " + getResources().getString(R.string.schedule_request_accepted));
+                    date = jsonObject_notification.getString("created_date");
+                    time = jsonObject_notification.getString("created_time");
                     tv_date.setText(getDate_Time_String(date,time));
                     tv_user_message.setText(jsonObject_notification.getString("message"));
                     break;
                 case "schedule_rejected":
-                    tv_notification_message.setText(first_name + getResources().getString(R.string.schedule_request_rejected));
-                    date = jsonObject_notification.getString("start_date");
-                    time = jsonObject_notification.getString("start_time");
+                    tv_notification_message.setText(first_name.trim()+" " + getResources().getString(R.string.schedule_request_rejected));
+                    date = jsonObject_notification.getString("created_date");
+                    time = jsonObject_notification.getString("created_time");
                     tv_date.setText(getDate_Time_String(date,time));
                     tv_user_message.setText(jsonObject_notification.getString("message"));
                     break;
@@ -86,7 +86,7 @@ public class MenteeNotificationActions extends Activity {
 
 
     private String getDate_Time_String(String date,String time){
-        return String.format(getResources().getStringArray(R.array.months)[Integer.parseInt(date.split("-")[1])-1]+" %02d, %d %02d:%02d",date.split("-")[2],date.split("-")[0],time.split(":")[0],time.split(":")[1]);
+        return String.format(getResources().getStringArray(R.array.months)[Integer.parseInt(date.split("-")[1])-1]+" %02d, %d %02d:%02d",Integer.parseInt(date.split("-")[2]),Integer.parseInt(date.split("-")[0]),Integer.parseInt(time.split(":")[0]),Integer.parseInt(time.split(":")[1]));
     }
 
     private void initialize() {

@@ -129,7 +129,8 @@ public class HomeFragment extends Fragment implements Callback {
                         JSONObject jsonObject_notification = jsonArray_notifications.getJSONObject(notification_no);
                         Log.d(TAG,"jsonObject as string "+jsonObject_notification.toString());
                         String title = jsonObject_notification.getString("title");
-                        if (title.equalsIgnoreCase("Connection request")) {
+                       /* if (title.equalsIgnoreCase("Connection request")) {*/
+                            if (title.equalsIgnoreCase("")) {
                             ConnectionRequest connectionRequest = new ConnectionRequest();
                             connectionRequest.setId(jsonObject_notification.getString("id"));
                             String image_url = jsonObject_notification.getString("image");
@@ -174,6 +175,8 @@ public class HomeFragment extends Fragment implements Callback {
 
                                 scheduleRequest.setWeek_days(week_days);
                                 scheduleRequest.setStatus(jsonObject_notification.getString("status"));
+                                scheduleRequest.setCreated_date(jsonObject_notification.getString("created_date"));
+                                scheduleRequest.setCreated_time(jsonObject_notification.getString("created_time"));
 
                                 scheduleRequests.add(scheduleRequest);
                             }

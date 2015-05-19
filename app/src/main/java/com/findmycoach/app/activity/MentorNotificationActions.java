@@ -42,6 +42,8 @@ public class MentorNotificationActions extends Activity implements Callback {
     ProgressDialog progressDialog;
     private String TAG = "FMC";
     String action;
+    String created_date,created_time;
+
 
 
     @Override
@@ -58,7 +60,7 @@ public class MentorNotificationActions extends Activity implements Callback {
                 connectionRequest = bundle.getParcelable("conn_req_data");
                 initialize_for_connection_request();
                 first_name = connectionRequest.getFirst_name();
-                tv_title_message.setText(first_name + getResources().getString(R.string.connection_request_title));
+                tv_title_message.setText(first_name.trim() + " "+getResources().getString(R.string.connection_request_title));
                 start_date = connectionRequest.getStart_date();
                 start_time = connectionRequest.getStart_time();
 
@@ -127,17 +129,25 @@ public class MentorNotificationActions extends Activity implements Callback {
                 scheduleRequest = bundle.getParcelable("schedule_req_data");
                 initialize_for_schedule_request();
                 first_name = scheduleRequest.getFirst_name();
-                tv_title_message.setText(first_name + getResources().getString(R.string.schedule_request_title));
+                tv_title_message.setText(first_name.trim() + " "+ getResources().getString(R.string.schedule_request_title));
                 start_date = scheduleRequest.getStart_date();
                 stop_date = scheduleRequest.getStop_date();
                 start_time = scheduleRequest.getStart_time();
                 stop_time = scheduleRequest.getStop_time();
                 week_days = scheduleRequest.getWeek_days();
+                created_date = scheduleRequest.getCreated_date();
+                created_time = scheduleRequest.getCreated_time();
+
+                Log.d(TAG,"start time of class: "+start_time.toString());
+                Log.d(TAG,"stop_time of class: "+stop_time.toString());
+
+                tv_date.setText(String.format(getResources().getStringArray(R.array.months)[Integer.parseInt(created_date.split("-")[1]) - 1] + " %02d,%d \t %02d:%02d", Integer.parseInt(created_date.split("-")[2]), Integer.parseInt(created_date.split("-")[0]), Integer.parseInt(created_time.split(":")[0]), Integer.parseInt(created_time.split(":")[1])));
+
 
                 tv_start_date.setText(String.format("%02d-%02d-%d", Integer.parseInt(start_date.split("-")[2]), Integer.parseInt(start_date.split("-")[1]), Integer.parseInt(start_date.split("-")[0])));
                 tv_stop_date.setText(String.format("%02d-%02d-%d", Integer.parseInt(stop_date.split("-")[2]), Integer.parseInt(stop_date.split("-")[1]), Integer.parseInt(stop_date.split("-")[0])));
-                tv_start_time.setText(String.format("%02d:%02d", start_time.split(":")[0], start_time.split(":")[1]));
-                tv_stop_time.setText(String.format("%02d:%02d", stop_time.split(":")[0], stop_time.split(":")[1]));
+                tv_start_time.setText(String.format("%02d:%02d", Integer.parseInt(start_time.split(":")[0]), Integer.parseInt(start_time.split(":")[1])));
+                tv_stop_time.setText(String.format("%02d:%02d", Integer.parseInt(stop_time.split(":")[0]), Integer.parseInt(stop_time.split(":")[1])));
 
 
                 StringBuilder stringBuilder = new StringBuilder();
@@ -250,10 +260,11 @@ public class MentorNotificationActions extends Activity implements Callback {
 
     private void initialize_for_schedule_request() {
         iv_user_icon = (ImageView) findViewById(R.id.iv_user_icon);
+        tv_date= (TextView) findViewById(R.id.tv_date);
         tv_start_date = (TextView) findViewById(R.id.tv_start_date_val);
         tv_stop_date = (TextView) findViewById(R.id.tv_stop_date_val);
         tv_start_time = (TextView) findViewById(R.id.tv_start_time_val);
-        tv_stop_time = (TextView) findViewById(R.id.tv_start_time_val);
+        tv_stop_time = (TextView) findViewById(R.id.tv_stop_time_val);
         tv_subject = (TextView) findViewById(R.id.tv_subject_val);
         tv_week_days = (TextView) findViewById(R.id.tv_week_days_val);
         tv_class_type = (TextView) findViewById(R.id.tv_class_type_val);
@@ -287,10 +298,10 @@ public class MentorNotificationActions extends Activity implements Callback {
                     JSONObject jsonObject = new JSONObject((String) object);
                     if (jsonObject.getString("message").equals("Success")) {
                         if (action.equals("accept")) {
-                            Toast.makeText(MentorNotificationActions.this, first_name + getResources().getString(R.string.is_in_connection), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MentorNotificationActions.this, first_name.trim() +" "+ getResources().getString(R.string.is_in_connection), Toast.LENGTH_SHORT).show();
                             finish();
                         } else {
-                            Toast.makeText(MentorNotificationActions.this, first_name + getResources().getString(R.string.request_declined), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MentorNotificationActions.this, first_name.trim() + getResources().getString(R.string.request_declined), Toast.LENGTH_SHORT).show();
                             finish();
                         }
 
@@ -306,6 +317,19 @@ public class MentorNotificationActions extends Activity implements Callback {
             case "schedule_request":
                 try {
                     JSONObject jsonObject = new JSONObject((String) object);
+                    String status=jsonObject.getString("status");
+                    if (Integer.parseInt(status) == 1)
+                        Toast.makeText(MentorNotificationActions.this,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+
+                    if(Integer.parseInt(status) == 2)
+                        Toast.makeText(MentorNotificationActions.this,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+
+                    if(Integer.parseInt(status) == 3)
+                        Toast.makeText(MentorNotificationActions.this,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+
+
+                    finish();
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
