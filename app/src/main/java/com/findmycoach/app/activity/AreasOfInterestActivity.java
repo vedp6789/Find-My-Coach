@@ -63,7 +63,6 @@ public class AreasOfInterestActivity extends Activity implements Callback {
 
     private void populateData() {
         String interestsString = getIntent().getStringExtra("interests");
-        Log.e(TAG, interestsString);
 
         for (Datum d : category.getData()) {
             for (DatumSub sub : d.getDataSub())
