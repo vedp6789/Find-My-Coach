@@ -1,8 +1,12 @@
 package com.findmycoach.app.activity;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +18,7 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.UserNotifications.ConnectionRequest;
 import com.findmycoach.app.beans.UserNotifications.ScheduleRequest;
+import com.findmycoach.app.fragment_mentor.HomeFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -241,7 +246,7 @@ public class MentorNotificationActions extends Activity implements Callback {
                         requestParams.add("slot_type", scheduleRequest.getClass_type());
                         requestParams.add("event_id", scheduleRequest.getEvent_id());
                         requestParams.add("student_id", scheduleRequest.getStudent_id());
-                        requestParams.add("mentor_id",StorageHelper.getUserDetails(MentorNotificationActions.this,StorageHelper.getUserDetails(MentorNotificationActions.this,"user_id")));
+                        requestParams.add("mentor_id",StorageHelper.getUserDetails(MentorNotificationActions.this, "user_id"));
 
                         if (et_mentor_reply.getText().toString() != null) {
                             requestParams.add("message", et_mentor_reply.getText().toString());
@@ -304,6 +309,11 @@ public class MentorNotificationActions extends Activity implements Callback {
                         if (action.equals("accept")) {
                             Toast.makeText(MentorNotificationActions.this, first_name.trim() +" "+ getResources().getString(R.string.is_in_connection), Toast.LENGTH_SHORT).show();
                             finish();
+                            /*FragmentManager fragmentManager=getFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager
+                                    .beginTransaction();
+                            HomeFragment homeFragment=new HomeFragment();
+                            fragmentTransaction.replace()*/
                         } else {
                             Toast.makeText(MentorNotificationActions.this, first_name.trim() + getResources().getString(R.string.request_declined), Toast.LENGTH_SHORT).show();
                             finish();
@@ -322,13 +332,13 @@ public class MentorNotificationActions extends Activity implements Callback {
                 try {
                     JSONObject jsonObject = new JSONObject((String) object);
                     String status=jsonObject.getString("status");
-                    if (Integer.parseInt(status) == 1)
+                    if (Integer.parseInt(status) == 1)  /* already responded when user accepts*/
                         Toast.makeText(MentorNotificationActions.this,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
 
-                    if(Integer.parseInt(status) == 2)
+                    if(Integer.parseInt(status) == 2)  /* success*/
                         Toast.makeText(MentorNotificationActions.this,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
 
-                    if(Integer.parseInt(status) == 3)
+                    if(Integer.parseInt(status) == 3)   /* max users crossed when user accepts */
                         Toast.makeText(MentorNotificationActions.this,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
 
 

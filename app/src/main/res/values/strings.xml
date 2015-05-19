@@ -579,8 +579,8 @@
     <string name="schedule_request_title">has sent a class schedule request</string>
     <string name="schedule_request_message"> has requested a schedule</string>
     <string name="days_ago"> days ago</string>
-    <string name="no_connection_request">Out of connection request</string>
-    <string name="no_schedule_request">Out of class request</string>
+    <string name="no_connection_request">No connection request</string>
+    <string name="no_schedule_request">No schedule request</string>
     <string name="no_notification_found">Out of notification</string>
     <string name="connection_request_accepted"> has accepted your connection request</string>
     <string name="connection_request_rejected"> has rejected your connection request</string>
