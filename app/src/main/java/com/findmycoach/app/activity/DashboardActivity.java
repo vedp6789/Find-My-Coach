@@ -347,7 +347,9 @@ public class DashboardActivity extends FragmentActivity
 
                 switch (fragment_to_launch_from_notification) {
                     case 1:
+                    case 4:
                         item = itemHome;
+                        break;
                     case 2:
                     case 3:
                     case 5:
@@ -358,20 +360,6 @@ public class DashboardActivity extends FragmentActivity
                     case 8:
                     case 9:
                         item = itemConnection;
-                        break;
-                    case 4:
-                        item = itemHome;
-                        /*String slot_type = getIntent().getExtras().getString("slot_type");
-                        String event_id = getIntent().getExtras().getString("event_id");
-                        String student_id = getIntent().getExtras().getString("student_id");
-                        android.app.FragmentManager fragmentManager = getFragmentManager();
-                        GCMScheduleRequestDialogFragment gcmScheduleRequestDialogFragment = new GCMScheduleRequestDialogFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("slot_type", slot_type);
-                        bundle.putString("event_id", event_id);
-                        bundle.putString("student_id", student_id);
-                        gcmScheduleRequestDialogFragment.setArguments(bundle);
-                        gcmScheduleRequestDialogFragment.show(fragmentManager, null);*/
                         break;
                 }
                 fragment_to_launch_from_notification = 0;
