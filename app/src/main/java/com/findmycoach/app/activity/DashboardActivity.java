@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -32,7 +33,6 @@ import com.findmycoach.app.fragment.MyConnectionsFragment;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.fragment.NotificationsFragment;
 import com.findmycoach.app.fragment_mentee.HomeFragment;
-import com.findmycoach.app.fragment_mentor.GCMScheduleRequestDialogFragment;
 import com.findmycoach.app.reside_menu.ResideMenu;
 import com.findmycoach.app.reside_menu.ResideMenuItem;
 import com.findmycoach.app.util.Callback;
@@ -73,6 +73,11 @@ public class DashboardActivity extends FragmentActivity
     static final String TAG = "Google Play Services status:";
     static final String TAG1 = "GCMCommunication";
     static final String TAG2 = "FMC-GCM";
+
+    public ImageView menuDrawer;
+    public ImageView backButton;
+    public TextView titleTV;
+
     GoogleCloudMessaging gcm;
     Context context;
 
@@ -328,6 +333,9 @@ public class DashboardActivity extends FragmentActivity
     @Override
     protected void onResume() {
         super.onResume();
+
+        Log.e("VED", user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification);
+
         if (fragment_to_launch_from_notification == 0) {
             if (!checkPlayServices()) {
                 Toast.makeText(DashboardActivity.this, getResources().getString(R.string.google_play_services_not_supported), Toast.LENGTH_LONG).show();
@@ -335,18 +343,22 @@ public class DashboardActivity extends FragmentActivity
             }
         } else {
 
-            if (Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group")) == group_push_notification) {
-                user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
+            user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
+            if (user_group == group_push_notification) {
 
                 ResideMenuItem item = null;
 
                 switch (fragment_to_launch_from_notification) {
                     case 1:
+                    case 4:
+                        Log.e("VED", user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 1,4");
                         item = itemHome;
+                        break;
                     case 2:
                     case 3:
                     case 5:
                     case 6:
+                        Log.e("VED", user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 2,3,5,6");
                         item = itemNotification;
                         break;
                     case 7:
@@ -354,29 +366,17 @@ public class DashboardActivity extends FragmentActivity
                     case 9:
                         item = itemConnection;
                         break;
-                    case 4:
-                        item= itemHome;
-                        /*String slot_type = getIntent().getExtras().getString("slot_type");
-                        String event_id = getIntent().getExtras().getString("event_id");
-                        String student_id = getIntent().getExtras().getString("student_id");
-                        android.app.FragmentManager fragmentManager = getFragmentManager();
-                        GCMScheduleRequestDialogFragment gcmScheduleRequestDialogFragment = new GCMScheduleRequestDialogFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("slot_type", slot_type);
-                        bundle.putString("event_id", event_id);
-                        bundle.putString("student_id", student_id);
-                        gcmScheduleRequestDialogFragment.setArguments(bundle);
-                        gcmScheduleRequestDialogFragment.show(fragmentManager, null);*/
-                        break;
                 }
                 fragment_to_launch_from_notification = 0;
 
-                if (resideMenu == null)
+                if (resideMenu == null) {
                     setUpMenu(item);
-                else if (item != null)
+                    Log.e("VED", "reside null");
+                }
+                else if (item != null) {
                     item.callOnClick();
-
-                setTitle(mTitle);
+                    Log.e("VED", "item not null");
+                }
             } else {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.switch_login), Toast.LENGTH_SHORT).show();
             }
@@ -490,7 +490,7 @@ public class DashboardActivity extends FragmentActivity
         resideMenu.setOnClickListener(this);
 
         resideMenu.addMenuItem(itemHome, ResideMenu.DIRECTION_RIGHT);
-        if(user_group == 2)
+        if (user_group == 2)
             resideMenu.addMenuItem(itemNotification, ResideMenu.DIRECTION_RIGHT);
         resideMenu.addMenuItem(itemConnection, ResideMenu.DIRECTION_RIGHT);
         resideMenu.addMenuItem(itemSchedule, ResideMenu.DIRECTION_RIGHT);
@@ -500,7 +500,14 @@ public class DashboardActivity extends FragmentActivity
         // You can disable a direction by setting ->
         resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_LEFT);
 
-        findViewById(R.id.menuButton).setOnClickListener(new View.OnClickListener() {
+        backButton = (ImageView) findViewById(R.id.backButton);
+        titleTV = (TextView) findViewById(R.id.title);
+        menuDrawer = (ImageView) findViewById(R.id.menuButton);
+
+        backButton.setVisibility(View.INVISIBLE);
+        titleTV.setText("");
+
+        menuDrawer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 resideMenu.openMenu(ResideMenu.DIRECTION_RIGHT);
@@ -540,22 +547,25 @@ public class DashboardActivity extends FragmentActivity
         });
     }
 
-    private void updateUI(View view){
+    private void updateUI(View view) {
         int position = -1;
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         if (user_group == 3) {
             if (view == itemHome) {
+                titleTV.setText(navigationTitle[1]);
                 fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentor.HomeFragment());
                 position = 0;
             } else if (view == itemNotification) {
                 fragmentTransaction.replace(R.id.container, new NotificationsFragment());
                 position = 1;
             } else if (view == itemConnection) {
+                titleTV.setText(navigationTitle[2]);
                 fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
                 position = 2;
             } else if (view == itemSchedule) {
+                titleTV.setText(navigationTitle[3]);
                 fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
                 position = 3;
             }
@@ -563,15 +573,19 @@ public class DashboardActivity extends FragmentActivity
         }
         if (user_group == 2) {
             if (view == itemHome) {
+                titleTV.setText("");
                 fragmentTransaction.replace(R.id.container, new HomeFragment());
                 position = 0;
             } else if (view == itemNotification) {
+                titleTV.setText(navigationTitle[1]);
                 fragmentTransaction.replace(R.id.container, new NotificationsFragment());
                 position = 1;
             } else if (view == itemConnection) {
+                titleTV.setText(navigationTitle[2]);
                 fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
                 position = 2;
             } else if (view == itemSchedule) {
+                titleTV.setText(navigationTitle[3]);
                 fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
                 position = 3;
             }
@@ -631,7 +645,9 @@ public class DashboardActivity extends FragmentActivity
         }
     }
 
-    /**Hide keyboard on touch view*/
+    /**
+     * Hide keyboard on touch view
+     */
     public void setupUIForShowHideKeyBoard(View view) {
         //Set up touch listener for non-text box views to hide keyboard.
         if (!(view instanceof EditText)) {

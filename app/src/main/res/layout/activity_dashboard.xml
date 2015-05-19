@@ -7,19 +7,51 @@
     android:background="@drawable/bg"
     tools:context="com.findmycoach.app.activity.DashboardActivity">
 
-    <ImageView
-        android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/side_menu_small"
-        android:layout_margin="@dimen/back_margin"
-        android:id="@+id/menuButton" />
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_button_height"
+        android:orientation="horizontal"
+        android:background="@android:color/transparent">
 
-        <RelativeLayout
-            android:layout_below="@id/menuButton"
-            android:id="@+id/container"
+        <ImageView
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/textView_padding_margin"
+            android:id="@+id/backButton" />
+
+        <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"/>
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/profile_name"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_toEndOf="@+id/backButton"
+            android:layout_toStartOf="@+id/menuButton"
+            android:layout_toLeftOf="@+id/menuButton"
+            android:layout_toRightOf="@+id/backButton" />
+
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:id="@+id/menuButton"
+            android:src="@drawable/side_menu_small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/textView_padding_margin" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_below="@id/header"
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent" />
 
 </RelativeLayout>
