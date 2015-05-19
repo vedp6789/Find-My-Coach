@@ -769,12 +769,12 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
                     /* if condition is checking whether the flag is 0 or 1 in case of single coinciding slot with Week-days mentioned, or in case of single coinciding exception with Week-days in Json string .*/
                         if (flag == 0) {
-                            stringBuilder.append("Sorry, there is already a slot between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + st_time.substring(0, 5) + " for " + stringBuilder1.toString() + " \n So this slot cannot be placed!");
+                            stringBuilder.append(getResources().getString(R.string.already_slot_found) + simpleDateFormat.format(start_date) + getResources().getString(R.string.and) + simpleDateFormat.format(stop_date) + getResources().getString(R.string.from1) + s_time.substring(0, 5) + getResources().getString(R.string.to2) + st_time.substring(0, 5) + getResources().getString(R.string.for1) + stringBuilder1.toString() + getResources().getString(R.string.cannot_placed));
 
                             showCoincidingAlertMessage(stringBuilder.toString(), flag);
                             Log.d(TAG, "Message for coinciding slot schedule : " + stringBuilder.toString());
                         } else {
-                            stringBuilder.append("Hi, you have placed a new slot with a vacation between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + st_time.substring(0, 5) + " for " + stringBuilder1.toString());
+                            stringBuilder.append(getResources().getString(R.string.new_slot_with_vacation) + simpleDateFormat.format(start_date) + getResources().getString(R.string.and) + simpleDateFormat.format(stop_date) + getResources().getString(R.string.from1) + s_time.substring(0, 5) + getResources().getString(R.string.to2) + st_time.substring(0, 5) + getResources().getString(R.string.for1) + stringBuilder1.toString());
                             showCoincidingAlertMessage(stringBuilder.toString(), flag);
                             Log.d(TAG, "Message for coinciding exception while add new slot : " + stringBuilder.toString());
                         }
@@ -784,11 +784,11 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
                     /* if condition is checking whether the flag is 0 or 1 in case of single coinciding slot,or in case of single coinciding exception in Json string.*/
                         if (flag == 0) {
-                            stringBuilder.append("Sorry, there is already a slot between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + st_time.substring(0, 5) + "\n So this slot cannot be placed!");
+                            stringBuilder.append(getResources().getString(R.string.already_slot_found) + simpleDateFormat.format(start_date) +getResources().getString(R.string.and) + simpleDateFormat.format(stop_date) + getResources().getString(R.string.from1) + s_time.substring(0, 5) + getResources().getString(R.string.to2)+ st_time.substring(0, 5) + getResources().getString(R.string.cannot_placed));
                             showCoincidingAlertMessage(stringBuilder.toString(), flag);
                             Log.d(TAG, "Message for coinciding slot schedule : " + stringBuilder.toString());
                         } else {
-                            stringBuilder.append("Hi, you have placed a new slot with a vacation between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + st_time.substring(0, 5));
+                            stringBuilder.append(getResources().getString(R.string.new_slot_with_vacation) + simpleDateFormat.format(start_date) +getResources().getString(R.string.and)+ simpleDateFormat.format(stop_date) + getResources().getString(R.string.from1) + s_time.substring(0, 5) + getResources().getString(R.string.to2) + st_time.substring(0, 5));
                             showCoincidingAlertMessage(stringBuilder.toString(), flag);
                             Log.d(TAG, "Message for coinciding exception while add new slot : " + stringBuilder.toString());
                         }
@@ -819,7 +819,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                     .show();
         } else {
             new AlertDialog.Builder(this)
-                    .setTitle("Vaccation schedule found")
+                    .setTitle("Vacation schedule found")
                     .setMessage(message)
                     .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {

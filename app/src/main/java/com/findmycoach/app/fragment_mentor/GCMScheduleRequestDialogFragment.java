@@ -18,6 +18,7 @@ import com.facebook.Request;
 import com.findmycoach.app.R;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
+import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
 /**
@@ -60,6 +61,7 @@ EditText et_message;
                 requestParams.add("slot_type",slot_type);
                 requestParams.add("event_id",event_id);
                 requestParams.add("student_id",student_id);
+
                 if(et_message.getText().toString() != null){
                     requestParams.add("message",et_message.getText().toString());
                 }else{

@@ -129,8 +129,8 @@ public class HomeFragment extends Fragment implements Callback {
                         JSONObject jsonObject_notification = jsonArray_notifications.getJSONObject(notification_no);
                         Log.d(TAG,"jsonObject as string "+jsonObject_notification.toString());
                         String title = jsonObject_notification.getString("title");
-                       /* if (title.equalsIgnoreCase("Connection request")) {*/
-                            if (title.equalsIgnoreCase("")) {
+                        if (title.equalsIgnoreCase("Connection request")) {
+
                             ConnectionRequest connectionRequest = new ConnectionRequest();
                             connectionRequest.setId(jsonObject_notification.getString("id"));
                             String image_url = jsonObject_notification.getString("image");

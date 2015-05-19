@@ -615,6 +615,13 @@
     <string name="verify">Verify</string>
     <string name="verify_phone">Verify phone</string>
     <string name="sending_code">Sending code...</string>
+    <string name="already_slot_found">Sorry, there is already a slot between\n</string>
+    <string name="and">\tand\t</string>
+    <string name="from1">\tfrom\t</string>
+    <string name="to2">\tto\t</string>
+    <string name="for1">\tfor\t</string>
+    <string name="cannot_placed">\nSo this slot cannot be placed!</string>
+    <string name="new_slot_with_vacation">Hi, you have placed a new slot with a vacation between \n</string>
 
 
     <!--Exception message-->

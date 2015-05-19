@@ -358,6 +358,11 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                             }
                         }
 
+                        if (et_note_vaccation.getText().toString().trim() != null)
+                        requestParams.add("vacation_reason",et_note_vaccation.toString());
+                        else
+                        requestParams.add("vacation_reason",getResources().getString(R.string.schedule_vacation_note));
+
                         requestParams.add("name", StorageHelper.getUserDetails(ScheduleYourVacation.this, "user_id") + "_vacation_schedule");
 
                         requestParams.add("dates", stringBuilder1.toString());

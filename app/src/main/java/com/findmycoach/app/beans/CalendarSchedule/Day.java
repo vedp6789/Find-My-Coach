@@ -14,6 +14,7 @@ public class Day implements Parcelable {
     public Day(){
         dayEvents=new ArrayList<DayEvent>();
         daySlots=new ArrayList<DaySlot>();
+        dayVacations=new ArrayList<DayVacation>();
     }
 
 
@@ -34,6 +35,15 @@ public class Day implements Parcelable {
 
     public List<DayEvent> dayEvents;
     public List<DaySlot> daySlots;
+    public List<DayVacation> dayVacations;
+
+    public List<DayVacation> getDayVacations() {
+        return dayVacations;
+    }
+
+    public void setDayVacations(List<DayVacation> dayVacations) {
+        this.dayVacations = dayVacations;
+    }
 
     public List<DaySlot> getDaySlots() {
         return daySlots;
@@ -62,6 +72,8 @@ public class Day implements Parcelable {
 
         dest.writeTypedList(this.dayEvents);
         dest.writeTypedList(this.daySlots);
+        dest.writeTypedList(this.dayVacations);
+
     }
     public Day(Parcel parcel){
         //readFromParcel(parcel);
@@ -70,6 +82,7 @@ public class Day implements Parcelable {
         //List<DayEvent> list = null;
         parcel.readTypedList(this.dayEvents, DayEvent.CREATOR);
         parcel.readTypedList(this.daySlots, DaySlot.CREATOR);
+        parcel.readTypedList(this.dayVacations, DayVacation.CREATOR);
     }
 
 

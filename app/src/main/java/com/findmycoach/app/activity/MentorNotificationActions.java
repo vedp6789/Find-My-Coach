@@ -219,6 +219,7 @@ public class MentorNotificationActions extends Activity implements Callback {
                         requestParams.add("slot_type", scheduleRequest.getClass_type());
                         requestParams.add("event_id", scheduleRequest.getEvent_id());
                         requestParams.add("student_id", scheduleRequest.getStudent_id());
+                        requestParams.add("mentor_id",StorageHelper.getUserDetails(MentorNotificationActions.this,"user_id"));
                         if (et_mentor_reply.getText().toString() != null) {
                             requestParams.add("message", et_mentor_reply.getText().toString());
                         } else {
@@ -226,6 +227,7 @@ public class MentorNotificationActions extends Activity implements Callback {
                         }
                         requestParams.add("response", "true");
                         action = "accept";
+                        Log.d(TAG,"slot_type : "+scheduleRequest.getClass_type()+" event id: "+scheduleRequest.getEvent_id()+" student id: "+scheduleRequest.getStudent_id()+"response" +true+"mentor_id: "+StorageHelper.getUserDetails(MentorNotificationActions.this,"user_id"));
                         progressDialog.show();
                         NetworkClient.finalizeEvent(MentorNotificationActions.this, requestParams, MentorNotificationActions.this, 49);
 
@@ -239,6 +241,8 @@ public class MentorNotificationActions extends Activity implements Callback {
                         requestParams.add("slot_type", scheduleRequest.getClass_type());
                         requestParams.add("event_id", scheduleRequest.getEvent_id());
                         requestParams.add("student_id", scheduleRequest.getStudent_id());
+                        requestParams.add("mentor_id",StorageHelper.getUserDetails(MentorNotificationActions.this,StorageHelper.getUserDetails(MentorNotificationActions.this,"user_id")));
+
                         if (et_mentor_reply.getText().toString() != null) {
                             requestParams.add("message", et_mentor_reply.getText().toString());
                         } else {

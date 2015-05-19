@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,6 +28,7 @@ import com.findmycoach.app.adapter.NotificationAdapter;
 import com.findmycoach.app.beans.requests.ConnectionRequestsResponse;
 import com.findmycoach.app.beans.requests.Data;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.DividerItemDecoration;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.RecyclerItemClickListener;
 import com.findmycoach.app.util.StorageHelper;
@@ -69,9 +71,11 @@ public class NotificationsFragment extends Fragment implements Callback {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_mentee_notifications);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         adapter = new MenteeNotificationRecyclerViewAdapter(getActivity(), jsonArray_notifications);
         recyclerView.setAdapter(adapter);
