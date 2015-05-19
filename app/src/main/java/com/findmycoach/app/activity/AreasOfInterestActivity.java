@@ -1,22 +1,18 @@
 package com.findmycoach.app.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Dialog;
-import android.app.LocalActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TabHost;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.InterestsAdapter;
 import com.findmycoach.app.beans.category.Category;
+import com.findmycoach.app.beans.category.Datum;
+import com.findmycoach.app.beans.category.DatumSub;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
@@ -25,165 +21,127 @@ import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class AreasOfInterestActivity extends Activity implements Callback {
 
-    public static List<String> list;
     private static InterestsAdapter adapter;
     private Button saveAction;
     private final String TAG = "FMC";
     private DataBase dataBase;
     private Category category;
-    private Bundle bundle;
-
-    public static void notifyAdapter(){
-        adapter.notifyDataSetChanged();
-    }
+    private ListView listView;
+    private List<InterestsAdapter.SubCategoryItems> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        bundle = savedInstanceState;
-
-        list = null;
-        list = new ArrayList<String>();
-
         setContentView(R.layout.activity_areas_of_interest);
         initialize();
-        applyActionbarProperties();
         applyActions();
         checkSUbCategory();
     }
 
-    /** Checking whether subcategory is already cached or not*/
+    /**
+     * Checking whether subcategory is already cached or not
+     */
     private void checkSUbCategory() {
         dataBase = DataBase.singleton(this);
         category = dataBase.selectAllSubCategory();
 
         /** If not then call api to get sub categories */
-        if(category.getData().size() < 1) {
+        if (category.getData().size() < 1) {
             Log.d(TAG, "sub category api called");
             getSubCategories();
-        }
+        } else
+            populateData();
+
     }
 
-    /** Calling category api  */
+    private void populateData() {
+        String interestsString = getIntent().getStringExtra("interests");
+        Log.e(TAG, interestsString);
+
+        for (Datum d : category.getData()) {
+            for (DatumSub sub : d.getDataSub())
+                list.add(new InterestsAdapter.SubCategoryItems(sub.getName(), 0));
+        }
+
+
+        if (interestsString != null) {
+            String[] interests = interestsString.split(",");
+
+            for (String s : interests) {
+                for (InterestsAdapter.SubCategoryItems i : list) {
+                    if (i.getItemName().trim().equalsIgnoreCase(s.trim())) {
+                        i.setSelected(1);
+                    }
+                }
+            }
+        }
+
+        Collections.sort(list, new Comparator<InterestsAdapter.SubCategoryItems>() {
+            @Override
+            public int compare(InterestsAdapter.SubCategoryItems lhs, InterestsAdapter.SubCategoryItems rhs) {
+                return rhs.isSelected() - lhs.isSelected();
+            }
+        });
+
+        adapter = new InterestsAdapter(this, list);
+        listView.setAdapter(adapter);
+    }
+
+    /**
+     * Calling category api
+     */
     private void getSubCategories() {
         RequestParams requestParams = new RequestParams();
         String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
         NetworkClient.getCategories(this, requestParams, authToken, this, 34);
     }
 
-    /** Passing data back to calling class  */
+    /**
+     * Passing data back to calling class
+     */
     private void applyActions() {
         saveAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.putExtra("interests", new Gson().toJson(list));
+                List<String> listTemp = new ArrayList<>();
+                for(InterestsAdapter.SubCategoryItems l : list){
+                    if(l.isSelected() == 1)
+                        listTemp.add(l.getItemName());
+                }
+                intent.putExtra("interests", new Gson().toJson(listTemp));
                 setResult(RESULT_OK, intent);
                 finish();
             }
         });
 
-
-        findViewById(R.id.plus).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addInterest(category);
-            }
-        });
     }
 
-    /** Getting references of views */
+    /**
+     * Getting references of views
+     */
     private void initialize() {
-        ListView listView = (ListView) findViewById(R.id.areas_of_interest_list);
+        listView = (ListView) findViewById(R.id.areas_of_interest_list);
         saveAction = (Button) findViewById(R.id.save_interests);
-        String interestsString = getIntent().getStringExtra("interests");
-        if(interestsString != null){
-            String[] interests = interestsString.split(",");
-            for(String s : interests)
-                list.add(s.trim());
-        }
-        adapter = new InterestsAdapter(this, list);
-        listView.setAdapter(adapter);
+        list = new ArrayList<>();
     }
 
-    private void applyActionbarProperties() {
-//        ActionBar actionbar = getActionBar();
-//        if(actionbar != null)
-//            actionbar.setDisplayHomeAsUpEnabled(true);
-    }
 
-    /** Dialog to add sub category */
-    private void addInterest(Category category) {
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_area_of_interest);
-        dialog.setTitle(getResources().getString(R.string.select_sub_category));
-        TabHost tabHost = (TabHost) dialog.findViewById(R.id.tabhost);
-        LocalActivityManager localActivityManager;
-        localActivityManager = new LocalActivityManager(this, false);
-        localActivityManager.dispatchCreate(bundle);
-        tabHost.setup(localActivityManager);
-
-        for(int i=0; i<category.getData().size(); i++){
-            com.findmycoach.app.beans.category.Datum datum = category.getData().get(i);
-            TabHost.TabSpec singleCategory = tabHost.newTabSpec(i+"");
-            singleCategory.setIndicator(datum.getName());
-            Intent intent = new Intent(this, SubCategoryActivity.class);
-            StringBuilder subCategory = new StringBuilder();
-            StringBuilder subCategoryId = new StringBuilder();
-            int row = datum.getDataSub().size()+1;
-            subCategory.append("Select one#");
-            subCategoryId.append("-1#");
-            for(int x=0; x<row-1; x++) {
-                subCategory.append(datum.getDataSub().get(x).getName() + "#");
-                subCategoryId.append(datum.getDataSub().get(x).getId() + "#");
-            }
-            intent.putExtra("row", row);
-            intent.putExtra("sub_category", subCategory.toString());
-            intent.putExtra("sub_category_id",subCategoryId.toString());
-            intent.putExtra("column_index", i);
-            singleCategory.setContent(intent);
-            tabHost.addTab(singleCategory);
-        }
-
-        dialog.findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_areas_of_interest, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_add) {
-            addInterest(category);
-            return true;
-        }else if(id == android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    /** If subcategories are successfully retried from server, store it into database*/
+    /**
+     * If subcategories are successfully retried from server, store it into database
+     */
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         dataBase.insertData((Category) object);
         category = dataBase.selectAllSubCategory();
+        populateData();
     }
 
     @Override

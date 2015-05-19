@@ -118,7 +118,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 1 : 0);*/
 
         chargeInput.setText(userInfo.getCharges());
-        chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"hour"}));
+        chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, new String[]{"hour"}));
         chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
 
         try {
@@ -365,6 +365,14 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             public void onClick(View v) {
                 if (validateUserUpdate())
                     callUpdateService();
+            }
+        });
+
+
+        findViewById(R.id.checkboxTextView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isReadyToTravel.setChecked(!isReadyToTravel.isChecked());
             }
         });
 

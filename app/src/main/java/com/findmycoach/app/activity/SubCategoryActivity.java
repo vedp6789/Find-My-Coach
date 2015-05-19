@@ -53,10 +53,10 @@ public class SubCategoryActivity extends Activity{
                 }
 
                 try{
-                    if(position != 0 && !AreasOfInterestActivity.list.contains(rowValue[position])) {
-                        AreasOfInterestActivity.list.add(rowValue[position]);
-                        AreasOfInterestActivity.notifyAdapter();
-                    }
+//                    if(position != 0 && !AreasOfInterestActivity.list.contains(rowValue[position])) {
+//                        AreasOfInterestActivity.list.add(rowValue[position]);
+//                        AreasOfInterestActivity.notifyAdapter();
+//                    }
                 }catch (Exception ignored){
                 }
             }
