@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/login_button_height"
+    android:layout_height="@dimen/action_bar_height"
     android:orientation="horizontal"
     android:background="@color/purple">
 
@@ -27,10 +27,14 @@
         android:layout_toLeftOf="@+id/menuItem" />
 
     <ImageView
+        android:src="@drawable/side_menu_small"
         android:layout_alignParentRight="true"
         android:id="@+id/menuItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/textView_padding_margin"/>
+        android:layout_marginLeft="@dimen/textView_padding_margin"
+        android:layout_marginRight="@dimen/textView_padding_margin"
+        android:layout_alignBottom="@+id/backButton"
+        android:layout_alignTop="@+id/backButton" />
 
 </RelativeLayout>
