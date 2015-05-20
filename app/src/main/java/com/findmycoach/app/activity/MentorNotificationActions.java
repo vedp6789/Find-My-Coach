@@ -2,6 +2,7 @@ package com.findmycoach.app.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -305,7 +306,7 @@ public class MentorNotificationActions extends Activity implements Callback {
                         } else {
                             Toast.makeText(MentorNotificationActions.this, first_name.trim() + getResources().getString(R.string.request_declined), Toast.LENGTH_SHORT).show();
                         }
-                        setResult(RESULT_OK);
+                        setResult(RESULT_OK, new Intent());
                         finish();
                     } else {
                         Toast.makeText(MentorNotificationActions.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();

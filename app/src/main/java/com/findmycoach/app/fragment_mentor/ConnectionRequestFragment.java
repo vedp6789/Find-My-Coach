@@ -101,8 +101,8 @@ public class ConnectionRequestFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == 12345 && requestCode == getActivity().RESULT_OK && selectedPosition != -1) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 12345 && resultCode == getActivity().RESULT_OK && selectedPosition != -1) {
             arrayList_of_connection_request.get(selectedPosition).setStatus("read");
             adapter.notifyDataSetChanged();
         }
