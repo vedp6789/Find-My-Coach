@@ -1,12 +1,9 @@
 package com.findmycoach.app.activity;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +15,6 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.UserNotifications.ConnectionRequest;
 import com.findmycoach.app.beans.UserNotifications.ScheduleRequest;
-import com.findmycoach.app.fragment_mentor.HomeFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -47,8 +43,7 @@ public class MentorNotificationActions extends Activity implements Callback {
     ProgressDialog progressDialog;
     private String TAG = "FMC";
     String action;
-    String created_date,created_time;
-
+    String created_date, created_time;
 
 
     @Override
@@ -65,7 +60,7 @@ public class MentorNotificationActions extends Activity implements Callback {
                 connectionRequest = bundle.getParcelable("conn_req_data");
                 initialize_for_connection_request();
                 first_name = connectionRequest.getFirst_name();
-                tv_title_message.setText(first_name.trim() + " "+getResources().getString(R.string.connection_request_title));
+                tv_title_message.setText(first_name.trim() + " " + getResources().getString(R.string.connection_request_title));
                 start_date = connectionRequest.getStart_date();
                 start_time = connectionRequest.getStart_time();
 
@@ -134,7 +129,7 @@ public class MentorNotificationActions extends Activity implements Callback {
                 scheduleRequest = bundle.getParcelable("schedule_req_data");
                 initialize_for_schedule_request();
                 first_name = scheduleRequest.getFirst_name();
-                tv_title_message.setText(first_name.trim() + " "+ getResources().getString(R.string.schedule_request_title));
+                tv_title_message.setText(first_name.trim() + " " + getResources().getString(R.string.schedule_request_title));
                 start_date = scheduleRequest.getStart_date();
                 stop_date = scheduleRequest.getStop_date();
                 start_time = scheduleRequest.getStart_time();
@@ -143,8 +138,8 @@ public class MentorNotificationActions extends Activity implements Callback {
                 created_date = scheduleRequest.getCreated_date();
                 created_time = scheduleRequest.getCreated_time();
 
-                Log.d(TAG,"start time of class: "+start_time.toString());
-                Log.d(TAG,"stop_time of class: "+stop_time.toString());
+                Log.d(TAG, "start time of class: " + start_time.toString());
+                Log.d(TAG, "stop_time of class: " + stop_time.toString());
 
                 tv_date.setText(String.format(getResources().getStringArray(R.array.months)[Integer.parseInt(created_date.split("-")[1]) - 1] + " %02d,%d \t %02d:%02d", Integer.parseInt(created_date.split("-")[2]), Integer.parseInt(created_date.split("-")[0]), Integer.parseInt(created_time.split(":")[0]), Integer.parseInt(created_time.split(":")[1])));
 
@@ -224,7 +219,7 @@ public class MentorNotificationActions extends Activity implements Callback {
                         requestParams.add("slot_type", scheduleRequest.getClass_type());
                         requestParams.add("event_id", scheduleRequest.getEvent_id());
                         requestParams.add("student_id", scheduleRequest.getStudent_id());
-                        requestParams.add("mentor_id",StorageHelper.getUserDetails(MentorNotificationActions.this,"user_id"));
+                        requestParams.add("mentor_id", StorageHelper.getUserDetails(MentorNotificationActions.this, "user_id"));
                         if (et_mentor_reply.getText().toString() != null) {
                             requestParams.add("message", et_mentor_reply.getText().toString());
                         } else {
@@ -232,7 +227,7 @@ public class MentorNotificationActions extends Activity implements Callback {
                         }
                         requestParams.add("response", "true");
                         action = "accept";
-                        Log.d(TAG,"slot_type : "+scheduleRequest.getClass_type()+" event id: "+scheduleRequest.getEvent_id()+" student id: "+scheduleRequest.getStudent_id()+"response" +true+"mentor_id: "+StorageHelper.getUserDetails(MentorNotificationActions.this,"user_id"));
+                        Log.d(TAG, "slot_type : " + scheduleRequest.getClass_type() + " event id: " + scheduleRequest.getEvent_id() + " student id: " + scheduleRequest.getStudent_id() + "response" + true + "mentor_id: " + StorageHelper.getUserDetails(MentorNotificationActions.this, "user_id"));
                         progressDialog.show();
                         NetworkClient.finalizeEvent(MentorNotificationActions.this, requestParams, MentorNotificationActions.this, 49);
 
@@ -246,7 +241,7 @@ public class MentorNotificationActions extends Activity implements Callback {
                         requestParams.add("slot_type", scheduleRequest.getClass_type());
                         requestParams.add("event_id", scheduleRequest.getEvent_id());
                         requestParams.add("student_id", scheduleRequest.getStudent_id());
-                        requestParams.add("mentor_id",StorageHelper.getUserDetails(MentorNotificationActions.this, "user_id"));
+                        requestParams.add("mentor_id", StorageHelper.getUserDetails(MentorNotificationActions.this, "user_id"));
 
                         if (et_mentor_reply.getText().toString() != null) {
                             requestParams.add("message", et_mentor_reply.getText().toString());
@@ -269,7 +264,7 @@ public class MentorNotificationActions extends Activity implements Callback {
 
     private void initialize_for_schedule_request() {
         iv_user_icon = (ImageView) findViewById(R.id.iv_user_icon);
-        tv_date= (TextView) findViewById(R.id.tv_date);
+        tv_date = (TextView) findViewById(R.id.tv_date);
         tv_start_date = (TextView) findViewById(R.id.tv_start_date_val);
         tv_stop_date = (TextView) findViewById(R.id.tv_stop_date_val);
         tv_start_time = (TextView) findViewById(R.id.tv_start_time_val);
@@ -307,21 +302,14 @@ public class MentorNotificationActions extends Activity implements Callback {
                     JSONObject jsonObject = new JSONObject((String) object);
                     if (jsonObject.getString("message").equals("Success")) {
                         if (action.equals("accept")) {
-                            Toast.makeText(MentorNotificationActions.this, first_name.trim() +" "+ getResources().getString(R.string.is_in_connection), Toast.LENGTH_SHORT).show();
-                            finish();
-                            /*FragmentManager fragmentManager=getFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager
-                                    .beginTransaction();
-                            HomeFragment homeFragment=new HomeFragment();
-                            fragmentTransaction.replace()*/
+                            Toast.makeText(MentorNotificationActions.this, first_name.trim() + " " + getResources().getString(R.string.is_in_connection), Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(MentorNotificationActions.this, first_name.trim() + getResources().getString(R.string.request_declined), Toast.LENGTH_SHORT).show();
-                            finish();
                         }
-
-
+                        setResult(RESULT_OK, new Intent());
+                        finish();
                     } else {
-                         Toast.makeText(MentorNotificationActions.this,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MentorNotificationActions.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
 
                     }
                 } catch (JSONException e) {
@@ -331,15 +319,15 @@ public class MentorNotificationActions extends Activity implements Callback {
             case "schedule_request":
                 try {
                     JSONObject jsonObject = new JSONObject((String) object);
-                    String status=jsonObject.getString("status");
+                    String status = jsonObject.getString("status");
                     if (Integer.parseInt(status) == 1)  /* already responded when user accepts*/
-                        Toast.makeText(MentorNotificationActions.this,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MentorNotificationActions.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
 
-                    if(Integer.parseInt(status) == 2)  /* success*/
-                        Toast.makeText(MentorNotificationActions.this,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                    if (Integer.parseInt(status) == 2)  /* success*/
+                        Toast.makeText(MentorNotificationActions.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
 
-                    if(Integer.parseInt(status) == 3)   /* max users crossed when user accepts */
-                        Toast.makeText(MentorNotificationActions.this,jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                    if (Integer.parseInt(status) == 3)   /* max users crossed when user accepts */
+                        Toast.makeText(MentorNotificationActions.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
 
 
                     finish();
