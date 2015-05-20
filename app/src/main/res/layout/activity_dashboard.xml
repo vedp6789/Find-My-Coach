@@ -32,7 +32,6 @@
             android:textColor="@color/white"
             android:textSize="@dimen/profile_name"
             android:gravity="center"
-            android:textStyle="bold"
             android:layout_toEndOf="@+id/backButton"
             android:layout_toStartOf="@+id/menuButton"
             android:layout_toLeftOf="@+id/menuButton"
