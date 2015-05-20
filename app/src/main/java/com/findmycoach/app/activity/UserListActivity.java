@@ -1,16 +1,14 @@
 package com.findmycoach.app.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
@@ -43,7 +41,6 @@ public class UserListActivity extends Activity implements Callback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
-        applyActionbarProperties();
         initialize();
         applyActions();
     }
@@ -60,6 +57,13 @@ public class UserListActivity extends Activity implements Callback {
                     connection_status_for_Selected_mentor=datum.getConnectionStatus();
                     getMentorDetails(datum.getId());
                 }
+            }
+        });
+
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
@@ -88,12 +92,6 @@ public class UserListActivity extends Activity implements Callback {
 
     }
 
-    private void applyActionbarProperties() {
-//        ActionBar actionbar = getActionBar();
-//        if(actionbar != null)
-//            actionbar.setDisplayHomeAsUpEnabled(true);
-    }
-
     private void initialize() {
         listView = (ListView) findViewById(R.id.user_list);
         String json = getIntent().getStringExtra("list");
@@ -105,22 +103,9 @@ public class UserListActivity extends Activity implements Callback {
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         mentorListAdapter = new MentorListAdapter(this, users, progressDialog);
         listView.setAdapter(mentorListAdapter);
-    }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.global, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            this.finish();
-        }
-        return super.onOptionsItemSelected(item);
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(getResources().getString(R.string.search_result));
     }
 
     @Override

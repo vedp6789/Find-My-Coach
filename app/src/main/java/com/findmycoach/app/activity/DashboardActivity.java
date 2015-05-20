@@ -45,6 +45,7 @@ import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class DashboardActivity extends FragmentActivity
         implements Callback, View.OnClickListener {
@@ -96,6 +97,7 @@ public class DashboardActivity extends FragmentActivity
     private ResideMenuItem itemSettings;
     private ResideMenuItem itemLogout;
 
+    private HashMap<String, Integer> resideMenuItemIcons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -478,6 +480,20 @@ public class DashboardActivity extends FragmentActivity
 
     private void setUpMenu(ResideMenuItem item) {
 
+        resideMenuItemIcons = new HashMap<>();
+
+        resideMenuItemIcons.put("HomeSelected", R.drawable.home_selected);
+        resideMenuItemIcons.put("HomeOutLined", R.drawable.home_outlined);
+
+        resideMenuItemIcons.put("NotificationSelected", R.drawable.notifications);
+        resideMenuItemIcons.put("NotificationOutLined", R.drawable.notifications_outlined);
+
+        resideMenuItemIcons.put("ConnectionSelected", R.drawable.my_connections);
+        resideMenuItemIcons.put("ConnectionOutLined", R.drawable.my_connections_outlined);
+
+        resideMenuItemIcons.put("ScheduleSelected", R.drawable.my_schedules);
+        resideMenuItemIcons.put("ScheduleOutLined", R.drawable.my_schedules_outlined);
+
         // attach to current activity;
         resideMenu = new ResideMenu(this);
         resideMenu.setBackground(R.drawable.bg);
@@ -487,10 +503,10 @@ public class DashboardActivity extends FragmentActivity
         resideMenu.setScaleValue(0.6f);
 
         // create menu items;
-        itemHome = new ResideMenuItem(this, R.drawable.home_selected, navigationTitle[0]);
-        itemNotification = new ResideMenuItem(this, R.drawable.notifications_outlined, navigationTitle[1]);
-        itemConnection = new ResideMenuItem(this, R.drawable.my_connections_outlined, navigationTitle[2]);
-        itemSchedule = new ResideMenuItem(this, R.drawable.my_schedules_outlined, navigationTitle[3]);
+        itemHome = new ResideMenuItem(this, resideMenuItemIcons.get("HomeOutLined"), navigationTitle[0]);
+        itemNotification = new ResideMenuItem(this, resideMenuItemIcons.get("NotificationOutLined"), navigationTitle[1]);
+        itemConnection = new ResideMenuItem(this, resideMenuItemIcons.get("ConnectionOutLined"), navigationTitle[2]);
+        itemSchedule = new ResideMenuItem(this, resideMenuItemIcons.get("ScheduleOutLined"), navigationTitle[3]);
         itemSettings = new ResideMenuItem(this, R.drawable.settings_outlined, navigationTitle[4]);
         itemLogout = new ResideMenuItem(this, android.R.drawable.ic_menu_close_clear_cancel, navigationTitle[5]);
 
@@ -583,6 +599,8 @@ public class DashboardActivity extends FragmentActivity
 
         if (user_group == 3) {
             if (view == itemHome) {
+                clearIcon();
+                itemHome.setIcon(resideMenuItemIcons.get("HomeSelected"));
                 titleTV.setText(navigationTitle[1]);
                 for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
                     fragmentManager.popBackStack();
@@ -590,21 +608,50 @@ public class DashboardActivity extends FragmentActivity
                 fragmentTransaction.add(R.id.container, new com.findmycoach.app.fragment_mentor.HomeFragment()).addToBackStack("Home");
                 position = 0;
             } else if (view == itemNotification) {
-                fragmentTransaction.add(R.id.container, new NotificationsFragment()).addToBackStack("Notification");
+                clearIcon();
+                itemNotification.setIcon(resideMenuItemIcons.get("NotificationSelected"));
+
+                try {
+                    if (!fragmentManager.getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals("Notification"))
+                        fragmentTransaction.add(R.id.container, new NotificationsFragment()).addToBackStack("Notification");
+                } catch (Exception e) {
+                    fragmentTransaction.add(R.id.container, new NotificationsFragment()).addToBackStack("Notification");
+                }
+
                 position = 1;
             } else if (view == itemConnection) {
+                clearIcon();
+                itemConnection.setIcon(resideMenuItemIcons.get("ConnectionSelected"));
                 titleTV.setText(navigationTitle[2]);
-                fragmentTransaction.add(R.id.container, new MyConnectionsFragment()).addToBackStack("Connection");
+
+                try {
+                    if (!fragmentManager.getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals("Connection"))
+                        fragmentTransaction.add(R.id.container, new MyConnectionsFragment()).addToBackStack("Connection");
+                } catch (Exception e) {
+                    fragmentTransaction.add(R.id.container, new MyConnectionsFragment()).addToBackStack("Connection");
+                }
+
                 position = 2;
             } else if (view == itemSchedule) {
+                clearIcon();
+                itemSchedule.setIcon(resideMenuItemIcons.get("ScheduleSelected"));
                 titleTV.setText(navigationTitle[3]);
-                fragmentTransaction.add(R.id.container, new MyScheduleFragment()).addToBackStack("Schedule");
+
+                try {
+                    if (!fragmentManager.getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals("Schedule"))
+                        fragmentTransaction.add(R.id.container, new MyScheduleFragment()).addToBackStack("Schedule");
+                } catch (Exception e) {
+                    fragmentTransaction.add(R.id.container, new MyScheduleFragment()).addToBackStack("Schedule");
+                }
+
                 position = 3;
             }
             fragmentTransaction.commit();
         }
         if (user_group == 2) {
             if (view == itemHome) {
+                clearIcon();
+                itemHome.setIcon(resideMenuItemIcons.get("HomeSelected"));
                 titleTV.setText("");
                 for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
                     fragmentManager.popBackStack();
@@ -612,16 +659,43 @@ public class DashboardActivity extends FragmentActivity
                 fragmentTransaction.add(R.id.container, new HomeFragment()).addToBackStack("Home");
                 position = 0;
             } else if (view == itemNotification) {
+                clearIcon();
+                itemNotification.setIcon(resideMenuItemIcons.get("NotificationSelected"));
                 titleTV.setText(navigationTitle[1]);
-                fragmentTransaction.add(R.id.container, new NotificationsFragment()).addToBackStack("Notification");
+
+                try {
+                    if (!fragmentManager.getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals("Notification"))
+                        fragmentTransaction.add(R.id.container, new NotificationsFragment()).addToBackStack("Notification");
+                } catch (Exception e) {
+                    fragmentTransaction.add(R.id.container, new NotificationsFragment()).addToBackStack("Notification");
+                }
+
                 position = 1;
             } else if (view == itemConnection) {
+                clearIcon();
+                itemConnection.setIcon(resideMenuItemIcons.get("ConnectionSelected"));
                 titleTV.setText(navigationTitle[2]);
-                fragmentTransaction.add(R.id.container, new MyConnectionsFragment()).addToBackStack("Connection");
+
+                try {
+                    if (!fragmentManager.getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals("Connection"))
+                        fragmentTransaction.add(R.id.container, new MyConnectionsFragment()).addToBackStack("Connection");
+                } catch (Exception e) {
+                    fragmentTransaction.add(R.id.container, new MyConnectionsFragment()).addToBackStack("Connection");
+                }
+
                 position = 2;
             } else if (view == itemSchedule) {
+                clearIcon();
+                itemSchedule.setIcon(resideMenuItemIcons.get("ScheduleSelected"));
                 titleTV.setText(navigationTitle[3]);
-                fragmentTransaction.add(R.id.container, new MyScheduleFragment()).addToBackStack("Schedule");
+
+                try {
+                    if (!fragmentManager.getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals("Schedule"))
+                        fragmentTransaction.add(R.id.container, new MyScheduleFragment()).addToBackStack("Schedule");
+                } catch (Exception e) {
+                    fragmentTransaction.add(R.id.container, new MyScheduleFragment()).addToBackStack("Schedule");
+                }
+
                 position = 3;
             }
             fragmentTransaction.commit();
@@ -636,6 +710,13 @@ public class DashboardActivity extends FragmentActivity
         else if (view == itemLogout)
             logout();
 
+    }
+
+    private void clearIcon() {
+        itemHome.setIcon(resideMenuItemIcons.get("HomeOutLined"));
+        itemNotification.setIcon(resideMenuItemIcons.get("NotificationOutLined"));
+        itemConnection.setIcon(resideMenuItemIcons.get("ConnectionOutLined"));
+        itemSchedule.setIcon(resideMenuItemIcons.get("ScheduleOutLined"));
     }
 
     @Override
@@ -661,9 +742,38 @@ public class DashboardActivity extends FragmentActivity
 
     @Override
     public void onBackPressed() {
-        if (fragmentManager.getBackStackEntryCount() > 1)
+        if (fragmentManager.getBackStackEntryCount() > 1) {
             fragmentManager.popBackStack();
-        else
+            clearIcon();
+
+            String tag = fragmentManager.getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 2).getName();
+            switch (tag) {
+                case "Home":
+                    if (user_group == 3)
+                        titleTV.setText(navigationTitle[1]);
+                    else
+                        titleTV.setText("");
+
+                    itemHome.setIcon(resideMenuItemIcons.get("HomeSelected"));
+                    break;
+                case "Notification":
+                    if (user_group == 2)
+                        titleTV.setText(navigationTitle[1]);
+                    else
+                        titleTV.setText("");
+
+                    itemNotification.setIcon(resideMenuItemIcons.get("NotificationSelected"));
+                    break;
+                case "Connection":
+                    titleTV.setText(navigationTitle[2]);
+                    itemConnection.setIcon(resideMenuItemIcons.get("ConnectionSelected"));
+                    break;
+                case "Schedule":
+                    titleTV.setText(navigationTitle[3]);
+                    itemSchedule.setIcon(resideMenuItemIcons.get("ScheduleSelected"));
+                    break;
+            }
+        } else
             finish();
 
 

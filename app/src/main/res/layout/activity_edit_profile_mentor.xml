@@ -360,9 +360,10 @@
                     android:layout_marginTop="@dimen/back_margin"
                     android:layout_gravity="center_vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="@dimen/login_button_height">
 
                     <TextView
+                        android:gravity="center_vertical"
                         android:id="@+id/checkboxTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -376,13 +377,13 @@
                         android:layout_alignParentStart="true" />
 
                     <CheckBox
-                        android:layout_margin="@dimen/textView_padding_margin"
-                        android:button="@drawable/custom_check_box"
+                        android:button="@null"
+                        android:background="@drawable/custom_check_box_square"
                         android:id="@+id/input_willing"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="@dimen/activity_vertical_margin"
+                        android:layout_height="@dimen/activity_vertical_margin"
                         android:textColor="@color/purple"
-                        android:layout_alignParentTop="true"
+                        android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true" />
 
