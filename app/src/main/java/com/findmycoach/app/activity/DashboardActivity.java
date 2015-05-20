@@ -334,7 +334,7 @@ public class DashboardActivity extends FragmentActivity
     protected void onResume() {
         super.onResume();
 
-        Log.e("VED", user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification);
+        Log.e(TAG, user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification);
 
         if (fragment_to_launch_from_notification == 0) {
             if (!checkPlayServices()) {
@@ -351,14 +351,14 @@ public class DashboardActivity extends FragmentActivity
                 switch (fragment_to_launch_from_notification) {
                     case 1:
                     case 4:
-                        Log.e("VED", user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 1,4");
+                        Log.e(TAG, user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 1,4");
                         item = itemHome;
                         break;
                     case 2:
                     case 3:
                     case 5:
                     case 6:
-                        Log.e("VED", user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 2,3,5,6");
+                        Log.e(TAG, user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 2,3,5,6");
                         item = itemNotification;
                         break;
                     case 7:
@@ -371,11 +371,11 @@ public class DashboardActivity extends FragmentActivity
 
                 if (resideMenu == null) {
                     setUpMenu(item);
-                    Log.e("VED", "reside null");
+                    Log.e(TAG, "reside null");
                 }
                 else if (item != null) {
                     item.callOnClick();
-                    Log.e("VED", "item not null");
+                    Log.e(TAG, "item not null");
                 }
             } else {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.switch_login), Toast.LENGTH_SHORT).show();
@@ -547,7 +547,7 @@ public class DashboardActivity extends FragmentActivity
         });
     }
 
-    private void updateUI(View view) {
+    public void updateUI(View view) {
         int position = -1;
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

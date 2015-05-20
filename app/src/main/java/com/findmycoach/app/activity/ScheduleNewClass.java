@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -409,6 +410,14 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         rb_pay_now = (RadioButton) findViewById(R.id.rb_pay_now);
         rb_pay_personally = (RadioButton) findViewById(R.id.pay_personally);
+        rb_pay_personally.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                  
+                }
+            }
+        });
         b_payment = (Button) findViewById(R.id.b_proceed_to_payment);
         b_payment.setOnClickListener(this);
 

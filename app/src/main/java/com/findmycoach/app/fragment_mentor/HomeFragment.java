@@ -129,7 +129,7 @@ public class HomeFragment extends Fragment implements Callback {
                         JSONObject jsonObject_notification = jsonArray_notifications.getJSONObject(notification_no);
                         Log.d(TAG,"jsonObject as string "+jsonObject_notification.toString());
                         String title = jsonObject_notification.getString("title");
-                        if (title.equalsIgnoreCase("Connection request")) {
+                        if (title.equalsIgnoreCase("Connection_request")) {
 
                             ConnectionRequest connectionRequest = new ConnectionRequest();
                             connectionRequest.setId(jsonObject_notification.getString("id"));
@@ -151,7 +151,7 @@ public class HomeFragment extends Fragment implements Callback {
 
                             connectionRequests.add(connectionRequest);
                         } else {
-                            if (title.equalsIgnoreCase("Schedule request")) {
+                            if (title.equalsIgnoreCase("Schedule_request")) {
                                 Log.d(TAG,"Inside Schedule request type title");
                                 ScheduleRequest scheduleRequest = new ScheduleRequest();
                                 scheduleRequest.setId(jsonObject_notification.getString("id"));
