@@ -759,9 +759,9 @@
     <string name="action_decline">Decline</string>
     <string name="action_attach_image">Image</string>
     <string name="action_attach_video">Video</string>
-    <string name="add_available_slots">Add available slots</string>
+    <string name="add_available_slots">Add class slot</string>
     <string name="add_vacation">Schedule vacation</string>
-    <string name="create_slot">Create Slot</string>
+    <string name="create_slot">Create class</string>
     <string name="post_schedule_request">Post schedule request</string>
     <string name="schedule">Schedule</string>
     <string name="schedule_class">Schedule a class</string>
