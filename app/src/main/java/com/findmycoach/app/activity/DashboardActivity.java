@@ -60,6 +60,7 @@ public class DashboardActivity extends FragmentActivity
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private static final String GCM_SHARED_PREFERENCE = " gcm_preference";
     private static String REG_ID_SAVED_TO_SERVER;
+    private FragmentManager fragmentManager;
     String regid;
     boolean regid_saved_to_server = false;
     /**
@@ -101,6 +102,7 @@ public class DashboardActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
 
         dashboardActivity = this;
+        fragmentManager = getSupportFragmentManager();
 
 
         String userId = StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id));
@@ -372,8 +374,7 @@ public class DashboardActivity extends FragmentActivity
                 if (resideMenu == null) {
                     setUpMenu(item);
                     Log.e(TAG, "reside null");
-                }
-                else if (item != null) {
+                } else if (item != null) {
                     item.callOnClick();
                     Log.e(TAG, "item not null");
                 }
@@ -519,11 +520,28 @@ public class DashboardActivity extends FragmentActivity
             }
         });
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
 
         if (item != null)
             updateUI(item);
         else
             updateUI(itemHome);
+
+        fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                if (fragmentManager.getBackStackEntryCount() > 1)
+                    backButton.setVisibility(View.VISIBLE);
+                else
+                    backButton.setVisibility(View.INVISIBLE);
+            }
+        });
 
     }
 
@@ -549,24 +567,26 @@ public class DashboardActivity extends FragmentActivity
 
     public void updateUI(View view) {
         int position = -1;
-        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         if (user_group == 3) {
             if (view == itemHome) {
                 titleTV.setText(navigationTitle[1]);
-                fragmentTransaction.replace(R.id.container, new com.findmycoach.app.fragment_mentor.HomeFragment());
+                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                    fragmentManager.popBackStack();
+                }
+                fragmentTransaction.add(R.id.container, new com.findmycoach.app.fragment_mentor.HomeFragment()).addToBackStack("Home");
                 position = 0;
             } else if (view == itemNotification) {
-                fragmentTransaction.replace(R.id.container, new NotificationsFragment());
+                fragmentTransaction.add(R.id.container, new NotificationsFragment()).addToBackStack("Notification");
                 position = 1;
             } else if (view == itemConnection) {
                 titleTV.setText(navigationTitle[2]);
-                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+                fragmentTransaction.add(R.id.container, new MyConnectionsFragment()).addToBackStack("Connection");
                 position = 2;
             } else if (view == itemSchedule) {
                 titleTV.setText(navigationTitle[3]);
-                fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
+                fragmentTransaction.add(R.id.container, new MyScheduleFragment()).addToBackStack("Schedule");
                 position = 3;
             }
             fragmentTransaction.commit();
@@ -574,19 +594,22 @@ public class DashboardActivity extends FragmentActivity
         if (user_group == 2) {
             if (view == itemHome) {
                 titleTV.setText("");
-                fragmentTransaction.replace(R.id.container, new HomeFragment());
+                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                    fragmentManager.popBackStack();
+                }
+                fragmentTransaction.add(R.id.container, new HomeFragment()).addToBackStack("Home");
                 position = 0;
             } else if (view == itemNotification) {
                 titleTV.setText(navigationTitle[1]);
-                fragmentTransaction.replace(R.id.container, new NotificationsFragment());
+                fragmentTransaction.add(R.id.container, new NotificationsFragment()).addToBackStack("Notification");
                 position = 1;
             } else if (view == itemConnection) {
                 titleTV.setText(navigationTitle[2]);
-                fragmentTransaction.replace(R.id.container, new MyConnectionsFragment());
+                fragmentTransaction.add(R.id.container, new MyConnectionsFragment()).addToBackStack("Connection");
                 position = 2;
             } else if (view == itemSchedule) {
                 titleTV.setText(navigationTitle[3]);
-                fragmentTransaction.replace(R.id.container, new MyScheduleFragment());
+                fragmentTransaction.add(R.id.container, new MyScheduleFragment()).addToBackStack("Schedule");
                 position = 3;
             }
             fragmentTransaction.commit();
@@ -600,8 +623,8 @@ public class DashboardActivity extends FragmentActivity
             startActivity(new Intent(this, Settings.class));
         else if (view == itemLogout)
             logout();
-    }
 
+    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -626,10 +649,16 @@ public class DashboardActivity extends FragmentActivity
 
     @Override
     public void onBackPressed() {
-        Intent startMain = new Intent(Intent.ACTION_MAIN);
-        startMain.addCategory(Intent.CATEGORY_HOME);
-        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(startMain);
+        if (fragmentManager.getBackStackEntryCount() > 1)
+            fragmentManager.popBackStack();
+        else
+            finish();
+
+
+//        Intent startMain = new Intent(Intent.ACTION_MAIN);
+//        startMain.addCategory(Intent.CATEGORY_HOME);
+//        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(startMain);
     }
 
     public void fbClearToken() {

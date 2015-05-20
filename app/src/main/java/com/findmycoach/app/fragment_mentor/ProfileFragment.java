@@ -200,7 +200,11 @@ public class ProfileFragment extends Fragment implements Callback {
             populateViews(areaOfCoaching, buttons, getActivity());
         }
 
-        profileRatting.setRating(3.5f);
+       try{
+           profileRatting.setRating(Float.parseFloat(userInfo.getRating()));
+       }catch (Exception e){
+           profileRatting.setRating(0f);
+       }
         LayerDrawable stars = (LayerDrawable) profileRatting.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(getActivity().getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);
 
