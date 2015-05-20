@@ -610,6 +610,9 @@
     <string name="dob">Date of Birth</string>
     <string name="phone_no_must">Phone number is must!!!</string>
     <string name="t_and_c">Terms and Conditions</string>
+    <string name="payment_note_title">Please note</string>
+    <string name="payment_note_content">If you pay personally to the mentor, the mentor will not be verified by Chizzle! </string>
+
     <string name="logging_in">Logging in...</string>
     <string name="verifying">Verifying...</string>
     <string name="verify">Verify</string>

@@ -2,8 +2,10 @@ package com.findmycoach.app.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -17,6 +19,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -231,21 +234,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
 
 
-
-
-        /*boolean include_class_start_date_for_charge = false;
-
-        if (current_hour < slot_stop_hour) {
-            include_class_start_date_for_charge = true;
-        } else {
-            if (current_hour == slot_stop_hour && current_minute < slot_stop_minute)
-                include_class_start_date_for_charge = true;
-
-        }
-*/
-
-
-
         String class_schedule_start_date = tv_from_date.getText().toString();   /* Date which is getting prompted to student, from where student class schedule starts */
         int class_schedule_start_day = Integer.parseInt(class_schedule_start_date.split("-", 3)[0]);
         int class_schedule_start_month = Integer.parseInt(class_schedule_start_date.split("-", 3)[1]);
@@ -259,19 +247,10 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         calendar_schedule_start_date.set(class_schedule_start_year, class_schedule_start_month - 1, class_schedule_start_day);
 
         int valid_class_days = 0;
-        /* Calculation of charge to pay */
 
         valid_class_days = calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_stop_date_of_schedule, slot_on_week_days);
 
-        /*if (include_class_start_date_for_charge) {
-            *//* It means that if a class is on start day of the schedule, then it is going to be count as class *//*
-            valid_class_days = calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_stop_date_of_schedule, slot_on_week_days);
-        } else {
-            *//* class is not going to be count for first day of schedule as current time is greater than slot_stop_time*//*
-            calendar_schedule_start_date.add(Calendar.DATE, 1);
-            valid_class_days = calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_stop_date_of_schedule, slot_on_week_days);
-        }
-*/
+
 
         Log.d(TAG, "valid days " + valid_class_days);
         int total_amount = 0;
@@ -410,19 +389,68 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         rb_pay_now = (RadioButton) findViewById(R.id.rb_pay_now);
         rb_pay_personally = (RadioButton) findViewById(R.id.pay_personally);
-        rb_pay_personally.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                  
-                }
-            }
-        });
+
         b_payment = (Button) findViewById(R.id.b_proceed_to_payment);
         b_payment.setOnClickListener(this);
 
 
     }
+
+
+    private void showAlertMessageOnPayPersonally() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle(getResources().getString(R.string.payment_note_title));
+        ScrollView scrollView = new ScrollView(this);
+        final TextView contentView = new TextView(this);
+        contentView.setText(getResources().getString(R.string.payment_note_content));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(8, 8, 8, 8);
+        scrollView.addView(contentView);
+        scrollView.setLayoutParams(params);
+        alertDialog.setView(scrollView);
+        alertDialog.setCancelable(false);
+        alertDialog.setPositiveButton(getResources().getString(R.string.ok),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        RequestParams requestParams1 = new RequestParams();
+                        requestParams1.add("id", slot_id.toString());
+                        requestParams1.add("mentor_id", mentor_id);
+                        String student_id = StorageHelper.getUserDetails(ScheduleNewClass.this, "user_id");
+                        Log.d(TAG, "student_id what getting sent to server : " + student_id);
+                        requestParams1.add("student_id", student_id);
+                        String from_date = tv_from_date.getText().toString();
+                        requestParams1.add("start_date", from_date.split("-", 3)[2] + "-" + from_date.split("-", 3)[1] + "-" + from_date.split("-", 3)[0]);
+                        requestParams1.add("slot_type", slot_type);
+                        if (mentor_availability.equals("1")) {
+                            requestParams1.add("location", et_location.getText().toString());
+                        }
+                        int sub_category_id = DataBase.singleton(ScheduleNewClass.this).getSubCategoryId(selected_subject);
+                        requestParams1.add("sub_category_id", String.valueOf(sub_category_id));
+                        if (selected_mentor_for.equalsIgnoreCase("child")) {
+                            String date_of_birth_kid = tv_child_dob.getText().toString().split("-", 3)[2] + "-" + tv_child_dob.getText().toString().split("-", 3)[1] + "-" + tv_child_dob.getText().toString().split("-", 3)[0];
+                            requestParams1.add("date_of_birth_kid", date_of_birth_kid);
+                        }
+                        requestParams1.add("total_price", tv_total_charges.getText().toString());
+                        progressDialog.show();
+                        NetworkClient.postScheduleRequest(ScheduleNewClass.this, requestParams1, ScheduleNewClass.this, 46);
+                        // Log.d(TAG,"id : "+slot_id.toString()+"student_id"+student_id+"mentor_id: "+mentor_id+" start_date : "+from_date.split("-",3)[2]+"-"+from_date.split("-",3)[1]+"-"+from_date.split("-",3)[0]+"slot_type : "+slot_type+" sub_category_id : "+sub_category_id+" total_price : "+tv_total_charges.getText().toString()+"date_of_birth_kid"+tv_child_dob.getText().toString().split("-",3)[2]+"-"+tv_child_dob.getText().toString().split("-",3)[1]+"-"+tv_child_dob.getText().toString().split("-",3)[0]);
+
+                    }
+                }
+        );
+        alertDialog.setNegativeButton(getResources().getString(R.string.cancel),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+
+                    }
+                }
+        );
+        alertDialog.show();
+    }
+
 
 
     private void applyActionbarProperties(String name) {
@@ -458,29 +486,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 }
                 if (rb_pay_personally.isChecked()) {
                     if (validate()) {
-                        RequestParams requestParams1 = new RequestParams();
-                        requestParams1.add("id", slot_id.toString());
-                        requestParams1.add("mentor_id", mentor_id);
-                        String student_id = StorageHelper.getUserDetails(ScheduleNewClass.this, "user_id");
-                        Log.d(TAG, "student_id what getting sent to server : " + student_id);
-                        requestParams1.add("student_id", student_id);
-                        String from_date = tv_from_date.getText().toString();
-                        requestParams1.add("start_date", from_date.split("-", 3)[2] + "-" + from_date.split("-", 3)[1] + "-" + from_date.split("-", 3)[0]);
-                        requestParams1.add("slot_type", slot_type);
-                        if (mentor_availability.equals("1")) {
-                            requestParams1.add("location", et_location.getText().toString());
-                        }
-                        int sub_category_id = DataBase.singleton(this).getSubCategoryId(selected_subject);
-                        requestParams1.add("sub_category_id", String.valueOf(sub_category_id));
-                        if (selected_mentor_for.equalsIgnoreCase("child")) {
-                            String date_of_birth_kid = tv_child_dob.getText().toString().split("-", 3)[2] + "-" + tv_child_dob.getText().toString().split("-", 3)[1] + "-" + tv_child_dob.getText().toString().split("-", 3)[0];
-                            requestParams1.add("date_of_birth_kid", date_of_birth_kid);
-                        }
-                        requestParams1.add("total_price", tv_total_charges.getText().toString());
-                        progressDialog.show();
-                        NetworkClient.postScheduleRequest(ScheduleNewClass.this, requestParams1, this, 46);
-                        // Log.d(TAG,"id : "+slot_id.toString()+"student_id"+student_id+"mentor_id: "+mentor_id+" start_date : "+from_date.split("-",3)[2]+"-"+from_date.split("-",3)[1]+"-"+from_date.split("-",3)[0]+"slot_type : "+slot_type+" sub_category_id : "+sub_category_id+" total_price : "+tv_total_charges.getText().toString()+"date_of_birth_kid"+tv_child_dob.getText().toString().split("-",3)[2]+"-"+tv_child_dob.getText().toString().split("-",3)[1]+"-"+tv_child_dob.getText().toString().split("-",3)[0]);
-                        
+                        showAlertMessageOnPayPersonally();
                     }
                 }
                 break;
