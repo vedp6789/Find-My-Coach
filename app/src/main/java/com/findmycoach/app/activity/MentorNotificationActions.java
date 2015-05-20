@@ -329,6 +329,7 @@ public class MentorNotificationActions extends Activity implements Callback {
                     if (Integer.parseInt(status) == 3)   /* max users crossed when user accepts */
                         Toast.makeText(MentorNotificationActions.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
 
+                    setResult(RESULT_OK);
 
                     finish();
 

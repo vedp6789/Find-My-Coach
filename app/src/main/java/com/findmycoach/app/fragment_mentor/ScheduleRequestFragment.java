@@ -29,6 +29,8 @@ public class ScheduleRequestFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private int REQUEST_CODE=82;
+    private int recycler_view_position=-4;
 
     public ScheduleRequestFragment() {
         Log.d("FMC", "default ScheduleRequestFragment");
@@ -79,12 +81,13 @@ public class ScheduleRequestFragment extends Fragment {
                             Bundle bundle = new Bundle();
                             ScheduleRequest scheduleRequest = arrayList_schedule_requests.get(position);
                             String status = scheduleRequest.getStatus();
-
+                            recycler_view_position=position;
                             bundle.putParcelable("schedule_req_data", scheduleRequest);
                             intent.putExtra("for", "schedule_request");
                             intent.putExtra("schedule_req_bundle", bundle);
                             if (status.equals("unread"))
-                                startActivity(intent);
+                                startActivityForResult(intent,REQUEST_CODE);
+
 
 
                         }
@@ -97,6 +100,13 @@ public class ScheduleRequestFragment extends Fragment {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK && recycler_view_position != -4){
+            arrayList_schedule_requests.get(recycler_view_position).setStatus("read");
+            adapter.notifyDataSetChanged();
+        }
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
