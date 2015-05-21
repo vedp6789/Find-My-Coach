@@ -19,7 +19,15 @@ public class DayEvent implements Parcelable{
     private String fname;/* fname when event_type is solo else not going to be used*/
     private String lname;/* lname when event_type is solo else not going to be used*/
     private String sub_category_name;
+    private String slot_id;
 
+    public String getSlot_id() {
+        return slot_id;
+    }
+
+    public void setSlot_id(String slot_id) {
+        this.slot_id = slot_id;
+    }
 
     public DayEvent() {
 
@@ -127,6 +135,7 @@ public class DayEvent implements Parcelable{
         dest.writeString(this.fname);
         dest.writeString(this.lname);
         dest.writeString(this.sub_category_name);
+        dest.writeString(this.slot_id);
 
     }
 
@@ -145,6 +154,7 @@ public class DayEvent implements Parcelable{
         this.fname=source.readString();
         this.lname=source.readString();
         this.sub_category_name=source.readString();
+        this.slot_id=source.readString();
 
     }
 

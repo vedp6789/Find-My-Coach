@@ -104,7 +104,9 @@ public class ScheduleRequestFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK && recycler_view_position != -4){
             arrayList_schedule_requests.get(recycler_view_position).setStatus("read");
-            adapter.notifyDataSetChanged();
+            adapter = new ScheduleRequestRecyclerViewAdapter(getActivity(), arrayList_schedule_requests);
+            recyclerView.setAdapter(adapter);
+            //adapter.notifyDataSetChanged();
         }
     }
 

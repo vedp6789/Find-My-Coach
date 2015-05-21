@@ -731,6 +731,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                         }
 
                         dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                        dayEvent.setSlot_id(day_event.getString("slot_id"));
                         dayEvents.add(dayEvent);
                     }
                     day1.setDayEvents(dayEvents);
@@ -796,6 +797,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                         }
 
                         dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                        dayEvent.setSlot_id(day_event.getString("slot_id"));
                         dayEvents.add(dayEvent);
                     }
                     day1.setDayEvents(dayEvents);
@@ -873,6 +875,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                         }
 
                         dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                        dayEvent.setSlot_id(day_event.getString("slot_id"));
+
                         Log.d(TAG, "Event info " + " for date : " + unique_day.getString("date") + " start_date : " + day_event.getString("start_date") + " stop_date : " + day_event.getString("stop_date") + " start_time : " + day_event.getString("start_time") + " no of users : " + day_event.getString("number_of_users"));
                         dayEvents.add(dayEvent);
                     }
@@ -983,6 +987,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                         }
 
                         dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                        dayEvent.setSlot_id(day_event.getString("slot_id"));
                         dayEvents.add(dayEvent);
                     }
                     day1.setDayEvents(dayEvents);
@@ -1086,6 +1091,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                         }
 
                         dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
+                        dayEvent.setSlot_id(day_event.getString("slot_id"));
                         dayEvents.add(dayEvent);
                     }
                     day1.setDayEvents(dayEvents);

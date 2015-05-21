@@ -63,7 +63,7 @@ public class MenteeNotificationRecyclerViewAdapter extends RecyclerView.Adapter<
                     holder.relativeLayout.setBackgroundColor(Color.LTGRAY);
 
                 //Connection accepted/Connection rejected/Schedule accepted/Schedule rejected
-                if (title.equals("Connection accepted") && title.equals("Connection rejected")) {
+                if (title.equals("connection_accepted") && title.equals("connection_rejected")) {
                     start_date = jsonObject_notification.getString("created_date");
                 } else {
                     start_date = jsonObject_notification.getString("created_date");
@@ -86,19 +86,19 @@ public class MenteeNotificationRecyclerViewAdapter extends RecyclerView.Adapter<
                 long difference = rightNow_in_millis - connection_request_start_date_in_millis;
                 days = difference / (24 * 60 * 60 * 1000);
                 switch (title) {
-                    case "Connection accepted":
+                    case "connection_accepted":
                         holder.tv_message.setText(first_name.trim() + " " + context.getResources().getString(R.string.connection_request_accepted));
                         actionDay(holder);
                         break;
-                    case "Connection rejected":
+                    case "connection_rejected":
                         holder.tv_message.setText(first_name.trim() + " " + context.getResources().getString(R.string.connection_request_rejected));
                         actionDay(holder);
                         break;
-                    case "Schedule accepted":
+                    case "schedule_accepted":
                         holder.tv_message.setText(first_name.trim() + " " + context.getResources().getString(R.string.schedule_request_accepted));
                         actionDay(holder);
                         break;
-                    case "Schedule rejected":
+                    case "schedule_rejected":
                         holder.tv_message.setText(first_name.trim() + " " + context.getResources().getString(R.string.schedule_request_rejected));
                         actionDay(holder);
                         break;

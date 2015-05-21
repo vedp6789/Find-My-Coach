@@ -397,11 +397,11 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             String event_stop_date = dayEvent1.getEvent_stop_date();
                             String event_start_time = dayEvent1.getEvent_start_time();
                             String event_stop_time = dayEvent1.getEvent_stop_time();
+                            String event_related_slot_id=dayEvent1.getSlot_id();
                             int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
-                                        /* checking whether this particular event is similar to slot or not */
-                            if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
+                            /* checking whether this particular event is similar to slot or not */
+                            if(event_related_slot_id.equals(slot_id)){
                                 slot_match_with_any_event = true;
-                                            /* if found similar then check whether the event_totoal_mentees from slot_max_users*/
                                 if (event_total_mentees < slot_max_users) {
                                     free_slot++;
                                     /*
@@ -429,6 +429,38 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                 }
                                 break;
                             }
+
+                           /*             *//* checking whether this particular event is similar to slot or not *//*
+                            if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
+                                slot_match_with_any_event = true;
+                                            *//* if found similar then check whether the event_totoal_mentees from slot_max_users*//*
+                                if (event_total_mentees < slot_max_users) {
+                                    free_slot++;
+                                    *//*
+                                    * Here on this slot, we will show this slot as a free slot on week-view.
+                                    * *//*
+
+
+                                    Calendar startTime;
+                                    startTime = Calendar.getInstance();
+                                    startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
+                                    startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_start_time.split(":", 3)[0]));
+                                    startTime.set(Calendar.MINUTE, Integer.parseInt(slot_start_time.split(":", 3)[1]));
+                                    startTime.set(Calendar.MONTH, newMonth - 1);
+                                    startTime.set(Calendar.YEAR, newYear);
+                                    Calendar endTime;// = (Calendar) startTime.clone();
+                                    endTime = (Calendar) startTime.clone();
+                                    endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
+                                    endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
+                                    WeekViewEvent weekViewEvent;
+                                    weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, slot_on_week_days), startTime, endTime, slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, slot_on_week_days, mentor_id, mentor_availablity, free_slot_event_type, charges, arrayList_subcategory);
+                                    weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
+                                    events.add(weekViewEvent);
+
+
+                                }
+                                break;
+                            }*/
                         }
 
                         if (!slot_match_with_any_event) {
@@ -468,9 +500,15 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             String event_stop_date = dayEvent1.getEvent_stop_date();
                             String event_start_time = dayEvent1.getEvent_start_time();
                             String event_stop_time = dayEvent1.getEvent_stop_time();
+                            String event_releated_to_slot_id=dayEvent1.getSlot_id();
                             int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
                                         /* checking whether this particular event is similar to slot or not */
-                            if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
+                            if(event_releated_to_slot_id.equals(slot_id)){
+                                slot_match_with_event = true;
+
+
+                            }
+                            /*if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
                                 slot_match_with_event = true;
 
                                 if(event_total_mentees < slot_max_users){
@@ -495,7 +533,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
 
                                 break;
-                            }
+                            }*/
                         }
 
                         if (!slot_match_with_event) {

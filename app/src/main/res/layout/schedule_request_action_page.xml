@@ -149,7 +149,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:id="@+id/tv_class_type"
-        android:layout_below="@id/tv_week_days"
+        android:layout_below="@id/tv_week_days_val"
         android:text="@string/class_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -159,7 +159,7 @@
         android:layout_marginTop="5dp"
         android:id="@+id/tv_class_type_val"
         android:gravity="center"
-        android:layout_below="@id/tv_week_days"
+        android:layout_below="@id/tv_week_days_val"
         android:layout_toRightOf="@id/tv_class_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -167,19 +167,19 @@
 
     <TextView
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/tv_subject"
-        android:layout_below="@id/tv_class_type"
+        android:layout_below="@id/tv_class_type_val"
         android:text="@string/subject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/tv_subject_val"
         android:gravity="center"
-        android:layout_below="@id/tv_class_type"
+        android:layout_below="@id/tv_class_type_val"
         android:layout_toRightOf="@id/tv_subject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

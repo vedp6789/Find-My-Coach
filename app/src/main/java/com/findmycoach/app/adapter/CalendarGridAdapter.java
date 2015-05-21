@@ -353,7 +353,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                 if (current_month_data.size() <= 0) {
                     if (allow_once) {
-                        Toast.makeText(context, "Please refresh the schedule !", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(context, "Please refresh the schedule !", Toast.LENGTH_SHORT).show();
                         if (myScheduleFragment != null) {
                             String user_group = StorageHelper.getUserGroup(context, "user_group");
                             myScheduleFragment.populate_calendar_from_adapter = true;
@@ -450,11 +450,14 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                 String slot_start_time = daySlot.getSlot_start_time();
                                 String slot_stop_time = daySlot.getSlot_stop_time();
                                 String slot_type = daySlot.getSlot_type();
+                                String slot_id=daySlot.getSlot_id();
                                 int slot_max_users = Integer.parseInt(daySlot.getSlot_max_users());
 
                                 int slot_stop_day = Integer.parseInt(slot_stop_date.split("-", 3)[2]);
                                 int slot_stop_month = Integer.parseInt(slot_stop_date.split("-", 3)[1]);
                                 int slot_stop_year = Integer.parseInt(slot_stop_date.split("-", 3)[0]);
+
+
 
                                 long current_date_in_millis = System.currentTimeMillis();
 
@@ -493,15 +496,27 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                         String event_stop_date = dayEvent1.getEvent_stop_date();
                                         String event_start_time = dayEvent1.getEvent_start_time();
                                         String event_stop_time = dayEvent1.getEvent_stop_time();
+                                        String event_regarding_slot_id=dayEvent1.getSlot_id();   /* this will get slot_id regarding its matching slot */
                                         int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
                                         /* checking whether this particular event is similar to slot or not */
-                                        if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
-                                            slot_match_with_event = true;
+                                        if(event_regarding_slot_id.equals(slot_id)){
+                                            slot_match_with_event =true;
                                             /* if found similar then check whether the event_totoal_mentees from slot_max_users*/
                                             if (event_total_mentees < slot_max_users) {
                                                 free_slot++;
                                             }
                                         }
+/*
+                                        if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
+                                            slot_match_with_event = true;
+                                            */
+/* if found similar then check whether the event_totoal_mentees from slot_max_users*//*
+
+                                            if (event_total_mentees < slot_max_users) {
+                                                free_slot++;
+                                            }
+                                        }
+*/
                                     }
 
                                     if (!slot_match_with_event)
@@ -520,13 +535,21 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                         String event_stop_date = dayEvent1.getEvent_stop_date();
                                         String event_start_time = dayEvent1.getEvent_start_time();
                                         String event_stop_time = dayEvent1.getEvent_stop_time();
+                                        String event_regarding_slot_id=dayEvent1.getSlot_id();/* this will get slot_id regarding its matching slot */
                                         int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
                                         /* checking whether this particular event is similar to slot or not */
+                                        if(event_regarding_slot_id.equals(slot_id)){
+                                            slot_match_with_event =true;
+                                            /* if found similar then check whether the event_totoal_mentees from slot_max_users*/
+
+                                        }
                                         if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
                                             slot_match_with_event = true;
-                                            if (event_total_mentees < slot_max_users) {
+
+                                            /* Below code is commented as it is expected from API side is that when both event and slot matches i.e. */
+                                            /*if (event_total_mentees < slot_max_users) {
                                                 free_slot++;
-                                            }
+                                            }*/
 
                                         }
                                     }

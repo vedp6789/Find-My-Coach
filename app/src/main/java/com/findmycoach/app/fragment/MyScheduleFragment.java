@@ -737,38 +737,38 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         Log.d(TAG, "API " + calledApiValue + " failure");
         switch (calledApiValue) {
             case 37:
-                Log.d(TAG, " API 37 success");
+
                 Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
                 updateCalendarOnFailure();
                 break;
             case 38:
-                Log.d(TAG, " API 38 success");
+
                 updateMonthAndYearOnNextMonthClick();
                 Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
                 updateArrayListsForNextMonth();
                 updateCalendarOnFailure();
                 break;
             case 39:
-                Log.d(TAG, " API 39 success");
+
                 updateMonthAndYearOnPreviousMonthClick();
                 updateArrayListsForPreviousMonth();
                 Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
                 updateCalendarOnFailure();
                 break;
             case 40:
-                Log.d(TAG, " API 40 success");
+
                 Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
                 updateCalendarOnFailure();
                 break;
             case 41:
-                Log.d(TAG, " API 41 success");
+
                 updateMonthAndYearOnNextMonthClick();
                 updateArrayListsForNextMonth();
                 Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
                 updateCalendarOnFailure();
                 break;
             case 42:
-                Log.d(TAG, " API 42 success");
+
                 updateMonthAndYearOnPreviousMonthClick();
                 updateArrayListsForPreviousMonth();
                 Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
@@ -1271,7 +1271,6 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
                             dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
-                            dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
                             dayEvent.setEvent_type(day_event.getString("slot_type"));
                             dayEvents.add(dayEvent);
                         }
@@ -1421,7 +1420,6 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                             dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
                             dayEvent.setFname(day_event.getString("first_name"));
                             dayEvent.setLname(day_event.getString("last_name"));
-                            dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
                             dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
                             dayEvent.setEvent_type(day_event.getString("slot_type"));
                             dayEvents.add(dayEvent);
