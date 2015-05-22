@@ -35,6 +35,7 @@ public class UserListActivity extends Activity implements Callback {
     private MentorListAdapter mentorListAdapter;
     private int selectedPosition = -1;
     private String connection_status_for_Selected_mentor;
+    private String searchFor;
 
 
     @Override
@@ -95,13 +96,14 @@ public class UserListActivity extends Activity implements Callback {
     private void initialize() {
         listView = (ListView) findViewById(R.id.user_list);
         String json = getIntent().getStringExtra("list");
+        searchFor = getIntent().getStringExtra("search_for");
         Log.d(TAG, "Intent String:" + json);
         SearchResponse searchResponse = new Gson().fromJson(json, SearchResponse.class);
         users = searchResponse.getData();
         Log.d(TAG, "Users:" + users);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
-        mentorListAdapter = new MentorListAdapter(this, users, progressDialog);
+        mentorListAdapter = new MentorListAdapter(this, users, progressDialog, searchFor);
         listView.setAdapter(mentorListAdapter);
 
         TextView title = (TextView) findViewById(R.id.title);

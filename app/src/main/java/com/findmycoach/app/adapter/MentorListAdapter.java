@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,14 +38,20 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     private String studentId;
     private ProgressDialog progressDialog;
     private int clickedPosition = -1;
+    private String searchFor = "";
 
-    private static final String TAG="FMC";
+    private static final String TAG = "FMC";
 
-    public MentorListAdapter(Context context, List<Datum> users, ProgressDialog progressDialog) {
+    public MentorListAdapter(Context context, List<Datum> users, ProgressDialog progressDialog, String searchFor) {
         this.context = context;
         this.users = users;
         this.progressDialog = progressDialog;
-        studentId =  StorageHelper.getUserDetails(context, "user_id");
+        studentId = StorageHelper.getUserDetails(context, "user_id");
+        try{
+            this.searchFor = searchFor.split("-")[0];
+        }catch (Exception e){
+            this.searchFor = "";
+        }
     }
 
     @Override
@@ -68,25 +76,42 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.user_list_item, null);
         }
+        final Datum user = users.get(position);
+
+        TextView nameTV = (TextView) view.findViewById(R.id.mentor_name);
+        TextView chargesTV = (TextView) view.findViewById(R.id.chargesTV);
+        TextView subCategoryTV = (TextView) view.findViewById(R.id.subCatTV);
+        TextView daysTV = (TextView) view.findViewById(R.id.daysTV);
+        TextView distanceTV = (TextView) view.findViewById(R.id.distanceTV);
+        RatingBar ratingBar = (RatingBar) view.findViewById(R.id.mentor_rating);
         ImageView imageView = (ImageView) view.findViewById(R.id.mentor_image);
         final ImageView imageConnect = (ImageView) view.findViewById(R.id.connect_mentor);
-        RatingBar rating = (RatingBar) view.findViewById(R.id.mentor_rating);
-        TextView name = (TextView) view.findViewById(R.id.mentor_name);
-        final Datum user = users.get(position);
-        name.setText(user.getFirstName() + " " + user.getLastName());
-//            rating.setRating(user.get);
-        if (user.getPhotograph() != null && !( user.getPhotograph()).equals("")) {
+
+
+
+        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+        stars.getDrawable(2).setColorFilter(context.getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);
+
+        nameTV.setText(user.getFirstName());
+        subCategoryTV.setText(searchFor);
+        distanceTV.setText(String.format("%.2f", Double.parseDouble(user.getDistance())) + " km");
+        try {
+            ratingBar.setRating(Integer.parseInt(user.getRating()));
+        } catch (Exception e) {
+            ratingBar.setRating(0f);
+        }
+        if (user.getPhotograph() != null && !(user.getPhotograph()).equals("")) {
             Picasso.with(context)
                     .load((String) user.getPhotograph())
                     .placeholder(R.drawable.user_icon)
                     .error(R.drawable.user_icon)
                     .into(imageView);
         }
-        if(user.getConnectionStatus() != null && !user.getConnectionStatus().equals("broken") && !user.getConnectionStatus().equals("rejected")){
-            if(user.getConnectionStatus().equals("accepted") || user.getConnectionStatus().contains("mentor_mentee")){
-                imageConnect.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_menu_close_clear_cancel));
-            }else if(user.getConnectionStatus().equals("pending")) {
-                imageConnect.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_notification_clear_all));
+        if (user.getConnectionStatus() != null && !user.getConnectionStatus().equals("broken") && !user.getConnectionStatus().equals("rejected")) {
+            if (user.getConnectionStatus().equals("accepted") || user.getConnectionStatus().contains("mentor_mentee")) {
+                imageConnect.setImageDrawable(context.getResources().getDrawable(R.drawable.disconnect));
+            } else if (user.getConnectionStatus().equals("pending")) {
+                imageConnect.setImageDrawable(context.getResources().getDrawable(R.drawable.pending));
             }
             imageConnect.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -95,8 +120,8 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
                     disconnect(user.getConnectionId(), user.getId());
                 }
             });
-        }else{
-            imageConnect.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_menu_add));
+        } else {
+            imageConnect.setImageDrawable(context.getResources().getDrawable(R.drawable.connect));
             imageConnect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -127,7 +152,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String message = input.getText().toString();
-                        if(message.trim().length() < 1)
+                        if (message.trim().length() < 1)
                             message = defaultMessage;
                         sendConnectionRequest(message, userId);
                     }
@@ -147,12 +172,12 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
 
     private void sendConnectionRequest(String message, String userId) {
         progressDialog.show();
-        Log.d(TAG,"\n" + message + "\nMentor id : " + userId + "\nStudent id : " + studentId);
+        Log.d(TAG, "\n" + message + "\nMentor id : " + userId + "\nStudent id : " + studentId);
         RequestParams requestParams = new RequestParams();
         requestParams.add("owner", studentId);
         requestParams.add("invitee", userId);
         requestParams.add("message", message);
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
         NetworkClient.sendConnectionRequest(context, requestParams, this, 17);
     }
 
@@ -163,23 +188,23 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         RequestParams requestParams = new RequestParams();
         requestParams.add("id", connectionId);
         requestParams.add("user_id", oppositeUSerId);
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
         NetworkClient.breakConnection(context, requestParams, this, 21);
     }
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        if(clickedPosition != -1) {
-            if(calledApiValue == 17 ) {
+        if (clickedPosition != -1) {
+            if (calledApiValue == 17) {
                 users.get(clickedPosition).setConnectionStatus("pending");
-                String status = object+"";
-                try{
-                    users.get(clickedPosition).setConnectionId(Integer.parseInt(status)+"");
-                }catch (Exception e){
+                String status = object + "";
+                try {
+                    users.get(clickedPosition).setConnectionId(Integer.parseInt(status) + "");
+                } catch (Exception e) {
                     Toast.makeText(context, context.getResources().getString(R.string.success), Toast.LENGTH_LONG).show();
                 }
-            }else if(calledApiValue == 21){
+            } else if (calledApiValue == 21) {
                 users.get(clickedPosition).setConnectionStatus("broken");
                 Toast.makeText(context, (String) object, Toast.LENGTH_LONG).show();
             }
@@ -191,6 +216,6 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        Toast.makeText(context,(String) object, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, (String) object, Toast.LENGTH_LONG).show();
     }
 }

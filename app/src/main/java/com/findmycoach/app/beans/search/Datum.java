@@ -34,6 +34,16 @@ public class Datum {
     @SerializedName("connection_id")
     @Expose
     private String connectionId;
+    @Expose
+    private String distance;
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
 
     public void setConnectionId(String connectionId) {
         this.connectionId = connectionId;
