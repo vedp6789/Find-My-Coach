@@ -469,7 +469,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_enter_code">Enter 6 digits code here.</string>
     <string name="resend_code">Resend verification code</string>
-    <string name="find_mentor">Find Mentor</string>
+    <string name="find_mentor">Find mentor</string>
     <string name="change_location">Change</string>
     <string name="preferred_time">Preferred Time</string>
     <string name="search">Search</string>
@@ -480,7 +480,7 @@
     <string name="hint_enter_cvv">CVV</string>
     <string name="button_skip">SKIP</string>
     <string name="button_save_and_continue">Save and continue</string>
-    <string name="terms">Welcome to Find My Coach. If you continue to use this app you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern ANI Technologies Private Limited relationship with you in relation to this website and the Service .The term FMC or us or we refers to the owner of the website whose registered office is ANI TECHNOLOGIES PRIVATE LIMITED.</string>
+    <string name="terms">Welcome to Chizzle. If you continue to use this app you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern ANI Technologies Private Limited relationship with you in relation to this website and the Service .The term Chizzle or us or we refers to the owner of the website whose registered office is ANI TECHNOLOGIES PRIVATE LIMITED.</string>
     <string name="dummy_contain_of_message">This is the dummy contain of message </string>
     <string name="enter_valid_email">Please enter valid email</string>
     <string name="enter_valid_phone_no">Enter valid phone number</string>
@@ -493,7 +493,7 @@
     <string name="not_connected">Not connected to anyone.</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
-    <string name="gcm_notification">GCM Notification</string>
+    <string name="gcm_notification">GCM notification</string>
     <string name="email_not_present_in_db">Email is not present in database.</string>
     <string name="email_not_registered">Email is not registered.</string>
     <string name="problem_in_connection_server">Problem connecting to server.</string>
@@ -504,7 +504,7 @@
     <string name="max_students">Maximum students:</string>
     <string name="fmc_service">FMC Service</string>
     <string name="fmc_service_description">FMC running in service to allow push notification.</string>
-    <string name="class_schedule">Class Schedule</string>
+    <string name="class_schedule">Class schedule</string>
     <string name="payment_details">Payment details</string>
     <string name="payment_details_method">Add payment method</string>
     <string name="not_free">Not free</string>
@@ -527,13 +527,13 @@
     <!-- end of unique strings block-->
 
     <!-- Toast message strings-->
-    <string name="attach_image_clicked">Attach Image is clicked</string>
-    <string name="attach_video_clicked">Attach Video is clicked</string>
+    <string name="attach_image_clicked">Attach image is clicked</string>
+    <string name="attach_video_clicked">Attach video is clicked</string>
     <string name="too_big_image">Image is too big, Please choose smaller one</string>
     <string name="image_not_picked">You have not picked image</string>
     <string name="choose_suggested_copy">Choose a suggested city</string>
     <string name="enter_necessary_details">Please enter necessary details</string>
-    <string name="check_network_connection">Please Check Network Connection</string>
+    <string name="check_network_connection">Please check network connection</string>
     <string name="google_play_services_not_supported">Your device is not Google Play Services supported.</string>
     <string name="clicked">Clicked </string>
     <string name="long_pressed_event">Long pressed event: </string>
@@ -555,7 +555,7 @@
     <string name="rating_for">Rating for </string>
     <string name="is"> is </string>
     <string name="will_be_submitted"> will be submitted.</string>
-    <string name="your_address_please">Your Address please!</string>
+    <string name="your_address_please">Your address please!</string>
     <string name="atleast_a_week_day">Select at least one week-day.</string>
     <string name="duration_please">Select the duration for this schedule.</string>
     <string name="cards_detail_will_saved">Card details will be saved</string>
@@ -638,16 +638,16 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
-    <string name="title_activity_edit_profile">Edit Profile</string>
+    <string name="title_activity_edit_profile">Edit profile</string>
     <string name="title_activity_choose_image">ChooseImageActivity</string>
     <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
     <string name="title_activity_login">Sign in</string>
-    <string name="title_activity_chat_widget">Chat Widget</string>
+    <string name="title_activity_chat_widget">Chat widget</string>
     <string name="title_activity_signup">SignupActivity</string>
-    <string name="title_edit_profile_menu">Edit Profile</string>
+    <string name="title_edit_profile_menu">Edit profile</string>
     <string name="title_validate_phone">Verify phone number</string>
     <string name="title_activity_user_list">Mentors</string>
-    <string name="title_activity_mentor_details">Mentor Details</string>
+    <string name="title_activity_mentor_details">Mentor detail</string>
     <string name="title_activity_areas_of_interest">AreasOfInterestActivity</string>
 
     <!-- Strings related to login -->
@@ -660,26 +660,26 @@
     <string name="prompt_password">Password</string>
     <string name="old_password">Old password:</string>
     <string name="new_password">New password:</string>
-    <string name="new_phone_no">Mobile Number:</string>
-    <string name="prompt_confirm_password">Confirm Password</string>
+    <string name="new_phone_no">Mobile number:</string>
+    <string name="prompt_confirm_password">Confirm password</string>
     <string name="prompt_commit">Commit</string>
-    <string name="prompt_first_name">First Name</string>
-    <string name="prompt_last_name">Last Name</string>
-    <string name="prompt_date_of_birth">Date Of Birth</string>
+    <string name="prompt_first_name">First name</string>
+    <string name="prompt_last_name">Last name</string>
+    <string name="prompt_date_of_birth">Date of birth</string>
     <string name="prompt_gender">Gender</string>
-    <string name="prompt_area_of_interest">Area of Interests</string>
-    <string name="prompt_area_of_coaching">Area of Coaching</string>
+    <string name="prompt_area_of_interest">Area of interests</string>
+    <string name="prompt_area_of_coaching">Area of coaching</string>
     <string name="please_add_area_of_interest">Please add area of interest.</string>
     <string name="please_add_area_of_coaching">Please add area of coaching.</string>
-    <string name="prompt_coaching_type">Coaching Type</string>
-    <string name="prompt_training_location">Training Location</string>
+    <string name="prompt_coaching_type">Coaching type</string>
+    <string name="prompt_training_location">Training location</string>
     <string name="prompt_male">Male</string>
     <string name="prompt_female">Female</string>
-    <string name="prompt_phone">Mobile Number</string>
+    <string name="prompt_phone">Mobile number</string>
     <string name="prompt_submit">Submit</string>
     <string name="prompt_address">Address</string>
 
-    <string name="prompt_address1">City State Country</string>
+    <string name="prompt_address1">City state country</string>
     <string name="prompt_city">City</string>
     <string name="prompt_state">State</string>
     <string name="prompt_country">Country</string>
@@ -711,26 +711,26 @@
     <string name="date_picker_to">To</string>
     <string name="no_search_result_found">No result found</string>
     <string name="prompt_category">Category</string>
-    <string name="prompt_sub_category">Sub Category</string>
+    <string name="prompt_sub_category">Subcategory</string>
     <string name="prompt_rating">Rating</string>
     <string name="rate">Rate</string>
-    <string name="prompt_name">Search By Name</string>
+    <string name="prompt_name">Search By name</string>
     <string name="prompt_location">Location</string>
-    <string name="prompt_current_location">Current Location</string>
+    <string name="prompt_current_location">Current location</string>
     <string name="connection_request_msg">Hi, I would like to connect with you.</string>
-    <string name="connection_request">Connection Request</string>
-    <string name="enter_msg">Enter Message</string>
+    <string name="connection_request">Connection request</string>
+    <string name="enter_msg">Enter message</string>
     <string name="send">Send</string>
     <string name="request_sent_successfully">Request sent successfully.</string>
     <string name="created_on">  Created on : </string>
     <string name="not_connected_to_anyone">Not connected to anyone.</string>
     <string name="choose_suggested_city">Choose a suggested city</string>
     <string name="choose_suggested_location">Choose a suggested location</string>
-    <string name="add_interest">Add Interest</string>
-    <string name="enter_interest">Enter Interest</string>
-    <string name="data_already_exist">Data Already Exist</string>
-    <string name="mentor_name">Mentor\'s Name:</string>
-    <string name="mentee_name">Mentee\'s Name:</string>
+    <string name="add_interest">Add interest</string>
+    <string name="enter_interest">Enter interest</string>
+    <string name="data_already_exist">Data already exist</string>
+    <string name="mentor_name">Mentor\'s name:</string>
+    <string name="mentee_name">Mentee\'s name:</string>
     <string name="sub">Subject:</string>
     <string name="event_time">Time:</string>
     <string name="mentee_add">Mentee\'s address:</string>
@@ -747,7 +747,7 @@
     <string name="facebook">Facebook</string>
     <string name="google_plus">Google +</string>
     <string name="action_register">Register</string>
-    <string name="action_forgot_password">Forgot Password</string>
+    <string name="action_forgot_password">Forgot password</string>
     <string name="action_sign_up">Sign Up</string>
     <string name="action_save">Save</string>
     <string name="select_sub_category">Select category</string>
@@ -771,8 +771,8 @@
     <string name="cancel">Cancel</string>
     <string name="start_time">Select</string>
     <string name="stop_time">Select</string>
-    <string name="submit_rating">Submit Rating</string>
-    <string name="view_profile">View Profile</string>
+    <string name="submit_rating">Submit rating</string>
+    <string name="view_profile">View profile</string>
 
     <string name="beginner">Beginner</string>
     <string name="intermediate">Intermediate</string>
@@ -828,7 +828,7 @@
     <string name="schedule_request">Post schedule request</string>
     <string name="accept_req">Accept</string>
     <string name="reject_req">Reject</string>
-    <string name="event_desc">Event Description</string>
+    <string name="event_desc">Event description</string>
   <string name="month">Month</string>
     <string name="year">Year</string>
     <string name="calendar_by_loc">Calendar by location</string>
