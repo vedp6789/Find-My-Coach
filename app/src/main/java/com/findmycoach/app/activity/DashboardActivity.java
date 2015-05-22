@@ -449,8 +449,20 @@ public class DashboardActivity extends FragmentActivity
         StorageHelper.clearUser(this);
         StorageHelper.clearUserPhone(this);
         fbClearToken();
+        removeGCMRegistrationId();
         this.finish();
         startActivity(new Intent(this, LoginActivity.class));
+    }
+
+    private void removeGCMRegistrationId() {
+        final SharedPreferences prefs = getGCMPreferences(context);
+        Log.d(TAG,"After Logout selection and removal of GCM data: \nGCM Registration id: "+prefs.getString(PROPERTY_REG_ID,"")+"APP Version saved: "+prefs.getInt(PROPERTY_APP_VERSION,-1));
+        Log.i(TAG, "Removing GCM registration id and App version on Logout" );
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(PROPERTY_REG_ID);
+        editor.remove(PROPERTY_APP_VERSION);
+        editor.apply();
+        Log.d(TAG,"After Logout selection and removal of GCM data: \nGCM Registration id: "+prefs.getString(PROPERTY_REG_ID,"")+"APP Version saved: "+prefs.getInt(PROPERTY_APP_VERSION,-1));
     }
 
     private void updateTermsAndConditionsStatus() {
