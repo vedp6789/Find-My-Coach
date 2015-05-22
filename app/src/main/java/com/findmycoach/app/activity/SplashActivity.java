@@ -15,7 +15,7 @@ import com.loopj.android.http.RequestParams;
 /**
  * Created by prem on 11/3/15.
  */
-public class SplashActivity extends Activity implements Callback{
+public class SplashActivity extends Activity implements Callback {
 
     private DataBase dataBase;
     private boolean isStart;
@@ -30,20 +30,18 @@ public class SplashActivity extends Activity implements Callback{
     }
 
 
-    /** Updating app data from server */
+    /**
+     * Updating app data from server
+     */
     private void getDataFromServer() {
         /** Checking if sub categories are already present */
         dataBase = DataBase.singleton(this);
-//        Category categoryFromDb = dataBase.selectAllSubCategory();
-
-        //** If sub category is not present then call api to get *//*
-            getCategories();
-//        //** Subcategories is present *//*
-//        if(categoryFromDb.getData().size() > 0)
-//            runHoldThread();
+        getCategories();
     }
 
-    /** Thread to hold splash screen */
+    /**
+     * Thread to hold splash screen
+     */
     private void runHoldThread() {
         Thread thread = new Thread() {
             @Override
@@ -51,7 +49,7 @@ public class SplashActivity extends Activity implements Callback{
                 try {
                     synchronized (this) {
                         wait(getResources().getInteger(R.integer.splash_screen_hold_duration));
-                        if(isStart)
+                        if (isStart)
                             startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                         isStart = false;
                         finish();
@@ -64,7 +62,9 @@ public class SplashActivity extends Activity implements Callback{
         thread.start();
     }
 
-    /** Get Sub Categories */
+    /**
+     * Get Sub Categories
+     */
     private void getCategories() {
         /* TODO remove hard coded auth token */
         NetworkClient.getSubCategories(this, new RequestParams(), null, this, 34);

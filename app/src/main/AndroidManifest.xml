@@ -92,6 +92,7 @@
             android:name="com.findmycoach.app.activity.DashboardActivity"
             android:label="@string/title_activity_dashboard"
             android:screenOrientation="portrait"
+            android:launchMode="singleInstance"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.EditProfileActivityMentor"
