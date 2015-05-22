@@ -1,61 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center"
-    android:weightSum="3">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/mentor_image"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_weight="1"
+        android:layout_width="@dimen/list_view_image_height"
+        android:layout_height="@dimen/list_view_image_height"
         android:src="@drawable/user_icon"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <LinearLayout
+
+    <TextView
+        android:text="Name"
+        android:textColor="@color/purple"
+        android:id="@+id/mentor_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/mentor_image"
+        android:layout_gravity="center"
+        android:textSize="@dimen/profile_name"
+        android:textStyle="bold"
         android:layout_toEndOf="@+id/mentor_image"
-        android:layout_toRightOf="@+id/mentor_image"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/mentor_image" />
 
-        <TextView
-            android:text="Name"
-            android:id="@+id/mentor_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <RatingBar
-            android:id="@+id/mentor_rating"
-            style="?android:attr/ratingBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_margin="8dp"
-            android:isIndicator="true"
-            android:numStars="5"
-            android:stepSize="0.3" />
-    </LinearLayout>
+    <RatingBar
+        android:id="@+id/mentor_rating"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:stepSize="0.3"
+        android:rating="3"
+        android:layout_toEndOf="@+id/mentor_image"
+        android:layout_alignBottom="@+id/mentor_image"
+        android:layout_toRightOf="@+id/mentor_image" />
 
     <ImageView
         android:id="@+id/connect_mentor"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_gravity="end|center"
-        android:layout_margin="8dp"
-        android:layout_weight="1"
-        android:src="@android:drawable/ic_menu_add" />
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_add"
+        android:layout_alignParentRight="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="6 km"
+        android:id="@+id/distanceTV"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/connect_mentor"
+        android:layout_toStartOf="@+id/connect_mentor" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$ 25/hr"
+        android:id="@+id/chargesTV"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/distanceTV"
+        android:layout_toStartOf="@+id/distanceTV" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cricket"
+        android:id="@+id/subCatTV"
+        android:layout_alignTop="@+id/mentor_rating"
+        android:layout_toRightOf="@+id/mentor_rating"
+        android:layout_toEndOf="@+id/mentor_rating" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="M T W T F S S"
+        android:id="@+id/daysTV"
+        android:layout_toStartOf="@+id/connect_mentor"
+        android:layout_alignTop="@+id/subCatTV"
+        android:layout_toLeftOf="@+id/connect_mentor" />
 </RelativeLayout>

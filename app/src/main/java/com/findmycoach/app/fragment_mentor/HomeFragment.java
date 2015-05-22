@@ -38,6 +38,7 @@ public class HomeFragment extends Fragment implements Callback {
     private ProgressDialog progressDialog;
     MentorNotifications mentorNotifications;
     private String TAG = "FMC";
+    private String tag;
 
     private static int tab_to_show=0;
 
@@ -53,6 +54,13 @@ public class HomeFragment extends Fragment implements Callback {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        try {
+            Log.e("SHEKHAR", tag+" before");
+            tag = savedInstanceState.getString("OpenTab");
+            Log.e("SHEKHAR", tag+" after");
+        }catch (Exception ignored){}
+
         super.onCreate(savedInstanceState);
         Log.d("FMC", "Inside mentor home fragment");
         mentorNotifications = new MentorNotifications();
@@ -91,6 +99,8 @@ public class HomeFragment extends Fragment implements Callback {
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.mentor_notification_tab);
         pagerSlidingTabStrip.setShouldExpand(true);
         pagerSlidingTabStrip.setViewPager(notifications_on_viewpager);
+        if (tag != null && tag.equalsIgnoreCase("Schedule"))
+            notifications_on_viewpager.setCurrentItem(1);
     }
 
     @Override
@@ -121,20 +131,20 @@ public class HomeFragment extends Fragment implements Callback {
                 if (status.equals("true")) {
 
 
-                    ArrayList<ConnectionRequest> connectionRequests = new ArrayList<ConnectionRequest>();
+                    ArrayList<ConnectionRequest> connectionRequests = new ArrayList<ConnectionRequest>(); pagerSlidingTabStrip.setViewPager(notifications_on_viewpager);
                     ArrayList<ScheduleRequest> scheduleRequests = new ArrayList<ScheduleRequest>();
                     JSONArray jsonArray_notifications = jsonObject.getJSONArray("data");
                     for (int notification_no = 0; notification_no < jsonArray_notifications.length(); notification_no++) {
 
                         JSONObject jsonObject_notification = jsonArray_notifications.getJSONObject(notification_no);
-                        Log.d(TAG,"jsonObject as string "+jsonObject_notification.toString());
+                        Log.d(TAG, "jsonObject as string " + jsonObject_notification.toString());
                         String title = jsonObject_notification.getString("title");
                         if (title.equalsIgnoreCase("Connection_request")) {
 
                             ConnectionRequest connectionRequest = new ConnectionRequest();
                             connectionRequest.setId(jsonObject_notification.getString("id"));
                             String image_url = jsonObject_notification.getString("image");
-                            Log.d(TAG,"image url not found");
+                            Log.d(TAG, "image url not found");
                             if (image_url != null) {
                                 connectionRequest.setImage_url(jsonObject_notification.getString("image"));
                             }
@@ -152,7 +162,7 @@ public class HomeFragment extends Fragment implements Callback {
                             connectionRequests.add(connectionRequest);
                         } else {
                             if (title.equalsIgnoreCase("Schedule_request")) {
-                                Log.d(TAG,"Inside Schedule request type title");
+                                Log.d(TAG, "Inside Schedule request type title");
                                 ScheduleRequest scheduleRequest = new ScheduleRequest();
                                 scheduleRequest.setId(jsonObject_notification.getString("id"));
                                 scheduleRequest.setImage_url(jsonObject_notification.getString("image"));
@@ -185,12 +195,14 @@ public class HomeFragment extends Fragment implements Callback {
 
                     mentorNotifications.setList_of_connection_request(connectionRequests);
                     mentorNotifications.setList_of_schedule_request(scheduleRequests);
-                    Log.d(TAG,"update mentor notification");
+                    Log.d(TAG, "update mentor notification");
 
                     mentorNotificationTabsPagerAdapter = new MentorNotificationTabsPagerAdapter(getActivity().getSupportFragmentManager(), mentorNotifications);
                     notifications_on_viewpager.setAdapter(mentorNotificationTabsPagerAdapter);
 
                     pagerSlidingTabStrip.setViewPager(notifications_on_viewpager);
+                    if (tag != null && tag.equalsIgnoreCase("Schedule"))
+                        notifications_on_viewpager.setCurrentItem(1);
 
 
                 } else {

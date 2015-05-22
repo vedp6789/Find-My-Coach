@@ -354,8 +354,13 @@ public class DashboardActivity extends FragmentActivity
 
                 switch (fragment_to_launch_from_notification) {
                     case 1:
+                        Log.e(TAG, user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 1");
+                        itemHome.setTag(itemHome.getId(), "Connection");
+                        item = itemHome;
+                        break;
                     case 4:
-                        Log.e(TAG, user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 1,4");
+                        Log.e(TAG, user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 4");
+                        itemHome.setTag(itemHome.getId(), "Schedule");
                         item = itemHome;
                         break;
                     case 2:
@@ -378,7 +383,7 @@ public class DashboardActivity extends FragmentActivity
                     Log.e(TAG, "reside null");
                 } else if (item != null) {
                     item.callOnClick();
-                    Log.e(TAG, "item not null");
+                    Log.e(TAG, "reside menu item not null");
                 }
             } else {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.switch_login), Toast.LENGTH_SHORT).show();
@@ -605,7 +610,13 @@ public class DashboardActivity extends FragmentActivity
                 for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
                     fragmentManager.popBackStack();
                 }
-                fragmentTransaction.add(R.id.container, new com.findmycoach.app.fragment_mentor.HomeFragment()).addToBackStack("Home");
+                String tag = (String) itemHome.getTag(itemHome.getId());
+                Bundle bundle = new Bundle();
+                bundle.putString("OpenTab", tag);
+                Log.e(TAG, tag + " <== Tag");
+                com.findmycoach.app.fragment_mentor.HomeFragment homeFragmentMentor = new com.findmycoach.app.fragment_mentor.HomeFragment();
+                homeFragmentMentor.setArguments(bundle);
+                fragmentTransaction.add(R.id.container, homeFragmentMentor).addToBackStack("Home");
                 position = 0;
             } else if (view == itemNotification) {
                 clearIcon();
