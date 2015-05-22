@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <include layout="@layout/header_back_name_menu"
+        android:id="@+id/include" />
 
     <ListView
         android:id="@+id/chatWidgetLv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="50dp"
-        android:stackFromBottom="true" />
+        android:stackFromBottom="true"
+        android:layout_below="@+id/include"
+        android:layout_above="@+id/sendButton" />
 
     <ImageButton
         android:id="@+id/sendButton"
@@ -19,13 +23,20 @@
         android:layout_height="50dp"
         android:layout_gravity="right|bottom"
         android:background="@android:color/transparent"
-        android:src="@android:drawable/ic_menu_send" />
+        android:src="@android:drawable/ic_menu_send"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:id="@+id/msgToSendET"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="left|bottom"
-        android:layout_marginRight="50dp"
-        android:hint="@string/type_here" />
-</FrameLayout>
+        android:hint="@string/type_here"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/sendButton"
+        android:layout_toStartOf="@+id/sendButton" />
+</RelativeLayout>
