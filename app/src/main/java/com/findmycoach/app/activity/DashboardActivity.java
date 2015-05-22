@@ -382,7 +382,8 @@ public class DashboardActivity extends FragmentActivity
                     setUpMenu(item);
                     Log.e(TAG, "reside null");
                 } else if (item != null) {
-                    item.callOnClick();
+//                    item.callOnClick();
+                    updateUI(item);
                     Log.e(TAG, "reside menu item not null");
                 }
             } else {

@@ -5,6 +5,7 @@
     android:isScrollContainer="true"
     android:orientation="vertical"
     android:padding="8dp"
+    android:background="@android:color/darker_gray"
     tools:context="com.findmycoach.app.fragment_mentor.ProfileFragment">
 
 

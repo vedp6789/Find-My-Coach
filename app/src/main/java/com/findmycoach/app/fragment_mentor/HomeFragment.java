@@ -57,7 +57,7 @@ public class HomeFragment extends Fragment implements Callback {
 
         try {
             Log.e("SHEKHAR", tag+" before");
-            tag = savedInstanceState.getString("OpenTab");
+            tag = getArguments().getString("OpenTab");
             Log.e("SHEKHAR", tag+" after");
         }catch (Exception ignored){}
 
