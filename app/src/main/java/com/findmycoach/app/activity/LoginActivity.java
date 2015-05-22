@@ -793,13 +793,14 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         if (statusCode == 206) {
             RequestParams requestParams = new RequestParams();
             requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
-            try{
+            try {
                 StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getData().getId());
-            }catch (Exception e){
-                try{
+            } catch (Exception e) {
+                try {
                     StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" +
                             StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
-                }catch (Exception ex){}
+                } catch (Exception ex) {
+                }
             }
             getPhoneNumber(requestParams);
             return;
