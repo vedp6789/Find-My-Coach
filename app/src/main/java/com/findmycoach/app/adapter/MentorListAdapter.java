@@ -91,14 +91,16 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
 
         LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(context.getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(1).setColorFilter(context.getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(0).setColorFilter(context.getResources().getColor(R.color.purple_light), PorterDuff.Mode.SRC_ATOP);
 
         nameTV.setText(user.getFirstName());
         subCategoryTV.setText(searchFor);
         distanceTV.setText(String.format("%.2f", Double.parseDouble(user.getDistance())) + " km");
         try {
-            ratingBar.setRating(Integer.parseInt(user.getRating()));
+            ratingBar.setRating(Float.parseFloat(user.getRating()));
         } catch (Exception e) {
-            ratingBar.setRating(0f);
+            ratingBar.setRating(0);
         }
         if (user.getPhotograph() != null && !(user.getPhotograph()).equals("")) {
             Picasso.with(context)

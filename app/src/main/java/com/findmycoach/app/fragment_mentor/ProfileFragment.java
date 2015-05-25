@@ -207,6 +207,8 @@ public class ProfileFragment extends Fragment implements Callback {
        }
         LayerDrawable stars = (LayerDrawable) profileRatting.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(getActivity().getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(1).setColorFilter(getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(0).setColorFilter(getResources().getColor(R.color.purple_light), PorterDuff.Mode.SRC_ATOP);
 
         if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {
             profileTravelAvailable.setText(getResources().getString(R.string.yes));
