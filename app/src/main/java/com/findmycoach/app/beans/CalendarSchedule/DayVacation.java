@@ -14,6 +14,10 @@ public class DayVacation implements Parcelable{
     private String cause_of_the_vacation;
     private String [] week_days;
 
+    public   DayVacation(){
+
+    }
+
     public String getCause_of_the_vacation() {
         return cause_of_the_vacation;
     }

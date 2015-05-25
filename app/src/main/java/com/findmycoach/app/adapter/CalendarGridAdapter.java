@@ -614,7 +614,11 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             } else {
                 intent.putExtra("for", "MentorDetailsActivity");
 
-                no_of_free_slots = Integer.parseInt((String) view.getTag(R.id.TAG_FREE_SLOT));
+                String grid_cell_tag=(String) view.getTag(R.id.TAG_FREE_SLOT);
+                if(grid_cell_tag != null)
+                no_of_free_slots = Integer.parseInt(grid_cell_tag);
+                else
+                no_of_free_slots = 0;
                 intent.putExtra("mentor_id", mentor_id);
                 intent.putExtra("availability", availability);
                 intent.putExtra("charges", charges);
@@ -651,10 +655,16 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
             if (month_in_foreground < month_index_of_grid_clicked) {
                 if (month_in_foreground == 0 && month_index_of_grid_clicked == 11) {
+                    if(myScheduleFragment != null)
                     myScheduleFragment.showPrevMonth();
+                    else
+                        mentorDetailsActivity.showPrevMonth();
                 } else {
                     //myScheduleFragment.showPrevMonth();
+                    if (myScheduleFragment != null)
                     myScheduleFragment.showNextMonth();
+                    else
+                        mentorDetailsActivity.showNextMonth();
                 }
 
 
@@ -688,14 +698,19 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                 } else {
                     if (month_in_foreground == 11 && month_index_of_grid_clicked == 0) {
+                        if(myScheduleFragment != null)
                         myScheduleFragment.showNextMonth();
+                        else
+                            mentorDetailsActivity.showNextMonth();
 
                     } else {
                         if (month_in_foreground > month_index_of_grid_clicked) {
 
                             //myScheduleFragment.showNextMonth();
+                            if (myScheduleFragment != null)
                             myScheduleFragment.showPrevMonth();
-
+                            else
+                                mentorDetailsActivity.showPrevMonth();
 
                         }
                     }

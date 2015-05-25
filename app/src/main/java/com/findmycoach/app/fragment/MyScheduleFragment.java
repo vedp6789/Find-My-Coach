@@ -31,6 +31,7 @@ import com.findmycoach.app.adapter.CalendarGridAdapter;
 import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
+import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
 import com.findmycoach.app.fragment_mentor.LocationForSchedule;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
@@ -829,8 +830,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
                     List<DayEvent> dayEvents = new ArrayList<DayEvent>();
                     JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
-
                     List<DaySlot> daySlots = new ArrayList<DaySlot>();
+                   // Log.d(TAG,"day object for prev month: "+unique_day.toString());
+                    JSONArray jsonArray_of_vacation=unique_day.getJSONArray("exceptions");
+                    List<DayVacation> dayVacations=new ArrayList<DayVacation>();
+
                     if (jsonArray_of_slots.length() > 0) {
                         for (int s = 0; s < jsonArray_of_slots.length(); s++) {
                             JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
@@ -876,6 +880,27 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     } else {
                         day1.setDayEvents(dayEvents);
                     }
+
+                    if(jsonArray_of_vacation.length() > 0){
+                        for (int vacation=0; vacation > jsonArray_of_vacation.length() ; vacation++){
+                            JSONObject day_vacation = jsonArray_of_vacation.getJSONObject(vacation);
+                            DayVacation dayVacation = new DayVacation();
+                            dayVacation.setStart_date(day_vacation.getString("start_date"));
+                            dayVacation.setStop_date(day_vacation.getString("stop_date"));
+                            dayVacation.setStart_time(day_vacation.getString("start_time"));
+                            dayVacation.setStop_time(day_vacation.getString("stop_time"));
+
+                            JSONArray jsonArray_week_days=day_vacation.getJSONArray("dates");
+                            String[] dates = new String[jsonArray_week_days.length()];
+                            for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
+                                dates[week_day] = jsonArray_week_days.getString(week_day);
+                            }
+                            dayVacation.setWeek_days(dates);
+                            dayVacations.add(dayVacation);
+
+
+                        }
+                    }
                     previousMonthArrayList.add(day1);
                 }
 
@@ -887,8 +912,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
                     List<DayEvent> dayEvents = new ArrayList<DayEvent>();
                     JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
-
                     List<DaySlot> daySlots = new ArrayList<DaySlot>();
+
+                    Log.d(TAG,"day object for  current month: "+unique_day.toString());
+
                     if (jsonArray_of_slots.length() > 0) {
                         for (int s = 0; s < jsonArray_of_slots.length(); s++) {
                             JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
@@ -955,6 +982,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
                     JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
                     List<DaySlot> daySlots = new ArrayList<DaySlot>();
+
+                    Log.d(TAG, "day object for next month: " + unique_day.toString());
+
                     if (jsonArray_of_slots.length() > 0) {
                         for (int s = 0; s < jsonArray_of_slots.length(); s++) {
                             JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
