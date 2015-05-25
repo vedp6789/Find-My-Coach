@@ -1,18 +1,24 @@
 package com.findmycoach.app.activity;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,13 +58,15 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private ImageView profileImage;
     private TextView profileName;
     private TextView profileAddress;
-    private TextView profileRatting;
+    private RatingBar profileRatting;
     private TextView profileCharges;
+    private TextView profileEmail;
     private TextView profileExperience;
     private TextView profileQualification;
     private TextView profileTravelAvailable;
     private TextView profilePhone;
-    private TextView areaOfCoaching;
+    private TextView profileDob;
+    private LinearLayout areaOfCoaching;
     private Data userInfo = null;
     private String connectionStatus;
 
@@ -388,23 +396,38 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         profileName = (TextView) findViewById(R.id.profile_name);
         profileAddress = (TextView) findViewById(R.id.profile_address);
         profileExperience = (TextView) findViewById(R.id.profile_experience);
-        profileRatting = (TextView) findViewById(R.id.profile_rating);
+        profileRatting = (RatingBar) findViewById(R.id.profile_rating);
         profileQualification = (TextView) findViewById(R.id.profile_accomplishment);
         profileCharges = (TextView) findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) findViewById(R.id.profile_travel_available);
-        areaOfCoaching = (TextView) findViewById(R.id.areas_of_coaching);
+        areaOfCoaching = (LinearLayout) findViewById(R.id.areas_of_coaching);
         profilePhone = (TextView) findViewById(R.id.profile_phone);
+        profileEmail = (TextView) findViewById(R.id.profile_email);
+        profileDob = (TextView) findViewById(R.id.profile_dob);
 
         tv_currentMonth = (TextView) findViewById(R.id.tv_currentMonth);
         iv_nextMonth = (ImageView) findViewById(R.id.iv_nextMonth);
         iv_prevMonth = (ImageView) findViewById(R.id.iv_prevMonth);
 
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(getResources().getString(R.string.title_activity_mentor_details));
 
     }
 
 
     private void populateFields() {
         profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
+        try {
+            profileEmail.setText(userInfo.getEmail());
+        } catch (Exception e) {
+        }
         String address = "";
         if (userInfo.getAddress() != null) {
             address = address + userInfo.getAddress() + ", ";
@@ -417,6 +440,10 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         }
         if (userInfo.getZip() != null) {
             address = address + userInfo.getZip();
+        }
+        try {
+            profileDob.setText((String) userInfo.getDob());
+        } catch (Exception e) {
         }
         if (userInfo.getExperience() != null) {
             profileExperience.setText(userInfo.getExperience() + " year(s)");
@@ -431,7 +458,15 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             Log.d(TAG, "Charges amount : " + charges.split("per", 2)[0] + "charges unit : " + charges.split("per", 2)[1]);
             profileCharges.setText("\u20B9 " + charges);
         }
-        profileRatting.setText(userInfo.getRating());
+        try{
+            profileRatting.setRating(Float.parseFloat(userInfo.getRating()));
+        }catch (Exception e){
+            profileRatting.setRating(0f);
+        }
+        LayerDrawable stars = (LayerDrawable) profileRatting.getProgressDrawable();
+        stars.getDrawable(2).setColorFilter(getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(1).setColorFilter(getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(0).setColorFilter(getResources().getColor(R.color.purple_light), PorterDuff.Mode.SRC_ATOP);
         if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {
             profileTravelAvailable.setText(getResources().getString(R.string.yes));
         } else {
@@ -444,19 +479,60 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
         List<String> areaOfInterests = userInfo.getSubCategoryName();
         if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).trim().equals("")) {
-            String areaOfInterest = "";
-            for (int index = 0; index < areaOfInterests.size(); index++) {
-                if (index != 0) {
-                    areaOfInterest = areaOfInterest + ", " + areaOfInterests.get(index);
-                } else {
-                    areaOfInterest = areaOfInterest + areaOfInterests.get(index);
-                }
+            List<Button> buttons = new ArrayList<>();
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            for (String areaOfInterest : areaOfInterests) {
+                Button button = (Button) inflater.inflate(R.layout.button, null);
+                button.setText(areaOfInterest);
+                buttons.add(button);
             }
-            areaOfCoaching.setText(areaOfInterest);
-        } else {
-            areaOfCoaching.setText("");
+            populateViews(areaOfCoaching, buttons, this);
         }
         profilePhone.setText(userInfo.getPhonenumber());
+    }
+
+    private void populateViews(LinearLayout linearLayout, List<Button> views, Context context) {
+
+        Display display = getWindowManager().getDefaultDisplay();
+        linearLayout.removeAllViews();
+        int maxWidth = display.getWidth() - 40;
+
+        LinearLayout.LayoutParams params;
+        LinearLayout newLL = new LinearLayout(context);
+        newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        newLL.setOrientation(LinearLayout.HORIZONTAL);
+        newLL.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        int widthSoFar = 0;
+
+        for (Button view : views) {
+            LinearLayout LL = new LinearLayout(context);
+            LL.setOrientation(LinearLayout.HORIZONTAL);
+            LL.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
+            LL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            view.measure(0, 0);
+            params = new LinearLayout.LayoutParams(view.getMeasuredWidth(), profileEmail.getHeight());
+            params.setMargins(2, 2, 2, 2);
+
+            LL.addView(view, params);
+            LL.measure(0, 0);
+            widthSoFar += view.getMeasuredWidth();
+            if (widthSoFar >= maxWidth) {
+                linearLayout.addView(newLL);
+
+                newLL = new LinearLayout(context);
+                newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, profileEmail.getHeight()));
+                newLL.setOrientation(LinearLayout.HORIZONTAL);
+                newLL.setGravity(Gravity.CENTER_HORIZONTAL);
+                params = new LinearLayout.LayoutParams(LL.getMeasuredWidth(), LL.getMeasuredHeight());
+                newLL.addView(LL, params);
+                widthSoFar = LL.getMeasuredWidth();
+            } else {
+                newLL.addView(LL);
+            }
+        }
+        linearLayout.addView(newLL);
     }
 
     @Override

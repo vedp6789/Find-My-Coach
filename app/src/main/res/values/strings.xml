@@ -816,6 +816,7 @@
     <string name="subject">Subject: </string>
     <string name="days_of_week">Days of week</string>
     <string name="week_days">Week days:</string>
+    <string name="available_days">Available days</string>
     <string name="duration">Duration</string>
     <string name="payment_option">Payment option</string>
     <string name="location">Location:</string>
