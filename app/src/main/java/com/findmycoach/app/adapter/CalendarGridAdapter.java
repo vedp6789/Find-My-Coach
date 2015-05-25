@@ -2,7 +2,6 @@ package com.findmycoach.app.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +21,6 @@ import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -333,18 +331,17 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
         if (day_color[1].equals("GREY")) {
-            gridcell.setTextColor(context.getResources().getColor(R.color.caldroid_darker_gray));
-            gridcell.setBackgroundResource(R.drawable.abc_btn_check_material);
+            gridcell.setTextColor(context.getResources().getColor(R.color.purple_light));
         }
         if (day_color[1].equals("WHITE")) {
-            gridcell.setTextColor(context.getResources().getColor(R.color.caldroid_black));
+            gridcell.setTextColor(context.getResources().getColor(R.color.purple));
             allow_schedule_population = true;
 
         }
         if (day_color[1].equals("BLUE")) {
-            gridcell.setTextColor(context.getResources().getColor(R.color.caldroid_holo_blue_dark));
+            gridcell.setTextColor(context.getResources().getColor(R.color.white));
+            gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
             allow_schedule_population = true;
-
         }
         day_schedule_index = Integer.parseInt(theday) - 1;
         if (allow_data_population_from_server_data) {
@@ -399,9 +396,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                         if (dayEvents.size() > 0) {
                             if (day_color[1].equals("BLUE")) {
-                                gridcell.setBackgroundColor(new Color().CYAN);
+                                gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
                             } else {
-                                gridcell.setBackgroundColor(new Color().YELLOW);
+                                gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
                             }
                         }
 
@@ -569,14 +566,13 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             * */
                         if (free_slot > 0) {
                             if (day_color[1].equals("BLUE")) {
-
-                                gridcell.setBackgroundColor(new Color().CYAN);
+                                gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
                             } else {
-                                gridcell.setBackgroundColor(new Color().YELLOW);
+                                gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
                             }
                         } else {
                             if (day_color[1].equals("BLUE")) {
-                                gridcell.setBackgroundColor(new Color().CYAN);
+                                gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
                             }
                         }
 

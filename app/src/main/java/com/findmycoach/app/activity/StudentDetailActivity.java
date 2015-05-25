@@ -1,13 +1,11 @@
 package com.findmycoach.app.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +29,8 @@ public class StudentDetailActivity  extends Activity implements Callback {
     private TextView profileName;
     private TextView profileAddress;
     private TextView trainingLocation;
+    private TextView email;
+    private TextView dob;
     private TextView mentorFor;
     private TextView coachingType;
     private TextView profilePhone;
@@ -78,12 +78,32 @@ public class StudentDetailActivity  extends Activity implements Callback {
         mentorFor = (TextView) findViewById(R.id.mentor_for);
         coachingType = (TextView) findViewById(R.id.coaching_type);
         profilePhone = (TextView) findViewById(R.id.profile_phone);
+        email = (TextView) findViewById(R.id.profile_email);
+        dob = (TextView) findViewById(R.id.profile_dob);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
+
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(getResources().getString(R.string.title_student_details));
     }
 
     private void populateFields() {
         profileName.setText(studentDetails.getFirstName() + " " + studentDetails.getLastName());
+        try{
+            email.setText(studentDetails.getEmail());
+        }catch (Exception e){
+        }
+        try{
+            dob.setText((String) studentDetails.getDob());
+        }catch (Exception e){
+        }
         String address = "";
         if (studentDetails.getAddress() != null) {
             address = address + studentDetails.getAddress() + ", ";
@@ -106,32 +126,6 @@ public class StudentDetailActivity  extends Activity implements Callback {
         trainingLocation.setText((String) studentDetails.getTrainingLocation());
         coachingType.setText((String) studentDetails.getCoachingType());
         profilePhone.setText(studentDetails.getPhonenumber());
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        String comingFrom = getIntent().getStringExtra("coming_from");
-        if(comingFrom != null && comingFrom.equals("ChatWidget"))
-            getMenuInflater().inflate(R.menu.menu_connected, menu);
-        else
-            getMenuInflater().inflate(R.menu.student_details, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        Log.d(TAG,studentDetails.getConnectionStatus() + " : " + studentDetails.getConnectionId());
-        if (id == R.id.accept) {
-            respondToRequest("accepted");
-        }else if (id == R.id.decline) {
-            respondToRequest("rejected");
-        }else if (id == android.R.id.home) {
-            finish();
-        }else if (id == R.id.action_disconnect) {
-            disconnect(studentDetails.getConnectionId(), studentDetails.getId());
-        }
-        return true;
     }
 
     private void disconnect(String connectionId, String oppositeUSerId) {

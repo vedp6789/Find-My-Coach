@@ -2,7 +2,6 @@ package com.findmycoach.app.fragment;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,19 +12,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.AddNewSlotActivity;
 import com.findmycoach.app.activity.DashboardActivity;
-import com.findmycoach.app.activity.ScheduleNewClass;
 import com.findmycoach.app.activity.ScheduleYourVacation;
 import com.findmycoach.app.adapter.CalendarGridAdapter;
 import com.findmycoach.app.beans.CalendarSchedule.Day;
@@ -35,7 +34,6 @@ import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
 import com.findmycoach.app.fragment_mentor.LocationForSchedule;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
-import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
@@ -52,10 +50,11 @@ import java.util.Locale;
 
 public class MyScheduleFragment extends Fragment implements View.OnClickListener, Callback {
 
-    private TextView currentMonth, add_slot, add_vacation;
+    private TextView currentMonth;
+    private Button add_slot, add_vacation;
     public TextView tv_location_for_calendar;
     public LinearLayout ll_location_for_calendar;
-    public CheckBox cb_calendar_by_location;
+    public RadioButton cb_calendar_by_location;
     private ImageView prevMonth;
     private ImageView nextMonth;
     private GridView calendarView;
@@ -232,10 +231,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         ll_location_for_calendar = (LinearLayout) view.findViewById(R.id.ll_location_for_calendar);
         ll_location_for_calendar.setVisibility(View.GONE);
 
-        add_slot = (TextView) view.findViewById(R.id.tv_add_new_slot);
+        add_slot = (Button) view.findViewById(R.id.tv_add_new_slot);
         add_slot.setOnClickListener(this);
 
-        add_vacation = (TextView) view.findViewById(R.id.tv_add_vacation);
+        add_vacation = (Button) view.findViewById(R.id.tv_add_vacation);
         add_vacation.setOnClickListener(this);
 
         prevMonth = (ImageView) view.findViewById(R.id.prevMonth);
@@ -252,7 +251,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         getCalendarDetailsAPICall();    /* API call for 3 months data */
 
         /* Checkbox used to set flag for viewing calendar details by location */
-        cb_calendar_by_location = (CheckBox) view.findViewById(R.id.cb_calendar_by_location);
+        cb_calendar_by_location = (RadioButton) view.findViewById(R.id.cb_calendar_by_location);
         cb_calendar_by_location.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1161,8 +1160,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
 
                 adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList);
-                adapter1.notifyDataSetChanged();
                 calendarView.setAdapter(adapter1);
+                adapter1.notifyDataSetChanged();
 
 
             } catch (JSONException e) {
@@ -1258,8 +1257,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
                 currentMonth.setText(DateFormat.format(dateTemplate,
                         _calendar.getTime()));
-                adapter1.notifyDataSetChanged();
                 calendarView.setAdapter(adapter1);
+                adapter1.notifyDataSetChanged();
 
 
             } catch (JSONException e) {
@@ -1322,8 +1321,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
                 currentMonth.setText(DateFormat.format(dateTemplate,
                         _calendar.getTime()));
-                adapter1.notifyDataSetChanged();
                 calendarView.setAdapter(adapter1);
+                adapter1.notifyDataSetChanged();
 
 
             } catch (JSONException e) {
@@ -1410,8 +1409,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
                 currentMonth.setText(DateFormat.format(dateTemplate,
                         _calendar.getTime()));
-                adapter1.notifyDataSetChanged();
                 calendarView.setAdapter(adapter1);
+                adapter1.notifyDataSetChanged();
 
 
             } catch (JSONException e) {
@@ -1466,8 +1465,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
                 currentMonth.setText(DateFormat.format(dateTemplate,
                         _calendar.getTime()));
-                adapter1.notifyDataSetChanged();
                 calendarView.setAdapter(adapter1);
+                adapter1.notifyDataSetChanged();
 
 
             } catch (JSONException e) {

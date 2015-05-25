@@ -221,14 +221,13 @@
                 android:textSize="@dimen/profile_details" />
 
             <!--Calender starts-->
+
             <RelativeLayout
                 android:id="@+id/rl_days_availability"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/sv_profile"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/back_margin"
                 android:orientation="vertical">
 
                 <TextView
@@ -242,44 +241,53 @@
                     android:textStyle="bold" />
 
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/buttonlayout"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="@dimen/calender_header_height"
                     android:layout_below="@id/tv_classes_abailability"
-                    android:height="6dp"
-                    android:background="@color/caldroid_gray"
+                    android:background="@color/purple"
                     android:orientation="horizontal">
 
                     <ImageView
+                        android:layout_marginTop="@dimen/textView_padding_margin"
+                        android:layout_marginBottom="@dimen/textView_padding_margin"
+                        android:layout_marginLeft="@dimen/back_margin"
+                        android:background="@color/white"
                         android:id="@+id/iv_prevMonth"
-                        android:layout_width="40dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
                         android:layout_gravity="start"
-                        android:layout_marginLeft="10sp"
-                        android:paddingRight="10dp"
-                        android:src="@drawable/calendar_left_arrow_selector" />
+                        android:padding="@dimen/calender_header_margin_arrow"
+                        android:src="@drawable/calender_prev_arrow_purple"
+                        android:layout_centerVertical="true" />
 
                     <TextView
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/profile_details"
+                        android:textStyle="bold"
                         android:id="@+id/tv_currentMonth"
-                        android:layout_width="wrap_content"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:gravity="center"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="#000000" />
+                        android:layout_toRightOf="@+id/iv_prevMonth"
+                        android:layout_toLeftOf="@+id/iv_nextMonth"
+                        android:layout_toStartOf="@+id/iv_nextMonth" />
 
                     <ImageView
+                        android:layout_marginTop="@dimen/textView_padding_margin"
+                        android:layout_marginBottom="@dimen/textView_padding_margin"
+                        android:layout_marginRight="@dimen/back_margin"
+                        android:background="@color/white"
                         android:id="@+id/iv_nextMonth"
-                        android:layout_width="40dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
-                        android:layout_gravity="start"
-                        android:layout_marginRight="10sp"
-                        android:paddingLeft="10dp"
-                        android:src="@drawable/calendar_right_arrow_selector" />
-                </LinearLayout>
+                        android:padding="@dimen/calender_header_margin_arrow"
+                        android:src="@drawable/calender_next_arrow_purple"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true" />
+                </RelativeLayout>
 
                 <include
                     android:id="@+id/cal"
@@ -287,6 +295,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/buttonlayout" />
+
+                <TextView
+                    android:layout_below="@+id/cal"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/purple_light"
+                    android:layout_marginBottom="@dimen/back_margin"/>
 
 
             </RelativeLayout>
