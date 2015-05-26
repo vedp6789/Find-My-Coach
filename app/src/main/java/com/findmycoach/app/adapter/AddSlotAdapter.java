@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.AddNewSlotActivity;
+import com.findmycoach.app.activity.ScheduleYourVacation;
 
 /**
  * Created by prem on 26/5/15.
@@ -17,12 +18,20 @@ import com.findmycoach.app.activity.AddNewSlotActivity;
 public class AddSlotAdapter extends BaseAdapter {
 
     private String[] days;
-    private AddNewSlotActivity context;
+    private AddNewSlotActivity addNewSlotActivity;
+    private ScheduleYourVacation scheduleYourVacation;
 
-    public AddSlotAdapter(AddNewSlotActivity context, String[] days) {
+    public AddSlotAdapter(AddNewSlotActivity addNewSlotActivity, String[] days) {
         this.days = days;
-        this.context = context;
+        this.addNewSlotActivity = addNewSlotActivity;
     }
+
+    public AddSlotAdapter(String[] days, ScheduleYourVacation scheduleYourVacation) {
+        this.days = days;
+        this.scheduleYourVacation = scheduleYourVacation;
+    }
+
+
 
     @Override
     public int getCount() {
@@ -42,55 +51,117 @@ public class AddSlotAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = layoutInflater.inflate(R.layout.screen_gridcell, null);
-        final Button button = (Button) v.findViewById(R.id.calendar_day_gridcell);
-        button.setTextSize(11f);
-        button.setTypeface(null, Typeface.BOLD);
-        button.setText(days[position]);
+        View v = null;
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (position) {
-                    case 0:
-                        context.boo_mon_checked = !context.boo_mon_checked;
-                        updateView(button, context.boo_mon_checked);
-                        break;
-                    case 1:
-                        context.boo_tue_checked = !context.boo_tue_checked;
-                        updateView(button, context.boo_tue_checked);
-                        break;
-                    case 2:
-                        context.boo_wed_checked = !context.boo_wed_checked;
-                        updateView(button, context.boo_wed_checked);
-                        break;
-                    case 3:
-                        context.boo_thurs_checked = !context.boo_thurs_checked;
-                        updateView(button, context.boo_thurs_checked);
-                        break;
-                    case 4:
-                        context.boo_fri_checked = !context.boo_fri_checked;
-                        updateView(button, context.boo_fri_checked);
-                        break;
-                    case 5:
-                        context.boo_sat_checked = !context.boo_sat_checked;
-                        updateView(button, context.boo_sat_checked);
-                        break;
-                    case 6:
-                        context.boo_sun_checked = !context.boo_sun_checked;
-                        updateView(button, context.boo_sun_checked);
-                        break;
+        if(addNewSlotActivity != null){
+
+            LayoutInflater layoutInflater = (LayoutInflater) addNewSlotActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            v = layoutInflater.inflate(R.layout.screen_gridcell, null);
+            final Button button = (Button) v.findViewById(R.id.calendar_day_gridcell);
+            button.setTextSize(11f);
+            button.setTypeface(null, Typeface.BOLD);
+            button.setText(days[position]);
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (position) {
+                        case 0:
+                            addNewSlotActivity.boo_mon_checked = !addNewSlotActivity.boo_mon_checked;
+                            updateView(button, addNewSlotActivity.boo_mon_checked);
+                            break;
+                        case 1:
+                            addNewSlotActivity.boo_tue_checked = !addNewSlotActivity.boo_tue_checked;
+                            updateView(button, addNewSlotActivity.boo_tue_checked);
+                            break;
+                        case 2:
+                            addNewSlotActivity.boo_wed_checked = !addNewSlotActivity.boo_wed_checked;
+                            updateView(button, addNewSlotActivity.boo_wed_checked);
+                            break;
+                        case 3:
+                            addNewSlotActivity.boo_thurs_checked = !addNewSlotActivity.boo_thurs_checked;
+                            updateView(button, addNewSlotActivity.boo_thurs_checked);
+                            break;
+                        case 4:
+                            addNewSlotActivity.boo_fri_checked = !addNewSlotActivity.boo_fri_checked;
+                            updateView(button, addNewSlotActivity.boo_fri_checked);
+                            break;
+                        case 5:
+                            addNewSlotActivity.boo_sat_checked = !addNewSlotActivity.boo_sat_checked;
+                            updateView(button, addNewSlotActivity.boo_sat_checked);
+                            break;
+                        case 6:
+                            addNewSlotActivity.boo_sun_checked = !addNewSlotActivity.boo_sun_checked;
+                            updateView(button, addNewSlotActivity.boo_sun_checked);
+                            break;
+                    }
                 }
-            }
-        });
+            });
+        }
+        else if(scheduleYourVacation != null){
+
+            LayoutInflater layoutInflater = (LayoutInflater) scheduleYourVacation.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            v = layoutInflater.inflate(R.layout.screen_gridcell, null);
+            final Button button = (Button) v.findViewById(R.id.calendar_day_gridcell);
+            button.setTextSize(11f);
+            button.setTypeface(null, Typeface.BOLD);
+            button.setText(days[position]);
+
+            button.setBackground(scheduleYourVacation.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (position) {
+                        case 0:
+                            scheduleYourVacation.boo_mon_checked = !scheduleYourVacation.boo_mon_checked;
+                            updateView(button, scheduleYourVacation.boo_mon_checked, "M");
+                            break;
+                        case 1:
+                            scheduleYourVacation.boo_tue_checked = !scheduleYourVacation.boo_tue_checked;
+                            updateView(button, scheduleYourVacation.boo_tue_checked, "T");
+                            break;
+                        case 2:
+                            scheduleYourVacation.boo_wed_checked = !scheduleYourVacation.boo_wed_checked;
+                            updateView(button, scheduleYourVacation.boo_wed_checked, "W");
+                            break;
+                        case 3:
+                            scheduleYourVacation.boo_thurs_checked = !scheduleYourVacation.boo_thurs_checked;
+                            updateView(button, scheduleYourVacation.boo_thurs_checked, "Th");
+                            break;
+                        case 4:
+                            scheduleYourVacation.boo_fri_checked = !scheduleYourVacation.boo_fri_checked;
+                            updateView(button, scheduleYourVacation.boo_fri_checked, "F");
+                            break;
+                        case 5:
+                            scheduleYourVacation.boo_sat_checked = !scheduleYourVacation.boo_sat_checked;
+                            updateView(button, scheduleYourVacation.boo_sat_checked, "S");
+                            break;
+                        case 6:
+                            scheduleYourVacation.boo_sun_checked = !scheduleYourVacation.boo_sun_checked;
+                            updateView(button, scheduleYourVacation.boo_sun_checked, "Su");
+                            break;
+                    }
+                }
+            });
+        }
         return v;
     }
 
     private void updateView(Button btn, boolean isChecked){
         if(isChecked)
-            btn.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+            btn.setBackground(addNewSlotActivity.getResources().getDrawable(R.drawable.scheduled_event_arrow));
         else
-            btn.setBackgroundColor(context.getResources().getColor(R.color.white));
+            btn.setBackgroundColor(addNewSlotActivity.getResources().getColor(R.color.white));
+    }
+
+    private void updateView(Button btn, boolean isChecked, String s){
+        if(isChecked) {
+            btn.setBackground(scheduleYourVacation.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+            scheduleYourVacation.days_array.add(s);
+        }
+        else {
+            btn.setBackgroundColor(scheduleYourVacation.getResources().getColor(R.color.white));
+            scheduleYourVacation.days_array.remove(s);
+        }
     }
 }

@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -58,7 +57,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             boo_fri_checked, boo_sat_checked,
             boo_sun_checked;
     Button b_create_slot;
-    private ScrollableGridView gridView;
     private static String time_from;
     private static String time_to;
     private static String date_from;
@@ -86,23 +84,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
     ProgressDialog progressDialog;
 
-    private void applyActionbarProperties() {
-//        ActionBar actionBar = getActionBar();
-//        if (actionBar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//            actionBar.setTitle(getResources().getString(R.string.add_new_slot));
-//        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,7 +109,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         boo_sun_checked = false;
 
         initialize();
-        applyActionbarProperties();
         progressDialog = new ProgressDialog(AddNewSlotActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
 
@@ -1054,7 +1034,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         ll_slot_maximum_students.setVisibility(View.GONE);
         et_maximum_students = (EditText) findViewById(R.id.et_maximum_students);
         b_create_slot = (Button) findViewById(R.id.b_create_slot);
-        gridView = (ScrollableGridView) findViewById(R.id.calendar);
+        ScrollableGridView gridView = (ScrollableGridView) findViewById(R.id.calendar);
         gridView.setAdapter(new AddSlotAdapter(this, getResources().getStringArray(R.array.week_days_mon)));
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
