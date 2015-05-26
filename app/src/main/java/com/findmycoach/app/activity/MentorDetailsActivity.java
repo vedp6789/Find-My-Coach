@@ -31,6 +31,7 @@ import com.findmycoach.app.adapter.CalendarGridAdapter;
 import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
+import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
 import com.findmycoach.app.beans.mentor.Data;
 import com.findmycoach.app.beans.mentor.Response;
 import com.findmycoach.app.fragment.CustomDatePickerFragment;
@@ -164,10 +165,10 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
 
         if (month_from_dialog == 0 && year_from_dialog == 0) {
-            if(populate_calendar_from_adapter){
-                populate_calendar_from_adapter=false;
+            if (populate_calendar_from_adapter) {
+                populate_calendar_from_adapter = false;
 
-            }else {
+            } else {
                 startPointForCalendar();
             }
         } else {
@@ -183,7 +184,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         RequestParams requestParams = new RequestParams();
         requestParams.add("user_group", String.valueOf("3"));
         requestParams.add("mentor_id", userInfo.getId());
-        Log.d(TAG,"mentor_id : "+userInfo.getId());
+        Log.d(TAG, "mentor_id : " + userInfo.getId());
 
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -228,7 +229,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     void networkCall1(RequestParams requestParams) {
         progressDialog.show();
         NetworkClient.getCalendarDetails(MentorDetailsActivity.this, requestParams, StorageHelper.getUserDetails(MentorDetailsActivity.this, "auth_token"), this, 37); /* Network operation for getting details for three months */
-        Log.d(TAG,"FMC auth token :"+StorageHelper.getUserDetails(MentorDetailsActivity.this, "auth_token"));
+        Log.d(TAG, "FMC auth token :" + StorageHelper.getUserDetails(MentorDetailsActivity.this, "auth_token"));
 
     }
 
@@ -458,9 +459,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             Log.d(TAG, "Charges amount : " + charges.split("per", 2)[0] + "charges unit : " + charges.split("per", 2)[1]);
             profileCharges.setText("\u20B9 " + charges);
         }
-        try{
+        try {
             profileRatting.setRating(Float.parseFloat(userInfo.getRating()));
-        }catch (Exception e){
+        } catch (Exception e) {
             profileRatting.setRating(0f);
         }
         LayerDrawable stars = (LayerDrawable) profileRatting.getProgressDrawable();
@@ -760,8 +761,10 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
                 List<DayEvent> dayEvents = new ArrayList<DayEvent>();
                 JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
-
                 List<DaySlot> daySlots = new ArrayList<DaySlot>();
+                JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
+                List<DayVacation> dayVacations = new ArrayList<DayVacation>();
+
                 if (jsonArray_of_slots.length() > 0) {
                     for (int s = 0; s < jsonArray_of_slots.length(); s++) {
                         JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
@@ -814,6 +817,31 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 } else {
                     day1.setDayEvents(dayEvents);
                 }
+
+                if (jsonArray_of_vacation.length() > 0) {
+                    for (int vacation = 0; vacation < jsonArray_of_vacation.length(); vacation++) {
+                        JSONObject day_vacation = jsonArray_of_vacation.getJSONObject(vacation);
+                        DayVacation dayVacation = new DayVacation();
+                        dayVacation.setStart_date(day_vacation.getString("start_date"));
+                        dayVacation.setStop_date(day_vacation.getString("stop_date"));
+                        dayVacation.setStart_time(day_vacation.getString("start_time"));
+                        dayVacation.setStop_time(day_vacation.getString("stop_time"));
+
+                        JSONArray jsonArray_week_days = day_vacation.getJSONArray("dates");
+                        String[] dates = new String[jsonArray_week_days.length()];
+                        for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
+                            dates[week_day] = jsonArray_week_days.getString(week_day);
+                        }
+                        dayVacation.setWeek_days(dates);
+                        dayVacations.add(dayVacation);
+
+
+                    }
+                    day1.setDayVacations(dayVacations);
+                } else {
+                    day1.setDayVacations(dayVacations);
+                }
+
                 previousMonthArrayList.add(day1);
             }
 
@@ -825,8 +853,10 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
                 List<DayEvent> dayEvents = new ArrayList<DayEvent>();
                 JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
-
                 List<DaySlot> daySlots = new ArrayList<DaySlot>();
+                JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
+                List<DayVacation> dayVacations = new ArrayList<DayVacation>();
+
                 if (jsonArray_of_slots.length() > 0) {
                     for (int s = 0; s < jsonArray_of_slots.length(); s++) {
                         JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
@@ -880,6 +910,31 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 } else {
                     day1.setDayEvents(dayEvents);
                 }
+
+                if (jsonArray_of_vacation.length() > 0) {
+                    for (int vacation = 0; vacation < jsonArray_of_vacation.length(); vacation++) {
+                        JSONObject day_vacation = jsonArray_of_vacation.getJSONObject(vacation);
+                        DayVacation dayVacation = new DayVacation();
+                        dayVacation.setStart_date(day_vacation.getString("start_date"));
+                        dayVacation.setStop_date(day_vacation.getString("stop_date"));
+                        dayVacation.setStart_time(day_vacation.getString("start_time"));
+                        dayVacation.setStop_time(day_vacation.getString("stop_time"));
+
+                        JSONArray jsonArray_week_days = day_vacation.getJSONArray("dates");
+                        String[] dates = new String[jsonArray_week_days.length()];
+                        for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
+                            dates[week_day] = jsonArray_week_days.getString(week_day);
+                        }
+                        dayVacation.setWeek_days(dates);
+                        dayVacations.add(dayVacation);
+
+
+                    }
+                    day1.setDayVacations(dayVacations);
+                } else {
+                    day1.setDayVacations(dayVacations);
+                }
+
                 currentMonthArrayList.add(day1);
             }
 
@@ -897,13 +952,13 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 day1.setDate(unique_day.getString("date"));
 
                 JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
-
-
                 List<DayEvent> dayEvents = new ArrayList<DayEvent>();
-
                 JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
                 Log.d(TAG, "for third month date :" + unique_day.getString("date") + " for third month event size : " + jsonArray_of_events.length() + " for third month slot size : " + jsonArray_of_slots.length());
                 List<DaySlot> daySlots = new ArrayList<DaySlot>();
+                JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
+                List<DayVacation> dayVacations = new ArrayList<DayVacation>();
+
                 if (jsonArray_of_slots.length() > 0) {
                     for (int s = 0; s < jsonArray_of_slots.length(); s++) {
                         JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
@@ -960,6 +1015,32 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 } else {
                     day1.setDayEvents(dayEvents);
                 }
+
+                if (jsonArray_of_vacation.length() > 0) {
+                    for (int vacation = 0; vacation < jsonArray_of_vacation.length(); vacation++) {
+                        JSONObject day_vacation = jsonArray_of_vacation.getJSONObject(vacation);
+                        DayVacation dayVacation = new DayVacation();
+                        dayVacation.setStart_date(day_vacation.getString("start_date"));
+                        dayVacation.setStop_date(day_vacation.getString("stop_date"));
+                        dayVacation.setStart_time(day_vacation.getString("start_time"));
+                        dayVacation.setStop_time(day_vacation.getString("stop_time"));
+
+                        JSONArray jsonArray_week_days = day_vacation.getJSONArray("dates");
+                        String[] dates = new String[jsonArray_week_days.length()];
+                        for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
+                            dates[week_day] = jsonArray_week_days.getString(week_day);
+                        }
+                        dayVacation.setWeek_days(dates);
+                        dayVacations.add(dayVacation);
+
+
+                    }
+                    day1.setDayVacations(dayVacations);
+                } else {
+                    day1.setDayVacations(dayVacations);
+                }
+
+
                 comingMonthArrayList.add(day1);
             }
 
@@ -1011,11 +1092,11 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 day1.setDate(unique_day.getString("date"));
                 JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
                 List<DayEvent> dayEvents = new ArrayList<DayEvent>();
-
                 JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
                 Log.d(TAG, "for third month date 2:" + unique_day.getString("date") + " for third month event size 2: " + jsonArray_of_events.length() + " for third month slot size : " + jsonArray_of_slots.length());
-
                 List<DaySlot> daySlots = new ArrayList<DaySlot>();
+                JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
+                List<DayVacation> dayVacations = new ArrayList<DayVacation>();
                 if (jsonArray_of_slots.length() > 0) {
                     for (int s = 0; s < jsonArray_of_slots.length(); s++) {
                         JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
@@ -1070,6 +1151,32 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 } else {
                     day1.setDayEvents(dayEvents);
                 }
+
+
+                if (jsonArray_of_vacation.length() > 0) {
+                    for (int vacation = 0; vacation < jsonArray_of_vacation.length(); vacation++) {
+                        JSONObject day_vacation = jsonArray_of_vacation.getJSONObject(vacation);
+                        DayVacation dayVacation = new DayVacation();
+                        dayVacation.setStart_date(day_vacation.getString("start_date"));
+                        dayVacation.setStop_date(day_vacation.getString("stop_date"));
+                        dayVacation.setStart_time(day_vacation.getString("start_time"));
+                        dayVacation.setStop_time(day_vacation.getString("stop_time"));
+
+                        JSONArray jsonArray_week_days = day_vacation.getJSONArray("dates");
+                        String[] dates = new String[jsonArray_week_days.length()];
+                        for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
+                            dates[week_day] = jsonArray_week_days.getString(week_day);
+                        }
+                        dayVacation.setWeek_days(dates);
+                        dayVacations.add(dayVacation);
+
+
+                    }
+                    day1.setDayVacations(dayVacations);
+                } else {
+                    day1.setDayVacations(dayVacations);
+                }
+
                 comingMonthArrayList.add(day1);
 
             }
@@ -1117,10 +1224,10 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 List<DayEvent> dayEvents = new ArrayList<DayEvent>();
 
                 JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
-
                 Log.d(TAG, "for third month date 3:" + unique_day.getString("date") + " for third month event size 3: " + jsonArray_of_events.length() + " for third month slot size : " + jsonArray_of_slots.length());
-
                 List<DaySlot> daySlots = new ArrayList<DaySlot>();
+                JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
+                List<DayVacation> dayVacations = new ArrayList<DayVacation>();
                 if (jsonArray_of_slots.length() > 0) {
                     for (int s = 0; s < jsonArray_of_slots.length(); s++) {
                         JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
@@ -1173,6 +1280,31 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                     day1.setDayEvents(dayEvents);
                 } else {
                     day1.setDayEvents(dayEvents);
+                }
+
+
+                if (jsonArray_of_vacation.length() > 0) {
+                    for (int vacation = 0; vacation < jsonArray_of_vacation.length(); vacation++) {
+                        JSONObject day_vacation = jsonArray_of_vacation.getJSONObject(vacation);
+                        DayVacation dayVacation = new DayVacation();
+                        dayVacation.setStart_date(day_vacation.getString("start_date"));
+                        dayVacation.setStop_date(day_vacation.getString("stop_date"));
+                        dayVacation.setStart_time(day_vacation.getString("start_time"));
+                        dayVacation.setStop_time(day_vacation.getString("stop_time"));
+
+                        JSONArray jsonArray_week_days = day_vacation.getJSONArray("dates");
+                        String[] dates = new String[jsonArray_week_days.length()];
+                        for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
+                            dates[week_day] = jsonArray_week_days.getString(week_day);
+                        }
+                        dayVacation.setWeek_days(dates);
+                        dayVacations.add(dayVacation);
+
+
+                    }
+                    day1.setDayVacations(dayVacations);
+                } else {
+                    day1.setDayVacations(dayVacations);
                 }
                 previousMonthArrayList.add(day1);
 
