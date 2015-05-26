@@ -448,6 +448,17 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                         if(matching_week_day.size() <=0)
                                             continue;
 
+                                        Calendar right_now=Calendar.getInstance();
+
+
+                                        Calendar calendar_stop_date_of_slot = Calendar.getInstance();
+                                        calendar_stop_date_of_slot.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
+
+                                        Calendar calendar_vacation_start_date = Calendar.getInstance();
+                                       
+                                        calendar_vacation_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
+
+
                                         if ((vacation_start_date_in_millis < slot_start_date_in_millis && vacation_stop_date_in_millis < slot_stop_date_in_millis && vacation_stop_date_in_millis > slot_start_date_in_millis)) {
 
                                         } else {
