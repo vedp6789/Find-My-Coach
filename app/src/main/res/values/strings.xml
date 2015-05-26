@@ -695,6 +695,7 @@
     <string name="prompt_facebook">Facebook</string>
     <string name="prompt_google_plus">Google +</string>
     <string name="days">Days</string>
+    <string name="select_days">Select days</string>
     <string name="from">From :</string>
     <string name="all">All</string>
     <string name="timing">Timing:</string>
@@ -726,6 +727,8 @@
     <string name="created_on">  Created on : </string>
     <string name="not_connected_to_anyone">Not connected to anyone.</string>
     <string name="choose_suggested_city">Choose a suggested city</string>
+    <string name="choose_time">Choose time</string>
+    <string name="choose_date">Choose date</string>
     <string name="choose_suggested_location">Choose a suggested location</string>
     <string name="add_interest">Add interest</string>
     <string name="enter_interest">Enter interest</string>
@@ -763,7 +766,7 @@
     <string name="action_attach_video">Video</string>
     <string name="add_available_slots">Add slot</string>
     <string name="add_vacation">Schedule vacation</string>
-    <string name="create_slot">Create class</string>
+    <string name="create_slot">Create slot</string>
     <string name="post_schedule_request">Post schedule request</string>
     <string name="schedule">Schedule</string>
     <string name="scheduled_event">Scheduled event</string>
@@ -879,6 +882,16 @@
         <item>Thu</item>
         <item>Fri</item>
         <item>Sat</item>
+    </string-array>
+
+    <string-array name="week_days_mon">
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+        <item>Sun</item>
     </string-array>
 
     <string-array name="months">

@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -20,12 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.adapter.AddSlotAdapter;
 import com.findmycoach.app.fragment_mentor.StartDateDialogFragment;
 import com.findmycoach.app.fragment_mentor.StartTimeDialogFragment;
 import com.findmycoach.app.fragment_mentor.StopTimeDialogFragment;
 import com.findmycoach.app.fragment_mentor.TillDateDialogFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
+import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.SetDate;
 import com.findmycoach.app.util.SetTime;
 import com.findmycoach.app.util.StorageHelper;
@@ -47,19 +48,17 @@ import java.util.TreeSet;
  * Created by praka_000 on 2/12/2015.
  */
 public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
-    CheckBox cb_mon, cb_tue,
-            cb_wed, cb_thur,
-            cb_fri, cb_sat,
-            cb_sun;
+
     Spinner sp_slot_type;
     EditText et_maximum_students;
     LinearLayout ll_slot_maximum_students;
     public static TextView tv_start_date, tv_till_date, tv_start_time, tv_stop_time;
-    boolean boo_mon_checked, boo_tue_checked,
+    public boolean boo_mon_checked, boo_tue_checked,
             boo_wed_checked, boo_thurs_checked,
             boo_fri_checked, boo_sat_checked,
             boo_sun_checked;
     Button b_create_slot;
+    private ScrollableGridView gridView;
     private static String time_from;
     private static String time_to;
     private static String date_from;
@@ -109,7 +108,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_avail_slot);
 
-        allow_slot_type_message=false;
+        allow_slot_type_message = false;
 
         time_from = getResources().getString(R.string.select);
         time_to = getResources().getString(R.string.select);
@@ -203,86 +202,9 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             }
         });
 
-        cb_mon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (cb_mon.isChecked()) {
-                    boo_mon_checked = true;
-                } else {
-                    boo_mon_checked = false;
-                }
-            }
-        });
-
-        cb_tue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (cb_tue.isChecked()) {
-                    boo_tue_checked = true;
-                } else {
-                    boo_tue_checked = false;
-                }
-            }
-        });
-
-        cb_wed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (cb_wed.isChecked()) {
-                    boo_wed_checked = true;
-                } else {
-                    boo_wed_checked = false;
-                }
-            }
-        });
-
-        cb_thur.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (cb_thur.isChecked()) {
-                    boo_thurs_checked = true;
-                } else {
-                    boo_thurs_checked = false;
-                }
-            }
-        });
-
-        cb_fri.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (cb_fri.isChecked()) {
-                    boo_fri_checked = true;
-                } else {
-                    boo_fri_checked = false;
-                }
-            }
-        });
-
-        cb_sat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (cb_sat.isChecked()) {
-                    boo_sat_checked = true;
-                } else {
-                    boo_sat_checked = false;
-                }
-            }
-        });
-
-        cb_sun.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (cb_sun.isChecked()) {
-                    boo_sun_checked = true;
-                } else {
-                    boo_sun_checked = false;
-                }
-            }
-        });
-
         final String[] slot_types = {getResources().getString(R.string.individual), getResources().getString(R.string.group)};
-        ArrayAdapter arrayAdapter1_slot_types = new ArrayAdapter(this, android.R.layout.simple_spinner_item, slot_types);
-        arrayAdapter1_slot_types.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter arrayAdapter1_slot_types = new ArrayAdapter(this, R.layout.textview, slot_types);
+        arrayAdapter1_slot_types.setDropDownViewResource(R.layout.textview);
         sp_slot_type.setAdapter(arrayAdapter1_slot_types);
         sp_slot_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -291,9 +213,9 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 slot_type = null;
                 slot_type = (String) parent.getItemAtPosition(position);
                 if (slot_type.equals(getResources().getString(R.string.individual))) {
-                    if(allow_slot_type_message)
-                    Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.single_student_can_schedule_class), Toast.LENGTH_SHORT).show();
-                    allow_slot_type_message=true;
+                    if (allow_slot_type_message)
+                        Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.single_student_can_schedule_class), Toast.LENGTH_SHORT).show();
+                    allow_slot_type_message = true;
                     maximum_students = 1;
                     if (ll_slot_maximum_students.getVisibility() == View.VISIBLE)
                         ll_slot_maximum_students.setVisibility(View.GONE);
@@ -369,7 +291,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
                         requestParams.add("start_date", stringBuilder.toString());
 
-                        if (tv_till_date.getText().toString().equals(getResources().getString(R.string.forever))) {
+                        if (tv_till_date.getText().toString().trim().equalsIgnoreCase(getResources().getString(R.string.forever))) {
                             StringBuilder stringBuilder2 = new StringBuilder();
                             stringBuilder2.append(String.valueOf(from_year + 10));
                             if ((from_month / 10) > 0) {
@@ -779,11 +701,11 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
                     /* if condition is checking whether the flag is 0 or 1 in case of single coinciding slot,or in case of single coinciding exception in Json string.*/
                         if (flag == 0) {
-                            stringBuilder.append(getResources().getString(R.string.already_slot_found) + simpleDateFormat.format(start_date) +getResources().getString(R.string.and) + simpleDateFormat.format(stop_date) + getResources().getString(R.string.from1) + s_time.substring(0, 5) + getResources().getString(R.string.to2)+ st_time.substring(0, 5) + getResources().getString(R.string.cannot_placed));
+                            stringBuilder.append(getResources().getString(R.string.already_slot_found) + simpleDateFormat.format(start_date) + getResources().getString(R.string.and) + simpleDateFormat.format(stop_date) + getResources().getString(R.string.from1) + s_time.substring(0, 5) + getResources().getString(R.string.to2) + st_time.substring(0, 5) + getResources().getString(R.string.cannot_placed));
                             showCoincidingAlertMessage(stringBuilder.toString(), flag);
                             Log.d(TAG, "Message for coinciding slot schedule : " + stringBuilder.toString());
                         } else {
-                            stringBuilder.append(getResources().getString(R.string.new_slot_with_vacation) + simpleDateFormat.format(start_date) +getResources().getString(R.string.and)+ simpleDateFormat.format(stop_date) + getResources().getString(R.string.from1) + s_time.substring(0, 5) + getResources().getString(R.string.to2) + st_time.substring(0, 5));
+                            stringBuilder.append(getResources().getString(R.string.new_slot_with_vacation) + simpleDateFormat.format(start_date) + getResources().getString(R.string.and) + simpleDateFormat.format(stop_date) + getResources().getString(R.string.from1) + s_time.substring(0, 5) + getResources().getString(R.string.to2) + st_time.substring(0, 5));
                             showCoincidingAlertMessage(stringBuilder.toString(), flag);
                             Log.d(TAG, "Message for coinciding exception while add new slot : " + stringBuilder.toString());
                         }
@@ -1102,19 +1024,19 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
     private ArrayList<String> getListForCheckedDays() {
         ArrayList<String> days_checked = new ArrayList<String>();
-        if (cb_mon.isChecked())
+        if (boo_mon_checked)
             days_checked.add("2");
-        if (cb_tue.isChecked())
+        if (boo_tue_checked)
             days_checked.add("3");
-        if (cb_wed.isChecked())
+        if (boo_wed_checked)
             days_checked.add("4");
-        if (cb_thur.isChecked())
+        if (boo_thurs_checked)
             days_checked.add("5");
-        if (cb_fri.isChecked())
+        if (boo_fri_checked)
             days_checked.add("6");
-        if (cb_sat.isChecked())
+        if (boo_sat_checked)
             days_checked.add("7");
-        if (cb_sun.isChecked())
+        if (boo_sun_checked)
             days_checked.add("1");
 
         return days_checked;
@@ -1123,13 +1045,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
 
     void initialize() {
-        cb_mon = (CheckBox) findViewById(R.id.cb_mon);
-        cb_tue = (CheckBox) findViewById(R.id.cb_tue);
-        cb_wed = (CheckBox) findViewById(R.id.cb_wed);
-        cb_thur = (CheckBox) findViewById(R.id.cb_thur);
-        cb_fri = (CheckBox) findViewById(R.id.cb_fri);
-        cb_sat = (CheckBox) findViewById(R.id.cb_sat);
-        cb_sun = (CheckBox) findViewById(R.id.cb_sun);
         tv_start_date = (TextView) findViewById(R.id.tv_slot_start_date);
         tv_till_date = (TextView) findViewById(R.id.tv_slot_till_date);
         tv_start_time = (TextView) findViewById(R.id.tv_slot_start_time);
@@ -1139,7 +1054,17 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         ll_slot_maximum_students.setVisibility(View.GONE);
         et_maximum_students = (EditText) findViewById(R.id.et_maximum_students);
         b_create_slot = (Button) findViewById(R.id.b_create_slot);
+        gridView = (ScrollableGridView) findViewById(R.id.calendar);
+        gridView.setAdapter(new AddSlotAdapter(this, getResources().getStringArray(R.array.week_days_mon)));
 
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(getResources().getString(R.string.add_available_slots));
     }
 
 

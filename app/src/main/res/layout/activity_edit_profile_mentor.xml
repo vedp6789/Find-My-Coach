@@ -133,7 +133,7 @@
                     android:id="@+id/input_gender"
                     android:background="@android:color/transparent"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/login_button_height"
                     android:prompt="@string/prompt_gender"
                     android:spinnerMode="dropdown" />
 
