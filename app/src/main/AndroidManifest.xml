@@ -139,7 +139,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MentorDetailsActivity"
-            android:label="@string/title_activity_mentor_details"
+            android:label="@string/title_mentor_details"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.findmycoach.app.activity.UserListActivity"

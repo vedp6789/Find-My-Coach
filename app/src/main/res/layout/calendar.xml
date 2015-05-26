@@ -5,23 +5,93 @@
     <LinearLayout
         android:id="@+id/ll_calendar_week_days"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/login_button_height"
         android:layout_below="@+id/buttonlayout"
-        android:layout_gravity="center">
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:weightSum="7">
 
-        <ImageView
-            android:id="@+id/calendarheader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:scaleType="fitXY"
-            android:background="@drawable/calendar_days" />
+        <TextView
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/purple_light"
+            android:text="@string/su"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/profile_heading"
+            android:layout_weight="1"/>
+        <TextView
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/purple_light"
+            android:text="@string/m"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/profile_heading"
+            android:layout_weight="1"/>
+        <TextView
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/purple_light"
+            android:text="@string/t"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/profile_heading"
+            android:layout_weight="1"/>
+        <TextView
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/purple_light"
+            android:text="@string/w"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/profile_heading"
+            android:layout_weight="1"/>
+        <TextView
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/purple_light"
+            android:text="@string/th"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/profile_heading"
+            android:layout_weight="1"/>
+        <TextView
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/purple_light"
+            android:text="@string/f"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/profile_heading"
+            android:layout_weight="1"/>
+        <TextView
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/purple_light"
+            android:text="@string/s"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/profile_heading"
+            android:layout_weight="1"/>
+
+
     </LinearLayout>
 
     <com.findmycoach.app.util.ScrollableGridView
         android:id="@+id/calendar_mentor_availability"
         android:layout_width="match_parent"
         android:layout_height="450dp"
+        android:horizontalSpacing="0.5dp"
+        android:verticalSpacing="0.5dp"
+        android:background="@color/purple_light"
         android:layout_below="@+id/ll_calendar_week_days"
         android:numColumns="7" />
 

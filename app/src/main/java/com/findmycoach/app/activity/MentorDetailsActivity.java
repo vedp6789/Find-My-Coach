@@ -418,7 +418,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         });
 
         TextView title = (TextView) findViewById(R.id.title);
-        title.setText(getResources().getString(R.string.title_activity_mentor_details));
+        title.setText(getResources().getString(R.string.title_mentor_details));
 
     }
 
