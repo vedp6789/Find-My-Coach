@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:layout_height="fill_parent"
+    android:background="@color/white">
 
 
     <LinearLayout
@@ -91,7 +90,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/purple_light"
+            android:background="@color/purple"
             android:gravity="center"
             android:text="@string/su"
             android:textColor="@color/white"
@@ -102,7 +101,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/purple_light"
+            android:background="@color/purple"
             android:gravity="center"
             android:text="@string/m"
             android:textColor="@color/white"
@@ -113,7 +112,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/purple_light"
+            android:background="@color/purple"
             android:gravity="center"
             android:text="@string/t"
             android:textColor="@color/white"
@@ -124,7 +123,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/purple_light"
+            android:background="@color/purple"
             android:gravity="center"
             android:text="@string/w"
             android:textColor="@color/white"
@@ -135,7 +134,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/purple_light"
+            android:background="@color/purple"
             android:gravity="center"
             android:text="@string/th"
             android:textColor="@color/white"
@@ -146,7 +145,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/purple_light"
+            android:background="@color/purple"
             android:gravity="center"
             android:text="@string/f"
             android:textColor="@color/white"
@@ -157,7 +156,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/purple_light"
+            android:background="@color/purple"
             android:gravity="center"
             android:text="@string/s"
             android:textColor="@color/white"
@@ -165,7 +164,7 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <GridView
+    <com.findmycoach.app.util.ScrollableGridView
         android:id="@+id/calendar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -175,6 +174,7 @@
         android:numColumns="7"
         android:verticalSpacing="0.5dp" />
 
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
@@ -183,10 +183,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/calendar"
         android:layout_marginTop="@dimen/back_margin"
         android:orientation="horizontal"
+        android:background="@color/white"
         android:weightSum="2">
 
 

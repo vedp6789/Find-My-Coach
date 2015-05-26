@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -34,6 +33,7 @@ import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
 import com.findmycoach.app.fragment_mentor.LocationForSchedule;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
+import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
@@ -57,7 +57,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public RadioButton cb_calendar_by_location;
     private ImageView prevMonth;
     private ImageView nextMonth;
-    private GridView calendarView;
+    private ScrollableGridView calendarView;
     private CalendarGridAdapter adapter1;
     private Calendar _calendar;
     public static int month, year;
@@ -133,7 +133,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         nextMonth = (ImageView) view.findViewById(R.id.nextMonth);
         nextMonth.setOnClickListener(this);
 
-        calendarView = (GridView) view.findViewById(R.id.calendar);
+        calendarView = (ScrollableGridView) view.findViewById(R.id.calendar);
 
         getCalendarDetailsForMentee();
 
@@ -247,7 +247,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         nextMonth = (ImageView) view.findViewById(R.id.nextMonth);
         nextMonth.setOnClickListener(this);
 
-        calendarView = (GridView) view.findViewById(R.id.calendar);
+        calendarView = (ScrollableGridView) view.findViewById(R.id.calendar);
         getCalendarDetailsAPICall();    /* API call for 3 months data */
 
         /* Checkbox used to set flag for viewing calendar details by location */
@@ -830,7 +830,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     List<DayEvent> dayEvents = new ArrayList<DayEvent>();
                     JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
                     List<DaySlot> daySlots = new ArrayList<DaySlot>();
-                   // Log.d(TAG,"day object for prev month: "+unique_day.toString());
+                   //Log.d(TAG,"day object for prev month: "+unique_day.toString());
                     JSONArray jsonArray_of_vacation=unique_day.getJSONArray("exceptions");
                     List<DayVacation> dayVacations=new ArrayList<DayVacation>();
 
@@ -913,7 +913,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
                     List<DaySlot> daySlots = new ArrayList<DaySlot>();
 
-                    Log.d(TAG,"day object for  current month: "+unique_day.toString());
+                 //   Log.d(TAG,"day object for  current month: "+unique_day.toString());
 
                     if (jsonArray_of_slots.length() > 0) {
                         for (int s = 0; s < jsonArray_of_slots.length(); s++) {
@@ -982,7 +982,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
                     List<DaySlot> daySlots = new ArrayList<DaySlot>();
 
-                    Log.d(TAG, "day object for next month: " + unique_day.toString());
+                 //   Log.d(TAG, "day object for next month: " + unique_day.toString());
 
                     if (jsonArray_of_slots.length() > 0) {
                         for (int s = 0; s < jsonArray_of_slots.length(); s++) {
