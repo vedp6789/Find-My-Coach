@@ -21,7 +21,9 @@ import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
 import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
+import com.findmycoach.app.beans.CalendarSchedule.SlotDurationDetailBean;
 import com.findmycoach.app.beans.CalendarSchedule.VacationCoincidingSlot;
+import com.findmycoach.app.beans.CalendarSchedule.VacationDurationDetailBean;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.SetDate;
@@ -263,7 +265,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                 List<DayVacation> dayVacations = d.getDayVacations();
 
 
-
                 DaySlot daySlot;
                 if (daySlots.size() > 0) {
                     for (int slot = 0; slot < daySlots.size(); slot++) {
@@ -426,6 +427,16 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                 slot_match_with_any_event = true;
                                 if (event_total_mentees < slot_max_users) {
                                     free_slot++;
+
+                                    Calendar right_now = Calendar.getInstance();
+                                    Calendar calendar_stop_date_of_slot = Calendar.getInstance();
+                                    calendar_stop_date_of_slot.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
+
+                                    ArrayList<SlotDurationDetailBean> slotDurationDetailBeans = new ArrayList<SlotDurationDetailBean>();
+                                    slotDurationDetailBeans = calculateNoOfTotalClassDays(right_now, calendar_stop_date_of_slot, slot_on_week_days);
+
+                                    ArrayList<VacationDurationDetailBean> vacationDurationDetailBeans = new ArrayList<VacationDurationDetailBean>();
+
                                     /*
                                     * Here on this slot, we will show this slot as a free slot on week-view.
                                     * */
@@ -437,22 +448,76 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                         for (int vacation_number = 0; vacation_number < slot_coinciding_vacations.size(); vacation_number++) {
                                             VacationCoincidingSlot vacationCoincidingSlot = slot_coinciding_vacations.get(vacation_number);
                                             int vacation_coincide_type = vacationCoincidingSlot.getVacation_coincide_type();
+                                            String vacation_start_date = vacationCoincidingSlot.getVacation_start_date();
+                                            String vacation_stop_date = vacationCoincidingSlot.getVacation_stop_date();
+                                            String[] vacation_coinciding_week_days = vacationCoincidingSlot.getVacation_week_days();
+                                            if (vacation_coincide_type == 1) {   /* in case of vacation started previous(date) to free slot  and vacation completes in between of free slot start and stop*/
+                                                Calendar calendar_vacation_stop_date = Calendar.getInstance();
+                                                calendar_vacation_stop_date.set(Integer.parseInt(vacation_stop_date.split("-")[0]), Integer.parseInt(vacation_stop_date.split("-")[1]) - 1, Integer.parseInt(vacation_stop_date.split("-")[2]));
+                                                addVacationDetailAndGetList(vacationDurationDetailBeans, right_now, calendar_vacation_stop_date, vacation_coinciding_week_days);
+                                            }
+                                            if (vacation_coincide_type == 2) {   /* in case of vacation started in between free slot start(date) and free slot end(date), vacation completes after free slot completion  */
+                                                Calendar calendar_vacation_start_date = Calendar.getInstance();
+                                                calendar_vacation_start_date.set(Integer.parseInt(vacation_start_date.split("-")[0]), Integer.parseInt(vacation_start_date.split("-")[1]) - 1, Integer.parseInt(vacation_start_date.split("-")[2]));
 
-                                            //if(vacation_coincide_type)
+                                                Calendar calendar_vacation_stop_date = Calendar.getInstance();
+                                                calendar_vacation_stop_date.set(slot_stop_year, slot_stop_month, slot_stop_day);
+
+                                                addVacationDetailAndGetList(vacationDurationDetailBeans, calendar_vacation_start_date, calendar_vacation_stop_date, vacation_coinciding_week_days);
+                                            }
+                                            if (vacation_coincide_type == 3) {  /* in case of vacation start and vacation stop is similar to free slot start and free slot completion (date)*/
+                                                Calendar calendar_vacation_stop_date = Calendar.getInstance();
+                                                calendar_vacation_stop_date.set(slot_stop_year, slot_stop_month, slot_stop_day);
+                                                addVacationDetailAndGetList(vacationDurationDetailBeans, right_now, calendar_vacation_stop_date, vacation_coinciding_week_days);
+                                            }
+                                            if (vacation_coincide_type == 4) {  /* in case of vacation started previous to free slot start date and completes after  slot completion*/
+                                                Calendar calendar_vacation_stop_date = Calendar.getInstance();
+                                                calendar_vacation_stop_date.set(slot_stop_year, slot_stop_month, slot_stop_day);
+                                                addVacationDetailAndGetList(vacationDurationDetailBeans, right_now, calendar_vacation_stop_date, vacation_coinciding_week_days);
+                                            }
+
+                                            if (vacation_coincide_type == 5) {      /* in case  of vacation start and stop time both are in between of free slot start and free slot stop dates*/
+                                                Calendar calendar_vacation_start_date = Calendar.getInstance();
+                                                calendar_vacation_start_date.set(Integer.parseInt(vacation_start_date.split("-")[0]), Integer.parseInt(vacation_start_date.split("-")[1]) - 1, Integer.parseInt(vacation_start_date.split("-")[2]));
+
+                                                Calendar calendar_vacation_stop_date = Calendar.getInstance();
+                                                calendar_vacation_stop_date.set(Integer.parseInt(vacation_stop_date.split("-")[0]), Integer.parseInt(vacation_stop_date.split("-")[1]) - 1, Integer.parseInt(vacation_stop_date.split("-")[2]));
+
+                                                addVacationDetailAndGetList(vacationDurationDetailBeans, calendar_vacation_start_date, calendar_vacation_stop_date, vacation_coinciding_week_days);
+                                            }
+
                                         }
+
+                                        ArrayList<VacationDurationDetailBean> vacationDurationDetailBeans1=new ArrayList<VacationDurationDetailBean>();
+                                        for (int coinciding_vacation = 0; coinciding_vacation < vacationDurationDetailBeans.size(); coinciding_vacation++) {
+                                            VacationDurationDetailBean vacationDurationDetailBean=vacationDurationDetailBeans.get(coinciding_vacation);
+                                            String date=vacationDurationDetailBean.getDate();
+                                            String week_day=vacationDurationDetailBean.getWeek_day();
+                                            for(int slot_duration_bean=0;slot_duration_bean < slotDurationDetailBeans.size();slot_duration_bean++){
+                                                SlotDurationDetailBean slotDurationDetailBean=slotDurationDetailBeans.get(slot_duration_bean);
+                                                String slot_date=slotDurationDetailBean.getDate();
+                                                String slot_week_day=slotDurationDetailBean.getWeek_day();
+
+                                                if(slot_date.equals(date) && slot_week_day.equals(week_day)){
+                                                    slotDurationDetailBeans.remove(slot_duration_bean);
+                                                    vacationDurationDetailBeans1.add(vacationDurationDetailBeans.get(coinciding_vacation));
+                                                }
+
+
+                                            }
+                                        }
+
+                                        if(slotDurationDetailBeans.size() > 0){
+                                            /* we have to show free slot to week view as there are slots which can be scheduled */
+
+                                        }else{
+                                            /* In this case no slots can be scheduled as every slot have vacation*/
+                                        }
+
+
+
+
                                     }
-
-                                   /* Calendar right_now = Calendar.getInstance();
-
-
-                                    Calendar calendar_stop_date_of_slot = Calendar.getInstance();
-                                    calendar_stop_date_of_slot.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
-
-                                    Calendar calendar_vacation_start_date = Calendar.getInstance();
-
-                                    calendar_vacation_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
-
-*/
 
 
                                     Calendar startTime;
@@ -477,6 +542,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             }
 
                         }
+
 
                         if (!slot_match_with_any_event) {
                             free_slot++;
@@ -676,14 +742,15 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     }
 
 
-    private int calculateNoOfTotalClassDays(Calendar calendar_schedule_start_date, Calendar calendar_stop_date_of_schedule, String[] slot_on_week_days) {
+    private ArrayList<SlotDurationDetailBean> calculateNoOfTotalClassDays(Calendar calendar_schedule_start_date, Calendar calendar_stop_date_of_schedule, String[] slot_on_week_days) {
 
         int workDays = 0;
-
+        ArrayList<SlotDurationDetailBean> slotDurationDetailBeans = new ArrayList<SlotDurationDetailBean>();
         //Return 0 if start and end are the same
-        if (calendar_schedule_start_date.getTimeInMillis() == calendar_stop_date_of_schedule.getTimeInMillis()) {
-            return 0;
-        }
+
+        /*if (calendar_schedule_start_date.getTimeInMillis() == calendar_stop_date_of_schedule.getTimeInMillis()) {
+            return slotDurationDetailBeans;
+        }*/
 
         List<Integer> selectedDays = new ArrayList<Integer>();
         for (String d : slot_on_week_days) {
@@ -708,7 +775,11 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
             if (selectedDays.contains(calendar_schedule_start_date.get(Calendar.DAY_OF_WEEK))) {
                 ++workDays;
-
+                SlotDurationDetailBean slotDurationDetailBean = new SlotDurationDetailBean();
+                Log.d(TAG, "year: " + calendar_schedule_start_date.get(Calendar.YEAR) + "month: " + calendar_schedule_start_date.get(Calendar.MONTH) + "day_of_month: " + calendar_schedule_start_date.get(Calendar.DAY_OF_MONTH) + "date: " + calendar_schedule_start_date.get(Calendar.DATE));
+                slotDurationDetailBean.setDate(calendar_schedule_start_date.get(Calendar.YEAR) + "-" + calendar_schedule_start_date.get(Calendar.MONTH) + "-" + calendar_schedule_start_date.get(Calendar.DAY_OF_MONTH));
+                slotDurationDetailBean.setWeek_day(String.valueOf(calendar_schedule_start_date.get(Calendar.DAY_OF_WEEK)));
+                slotDurationDetailBeans.add(slotDurationDetailBean);
             }
             calendar_schedule_start_date.add(Calendar.DAY_OF_MONTH, 1);
 
@@ -716,7 +787,44 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         }
         while (calendar_schedule_start_date.getTimeInMillis() <= calendar_stop_date_of_schedule.getTimeInMillis()); //excluding end date
 
-        return workDays;
+        return slotDurationDetailBeans;
+    }
+
+    private ArrayList<VacationDurationDetailBean> addVacationDetailAndGetList(ArrayList<VacationDurationDetailBean> vacationDurationDetailBeans, Calendar vacation_start_calendar, Calendar vacation_stop_calendar, String[] vacation_coincide_week_days) {
+        List<Integer> selectedDays = new ArrayList<Integer>();
+        for (String d : vacation_coincide_week_days) {
+            if (d.equalsIgnoreCase("su"))
+                selectedDays.add(1);
+            if (d.equalsIgnoreCase("m"))
+                selectedDays.add(2);
+            if (d.equalsIgnoreCase("t"))
+                selectedDays.add(3);
+            if (d.equalsIgnoreCase("w"))
+                selectedDays.add(4);
+            if (d.equalsIgnoreCase("th"))
+                selectedDays.add(5);
+            if (d.equalsIgnoreCase("f"))
+                selectedDays.add(6);
+            if (d.equalsIgnoreCase("s"))
+                selectedDays.add(7);
+        }
+
+        do {
+            //excluding start date
+
+            if (selectedDays.contains(vacation_start_calendar.get(Calendar.DAY_OF_WEEK))) {
+                VacationDurationDetailBean vacationDurationDetailBean = new VacationDurationDetailBean();
+                vacationDurationDetailBean.setDate(vacation_start_calendar.get(Calendar.YEAR) + "-" + vacation_start_calendar.get(Calendar.MONTH) + "-" + vacation_start_calendar.get(Calendar.DAY_OF_MONTH));
+                vacationDurationDetailBean.setWeek_day(String.valueOf(vacation_start_calendar.get(Calendar.DAY_OF_WEEK)));
+                vacationDurationDetailBeans.add(vacationDurationDetailBean);
+            }
+            vacation_start_calendar.add(Calendar.DAY_OF_MONTH, 1);
+
+
+        }
+        while (vacation_start_calendar.getTimeInMillis() <= vacation_stop_calendar.getTimeInMillis()); //excluding end date
+
+        return vacationDurationDetailBeans;
     }
 
     private void populateWeekViewForCurrentMonth2(List<WeekViewEvent> events, int newYear, int newMonth) {
