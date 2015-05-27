@@ -21,6 +21,7 @@ import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
 import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
+import com.findmycoach.app.beans.CalendarSchedule.VacationCoincidingSlot;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.SetDate;
@@ -258,8 +259,11 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             for (Day d : coming_month) {
                 String date_for_d = d.getDate();
                 List<DayEvent> dayEvents = d.getDayEvents();
-
                 List<DaySlot> daySlots = d.getDaySlots();
+                List<DayVacation> dayVacations = d.getDayVacations();
+
+
+
                 DaySlot daySlot;
                 if (daySlots.size() > 0) {
                     for (int slot = 0; slot < daySlots.size(); slot++) {
@@ -387,6 +391,9 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                     int slot_stop_hour = Integer.parseInt(slot_stop_time.split(":", 3)[0]);
                     int slot_stop_minute = Integer.parseInt(slot_stop_time.split(":", 3)[1]);
 
+                    int slot_start_time_in_seconds = (slot_start_hour * 60 * 60) + (slot_start_minute * 60);
+                    int slot_stop_time_in_seconds = (slot_stop_hour * 60 * 60) + (slot_stop_minute * 60);
+
 
                     Calendar cal_slot_start = new GregorianCalendar();
                     cal_slot_start.set(slot_start_year, slot_start_month - 1, slot_start_day);
@@ -395,6 +402,9 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                     Calendar cal_slot_stop = new GregorianCalendar();
                     cal_slot_stop.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
                     long slot_stop_date_in_millis = cal_slot_stop.getTimeInMillis();
+
+
+
 
 
                     /*
@@ -419,67 +429,30 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                     /*
                                     * Here on this slot, we will show this slot as a free slot on week-view.
                                     * */
+                                    ArrayList<VacationCoincidingSlot> slot_coinciding_vacations = getSlotCoincidingVacations(dayVacations, slot_on_week_days, slot_start_time_in_seconds, slot_stop_time_in_seconds, slot_start_date_in_millis, slot_stop_date_in_millis);
 
-                                    for (int vacation_number = 0; vacation_number < dayVacations.size(); vacation_number++) {
-                                        DayVacation dayVacation = dayVacations.get(vacation_number);
-                                        String start_date = dayVacation.getStart_date();
-                                        String stop_date = dayVacation.getStop_date();
-                                        String start_time = dayVacation.getStart_time();
-                                        String stop_time = dayVacation.getStop_time();
-                                        String[] week_days = dayVacation.getWeek_days();
+                                    if (slot_coinciding_vacations.size() <= 0) {
+                                        /* free slot will get foreground to Day View and on its tap, class can be scheduled with no vacations*/
+                                    } else {
+                                        for (int vacation_number = 0; vacation_number < slot_coinciding_vacations.size(); vacation_number++) {
+                                            VacationCoincidingSlot vacationCoincidingSlot = slot_coinciding_vacations.get(vacation_number);
+                                            int vacation_coincide_type = vacationCoincidingSlot.getVacation_coincide_type();
 
-                                        Calendar cal_vacation_start = new GregorianCalendar();
-                                        cal_vacation_start.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
-                                        long vacation_start_date_in_millis = cal_vacation_start.getTimeInMillis();
-
-                                        Calendar cal_vacation_stop = new GregorianCalendar();
-                                        cal_vacation_stop.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
-                                        long vacation_stop_date_in_millis = cal_vacation_stop.getTimeInMillis();
-
-                                        ArrayList<String> matching_week_day=new ArrayList<String>();
-                                        for(int slot_week_day =0; slot_week_day < slot_on_week_days.length ; slot_week_day++ ){
-                                            String week_day=slot_on_week_days[slot_week_day];
-                                            for(int vacation_week_day =0;vacation_week_day < week_days.length;vacation_week_day++){
-                                                if(week_day.equals(week_days[vacation_week_day]))
-                                                    matching_week_day.add(week_day);
-                                            }
-                                        }
-
-                                        if(matching_week_day.size() <=0)
-                                            continue;
-
-                                        Calendar right_now=Calendar.getInstance();
-
-
-                                        Calendar calendar_stop_date_of_slot = Calendar.getInstance();
-                                        calendar_stop_date_of_slot.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
-
-                                        Calendar calendar_vacation_start_date = Calendar.getInstance();
-                                       
-                                        calendar_vacation_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
-
-
-                                        if ((vacation_start_date_in_millis < slot_start_date_in_millis && vacation_stop_date_in_millis < slot_stop_date_in_millis && vacation_stop_date_in_millis > slot_start_date_in_millis)) {
-
-                                        } else {
-                                            if ((vacation_start_date_in_millis > slot_start_date_in_millis && vacation_start_date_in_millis < slot_stop_date_in_millis && vacation_stop_date_in_millis > slot_stop_date_in_millis)) {
-
-                                            } else {
-                                                if ((vacation_start_date_in_millis == slot_start_date_in_millis && vacation_stop_date_in_millis == slot_stop_date_in_millis)) {
-
-                                                } else {
-                                                    if ((vacation_start_date_in_millis < slot_start_date_in_millis && vacation_stop_date_in_millis > slot_stop_date_in_millis)) {
-
-                                                    } else {
-                                                        if ((vacation_start_date_in_millis > slot_start_date_in_millis && vacation_start_date_in_millis < slot_stop_date_in_millis && vacation_stop_date_in_millis > slot_start_date_in_millis && vacation_stop_date_in_millis < slot_stop_date_in_millis)) {
-
-                                                        }
-                                                    }
-                                                }
-                                            }
-
+                                            //if(vacation_coincide_type)
                                         }
                                     }
+
+                                   /* Calendar right_now = Calendar.getInstance();
+
+
+                                    Calendar calendar_stop_date_of_slot = Calendar.getInstance();
+                                    calendar_stop_date_of_slot.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
+
+                                    Calendar calendar_vacation_start_date = Calendar.getInstance();
+
+                                    calendar_vacation_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
+
+*/
 
 
                                     Calendar startTime;
@@ -596,6 +569,111 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         }
     }
 
+    private ArrayList<VacationCoincidingSlot> getSlotCoincidingVacations(List<DayVacation> dayVacations, String[] slot_on_week_days, int slot_start_time_in_seconds, int slot_stop_time_in_seconds, long slot_start_date_in_millis, long slot_stop_date_in_millis) {
+        ArrayList<VacationCoincidingSlot> vacations_found_coinciding = new ArrayList<VacationCoincidingSlot>();
+        for (int vacation_number = 0; vacation_number < dayVacations.size(); vacation_number++) {
+            DayVacation dayVacation = dayVacations.get(vacation_number);
+            String start_date = dayVacation.getStart_date();
+            String stop_date = dayVacation.getStop_date();
+            String start_time = dayVacation.getStart_time();
+            String stop_time = dayVacation.getStop_time();
+            String[] week_days = dayVacation.getWeek_days();
+
+            Calendar cal_vacation_start = new GregorianCalendar();
+            cal_vacation_start.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
+            long vacation_start_date_in_millis = cal_vacation_start.getTimeInMillis();
+
+            Calendar cal_vacation_stop = new GregorianCalendar();
+            cal_vacation_stop.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
+            long vacation_stop_date_in_millis = cal_vacation_stop.getTimeInMillis();
+
+            ArrayList<String> matching_week_day = new ArrayList<String>();      /*coinciding week days*/
+            for (int slot_week_day = 0; slot_week_day < slot_on_week_days.length; slot_week_day++) {
+                String week_day = slot_on_week_days[slot_week_day];
+                for (int vacation_week_day = 0; vacation_week_day < week_days.length; vacation_week_day++) {
+                    if (week_day.equals(week_days[vacation_week_day]))
+                        matching_week_day.add(week_day);
+                }
+            }
+
+            if (matching_week_day.size() <= 0)
+                continue;
+
+            int this_vacation_start_time_seconds = (Integer.parseInt(start_time.split(":")[0]) * 60 * 60) + Integer.parseInt(start_time.split(":")[1]) * 60;
+            int this_vacation_stop_time_seconds = (Integer.parseInt(stop_time.split(":")[0]) * 60 * 60) + Integer.parseInt(stop_time.split(":")[1]) * 60;
+
+            if ((this_vacation_start_time_seconds < slot_start_time_in_seconds && this_vacation_stop_time_seconds > slot_start_time_in_seconds && this_vacation_stop_time_seconds < slot_stop_time_in_seconds) || (this_vacation_start_time_seconds > slot_start_time_in_seconds && this_vacation_start_time_seconds < slot_stop_time_in_seconds && this_vacation_stop_time_seconds > slot_stop_time_in_seconds) || (this_vacation_start_time_seconds == slot_start_time_in_seconds && this_vacation_stop_time_seconds == slot_stop_time_in_seconds) || (this_vacation_start_time_seconds < slot_start_time_in_seconds && this_vacation_stop_time_seconds > slot_stop_time_in_seconds) || (this_vacation_start_time_seconds > slot_start_time_in_seconds && this_vacation_start_time_seconds < slot_stop_time_in_seconds && this_vacation_stop_time_seconds > slot_start_time_in_seconds && this_vacation_stop_time_seconds < slot_stop_time_in_seconds)) {
+                                             /* this confirms that vacation is coinciding with slot_time */
+            } else
+                continue;
+
+
+            if ((vacation_start_date_in_millis < slot_start_date_in_millis && vacation_stop_date_in_millis < slot_stop_date_in_millis && vacation_stop_date_in_millis > slot_start_date_in_millis)) {
+          /* vacation_coincide_type_1*/
+                VacationCoincidingSlot vacationCoincidingSlot = new VacationCoincidingSlot();
+                setData(vacationCoincidingSlot, start_date, start_time, stop_date, stop_time, matching_week_day);
+                vacationCoincidingSlot.setVacation_coincide_type(1);   /* this will be used to calculate no of slot affected days from this type of vacation coincide*/
+
+                vacations_found_coinciding.add(vacationCoincidingSlot);
+
+            } else {
+                if ((vacation_start_date_in_millis > slot_start_date_in_millis && vacation_start_date_in_millis < slot_stop_date_in_millis && vacation_stop_date_in_millis > slot_stop_date_in_millis)) {
+          /* vacation_coincide_type_2*/
+                    VacationCoincidingSlot vacationCoincidingSlot = new VacationCoincidingSlot();
+                    setData(vacationCoincidingSlot, start_date, start_time, stop_date, stop_time, matching_week_day);
+                    vacationCoincidingSlot.setVacation_coincide_type(2);/* this will be used to calculate no of slot affected days from this type of vacation coincide*/
+
+                    vacations_found_coinciding.add(vacationCoincidingSlot);
+                } else {
+                    if ((vacation_start_date_in_millis == slot_start_date_in_millis && vacation_stop_date_in_millis == slot_stop_date_in_millis)) {
+          /* vacation_coincide_type_3*/
+                        VacationCoincidingSlot vacationCoincidingSlot = new VacationCoincidingSlot();
+                        setData(vacationCoincidingSlot, start_date, start_time, stop_date, stop_time, matching_week_day);
+                        vacationCoincidingSlot.setVacation_coincide_type(3);/* this will be used to calculate no of slot affected days from this type of vacation coincide*/
+
+                        vacations_found_coinciding.add(vacationCoincidingSlot);
+                    } else {
+                        if ((vacation_start_date_in_millis < slot_start_date_in_millis && vacation_stop_date_in_millis > slot_stop_date_in_millis)) {
+
+          /* vacation_coincide_type_4*/
+                            VacationCoincidingSlot vacationCoincidingSlot = new VacationCoincidingSlot();
+                            setData(vacationCoincidingSlot, start_date, start_time, stop_date, stop_time, matching_week_day);
+                            vacationCoincidingSlot.setVacation_coincide_type(4);/* this will be used to calculate no of slot affected days from this type of vacation coincide*/
+
+                            vacations_found_coinciding.add(vacationCoincidingSlot);
+                        } else {
+                            if ((vacation_start_date_in_millis > slot_start_date_in_millis && vacation_start_date_in_millis < slot_stop_date_in_millis && vacation_stop_date_in_millis > slot_start_date_in_millis && vacation_stop_date_in_millis < slot_stop_date_in_millis)) {
+          /* vacation_coincide_type_5*/
+                                VacationCoincidingSlot vacationCoincidingSlot = new VacationCoincidingSlot();
+                                setData(vacationCoincidingSlot, start_date, start_time, stop_date, stop_time, matching_week_day);
+                                vacationCoincidingSlot.setVacation_coincide_type(5);/* this will be used to calculate no of slot affected days from this type of vacation coincide*/
+
+                                vacations_found_coinciding.add(vacationCoincidingSlot);
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        return vacations_found_coinciding;
+    }
+
+
+    private VacationCoincidingSlot setData(VacationCoincidingSlot vacationCoincidingSlot, String start_date, String start_time, String stop_date, String stop_time, ArrayList<String> matching_week_day) {
+        vacationCoincidingSlot.setVacation_start_date(start_date);
+        vacationCoincidingSlot.setVacation_start_time(start_time);
+        vacationCoincidingSlot.setVacation_stop_date(stop_date);
+        vacationCoincidingSlot.setVacation_stop_time(stop_time);
+
+        String[] coinciding_week_days = new String[matching_week_day.size()];
+        for (int wik_day = 0; wik_day < matching_week_day.size(); wik_day++) {
+            coinciding_week_days[wik_day] = matching_week_day.get(wik_day);
+        }
+
+        vacationCoincidingSlot.setVacation_week_days(coinciding_week_days);
+        return vacationCoincidingSlot;
+    }
 
 
     private int calculateNoOfTotalClassDays(Calendar calendar_schedule_start_date, Calendar calendar_stop_date_of_schedule, String[] slot_on_week_days) {
