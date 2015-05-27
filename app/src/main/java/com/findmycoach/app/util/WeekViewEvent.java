@@ -1,5 +1,8 @@
 package com.findmycoach.app.util;
 
+import com.findmycoach.app.beans.CalendarSchedule.SlotDurationDetailBean;
+import com.findmycoach.app.beans.CalendarSchedule.VacationDurationDetailBean;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -30,6 +33,24 @@ public class WeekViewEvent {
     private String [] slot_on_week_days;
     private String charges;
     private ArrayList<String> arrayList_sub_category;
+    private ArrayList<SlotDurationDetailBean> slotDurationDetailBeans;
+    private ArrayList<VacationDurationDetailBean> vacationDurationDetailBeans;
+
+    public ArrayList<SlotDurationDetailBean> getSlotDurationDetailBeans() {
+        return slotDurationDetailBeans;
+    }
+
+    public void setSlotDurationDetailBeans(ArrayList<SlotDurationDetailBean> slotDurationDetailBeans) {
+        this.slotDurationDetailBeans = slotDurationDetailBeans;
+    }
+
+    public ArrayList<VacationDurationDetailBean> getVacationDurationDetailBeans() {
+        return vacationDurationDetailBeans;
+    }
+
+    public void setVacationDurationDetailBeans(ArrayList<VacationDurationDetailBean> vacationDurationDetailBeans) {
+        this.vacationDurationDetailBeans = vacationDurationDetailBeans;
+    }
 
     public ArrayList<String> getArrayList_sub_category() {
         return arrayList_sub_category;
@@ -257,7 +278,7 @@ public class WeekViewEvent {
      * Initializes the event for week view, this week-view will display free slots available and mentee can select one free slot for his schedule request with mentor.
      */
 
-    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime, int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_day, int slot_stop_month, int slot_stop_year, int slot_start_hour, int slot_start_minute, int slot_stop_hour, int slot_stop_minute, String slot_type,String [] slot_on_week_days, String mentor_id, String mentor_availability,int free_slot_event_type,String charges,ArrayList<String> arrayList_sub_category) {
+    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime, int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_day, int slot_stop_month, int slot_stop_year, int slot_start_hour, int slot_start_minute, int slot_stop_hour, int slot_stop_minute, String slot_type,String [] slot_on_week_days, String mentor_id, String mentor_availability,int free_slot_event_type,String charges,ArrayList<String> arrayList_sub_category,ArrayList<SlotDurationDetailBean> slotDurationDetailBeans, ArrayList<VacationDurationDetailBean> vacationDurationDetailBeans) {
         this.mId = id;
         this.mName = name;
         this.mStartTime = startTime;
