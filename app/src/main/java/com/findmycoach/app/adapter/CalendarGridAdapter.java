@@ -18,6 +18,7 @@ import com.findmycoach.app.activity.SetScheduleActivity;
 import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
+import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
@@ -351,7 +352,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                 if (current_month_data.size() <= 0) {
                     if (allow_once) {
-                       // Toast.makeText(context, "Please refresh the schedule !", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(context, "Please refresh the schedule !", Toast.LENGTH_SHORT).show();
                         if (myScheduleFragment != null) {
                             String user_group = StorageHelper.getUserGroup(context, "user_group");
                             myScheduleFragment.populate_calendar_from_adapter = true;
@@ -393,9 +394,11 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                 * */
                     if (myScheduleFragment != null) {
                         List<DayEvent> dayEvents = day.getDayEvents();
-
+                        List<DayVacation> dayVacations = day.getDayVacations();
 
                         if (dayEvents.size() > 0) {
+
+
                             if (day_color[1].equals("BLUE")) {
                                 gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
                             } else {
@@ -412,6 +415,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                 * */
                         List<DayEvent> dayEvents = day.getDayEvents();
                         List<DaySlot> daySlots = day.getDaySlots();
+                        List<DayVacation> dayVacations = day.getDayVacations();
 
                     /*if (daySlots.size() > 0 && dayEvents.size() <= 0) {
                         *//*  success when this day has only slots and there is no event coming from server*//*
@@ -448,14 +452,15 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                 String slot_start_time = daySlot.getSlot_start_time();
                                 String slot_stop_time = daySlot.getSlot_stop_time();
                                 String slot_type = daySlot.getSlot_type();
-                                String slot_id=daySlot.getSlot_id();
+                                String slot_id = daySlot.getSlot_id();
                                 int slot_max_users = Integer.parseInt(daySlot.getSlot_max_users());
 
                                 int slot_stop_day = Integer.parseInt(slot_stop_date.split("-", 3)[2]);
                                 int slot_stop_month = Integer.parseInt(slot_stop_date.split("-", 3)[1]);
                                 int slot_stop_year = Integer.parseInt(slot_stop_date.split("-", 3)[0]);
 
-
+                                int slot_start_time_in_seconds = (Integer.parseInt(slot_start_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(slot_start_time.split(":")[1]) * 60);
+                                int slot_stop_time_in_seconds = (Integer.parseInt(slot_stop_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(slot_stop_time.split(":")[1]) * 60);
 
                                 long current_date_in_millis = System.currentTimeMillis();
 
@@ -494,15 +499,47 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                         String event_stop_date = dayEvent1.getEvent_stop_date();
                                         String event_start_time = dayEvent1.getEvent_start_time();
                                         String event_stop_time = dayEvent1.getEvent_stop_time();
-                                        String event_regarding_slot_id=dayEvent1.getSlot_id();   /* this will get slot_id regarding its matching slot */
+                                        String event_regarding_slot_id = dayEvent1.getSlot_id();   /* this will get slot_id regarding its matching slot */
                                         int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
                                         /* checking whether this particular event is similar to slot or not */
-                                        if(event_regarding_slot_id.equals(slot_id)){
-                                            slot_match_with_event =true;
+                                        if (event_regarding_slot_id.equals(slot_id)) {
+                                            slot_match_with_event = true;
                                             /* if found similar then check whether the event_totoal_mentees from slot_max_users*/
                                             if (event_total_mentees < slot_max_users) {
-                                                free_slot++;
+
+
+                                                if (dayVacations.size() <= 0) {
+                                                    free_slot++;
+                                                } else {
+                                                    boolean vacation_found_in_between = false;
+                                                    for (int day_vacation = 0; day_vacation < dayVacations.size(); day_vacation++) {
+                                                        DayVacation dayVacation = dayVacations.get(day_vacation);
+                                                        String vacation_start_time = dayVacation.getStart_time();
+                                                        String vacation_stop_time = dayVacation.getStop_time();
+
+                                                        int this_vacation_start_time_seconds = (Integer.parseInt(vacation_start_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(vacation_start_time.split(":")[1]) * 60);
+                                                        int this_vacation_stop_time_seconds = (Integer.parseInt(vacation_stop_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(vacation_stop_time.split(":")[1]) * 60);
+
+
+                                                        if ((this_vacation_start_time_seconds < slot_start_time_in_seconds && this_vacation_stop_time_seconds > slot_start_time_in_seconds && this_vacation_stop_time_seconds < slot_stop_time_in_seconds) || (this_vacation_start_time_seconds > slot_start_time_in_seconds && this_vacation_start_time_seconds < slot_stop_time_in_seconds && this_vacation_stop_time_seconds > slot_stop_time_in_seconds) || (this_vacation_start_time_seconds == slot_start_time_in_seconds && this_vacation_stop_time_seconds == slot_stop_time_in_seconds) || (this_vacation_start_time_seconds < slot_start_time_in_seconds && this_vacation_stop_time_seconds > slot_stop_time_in_seconds) || (this_vacation_start_time_seconds > slot_start_time_in_seconds && this_vacation_start_time_seconds < slot_stop_time_in_seconds && this_vacation_stop_time_seconds > slot_start_time_in_seconds && this_vacation_stop_time_seconds < slot_stop_time_in_seconds)) {
+                                             /* this confirms that vacation is coinciding with slot_time */
+                                                            vacation_found_in_between = true;
+                                                            break;
+                                                        } else
+                                                            continue;
+
+
+                                                    }
+                                                    if (!vacation_found_in_between){
+                                                        free_slot++;
+
+                                                    }
+
+
+                                                }
+
                                             }
+                                            break;
                                         }
 /*
                                         if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
@@ -517,8 +554,38 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 */
                                     }
 
-                                    if (!slot_match_with_event)
-                                        free_slot++;
+                                    if (!slot_match_with_event) {
+
+                                        if (dayVacations.size() <= 0) {
+                                            free_slot++;
+                                        } else {
+                                            boolean vacation_found_in_between = false;
+                                            for (int day_vacation = 0; day_vacation < dayVacations.size(); day_vacation++) {
+                                                DayVacation dayVacation = dayVacations.get(day_vacation);
+                                                String vacation_start_time = dayVacation.getStart_time();
+                                                String vacation_stop_time = dayVacation.getStop_time();
+
+                                                int this_vacation_start_time_seconds = (Integer.parseInt(vacation_start_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(vacation_start_time.split(":")[1]) * 60);
+                                                int this_vacation_stop_time_seconds = (Integer.parseInt(vacation_stop_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(vacation_stop_time.split(":")[1]) * 60);
+
+
+                                                if ((this_vacation_start_time_seconds < slot_start_time_in_seconds && this_vacation_stop_time_seconds > slot_start_time_in_seconds && this_vacation_stop_time_seconds < slot_stop_time_in_seconds) || (this_vacation_start_time_seconds > slot_start_time_in_seconds && this_vacation_start_time_seconds < slot_stop_time_in_seconds && this_vacation_stop_time_seconds > slot_stop_time_in_seconds) || (this_vacation_start_time_seconds == slot_start_time_in_seconds && this_vacation_stop_time_seconds == slot_stop_time_in_seconds) || (this_vacation_start_time_seconds < slot_start_time_in_seconds && this_vacation_stop_time_seconds > slot_stop_time_in_seconds) || (this_vacation_start_time_seconds > slot_start_time_in_seconds && this_vacation_start_time_seconds < slot_stop_time_in_seconds && this_vacation_stop_time_seconds > slot_start_time_in_seconds && this_vacation_stop_time_seconds < slot_stop_time_in_seconds)) {
+                                             /* this confirms that vacation is coinciding with slot_time */
+                                                    vacation_found_in_between = true;
+                                                    break;
+                                                } else
+                                                    continue;
+
+
+                                            }
+                                            if (!vacation_found_in_between){
+                                                free_slot++;
+
+                                            }
+
+
+                                        }
+                                    }
 
 
                                 } else {
@@ -533,27 +600,49 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                         String event_stop_date = dayEvent1.getEvent_stop_date();
                                         String event_start_time = dayEvent1.getEvent_start_time();
                                         String event_stop_time = dayEvent1.getEvent_stop_time();
-                                        String event_regarding_slot_id=dayEvent1.getSlot_id();/* this will get slot_id regarding its matching slot */
+                                        String event_regarding_slot_id = dayEvent1.getSlot_id();/* this will get slot_id regarding its matching slot */
                                         int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
                                         /* checking whether this particular event is similar to slot or not */
-                                        if(event_regarding_slot_id.equals(slot_id)){
-                                            slot_match_with_event =true;
+                                        if (event_regarding_slot_id.equals(slot_id)) {
+                                            slot_match_with_event = true;
+                                            break;
                                             /* if found similar then check whether the event_totoal_mentees from slot_max_users*/
 
                                         }
-                                        if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
-                                            slot_match_with_event = true;
 
-                                            /* Below code is commented as it is expected from API side is that when both event and slot matches i.e. */
-                                            /*if (event_total_mentees < slot_max_users) {
+                                    }
+
+                                    if (!slot_match_with_event) {
+                                        if (dayVacations.size() <= 0) {
+                                            free_slot++;
+                                        } else {
+                                            boolean vacation_found_in_between = false;
+                                            for (int day_vacation = 0; day_vacation < dayVacations.size(); day_vacation++) {
+                                                DayVacation dayVacation = dayVacations.get(day_vacation);
+                                                String vacation_start_time = dayVacation.getStart_time();
+                                                String vacation_stop_time = dayVacation.getStop_time();
+
+                                                int this_vacation_start_time_seconds = (Integer.parseInt(vacation_start_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(vacation_start_time.split(":")[1]) * 60);
+                                                int this_vacation_stop_time_seconds = (Integer.parseInt(vacation_stop_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(vacation_stop_time.split(":")[1]) * 60);
+
+
+                                                if ((this_vacation_start_time_seconds < slot_start_time_in_seconds && this_vacation_stop_time_seconds > slot_start_time_in_seconds && this_vacation_stop_time_seconds < slot_stop_time_in_seconds) || (this_vacation_start_time_seconds > slot_start_time_in_seconds && this_vacation_start_time_seconds < slot_stop_time_in_seconds && this_vacation_stop_time_seconds > slot_stop_time_in_seconds) || (this_vacation_start_time_seconds == slot_start_time_in_seconds && this_vacation_stop_time_seconds == slot_stop_time_in_seconds) || (this_vacation_start_time_seconds < slot_start_time_in_seconds && this_vacation_stop_time_seconds > slot_stop_time_in_seconds) || (this_vacation_start_time_seconds > slot_start_time_in_seconds && this_vacation_start_time_seconds < slot_stop_time_in_seconds && this_vacation_stop_time_seconds > slot_start_time_in_seconds && this_vacation_stop_time_seconds < slot_stop_time_in_seconds)) {
+                                             /* this confirms that vacation is coinciding with slot_time */
+                                                    vacation_found_in_between = true;
+                                                    break;
+                                                } else
+                                                    continue;
+
+
+                                            }
+                                            if (!vacation_found_in_between){
                                                 free_slot++;
-                                            }*/
+
+                                            }
+
 
                                         }
                                     }
-
-                                    if (!slot_match_with_event)
-                                        free_slot++;
                                 }
 
                             }
@@ -611,11 +700,11 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             } else {
                 intent.putExtra("for", "MentorDetailsActivity");
 
-                String grid_cell_tag=(String) view.getTag(R.id.TAG_FREE_SLOT);
-                if(grid_cell_tag != null)
-                no_of_free_slots = Integer.parseInt(grid_cell_tag);
+                String grid_cell_tag = (String) view.getTag(R.id.TAG_FREE_SLOT);
+                if (grid_cell_tag != null)
+                    no_of_free_slots = Integer.parseInt(grid_cell_tag);
                 else
-                no_of_free_slots = 0;
+                    no_of_free_slots = 0;
                 intent.putExtra("mentor_id", mentor_id);
                 intent.putExtra("availability", availability);
                 intent.putExtra("charges", charges);
@@ -652,14 +741,14 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
             if (month_in_foreground < month_index_of_grid_clicked) {
                 if (month_in_foreground == 0 && month_index_of_grid_clicked == 11) {
-                    if(myScheduleFragment != null)
-                    myScheduleFragment.showPrevMonth();
+                    if (myScheduleFragment != null)
+                        myScheduleFragment.showPrevMonth();
                     else
                         mentorDetailsActivity.showPrevMonth();
                 } else {
                     //myScheduleFragment.showPrevMonth();
                     if (myScheduleFragment != null)
-                    myScheduleFragment.showNextMonth();
+                        myScheduleFragment.showNextMonth();
                     else
                         mentorDetailsActivity.showNextMonth();
                 }
@@ -695,8 +784,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                 } else {
                     if (month_in_foreground == 11 && month_index_of_grid_clicked == 0) {
-                        if(myScheduleFragment != null)
-                        myScheduleFragment.showNextMonth();
+                        if (myScheduleFragment != null)
+                            myScheduleFragment.showNextMonth();
                         else
                             mentorDetailsActivity.showNextMonth();
 
@@ -705,7 +794,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                             //myScheduleFragment.showNextMonth();
                             if (myScheduleFragment != null)
-                            myScheduleFragment.showPrevMonth();
+                                myScheduleFragment.showPrevMonth();
                             else
                                 mentorDetailsActivity.showPrevMonth();
 

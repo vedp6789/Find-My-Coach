@@ -25,6 +25,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.beans.CalendarSchedule.SlotDurationDetailBean;
+import com.findmycoach.app.beans.CalendarSchedule.VacationCoincidingSlot;
+import com.findmycoach.app.beans.CalendarSchedule.VacationDurationDetailBean;
 import com.findmycoach.app.fragment_mentee.ChildDOB;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
@@ -75,6 +78,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private String slot_type;
     private String[] slot_on_week_days;
     private String charges;
+    private ArrayList<SlotDurationDetailBean> slotDurationDetailBeans;
+    private ArrayList<VacationCoincidingSlot> vacationCoincidingSlots;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +114,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         charges = bundle.getString("charges");
         arrayList_subcategory = bundle.getStringArrayList("arrayList_sub_category");
         slot_type = bundle.getString("slot_type");
+        slotDurationDetailBeans=bundle.getParcelableArrayList("slot_duration_detail");
+        vacationCoincidingSlots = bundle.getParcelableArrayList("slot_coinciding_vacation");
+
 
         /*
         * IN CASE OF GROUP SLOT_TYPE THERE IS NO NEED TO TAKE ADDRESS FROM USERS AS IT IS ASSUMED THAT GROUP CLASS WILL BE SCHEDULED AT MENTOR'S ADDRESS

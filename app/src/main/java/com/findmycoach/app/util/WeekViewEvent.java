@@ -1,6 +1,7 @@
 package com.findmycoach.app.util;
 
 import com.findmycoach.app.beans.CalendarSchedule.SlotDurationDetailBean;
+import com.findmycoach.app.beans.CalendarSchedule.VacationCoincidingSlot;
 import com.findmycoach.app.beans.CalendarSchedule.VacationDurationDetailBean;
 
 import java.util.ArrayList;
@@ -35,6 +36,15 @@ public class WeekViewEvent {
     private ArrayList<String> arrayList_sub_category;
     private ArrayList<SlotDurationDetailBean> slotDurationDetailBeans;
     private ArrayList<VacationDurationDetailBean> vacationDurationDetailBeans;
+    private ArrayList<VacationCoincidingSlot> vacationCoincidingSlots;
+
+    public ArrayList<VacationCoincidingSlot> getVacationCoincidingSlots() {
+        return vacationCoincidingSlots;
+    }
+
+    public void setVacationCoincidingSlots(ArrayList<VacationCoincidingSlot> vacationCoincidingSlots) {
+        this.vacationCoincidingSlots = vacationCoincidingSlots;
+    }
 
     public ArrayList<SlotDurationDetailBean> getSlotDurationDetailBeans() {
         return slotDurationDetailBeans;
@@ -278,7 +288,7 @@ public class WeekViewEvent {
      * Initializes the event for week view, this week-view will display free slots available and mentee can select one free slot for his schedule request with mentor.
      */
 
-    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime, int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_day, int slot_stop_month, int slot_stop_year, int slot_start_hour, int slot_start_minute, int slot_stop_hour, int slot_stop_minute, String slot_type,String [] slot_on_week_days, String mentor_id, String mentor_availability,int free_slot_event_type,String charges,ArrayList<String> arrayList_sub_category,ArrayList<SlotDurationDetailBean> slotDurationDetailBeans, ArrayList<VacationDurationDetailBean> vacationDurationDetailBeans) {
+    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime, int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_day, int slot_stop_month, int slot_stop_year, int slot_start_hour, int slot_start_minute, int slot_stop_hour, int slot_stop_minute, String slot_type,String [] slot_on_week_days, String mentor_id, String mentor_availability,int free_slot_event_type,String charges,ArrayList<String> arrayList_sub_category,ArrayList<SlotDurationDetailBean> slotDurationDetailBeans, ArrayList<VacationCoincidingSlot> vacationCoincidingSlots) {
         this.mId = id;
         this.mName = name;
         this.mStartTime = startTime;
@@ -300,6 +310,8 @@ public class WeekViewEvent {
         this.eventType=free_slot_event_type;
         this.charges=charges;
         this.arrayList_sub_category=arrayList_sub_category;
+        this.slotDurationDetailBeans=slotDurationDetailBeans;
+        this.vacationCoincidingSlots=vacationCoincidingSlots;
 
     }
 
