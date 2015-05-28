@@ -698,7 +698,7 @@
     <string name="select_days">Select days</string>
     <string name="from">From :</string>
     <string name="all">All</string>
-    <string name="timing">Timing:</string>
+    <string name="timing">Timing</string>
     <string name="to">To:</string>
     <string name="to1">to</string>
     <string name="starting_from">Starting from:</string>
@@ -818,13 +818,13 @@
     <string name="set_time">Set time</string>
     <string name="schedule_vacation_note">Out of class</string>
     <string name="classes_availability">Mentor\'s availability</string>
-    <string name="subject">Subject: </string>
+    <string name="subject">Subject</string>
     <string name="days_of_week">Days of week</string>
     <string name="week_days">Week days:</string>
     <string name="available_days">Available days</string>
     <string name="duration">Duration</string>
     <string name="payment_option">Payment option</string>
-    <string name="location">Location:</string>
+    <string name="location">Location</string>
     <string name="address">Address please</string>
     <string name="mentor_for">Mentor for</string>
     <string name="pay_now">Pay now</string>
