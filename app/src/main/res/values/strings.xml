@@ -825,6 +825,8 @@
     <string name="duration">Duration</string>
     <string name="payment_option">Payment option</string>
     <string name="location">Location</string>
+    <string name="number_of_classes">Total class</string>
+    <string name="vacations">Vacation</string>
     <string name="address">Address please</string>
     <string name="mentor_for">Mentor for</string>
     <string name="pay_now">Pay now</string>

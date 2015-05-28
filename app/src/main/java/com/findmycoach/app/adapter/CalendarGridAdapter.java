@@ -393,18 +393,34 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                 * success when CalendarGridAdapter is used by MyScheduleFragment class
                 * */
                     if (myScheduleFragment != null) {
-                        List<DayEvent> dayEvents = day.getDayEvents();
-                        List<DayVacation> dayVacations = day.getDayVacations();
+                        if (StorageHelper.getUserDetails(context, "user_group").equals("3")) {
+                            List<DayEvent> dayEvents = day.getDayEvents();
+                            List<DaySlot> daySlots = day.getDaySlots();
+                            List<DayVacation> dayVacations = day.getDayVacations();
 
-                        if (dayEvents.size() > 0) {
-
-
-                            if (day_color[1].equals("BLUE")) {
-                                gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
-                            } else {
-                                gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                            if (dayEvents.size() > 0) {
+                                if (day_color[1].equals("BLUE")) {
+                                    gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                } else {
+                                    gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                }
                             }
                         }
+                        if (StorageHelper.getUserDetails(context, "user_group").equals("2")) {
+                            List<DayEvent> dayEvents = day.getDayEvents();
+                            List<DayVacation> dayVacations = day.getDayVacations();
+
+                            if (dayEvents.size() > 0) {
+
+
+                                if (day_color[1].equals("BLUE")) {
+                                    gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                } else {
+                                    gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                }
+                            }
+                        }
+
 
                     } else {
                 /*
@@ -530,7 +546,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
                                                     }
-                                                    if (!vacation_found_in_between){
+                                                    if (!vacation_found_in_between) {
                                                         free_slot++;
 
                                                     }
@@ -578,7 +594,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
                                             }
-                                            if (!vacation_found_in_between){
+                                            if (!vacation_found_in_between) {
                                                 free_slot++;
 
                                             }
@@ -635,7 +651,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
                                             }
-                                            if (!vacation_found_in_between){
+                                            if (!vacation_found_in_between) {
                                                 free_slot++;
 
                                             }

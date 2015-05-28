@@ -45,7 +45,7 @@ import java.util.List;
  */
 public class ScheduleNewClass extends Activity implements Button.OnClickListener, Callback {
 
-    private LinearLayout ll_child_dob, ll_location;
+    private LinearLayout ll_child_dob, ll_location,ll_vacation;
     public static TextView tv_child_dob;
     private static TextView tv_from_date, tv_to_date, tv_class_timing, tv_subject, tv_total_charges;
     Spinner sp_subjects, sp_mentor_for;
@@ -81,6 +81,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private ArrayList<VacationCoincidingSlot> vacationCoincidingSlots;
     private ScrollableGridView gridView;
     private TextView title;
+    private TextView tv_number_of_classes,tv_vacation;
+
 
 
     @Override
@@ -131,6 +133,27 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
          if (slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
             ll_location.setVisibility(View.GONE);
         }
+
+        if(vacationCoincidingSlots.size() <= 0)
+            ll_vacation.setVisibility(View.GONE);
+        else{
+            StringBuilder stringBuilder_comma_separated_vacation_duration=new StringBuilder();
+            for(int vacation_coinciding_slot=0; vacation_coinciding_slot < vacationCoincidingSlots.size(); vacation_coinciding_slot++){
+                VacationCoincidingSlot va=vacationCoincidingSlots.get(vacation_coinciding_slot);
+                String vacation_start_date = va.getVacation_start_date();
+                String vacation_stop_date = va.getVacation_stop_date();
+                if(vacation_coinciding_slot == (vacationCoincidingSlots.size()-1))
+                stringBuilder_comma_separated_vacation_duration.append(String.format("%02d-%02d-%d to %02d-%02d-%d",Integer.parseInt(vacation_start_date.split("-")[2]),Integer.parseInt(vacation_start_date.split("-")[1]),Integer.parseInt(vacation_start_date.split("-")[0]),Integer.parseInt(vacation_stop_date.split("-")[2]),Integer.parseInt(vacation_stop_date.split("-")[1]),Integer.parseInt(vacation_stop_date.split("-")[0])));
+                else
+                    stringBuilder_comma_separated_vacation_duration.append(String.format("%02d-%02d-%d to %02d-%02d-%d, ",Integer.parseInt(vacation_start_date.split("-")[2]),Integer.parseInt(vacation_start_date.split("-")[1]),Integer.parseInt(vacation_start_date.split("-")[0]),Integer.parseInt(vacation_stop_date.split("-")[2]),Integer.parseInt(vacation_stop_date.split("-")[1]),Integer.parseInt(vacation_stop_date.split("-")[0])));
+
+            }
+            tv_vacation.setText(stringBuilder_comma_separated_vacation_duration.toString());
+        }
+
+
+        tv_number_of_classes.setText(slotDurationDetailBeans.size());
+
 
 
         if (arrayList_subcategory.size() > 1) {
@@ -218,7 +241,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             }
 
 
-            tv_from_date.setText(from_date);
+           tv_from_date.setText(from_date);
         } else {
             String to_date = String.format("%02d-%02d-%d", slot_start_day, slot_start_month, slot_start_year);
             tv_from_date.setText(to_date);
@@ -252,7 +275,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         Calendar calendar_schedule_start_date = Calendar.getInstance();
         calendar_schedule_start_date.set(class_schedule_start_year, class_schedule_start_month - 1, class_schedule_start_day);
 
-        int valid_class_days = 0;
+        /*int valid_class_days = 0;
 
         valid_class_days = calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_stop_date_of_schedule, slot_on_week_days);
 
@@ -269,9 +292,24 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             int no_of_total_hours= valid_class_days * no_of_hours_in_a_day;
             total_amount=no_of_total_hours*cost;
         }else{
-            /*  this will not allowed now as there is only cost_basis that is per hour*/
+            *//*  this will not allowed now as there is only cost_basis that is per hour*//*
         }
 
+        */
+
+        int total_class_days;
+        int total_amount=0;
+        int cost = Integer.parseInt(charges.split(" per ",2)[0]);
+        String cost_basis = charges.split(" per ",2)[0];
+        if(cost_basis.equalsIgnoreCase("hour")){
+            total_class_days=slotDurationDetailBeans.size();
+            int no_of_hours_in_a_day=slot_stop_hour - slot_start_hour;
+            int no_of_total_hours= total_class_days * no_of_hours_in_a_day;
+            total_amount = no_of_total_hours * cost;
+
+        }else{
+             /*this will not allowed now as there is only cost_basis that is per hour*/
+        }
 
 
         Log.d(TAG, "Total amount :" + total_amount);
@@ -375,6 +413,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         ll_location = (LinearLayout) findViewById(R.id.ll_location);
         ll_location.setVisibility(View.GONE);
         sp_mentor_for = (Spinner) findViewById(R.id.sp_mentor_for);
+        tv_number_of_classes= (TextView) findViewById(R.id.tv_number_of_classes);
+        ll_vacation= (LinearLayout) findViewById(R.id.ll_vacations);
+        tv_vacation= (TextView) findViewById(R.id.tv_vacations);
 
         gridView = (ScrollableGridView) findViewById(R.id.calendar);
 
