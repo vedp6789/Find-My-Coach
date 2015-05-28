@@ -152,7 +152,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         }
 
 
-        tv_number_of_classes.setText(slotDurationDetailBeans.size());
+        tv_number_of_classes.setText(String.valueOf(slotDurationDetailBeans.size()));
 
 
 
