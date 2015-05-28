@@ -1,6 +1,5 @@
 package com.findmycoach.app.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
@@ -14,8 +13,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -25,10 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.adapter.AddSlotAdapter;
 import com.findmycoach.app.fragment_mentee.ChildDOB;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
+import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
@@ -46,7 +45,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     public static TextView tv_child_dob;
     private static TextView tv_from_date, tv_to_date, tv_class_timing, tv_subject, tv_total_charges;
     Spinner sp_subjects, sp_mentor_for;
-    CheckBox cb_mon, cb_tue, cb_wed, cb_thu, cb_fri, cb_sat, cb_sun;
     EditText et_location;
     RadioButton rb_pay_now, rb_pay_personally;
     private static Button b_payment;
@@ -75,6 +73,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private String slot_type;
     private String[] slot_on_week_days;
     private String charges;
+    private ScrollableGridView gridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,8 +124,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         if (arrayList_subcategory.size() > 1) {
             sp_subjects.setVisibility(View.VISIBLE);
-            ArrayAdapter arrayAdapter_sub_category = new ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayList_subcategory);
-            arrayAdapter_sub_category.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            ArrayAdapter arrayAdapter_sub_category = new ArrayAdapter(this, R.layout.textview, arrayList_subcategory);
+            arrayAdapter_sub_category.setDropDownViewResource(R.layout.textview);
             sp_subjects.setAdapter(arrayAdapter_sub_category);
             sp_subjects.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -149,38 +148,34 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         tv_class_timing.setText(timing);
 
 
+        List<Integer> selectedDays = new ArrayList<>();
         for (int slot_week_day = 0; slot_week_day < slot_on_week_days.length; slot_week_day++) {
             String day = slot_on_week_days[slot_week_day];
             if (day.equals("M")) {
-                cb_mon.setChecked(true);
+                selectedDays.add(0);
             }
             if (day.equals("T")) {
-                cb_tue.setChecked(true);
+                selectedDays.add(1);
             }
             if (day.equals("W")) {
-                cb_wed.setChecked(true);
+                selectedDays.add(2);
             }
             if (day.equals("Th")) {
-                cb_thu.setChecked(true);
+                selectedDays.add(3);
             }
             if (day.equals("F")) {
-                cb_fri.setChecked(true);
+                selectedDays.add(4);
             }
             if (day.equals("S")) {
-                cb_sat.setChecked(true);
+                selectedDays.add(0);
             }
             if (day.equals("Su")) {
-                cb_sun.setChecked(true);
+                selectedDays.add(6);
             }
         }
 
-        cb_mon.setEnabled(false);
-        cb_tue.setEnabled(false);
-        cb_wed.setEnabled(false);
-        cb_thu.setEnabled(false);
-        cb_fri.setEnabled(false);
-        cb_sat.setEnabled(false);
-        cb_sun.setEnabled(false);
+        gridView.setAdapter(new AddSlotAdapter(getResources().getStringArray(R.array.week_days_mon), selectedDays, this));
+
 
         Log.d(TAG, "mentor availability : " + bundle.getString("mentor_availability"));
 
@@ -325,8 +320,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
 
         String[] mentor_for = {getResources().getString(R.string.self), getResources().getString(R.string.child)};
-        ArrayAdapter arrayAdapter1_mentor_for = new ArrayAdapter(this, android.R.layout.simple_spinner_item, mentor_for);
-        arrayAdapter1_mentor_for.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter arrayAdapter1_mentor_for = new ArrayAdapter(this, R.layout.textview, mentor_for);
+        arrayAdapter1_mentor_for.setDropDownViewResource(R.layout.textview);
         sp_mentor_for.setAdapter(arrayAdapter1_mentor_for);
         sp_mentor_for.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -369,20 +364,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         ll_location = (LinearLayout) findViewById(R.id.ll_location);
         ll_location.setVisibility(View.GONE);
         sp_mentor_for = (Spinner) findViewById(R.id.sp_mentor_for);
-        cb_mon = (CheckBox) findViewById(R.id.cb_m);
-        cb_mon.setChecked(false);
-        cb_tue = (CheckBox) findViewById(R.id.cb_t);
-        cb_tue.setChecked(false);
-        cb_wed = (CheckBox) findViewById(R.id.cb_w);
-        cb_wed.setChecked(false);
-        cb_thu = (CheckBox) findViewById(R.id.cb_th);
-        cb_thu.setChecked(false);
-        cb_fri = (CheckBox) findViewById(R.id.cb_f);
-        cb_fri.setChecked(false);
-        cb_sat = (CheckBox) findViewById(R.id.cb_s);
-        cb_sat.setChecked(false);
-        cb_sun = (CheckBox) findViewById(R.id.cb_su);
-        cb_sun.setChecked(false);
+
+        gridView = (ScrollableGridView) findViewById(R.id.calendar);
 
 
         et_location = (EditText) findViewById(R.id.et_location);
@@ -393,6 +376,16 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         b_payment = (Button) findViewById(R.id.b_proceed_to_payment);
         b_payment.setOnClickListener(this);
 
+
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText("Name of mentor");
 
     }
 
