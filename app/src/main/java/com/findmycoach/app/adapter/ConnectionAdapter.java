@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -73,7 +72,7 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
         final ImageView imageView = (ImageView) view.findViewById(R.id.studentImageView);
         TextView nameTV = (TextView) view.findViewById(R.id.nameTV);
         TextView lastMsgTV = (TextView) view.findViewById(R.id.lastMsgTV);
-        ImageButton connectionButton = (ImageButton) view.findViewById(R.id.detailsTV);
+        ImageView connectionButton = (ImageView) view.findViewById(R.id.detailsTV);
 
         singleRow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,9 +102,10 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
         return view;
     }
 
-    private void populateSingleRow(ImageView imageView, TextView nameTV, TextView lastMsgTV, ImageButton connectionButton, int user_group, final Data singleConnection, final int position ){
+    private void populateSingleRow(ImageView imageView, TextView nameTV, TextView lastMsgTV, ImageView connectionButton, int user_group, final Data singleConnection, final int position ){
         final String status = singleConnection.getStatus();
-        lastMsgTV.setText("Receiver id : " + singleConnection.getInviteeId() + ", Sender id : " + singleConnection.getOwnerId() + ", Status : " + status);
+//        lastMsgTV.setText("Receiver id : " + singleConnection.getInviteeId() + ", Sender id : " + singleConnection.getOwnerId() + ", Status : " + status);
+        lastMsgTV.setText(status);
         switch (user_group){
             case 3:
 
@@ -118,9 +118,9 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
                 nameTV.setText(singleConnection.getOwnerName());
 
                 if(status.equals("accepted")){
-                    connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_menu_close_clear_cancel));
+                    connectionButton.setImageDrawable(context.getResources().getDrawable(R.drawable.disconnect));
                 }else if(status.equals("pending")){
-                    connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_menu_add));
+                    connectionButton.setImageDrawable(context.getResources().getDrawable(R.drawable.pending));
                 }else{
                     connectionButton.setVisibility(View.GONE);
                 }
