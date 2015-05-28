@@ -1,7 +1,6 @@
 package com.findmycoach.app.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.UserNotifications.ConnectionRequest;
@@ -23,17 +21,17 @@ import java.util.GregorianCalendar;
  */
 public class ConnectionRequestRecyclerViewAdapter extends RecyclerView.Adapter<ConnectionRequestRecyclerViewAdapter.ViewHolder> {
     private ArrayList<ConnectionRequest> connectionRequests;
-    boolean no_connection_request=false;
+    boolean no_connection_request = false;
     Context context;
     private long days;
 
-    public ConnectionRequestRecyclerViewAdapter(Context context,ArrayList<ConnectionRequest> connectionRequests) {
-        no_connection_request=false;
+    public ConnectionRequestRecyclerViewAdapter(Context context, ArrayList<ConnectionRequest> connectionRequests) {
+        no_connection_request = false;
         this.connectionRequests = connectionRequests;
-        if(connectionRequests.size() <=0){
-            no_connection_request=true;
+        if (connectionRequests.size() <= 0) {
+            no_connection_request = true;
         }
-        this.context=context;
+        this.context = context;
     }
 
 
@@ -46,20 +44,23 @@ public class ConnectionRequestRecyclerViewAdapter extends RecyclerView.Adapter<C
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if(no_connection_request){
-            Log.d("FMC","NO connection request found");
+        if (no_connection_request) {
+            Log.d("FMC", "NO connection request found");
             holder.tv_connection_request_message.setText(context.getResources().getString(R.string.no_connection_request));
-        }else{
-            String first_name=connectionRequests.get(position).getFirst_name();
-            String start_date=connectionRequests.get(position).getStart_date();
-            String start_time=connectionRequests.get(position).getStart_time();
-            String status=connectionRequests.get(position).getStatus();
+        } else {
+            String first_name = connectionRequests.get(position).getFirst_name();
+            String start_date = connectionRequests.get(position).getStart_date();
+            String start_time = connectionRequests.get(position).getStart_time();
+            String status = connectionRequests.get(position).getStatus();
 
-            if(status.equals("read"))
-                holder.relativeLayout.setBackgroundColor(Color.LTGRAY);
+            if (!status.equals("read")) {
+                holder.relativeLayout.setBackgroundColor(context.getResources().getColor(R.color.purple_light));
+                holder.tv_connection_request_message.setTextColor(context.getResources().getColor(R.color.white));
+                holder.tv_connection_request_delivery_time.setTextColor(context.getResources().getColor(R.color.purple));
+            }
 
             Calendar cal = new GregorianCalendar();
-            cal.set(Integer.parseInt(start_date.split("-")[0]),Integer.parseInt(start_date.split("-")[1])-1, Integer.parseInt(start_date.split("-")[2]));
+            cal.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
             long connection_request_start_date_in_millis = cal.getTimeInMillis();
 
 
@@ -69,26 +70,25 @@ public class ConnectionRequestRecyclerViewAdapter extends RecyclerView.Adapter<C
             int current_minute = rightNow.get(Calendar.MINUTE);
 
 
-            long difference=rightNow_in_millis-connection_request_start_date_in_millis;
+            long difference = rightNow_in_millis - connection_request_start_date_in_millis;
             days = difference / (24 * 60 * 60 * 1000);
 
-            holder.tv_connection_request_message.setText(first_name.trim()+" "+context.getResources().getString(R.string.connection_request_message));
+            holder.tv_connection_request_message.setText(first_name.trim() + " " + context.getResources().getString(R.string.connection_request_message));
             actionDay(holder);
 
         }
 
 
-
     }
 
     private void actionDay(ViewHolder holder) {
-        if(days == 0){
+        if (days == 0) {
             holder.tv_connection_request_delivery_time.setText(context.getResources().getString(R.string.today));
-        }else{
-            if(days == 1){
+        } else {
+            if (days == 1) {
                 holder.tv_connection_request_delivery_time.setText(context.getResources().getString(R.string.yesterday));
-            }else{
-                holder.tv_connection_request_delivery_time.setText(days+context.getResources().getString(R.string.days_ago));
+            } else {
+                holder.tv_connection_request_delivery_time.setText(days + " " + context.getResources().getString(R.string.days_ago));
             }
         }
     }
@@ -96,9 +96,9 @@ public class ConnectionRequestRecyclerViewAdapter extends RecyclerView.Adapter<C
 
     @Override
     public int getItemCount() {
-        if(no_connection_request){
+        if (no_connection_request) {
             return 1;
-        }else{
+        } else {
 
         }
         return connectionRequests.size();

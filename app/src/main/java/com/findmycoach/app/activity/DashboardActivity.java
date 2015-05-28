@@ -72,7 +72,7 @@ public class DashboardActivity extends FragmentActivity
     /**
      * Tag used on log messages.
      */
-    static final String TAG = "Google Play Services status:";
+    static final String TAG = "G Play Sstatus:";
     static final String TAG1 = "GCMCommunication";
     static final String TAG2 = "FMC-GCM";
 

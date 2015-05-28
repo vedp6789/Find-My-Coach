@@ -1,29 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:id="@+id/rl_mentee_notification"
-    android:background="@color/accent_material_dark">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingRight="@dimen/back_margin"
+    android:paddingLeft="@dimen/back_margin"
+    android:paddingBottom="@dimen/textView_padding_margin"
+    android:paddingTop="@dimen/textView_padding_margin"
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_mentee_notification_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:gravity="center_vertical"
-        android:textSize="18dp"
-        android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"
-        />
+        android:layout_toLeftOf="@+id/tv_how_old_message"
+        android:layout_toStartOf="@+id/tv_how_old_message"
+        android:gravity="center_vertical"
+        android:textColor="@color/purple"
+        android:layout_marginRight="@dimen/textView_padding_margin"
+        android:textSize="@dimen/profile_details" />
+
     <TextView
         android:id="@+id/tv_mentee_message_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_mentee_notification_message"
-        android:layout_marginTop="5dp"
-        android:textSize="15dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="3dp"
+        android:gravity="center_vertical"
+        android:maxWidth="@dimen/max_text_view_width"
+        android:singleLine="true"
+        android:textColor="@color/purple_light"
+        android:textSize="@dimen/profile_heading" />
 
 
 </RelativeLayout>

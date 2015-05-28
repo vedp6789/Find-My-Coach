@@ -20,6 +20,7 @@
     <dimen name="calender_header_margin_arrow">8dp</dimen>
     <dimen name="calender_margin">10dp</dimen>
     <dimen name="indicator">20dp</dimen>
+    <dimen name="max_text_view_width">150dp</dimen>
 
 
 
