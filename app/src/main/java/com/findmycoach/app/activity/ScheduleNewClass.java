@@ -74,6 +74,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private String[] slot_on_week_days;
     private String charges;
     private ScrollableGridView gridView;
+    private TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -383,9 +384,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 finish();
             }
         });
-
-        TextView title = (TextView) findViewById(R.id.title);
-        title.setText("Name of mentor");
+        title = (TextView) findViewById(R.id.title);
 
     }
 
