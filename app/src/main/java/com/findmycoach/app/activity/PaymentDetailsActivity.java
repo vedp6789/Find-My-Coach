@@ -1,6 +1,5 @@
 package com.findmycoach.app.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
@@ -52,6 +51,14 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
         findViewById(R.id.buttonSkip).setOnClickListener(this);
         findViewById(R.id.buttonSave).setOnClickListener(this);
         inputCardExpiry.setOnClickListener(this);
+
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 
     private void applyActionbarProperties() {

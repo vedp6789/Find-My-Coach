@@ -478,7 +478,7 @@
     <string name="hint_name_on_card">Name on card</string>
     <string name="hint_date_of_expiry">Date of expiry</string>
     <string name="hint_enter_cvv">CVV</string>
-    <string name="button_skip">SKIP</string>
+    <string name="button_skip">Skip</string>
     <string name="button_save_and_continue">Save and continue</string>
     <string name="terms">Welcome to Chizzle. If you continue to use this app you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern ANI Technologies Private Limited relationship with you in relation to this website and the Service .The term Chizzle or us or we refers to the owner of the website whose registered office is ANI TECHNOLOGIES PRIVATE LIMITED.</string>
     <string name="dummy_contain_of_message">This is the dummy contain of message </string>
@@ -637,6 +637,7 @@
     <string name="title_activity_dashboard">DashboardActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="enter_credit_debit_card">Enter credit/debit card number</string>
     <string name="action_example">Example action</string>
     <string name="title_activity_edit_profile">Edit profile</string>
     <string name="title_activity_choose_image">ChooseImageActivity</string>
