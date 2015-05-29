@@ -29,10 +29,10 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.CalendarGridAdapter;
 import com.findmycoach.app.beans.CalendarSchedule.Day;
-import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
-import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
-import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
-import com.findmycoach.app.beans.mentor.Data;
+import com.findmycoach.app.beans.CalendarSchedule.EventBean;
+import com.findmycoach.app.beans.CalendarSchedule.SlotBean;
+import com.findmycoach.app.beans.CalendarSchedule.VacationBean;
+import com.findmycoach.app.beans.mentor.MentorBean;
 import com.findmycoach.app.beans.mentor.Response;
 import com.findmycoach.app.fragment.CustomDatePickerFragment;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
@@ -68,7 +68,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private TextView profilePhone;
     private TextView profileDob;
     private LinearLayout areaOfCoaching;
-    private Data userInfo = null;
+    private MentorBean userInfo = null;
     private String connectionStatus;
 
 
@@ -381,7 +381,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             connectionStatus = "not connected";
         Log.d(TAG, "json data :" + jsonData);
         Response mentorDetails = new Gson().fromJson(jsonData, Response.class);
-        userInfo = mentorDetails.getData();
+        userInfo = mentorDetails.getMentorBean();
 
         String searchedKeyWord = getIntent().getStringExtra("searched_keyword");
         if (searchedKeyWord != null && !searchedKeyWord.equals("-1")) {
@@ -759,87 +759,87 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 JSONObject unique_day = jsonArray_data.getJSONObject(i);
                 day1.setDate(unique_day.getString("date"));
                 JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
-                List<DayEvent> dayEvents = new ArrayList<DayEvent>();
+                List<EventBean> eventBeans = new ArrayList<EventBean>();
                 JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
-                List<DaySlot> daySlots = new ArrayList<DaySlot>();
+                List<SlotBean> slotBeans = new ArrayList<SlotBean>();
                 JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
-                List<DayVacation> dayVacations = new ArrayList<DayVacation>();
+                List<VacationBean> vacationBeans = new ArrayList<VacationBean>();
 
                 if (jsonArray_of_slots.length() > 0) {
                     for (int s = 0; s < jsonArray_of_slots.length(); s++) {
                         JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
-                        DaySlot daySlot = new DaySlot();
-                        daySlot.setSlot_start_date(day_slot.getString("start_date"));
-                        daySlot.setSlot_stop_date(day_slot.getString("stop_date"));
-                        daySlot.setSlot_start_time(day_slot.getString("start_time"));
-                        daySlot.setSlot_stop_time(day_slot.getString("stop_time"));
-                        daySlot.setSlot_type(day_slot.getString("slot_type"));
-                        daySlot.setSlot_max_users(day_slot.getString("max_users"));
+                        SlotBean slotBean = new SlotBean();
+                        slotBean.setSlot_start_date(day_slot.getString("start_date"));
+                        slotBean.setSlot_stop_date(day_slot.getString("stop_date"));
+                        slotBean.setSlot_start_time(day_slot.getString("start_time"));
+                        slotBean.setSlot_stop_time(day_slot.getString("stop_time"));
+                        slotBean.setSlot_type(day_slot.getString("slot_type"));
+                        slotBean.setSlot_max_users(day_slot.getString("max_users"));
 
                         JSONArray week_days_jsonArray = day_slot.getJSONArray("dates");
                         String[] dates = new String[week_days_jsonArray.length()];
                         for (int week_day = 0; week_day < week_days_jsonArray.length(); week_day++) {
                             dates[week_day] = week_days_jsonArray.getString(week_day);
                         }
-                        daySlot.setSlot_week_days(dates);
-                        daySlot.setSlot_id(day_slot.getString("id"));
+                        slotBean.setSlot_week_days(dates);
+                        slotBean.setSlot_id(day_slot.getString("id"));
 
-                        daySlots.add(daySlot);
+                        slotBeans.add(slotBean);
                     }
-                    day1.setDaySlots(daySlots);
+                    day1.setSlotBeans(slotBeans);
                 } else {
-                    day1.setDaySlots(daySlots);
+                    day1.setSlotBeans(slotBeans);
                 }
 
                 if (jsonArray_of_events.length() > 0) {
                     for (int e = 0; e < jsonArray_of_events.length(); e++) {
 
                         JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                        DayEvent dayEvent = new DayEvent();
-                        dayEvent.setEvent_id(day_event.getString("id"));
-                        dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                        dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
-                        dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                        dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                        EventBean eventBean = new EventBean();
+                        eventBean.setEvent_id(day_event.getString("id"));
+                        eventBean.setEvent_start_date(day_event.getString("start_date"));
+                        eventBean.setEvent_stop_date(day_event.getString("stop_date"));
+                        eventBean.setEvent_start_time(day_event.getString("start_time"));
+                        eventBean.setEvent_stop_time(day_event.getString("stop_time"));
                         String slot_type = day_event.getString("slot_type");
-                        dayEvent.setEvent_type(slot_type);
-                        dayEvent.setEvent_total_mentee(day_event.getString("number_of_users"));
+                        eventBean.setEvent_type(slot_type);
+                        eventBean.setEvent_total_mentee(day_event.getString("number_of_users"));
                         if (!slot_type.equalsIgnoreCase("Group")) {
-                            dayEvent.setFname(day_event.getString("first_name"));
-                            dayEvent.setLname(day_event.getString("last_name"));
+                            eventBean.setFname(day_event.getString("first_name"));
+                            eventBean.setLname(day_event.getString("last_name"));
                         }
 
-                        dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
-                        dayEvent.setSlot_id(day_event.getString("slot_id"));
-                        dayEvents.add(dayEvent);
+                        eventBean.setSub_category_name(day_event.getString("sub_category_name"));
+                        eventBean.setSlot_id(day_event.getString("slot_id"));
+                        eventBeans.add(eventBean);
                     }
-                    day1.setDayEvents(dayEvents);
+                    day1.setEventBeans(eventBeans);
                 } else {
-                    day1.setDayEvents(dayEvents);
+                    day1.setEventBeans(eventBeans);
                 }
 
                 if (jsonArray_of_vacation.length() > 0) {
                     for (int vacation = 0; vacation < jsonArray_of_vacation.length(); vacation++) {
                         JSONObject day_vacation = jsonArray_of_vacation.getJSONObject(vacation);
-                        DayVacation dayVacation = new DayVacation();
-                        dayVacation.setStart_date(day_vacation.getString("start_date"));
-                        dayVacation.setStop_date(day_vacation.getString("stop_date"));
-                        dayVacation.setStart_time(day_vacation.getString("start_time"));
-                        dayVacation.setStop_time(day_vacation.getString("stop_time"));
+                        VacationBean vacationBean = new VacationBean();
+                        vacationBean.setStart_date(day_vacation.getString("start_date"));
+                        vacationBean.setStop_date(day_vacation.getString("stop_date"));
+                        vacationBean.setStart_time(day_vacation.getString("start_time"));
+                        vacationBean.setStop_time(day_vacation.getString("stop_time"));
 
                         JSONArray jsonArray_week_days = day_vacation.getJSONArray("dates");
                         String[] dates = new String[jsonArray_week_days.length()];
                         for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
                             dates[week_day] = jsonArray_week_days.getString(week_day);
                         }
-                        dayVacation.setWeek_days(dates);
-                        dayVacations.add(dayVacation);
+                        vacationBean.setWeek_days(dates);
+                        vacationBeans.add(vacationBean);
 
 
                     }
-                    day1.setDayVacations(dayVacations);
+                    day1.setVacationBeans(vacationBeans);
                 } else {
-                    day1.setDayVacations(dayVacations);
+                    day1.setVacationBeans(vacationBeans);
                 }
 
                 previousMonthArrayList.add(day1);
@@ -851,88 +851,88 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 JSONObject unique_day = jsonArray_data.getJSONObject(i);
                 day1.setDate(unique_day.getString("date"));
                 JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
-                List<DayEvent> dayEvents = new ArrayList<DayEvent>();
+                List<EventBean> eventBeans = new ArrayList<EventBean>();
                 JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
-                List<DaySlot> daySlots = new ArrayList<DaySlot>();
+                List<SlotBean> slotBeans = new ArrayList<SlotBean>();
                 JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
-                List<DayVacation> dayVacations = new ArrayList<DayVacation>();
+                List<VacationBean> vacationBeans = new ArrayList<VacationBean>();
 
                 if (jsonArray_of_slots.length() > 0) {
                     for (int s = 0; s < jsonArray_of_slots.length(); s++) {
                         JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
-                        DaySlot daySlot = new DaySlot();
-                        daySlot.setSlot_start_date(day_slot.getString("start_date"));
-                        daySlot.setSlot_stop_date(day_slot.getString("stop_date"));
-                        daySlot.setSlot_start_time(day_slot.getString("start_time"));
-                        daySlot.setSlot_stop_time(day_slot.getString("stop_time"));
-                        daySlot.setSlot_type(day_slot.getString("slot_type"));
-                        daySlot.setSlot_max_users(day_slot.getString("max_users"));
+                        SlotBean slotBean = new SlotBean();
+                        slotBean.setSlot_start_date(day_slot.getString("start_date"));
+                        slotBean.setSlot_stop_date(day_slot.getString("stop_date"));
+                        slotBean.setSlot_start_time(day_slot.getString("start_time"));
+                        slotBean.setSlot_stop_time(day_slot.getString("stop_time"));
+                        slotBean.setSlot_type(day_slot.getString("slot_type"));
+                        slotBean.setSlot_max_users(day_slot.getString("max_users"));
 
                         JSONArray week_days_jsonArray = day_slot.getJSONArray("dates");
                         String[] dates = new String[week_days_jsonArray.length()];
                         for (int week_day = 0; week_day < week_days_jsonArray.length(); week_day++) {
                             dates[week_day] = week_days_jsonArray.getString(week_day);
                         }
-                        daySlot.setSlot_week_days(dates);
-                        daySlot.setSlot_id(day_slot.getString("id"));
+                        slotBean.setSlot_week_days(dates);
+                        slotBean.setSlot_id(day_slot.getString("id"));
 
-                        daySlots.add(daySlot);
+                        slotBeans.add(slotBean);
                     }
-                    day1.setDaySlots(daySlots);
+                    day1.setSlotBeans(slotBeans);
                 } else {
-                    day1.setDaySlots(daySlots);
+                    day1.setSlotBeans(slotBeans);
                 }
 
                 if (jsonArray_of_events.length() > 0) {
                     for (int e = 0; e < jsonArray_of_events.length(); e++) {
 
                         JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                        DayEvent dayEvent = new DayEvent();
+                        EventBean eventBean = new EventBean();
 
-                        dayEvent.setEvent_id(day_event.getString("id"));
-                        dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                        dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
-                        dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                        dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                        eventBean.setEvent_id(day_event.getString("id"));
+                        eventBean.setEvent_start_date(day_event.getString("start_date"));
+                        eventBean.setEvent_stop_date(day_event.getString("stop_date"));
+                        eventBean.setEvent_start_time(day_event.getString("start_time"));
+                        eventBean.setEvent_stop_time(day_event.getString("stop_time"));
                         String slot_type = day_event.getString("slot_type");
-                        dayEvent.setEvent_type(slot_type);
-                        dayEvent.setEvent_total_mentee(day_event.getString("number_of_users"));
+                        eventBean.setEvent_type(slot_type);
+                        eventBean.setEvent_total_mentee(day_event.getString("number_of_users"));
                         if (!slot_type.equalsIgnoreCase("Group")) {
-                            dayEvent.setFname(day_event.getString("first_name"));
-                            dayEvent.setLname(day_event.getString("last_name"));
+                            eventBean.setFname(day_event.getString("first_name"));
+                            eventBean.setLname(day_event.getString("last_name"));
                         }
 
-                        dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
-                        dayEvent.setSlot_id(day_event.getString("slot_id"));
-                        dayEvents.add(dayEvent);
+                        eventBean.setSub_category_name(day_event.getString("sub_category_name"));
+                        eventBean.setSlot_id(day_event.getString("slot_id"));
+                        eventBeans.add(eventBean);
                     }
-                    day1.setDayEvents(dayEvents);
+                    day1.setEventBeans(eventBeans);
                 } else {
-                    day1.setDayEvents(dayEvents);
+                    day1.setEventBeans(eventBeans);
                 }
 
                 if (jsonArray_of_vacation.length() > 0) {
                     for (int vacation = 0; vacation < jsonArray_of_vacation.length(); vacation++) {
                         JSONObject day_vacation = jsonArray_of_vacation.getJSONObject(vacation);
-                        DayVacation dayVacation = new DayVacation();
-                        dayVacation.setStart_date(day_vacation.getString("start_date"));
-                        dayVacation.setStop_date(day_vacation.getString("stop_date"));
-                        dayVacation.setStart_time(day_vacation.getString("start_time"));
-                        dayVacation.setStop_time(day_vacation.getString("stop_time"));
+                        VacationBean vacationBean = new VacationBean();
+                        vacationBean.setStart_date(day_vacation.getString("start_date"));
+                        vacationBean.setStop_date(day_vacation.getString("stop_date"));
+                        vacationBean.setStart_time(day_vacation.getString("start_time"));
+                        vacationBean.setStop_time(day_vacation.getString("stop_time"));
 
                         JSONArray jsonArray_week_days = day_vacation.getJSONArray("dates");
                         String[] dates = new String[jsonArray_week_days.length()];
                         for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
                             dates[week_day] = jsonArray_week_days.getString(week_day);
                         }
-                        dayVacation.setWeek_days(dates);
-                        dayVacations.add(dayVacation);
+                        vacationBean.setWeek_days(dates);
+                        vacationBeans.add(vacationBean);
 
 
                     }
-                    day1.setDayVacations(dayVacations);
+                    day1.setVacationBeans(vacationBeans);
                 } else {
-                    day1.setDayVacations(dayVacations);
+                    day1.setVacationBeans(vacationBeans);
                 }
 
                 currentMonthArrayList.add(day1);
@@ -952,92 +952,92 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 day1.setDate(unique_day.getString("date"));
 
                 JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
-                List<DayEvent> dayEvents = new ArrayList<DayEvent>();
+                List<EventBean> eventBeans = new ArrayList<EventBean>();
                 JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
                 Log.d(TAG, "for third month date :" + unique_day.getString("date") + " for third month event size : " + jsonArray_of_events.length() + " for third month slot size : " + jsonArray_of_slots.length());
-                List<DaySlot> daySlots = new ArrayList<DaySlot>();
+                List<SlotBean> slotBeans = new ArrayList<SlotBean>();
                 JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
-                List<DayVacation> dayVacations = new ArrayList<DayVacation>();
+                List<VacationBean> vacationBeans = new ArrayList<VacationBean>();
 
                 if (jsonArray_of_slots.length() > 0) {
                     for (int s = 0; s < jsonArray_of_slots.length(); s++) {
                         JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
-                        DaySlot daySlot = new DaySlot();
-                        daySlot.setSlot_start_date(day_slot.getString("start_date"));
-                        daySlot.setSlot_stop_date(day_slot.getString("stop_date"));
-                        daySlot.setSlot_start_time(day_slot.getString("start_time"));
-                        daySlot.setSlot_stop_time(day_slot.getString("stop_time"));
-                        daySlot.setSlot_type(day_slot.getString("slot_type"));
-                        daySlot.setSlot_max_users(day_slot.getString("max_users"));
+                        SlotBean slotBean = new SlotBean();
+                        slotBean.setSlot_start_date(day_slot.getString("start_date"));
+                        slotBean.setSlot_stop_date(day_slot.getString("stop_date"));
+                        slotBean.setSlot_start_time(day_slot.getString("start_time"));
+                        slotBean.setSlot_stop_time(day_slot.getString("stop_time"));
+                        slotBean.setSlot_type(day_slot.getString("slot_type"));
+                        slotBean.setSlot_max_users(day_slot.getString("max_users"));
 
                         JSONArray week_days_jsonArray = day_slot.getJSONArray("dates");
                         String[] dates = new String[week_days_jsonArray.length()];
                         for (int week_day = 0; week_day < week_days_jsonArray.length(); week_day++) {
                             dates[week_day] = week_days_jsonArray.getString(week_day);
                         }
-                        daySlot.setSlot_week_days(dates);
-                        daySlot.setSlot_id(day_slot.getString("id"));
+                        slotBean.setSlot_week_days(dates);
+                        slotBean.setSlot_id(day_slot.getString("id"));
                         Log.d(TAG, "Slot info " + " for date : " + unique_day.getString("date") + " start_date : " + day_slot.getString("start_date") + " stop_date : " + day_slot.getString("stop_date") + " start_time : " + day_slot.getString("start_time") + " max users : " + day_slot.getString("max_users"));
 
-                        daySlots.add(daySlot);
+                        slotBeans.add(slotBean);
                     }
-                    day1.setDaySlots(daySlots);
+                    day1.setSlotBeans(slotBeans);
                 } else {
-                    day1.setDaySlots(daySlots);
+                    day1.setSlotBeans(slotBeans);
                 }
 
                 if (jsonArray_of_events.length() > 0) {
                     for (int e = 0; e < jsonArray_of_events.length(); e++) {
 
                         JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                        DayEvent dayEvent = new DayEvent();
+                        EventBean eventBean = new EventBean();
 
-                        dayEvent.setEvent_id(day_event.getString("id"));
-                        dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                        dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
-                        dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                        dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                        eventBean.setEvent_id(day_event.getString("id"));
+                        eventBean.setEvent_start_date(day_event.getString("start_date"));
+                        eventBean.setEvent_stop_date(day_event.getString("stop_date"));
+                        eventBean.setEvent_start_time(day_event.getString("start_time"));
+                        eventBean.setEvent_stop_time(day_event.getString("stop_time"));
                         String slot_type = day_event.getString("slot_type");
-                        dayEvent.setEvent_type(slot_type);
-                        dayEvent.setEvent_total_mentee(day_event.getString("number_of_users"));
+                        eventBean.setEvent_type(slot_type);
+                        eventBean.setEvent_total_mentee(day_event.getString("number_of_users"));
                         if (!slot_type.equalsIgnoreCase("Group")) {
-                            dayEvent.setFname(day_event.getString("first_name"));
-                            dayEvent.setLname(day_event.getString("last_name"));
+                            eventBean.setFname(day_event.getString("first_name"));
+                            eventBean.setLname(day_event.getString("last_name"));
                         }
 
-                        dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
-                        dayEvent.setSlot_id(day_event.getString("slot_id"));
+                        eventBean.setSub_category_name(day_event.getString("sub_category_name"));
+                        eventBean.setSlot_id(day_event.getString("slot_id"));
 
                         Log.d(TAG, "Event info " + " for date : " + unique_day.getString("date") + " start_date : " + day_event.getString("start_date") + " stop_date : " + day_event.getString("stop_date") + " start_time : " + day_event.getString("start_time") + " no of users : " + day_event.getString("number_of_users"));
-                        dayEvents.add(dayEvent);
+                        eventBeans.add(eventBean);
                     }
-                    day1.setDayEvents(dayEvents);
+                    day1.setEventBeans(eventBeans);
                 } else {
-                    day1.setDayEvents(dayEvents);
+                    day1.setEventBeans(eventBeans);
                 }
 
                 if (jsonArray_of_vacation.length() > 0) {
                     for (int vacation = 0; vacation < jsonArray_of_vacation.length(); vacation++) {
                         JSONObject day_vacation = jsonArray_of_vacation.getJSONObject(vacation);
-                        DayVacation dayVacation = new DayVacation();
-                        dayVacation.setStart_date(day_vacation.getString("start_date"));
-                        dayVacation.setStop_date(day_vacation.getString("stop_date"));
-                        dayVacation.setStart_time(day_vacation.getString("start_time"));
-                        dayVacation.setStop_time(day_vacation.getString("stop_time"));
+                        VacationBean vacationBean = new VacationBean();
+                        vacationBean.setStart_date(day_vacation.getString("start_date"));
+                        vacationBean.setStop_date(day_vacation.getString("stop_date"));
+                        vacationBean.setStart_time(day_vacation.getString("start_time"));
+                        vacationBean.setStop_time(day_vacation.getString("stop_time"));
 
                         JSONArray jsonArray_week_days = day_vacation.getJSONArray("dates");
                         String[] dates = new String[jsonArray_week_days.length()];
                         for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
                             dates[week_day] = jsonArray_week_days.getString(week_day);
                         }
-                        dayVacation.setWeek_days(dates);
-                        dayVacations.add(dayVacation);
+                        vacationBean.setWeek_days(dates);
+                        vacationBeans.add(vacationBean);
 
 
                     }
-                    day1.setDayVacations(dayVacations);
+                    day1.setVacationBeans(vacationBeans);
                 } else {
-                    day1.setDayVacations(dayVacations);
+                    day1.setVacationBeans(vacationBeans);
                 }
 
 
@@ -1091,90 +1091,90 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 JSONObject unique_day = jsonArray_data.getJSONObject(i);
                 day1.setDate(unique_day.getString("date"));
                 JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
-                List<DayEvent> dayEvents = new ArrayList<DayEvent>();
+                List<EventBean> eventBeans = new ArrayList<EventBean>();
                 JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
                 Log.d(TAG, "for third month date 2:" + unique_day.getString("date") + " for third month event size 2: " + jsonArray_of_events.length() + " for third month slot size : " + jsonArray_of_slots.length());
-                List<DaySlot> daySlots = new ArrayList<DaySlot>();
+                List<SlotBean> slotBeans = new ArrayList<SlotBean>();
                 JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
-                List<DayVacation> dayVacations = new ArrayList<DayVacation>();
+                List<VacationBean> vacationBeans = new ArrayList<VacationBean>();
                 if (jsonArray_of_slots.length() > 0) {
                     for (int s = 0; s < jsonArray_of_slots.length(); s++) {
                         JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
-                        DaySlot daySlot = new DaySlot();
-                        daySlot.setSlot_start_date(day_slot.getString("start_date"));
-                        daySlot.setSlot_stop_date(day_slot.getString("stop_date"));
-                        daySlot.setSlot_start_time(day_slot.getString("start_time"));
-                        daySlot.setSlot_stop_time(day_slot.getString("stop_time"));
-                        daySlot.setSlot_type(day_slot.getString("slot_type"));
-                        daySlot.setSlot_max_users(day_slot.getString("max_users"));
+                        SlotBean slotBean = new SlotBean();
+                        slotBean.setSlot_start_date(day_slot.getString("start_date"));
+                        slotBean.setSlot_stop_date(day_slot.getString("stop_date"));
+                        slotBean.setSlot_start_time(day_slot.getString("start_time"));
+                        slotBean.setSlot_stop_time(day_slot.getString("stop_time"));
+                        slotBean.setSlot_type(day_slot.getString("slot_type"));
+                        slotBean.setSlot_max_users(day_slot.getString("max_users"));
 
                         JSONArray week_days_jsonArray = day_slot.getJSONArray("dates");
                         String[] dates = new String[week_days_jsonArray.length()];
                         for (int week_day = 0; week_day < week_days_jsonArray.length(); week_day++) {
                             dates[week_day] = week_days_jsonArray.getString(week_day);
                         }
-                        daySlot.setSlot_week_days(dates);
-                        daySlot.setSlot_id(day_slot.getString("id"));
+                        slotBean.setSlot_week_days(dates);
+                        slotBean.setSlot_id(day_slot.getString("id"));
 
 
-                        daySlots.add(daySlot);
+                        slotBeans.add(slotBean);
                     }
-                    day1.setDaySlots(daySlots);
+                    day1.setSlotBeans(slotBeans);
                 } else {
-                    day1.setDaySlots(daySlots);
+                    day1.setSlotBeans(slotBeans);
                 }
 
                 if (jsonArray_of_events.length() > 0) {
                     for (int e = 0; e < jsonArray_of_events.length(); e++) {
 
                         JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                        DayEvent dayEvent = new DayEvent();
+                        EventBean eventBean = new EventBean();
 
-                        dayEvent.setEvent_id(day_event.getString("id"));
-                        dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                        dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
-                        dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                        dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                        eventBean.setEvent_id(day_event.getString("id"));
+                        eventBean.setEvent_start_date(day_event.getString("start_date"));
+                        eventBean.setEvent_stop_date(day_event.getString("stop_date"));
+                        eventBean.setEvent_start_time(day_event.getString("start_time"));
+                        eventBean.setEvent_stop_time(day_event.getString("stop_time"));
                         String slot_type = day_event.getString("slot_type");
-                        dayEvent.setEvent_type(slot_type);
-                        dayEvent.setEvent_total_mentee(day_event.getString("number_of_users"));
+                        eventBean.setEvent_type(slot_type);
+                        eventBean.setEvent_total_mentee(day_event.getString("number_of_users"));
                         if (!slot_type.equalsIgnoreCase("Group")) {
-                            dayEvent.setFname(day_event.getString("first_name"));
-                            dayEvent.setLname(day_event.getString("last_name"));
+                            eventBean.setFname(day_event.getString("first_name"));
+                            eventBean.setLname(day_event.getString("last_name"));
                         }
 
-                        dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
-                        dayEvent.setSlot_id(day_event.getString("slot_id"));
-                        dayEvents.add(dayEvent);
+                        eventBean.setSub_category_name(day_event.getString("sub_category_name"));
+                        eventBean.setSlot_id(day_event.getString("slot_id"));
+                        eventBeans.add(eventBean);
                     }
-                    day1.setDayEvents(dayEvents);
+                    day1.setEventBeans(eventBeans);
                 } else {
-                    day1.setDayEvents(dayEvents);
+                    day1.setEventBeans(eventBeans);
                 }
 
 
                 if (jsonArray_of_vacation.length() > 0) {
                     for (int vacation = 0; vacation < jsonArray_of_vacation.length(); vacation++) {
                         JSONObject day_vacation = jsonArray_of_vacation.getJSONObject(vacation);
-                        DayVacation dayVacation = new DayVacation();
-                        dayVacation.setStart_date(day_vacation.getString("start_date"));
-                        dayVacation.setStop_date(day_vacation.getString("stop_date"));
-                        dayVacation.setStart_time(day_vacation.getString("start_time"));
-                        dayVacation.setStop_time(day_vacation.getString("stop_time"));
+                        VacationBean vacationBean = new VacationBean();
+                        vacationBean.setStart_date(day_vacation.getString("start_date"));
+                        vacationBean.setStop_date(day_vacation.getString("stop_date"));
+                        vacationBean.setStart_time(day_vacation.getString("start_time"));
+                        vacationBean.setStop_time(day_vacation.getString("stop_time"));
 
                         JSONArray jsonArray_week_days = day_vacation.getJSONArray("dates");
                         String[] dates = new String[jsonArray_week_days.length()];
                         for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
                             dates[week_day] = jsonArray_week_days.getString(week_day);
                         }
-                        dayVacation.setWeek_days(dates);
-                        dayVacations.add(dayVacation);
+                        vacationBean.setWeek_days(dates);
+                        vacationBeans.add(vacationBean);
 
 
                     }
-                    day1.setDayVacations(dayVacations);
+                    day1.setVacationBeans(vacationBeans);
                 } else {
-                    day1.setDayVacations(dayVacations);
+                    day1.setVacationBeans(vacationBeans);
                 }
 
                 comingMonthArrayList.add(day1);
@@ -1221,90 +1221,90 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 JSONObject unique_day = jsonArray_data.getJSONObject(i);
                 day1.setDate(unique_day.getString("date"));
                 JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
-                List<DayEvent> dayEvents = new ArrayList<DayEvent>();
+                List<EventBean> eventBeans = new ArrayList<EventBean>();
 
                 JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
                 Log.d(TAG, "for third month date 3:" + unique_day.getString("date") + " for third month event size 3: " + jsonArray_of_events.length() + " for third month slot size : " + jsonArray_of_slots.length());
-                List<DaySlot> daySlots = new ArrayList<DaySlot>();
+                List<SlotBean> slotBeans = new ArrayList<SlotBean>();
                 JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
-                List<DayVacation> dayVacations = new ArrayList<DayVacation>();
+                List<VacationBean> vacationBeans = new ArrayList<VacationBean>();
                 if (jsonArray_of_slots.length() > 0) {
                     for (int s = 0; s < jsonArray_of_slots.length(); s++) {
                         JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
-                        DaySlot daySlot = new DaySlot();
-                        daySlot.setSlot_start_date(day_slot.getString("start_date"));
-                        daySlot.setSlot_stop_date(day_slot.getString("stop_date"));
-                        daySlot.setSlot_start_time(day_slot.getString("start_time"));
-                        daySlot.setSlot_stop_time(day_slot.getString("stop_time"));
-                        daySlot.setSlot_type(day_slot.getString("slot_type"));
-                        daySlot.setSlot_max_users(day_slot.getString("max_users"));
+                        SlotBean slotBean = new SlotBean();
+                        slotBean.setSlot_start_date(day_slot.getString("start_date"));
+                        slotBean.setSlot_stop_date(day_slot.getString("stop_date"));
+                        slotBean.setSlot_start_time(day_slot.getString("start_time"));
+                        slotBean.setSlot_stop_time(day_slot.getString("stop_time"));
+                        slotBean.setSlot_type(day_slot.getString("slot_type"));
+                        slotBean.setSlot_max_users(day_slot.getString("max_users"));
 
                         JSONArray week_days_jsonArray = day_slot.getJSONArray("dates");
                         String[] dates = new String[week_days_jsonArray.length()];
                         for (int week_day = 0; week_day < week_days_jsonArray.length(); week_day++) {
                             dates[week_day] = week_days_jsonArray.getString(week_day);
                         }
-                        daySlot.setSlot_week_days(dates);
-                        daySlot.setSlot_id(day_slot.getString("id"));
+                        slotBean.setSlot_week_days(dates);
+                        slotBean.setSlot_id(day_slot.getString("id"));
 
-                        daySlots.add(daySlot);
+                        slotBeans.add(slotBean);
                     }
-                    day1.setDaySlots(daySlots);
+                    day1.setSlotBeans(slotBeans);
                 } else {
-                    day1.setDaySlots(daySlots);
+                    day1.setSlotBeans(slotBeans);
                 }
 
                 if (jsonArray_of_events.length() > 0) {
                     for (int e = 0; e < jsonArray_of_events.length(); e++) {
 
                         JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                        DayEvent dayEvent = new DayEvent();
+                        EventBean eventBean = new EventBean();
 
-                        dayEvent.setEvent_id(day_event.getString("id"));
-                        dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                        dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
-                        dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                        dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
+                        eventBean.setEvent_id(day_event.getString("id"));
+                        eventBean.setEvent_start_date(day_event.getString("start_date"));
+                        eventBean.setEvent_stop_date(day_event.getString("stop_date"));
+                        eventBean.setEvent_start_time(day_event.getString("start_time"));
+                        eventBean.setEvent_stop_time(day_event.getString("stop_time"));
                         String slot_type = day_event.getString("slot_type");
-                        dayEvent.setEvent_type(slot_type);
-                        dayEvent.setEvent_total_mentee(day_event.getString("number_of_users"));
+                        eventBean.setEvent_type(slot_type);
+                        eventBean.setEvent_total_mentee(day_event.getString("number_of_users"));
                         if (!slot_type.equalsIgnoreCase("Group")) {
-                            dayEvent.setFname(day_event.getString("first_name"));
-                            dayEvent.setLname(day_event.getString("last_name"));
+                            eventBean.setFname(day_event.getString("first_name"));
+                            eventBean.setLname(day_event.getString("last_name"));
                         }
 
-                        dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
-                        dayEvent.setSlot_id(day_event.getString("slot_id"));
-                        dayEvents.add(dayEvent);
+                        eventBean.setSub_category_name(day_event.getString("sub_category_name"));
+                        eventBean.setSlot_id(day_event.getString("slot_id"));
+                        eventBeans.add(eventBean);
                     }
-                    day1.setDayEvents(dayEvents);
+                    day1.setEventBeans(eventBeans);
                 } else {
-                    day1.setDayEvents(dayEvents);
+                    day1.setEventBeans(eventBeans);
                 }
 
 
                 if (jsonArray_of_vacation.length() > 0) {
                     for (int vacation = 0; vacation < jsonArray_of_vacation.length(); vacation++) {
                         JSONObject day_vacation = jsonArray_of_vacation.getJSONObject(vacation);
-                        DayVacation dayVacation = new DayVacation();
-                        dayVacation.setStart_date(day_vacation.getString("start_date"));
-                        dayVacation.setStop_date(day_vacation.getString("stop_date"));
-                        dayVacation.setStart_time(day_vacation.getString("start_time"));
-                        dayVacation.setStop_time(day_vacation.getString("stop_time"));
+                        VacationBean vacationBean = new VacationBean();
+                        vacationBean.setStart_date(day_vacation.getString("start_date"));
+                        vacationBean.setStop_date(day_vacation.getString("stop_date"));
+                        vacationBean.setStart_time(day_vacation.getString("start_time"));
+                        vacationBean.setStop_time(day_vacation.getString("stop_time"));
 
                         JSONArray jsonArray_week_days = day_vacation.getJSONArray("dates");
                         String[] dates = new String[jsonArray_week_days.length()];
                         for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
                             dates[week_day] = jsonArray_week_days.getString(week_day);
                         }
-                        dayVacation.setWeek_days(dates);
-                        dayVacations.add(dayVacation);
+                        vacationBean.setWeek_days(dates);
+                        vacationBeans.add(vacationBean);
 
 
                     }
-                    day1.setDayVacations(dayVacations);
+                    day1.setVacationBeans(vacationBeans);
                 } else {
-                    day1.setDayVacations(dayVacations);
+                    day1.setVacationBeans(vacationBeans);
                 }
                 previousMonthArrayList.add(day1);
 

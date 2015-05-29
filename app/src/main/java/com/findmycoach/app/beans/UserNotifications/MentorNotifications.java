@@ -3,11 +3,7 @@ package com.findmycoach.app.beans.UserNotifications;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
-import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
-
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ved on 14/5/15.

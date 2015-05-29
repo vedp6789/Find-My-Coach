@@ -12,9 +12,9 @@ import android.os.Parcelable;
 public class Day implements Parcelable {
 
     public Day(){
-        dayEvents=new ArrayList<DayEvent>();
-        daySlots=new ArrayList<DaySlot>();
-        dayVacations=new ArrayList<DayVacation>();
+        eventBeans =new ArrayList<EventBean>();
+        slotBeans =new ArrayList<SlotBean>();
+        vacationBeans =new ArrayList<VacationBean>();
     }
 
 
@@ -33,32 +33,32 @@ public class Day implements Parcelable {
         return CREATOR;
     }
 
-    public List<DayEvent> dayEvents;
-    public List<DaySlot> daySlots;
-    public List<DayVacation> dayVacations;
+    public List<EventBean> eventBeans;
+    public List<SlotBean> slotBeans;
+    public List<VacationBean> vacationBeans;
 
-    public List<DayVacation> getDayVacations() {
-        return dayVacations;
+    public List<VacationBean> getVacationBeans() {
+        return vacationBeans;
     }
 
-    public void setDayVacations(List<DayVacation> dayVacations) {
-        this.dayVacations = dayVacations;
+    public void setVacationBeans(List<VacationBean> vacationBeans) {
+        this.vacationBeans = vacationBeans;
     }
 
-    public List<DaySlot> getDaySlots() {
-        return daySlots;
+    public List<SlotBean> getSlotBeans() {
+        return slotBeans;
     }
 
-    public void setDaySlots(List<DaySlot> daySlots) {
-        this.daySlots = daySlots;
+    public void setSlotBeans(List<SlotBean> slotBeans) {
+        this.slotBeans = slotBeans;
     }
 
-    public List<DayEvent> getDayEvents() {
-        return dayEvents;
+    public List<EventBean> getEventBeans() {
+        return eventBeans;
     }
 
-    public void setDayEvents(List<DayEvent> dayEvents) {
-        this.dayEvents = dayEvents;
+    public void setEventBeans(List<EventBean> eventBeans) {
+        this.eventBeans = eventBeans;
     }
 
     @Override
@@ -70,9 +70,9 @@ public class Day implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.date);
 
-        dest.writeTypedList(this.dayEvents);
-        dest.writeTypedList(this.daySlots);
-        dest.writeTypedList(this.dayVacations);
+        dest.writeTypedList(this.eventBeans);
+        dest.writeTypedList(this.slotBeans);
+        dest.writeTypedList(this.vacationBeans);
 
     }
     public Day(Parcel parcel){
@@ -80,9 +80,9 @@ public class Day implements Parcelable {
         this();
         this.date=parcel.readString();
         //List<DayEvent> list = null;
-        parcel.readTypedList(this.dayEvents, DayEvent.CREATOR);
-        parcel.readTypedList(this.daySlots, DaySlot.CREATOR);
-        parcel.readTypedList(this.dayVacations, DayVacation.CREATOR);
+        parcel.readTypedList(this.eventBeans, EventBean.CREATOR);
+        parcel.readTypedList(this.slotBeans, SlotBean.CREATOR);
+        parcel.readTypedList(this.vacationBeans, VacationBean.CREATOR);
     }
 
 

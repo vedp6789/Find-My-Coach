@@ -250,7 +250,7 @@ public class DashboardActivity extends FragmentActivity
             if (user_group == 2) {
                 ProfileResponse response = (ProfileResponse) object;
                 Intent intent = new Intent(this, EditProfileActivityMentee.class);
-                intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                intent.putExtra("user_info", new Gson().toJson(response.getStudentBean()));
                 startActivity(intent);
             } else if (user_group == 3) {
                 Response response = (Response) object;

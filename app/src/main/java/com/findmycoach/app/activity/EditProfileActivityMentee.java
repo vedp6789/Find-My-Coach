@@ -29,7 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
-import com.findmycoach.app.beans.student.Data;
+import com.findmycoach.app.beans.student.StudentBean;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
@@ -72,7 +72,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
     private Spinner coachingType;
     private Button updateAction;
     private ProgressDialog progressDialog;
-    private Data userInfo;
+    private StudentBean userInfo;
     private String imageInBinary = "";
     private String[] coachingTypeOptions;
     ArrayAdapter<String> arrayAdapter;
@@ -168,7 +168,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
 
     private void initialize() {
         coachingTypeOptions = getResources().getStringArray(R.array.coaching_type);
-        userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
+        userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), StudentBean.class);
         profileGender = (Spinner) findViewById(R.id.input_gender);
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
@@ -525,7 +525,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
         } else {
             progressDialog.dismiss();
             ProfileResponse response = (ProfileResponse) object;
-            userInfo = response.getData();
+            userInfo = response.getStudentBean();
             Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
             Intent intent = new Intent();
             intent.putExtra("user_info", new Gson().toJson(userInfo));

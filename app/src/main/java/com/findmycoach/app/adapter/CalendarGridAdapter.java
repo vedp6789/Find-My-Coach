@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,9 +15,9 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.activity.MentorDetailsActivity;
 import com.findmycoach.app.activity.SetScheduleActivity;
 import com.findmycoach.app.beans.CalendarSchedule.Day;
-import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
-import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
-import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
+import com.findmycoach.app.beans.CalendarSchedule.EventBean;
+import com.findmycoach.app.beans.CalendarSchedule.SlotBean;
+import com.findmycoach.app.beans.CalendarSchedule.VacationBean;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
@@ -65,7 +64,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private static ArrayList<Day> coming_month_data = null;
     private static int day_schedule_index = 0;
     Day day = null;
-    DayEvent dayEvent = null;
+    EventBean eventBean = null;
     private boolean allow_data_population_from_server_data = true;
 
     private boolean allow_once; /* this is a flag which is used to give message to the user that network communication is
@@ -394,11 +393,11 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                 * */
                     if (myScheduleFragment != null) {
                         if (StorageHelper.getUserDetails(context, "user_group").equals("3")) {
-                            List<DayEvent> dayEvents = day.getDayEvents();
-                            List<DaySlot> daySlots = day.getDaySlots();
-                            List<DayVacation> dayVacations = day.getDayVacations();
+                            List<EventBean> eventBeans = day.getEventBeans();
+                            List<SlotBean> slotBeans = day.getSlotBeans();
+                            List<VacationBean> vacationBeans = day.getVacationBeans();
 
-                            if (dayEvents.size() > 0) {
+                            if (eventBeans.size() > 0) {
                                 if (day_color[1].equals("BLUE")) {
                                     gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
                                 } else {
@@ -407,10 +406,10 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             }
                         }
                         if (StorageHelper.getUserDetails(context, "user_group").equals("2")) {
-                            List<DayEvent> dayEvents = day.getDayEvents();
-                            List<DayVacation> dayVacations = day.getDayVacations();
+                            List<EventBean> eventBeans = day.getEventBeans();
+                            List<VacationBean> vacationBeans = day.getVacationBeans();
 
-                            if (dayEvents.size() > 0) {
+                            if (eventBeans.size() > 0) {
 
 
                                 if (day_color[1].equals("BLUE")) {
@@ -429,9 +428,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                 *
                 * success when CalendarGridAdapter is used by MentorDetailsActivity class
                 * */
-                        List<DayEvent> dayEvents = day.getDayEvents();
-                        List<DaySlot> daySlots = day.getDaySlots();
-                        List<DayVacation> dayVacations = day.getDayVacations();
+                        List<EventBean> eventBeans = day.getEventBeans();
+                        List<SlotBean> slotBeans = day.getSlotBeans();
+                        List<VacationBean> vacationBeans = day.getVacationBeans();
 
                     /*if (daySlots.size() > 0 && dayEvents.size() <= 0) {
                         *//*  success when this day has only slots and there is no event coming from server*//*
@@ -446,7 +445,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                     } else {*/
                         int free_slot = 0;
-                        if (daySlots.size() <= 0) {
+                        if (slotBeans.size() <= 0) {
                             /*   success when there is no slots i.e. slots array size is zero
                             *    In this condition, grid click event should be handled like we do not open week-view and give a message that mentor is not free on this day.
                             * */
@@ -461,15 +460,15 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             /*
                              * matching each slot of the day with all possible events, and on this match deciding whether this slot come as free slot or not.
                              * */
-                            for (int day_slot = 0; day_slot < daySlots.size(); day_slot++) {
-                                DaySlot daySlot = daySlots.get(day_slot);
-                                String slot_start_date = daySlot.getSlot_start_date();
-                                String slot_stop_date = daySlot.getSlot_stop_date();
-                                String slot_start_time = daySlot.getSlot_start_time();
-                                String slot_stop_time = daySlot.getSlot_stop_time();
-                                String slot_type = daySlot.getSlot_type();
-                                String slot_id = daySlot.getSlot_id();
-                                int slot_max_users = Integer.parseInt(daySlot.getSlot_max_users());
+                            for (int day_slot = 0; day_slot < slotBeans.size(); day_slot++) {
+                                SlotBean slotBean = slotBeans.get(day_slot);
+                                String slot_start_date = slotBean.getSlot_start_date();
+                                String slot_stop_date = slotBean.getSlot_stop_date();
+                                String slot_start_time = slotBean.getSlot_start_time();
+                                String slot_stop_time = slotBean.getSlot_stop_time();
+                                String slot_type = slotBean.getSlot_type();
+                                String slot_id = slotBean.getSlot_id();
+                                int slot_max_users = Integer.parseInt(slotBean.getSlot_max_users());
 
                                 int slot_stop_day = Integer.parseInt(slot_stop_date.split("-", 3)[2]);
                                 int slot_stop_month = Integer.parseInt(slot_stop_date.split("-", 3)[1]);
@@ -509,14 +508,14 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                 * */
                                 if (slot_type.equalsIgnoreCase(context.getResources().getString(R.string.group))) {
                                     boolean slot_match_with_event = false;
-                                    for (int day_event = 0; day_event < dayEvents.size(); day_event++) {    /* dayEvents is a list of DayEvent bean*/
-                                        DayEvent dayEvent1 = dayEvents.get(day_event);
-                                        String event_start_date = dayEvent1.getEvent_start_date();
-                                        String event_stop_date = dayEvent1.getEvent_stop_date();
-                                        String event_start_time = dayEvent1.getEvent_start_time();
-                                        String event_stop_time = dayEvent1.getEvent_stop_time();
-                                        String event_regarding_slot_id = dayEvent1.getSlot_id();   /* this will get slot_id regarding its matching slot */
-                                        int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
+                                    for (int day_event = 0; day_event < eventBeans.size(); day_event++) {    /* dayEvents is a list of DayEvent bean*/
+                                        EventBean eventBean1 = eventBeans.get(day_event);
+                                        String event_start_date = eventBean1.getEvent_start_date();
+                                        String event_stop_date = eventBean1.getEvent_stop_date();
+                                        String event_start_time = eventBean1.getEvent_start_time();
+                                        String event_stop_time = eventBean1.getEvent_stop_time();
+                                        String event_regarding_slot_id = eventBean1.getSlot_id();   /* this will get slot_id regarding its matching slot */
+                                        int event_total_mentees = Integer.parseInt(eventBean1.getEvent_total_mentee());
                                         /* checking whether this particular event is similar to slot or not */
                                         if (event_regarding_slot_id.equals(slot_id)) {
                                             slot_match_with_event = true;
@@ -524,14 +523,14 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                             if (event_total_mentees < slot_max_users) {
 
 
-                                                if (dayVacations.size() <= 0) {
+                                                if (vacationBeans.size() <= 0) {
                                                     free_slot++;
                                                 } else {
                                                     boolean vacation_found_in_between = false;
-                                                    for (int day_vacation = 0; day_vacation < dayVacations.size(); day_vacation++) {
-                                                        DayVacation dayVacation = dayVacations.get(day_vacation);
-                                                        String vacation_start_time = dayVacation.getStart_time();
-                                                        String vacation_stop_time = dayVacation.getStop_time();
+                                                    for (int day_vacation = 0; day_vacation < vacationBeans.size(); day_vacation++) {
+                                                        VacationBean vacationBean = vacationBeans.get(day_vacation);
+                                                        String vacation_start_time = vacationBean.getStart_time();
+                                                        String vacation_stop_time = vacationBean.getStop_time();
 
                                                         int this_vacation_start_time_seconds = (Integer.parseInt(vacation_start_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(vacation_start_time.split(":")[1]) * 60);
                                                         int this_vacation_stop_time_seconds = (Integer.parseInt(vacation_stop_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(vacation_stop_time.split(":")[1]) * 60);
@@ -572,14 +571,14 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                                     if (!slot_match_with_event) {
 
-                                        if (dayVacations.size() <= 0) {
+                                        if (vacationBeans.size() <= 0) {
                                             free_slot++;
                                         } else {
                                             boolean vacation_found_in_between = false;
-                                            for (int day_vacation = 0; day_vacation < dayVacations.size(); day_vacation++) {
-                                                DayVacation dayVacation = dayVacations.get(day_vacation);
-                                                String vacation_start_time = dayVacation.getStart_time();
-                                                String vacation_stop_time = dayVacation.getStop_time();
+                                            for (int day_vacation = 0; day_vacation < vacationBeans.size(); day_vacation++) {
+                                                VacationBean vacationBean = vacationBeans.get(day_vacation);
+                                                String vacation_start_time = vacationBean.getStart_time();
+                                                String vacation_stop_time = vacationBean.getStop_time();
 
                                                 int this_vacation_start_time_seconds = (Integer.parseInt(vacation_start_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(vacation_start_time.split(":")[1]) * 60);
                                                 int this_vacation_stop_time_seconds = (Integer.parseInt(vacation_stop_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(vacation_stop_time.split(":")[1]) * 60);
@@ -610,14 +609,14 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                     * For slot which are selected as solo
                                     * */
                                     boolean slot_match_with_event = false;
-                                    for (int day_event = 0; day_event < dayEvents.size(); day_event++) {
-                                        DayEvent dayEvent1 = dayEvents.get(day_event);
-                                        String event_start_date = dayEvent1.getEvent_start_date();
-                                        String event_stop_date = dayEvent1.getEvent_stop_date();
-                                        String event_start_time = dayEvent1.getEvent_start_time();
-                                        String event_stop_time = dayEvent1.getEvent_stop_time();
-                                        String event_regarding_slot_id = dayEvent1.getSlot_id();/* this will get slot_id regarding its matching slot */
-                                        int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
+                                    for (int day_event = 0; day_event < eventBeans.size(); day_event++) {
+                                        EventBean eventBean1 = eventBeans.get(day_event);
+                                        String event_start_date = eventBean1.getEvent_start_date();
+                                        String event_stop_date = eventBean1.getEvent_stop_date();
+                                        String event_start_time = eventBean1.getEvent_start_time();
+                                        String event_stop_time = eventBean1.getEvent_stop_time();
+                                        String event_regarding_slot_id = eventBean1.getSlot_id();/* this will get slot_id regarding its matching slot */
+                                        int event_total_mentees = Integer.parseInt(eventBean1.getEvent_total_mentee());
                                         /* checking whether this particular event is similar to slot or not */
                                         if (event_regarding_slot_id.equals(slot_id)) {
                                             slot_match_with_event = true;
@@ -629,14 +628,14 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                     }
 
                                     if (!slot_match_with_event) {
-                                        if (dayVacations.size() <= 0) {
+                                        if (vacationBeans.size() <= 0) {
                                             free_slot++;
                                         } else {
                                             boolean vacation_found_in_between = false;
-                                            for (int day_vacation = 0; day_vacation < dayVacations.size(); day_vacation++) {
-                                                DayVacation dayVacation = dayVacations.get(day_vacation);
-                                                String vacation_start_time = dayVacation.getStart_time();
-                                                String vacation_stop_time = dayVacation.getStop_time();
+                                            for (int day_vacation = 0; day_vacation < vacationBeans.size(); day_vacation++) {
+                                                VacationBean vacationBean = vacationBeans.get(day_vacation);
+                                                String vacation_start_time = vacationBean.getStart_time();
+                                                String vacation_stop_time = vacationBean.getStop_time();
 
                                                 int this_vacation_start_time_seconds = (Integer.parseInt(vacation_start_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(vacation_start_time.split(":")[1]) * 60);
                                                 int this_vacation_stop_time_seconds = (Integer.parseInt(vacation_stop_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(vacation_stop_time.split(":")[1]) * 60);
