@@ -12,11 +12,11 @@
 
     <string-array name="country_names">
         <item>Select</item>
-        <item>61, Australia</item>
-        <item>91, India</item>
-        <item>65, Singapore</item>
-        <item>46, Sweden</item>
-        <item>44, United Kingdom</item>
+        <item>Australia (61)</item>
+        <item>India (91)</item>
+        <item>Singapore (65)</item>
+        <item>Sweden (46)</item>
+        <item>United Kingdom (44)</item>
     </string-array>
 
     <!--<string-array name="country_codes" >-->

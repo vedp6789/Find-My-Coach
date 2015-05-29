@@ -11,6 +11,6 @@
         android:text="@string/find_my_coach"
         android:textStyle="bold"
         android:textColor="@color/white"
-        android:textSize="32sp"
+        android:textSize="@dimen/header"
         android:layout_centerVertical="true"/>
 </RelativeLayout>

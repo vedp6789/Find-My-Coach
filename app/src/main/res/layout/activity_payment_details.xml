@@ -1,96 +1,163 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_gravity="start"
+        android:layout_width="@dimen/action_bar_height"
+        android:layout_height="@dimen/action_bar_height"
+        android:src="@drawable/back"
+        android:layout_marginTop="@dimen/back_margin"
+        android:padding="@dimen/textView_padding_margin"
+        android:id="@+id/backButton" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/payment_details_method"
         android:id="@+id/textView4"
-        android:textStyle="bold"
-        android:textSize="26sp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
-
-    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:gravity="center_horizontal"
-        android:hint="@string/hint_enter_card_number"
-        android:id="@+id/editTextCard"
-        android:layout_below="@+id/textView4"
-        android:layout_marginTop="15dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginTop="@dimen/margin_top"
+        android:text="@string/payment_details_method"
+        android:textColor="@color/white"
+        android:textSize="@dimen/header"
+        android:textStyle="bold" />
 
-    <EditText
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:inputType="textCapSentences"
-        android:hint="@string/hint_name_on_card"
-        android:ems="10"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enter_credit_debit_card"
+            android:textSize="@dimen/profile_details"
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:id="@+id/scanCard"
+            android:layout_width="@dimen/connection_button"
+            android:layout_height="@dimen/connection_button"
+            android:layout_marginLeft="@dimen/back_margin"
+            android:src="@drawable/camera" />
+    </LinearLayout>
+
+    <RelativeLayout
+        style="@style/EditTextCustomHolo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/back_margin"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/cardIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/editTextCard"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="@dimen/textView_padding_margin" />
+
+        <EditText
+            android:id="@+id/editTextCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/cardIcon"
+            android:layout_toRightOf="@+id/cardIcon"
+            android:background="@null"
+            android:ems="10"
+            android:gravity="center_horizontal"
+            android:hint="@string/hint_enter_card_number"
+            android:inputType="number"
+            android:textColor="@color/white"
+            android:textColorHint="@color/purple_light" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+
+        <EditText
+            android:id="@+id/editTextDate"
+            style="@style/EditTextCustomHolo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/textView_padding_margin"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:focusable="false"
+            android:gravity="center_horizontal"
+            android:hint="@string/hint_date_of_expiry"
+            android:inputType="datetime"
+            android:textIsSelectable="false" />
+
+        <EditText
+            android:id="@+id/editTextCVV"
+            style="@style/EditTextCustomHolo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/textView_padding_margin"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:gravity="center_horizontal"
+            android:hint="@string/hint_enter_cvv"
+            android:inputType="datetime" />
+    </LinearLayout>
+
+    <EditText
         android:id="@+id/editTextName"
-        android:layout_below="@+id/editTextCard"
-        android:layout_marginTop="15dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:gravity="center_horizontal"
+        style="@style/EditTextCustomHolo"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_date_of_expiry"
-        android:inputType="datetime"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/back_margin"
         android:ems="10"
-        android:focusable="false"
-        android:textIsSelectable="false"
-        android:id="@+id/editTextDate"
-        android:layout_below="@+id/editTextName"
-        android:layout_marginTop="15dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
         android:gravity="center_horizontal"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_enter_cvv"
-        android:inputType="datetime"
-        android:ems="10"
-        android:id="@+id/editTextCVV"
-        android:layout_below="@+id/editTextDate"
-        android:layout_marginTop="15dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:hint="@string/hint_name_on_card"
+        android:inputType="textCapSentences" />
+
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_skip"
-        android:id="@+id/buttonSkip"
-        android:layout_below="@+id/editTextCVV"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_save_and_continue"
         android:id="@+id/buttonSave"
-        android:layout_below="@+id/buttonSkip"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" />
-</RelativeLayout>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@drawable/custom_button_click"
+        android:text="@string/button_save_and_continue"
+        android:textColor="@color/custom_button_text_color_click" />
+
+
+    <Button
+        android:id="@+id/buttonSkip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@null"
+        android:textStyle="bold"
+        android:drawableLeft="@drawable/skip_small"
+        android:text="@string/button_skip"
+        android:textColor="@color/white" />
+</LinearLayout>
