@@ -2,6 +2,14 @@ package com.findmycoach.app.beans.CalendarSchedule;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by ved on 11/3/15.
@@ -19,6 +27,8 @@ public class DaySlot implements Parcelable{
     public String slot_type;
     public String slot_max_users;
     public String [] slot_week_days;
+    public List<DayEvent> events;
+    public List<DayVacation> vacations;
 
     public String getSlot_id() {
         return slot_id;
@@ -84,6 +94,23 @@ public class DaySlot implements Parcelable{
         this.slot_stop_time = slot_stop_time;
     }
 
+
+    public List<DayEvent> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<DayEvent> events) {
+        this.events = events;
+    }
+
+    public List<DayVacation> getVacations() {
+        return vacations;
+    }
+
+    public void setVacations(List<DayVacation> vacations) {
+        this.vacations = vacations;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -99,6 +126,8 @@ public class DaySlot implements Parcelable{
         dest.writeString(this.slot_max_users);
         dest.writeStringArray(this.slot_week_days);
         dest.writeString(this.slot_id);
+        dest.writeTypedList(this.events);
+        dest.writeTypedList(this.vacations);
     }
 
 
@@ -114,6 +143,8 @@ public class DaySlot implements Parcelable{
         this.slot_max_users=source.readString();
         this.slot_week_days=source.createStringArray();
         this.slot_id=source.readString();
+        source.readTypedList(this.events, DayEvent.CREATOR);
+        source.readTypedList(this.vacations, DayVacation.CREATOR);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -125,4 +156,21 @@ public class DaySlot implements Parcelable{
             return new DaySlot[size];
         }
     };
+
+
+    /**
+     * Utility functions
+     */
+
+    public List<ClassBean> getAvailablClasses(){
+        return getAvailablClasses(new Date(this.slot_start_date), new Date(this.slot_stop_date));
+    }
+
+    public List<ClassBean> getAvailablClasses(Date startDate, Date stopDate){
+        List<ClassBean> classes=new ArrayList<ClassBean>();
+
+        return classes;
+    }
+
+
 }

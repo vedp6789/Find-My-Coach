@@ -1,0 +1,30 @@
+{
+    "slots": [{
+        "slot_id": 1,
+        "start_time": "14:00:00",
+        "stop_time": "15:00:00",
+        "start_date": "15-04-01",
+        "stop_date": "15-04-30",
+        "slot_type": "individual",
+        "max_users": 4,
+        "weekdays": ["S", "T", "M"],
+        "events": [{
+            "event_id": 2,
+            "start_date": "15-04-01",
+            "stop_date": "15-04-30",
+            "slot_id": 1,
+            "mentor": {},
+            "mentee": {},
+            "sub_category": {},
+            "active_members": 1,
+            "weekdays": ["S", "T", "M"]
+        }],
+        "vacations": [{
+            "vacation_id": 1,
+            "start_date": "15-04-01",
+            "stop_date": "15-04-30",
+            "cause_of_the_vacation": "Going for holidays",
+            "weekdays": ["S", "T", "M"]
+        }]
+    }]
+}
