@@ -521,9 +521,12 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                             slot_match_with_event = true;
                                             /* if found similar then check whether the event_totoal_mentees from slot_max_users*/
                                             if (event_total_mentees < slot_max_users) {
+                                                free_slot++;
+                                                break;
 
 
-                                                if (vacationBeans.size() <= 0) {
+
+                                                /*if (vacationBeans.size() <= 0) {
                                                     free_slot++;
                                                 } else {
                                                     boolean vacation_found_in_between = false;
@@ -537,7 +540,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
                                                         if ((this_vacation_start_time_seconds < slot_start_time_in_seconds && this_vacation_stop_time_seconds > slot_start_time_in_seconds && this_vacation_stop_time_seconds < slot_stop_time_in_seconds) || (this_vacation_start_time_seconds > slot_start_time_in_seconds && this_vacation_start_time_seconds < slot_stop_time_in_seconds && this_vacation_stop_time_seconds > slot_stop_time_in_seconds) || (this_vacation_start_time_seconds == slot_start_time_in_seconds && this_vacation_stop_time_seconds == slot_stop_time_in_seconds) || (this_vacation_start_time_seconds < slot_start_time_in_seconds && this_vacation_stop_time_seconds > slot_stop_time_in_seconds) || (this_vacation_start_time_seconds > slot_start_time_in_seconds && this_vacation_start_time_seconds < slot_stop_time_in_seconds && this_vacation_stop_time_seconds > slot_start_time_in_seconds && this_vacation_stop_time_seconds < slot_stop_time_in_seconds)) {
-                                             /* this confirms that vacation is coinciding with slot_time */
+                                             *//* this confirms that vacation is coinciding with slot_time *//*
                                                             vacation_found_in_between = true;
                                                             break;
                                                         } else
@@ -551,10 +554,11 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                                     }
 
 
-                                                }
+                                                }*/
 
-                                            }
-                                            break;
+                                            } else
+                                                break;
+
                                         }
 /*
                                         if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
@@ -570,8 +574,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                     }
 
                                     if (!slot_match_with_event) {
-
-                                        if (vacationBeans.size() <= 0) {
+                                        free_slot++;
+                                        /*if (vacationBeans.size() <= 0) {
                                             free_slot++;
                                         } else {
                                             boolean vacation_found_in_between = false;
@@ -585,7 +589,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
                                                 if ((this_vacation_start_time_seconds < slot_start_time_in_seconds && this_vacation_stop_time_seconds > slot_start_time_in_seconds && this_vacation_stop_time_seconds < slot_stop_time_in_seconds) || (this_vacation_start_time_seconds > slot_start_time_in_seconds && this_vacation_start_time_seconds < slot_stop_time_in_seconds && this_vacation_stop_time_seconds > slot_stop_time_in_seconds) || (this_vacation_start_time_seconds == slot_start_time_in_seconds && this_vacation_stop_time_seconds == slot_stop_time_in_seconds) || (this_vacation_start_time_seconds < slot_start_time_in_seconds && this_vacation_stop_time_seconds > slot_stop_time_in_seconds) || (this_vacation_start_time_seconds > slot_start_time_in_seconds && this_vacation_start_time_seconds < slot_stop_time_in_seconds && this_vacation_stop_time_seconds > slot_start_time_in_seconds && this_vacation_stop_time_seconds < slot_stop_time_in_seconds)) {
-                                             /* this confirms that vacation is coinciding with slot_time */
+                                             *//* this confirms that vacation is coinciding with slot_time *//*
                                                     vacation_found_in_between = true;
                                                     break;
                                                 } else
@@ -599,7 +603,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                             }
 
 
-                                        }
+                                        }*/
                                     }
 
 
@@ -628,7 +632,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                     }
 
                                     if (!slot_match_with_event) {
-                                        if (vacationBeans.size() <= 0) {
+                                        free_slot++;
+                                        /*if (vacationBeans.size() <= 0) {
                                             free_slot++;
                                         } else {
                                             boolean vacation_found_in_between = false;
@@ -642,7 +647,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
                                                 if ((this_vacation_start_time_seconds < slot_start_time_in_seconds && this_vacation_stop_time_seconds > slot_start_time_in_seconds && this_vacation_stop_time_seconds < slot_stop_time_in_seconds) || (this_vacation_start_time_seconds > slot_start_time_in_seconds && this_vacation_start_time_seconds < slot_stop_time_in_seconds && this_vacation_stop_time_seconds > slot_stop_time_in_seconds) || (this_vacation_start_time_seconds == slot_start_time_in_seconds && this_vacation_stop_time_seconds == slot_stop_time_in_seconds) || (this_vacation_start_time_seconds < slot_start_time_in_seconds && this_vacation_stop_time_seconds > slot_stop_time_in_seconds) || (this_vacation_start_time_seconds > slot_start_time_in_seconds && this_vacation_start_time_seconds < slot_stop_time_in_seconds && this_vacation_stop_time_seconds > slot_start_time_in_seconds && this_vacation_stop_time_seconds < slot_stop_time_in_seconds)) {
-                                             /* this confirms that vacation is coinciding with slot_time */
+                                             *//* this confirms that vacation is coinciding with slot_time *//*
                                                     vacation_found_in_between = true;
                                                     break;
                                                 } else
@@ -656,7 +661,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                             }
 
 
-                                        }
+                                        }*/
                                     }
                                 }
 
