@@ -352,6 +352,8 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             List<DayEvent> dayEvents = d.getDayEvents();
             List<DayVacation> dayVacations = d.getDayVacations();
 
+            Log.d(TAG,"Day vacations: "+dayVacations.size());
+
             if (daySlots.size() <= 0) {
                  /*   success when there is no slots i.e. slots array size is zero
                   *    In this condition, grid click event should be handled like we do not open week-view and give a message that mentor is not free on this day.
@@ -429,10 +431,10 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                     free_slot++;
 
                                     makeFreeSlotForeground(slot_start_day, slot_start_month, slot_start_year, slot_stop_year, slot_stop_month, slot_stop_day, slot_on_week_days, dayVacations, slot_start_time_in_seconds, slot_stop_time_in_seconds, slot_start_date_in_millis, slot_stop_date_in_millis, slot_start_time, date_for_d, newMonth, newYear, slot_stop_time, slot_id, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, events);
-
+                                    break;
 
                                 }
-                                break;
+
                             }
 
                         }
@@ -481,6 +483,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                         /* checking whether this particular event is similar to slot or not */
                             if (event_releated_to_slot_id.equals(slot_id)) {
                                 slot_match_with_event = true;
+
                                 /*This */
 
                             }
@@ -535,10 +538,12 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     }
 
     private void makeFreeSlotForeground(int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_year, int slot_stop_month, int slot_stop_day, String[] slot_on_week_days, List<DayVacation> dayVacations, int slot_start_time_in_seconds, int slot_stop_time_in_seconds, long slot_start_date_in_millis, long slot_stop_date_in_millis, String slot_start_time, String date_for_d, int newMonth, int newYear, String slot_stop_time, String slot_id, int slot_start_hour, int slot_start_minute, int slot_stop_hour, int slot_stop_minute, String slot_type, List<WeekViewEvent> events) {
-
+        Log.d(TAG,"makeFreeSlotForeground method call");
 
         boolean slot_start_date_ahead_of_current = true;
         Calendar right_now = Calendar.getInstance();
+        int current_hour = right_now.get(Calendar.HOUR_OF_DAY);
+
         long right_now_in_millis = right_now.getTimeInMillis();
 
         Calendar calendar_stop_date_of_slot = Calendar.getInstance();
@@ -554,6 +559,18 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             slotDurationDetailBeans = calculateNoOfTotalClassDays(calendar_start_date_of_slot, calendar_stop_date_of_slot, slot_on_week_days);
         } else {
             slot_start_date_ahead_of_current = false;
+            String from_date;
+            if (current_hour > slot_start_hour) {
+                /* increasing schedule start date by one day i.e. slot_start_date is before current date and current time is also greater than slot_start_time*/
+                right_now.set(right_now.get(Calendar.YEAR), right_now.get(Calendar.MONTH), right_now.get(Calendar.DAY_OF_MONTH) + 1);   /* making right_now calendar instance updated as per possible class start time */
+                right_now_in_millis = right_now.getTimeInMillis();   /* updating right_now_in_millis for current right_now calendar instance*/
+            } else {
+
+                    /* if current hour is behing slot start hour or it is equal to it , then start day of class schedule will be from this current date */
+                right_now.set(right_now.get(Calendar.YEAR), right_now.get(Calendar.MONTH), right_now.get(Calendar.DAY_OF_MONTH));
+                right_now_in_millis = right_now.getTimeInMillis();
+            }
+
             slotDurationDetailBeans = calculateNoOfTotalClassDays(right_now, calendar_stop_date_of_slot, slot_on_week_days);
 
         }
@@ -564,7 +581,17 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                     /*
                                     * Here on this slot, we will show this slot as a free slot on week-view.
                                     * */
-        ArrayList<VacationCoincidingSlot> slot_coinciding_vacations = getSlotCoincidingVacations(dayVacations, slot_on_week_days, slot_start_time_in_seconds, slot_stop_time_in_seconds, slot_start_date_in_millis, slot_stop_date_in_millis);
+
+        ArrayList<VacationCoincidingSlot> slot_coinciding_vacations;
+        if (slot_start_date_ahead_of_current)
+            slot_coinciding_vacations = getSlotCoincidingVacations(dayVacations, slot_on_week_days, slot_start_time_in_seconds, slot_stop_time_in_seconds, slot_start_date_in_millis, slot_stop_date_in_millis);
+        else
+            slot_coinciding_vacations = getSlotCoincidingVacations(dayVacations, slot_on_week_days, slot_start_time_in_seconds, slot_stop_time_in_seconds, right_now_in_millis, slot_stop_date_in_millis);
+
+
+
+        Log.d(TAG,"slot_coinciding_vacation size: "+slot_coinciding_vacations.size());
+
 
         if (slot_coinciding_vacations.size() <= 0) {
                                         /* free slot will get foreground to Day View and on its tap, class can be scheduled with no vacations*/
@@ -636,17 +663,23 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                     addVacationDetailAndGetList(vacationDurationDetailBeans, calendar_vacation_start_date, calendar_vacation_stop_date, vacation_coinciding_week_days);
                 }
 
+
+                Log.d(TAG,"vacationDurationDetailBeans arrayList size: "+vacationDurationDetailBeans.size());
+
             }
 
-
+            Log.d(TAG,"slotDurationDetailBean arrayList size: "+slotDurationDetailBeans.size());
             for (int coinciding_vacation = 0; coinciding_vacation < vacationDurationDetailBeans.size(); coinciding_vacation++) {
                 VacationDurationDetailBean vacationDurationDetailBean = vacationDurationDetailBeans.get(coinciding_vacation);
                 String date = vacationDurationDetailBean.getDate();
                 String week_day = vacationDurationDetailBean.getWeek_day();
+                Log.d(TAG,"Vacation date: "+date+"week_day: "+week_day);
+
                 for (int slot_duration_bean = 0; slot_duration_bean < slotDurationDetailBeans.size(); slot_duration_bean++) {
                     SlotDurationDetailBean slotDurationDetailBean = slotDurationDetailBeans.get(slot_duration_bean);
                     String slot_date = slotDurationDetailBean.getDate();
                     String slot_week_day = slotDurationDetailBean.getWeek_day();
+                    Log.d(TAG,"Class date: "+slot_date+"slot week_day: "+slot_week_day);
 
                     if (slot_date.equals(date) && slot_week_day.equals(week_day)) {
                         slotDurationDetailBeans.remove(slot_duration_bean);
@@ -656,6 +689,8 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
                 }
             }
+            Log.d(TAG,"slotDurationDetailBean arrayList size after comparision: "+slotDurationDetailBeans.size());
+
 
             if (slotDurationDetailBeans.size() > 0) {
                                             /* we have to show free slot to week view as there are slots which can be scheduled */
