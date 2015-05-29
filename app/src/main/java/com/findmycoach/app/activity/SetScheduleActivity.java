@@ -7,39 +7,33 @@ package com.findmycoach.app.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 //import com.alamkanak.weekview.WeekView;
 //import com.alamkanak.weekview.WeekViewEvent;
 import com.findmycoach.app.beans.CalendarSchedule.Day;
-import com.findmycoach.app.beans.CalendarSchedule.EventBean;
-import com.findmycoach.app.beans.CalendarSchedule.SlotBean;
-import com.findmycoach.app.beans.CalendarSchedule.VacationBean;
+import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
+import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
+import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
 import com.findmycoach.app.beans.CalendarSchedule.SlotDurationDetailBean;
 import com.findmycoach.app.beans.CalendarSchedule.VacationCoincidingSlot;
 import com.findmycoach.app.beans.CalendarSchedule.VacationDurationDetailBean;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
-import com.findmycoach.app.util.SetDate;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.views.WeekView;
 import com.findmycoach.app.util.WeekViewEvent;
 import com.findmycoach.app.R;
-import com.findmycoach.app.beans.connections.Data;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Set;
 
 
 public class SetScheduleActivity extends Activity implements WeekView.MonthChangeListener,
@@ -221,24 +215,24 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 2) {
             for (Day d : coming_month) {
                 String date_for_d = d.getDate();
-                List<EventBean> eventBeans = d.getEventBeans();
+                List<DayEvent> dayEvents = d.getDayEvents();
 
 
-                EventBean eventBean;
-                if (eventBeans.size() > 0) {
-                    for (int event = 0; event < eventBeans.size(); event++) {
-                        eventBean = eventBeans.get(event);
+                DayEvent dayEvent;
+                if (dayEvents.size() > 0) {
+                    for (int event = 0; event < dayEvents.size(); event++) {
+                        dayEvent = dayEvents.get(event);
 
                         Calendar startTime;
                         startTime = Calendar.getInstance();
                         startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
-                        String start_time = eventBean.getEvent_start_time();
-                        String stop_time = eventBean.getEvent_stop_time();
-                        String f_name = eventBean.getFname();
-                        String l_name = eventBean.getLname();
-                        String event_id = eventBean.getEvent_id();
-                        String sub_category_name = eventBean.getSub_category_name();
-                        String slot_type = eventBean.getEvent_type();
+                        String start_time = dayEvent.getEvent_start_time();
+                        String stop_time = dayEvent.getEvent_stop_time();
+                        String f_name = dayEvent.getFname();
+                        String l_name = dayEvent.getLname();
+                        String event_id = dayEvent.getEvent_id();
+                        String sub_category_name = dayEvent.getSub_category_name();
+                        String slot_type = dayEvent.getEvent_type();
                         //String event_name=dayEvent.getEvent_name();
                         startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
                         startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
@@ -260,26 +254,26 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 3) {
             for (Day d : coming_month) {
                 String date_for_d = d.getDate();
-                List<EventBean> eventBeans = d.getEventBeans();
-                List<SlotBean> slotBeans = d.getSlotBeans();
-                List<VacationBean> vacationBeans = d.getVacationBeans();
+                List<DayEvent> dayEvents = d.getDayEvents();
+                List<DaySlot> daySlots = d.getDaySlots();
+                List<DayVacation> dayVacations = d.getDayVacations();
 
 
-                SlotBean slotBean;
-                if (slotBeans.size() > 0) {
-                    for (int slot = 0; slot < slotBeans.size(); slot++) {
+                DaySlot daySlot;
+                if (daySlots.size() > 0) {
+                    for (int slot = 0; slot < daySlots.size(); slot++) {
                         Log.d(TAG, "Populating slot data for: " + date_for_d);
-                        slotBean = slotBeans.get(slot);
+                        daySlot = daySlots.get(slot);
                         Calendar startTime;
                         startTime = Calendar.getInstance();
                         startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
-                        String slot_start_time = slotBean.getSlot_start_time();
-                        String slot_stop_time = slotBean.getSlot_stop_time();
-                        String slot_start_date = slotBean.getSlot_start_date();
-                        String slot_stop_date = slotBean.getSlot_stop_date();
-                        String[] slot_on_week_days = slotBean.getSlot_week_days();
-                        String slot_type = slotBean.getSlot_type();
-                        String slot_max_users = slotBean.getSlot_max_users();
+                        String slot_start_time = daySlot.getSlot_start_time();
+                        String slot_stop_time = daySlot.getSlot_stop_time();
+                        String slot_start_date = daySlot.getSlot_start_date();
+                        String slot_stop_date = daySlot.getSlot_stop_date();
+                        String[] slot_on_week_days = daySlot.getSlot_week_days();
+                        String slot_type = daySlot.getSlot_type();
+                        String slot_max_users = daySlot.getSlot_max_users();
                         //String event_name=dayEvent.getEvent_name();
                         startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_start_time.split(":", 3)[0]));
                         startTime.set(Calendar.MINUTE, Integer.parseInt(slot_start_time.split(":", 3)[1]));
@@ -297,21 +291,21 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                     }
                 }
 
-                EventBean eventBean;
-                if (eventBeans.size() > 0) {
-                    for (int event = 0; event < eventBeans.size(); event++) {
-                        eventBean = eventBeans.get(event);
+                DayEvent dayEvent;
+                if (dayEvents.size() > 0) {
+                    for (int event = 0; event < dayEvents.size(); event++) {
+                        dayEvent = dayEvents.get(event);
 
                         Calendar startTime;
                         startTime = Calendar.getInstance();
                         startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
-                        String start_time = eventBean.getEvent_start_time();
-                        String stop_time = eventBean.getEvent_stop_time();
-                        String f_name = eventBean.getFname();
-                        String l_name = eventBean.getLname();
-                        String event_id = eventBean.getEvent_id();
-                        String sub_category_name = eventBean.getSub_category_name();
-                        String slot_type = eventBean.getEvent_type();
+                        String start_time = dayEvent.getEvent_start_time();
+                        String stop_time = dayEvent.getEvent_stop_time();
+                        String f_name = dayEvent.getFname();
+                        String l_name = dayEvent.getLname();
+                        String event_id = dayEvent.getEvent_id();
+                        String sub_category_name = dayEvent.getSub_category_name();
+                        String slot_type = dayEvent.getEvent_type();
                         //String event_name=dayEvent.getEvent_name();
                         startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
                         startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
@@ -348,11 +342,11 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     private void poplateWeekView(ArrayList<Day> month, List<WeekViewEvent> events, int newYear, int newMonth) {
         for (Day d : month) {
             String date_for_d = d.getDate();
-            List<SlotBean> slotBeans = d.getSlotBeans();
-            List<EventBean> eventBeans = d.getEventBeans();
-            List<VacationBean> vacationBeans = d.getVacationBeans();
+            List<DaySlot> daySlots = d.getDaySlots();
+            List<DayEvent> dayEvents = d.getDayEvents();
+            List<DayVacation> dayVacations = d.getDayVacations();
 
-            Log.d(TAG,"Day vacations: "+ vacationBeans.size());
+            Log.d(TAG,"Day vacations: "+ dayVacations.size());
 
             if (daySlots.size() <= 0) {
                  /*   success when there is no slots i.e. slots array size is zero
@@ -369,16 +363,16 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                 /*
                  * matching each slot of the day with all possible events, and on this match deciding whether this slot come as free slot or not.
                  * */
-                for (int day_slot = 0; day_slot < slotBeans.size(); day_slot++) {
-                    SlotBean slotBean = slotBeans.get(day_slot);
-                    String slot_start_date = slotBean.getSlot_start_date();
-                    String slot_stop_date = slotBean.getSlot_stop_date();
-                    String slot_start_time = slotBean.getSlot_start_time();
-                    String slot_stop_time = slotBean.getSlot_stop_time();
-                    String slot_type = slotBean.getSlot_type();
-                    String slot_id = slotBean.getSlot_id();
-                    String[] slot_on_week_days = slotBean.getSlot_week_days();
-                    int slot_max_users = Integer.parseInt(slotBean.getSlot_max_users());
+                for (int day_slot = 0; day_slot < daySlots.size(); day_slot++) {
+                    DaySlot daySlot = daySlots.get(day_slot);
+                    String slot_start_date = daySlot.getSlot_start_date();
+                    String slot_stop_date = daySlot.getSlot_stop_date();
+                    String slot_start_time = daySlot.getSlot_start_time();
+                    String slot_stop_time = daySlot.getSlot_stop_time();
+                    String slot_type = daySlot.getSlot_type();
+                    String slot_id = daySlot.getSlot_id();
+                    String[] slot_on_week_days = daySlot.getSlot_week_days();
+                    int slot_max_users = Integer.parseInt(daySlot.getSlot_max_users());
 
 
                     int slot_start_day = Integer.parseInt(slot_start_date.split("-", 3)[2]);
@@ -416,21 +410,21 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                      * */
                     if (slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
                         boolean slot_match_with_any_event = false;
-                        for (int day_event = 0; day_event < eventBeans.size(); day_event++) {    /* dayEvents is a list of DayEvent bean*/
-                            EventBean eventBean1 = eventBeans.get(day_event);
-                            String event_start_date = eventBean1.getEvent_start_date();
-                            String event_stop_date = eventBean1.getEvent_stop_date();
-                            String event_start_time = eventBean1.getEvent_start_time();
-                            String event_stop_time = eventBean1.getEvent_stop_time();
-                            String event_related_slot_id = eventBean1.getSlot_id();
-                            int event_total_mentees = Integer.parseInt(eventBean1.getEvent_total_mentee());
+                        for (int day_event = 0; day_event < dayEvents.size(); day_event++) {    /* dayEvents is a list of DayEvent bean*/
+                            DayEvent dayEvent1 = dayEvents.get(day_event);
+                            String event_start_date = dayEvent1.getEvent_start_date();
+                            String event_stop_date = dayEvent1.getEvent_stop_date();
+                            String event_start_time = dayEvent1.getEvent_start_time();
+                            String event_stop_time = dayEvent1.getEvent_stop_time();
+                            String event_related_slot_id = dayEvent1.getSlot_id();
+                            int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
                             /* checking whether this particular event is similar to slot or not */
                             if (event_related_slot_id.equals(slot_id)) {
                                 slot_match_with_any_event = true;
                                 if (event_total_mentees < slot_max_users) {
                                     free_slot++;
 
-                                    makeFreeSlotForeground(slot_start_day, slot_start_month, slot_start_year, slot_stop_year, slot_stop_month, slot_stop_day, slot_on_week_days, vacationBeans, slot_start_time_in_seconds, slot_stop_time_in_seconds, slot_start_date_in_millis, slot_stop_date_in_millis, slot_start_time, date_for_d, newMonth, newYear, slot_stop_time, slot_id, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, events);
+                                    makeFreeSlotForeground(slot_start_day, slot_start_month, slot_start_year, slot_stop_year, slot_stop_month, slot_stop_day, slot_on_week_days, dayVacations, slot_start_time_in_seconds, slot_stop_time_in_seconds, slot_start_date_in_millis, slot_stop_date_in_millis, slot_start_time, date_for_d, newMonth, newYear, slot_stop_time, slot_id, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, events);
                                     break;
 
                                 }
@@ -445,7 +439,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             /*
                                     * Here on this slot, we will show this slot as a free slot on week-view.
                                     * */
-                            makeFreeSlotForeground(slot_start_day, slot_start_month, slot_start_year, slot_stop_year, slot_stop_month, slot_stop_day, slot_on_week_days, vacationBeans, slot_start_time_in_seconds, slot_stop_time_in_seconds, slot_start_date_in_millis, slot_stop_date_in_millis, slot_start_time, date_for_d, newMonth, newYear, slot_stop_time, slot_id, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, events);
+                            makeFreeSlotForeground(slot_start_day, slot_start_month, slot_start_year, slot_stop_year, slot_stop_month, slot_stop_day, slot_on_week_days, dayVacations, slot_start_time_in_seconds, slot_stop_time_in_seconds, slot_start_date_in_millis, slot_stop_date_in_millis, slot_start_time, date_for_d, newMonth, newYear, slot_stop_time, slot_id, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, events);
 
 
                             /*Calendar startTime;
@@ -472,14 +466,14 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                     * For the slot which are selected as solo
                                     * */
                         boolean slot_match_with_event = false;
-                        for (int day_event = 0; day_event < eventBeans.size(); day_event++) {
-                            EventBean eventBean1 = eventBeans.get(day_event);
-                            String event_start_date = eventBean1.getEvent_start_date();
-                            String event_stop_date = eventBean1.getEvent_stop_date();
-                            String event_start_time = eventBean1.getEvent_start_time();
-                            String event_stop_time = eventBean1.getEvent_stop_time();
-                            String event_releated_to_slot_id = eventBean1.getSlot_id();
-                            int event_total_mentees = Integer.parseInt(eventBean1.getEvent_total_mentee());
+                        for (int day_event = 0; day_event < dayEvents.size(); day_event++) {
+                            DayEvent dayEvent1 = dayEvents.get(day_event);
+                            String event_start_date = dayEvent1.getEvent_start_date();
+                            String event_stop_date = dayEvent1.getEvent_stop_date();
+                            String event_start_time = dayEvent1.getEvent_start_time();
+                            String event_stop_time = dayEvent1.getEvent_stop_time();
+                            String event_releated_to_slot_id = dayEvent1.getSlot_id();
+                            int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
                                         /* checking whether this particular event is similar to slot or not */
                             if (event_releated_to_slot_id.equals(slot_id)) {
                                 slot_match_with_event = true;
@@ -497,7 +491,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                     * */
 
 
-                            makeFreeSlotForeground(slot_start_day, slot_start_month, slot_start_year, slot_stop_year, slot_stop_month, slot_stop_day, slot_on_week_days, vacationBeans, slot_start_time_in_seconds, slot_stop_time_in_seconds, slot_start_date_in_millis, slot_stop_date_in_millis, slot_start_time, date_for_d, newMonth, newYear, slot_stop_time, slot_id, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, events);
+                            makeFreeSlotForeground(slot_start_day, slot_start_month, slot_start_year, slot_stop_year, slot_stop_month, slot_stop_day, slot_on_week_days, dayVacations, slot_start_time_in_seconds, slot_stop_time_in_seconds, slot_start_date_in_millis, slot_stop_date_in_millis, slot_start_time, date_for_d, newMonth, newYear, slot_stop_time, slot_id, slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute, slot_type, events);
 
 
                             /*Calendar startTime;
@@ -537,7 +531,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         }
     }
 
-    private void makeFreeSlotForeground(int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_year, int slot_stop_month, int slot_stop_day, String[] slot_on_week_days, List<VacationBean> vacationBeans, int slot_start_time_in_seconds, int slot_stop_time_in_seconds, long slot_start_date_in_millis, long slot_stop_date_in_millis, String slot_start_time, String date_for_d, int newMonth, int newYear, String slot_stop_time, String slot_id, int slot_start_hour, int slot_start_minute, int slot_stop_hour, int slot_stop_minute, String slot_type, List<WeekViewEvent> events) {
+    private void makeFreeSlotForeground(int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_year, int slot_stop_month, int slot_stop_day, String[] slot_on_week_days, List<DayVacation> dayVacations, int slot_start_time_in_seconds, int slot_stop_time_in_seconds, long slot_start_date_in_millis, long slot_stop_date_in_millis, String slot_start_time, String date_for_d, int newMonth, int newYear, String slot_stop_time, String slot_id, int slot_start_hour, int slot_start_minute, int slot_stop_hour, int slot_stop_minute, String slot_type, List<WeekViewEvent> events) {
         Log.d(TAG,"makeFreeSlotForeground method call");
 
         boolean slot_start_date_ahead_of_current = true;
@@ -718,15 +712,15 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         }
     }
 
-    private ArrayList<VacationCoincidingSlot> getSlotCoincidingVacations(List<VacationBean> vacationBeans, String[] slot_on_week_days, int slot_start_time_in_seconds, int slot_stop_time_in_seconds, long slot_start_date_in_millis, long slot_stop_date_in_millis) {
+    private ArrayList<VacationCoincidingSlot> getSlotCoincidingVacations(List<DayVacation> dayVacations, String[] slot_on_week_days, int slot_start_time_in_seconds, int slot_stop_time_in_seconds, long slot_start_date_in_millis, long slot_stop_date_in_millis) {
         ArrayList<VacationCoincidingSlot> vacations_found_coinciding = new ArrayList<VacationCoincidingSlot>();
-        for (int vacation_number = 0; vacation_number < vacationBeans.size(); vacation_number++) {
-            VacationBean vacationBean = vacationBeans.get(vacation_number);
-            String start_date = vacationBean.getStart_date();
-            String stop_date = vacationBean.getStop_date();
-            String start_time = vacationBean.getStart_time();
-            String stop_time = vacationBean.getStop_time();
-            String[] week_days = vacationBean.getWeek_days();
+        for (int vacation_number = 0; vacation_number < dayVacations.size(); vacation_number++) {
+            DayVacation dayVacation = dayVacations.get(vacation_number);
+            String start_date = dayVacation.getStart_date();
+            String stop_date = dayVacation.getStop_date();
+            String start_time = dayVacation.getStart_time();
+            String stop_time = dayVacation.getStop_time();
+            String[] week_days = dayVacation.getWeek_days();
 
             Calendar cal_vacation_start = new GregorianCalendar();
             cal_vacation_start.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
@@ -917,24 +911,24 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 2) {
             for (Day d : current_month) {
                 String date_for_d = d.getDate();
-                List<EventBean> eventBeans = d.getEventBeans();
+                List<DayEvent> dayEvents = d.getDayEvents();
 
 
-                EventBean eventBean;
-                if (eventBeans.size() > 0) {
-                    for (int event = 0; event < eventBeans.size(); event++) {
-                        eventBean = eventBeans.get(event);
+                DayEvent dayEvent;
+                if (dayEvents.size() > 0) {
+                    for (int event = 0; event < dayEvents.size(); event++) {
+                        dayEvent = dayEvents.get(event);
 
                         Calendar startTime;
                         startTime = Calendar.getInstance();
                         startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
-                        String start_time = eventBean.getEvent_start_time();
-                        String stop_time = eventBean.getEvent_stop_time();
-                        String f_name = eventBean.getFname();
-                        String l_name = eventBean.getLname();
-                        String event_id = eventBean.getEvent_id();
-                        String sub_category_name = eventBean.getSub_category_name();
-                        String slot_type = eventBean.getEvent_type();
+                        String start_time = dayEvent.getEvent_start_time();
+                        String stop_time = dayEvent.getEvent_stop_time();
+                        String f_name = dayEvent.getFname();
+                        String l_name = dayEvent.getLname();
+                        String event_id = dayEvent.getEvent_id();
+                        String sub_category_name = dayEvent.getSub_category_name();
+                        String slot_type = dayEvent.getEvent_type();
                         //String event_name=dayEvent.getEvent_name();
                         startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
                         startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
@@ -956,24 +950,24 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 3) {
             for (Day d : current_month) {
                 String date_for_d = d.getDate();
-                List<EventBean> eventBeans = d.getEventBeans();
+                List<DayEvent> dayEvents = d.getDayEvents();
 
-                List<SlotBean> slotBeans = d.getSlotBeans();
-                SlotBean slotBean;
-                if (slotBeans.size() > 0) {
-                    for (int slot = 0; slot < slotBeans.size(); slot++) {
+                List<DaySlot> daySlots = d.getDaySlots();
+                DaySlot daySlot;
+                if (daySlots.size() > 0) {
+                    for (int slot = 0; slot < daySlots.size(); slot++) {
                         Log.d(TAG, "Populating slot data for: " + date_for_d);
-                        slotBean = slotBeans.get(slot);
+                        daySlot = daySlots.get(slot);
                         Calendar startTime;
                         startTime = Calendar.getInstance();
                         startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
-                        String slot_start_time = slotBean.getSlot_start_time();
-                        String slot_stop_time = slotBean.getSlot_stop_time();
-                        String slot_start_date = slotBean.getSlot_start_date();
-                        String slot_stop_date = slotBean.getSlot_stop_date();
-                        String[] slot_on_week_days = slotBean.getSlot_week_days();
-                        String slot_type = slotBean.getSlot_type();
-                        String slot_max_users = slotBean.getSlot_max_users();
+                        String slot_start_time = daySlot.getSlot_start_time();
+                        String slot_stop_time = daySlot.getSlot_stop_time();
+                        String slot_start_date = daySlot.getSlot_start_date();
+                        String slot_stop_date = daySlot.getSlot_stop_date();
+                        String[] slot_on_week_days = daySlot.getSlot_week_days();
+                        String slot_type = daySlot.getSlot_type();
+                        String slot_max_users = daySlot.getSlot_max_users();
 
                         startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_start_time.split(":", 3)[0]));
                         startTime.set(Calendar.MINUTE, Integer.parseInt(slot_start_time.split(":", 3)[1]));
@@ -991,21 +985,21 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                     }
                 }
 
-                EventBean eventBean;
-                if (eventBeans.size() > 0) {
-                    for (int event = 0; event < eventBeans.size(); event++) {
-                        eventBean = eventBeans.get(event);
+                DayEvent dayEvent;
+                if (dayEvents.size() > 0) {
+                    for (int event = 0; event < dayEvents.size(); event++) {
+                        dayEvent = dayEvents.get(event);
 
                         Calendar startTime;
                         startTime = Calendar.getInstance();
                         startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
-                        String start_time = eventBean.getEvent_start_time();
-                        String stop_time = eventBean.getEvent_stop_time();
-                        String f_name = eventBean.getFname();
-                        String l_name = eventBean.getLname();
-                        String event_id = eventBean.getEvent_id();
-                        String sub_category_name = eventBean.getSub_category_name();
-                        String slot_type = eventBean.getEvent_type();
+                        String start_time = dayEvent.getEvent_start_time();
+                        String stop_time = dayEvent.getEvent_stop_time();
+                        String f_name = dayEvent.getFname();
+                        String l_name = dayEvent.getLname();
+                        String event_id = dayEvent.getEvent_id();
+                        String sub_category_name = dayEvent.getSub_category_name();
+                        String slot_type = dayEvent.getEvent_type();
                         startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
                         startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
                         startTime.set(Calendar.MONTH, newMonth - 1);
@@ -1040,26 +1034,26 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 2) {
             for (Day d : prev_month) {
                 String date_for_d = d.getDate();
-                List<EventBean> eventBeans = d.getEventBeans();
+                List<DayEvent> dayEvents = d.getDayEvents();
 
 
-                EventBean eventBean;
-                if (eventBeans.size() > 0) {
+                DayEvent dayEvent;
+                if (dayEvents.size() > 0) {
 
 
-                    for (int event = 0; event < eventBeans.size(); event++) {
-                        eventBean = eventBeans.get(event);
+                    for (int event = 0; event < dayEvents.size(); event++) {
+                        dayEvent = dayEvents.get(event);
 
                         Calendar startTime;
                         startTime = Calendar.getInstance();
                         startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
-                        String start_time = eventBean.getEvent_start_time();
-                        String stop_time = eventBean.getEvent_stop_time();
-                        String f_name = eventBean.getFname();
-                        String l_name = eventBean.getLname();
-                        String event_id = eventBean.getEvent_id();
-                        String sub_category_name = eventBean.getSub_category_name();
-                        String slot_type = eventBean.getEvent_type();
+                        String start_time = dayEvent.getEvent_start_time();
+                        String stop_time = dayEvent.getEvent_stop_time();
+                        String f_name = dayEvent.getFname();
+                        String l_name = dayEvent.getLname();
+                        String event_id = dayEvent.getEvent_id();
+                        String sub_category_name = dayEvent.getSub_category_name();
+                        String slot_type = dayEvent.getEvent_type();
                         //String event_name=dayEvent.getEvent_name();
                         startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
                         startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
@@ -1081,24 +1075,24 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 3) {
             for (Day d : prev_month) {
                 String date_for_d = d.getDate();
-                List<EventBean> eventBeans = d.getEventBeans();
+                List<DayEvent> dayEvents = d.getDayEvents();
 
-                List<SlotBean> slotBeans = d.getSlotBeans();
-                SlotBean slotBean;
-                if (slotBeans.size() > 0) {
+                List<DaySlot> daySlots = d.getDaySlots();
+                DaySlot daySlot;
+                if (daySlots.size() > 0) {
                     Log.d(TAG, "Populating slot data for: " + date_for_d);
-                    for (int slot = 0; slot < slotBeans.size(); slot++) {
-                        slotBean = slotBeans.get(slot);
+                    for (int slot = 0; slot < daySlots.size(); slot++) {
+                        daySlot = daySlots.get(slot);
                         Calendar startTime;
                         startTime = Calendar.getInstance();
                         startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
-                        String slot_start_time = slotBean.getSlot_start_time();
-                        String slot_stop_time = slotBean.getSlot_stop_time();
-                        String slot_start_date = slotBean.getSlot_start_date();
-                        String slot_stop_date = slotBean.getSlot_stop_date();
-                        String[] slot_on_week_days = slotBean.getSlot_week_days();
-                        String slot_type = slotBean.getSlot_type();
-                        String slot_max_users = slotBean.getSlot_max_users();
+                        String slot_start_time = daySlot.getSlot_start_time();
+                        String slot_stop_time = daySlot.getSlot_stop_time();
+                        String slot_start_date = daySlot.getSlot_start_date();
+                        String slot_stop_date = daySlot.getSlot_stop_date();
+                        String[] slot_on_week_days = daySlot.getSlot_week_days();
+                        String slot_type = daySlot.getSlot_type();
+                        String slot_max_users = daySlot.getSlot_max_users();
                         //String event_name=dayEvent.getEvent_name();
                         startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_start_time.split(":", 3)[0]));
                         startTime.set(Calendar.MINUTE, Integer.parseInt(slot_start_time.split(":", 3)[1]));
@@ -1116,22 +1110,22 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                     }
                 }
 
-                EventBean eventBean;
-                if (eventBeans.size() > 0) {
+                DayEvent dayEvent;
+                if (dayEvents.size() > 0) {
 
 
-                    for (int event = 0; event < eventBeans.size(); event++) {
-                        eventBean = eventBeans.get(event);
+                    for (int event = 0; event < dayEvents.size(); event++) {
+                        dayEvent = dayEvents.get(event);
                         Calendar startTime;
                         startTime = Calendar.getInstance();
                         startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
-                        String start_time = eventBean.getEvent_start_time();
-                        String stop_time = eventBean.getEvent_stop_time();
-                        String f_name = eventBean.getFname();
-                        String l_name = eventBean.getLname();
-                        String event_id = eventBean.getEvent_id();
-                        String sub_category_name = eventBean.getSub_category_name();
-                        String slot_type = eventBean.getEvent_type();
+                        String start_time = dayEvent.getEvent_start_time();
+                        String stop_time = dayEvent.getEvent_stop_time();
+                        String f_name = dayEvent.getFname();
+                        String l_name = dayEvent.getLname();
+                        String event_id = dayEvent.getEvent_id();
+                        String sub_category_name = dayEvent.getSub_category_name();
+                        String slot_type = dayEvent.getEvent_type();
                         //String event_name=dayEvent.getEvent_name();
                         startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
                         startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));

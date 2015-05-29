@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.EditProfileActivityMentee;
-import com.findmycoach.app.beans.student.StudentBean;
+import com.findmycoach.app.beans.student.Data;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
@@ -38,7 +38,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView mentorFor;
     private TextView coachingType;
     private TextView profilePhone;
-    private StudentBean userInfo = null;
+    private Data userInfo = null;
     private ImageLoader imgLoader;
     private ImageView editProfile;
     private TextView title;
@@ -112,7 +112,7 @@ public class ProfileFragment extends Fragment implements Callback {
         Log.d(TAG, "IN onActivity Result" + requestCode + "   " + requestCode);
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             String updatedUserJson = data.getStringExtra("user_info");
-            userInfo = new Gson().fromJson(updatedUserJson, StudentBean.class);
+            userInfo = new Gson().fromJson(updatedUserJson, Data.class);
             populateFields();
         }
     }
@@ -132,7 +132,7 @@ public class ProfileFragment extends Fragment implements Callback {
         progressDialog.hide();
         Log.d(TAG, "show profile");
         ProfileResponse response = (ProfileResponse) object;
-        userInfo = response.getStudentBean();
+        userInfo = response.getData();
         populateFields();
     }
 

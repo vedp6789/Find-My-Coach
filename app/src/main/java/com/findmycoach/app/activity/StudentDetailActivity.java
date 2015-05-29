@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.NotificationAdapter;
-import com.findmycoach.app.beans.student.StudentBean;
+import com.findmycoach.app.beans.student.Data;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
@@ -34,7 +34,7 @@ public class StudentDetailActivity  extends Activity implements Callback {
     private TextView mentorFor;
     private TextView coachingType;
     private TextView profilePhone;
-    private StudentBean studentDetails;
+    private Data studentDetails;
     private ProgressDialog progressDialog;
     private static final String TAG = "FMC";
 
@@ -50,7 +50,7 @@ public class StudentDetailActivity  extends Activity implements Callback {
         try{
             String response = getIntent().getStringExtra("student_detail");
             ProfileResponse profileResponse = new Gson().fromJson(response, ProfileResponse.class);
-            studentDetails = profileResponse.getStudentBean();
+            studentDetails = profileResponse.getData();
             if(studentDetails != null) {
                 applyActionbarProperties();
                 populateFields();

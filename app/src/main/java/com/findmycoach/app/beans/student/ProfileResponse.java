@@ -8,7 +8,7 @@ public class ProfileResponse {
     @Expose
     private String message;
     @Expose
-    private StudentBean studentBean;
+    private Data data;
 
     /**
      * @return The message
@@ -27,15 +27,15 @@ public class ProfileResponse {
     /**
      * @return The data
      */
-    public StudentBean getStudentBean() {
-        return studentBean;
+    public Data getData() {
+        return data;
     }
 
     /**
-     * @param studentBean The data
+     * @param data The data
      */
-    public void setStudentBean(StudentBean studentBean) {
-        this.studentBean = studentBean;
+    public void setData(Data data) {
+        this.data = data;
     }
 
 }

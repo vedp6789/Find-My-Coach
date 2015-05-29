@@ -8,7 +8,7 @@ public class Response {
     @Expose
     private String message;
     @Expose
-    private MentorBean mentorBean;
+    private Data data;
     @SerializedName("auth_token")
     @Expose
     private String authToken;
@@ -30,15 +30,15 @@ public class Response {
     /**
      * @return The data
      */
-    public MentorBean getMentorBean() {
-        return mentorBean;
+    public Data getData() {
+        return data;
     }
 
     /**
-     * @param mentorBean The data
+     * @param data The data
      */
-    public void setMentorBean(MentorBean mentorBean) {
-        this.mentorBean = mentorBean;
+    public void setData(Data data) {
+        this.data = data;
     }
 
     /**

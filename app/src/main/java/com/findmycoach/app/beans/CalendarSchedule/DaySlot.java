@@ -11,6 +11,7 @@ public class DaySlot implements Parcelable{
 
     }
 
+    public String slot_id;
     public String slot_start_time;
     public String slot_stop_time;
     public String slot_start_date;
@@ -18,7 +19,6 @@ public class DaySlot implements Parcelable{
     public String slot_type;
     public String slot_max_users;
     public String [] slot_week_days;
-    public String slot_id;
 
     public String getSlot_id() {
         return slot_id;
