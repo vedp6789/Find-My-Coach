@@ -2,20 +2,16 @@ package com.findmycoach.app.beans.CalendarSchedule;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
- * Created by ved on 11/3/15.
+ * Created by ved on 31/5/15.
  */
-public class DaySlot implements Parcelable{
-    public DaySlot(){
+public class Slot implements Parcelable{
+    public Slot(){
 
     }
 
@@ -131,7 +127,7 @@ public class DaySlot implements Parcelable{
     }
 
 
-    public DaySlot(Parcel source){
+    public Slot(Parcel source){
     /*
      * Reconstruct from the Parcel
      */
@@ -171,9 +167,4 @@ public class DaySlot implements Parcelable{
 
         return classes;
     }
-
-
-
-
-
 }
