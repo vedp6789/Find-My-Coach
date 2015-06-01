@@ -76,8 +76,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public String calendar_by_location = null;
     public boolean cb_calendar_by_location_is_checked = false, b_three_months_data;
     private int NEW_SLT = 0, VAC_SCH = 1, RESULT_OK = 500;
-    protected static int month_from_dialog, year_from_dialog;
+    protected static int month_from_dialog, year_from_dialog; /* this is getting initialized from CustomDatePicker fragment when user wants to jump on an specific date*/
     public boolean populate_calendar_from_adapter;
+    private String previous_month_start_date;/* this will get initialized when api is requested for three months (previous, current, coming)*/
+    private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     public MyScheduleFragment() {
         // Required empty public constructor
@@ -362,10 +364,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         requestParams.add("start_date", String.valueOf(stringBuilder));
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
 
+        previous_month_start_date = stringBuilder.toString();    /* this will be used to identify previous, current, coming month date (yyyy-mm-dd) */
 
         if (cb_calendar_by_location_is_checked) {
-
-
             Log.d(TAG, "calendar_by_location is checked true");
             if (calendar_by_location != null && !calendar_by_location.trim().equals("")) {
                 Log.d(TAG, "Calendar_by_location getting passed to server : " + calendar_by_location);
@@ -783,14 +784,14 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         previousMonthArrayList = currentMonthArrayList;
         currentMonthArrayList = comingMonthArrayList;
         comingMonthArrayList = null;
-        comingMonthArrayList = new ArrayList<DaySlot>();
+        comingMonthArrayList = new ArrayList<Slot>();
     }
 
     public void updateArrayListsForPreviousMonth() {
         comingMonthArrayList = currentMonthArrayList;
         currentMonthArrayList = previousMonthArrayList;
         previousMonthArrayList = null;
-        previousMonthArrayList = new ArrayList<DaySlot>();
+        previousMonthArrayList = new ArrayList<Slot>();
     }
 
 
@@ -806,6 +807,22 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         progressDialog.dismiss();
     }
 
+
+    private int finalizeDaysInMonth(int month, int year){
+        int days;
+        if(isLeapYear(year)){
+            if(month == 2){
+                days =29;
+            }else{
+                days=daysOfMonth[month-1];
+            }
+        }else{
+            days=daysOfMonth[month-1];
+
+
+        }
+        return  days;
+    }
 
     private void threeMonthsData(Object object) {
 
@@ -859,9 +876,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                         events.add(event);
 
 
-
                     }
-
                     slot.setEvents(events);
 
                     for (int vacation_jsonArray_index = 0; vacation_jsonArray_index < vacation_jsonArray.length(); vacation_jsonArray_index++) {
@@ -879,11 +894,49 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                         vacation.setWeek_days(vacation_weekdays_array);
                         vacations.add(vacation);
                     }
-
                     slot.setVacations(vacations);
+                    slot.setSlot_created_on_network_success("true");
+
+                    slots.add(slot);
 
 
                 }
+
+                int previous_month = Integer.parseInt(previous_month_start_date.split("-")[1]);
+                int previous_month_year = Integer.parseInt(previous_month_start_date.split("-")[0]);
+
+                int current_month, current_year,coming_month,coming_year;
+                if(previous_month == 11){
+                    current_month =12;current_year=previous_month_year;
+                    coming_month=1;coming_year= previous_month_year;++coming_year;
+                }else{
+                    if(previous_month == 12){
+                        current_month =1; current_year = previous_month_year; ++current_year;
+                        coming_month=2; coming_year = current_year;
+                    }else{
+                        current_month = previous_month; ++current_month; current_year = previous_month_year;
+                        coming_month= current_month; ++coming_month; coming_year = previous_month_year;
+                    }
+                }
+
+
+                previousMonthArrayList=getSlotsForThis(slots,previous_month,previous_month_year,finalizeDaysInMonth(previous_month,previous_month_year));
+                currentMonthArrayList=getSlotsForThis(slots, current_month, current_year, finalizeDaysInMonth(current_month, current_year));
+                comingMonthArrayList=getSlotsForThis(slots,coming_month,coming_year,finalizeDaysInMonth(coming_month,coming_year));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                 for (int i = 0; i < days_in_prev_month; i++) {
@@ -1372,6 +1425,41 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     }
 
+    private ArrayList<Slot> getSlotsForThis(List<Slot> slots, int month, int year, int days) {
+        ArrayList<Slot> slotArrayList=new ArrayList<Slot>();
+
+        Calendar calendar_start_of_month = Calendar.getInstance();
+        calendar_start_of_month.set(year,month-1,1);
+        long month_start_date_in_millis=calendar_start_of_month.getTimeInMillis();
+
+        Calendar calendar_end_of_month = Calendar.getInstance();
+        calendar_end_of_month.set(year,month-1,days);
+        long month_end_date_in_millis=calendar_end_of_month.getTimeInMillis();
+
+
+        for(int slot_no=0; slot_no < slots.size() ; slot_no++){
+            Slot slot=slots.get(slot_no);
+            String start_date=slot.getSlot_start_date();
+            String stop_date=slot.getSlot_stop_date();
+
+            Calendar calendar_slot_start_date=Calendar.getInstance();
+            calendar_slot_start_date.set(Integer.parseInt(start_date.split("-")[0]),Integer.parseInt(start_date.split("-")[1])-1,Integer.parseInt(start_date.split("-")[2]));
+            long slot_start_date_in_millis=calendar_slot_start_date.getTimeInMillis();
+            Calendar calendar_slot_end_date=Calendar.getInstance();
+            calendar_slot_end_date.set(Integer.parseInt(stop_date.split("-")[0]),Integer.parseInt(stop_date.split("-")[1])-1,Integer.parseInt(stop_date.split("-")[2]));
+            long slot_stop_date_in_millis=calendar_slot_end_date.getTimeInMillis();
+
+
+            if(slot_start_date_in_millis < )
+
+
+
+        }
+
+
+
+    }
+
     private void nextMonthData(Object object) {
 
         if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 3) {
@@ -1778,6 +1866,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 e.printStackTrace();
             }
         }
+    }
+
+    public static boolean isLeapYear(int year) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        return  cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365;
     }
 
 

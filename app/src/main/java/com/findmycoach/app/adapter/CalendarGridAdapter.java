@@ -18,6 +18,7 @@ import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
 import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
+import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
@@ -59,9 +60,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private String charges;
     private ArrayList<String> arrayList_subcategory = null;
     private String mentor_address;
-    private static ArrayList<Day> prev_month_data = null;
-    private static ArrayList<Day> current_month_data = null;
-    private static ArrayList<Day> coming_month_data = null;
+    private static ArrayList<Slot> prev_month_data = null;
+    private static ArrayList<Slot> current_month_data = null;
+    private static ArrayList<Slot> coming_month_data = null;
     private static int day_schedule_index = 0;
     Day day = null;
     DayEvent dayEvent = null;
@@ -85,7 +86,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     * This constructor is called from MyScheduleFragment
     *
     * */
-    public CalendarGridAdapter(Context context, int month, int year, MyScheduleFragment myScheduleFragment, ArrayList<Day> prev_month_data, ArrayList<Day> current_month_data, ArrayList<Day> coming_month_data) {
+    public CalendarGridAdapter(Context context, int month, int year, MyScheduleFragment myScheduleFragment, ArrayList<Slot> prev_month_data, ArrayList<Slot> current_month_data, ArrayList<Slot> coming_month_data) {
         super();
         this.context = context;
         weekdays = context.getResources().getStringArray(R.array.week_days);
@@ -103,9 +104,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         CURRENT_YEAR_OF_CALENDAR = calendar.get(Calendar.YEAR);
         month_in_foreground = month - 1;
 
-        CalendarGridAdapter.prev_month_data = new ArrayList<Day>();
-        CalendarGridAdapter.current_month_data = new ArrayList<Day>();
-        CalendarGridAdapter.coming_month_data = new ArrayList<Day>();
+        CalendarGridAdapter.prev_month_data = new ArrayList<Slot>();
+        CalendarGridAdapter.current_month_data = new ArrayList<Slot>();
+        CalendarGridAdapter.coming_month_data = new ArrayList<Slot>();
         CalendarGridAdapter.prev_month_data = prev_month_data;
         CalendarGridAdapter.current_month_data = current_month_data;
         CalendarGridAdapter.coming_month_data = coming_month_data;
@@ -122,7 +123,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         * This constructor is called from MyScheduleFragment
         *
         * */
-    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Day> prev_month_data, ArrayList<Day> current_month_data, ArrayList<Day> coming_month_data, String mentor_id, String availability_yn, String charges, ArrayList<String> arraylist_subcategory, String connection_status) {
+    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Slot> prev_month_data, ArrayList<Slot> current_month_data, ArrayList<Slot> coming_month_data, String mentor_id, String availability_yn, String charges, ArrayList<String> arraylist_subcategory, String connection_status) {
         super();
         this.context = context;
         weekdays = context.getResources().getStringArray(R.array.week_days);
@@ -144,9 +145,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         CURRENT_YEAR_OF_CALENDAR = calendar.get(Calendar.YEAR);
         month_in_foreground = month - 1;
 
-        CalendarGridAdapter.prev_month_data = new ArrayList<Day>();
-        CalendarGridAdapter.current_month_data = new ArrayList<Day>();
-        CalendarGridAdapter.coming_month_data = new ArrayList<Day>();
+        CalendarGridAdapter.prev_month_data = new ArrayList<Slot>();
+        CalendarGridAdapter.current_month_data = new ArrayList<Slot>();
+        CalendarGridAdapter.coming_month_data = new ArrayList<Slot>();
         CalendarGridAdapter.prev_month_data = prev_month_data;
         CalendarGridAdapter.current_month_data = current_month_data;
         CalendarGridAdapter.coming_month_data = coming_month_data;
@@ -306,6 +307,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context
@@ -337,7 +339,6 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         if (day_color[1].equals("WHITE")) {
             gridcell.setTextColor(context.getResources().getColor(R.color.purple));
             allow_schedule_population = true;
-
         }
         if (day_color[1].equals("BLUE")) {
             gridcell.setTextColor(context.getResources().getColor(R.color.white));
