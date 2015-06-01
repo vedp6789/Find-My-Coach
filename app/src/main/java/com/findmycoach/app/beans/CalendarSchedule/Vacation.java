@@ -7,15 +7,22 @@ import android.os.Parcelable;
  * Created by ved on 31/5/15.
  */
 public class Vacation implements Parcelable {
+    private String vacation_id;
     private String start_date;
-    private String start_time;
     private String stop_date;
-    private String stop_time;
     private String cause_of_the_vacation;
     private String [] week_days;
 
     public Vacation(){
 
+    }
+
+    public String getVacation_id() {
+        return vacation_id;
+    }
+
+    public void setVacation_id(String vacation_id) {
+        this.vacation_id = vacation_id;
     }
 
     public String getCause_of_the_vacation() {
@@ -42,13 +49,6 @@ public class Vacation implements Parcelable {
         this.start_date = start_date;
     }
 
-    public String getStart_time() {
-        return start_time;
-    }
-
-    public void setStart_time(String start_time) {
-        this.start_time = start_time;
-    }
 
     public String getStop_date() {
         return stop_date;
@@ -58,13 +58,6 @@ public class Vacation implements Parcelable {
         this.stop_date = stop_date;
     }
 
-    public String getStop_time() {
-        return stop_time;
-    }
-
-    public void setStop_time(String stop_time) {
-        this.stop_time = stop_time;
-    }
 
     @Override
     public int describeContents() {
@@ -74,18 +67,14 @@ public class Vacation implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.start_date);
-        dest.writeString(this.start_time);
         dest.writeString(this.stop_date);
-        dest.writeString(this.stop_time);
         dest.writeString(this.cause_of_the_vacation);
         dest.writeStringArray(this.week_days);
     }
 
     public Vacation(Parcel parcel){
         this.start_date=parcel.readString();
-        this.start_time=parcel.readString();
         this.stop_date=parcel.readString();
-        this.stop_time=parcel.readString();
         this.cause_of_the_vacation=parcel.readString();
         this.week_days=parcel.createStringArray();
     }

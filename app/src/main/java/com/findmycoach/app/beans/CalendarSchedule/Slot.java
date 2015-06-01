@@ -23,8 +23,8 @@ public class Slot implements Parcelable{
     public String slot_type;
     public String slot_max_users;
     public String [] slot_week_days;
-    public List<DayEvent> events;
-    public List<DayVacation> vacations;
+    public List<Event> events;
+    public List<Vacation> vacations;
 
     public String getSlot_id() {
         return slot_id;
@@ -91,19 +91,19 @@ public class Slot implements Parcelable{
     }
 
 
-    public List<DayEvent> getEvents() {
+    public List<Event> getEvents() {
         return events;
     }
 
-    public void setEvents(List<DayEvent> events) {
+    public void setEvents(List<Event> events) {
         this.events = events;
     }
 
-    public List<DayVacation> getVacations() {
+    public List<Vacation> getVacations() {
         return vacations;
     }
 
-    public void setVacations(List<DayVacation> vacations) {
+    public void setVacations(List<Vacation> vacations) {
         this.vacations = vacations;
     }
 
