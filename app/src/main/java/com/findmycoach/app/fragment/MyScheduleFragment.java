@@ -856,12 +856,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                         event.setEvent_stop_date(event_jsonObject.getString("stop_date"));
                         event.setSlot_id(event_jsonObject.getString("slot_id"));
                         event.setSub_category_name(event_jsonObject.getString("sub_category"));
-                        JSONArray event_jsonArray_week_days=event_jsonObject.getJSONArray("weekdays");
-                        String event_week_days [] =new String[event_jsonArray_week_days.length()];
-                        for(int week_day=0; week_day < event_jsonArray_week_days.length() ; week_day++){
-                            event_week_days[week_day] = event_jsonArray_week_days.getString(week_day);
-                        }
-                        event.setWeek_days();
+
                     }
 
 

@@ -15,18 +15,10 @@ public class Event implements Parcelable{
     private String lname; /*lname when event_type is solo else not going to be used*/
     private String sub_category_name;
     private String slot_id;
-    private String [] week_days;
+
 
     public String getSlot_id() {
         return slot_id;
-    }
-
-    public String[] getWeek_days() {
-        return week_days;
-    }
-
-    public void setWeek_days(String[] week_days) {
-        this.week_days = week_days;
     }
 
     public void setSlot_id(String slot_id) {
@@ -114,7 +106,6 @@ public class Event implements Parcelable{
         dest.writeString(this.slot_id);
         dest.writeString(this.sub_category_name);
         dest.writeString(this.event_total_mentee);
-        dest.writeStringArray(this.week_days);
         dest.writeString(this.fname);
         dest.writeString(this.lname);
 
@@ -133,7 +124,6 @@ public class Event implements Parcelable{
         this.slot_id=source.readString();
         this.sub_category_name=source.readString();
         this.event_total_mentee=source.readString();
-        this.week_days=source.createStringArray();
         this.fname=source.readString();
         this.lname=source.readString();
 

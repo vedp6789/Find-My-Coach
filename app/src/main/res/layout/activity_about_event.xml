@@ -97,7 +97,7 @@
         android:hint="@string/location"
         android:textColor="#000000"
         android:visibility="gone"
-        ></TextView>
+        />
     <TextView
         android:id="@+id/tv_address_val"
         android:layout_below="@id/tv_address"
