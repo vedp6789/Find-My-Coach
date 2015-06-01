@@ -70,9 +70,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     private static final String TAG = "FMC";
     ProgressDialog progressDialog;
     private int days_in_new_prev_month, days_in_new_next_month;
-    public ArrayList<DaySlot> previousMonthArrayList = null;
-    public ArrayList<DaySlot> currentMonthArrayList = null;
-    public ArrayList<DaySlot> comingMonthArrayList = null;
+    public ArrayList<Slot> previousMonthArrayList = null;
+    public ArrayList<Slot> currentMonthArrayList = null;
+    public ArrayList<Slot> comingMonthArrayList = null;
     public String calendar_by_location = null;
     public boolean cb_calendar_by_location_is_checked = false, b_three_months_data;
     private int NEW_SLT = 0, VAC_SCH = 1, RESULT_OK = 500;
@@ -145,9 +145,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     public void getCalendarDetailsForMentee() {
         /* Array list of 3 months previous, current and coming , These points Day class object for day details like class schedule*/
-        previousMonthArrayList = new ArrayList<DaySlot>();
-        currentMonthArrayList = new ArrayList<DaySlot>();
-        comingMonthArrayList = new ArrayList<DaySlot>();
+        previousMonthArrayList = new ArrayList<Slot>();
+        currentMonthArrayList = new ArrayList<Slot>();
+        comingMonthArrayList = new ArrayList<Slot>();
 
         if (month_from_dialog == 0 && year_from_dialog == 0) {
             if (populate_calendar_from_adapter) {
@@ -290,9 +290,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     public void getCalendarDetailsAPICall() {
 
-        previousMonthArrayList = new ArrayList<DaySlot>();
-        currentMonthArrayList = new ArrayList<DaySlot>();
-        comingMonthArrayList = new ArrayList<DaySlot>();
+        previousMonthArrayList = new ArrayList<Slot>();
+        currentMonthArrayList = new ArrayList<Slot>();
+        comingMonthArrayList = new ArrayList<Slot>();
 
 
         if (month_from_dialog == 0 && year_from_dialog == 0) {
@@ -822,15 +822,15 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 JSONObject jsonObject = new JSONObject((String) object);
                 JSONArray jsonArray_data = jsonObject.getJSONArray("slots");
 
-                List<Slot> slots=new ArrayList<Slot>();
+                List<Slot> slots = new ArrayList<Slot>();
 
 
-                for(int json_Array_data_index=0; json_Array_data_index < jsonArray_data.length() ; json_Array_data_index++){
-                    Slot slot=new Slot();
-                    List<Event> events=new ArrayList<Event>();
-                    List<Vacation> vacations=new ArrayList<Vacation>();
+                for (int json_Array_data_index = 0; json_Array_data_index < jsonArray_data.length(); json_Array_data_index++) {
+                    Slot slot = new Slot();
+                    List<Event> events = new ArrayList<Event>();
+                    List<Vacation> vacations = new ArrayList<Vacation>();
 
-                    JSONObject slot_jsonObject=jsonArray_data.getJSONObject(json_Array_data_index);
+                    JSONObject slot_jsonObject = jsonArray_data.getJSONObject(json_Array_data_index);
                     slot.setSlot_id(slot_jsonObject.getString("slot_id"));
                     slot.setSlot_start_time(slot_jsonObject.getString("start_time"));
                     slot.setSlot_stop_time(slot_jsonObject.getString("stop_time"));
@@ -838,37 +838,51 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     slot.setSlot_stop_date(slot_jsonObject.getString("stop_date"));
                     slot.setSlot_type(slot_jsonObject.getString("slot_type"));
                     slot.setSlot_max_users(slot_jsonObject.getString("max_users"));
-                    JSONArray jsonArray_week_days=slot_jsonObject.getJSONArray("weekdays");
-                    String week_days [] =new String[jsonArray_week_days.length()];
-                    for(int week_day=0; week_day < jsonArray_week_days.length() ; week_day++){
+                    JSONArray jsonArray_week_days = slot_jsonObject.getJSONArray("weekdays");
+                    String week_days[] = new String[jsonArray_week_days.length()];
+                    for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
                         week_days[week_day] = jsonArray_week_days.getString(week_day);
                     }
                     slot.setSlot_week_days(week_days);
 
-                    JSONArray event_jsonArray=slot_jsonObject.getJSONArray("events");
-                    JSONArray vacation_jsonArray= slot_jsonObject.getJSONArray("vacations");
+                    JSONArray event_jsonArray = slot_jsonObject.getJSONArray("events");
+                    JSONArray vacation_jsonArray = slot_jsonObject.getJSONArray("vacations");
 
-                    for(int event_jsonArray_index=0 ; event_jsonArray_index < event_jsonArray.length() ; event_jsonArray_index++){
-                        Event event=new Event();
-                        JSONObject event_jsonObject=event_jsonArray.getJSONObject(event_jsonArray_index);
+                    for (int event_jsonArray_index = 0; event_jsonArray_index < event_jsonArray.length(); event_jsonArray_index++) {
+                        Event event = new Event();
+                        JSONObject event_jsonObject = event_jsonArray.getJSONObject(event_jsonArray_index);
                         event.setEvent_id(event_jsonObject.getString("event_id"));
                         event.setEvent_start_date(event_jsonObject.getString("start_date"));
                         event.setEvent_stop_date(event_jsonObject.getString("stop_date"));
                         event.setSlot_id(event_jsonObject.getString("slot_id"));
                         event.setSub_category_name(event_jsonObject.getString("sub_category"));
-                        JSONArray event_jsonArray_week_days=event_jsonObject.getJSONArray("weekdays");
-                        String event_week_days [] =new String[event_jsonArray_week_days.length()];
-                        for(int week_day=0; week_day < event_jsonArray_week_days.length() ; week_day++){
-                            event_week_days[week_day] = event_jsonArray_week_days.getString(week_day);
-                        }
-                        event.setWeek_days();
+                        events.add(event);
+
+
                     }
+
+                    slot.setEvents(events);
+
+                    for (int vacation_jsonArray_index = 0; vacation_jsonArray_index < vacation_jsonArray.length(); vacation_jsonArray_index++) {
+                        Vacation vacation = new Vacation();
+                        JSONObject vacation_jsonObject = vacation_jsonArray.getJSONObject(vacation_jsonArray_index);
+                        vacation.setVacation_id(vacation_jsonObject.getString("vacation_id"));
+                        vacation.setStart_date(vacation_jsonObject.getString("start_date"));
+                        vacation.setStop_date(vacation_jsonObject.getString("stop_date"));
+                        vacation.setCause_of_the_vacation(vacation_jsonObject.getString("cause_of_the_vacation"));
+                        JSONArray vacation_weekdays = vacation_jsonObject.getJSONArray("weekdays");
+                        String vacation_weekdays_array[] = new String[vacation_weekdays.length()];
+                        for (int week_day = 0; week_day < vacation_weekdays.length(); week_day++) {
+                            vacation_weekdays_array[week_day] = vacation_weekdays.getString(week_day);   /* week_day is used to pass index */
+                        }
+                        vacation.setWeek_days(vacation_weekdays_array);
+                        vacations.add(vacation);
+                    }
+
+                    slot.setVacations(vacations);
 
 
                 }
-
-
-
 
 
                 for (int i = 0; i < days_in_prev_month; i++) {
@@ -879,9 +893,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     List<DayEvent> dayEvents = new ArrayList<DayEvent>();
                     JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
                     List<DaySlot> daySlots = new ArrayList<DaySlot>();
-                   //Log.d(TAG,"day object for prev month: "+unique_day.toString());
-                    JSONArray jsonArray_of_vacation=unique_day.getJSONArray("exceptions");
-                    List<DayVacation> dayVacations =new ArrayList<DayVacation>();
+                    //Log.d(TAG,"day object for prev month: "+unique_day.toString());
+                    JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
+                    List<DayVacation> dayVacations = new ArrayList<DayVacation>();
 
                     if (jsonArray_of_slots.length() > 0) {
                         for (int s = 0; s < jsonArray_of_slots.length(); s++) {
@@ -965,7 +979,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
                     List<DaySlot> daySlots = new ArrayList<DaySlot>();
 
-                    Log.d(TAG,"day object for  current month: "+unique_day.toString());
+                    Log.d(TAG, "day object for  current month: " + unique_day.toString());
                     JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
                     List<DayVacation> dayVacations = new ArrayList<DayVacation>();
 
