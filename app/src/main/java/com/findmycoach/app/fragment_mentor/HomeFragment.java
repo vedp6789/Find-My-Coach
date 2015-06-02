@@ -56,15 +56,15 @@ public class HomeFragment extends Fragment implements Callback {
     public void onCreate(Bundle savedInstanceState) {
 
         try {
-            Log.e("SHEKHAR", tag+" before");
+            Log.e(TAG, tag+" before");
             tag = getArguments().getString("OpenTab");
-            Log.e("SHEKHAR", tag+" after");
+            Log.e(TAG, tag+" after");
         }catch (Exception ignored){}
 
         super.onCreate(savedInstanceState);
         Log.d("FMC", "Inside mentor home fragment");
         mentorNotifications = new MentorNotifications();
-        mentorNotificationTabsPagerAdapter = new MentorNotificationTabsPagerAdapter(getActivity().getSupportFragmentManager(), mentorNotifications);
+        mentorNotificationTabsPagerAdapter = new MentorNotificationTabsPagerAdapter(getActivity().getSupportFragmentManager(), mentorNotifications, getActivity());
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getActivity().getResources().getString(R.string.please_wait));
 
@@ -197,7 +197,7 @@ public class HomeFragment extends Fragment implements Callback {
                     mentorNotifications.setList_of_schedule_request(scheduleRequests);
                     Log.d(TAG, "update mentor notification");
 
-                    mentorNotificationTabsPagerAdapter = new MentorNotificationTabsPagerAdapter(getActivity().getSupportFragmentManager(), mentorNotifications);
+                    mentorNotificationTabsPagerAdapter = new MentorNotificationTabsPagerAdapter(getActivity().getSupportFragmentManager(), mentorNotifications, getActivity());
                     notifications_on_viewpager.setAdapter(mentorNotificationTabsPagerAdapter);
 
                     pagerSlidingTabStrip.setViewPager(notifications_on_viewpager);

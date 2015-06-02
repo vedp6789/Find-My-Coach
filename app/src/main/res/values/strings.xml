@@ -744,6 +744,11 @@
 
     <!-- Prompting -->
 
+    <string-array name="pager_titles">
+        <item>Connections</item>
+        <item>Schedules</item>
+    </string-array>
+
     <!-- String s related to Actions -->
     <string name="action_sign_in">Login</string>
     <string name="action_sign_in_short">Sign in</string>
