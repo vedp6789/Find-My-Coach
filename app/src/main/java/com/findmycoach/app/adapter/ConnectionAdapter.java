@@ -151,9 +151,9 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
                 nameTV.setText(singleConnection.getInviteeName());
 
                 if(status.equals("accepted")){
-                    connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_menu_close_clear_cancel));
+                    connectionButton.setImageDrawable(context.getResources().getDrawable(R.drawable.disconnect));
                 }else if(status.equals("pending")){
-                connectionButton.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_notification_clear_all));
+                connectionButton.setImageDrawable(context.getResources().getDrawable(R.drawable.pending));
                 }else{
                     connectionButton.setVisibility(View.GONE);
                 }

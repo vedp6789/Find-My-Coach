@@ -232,6 +232,13 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
     }
 
     private void applyAction() {
+        profileDOB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDate(profileDOB);
+            }
+        });
+
         profileAddress1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

@@ -11,12 +11,13 @@
         android:layout_width="match_parent"
         app:pstsIndicatorColor="@color/purple"
         app:pstsDividerColor="@color/purple"
+        app:pstsIndicatorHeight="@dimen/days_margin"
         android:layout_height="@dimen/sliding_tab_height" />
 
 
     <com.findmycoach.app.util.CustomViewPager xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/vp_mentor_notifications"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="@dimen/days_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/mentor_notification_tab" />

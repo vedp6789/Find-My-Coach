@@ -46,7 +46,7 @@
         android:stepSize="0.3" />
 
     <ImageView
-        android:padding="3dp"
+        android:padding="@dimen/days_margin"
         android:id="@+id/connect_mentor"
         android:layout_width="@dimen/connection_button"
         android:layout_height="@dimen/connection_button"

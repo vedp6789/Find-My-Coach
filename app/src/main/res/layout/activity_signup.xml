@@ -8,65 +8,68 @@
     tools:context="com.findmycoach.app.activity.SignUpActivity">
 
     <ImageView
+        android:id="@+id/backButton"
         android:layout_width="@dimen/action_bar_height"
         android:layout_height="@dimen/action_bar_height"
-        android:src="@drawable/back"
         android:layout_marginTop="@dimen/back_margin"
         android:padding="@dimen/textView_padding_margin"
-        android:id="@+id/backButton" />
+        android:src="@drawable/back" />
 
-
-    <RelativeLayout
-        android:layout_below="@+id/backButton"
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin">
-
-        <LinearLayout
-            android:id="@+id/heading"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="16dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="@string/action_register"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:textSize="@dimen/header" />
-
-            <TextView
-                android:id="@+id/action_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:clickable="true"
-                android:drawableLeft="@drawable/login"
-                android:drawablePadding="6dp"
-                android:gravity="center"
-                android:padding="4dp"
-                android:text="@string/action_sign_in"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-
-        </LinearLayout>
+        android:layout_below="@+id/backButton"
+        android:layout_marginBottom="@dimen/back_margin"
+        android:scrollbars="vertical">
 
 
-        <ScrollView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:layout_below="@+id/heading"
-            android:id="@+id/scrollView">
+            android:layout_below="@+id/backButton"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
 
             <LinearLayout
+                android:id="@+id/heading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/action_register"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/header"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/action_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/list_view_image_height"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:clickable="true"
+                    android:drawableLeft="@drawable/login"
+                    android:drawablePadding="@dimen/days_margin"
+                    android:gravity="center"
+                    android:padding="@dimen/days_margin"
+                    android:text="@string/action_sign_in"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/profile_details" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_below="@+id/heading"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -79,56 +82,55 @@
                     android:orientation="vertical">
 
                     <RadioGroup
-                        android:gravity="center"
-                        android:layout_marginTop="@dimen/back_margin"
                         android:id="@+id/radio_group_user_signup"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"
                         android:minHeight="@dimen/abc_action_bar_stacked_max_height"
-                        android:layout_gravity="center_horizontal">
+                        android:orientation="horizontal">
 
                         <RadioButton
                             android:id="@+id/radio_button_mentor_signup"
-                            android:button="@drawable/custom_check_box"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
+                            android:layout_weight="1"
+                            android:button="@drawable/custom_check_box"
                             android:paddingLeft="@dimen/radio_button_padding"
                             android:text="@string/mentor"
-                            android:layout_weight="1" />
+                            android:textColor="@color/white" />
 
                         <RadioButton
                             android:id="@+id/radio_button_mentee_signup"
-                            android:button="@drawable/custom_check_box"
                             android:layout_width="0dp"
-                            android:textColor="@color/white"
-                            android:paddingLeft="@dimen/radio_button_padding"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/custom_check_box"
+                            android:paddingLeft="@dimen/radio_button_padding"
                             android:text="@string/mentee"
-                            android:layout_weight="1" />
+                            android:textColor="@color/white" />
 
                     </RadioGroup>
 
                     <EditText
                         android:id="@+id/input_first_name"
+                        style="@style/EditTextCustomHolo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textCapSentences"
-                        style="@style/EditTextCustomHolo"
-                        android:minHeight="@dimen/abc_action_bar_stacked_max_height"
                         android:hint="@string/prompt_first_name"
+                        android:inputType="textCapSentences"
+                        android:minHeight="@dimen/abc_action_bar_stacked_max_height"
                         android:padding="4dp"
                         android:singleLine="true" />
 
                     <EditText
                         android:id="@+id/input_last_name"
+                        style="@style/EditTextCustomHolo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="@string/prompt_last_name"
                         android:inputType="textCapSentences"
                         android:minHeight="@dimen/abc_action_bar_stacked_max_height"
-                        style="@style/EditTextCustomHolo"
-                        android:hint="@string/prompt_last_name"
                         android:padding="4dp"
                         android:singleLine="true" />
 
@@ -140,59 +142,59 @@
 
                         <TextView
                             android:id="@+id/countryCodeTV"
+                            style="@style/EditTextCustomHolo"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="3"
-                            android:minHeight="@dimen/abc_action_bar_stacked_max_height"
-                            style="@style/EditTextCustomHolo"
                             android:gravity="center"
-                            android:textColor="@color/purple_light"
-                            android:padding="4dp" />
+                            android:minHeight="@dimen/abc_action_bar_stacked_max_height"
+                            android:padding="4dp"
+                            android:textColor="@color/purple_light" />
 
                         <EditText
                             android:id="@+id/input_phone"
+                            style="@style/EditTextCustomHolo"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
-                            android:minHeight="@dimen/abc_action_bar_stacked_max_height"
                             android:layout_weight="1"
-                            style="@style/EditTextCustomHolo"
                             android:hint="@string/prompt_phone"
                             android:inputType="number"
+                            android:minHeight="@dimen/abc_action_bar_stacked_max_height"
                             android:padding="4dp"
                             android:singleLine="true" />
                     </LinearLayout>
 
                     <EditText
                         android:id="@+id/input_email"
+                        style="@style/EditTextCustomHolo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="@dimen/abc_action_bar_stacked_max_height"
-                        style="@style/EditTextCustomHolo"
                         android:hint="@string/prompt_email_id"
                         android:inputType="textEmailAddress"
+                        android:minHeight="@dimen/abc_action_bar_stacked_max_height"
                         android:padding="4dp"
                         android:singleLine="true" />
 
                     <EditText
                         android:id="@+id/input_password"
-                        android:layout_width="match_parent"
-                        android:minHeight="@dimen/abc_action_bar_stacked_max_height"
-                        android:layout_height="wrap_content"
                         style="@style/EditTextCustomHolo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:hint="@string/prompt_password"
                         android:inputType="textPassword"
+                        android:minHeight="@dimen/abc_action_bar_stacked_max_height"
                         android:padding="4dp"
                         android:singleLine="true" />
 
                     <EditText
                         android:id="@+id/input_confirm_password"
+                        style="@style/EditTextCustomHolo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="@dimen/abc_action_bar_stacked_max_height"
-                        style="@style/EditTextCustomHolo"
                         android:hint="@string/prompt_confirm_password"
                         android:inputType="textPassword"
+                        android:minHeight="@dimen/abc_action_bar_stacked_max_height"
                         android:padding="4dp"
                         android:singleLine="true" />
 
@@ -200,19 +202,19 @@
 
 
                 <Button
-                    android:layout_marginTop="@dimen/back_margin"
                     android:id="@+id/button_signup"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_button_height"
+                    android:layout_marginTop="@dimen/back_margin"
                     android:background="@drawable/custom_button_click"
-                    android:textColor="@color/custom_button_text_color_click"
                     android:text="@string/action_sign_up"
                     android:textAllCaps="false"
+                    android:textColor="@color/custom_button_text_color_click"
                     android:textStyle="bold" />
             </LinearLayout>
 
-        </ScrollView>
-
         </RelativeLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

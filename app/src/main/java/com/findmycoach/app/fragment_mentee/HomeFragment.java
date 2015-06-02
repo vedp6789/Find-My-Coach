@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,11 +156,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
         subCategoryIds = new String[data.size()];
 
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
 
         if (widthSubCategoryButton == 0)
-            widthSubCategoryButton = searchButton.getWidth() / (data.size() > 0 ? data.size() : 1);
+            widthSubCategoryButton = (size.x - (int) getResources().getDimension(R.dimen.category_button_padding)) / (data.size() > 0 ? data.size() : 1);
 
-        ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(widthSubCategoryButton, 90);
+
+        ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(widthSubCategoryButton, (int) getResources().getDimension(R.dimen.login_button_height));
 
         final HashMap<String, String[]> subCatNameMap = new HashMap<>();
         final HashMap<String, String[]> subCatIdMap = new HashMap<>();
@@ -379,7 +385,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 int minute = c.get(Calendar.MINUTE);
                 int hour = hourOfDay % 12;
                 fromTimingInput.setText(hour++ + ":" + minute + (hourOfDay > 11 ? " pm" : " am"));
+                fromTimingInput.setTag(fromTimingInput.getId(), hourOfDay++ + ":" + minute);
                 toTimingInput.setText(hour + ":" + minute + (hourOfDay > 11 ? " pm" : " am"));
+                toTimingInput.setTag(toTimingInput.getId(), hourOfDay + ":" + minute);
 
                 getSelectedButtons();
             }
@@ -549,18 +557,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         requestParams.add("subcategory_id", subCategoryTextView.getTag() + "");
 
         if (timeBarrier) {
-            String fromTiming = fromTimingInput.getText().toString();
-            String toTiming = toTimingInput.getText().toString();
+            String fromTiming = (String) fromTimingInput.getTag(fromTimingInput.getId());
+            String toTiming = (String) toTimingInput.getTag(toTimingInput.getId());
             requestParams.add("timing_from", fromTiming);
             requestParams.add("timing_to", toTiming);
 
-            String week = (daysButton.get(0).getTag(daysButton.get(0).getId())) + "," +
-                    (daysButton.get(1).getTag(daysButton.get(1).getId())) + "," +
-                    (daysButton.get(2).getTag(daysButton.get(2).getId())) + "," +
-                    (daysButton.get(3).getTag(daysButton.get(3).getId())) + "," +
-                    (daysButton.get(4).getTag(daysButton.get(4).getId())) + "," +
-                    (daysButton.get(5).getTag(daysButton.get(5).getId())) + "," +
-                    (daysButton.get(6).getTag(daysButton.get(6).getId()));
+            String week = "";
+
+            String[] daysArray = new String[]{"Su", "M", "T", "W", "Th", "F", "S"};
+
+            for (int x = 0; x < 7; x++) {
+                Button b = daysButton.get(x);
+                String val = b.getTag(b.getId()) + "";
+                if (val.trim().equals("1")) {
+                    week = week + "," + daysArray[x];
+                }
+            }
+            try {
+                week = week.replaceFirst(",", "");
+            } catch (Exception ignored) {
+            }
             requestParams.add("weeks", week);
             Log.d(TAG, "Selected weekdays : " + week + ", from time : " + fromTiming + ", to time : " + toTiming);
         }

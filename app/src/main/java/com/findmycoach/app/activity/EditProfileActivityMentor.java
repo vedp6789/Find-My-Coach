@@ -90,7 +90,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         setContentView(R.layout.activity_edit_profile_mentor);
         newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
         initialize();
-        applyActionbarProperties();
         populateUserData();
     }
 
@@ -203,12 +202,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         });
     }
 
-    private void applyActionbarProperties() {
-//        ActionBar actionbar = getActionBar();
-//        if (actionbar != null)
-//            actionbar.setDisplayHomeAsUpEnabled(true);
-    }
-
     private void initialize() {
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
         profileGender = (Spinner) findViewById(R.id.input_gender);
@@ -276,6 +269,13 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
     }
 
     private void applyAction() {
+        profileDOB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDate(profileDOB);
+            }
+        });
+
         profileAddress1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
