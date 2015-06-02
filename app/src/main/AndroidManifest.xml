@@ -69,7 +69,7 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustPan|stateVisible" />
         <activity
             android:name="com.findmycoach.app.activity.SignUpActivity"
             android:label="@string/title_activity_signup"
@@ -177,14 +177,14 @@
             android:screenOrientation="portrait" />
 
         <!-- Activities and service responsible for gathering customer consent and for future payments  -->
-        <service
-            android:name="com.paypal.android.sdk.payments.PayPalService"
-            android:exported="false" />
+        <!--<service-->
+            <!--android:name="com.paypal.android.sdk.payments.PayPalService"-->
+            <!--android:exported="false" />-->
 
-        <activity android:name="com.paypal.android.sdk.payments.LoginActivity" />
-        <activity android:name="com.paypal.android.sdk.payments.PayPalFuturePaymentActivity" />
-        <activity android:name="com.paypal.android.sdk.payments.FuturePaymentConsentActivity" />
-        <activity android:name="com.paypal.android.sdk.payments.FuturePaymentInfoActivity" />
+        <!--<activity android:name="com.paypal.android.sdk.payments.LoginActivity" />-->
+        <!--<activity android:name="com.paypal.android.sdk.payments.PayPalFuturePaymentActivity" />-->
+        <!--<activity android:name="com.paypal.android.sdk.payments.FuturePaymentConsentActivity" />-->
+        <!--<activity android:name="com.paypal.android.sdk.payments.FuturePaymentInfoActivity" />-->
 
         <!-- Activities responsible for gathering card info  -->
         <activity

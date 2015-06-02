@@ -96,7 +96,11 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
 
         nameTV.setText(user.getFirstName());
         subCategoryTV.setText(searchFor);
-        distanceTV.setText(String.format("%.2f", Double.parseDouble(user.getDistance())) + " km");
+        try{
+            distanceTV.setText(String.format("%.2f", Double.parseDouble(user.getDistance())) + " km");
+        }catch (Exception e){
+            distanceTV.setText("");
+        }
         try {
             ratingBar.setRating(Float.parseFloat(user.getRating()));
         } catch (Exception e) {

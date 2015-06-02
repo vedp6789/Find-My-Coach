@@ -2,13 +2,13 @@ package com.findmycoach.app.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -36,7 +36,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     private EditText confirmPasswordInput;
     private EditText emailInput;
     private EditText phoneNumberInput;
-    private ProgressDialog progressDialog;
+    private Dialog progressDialog;
     private RadioButton radioButton_mentee_signup, radioButton_mentor_signup;
     private int user_group = 0;
     private TextView countryCodeTV;
@@ -71,8 +71,13 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         countryCodeTV.setText(code.equals("") ? country_code[0] : code);
         countryCodeTV.setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getResources().getString(R.string.please_wait));
+        progressDialog = new Dialog(this);
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        progressDialog.setContentView(R.layout.progressbar_textview);
+        TextView msg = (TextView) progressDialog.findViewById(R.id.msg);
+        msg.setText(getResources().getString(R.string.please_wait));
+
         findViewById(R.id.action_login).setOnClickListener(this);
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {

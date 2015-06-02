@@ -3,6 +3,5 @@
 
     <!-- Default screen margins, per the Android Design guidelines. -->
 
-    <dimen name="radio_button_padding">30dp</dimen>
 
 </resources>
