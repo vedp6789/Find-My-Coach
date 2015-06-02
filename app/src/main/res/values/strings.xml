@@ -645,7 +645,7 @@
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_chat_widget">Chat widget</string>
     <string name="title_activity_signup">SignupActivity</string>
-    <string name="title_edit_profile_menu">Edit profile</string>
+    <string name="title_edit_profile_menu">Update profile</string>
     <string name="title_validate_phone">Verify phone number</string>
     <string name="title_activity_user_list">Mentors</string>
     <string name="title_mentor_details">Mentor detail</string>

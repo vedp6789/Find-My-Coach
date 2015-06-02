@@ -383,10 +383,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 int hourOfDay = c.get(Calendar.HOUR_OF_DAY);
                 int minute = c.get(Calendar.MINUTE);
                 int hour = hourOfDay % 12;
-                fromTimingInput.setText(hour++ + ":" + minute + (hourOfDay > 11 ? " pm" : " am"));
-                fromTimingInput.setTag(fromTimingInput.getId(), hourOfDay++ + ":" + minute);
-                toTimingInput.setText(hour + ":" + minute + (hourOfDay > 11 ? " pm" : " am"));
-                toTimingInput.setTag(toTimingInput.getId(), hourOfDay + ":" + minute);
+                String min = minute + "";
+                if(minute < 10)
+                    min = "0" + minute;
+                fromTimingInput.setText(hour++ + ":" + min + (hourOfDay > 11 ? " pm" : " am"));
+                fromTimingInput.setTag(fromTimingInput.getId(), hourOfDay++ + ":" + min);
+                toTimingInput.setText(hour + ":" + min + (hourOfDay > 11 ? " pm" : " am"));
+                toTimingInput.setTag(toTimingInput.getId(), hourOfDay + ":" + min);
 
                 getSelectedButtons();
             }
