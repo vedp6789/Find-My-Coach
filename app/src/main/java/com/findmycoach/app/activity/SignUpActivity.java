@@ -7,13 +7,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,10 +41,11 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     private EditText phoneNumberInput;
     private Dialog progressDialog;
     private RadioButton radioButton_mentee_signup, radioButton_mentor_signup;
-    private int user_group = 0;
+    private int user_group = 3;
     private TextView countryCodeTV;
     private String[] country_code, country_name;
     private String email, phoneNumber;
+    private ScrollView scrollView;
 
 
     @Override
@@ -67,6 +71,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         confirmPasswordInput = (EditText) findViewById(R.id.input_confirm_password);
         phoneNumberInput = (EditText) findViewById(R.id.input_phone);
         countryCodeTV = (TextView) findViewById(R.id.countryCodeTV);
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
         String code = getCountryZipCode();
         countryCodeTV.setText(code.equals("") ? country_code[0] : code);
         countryCodeTV.setOnClickListener(this);
@@ -84,6 +89,15 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        confirmPasswordInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    scrollView.fullScroll(View.FOCUS_DOWN);
+                }
+                return false;
             }
         });
     }
@@ -173,72 +187,78 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
      */
     private boolean validate(String firstName, String lastName, String phone, String email, String password, String confirmPassword, String countryCode) {
 
+        boolean isCorrect = true;
+
         if (firstName.equals("")) {
             showErrorMessage(firstNameInput, getResources().getString(R.string.error_field_required));
-            return false;
+            isCorrect = false;
         } else {
             for (int i = 0; i < firstName.length() - 1; i++) {
                 if (!Character.isLetter(firstName.charAt(i))) {
                     showErrorMessage(firstNameInput, getResources().getString(R.string.error_not_a_name));
-                    return false;
+                    isCorrect = false;
                 }
             }
         }
-        firstNameInput.setError(null);
+        if(isCorrect)
+            firstNameInput.setError(null);
 
         if (lastName.equals("")) {
             showErrorMessage(lastNameInput, getResources().getString(R.string.error_field_required));
-            return false;
+            isCorrect = false;
         } else {
             for (int i = 0; i < lastName.length() - 1; i++) {
                 if (!Character.isLetter(lastName.charAt(i))) {
                     showErrorMessage(lastNameInput, getResources().getString(R.string.error_not_a_name));
-                    return false;
+                    isCorrect = false;
                 }
             }
         }
-        lastNameInput.setError(null);
+        if(isCorrect)
+            lastNameInput.setError(null);
 
         if (countryCode.trim().equalsIgnoreCase("Select")) {
             showErrorMessage(countryCodeTV, getResources().getString(R.string.select_country_code));
-            return false;
+            isCorrect = false;
         }
 
         if (phone.equals("")) {
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_field_required));
-            return false;
+            isCorrect = false;
         } else if (phone.length() < 8) {
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_phone_number_invalid));
-            return false;
+            isCorrect = false;
         }
-        phoneNumberInput.setError(null);
+        if(isCorrect)
+            phoneNumberInput.setError(null);
 
         if (!isEmailValid(email)) {
             showErrorMessage(emailInput, getResources().getString(R.string.enter_valid_email));
-            return false;
+            isCorrect = false;
         }
-        emailInput.setError(null);
+        if(isCorrect)
+            emailInput.setError(null);
 
-        if (password.equals("")) {
-            showErrorMessage(passwordInput, getResources().getString(R.string.error_field_required));
-            return false;
-        } else if (password.length() < 5) {
+        if (password.equals("") || password.length() < 5) {
             showErrorMessage(passwordInput, getResources().getString(R.string.error_password_size));
-            return false;
+            isCorrect = false;
         }
-        passwordInput.setError(null);
+        if(isCorrect)
+            passwordInput.setError(null);
 
         if (confirmPassword.equals("")) {
             showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_required));
-            return false;
+            isCorrect = false;
         } else if (!password.equals(confirmPassword)) {
             showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_not_match));
-            return false;
+            isCorrect = false;
         }
-        confirmPasswordInput.setError(null);
+
+        if(isCorrect)
+            confirmPasswordInput.setError(null);
 
 
-        return true;
+        return isCorrect;
     }
 
     /**

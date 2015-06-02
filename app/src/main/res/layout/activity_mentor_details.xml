@@ -145,27 +145,9 @@
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_details" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/textView_padding_margin"
-                android:text="@string/prompt_accomplishment"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_heading"
-                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/profile_accomplishment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/textView_padding_margin"
-                android:gravity="center_vertical"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_details" />
-
-            <TextView
+              android:layout_marginTop="@dimen/textView_padding_margin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -181,6 +163,26 @@
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
                 android:orientation="vertical" />
+
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginTop="@dimen/textView_padding_margin"
+              android:text="@string/prompt_accomplishment"
+              android:textColor="@color/purple"
+              android:textSize="@dimen/profile_heading"
+              android:textStyle="bold" />
+
+            <TextView
+              android:id="@+id/profile_accomplishment"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginTop="@dimen/textView_padding_margin"
+              android:gravity="center_vertical"
+              android:textColor="@color/purple"
+              android:textSize="@dimen/profile_details" />
 
             <TextView
                 android:layout_width="wrap_content"

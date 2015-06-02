@@ -2,6 +2,7 @@ package com.findmycoach.app.fragment_mentee;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
@@ -57,7 +58,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private AutoCompleteTextView locationInput;
     private Category category;
     private Button searchButton;
-    private Dialog progressDialog;
+    private ProgressDialog progressDialog;
     private TextView currentLocationText;
     private TextView fromTimingInput;
     private TextView toTimingInput;
@@ -480,12 +481,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         locationLayout = (RelativeLayout) view.findViewById(R.id.current_location_layout);
         locationLayout = (RelativeLayout) view.findViewById(R.id.current_location_layout);
         timeBarrierLayout = (LinearLayout) view.findViewById(R.id.time_barrier_layout);
-        progressDialog = new Dialog(getActivity());
-        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        progressDialog.setContentView(R.layout.progressbar_textview);
-        TextView msg = (TextView) progressDialog.findViewById(R.id.msg);
-        msg.setText(getResources().getString(R.string.please_wait));
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
         timeBarrier = false;
         subCategoryLayout = (LinearLayout) fragmentView.findViewById(R.id.subCategoryLayout);
         subCategoryTextView = (TextView) fragmentView.findViewById(R.id.subCategoryTextView);

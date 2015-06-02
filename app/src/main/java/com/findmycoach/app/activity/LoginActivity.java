@@ -12,9 +12,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -161,6 +163,15 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         progressDialog.setContentView(R.layout.progressbar_textview);
         TextView msg = (TextView) progressDialog.findViewById(R.id.msg);
         msg.setText(getResources().getString(R.string.logging_in));
+
+        inputPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    logIn();
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -236,10 +247,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         if (!isEmailValid(userId)) {
             isValid = false;
             showErrorMessage(inputUserName, getResources().getString(R.string.error_invalid_email));
-        } else if (userPassword.equals("")) {
-            isValid = false;
-            showErrorMessage(inputPassword, getResources().getString(R.string.error_field_required));
-        } else if (userPassword.length() < 5) {
+        }
+        if (userPassword.equals("") || userPassword.length() < 5) {
             isValid = false;
             showErrorMessage(inputPassword, getResources().getString(R.string.error_password_size));
         }

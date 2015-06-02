@@ -279,26 +279,6 @@
                     android:singleLine="true" />
 
 
-                <TextView
-                    android:layout_marginTop="@dimen/back_margin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/prompt_accomplishment"
-                    android:textSize="@dimen/profile_heading"
-                    android:textColor="@color/purple_light"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/input_accomplishment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/EditTextCustomHoloPurple"
-                    android:hint="@string/prompt_accomplishment"
-                    android:inputType="text"
-                    android:textSize="@dimen/profile_details"
-                    android:singleLine="true" />
-
-
                 <LinearLayout
                     android:layout_marginTop="@dimen/back_margin"
                     android:layout_width="match_parent"
@@ -355,6 +335,25 @@
                         android:background="@color/purple_light" />
 
                 </LinearLayout>
+
+                <TextView
+                  android:layout_marginTop="@dimen/back_margin"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@string/prompt_accomplishment"
+                  android:textSize="@dimen/profile_heading"
+                  android:textColor="@color/purple_light"
+                  android:textStyle="bold" />
+
+                <EditText
+                  android:id="@+id/input_accomplishment"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  style="@style/EditTextCustomHoloPurple"
+                  android:hint="@string/prompt_accomplishment"
+                  android:inputType="text"
+                  android:textSize="@dimen/profile_details"
+                  android:singleLine="true" />
 
                 <RelativeLayout
                     android:layout_marginTop="@dimen/back_margin"

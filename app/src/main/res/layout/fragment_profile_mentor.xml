@@ -139,26 +139,7 @@
                 android:textSize="@dimen/profile_details" />
 
             <TextView
-                android:layout_marginTop="@dimen/textView_padding_margin"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/prompt_accomplishment"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_heading"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_marginTop="@dimen/textView_padding_margin"
-                android:layout_gravity="center"
-                android:id="@+id/profile_accomplishment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_details" />
-
-            <TextView
+               android:layout_marginTop="@dimen/textView_padding_margin"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -174,6 +155,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical" />
+
+            <TextView
+              android:layout_marginTop="@dimen/textView_padding_margin"
+              android:layout_gravity="center"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/prompt_accomplishment"
+              android:textColor="@color/purple"
+              android:textSize="@dimen/profile_heading"
+              android:textStyle="bold" />
+
+            <TextView
+              android:layout_gravity="center"
+              android:id="@+id/profile_accomplishment"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="@color/purple"
+              android:textSize="@dimen/profile_details" />
 
             <TextView
                 android:layout_marginTop="@dimen/textView_padding_margin"

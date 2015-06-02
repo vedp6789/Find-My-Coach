@@ -41,12 +41,16 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     private TextView countryCodeTV;
     private String[] country_code, country_name;
 
+    public static ValidatePhoneActivity validatePhoneActivity;
+
     private static final String TAG = "FMC";
     private String from=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        validatePhoneActivity = this;
 
         from=getIntent().getStringExtra("from");
         /** Getting user group of user, logout and close if user group not present **/
@@ -59,6 +63,21 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         }
         setContentView(R.layout.activity_validate_phone);
         initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        validatePhoneActivity = null;
+    }
+
+    public void getOtpFromMsg(String OTP){
+        if(OTP.length() == 6 && verificationCode != null){
+            verificationCode.setText(OTP);
+            try{
+                sendVerificationCode();
+            }catch (Exception ignored){}
+        }
     }
 
     /**

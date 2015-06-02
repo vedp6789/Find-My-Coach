@@ -88,7 +88,8 @@
                         android:layout_gravity="center_horizontal"
                         android:gravity="center"
                         android:minHeight="@dimen/abc_action_bar_stacked_max_height"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:checkedButton="@+id/radio_button_mentor_signup">
 
                         <RadioButton
                             android:id="@+id/radio_button_mentor_signup"
@@ -118,7 +119,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_first_name"
-                        android:inputType="textCapSentences"
+                        android:inputType="textCapSentences|textNoSuggestions"
                         android:minHeight="@dimen/abc_action_bar_stacked_max_height"
                         android:padding="4dp"
                         android:singleLine="true" />
@@ -129,7 +130,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_last_name"
-                        android:inputType="textCapSentences"
+                        android:inputType="textCapSentences|textNoSuggestions"
                         android:minHeight="@dimen/abc_action_bar_stacked_max_height"
                         android:padding="4dp"
                         android:singleLine="true" />
