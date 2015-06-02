@@ -90,6 +90,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     public ArrayList<Slot> previousMonthArrayList = null;
     public ArrayList<Slot> currentMonthArrayList = null;
     public ArrayList<Slot> comingMonthArrayList = null;
+    public ArrayList<Vacation> previousMonthNonCoincidingVacation=null;
+    public ArrayList<Vacation> currentMonthNonCoincidingVacation=null;
+    public ArrayList<Vacation> comingMonthNonCoincidingVacation=null;
     public boolean b_three_months_data;
     public static int month_from_dialog, year_from_dialog;
     private String charges;
@@ -930,7 +933,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                     event.setEvent_id(event_jsonObject.getString("event_id"));
                     event.setEvent_start_date(event_jsonObject.getString("start_date"));
                     event.setEvent_stop_date(event_jsonObject.getString("stop_date"));
-                    event.setSlot_id(event_jsonObject.getString("slot_id"));
                     event.setSub_category_name(event_jsonObject.getString("sub_category"));
                     events.add(event);
 

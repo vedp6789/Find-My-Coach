@@ -14,16 +14,8 @@ public class Event implements Parcelable{
     private String fname; /*fname when event_type is solo else not going to be used*/
     private String lname; /*lname when event_type is solo else not going to be used*/
     private String sub_category_name;
-    private String slot_id;
 
 
-    public String getSlot_id() {
-        return slot_id;
-    }
-
-    public void setSlot_id(String slot_id) {
-        this.slot_id = slot_id;
-    }
 
     public Event() {
 
@@ -103,7 +95,6 @@ public class Event implements Parcelable{
         dest.writeString(this.event_id);
         dest.writeString(this.event_start_date);
         dest.writeString(this.event_stop_date);
-        dest.writeString(this.slot_id);
         dest.writeString(this.sub_category_name);
         dest.writeString(this.event_total_mentee);
         dest.writeString(this.fname);
@@ -121,7 +112,6 @@ public class Event implements Parcelable{
         this.event_id=source.readString();
         this.event_start_date=source.readString();
         this.event_stop_date=source.readString();
-        this.slot_id=source.readString();
         this.sub_category_name=source.readString();
         this.event_total_mentee=source.readString();
         this.fname=source.readString();
