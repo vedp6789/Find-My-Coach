@@ -12,9 +12,27 @@ public class Vacation implements Parcelable {
     private String stop_date;
     private String cause_of_the_vacation;
     private String [] week_days;
+    private String start_time;
+    private String stop_time;
 
     public Vacation(){
 
+    }
+
+    public String getStart_time() {
+        return start_time;
+    }
+
+    public void setStart_time(String start_time) {
+        this.start_time = start_time;
+    }
+
+    public String getStop_time() {
+        return stop_time;
+    }
+
+    public void setStop_time(String stop_time) {
+        this.stop_time = stop_time;
     }
 
     public String getVacation_id() {
@@ -70,6 +88,8 @@ public class Vacation implements Parcelable {
         dest.writeString(this.stop_date);
         dest.writeString(this.cause_of_the_vacation);
         dest.writeStringArray(this.week_days);
+        dest.writeString(this.start_time);
+        dest.writeString(this.stop_time);
     }
 
     public Vacation(Parcel parcel){
@@ -77,6 +97,8 @@ public class Vacation implements Parcelable {
         this.stop_date=parcel.readString();
         this.cause_of_the_vacation=parcel.readString();
         this.week_days=parcel.createStringArray();
+        this.start_time=parcel.readString();
+        this.stop_time=parcel.readString();
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

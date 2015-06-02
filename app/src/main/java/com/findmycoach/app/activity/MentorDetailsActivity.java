@@ -32,6 +32,9 @@ import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
 import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
+import com.findmycoach.app.beans.CalendarSchedule.Event;
+import com.findmycoach.app.beans.CalendarSchedule.Slot;
+import com.findmycoach.app.beans.CalendarSchedule.Vacation;
 import com.findmycoach.app.beans.mentor.Data;
 import com.findmycoach.app.beans.mentor.Response;
 import com.findmycoach.app.fragment.CustomDatePickerFragment;
@@ -84,9 +87,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private int days_in_current_month, days_in_prev_month, days_in_next_month;
     ProgressDialog progressDialog;
     private int days_in_new_prev_month, days_in_new_next_month;
-    public ArrayList<Day> previousMonthArrayList = null;
-    public ArrayList<Day> currentMonthArrayList = null;
-    public ArrayList<Day> comingMonthArrayList = null;
+    public ArrayList<Slot> previousMonthArrayList = null;
+    public ArrayList<Slot> currentMonthArrayList = null;
+    public ArrayList<Slot> comingMonthArrayList = null;
     public boolean b_three_months_data;
     public static int month_from_dialog, year_from_dialog;
     private String charges;
@@ -94,6 +97,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
     private static final String TAG = "FMC";
     private ArrayList<String> array_list_subCategory = null;
+    private String previous_month_start_date;/* this will get initialized when api is requested for three months (previous, current, coming)*/
+    private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,9 +165,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
     public void getCalendarDetailsAPICall() {
         Log.d(TAG, "state 1");
-        previousMonthArrayList = new ArrayList<Day>();
-        currentMonthArrayList = new ArrayList<Day>();
-        comingMonthArrayList = new ArrayList<Day>();
+        previousMonthArrayList = new ArrayList<Slot>();
+        currentMonthArrayList = new ArrayList<Slot>();
+        comingMonthArrayList = new ArrayList<Slot>();
 
 
         if (month_from_dialog == 0 && year_from_dialog == 0) {
@@ -218,6 +224,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
         //Toast.makeText(getActivity(), getResources().getString(R.string.start_date1) + String.valueOf(stringBuilder), Toast.LENGTH_SHORT).show();
         requestParams.add("start_date", String.valueOf(stringBuilder));
+        previous_month_start_date = String.valueOf(stringBuilder);
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
         Log.d(TAG, "state 2");
 
@@ -692,6 +699,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             case 37:
                 Log.d(TAG, " API 37 success");
                 Toast.makeText(MentorDetailsActivity.this, (String) object, Toast.LENGTH_SHORT).show();
+                updateArrayListForThreeMonths();
                 updateCalendarOnFailure();
                 break;
             case 38:
@@ -713,18 +721,33 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         //Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
     }
 
+    private void updateArrayListForThreeMonths() {
+        Slot  slot = new Slot();
+        slot.setSlot_created_on_network_success("false");
+        previousMonthArrayList.add(slot);
+        currentMonthArrayList.add(slot);
+        comingMonthArrayList.add(slot);
+
+    }
+
     public void updateArrayListsForNextMonth() {
         previousMonthArrayList = currentMonthArrayList;
         currentMonthArrayList = comingMonthArrayList;
         comingMonthArrayList = null;
-        comingMonthArrayList = new ArrayList<Day>();
+        comingMonthArrayList = new ArrayList<Slot>();
+        Slot  slot = new Slot();
+        slot.setSlot_created_on_network_success("false");
+        comingMonthArrayList.add(slot);
     }
 
     public void updateArrayListsForPreviousMonth() {
         comingMonthArrayList = currentMonthArrayList;
         currentMonthArrayList = previousMonthArrayList;
         previousMonthArrayList = null;
-        previousMonthArrayList = new ArrayList<Day>();
+        previousMonthArrayList = new ArrayList<Slot>();
+        Slot  slot = new Slot();
+        slot.setSlot_created_on_network_success("false");
+        previousMonthArrayList.add(slot);
     }
 
 
@@ -750,302 +773,46 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         try {
 
             JSONObject jsonObject = new JSONObject((String) object);
-            JSONArray jsonArray_data = jsonObject.getJSONArray("data");
+            JSONArray jsonArray_data = jsonObject.getJSONArray("slots");
             Log.d(TAG, "json array size : " + jsonArray_data.length());
             Log.d(TAG, "Object got for three months data " + jsonObject.toString());
 
-            for (int i = 0; i < days_in_prev_month; i++) {
-                Day day1 = new Day();
-                JSONObject unique_day = jsonArray_data.getJSONObject(i);
-                day1.setDate(unique_day.getString("date"));
-                JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
-                List<DayEvent> dayEvents = new ArrayList<DayEvent>();
-                JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
-                List<DaySlot> daySlots = new ArrayList<DaySlot>();
-                JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
-                List<DayVacation> dayVacations = new ArrayList<DayVacation>();
+            List<Slot> slots = new ArrayList<Slot>();
 
-                if (jsonArray_of_slots.length() > 0) {
-                    for (int s = 0; s < jsonArray_of_slots.length(); s++) {
-                        JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
-                        DaySlot daySlot = new DaySlot();
-                        daySlot.setSlot_start_date(day_slot.getString("start_date"));
-                        daySlot.setSlot_stop_date(day_slot.getString("stop_date"));
-                        daySlot.setSlot_start_time(day_slot.getString("start_time"));
-                        daySlot.setSlot_stop_time(day_slot.getString("stop_time"));
-                        daySlot.setSlot_type(day_slot.getString("slot_type"));
-                        daySlot.setSlot_max_users(day_slot.getString("max_users"));
+            parseSlots(slots, jsonArray_data, 3);
 
-                        JSONArray week_days_jsonArray = day_slot.getJSONArray("dates");
-                        String[] dates = new String[week_days_jsonArray.length()];
-                        for (int week_day = 0; week_day < week_days_jsonArray.length(); week_day++) {
-                            dates[week_day] = week_days_jsonArray.getString(week_day);
-                        }
-                        daySlot.setSlot_week_days(dates);
-                        daySlot.setSlot_id(day_slot.getString("id"));
+            int previous_month = Integer.parseInt(previous_month_start_date.split("-")[1]);
+            int previous_month_year = Integer.parseInt(previous_month_start_date.split("-")[0]);
 
-                        daySlots.add(daySlot);
-                    }
-                    day1.setDaySlots(daySlots);
+            int current_month, current_year, coming_month, coming_year;
+            if (previous_month == 11) {
+                current_month = 12;
+                current_year = previous_month_year;
+                coming_month = 1;
+                coming_year = previous_month_year;
+                ++coming_year;
+            } else {
+                if (previous_month == 12) {
+                    current_month = 1;
+                    current_year = previous_month_year;
+                    ++current_year;
+                    coming_month = 2;
+                    coming_year = current_year;
                 } else {
-                    day1.setDaySlots(daySlots);
+                    current_month = previous_month;
+                    ++current_month;
+                    current_year = previous_month_year;
+                    coming_month = current_month;
+                    ++coming_month;
+                    coming_year = previous_month_year;
                 }
-
-                if (jsonArray_of_events.length() > 0) {
-                    for (int e = 0; e < jsonArray_of_events.length(); e++) {
-
-                        JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                        DayEvent dayEvent = new DayEvent();
-                        dayEvent.setEvent_id(day_event.getString("id"));
-                        dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                        dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
-                        dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                        dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
-                        String slot_type = day_event.getString("slot_type");
-                        dayEvent.setEvent_type(slot_type);
-                        dayEvent.setEvent_total_mentee(day_event.getString("number_of_users"));
-                        if (!slot_type.equalsIgnoreCase("Group")) {
-                            dayEvent.setFname(day_event.getString("first_name"));
-                            dayEvent.setLname(day_event.getString("last_name"));
-                        }
-
-                        dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
-                        dayEvent.setSlot_id(day_event.getString("slot_id"));
-                        dayEvents.add(dayEvent);
-                    }
-                    day1.setDayEvents(dayEvents);
-                } else {
-                    day1.setDayEvents(dayEvents);
-                }
-
-                if (jsonArray_of_vacation.length() > 0) {
-                    for (int vacation = 0; vacation < jsonArray_of_vacation.length(); vacation++) {
-                        JSONObject day_vacation = jsonArray_of_vacation.getJSONObject(vacation);
-                        DayVacation dayVacation = new DayVacation();
-                        dayVacation.setStart_date(day_vacation.getString("start_date"));
-                        dayVacation.setStop_date(day_vacation.getString("stop_date"));
-                        dayVacation.setStart_time(day_vacation.getString("start_time"));
-                        dayVacation.setStop_time(day_vacation.getString("stop_time"));
-
-                        JSONArray jsonArray_week_days = day_vacation.getJSONArray("dates");
-                        String[] dates = new String[jsonArray_week_days.length()];
-                        for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
-                            dates[week_day] = jsonArray_week_days.getString(week_day);
-                        }
-                        dayVacation.setWeek_days(dates);
-                        dayVacations.add(dayVacation);
-
-
-                    }
-                    day1.setDayVacations(dayVacations);
-                } else {
-                    day1.setDayVacations(dayVacations);
-                }
-
-                previousMonthArrayList.add(day1);
             }
+            previousMonthArrayList = getSlotsForThis(slots, previous_month, previous_month_year, finalizeDaysInMonth(previous_month, previous_month_year));
+            currentMonthArrayList = getSlotsForThis(slots, current_month, current_year, finalizeDaysInMonth(current_month, current_year));
+            comingMonthArrayList = getSlotsForThis(slots, coming_month, coming_year, finalizeDaysInMonth(coming_month, coming_year));
 
 
-            for (int i = days_in_prev_month; i < days_in_prev_month + days_in_current_month; i++) {
-                Day day1 = new Day();
-                JSONObject unique_day = jsonArray_data.getJSONObject(i);
-                day1.setDate(unique_day.getString("date"));
-                JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
-                List<DayEvent> dayEvents = new ArrayList<DayEvent>();
-                JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
-                List<DaySlot> daySlots = new ArrayList<DaySlot>();
-                JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
-                List<DayVacation> dayVacations = new ArrayList<DayVacation>();
-
-                if (jsonArray_of_slots.length() > 0) {
-                    for (int s = 0; s < jsonArray_of_slots.length(); s++) {
-                        JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
-                        DaySlot daySlot = new DaySlot();
-                        daySlot.setSlot_start_date(day_slot.getString("start_date"));
-                        daySlot.setSlot_stop_date(day_slot.getString("stop_date"));
-                        daySlot.setSlot_start_time(day_slot.getString("start_time"));
-                        daySlot.setSlot_stop_time(day_slot.getString("stop_time"));
-                        daySlot.setSlot_type(day_slot.getString("slot_type"));
-                        daySlot.setSlot_max_users(day_slot.getString("max_users"));
-
-                        JSONArray week_days_jsonArray = day_slot.getJSONArray("dates");
-                        String[] dates = new String[week_days_jsonArray.length()];
-                        for (int week_day = 0; week_day < week_days_jsonArray.length(); week_day++) {
-                            dates[week_day] = week_days_jsonArray.getString(week_day);
-                        }
-                        daySlot.setSlot_week_days(dates);
-                        daySlot.setSlot_id(day_slot.getString("id"));
-
-                        daySlots.add(daySlot);
-                    }
-                    day1.setDaySlots(daySlots);
-                } else {
-                    day1.setDaySlots(daySlots);
-                }
-
-                if (jsonArray_of_events.length() > 0) {
-                    for (int e = 0; e < jsonArray_of_events.length(); e++) {
-
-                        JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                        DayEvent dayEvent = new DayEvent();
-
-                        dayEvent.setEvent_id(day_event.getString("id"));
-                        dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                        dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
-                        dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                        dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
-                        String slot_type = day_event.getString("slot_type");
-                        dayEvent.setEvent_type(slot_type);
-                        dayEvent.setEvent_total_mentee(day_event.getString("number_of_users"));
-                        if (!slot_type.equalsIgnoreCase("Group")) {
-                            dayEvent.setFname(day_event.getString("first_name"));
-                            dayEvent.setLname(day_event.getString("last_name"));
-                        }
-
-                        dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
-                        dayEvent.setSlot_id(day_event.getString("slot_id"));
-                        dayEvents.add(dayEvent);
-                    }
-                    day1.setDayEvents(dayEvents);
-                } else {
-                    day1.setDayEvents(dayEvents);
-                }
-
-                if (jsonArray_of_vacation.length() > 0) {
-                    for (int vacation = 0; vacation < jsonArray_of_vacation.length(); vacation++) {
-                        JSONObject day_vacation = jsonArray_of_vacation.getJSONObject(vacation);
-                        DayVacation dayVacation = new DayVacation();
-                        dayVacation.setStart_date(day_vacation.getString("start_date"));
-                        dayVacation.setStop_date(day_vacation.getString("stop_date"));
-                        dayVacation.setStart_time(day_vacation.getString("start_time"));
-                        dayVacation.setStop_time(day_vacation.getString("stop_time"));
-
-                        JSONArray jsonArray_week_days = day_vacation.getJSONArray("dates");
-                        String[] dates = new String[jsonArray_week_days.length()];
-                        for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
-                            dates[week_day] = jsonArray_week_days.getString(week_day);
-                        }
-                        dayVacation.setWeek_days(dates);
-                        dayVacations.add(dayVacation);
-
-
-                    }
-                    day1.setDayVacations(dayVacations);
-                } else {
-                    day1.setDayVacations(dayVacations);
-                }
-
-                currentMonthArrayList.add(day1);
-            }
-
-
-/*                for (Day d : currentMonthArrayList) {
-
-                    for (DayEvent de : d.dayEvents) {
-                        Log.v(TAG, de.getEvent_id() + " : s_time : " + de.getEvent_start_time() + " : L_time : " + de.getEvent_stop_time());
-                    }
-                }*/
-
-            for (int i = days_in_prev_month + days_in_current_month; i < days_in_prev_month + days_in_current_month + days_in_next_month; i++) {
-                Day day1 = new Day();
-                JSONObject unique_day = jsonArray_data.getJSONObject(i);
-                day1.setDate(unique_day.getString("date"));
-
-                JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
-                List<DayEvent> dayEvents = new ArrayList<DayEvent>();
-                JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
-                Log.d(TAG, "for third month date :" + unique_day.getString("date") + " for third month event size : " + jsonArray_of_events.length() + " for third month slot size : " + jsonArray_of_slots.length());
-                List<DaySlot> daySlots = new ArrayList<DaySlot>();
-                JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
-                List<DayVacation> dayVacations = new ArrayList<DayVacation>();
-
-                if (jsonArray_of_slots.length() > 0) {
-                    for (int s = 0; s < jsonArray_of_slots.length(); s++) {
-                        JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
-                        DaySlot daySlot = new DaySlot();
-                        daySlot.setSlot_start_date(day_slot.getString("start_date"));
-                        daySlot.setSlot_stop_date(day_slot.getString("stop_date"));
-                        daySlot.setSlot_start_time(day_slot.getString("start_time"));
-                        daySlot.setSlot_stop_time(day_slot.getString("stop_time"));
-                        daySlot.setSlot_type(day_slot.getString("slot_type"));
-                        daySlot.setSlot_max_users(day_slot.getString("max_users"));
-
-                        JSONArray week_days_jsonArray = day_slot.getJSONArray("dates");
-                        String[] dates = new String[week_days_jsonArray.length()];
-                        for (int week_day = 0; week_day < week_days_jsonArray.length(); week_day++) {
-                            dates[week_day] = week_days_jsonArray.getString(week_day);
-                        }
-                        daySlot.setSlot_week_days(dates);
-                        daySlot.setSlot_id(day_slot.getString("id"));
-                        Log.d(TAG, "Slot info " + " for date : " + unique_day.getString("date") + " start_date : " + day_slot.getString("start_date") + " stop_date : " + day_slot.getString("stop_date") + " start_time : " + day_slot.getString("start_time") + " max users : " + day_slot.getString("max_users"));
-
-                        daySlots.add(daySlot);
-                    }
-                    day1.setDaySlots(daySlots);
-                } else {
-                    day1.setDaySlots(daySlots);
-                }
-
-                if (jsonArray_of_events.length() > 0) {
-                    for (int e = 0; e < jsonArray_of_events.length(); e++) {
-
-                        JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                        DayEvent dayEvent = new DayEvent();
-
-                        dayEvent.setEvent_id(day_event.getString("id"));
-                        dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                        dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
-                        dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                        dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
-                        String slot_type = day_event.getString("slot_type");
-                        dayEvent.setEvent_type(slot_type);
-                        dayEvent.setEvent_total_mentee(day_event.getString("number_of_users"));
-                        if (!slot_type.equalsIgnoreCase("Group")) {
-                            dayEvent.setFname(day_event.getString("first_name"));
-                            dayEvent.setLname(day_event.getString("last_name"));
-                        }
-
-                        dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
-                        dayEvent.setSlot_id(day_event.getString("slot_id"));
-
-                        Log.d(TAG, "Event info " + " for date : " + unique_day.getString("date") + " start_date : " + day_event.getString("start_date") + " stop_date : " + day_event.getString("stop_date") + " start_time : " + day_event.getString("start_time") + " no of users : " + day_event.getString("number_of_users"));
-                        dayEvents.add(dayEvent);
-                    }
-                    day1.setDayEvents(dayEvents);
-                } else {
-                    day1.setDayEvents(dayEvents);
-                }
-
-                if (jsonArray_of_vacation.length() > 0) {
-                    for (int vacation = 0; vacation < jsonArray_of_vacation.length(); vacation++) {
-                        JSONObject day_vacation = jsonArray_of_vacation.getJSONObject(vacation);
-                        DayVacation dayVacation = new DayVacation();
-                        dayVacation.setStart_date(day_vacation.getString("start_date"));
-                        dayVacation.setStop_date(day_vacation.getString("stop_date"));
-                        dayVacation.setStart_time(day_vacation.getString("start_time"));
-                        dayVacation.setStop_time(day_vacation.getString("stop_time"));
-
-                        JSONArray jsonArray_week_days = day_vacation.getJSONArray("dates");
-                        String[] dates = new String[jsonArray_week_days.length()];
-                        for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
-                            dates[week_day] = jsonArray_week_days.getString(week_day);
-                        }
-                        dayVacation.setWeek_days(dates);
-                        dayVacations.add(dayVacation);
-
-
-                    }
-                    day1.setDayVacations(dayVacations);
-                } else {
-                    day1.setDayVacations(dayVacations);
-                }
-
-
-                comingMonthArrayList.add(day1);
-            }
-
-
-            Log.d(TAG, "previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
+            Log.d(TAG, "Mentors slots info for mentee,  previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
             if (b_three_months_data) {   /*  program will come in this scope when user selects date from dialog i.e. user randomly selects a year and month */
                 Log.d(TAG, "Three months data get changed");
                 adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
@@ -1071,121 +838,156 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
     }
 
+    private ArrayList<Slot> getSlotsForThis(List<Slot> slots, int month, int year, int days) {
+        ArrayList<Slot> slotArrayList = new ArrayList<Slot>();
+
+        Calendar calendar_start_of_month = Calendar.getInstance();
+        calendar_start_of_month.set(year, month - 1, 1);
+        long month_start_date_in_millis = calendar_start_of_month.getTimeInMillis();
+
+        Calendar calendar_end_of_month = Calendar.getInstance();
+        calendar_end_of_month.set(year, month - 1, days);
+        long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
+
+
+        for (int slot_no = 0; slot_no < slots.size(); slot_no++) {
+            Slot slot = slots.get(slot_no);
+            String start_date = slot.getSlot_start_date();
+            String stop_date = slot.getSlot_stop_date();
+
+            Calendar calendar_slot_start_date = Calendar.getInstance();
+            calendar_slot_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
+            long slot_start_date_in_millis = calendar_slot_start_date.getTimeInMillis();
+            Calendar calendar_slot_end_date = Calendar.getInstance();
+            calendar_slot_end_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
+            long slot_stop_date_in_millis = calendar_slot_end_date.getTimeInMillis();
+
+
+            if ((slot_start_date_in_millis < month_start_date_in_millis && slot_stop_date_in_millis > month_end_date_in_millis) ||
+                    (slot_start_date_in_millis < month_start_date_in_millis && slot_stop_date_in_millis > month_start_date_in_millis && slot_stop_date_in_millis < month_end_date_in_millis) ||
+                    (slot_start_date_in_millis > month_start_date_in_millis && slot_start_date_in_millis < month_end_date_in_millis && slot_stop_date_in_millis > month_end_date_in_millis) ||
+                    (slot_start_date_in_millis > month_start_date_in_millis && slot_start_date_in_millis < month_end_date_in_millis && slot_stop_date_in_millis > month_start_date_in_millis && slot_stop_date_in_millis < month_end_date_in_millis) ||
+                    (slot_start_date_in_millis == month_start_date_in_millis && slot_stop_date_in_millis == month_end_date_in_millis)) {
+
+                slotArrayList.add(slot);
+
+            }
+        }
+
+        return slotArrayList;
+    }
+
+    private int finalizeDaysInMonth(int month, int year) {
+        int days;
+        if (isLeapYear(year)) {
+            if (month == 2) {
+                days = 29;
+            } else {
+                days = daysOfMonth[month - 1];
+            }
+        } else {
+            days = daysOfMonth[month - 1];
+
+
+        }
+        return days;
+    }
+
+    private boolean isLeapYear(int year) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        return cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365;
+    }
+
+    private void parseSlots(List<Slot> slots, JSONArray jsonArray_data, int user_group) {
+        for (int json_Array_data_index = 0; json_Array_data_index < jsonArray_data.length(); json_Array_data_index++) {
+            try {
+                Slot slot = new Slot();
+                List<Event> events = new ArrayList<Event>();
+                List<Vacation> vacations = new ArrayList<Vacation>();
+
+                JSONObject slot_jsonObject = jsonArray_data.getJSONObject(json_Array_data_index);
+                slot.setSlot_id(slot_jsonObject.getString("slot_id"));
+                slot.setSlot_start_time(slot_jsonObject.getString("start_time"));
+                slot.setSlot_stop_time(slot_jsonObject.getString("stop_time"));
+                slot.setSlot_start_date(slot_jsonObject.getString("start_date"));
+                slot.setSlot_stop_date(slot_jsonObject.getString("stop_date"));
+                slot.setSlot_type(slot_jsonObject.getString("slot_type"));
+                slot.setSlot_max_users(slot_jsonObject.getString("max_users"));
+                JSONArray jsonArray_week_days = slot_jsonObject.getJSONArray("weekdays");
+                String week_days[] = new String[jsonArray_week_days.length()];
+                for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
+                    week_days[week_day] = jsonArray_week_days.getString(week_day);
+                }
+                slot.setSlot_week_days(week_days);
+
+                JSONArray event_jsonArray = slot_jsonObject.getJSONArray("events");
+                JSONArray vacation_jsonArray = slot_jsonObject.getJSONArray("vacations");
+
+                for (int event_jsonArray_index = 0; event_jsonArray_index < event_jsonArray.length(); event_jsonArray_index++) {
+                    Event event = new Event();
+                    JSONObject event_jsonObject = event_jsonArray.getJSONObject(event_jsonArray_index);
+                    event.setEvent_id(event_jsonObject.getString("event_id"));
+                    event.setEvent_start_date(event_jsonObject.getString("start_date"));
+                    event.setEvent_stop_date(event_jsonObject.getString("stop_date"));
+                    event.setSlot_id(event_jsonObject.getString("slot_id"));
+                    event.setSub_category_name(event_jsonObject.getString("sub_category"));
+                    events.add(event);
+
+
+                }
+                slot.setEvents(events);
+
+                for (int vacation_jsonArray_index = 0; vacation_jsonArray_index < vacation_jsonArray.length(); vacation_jsonArray_index++) {
+                    Vacation vacation = new Vacation();
+                    JSONObject vacation_jsonObject = vacation_jsonArray.getJSONObject(vacation_jsonArray_index);
+                    vacation.setVacation_id(vacation_jsonObject.getString("vacation_id"));
+                    vacation.setStart_date(vacation_jsonObject.getString("start_date"));
+                    vacation.setStop_date(vacation_jsonObject.getString("stop_date"));
+                    vacation.setCause_of_the_vacation(vacation_jsonObject.getString("cause_of_the_vacation"));
+                    JSONArray vacation_weekdays = vacation_jsonObject.getJSONArray("weekdays");
+                    String vacation_weekdays_array[] = new String[vacation_weekdays.length()];
+                    for (int week_day = 0; week_day < vacation_weekdays.length(); week_day++) {
+                        vacation_weekdays_array[week_day] = vacation_weekdays.getString(week_day);   /* week_day is used to pass index */
+                    }
+                    vacation.setWeek_days(vacation_weekdays_array);
+                    vacation.setStart_time(vacation_jsonObject.getString("start_time"));
+                    vacation.setStop_time(vacation_jsonObject.getString("stop_time"));
+                    vacations.add(vacation);
+                }
+                slot.setVacations(vacations);
+                slot.setSlot_created_on_network_success("true");
+
+                slots.add(slot);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+    }
+
     private void nextMonthData(Object object) {
 
 
         progressDialog.dismiss();
         try {
             JSONObject jsonObject = new JSONObject((String) object);
-            JSONArray jsonArray_data = jsonObject.getJSONArray("data");
+            JSONArray jsonArray_data = jsonObject.getJSONArray("slots");
 
+            List<Slot> slots = new ArrayList<Slot>();
+
+            parseSlots(slots, jsonArray_data, 3);
 
             previousMonthArrayList = currentMonthArrayList;
             currentMonthArrayList = comingMonthArrayList;
             comingMonthArrayList = null;
-            comingMonthArrayList = new ArrayList<Day>();
+            comingMonthArrayList = new ArrayList<Slot>();
 
-
-            for (int i = 0; i < days_in_new_next_month; i++) {
-                Day day1 = new Day();
-                JSONObject unique_day = jsonArray_data.getJSONObject(i);
-                day1.setDate(unique_day.getString("date"));
-                JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
-                List<DayEvent> dayEvents = new ArrayList<DayEvent>();
-                JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
-                Log.d(TAG, "for third month date 2:" + unique_day.getString("date") + " for third month event size 2: " + jsonArray_of_events.length() + " for third month slot size : " + jsonArray_of_slots.length());
-                List<DaySlot> daySlots = new ArrayList<DaySlot>();
-                JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
-                List<DayVacation> dayVacations = new ArrayList<DayVacation>();
-                if (jsonArray_of_slots.length() > 0) {
-                    for (int s = 0; s < jsonArray_of_slots.length(); s++) {
-                        JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
-                        DaySlot daySlot = new DaySlot();
-                        daySlot.setSlot_start_date(day_slot.getString("start_date"));
-                        daySlot.setSlot_stop_date(day_slot.getString("stop_date"));
-                        daySlot.setSlot_start_time(day_slot.getString("start_time"));
-                        daySlot.setSlot_stop_time(day_slot.getString("stop_time"));
-                        daySlot.setSlot_type(day_slot.getString("slot_type"));
-                        daySlot.setSlot_max_users(day_slot.getString("max_users"));
-
-                        JSONArray week_days_jsonArray = day_slot.getJSONArray("dates");
-                        String[] dates = new String[week_days_jsonArray.length()];
-                        for (int week_day = 0; week_day < week_days_jsonArray.length(); week_day++) {
-                            dates[week_day] = week_days_jsonArray.getString(week_day);
-                        }
-                        daySlot.setSlot_week_days(dates);
-                        daySlot.setSlot_id(day_slot.getString("id"));
-
-
-                        daySlots.add(daySlot);
-                    }
-                    day1.setDaySlots(daySlots);
-                } else {
-                    day1.setDaySlots(daySlots);
-                }
-
-                if (jsonArray_of_events.length() > 0) {
-                    for (int e = 0; e < jsonArray_of_events.length(); e++) {
-
-                        JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                        DayEvent dayEvent = new DayEvent();
-
-                        dayEvent.setEvent_id(day_event.getString("id"));
-                        dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                        dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
-                        dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                        dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
-                        String slot_type = day_event.getString("slot_type");
-                        dayEvent.setEvent_type(slot_type);
-                        dayEvent.setEvent_total_mentee(day_event.getString("number_of_users"));
-                        if (!slot_type.equalsIgnoreCase("Group")) {
-                            dayEvent.setFname(day_event.getString("first_name"));
-                            dayEvent.setLname(day_event.getString("last_name"));
-                        }
-
-                        dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
-                        dayEvent.setSlot_id(day_event.getString("slot_id"));
-                        dayEvents.add(dayEvent);
-                    }
-                    day1.setDayEvents(dayEvents);
-                } else {
-                    day1.setDayEvents(dayEvents);
-                }
-
-
-                if (jsonArray_of_vacation.length() > 0) {
-                    for (int vacation = 0; vacation < jsonArray_of_vacation.length(); vacation++) {
-                        JSONObject day_vacation = jsonArray_of_vacation.getJSONObject(vacation);
-                        DayVacation dayVacation = new DayVacation();
-                        dayVacation.setStart_date(day_vacation.getString("start_date"));
-                        dayVacation.setStop_date(day_vacation.getString("stop_date"));
-                        dayVacation.setStart_time(day_vacation.getString("start_time"));
-                        dayVacation.setStop_time(day_vacation.getString("stop_time"));
-
-                        JSONArray jsonArray_week_days = day_vacation.getJSONArray("dates");
-                        String[] dates = new String[jsonArray_week_days.length()];
-                        for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
-                            dates[week_day] = jsonArray_week_days.getString(week_day);
-                        }
-                        dayVacation.setWeek_days(dates);
-                        dayVacations.add(dayVacation);
-
-
-                    }
-                    day1.setDayVacations(dayVacations);
-                } else {
-                    day1.setDayVacations(dayVacations);
-                }
-
-                comingMonthArrayList.add(day1);
-
-            }
-
+            comingMonthArrayList = (ArrayList<Slot>) slots;
 
             Log.d(TAG, "comingMonthArrayList size" + comingMonthArrayList.size());
-            for (Day day1 : comingMonthArrayList) {
-                Log.d(TAG, "date from new comingMonthArrayList" + day1.getDate());
-            }
+
 
             adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
             _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
@@ -1208,107 +1010,21 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         progressDialog.dismiss();
         try {
             JSONObject jsonObject = new JSONObject((String) object);
-            JSONArray jsonArray_data = jsonObject.getJSONArray("data");
+            JSONArray jsonArray_data = jsonObject.getJSONArray("slots");
+
+            List<Slot> slots= new ArrayList<Slot>();
+
+            parseSlots(slots, jsonArray_data, 3);
 
             comingMonthArrayList = currentMonthArrayList;
             currentMonthArrayList = previousMonthArrayList;
             previousMonthArrayList = null;
-            previousMonthArrayList = new ArrayList<Day>();
+            previousMonthArrayList = new ArrayList<Slot>();
+
+            previousMonthArrayList = (ArrayList<Slot>) slots;
 
 
-            for (int i = 0; i < days_in_new_prev_month; i++) {
-                Day day1 = new Day();
-                JSONObject unique_day = jsonArray_data.getJSONObject(i);
-                day1.setDate(unique_day.getString("date"));
-                JSONArray jsonArray_of_events = unique_day.getJSONArray("object");
-                List<DayEvent> dayEvents = new ArrayList<DayEvent>();
 
-                JSONArray jsonArray_of_slots = unique_day.getJSONArray("slots");
-                Log.d(TAG, "for third month date 3:" + unique_day.getString("date") + " for third month event size 3: " + jsonArray_of_events.length() + " for third month slot size : " + jsonArray_of_slots.length());
-                List<DaySlot> daySlots = new ArrayList<DaySlot>();
-                JSONArray jsonArray_of_vacation = unique_day.getJSONArray("exceptions");
-                List<DayVacation> dayVacations = new ArrayList<DayVacation>();
-                if (jsonArray_of_slots.length() > 0) {
-                    for (int s = 0; s < jsonArray_of_slots.length(); s++) {
-                        JSONObject day_slot = jsonArray_of_slots.getJSONObject(s);
-                        DaySlot daySlot = new DaySlot();
-                        daySlot.setSlot_start_date(day_slot.getString("start_date"));
-                        daySlot.setSlot_stop_date(day_slot.getString("stop_date"));
-                        daySlot.setSlot_start_time(day_slot.getString("start_time"));
-                        daySlot.setSlot_stop_time(day_slot.getString("stop_time"));
-                        daySlot.setSlot_type(day_slot.getString("slot_type"));
-                        daySlot.setSlot_max_users(day_slot.getString("max_users"));
-
-                        JSONArray week_days_jsonArray = day_slot.getJSONArray("dates");
-                        String[] dates = new String[week_days_jsonArray.length()];
-                        for (int week_day = 0; week_day < week_days_jsonArray.length(); week_day++) {
-                            dates[week_day] = week_days_jsonArray.getString(week_day);
-                        }
-                        daySlot.setSlot_week_days(dates);
-                        daySlot.setSlot_id(day_slot.getString("id"));
-
-                        daySlots.add(daySlot);
-                    }
-                    day1.setDaySlots(daySlots);
-                } else {
-                    day1.setDaySlots(daySlots);
-                }
-
-                if (jsonArray_of_events.length() > 0) {
-                    for (int e = 0; e < jsonArray_of_events.length(); e++) {
-
-                        JSONObject day_event = jsonArray_of_events.getJSONObject(e);
-                        DayEvent dayEvent = new DayEvent();
-
-                        dayEvent.setEvent_id(day_event.getString("id"));
-                        dayEvent.setEvent_start_date(day_event.getString("start_date"));
-                        dayEvent.setEvent_stop_date(day_event.getString("stop_date"));
-                        dayEvent.setEvent_start_time(day_event.getString("start_time"));
-                        dayEvent.setEvent_stop_time(day_event.getString("stop_time"));
-                        String slot_type = day_event.getString("slot_type");
-                        dayEvent.setEvent_type(slot_type);
-                        dayEvent.setEvent_total_mentee(day_event.getString("number_of_users"));
-                        if (!slot_type.equalsIgnoreCase("Group")) {
-                            dayEvent.setFname(day_event.getString("first_name"));
-                            dayEvent.setLname(day_event.getString("last_name"));
-                        }
-
-                        dayEvent.setSub_category_name(day_event.getString("sub_category_name"));
-                        dayEvent.setSlot_id(day_event.getString("slot_id"));
-                        dayEvents.add(dayEvent);
-                    }
-                    day1.setDayEvents(dayEvents);
-                } else {
-                    day1.setDayEvents(dayEvents);
-                }
-
-
-                if (jsonArray_of_vacation.length() > 0) {
-                    for (int vacation = 0; vacation < jsonArray_of_vacation.length(); vacation++) {
-                        JSONObject day_vacation = jsonArray_of_vacation.getJSONObject(vacation);
-                        DayVacation dayVacation = new DayVacation();
-                        dayVacation.setStart_date(day_vacation.getString("start_date"));
-                        dayVacation.setStop_date(day_vacation.getString("stop_date"));
-                        dayVacation.setStart_time(day_vacation.getString("start_time"));
-                        dayVacation.setStop_time(day_vacation.getString("stop_time"));
-
-                        JSONArray jsonArray_week_days = day_vacation.getJSONArray("dates");
-                        String[] dates = new String[jsonArray_week_days.length()];
-                        for (int week_day = 0; week_day < jsonArray_week_days.length(); week_day++) {
-                            dates[week_day] = jsonArray_week_days.getString(week_day);
-                        }
-                        dayVacation.setWeek_days(dates);
-                        dayVacations.add(dayVacation);
-
-
-                    }
-                    day1.setDayVacations(dayVacations);
-                } else {
-                    day1.setDayVacations(dayVacations);
-                }
-                previousMonthArrayList.add(day1);
-
-            }
             adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
             _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
             tv_currentMonth.setText(DateFormat.format(dateTemplate,
