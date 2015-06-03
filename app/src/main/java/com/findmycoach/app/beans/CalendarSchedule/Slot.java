@@ -195,24 +195,33 @@ public class Slot implements Parcelable{
 
                 String stop_date = event.getEvent_stop_date();
 
-                Calendar calendar_event_start_date = Calendar.getInstance();
-                calendar_event_start_date.set(Integer.parseInt(start_date.split("-")[0]),Integer.parseInt(start_date.split("-")[1]),Integer.parseInt(start_date.split("-")[2]));
-                long event_start_date_in_millis =calendar_event_start_date.getTimeInMillis();
+                List<Mentee> mentees=event.getMentees();
+                for(int mentee_no=0; mentee_no < mentees.size() ; mentee_no++){
+                    Mentee mentee=mentees.get(mentee_no);
+                    String start_date = mentee.getEvent_start_date();
+
+                    Calendar calendar_event_start_date = Calendar.getInstance();
+                    calendar_event_start_date.set(Integer.parseInt(start_date.split("-")[0]),Integer.parseInt(start_date.split("-")[1]),Integer.parseInt(start_date.split("-")[2]));
+                    long event_start_date_in_millis =calendar_event_start_date.getTimeInMillis();
 
 
-                Calendar calendar_event_stop_date = Calendar.getInstance();
-                calendar_event_stop_date.set(Integer.parseInt(stop_date.split("-")[0]),Integer.parseInt(stop_date.split("-")[1]),Integer.parseInt(stop_date.split("-")[2]));
-                long event_stop_date_in_millis =calendar_event_stop_date.getTimeInMillis();
+                    Calendar calendar_event_stop_date = Calendar.getInstance();
+                    calendar_event_stop_date.set(Integer.parseInt(stop_date.split("-")[0]),Integer.parseInt(stop_date.split("-")[1]),Integer.parseInt(stop_date.split("-")[2]));
+                    long event_stop_date_in_millis =calendar_event_stop_date.getTimeInMillis();
 
 
-                if((calendar_time_in_millis == event_start_date_in_millis)||
-                        (calendar_time_in_millis == event_stop_date_in_millis) ||
-                        (calendar_time_in_millis < event_stop_date_in_millis && calendar_time_in_millis > event_start_date_in_millis)){
-                    event_found =  true;
-                    break;
-                }else{
-                    event_found = false;
+                    if((calendar_time_in_millis == event_start_date_in_millis)||
+                            (calendar_time_in_millis == event_stop_date_in_millis) ||
+                            (calendar_time_in_millis < event_stop_date_in_millis && calendar_time_in_millis > event_start_date_in_millis)){
+                        event_found =  true;
+                        break;
+                    }else{
+                        event_found = false;
+                    }
                 }
+
+
+
 
 
             }

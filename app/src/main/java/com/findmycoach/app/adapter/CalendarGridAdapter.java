@@ -444,12 +444,25 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             boolean slot_found=false, event_found=false, vacation_found=false;
                             Calendar calendar_this_day=Calendar.getInstance();
                                 calendar_this_day.set(Integer.parseInt(theyear),Integer.parseInt(themonth),Integer.parseInt(theday));
-                                for(int current_month_data_index=0; current_month_data_index < current_month_data.size() ; current_month_data_index++){
+                                long this_day = calendar_this_day.getTimeInMillis();
+                                for(int current_month_data_index=0; current_month_data_index < current_month_data.size() ; current_month_data_index++){     /* current_month_data is having Slot*/
                                        Slot new_slot = current_month_data.get(current_month_data_index);
                                        String slot_start_date = new_slot.getSlot_start_date();
                                        String slot_stop_date = new_slot.getSlot_stop_date();
 
                                        Calendar calendar_slot_start_date = Calendar.getInstance();
+                                       calendar_slot_start_date.set(Integer.parseInt(slot_start_date.split("-")[0]),Integer.parseInt(slot_start_date.split("-")[1]),Integer.parseInt(slot_start_date.split("-")[2]));
+                                       long slot_start_millis=calendar_slot_start_date.getTimeInMillis();
+
+                                    Calendar calendar_slot_stop_date = Calendar.getInstance();
+                                    calendar_slot_stop_date.set(Integer.parseInt(slot_stop_date.split("-")[0]),Integer.parseInt(slot_stop_date.split("-")[1]),Integer.parseInt(slot_stop_date.split("-")[2]));
+                                    long slot_stop_millis=calendar_slot_stop_date.getTimeInMillis();
+
+                                    if(this_day)
+
+
+
+
                                 }
 
                             /*List<DayEvent> dayEvents = day.getDayEvents();
