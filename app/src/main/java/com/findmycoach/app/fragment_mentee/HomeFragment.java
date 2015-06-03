@@ -579,8 +579,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         if (timeBarrier) {
             String fromTiming = (String) fromTimingInput.getTag(fromTimingInput.getId());
             String toTiming = (String) toTimingInput.getTag(toTimingInput.getId());
-            requestParams.add("timing_from", fromTiming);
-            requestParams.add("timing_to", toTiming);
+            requestParams.add("timing_from", fromTiming + ":00");
+            requestParams.add("timing_to", toTiming + ":00");
 
             String week = "";
 

@@ -353,6 +353,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
 
     // Validate user first name, last name and address
     private boolean validateUserUpdate() {
+        boolean isValid = true;
         if (profileAddress1.getText().toString() != null) {
             if (profileAddress1.getText().toString().trim().equals("")) {
                 Toast.makeText(EditProfileActivityMentee.this, getResources().getString(R.string.choose_suggested_city), Toast.LENGTH_LONG).show();
@@ -363,7 +364,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
                         profileAddress1.setError(null);
                     }
                 }, 3500);
-                return false;
+                isValid = false;
             }
             if (!profileAddress1.getText().toString().equalsIgnoreCase(city)) {
                 if (!profileAddress1.getText().toString().equalsIgnoreCase(last_city_selected)) {
@@ -375,7 +376,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
                             profileAddress1.setError(null);
                         }
                     }, 3500);
-                    return false;
+                    isValid = false;
                 }
 
             }
@@ -389,37 +390,37 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
                     profileAddress1.setError(null);
                 }
             }, 3500);
-            return false;
+            isValid = false;
         }
 
-        String firstName = profileFirstName.getText().toString();
+        String firstName = profileFirstName.getText().toString().trim();
         if (firstName.equals("")) {
             showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
-            return false;
+            isValid = false;
         } else {
             for (int i = 0; i < firstName.length(); i++) {
                 if (!Character.isLetter(firstName.charAt(i))) {
                     showErrorMessage(profileFirstName, getResources().getString(R.string.error_not_a_name));
-                    return false;
+                    isValid = false;
                 }
             }
         }
 
-        String lastName = profileLastName.getText().toString();
+        String lastName = profileLastName.getText().toString().trim();
         if (lastName.equals("")) {
             showErrorMessage(profileLastName, getResources().getString(R.string.error_field_required));
-            return false;
+            isValid = false;
         } else {
             for (int i = 0; i < lastName.length(); i++) {
                 if (!Character.isLetter(lastName.charAt(i))) {
                     showErrorMessage(profileLastName, getResources().getString(R.string.error_not_a_name));
-                    return false;
+                    isValid = false;
                 }
             }
         }
 
 
-        return true;
+        return isValid;
 
 
     }
@@ -544,6 +545,8 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.remove(getResources().getString(R.string.new_user));
                 editor.apply();
+                DashboardActivity.dashboardActivity.container.setVisibility(View.VISIBLE);
+                DashboardActivity.dashboardActivity.showTermsAndConditions();
             }
         }
     }

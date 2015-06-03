@@ -21,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +55,7 @@ public class DashboardActivity extends FragmentActivity
     public int user_group;
     public static DashboardActivity dashboardActivity;
     private String[] navigationTitle;
+    private boolean isProfileOpen;
 
     /* Below are the class variables which are mainly used GCM Client registration and Google Play Services device configuration check*/
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -79,6 +81,7 @@ public class DashboardActivity extends FragmentActivity
     public ImageView menuDrawer;
     public ImageView backButton;
     public TextView titleTV;
+    public RelativeLayout container;
 
     GoogleCloudMessaging gcm;
     Context context;
@@ -105,6 +108,7 @@ public class DashboardActivity extends FragmentActivity
 
         dashboardActivity = this;
         fragmentManager = getSupportFragmentManager();
+        isProfileOpen = false;
 
 
         String userId = StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id));
@@ -123,6 +127,7 @@ public class DashboardActivity extends FragmentActivity
                 requestParams.add("id", userId);
                 requestParams.add("user_group", user_group + "");
                 NetworkClient.getProfile(this, requestParams, authToken, this, 4);
+                isProfileOpen = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -131,6 +136,9 @@ public class DashboardActivity extends FragmentActivity
         }
         Log.e("FMC - user_group", "" + user_group);
         setContentView(R.layout.activity_dashboard);
+        container = (RelativeLayout) findViewById(R.id.container);
+        if (!isProfileOpen)
+            container.setVisibility(View.VISIBLE);
 
         context = getApplicationContext();
         REG_ID_SAVED_TO_SERVER = getResources().getString(R.string.reg_id_saved_to_server);
@@ -156,7 +164,7 @@ public class DashboardActivity extends FragmentActivity
                     registerInBackground();
                 }
 
-                if (StorageHelper.getUserDetails(this, "terms") == null || !StorageHelper.getUserDetails(this, "terms").equals("yes")) {
+                if ((StorageHelper.getUserDetails(this, "terms") == null || !StorageHelper.getUserDetails(this, "terms").equals("yes")) && !isProfileOpen) {
                     showTermsAndConditions();
                 }
             } else {
@@ -258,12 +266,13 @@ public class DashboardActivity extends FragmentActivity
                 intent.putExtra("user_info", new Gson().toJson(response.getData()));
                 startActivity(intent);
             }
+            isProfileOpen = false;
         }
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
-
+        isProfileOpen = false;
     }
 
 
@@ -413,7 +422,7 @@ public class DashboardActivity extends FragmentActivity
     }
 
 
-    private void showTermsAndConditions() {
+    public void showTermsAndConditions() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle(getResources().getString(R.string.t_and_c));
         ScrollView scrollView = new ScrollView(this);
