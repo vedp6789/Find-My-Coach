@@ -824,7 +824,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         currentMonthArrayList.add(slot);
         comingMonthArrayList.add(slot);
 
-        /* Making non-coinciding arraylist updated with network status*/
+        /* Making non-coinciding Arraylists updated with "false" network communication */
         Vacation vacation =new Vacation();
         vacation.setVacation_made_at_network_success("false");
         previousMonthNonCoincidingVacation.add(vacation);
@@ -879,6 +879,21 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         comingMonthArrayList.add(slot);
 
 
+        previousMonthNonCoincidingVacation =currentMonthNonCoincidingVacation;
+        currentMonthNonCoincidingVacation = comingMonthNonCoincidingVacation;
+        currentMonthNonCoincidingVacation = null;
+        comingMonthNonCoincidingVacation = new ArrayList<Vacation>();
+        Vacation vacation=new Vacation();
+        vacation.setVacation_made_at_network_success("false");
+        comingMonthNonCoincidingVacation.add(vacation);
+
+
+        previousMonthYearInfo= currentMonthYearInfo;
+        currentMonthYearInfo=comingMonthYearInfo;
+        comingMonthYearInfo=null;
+        comingMonthYearInfo= new ArrayList<MonthYearInfo>();
+        comingMonthYearInfo=getMonthYearForThis(Integer.parseInt(next_month_requested_date.split("-")[1]),Integer.parseInt(next_month_requested_date.split("-")[0]),finalizeDaysInMonth(Integer.parseInt(next_month_requested_date.split("-")[1]),Integer.parseInt(next_month_requested_date.split("-")[0])));
+
 
 
     }
@@ -891,6 +906,22 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         Slot slot = new Slot();
         slot.setSlot_created_on_network_success("false");
         previousMonthArrayList.add(slot);
+
+        comingMonthNonCoincidingVacation =currentMonthNonCoincidingVacation;
+        currentMonthNonCoincidingVacation=previousMonthNonCoincidingVacation;
+        previousMonthNonCoincidingVacation =null;
+        previousMonthNonCoincidingVacation = new ArrayList<Vacation>();
+        Vacation vacation = new Vacation();
+        vacation.setVacation_made_at_network_success("false");
+        previousMonthNonCoincidingVacation.add(vacation);
+
+        comingMonthYearInfo = currentMonthYearInfo;
+        currentMonthYearInfo = previousMonthYearInfo;
+        previousMonthYearInfo = null;
+        previousMonthYearInfo = new ArrayList<MonthYearInfo>();
+        previousMonthYearInfo = getMonthYearForThis(Integer.parseInt(prev_month_requested_date.split("-")[1]),Integer.parseInt(prev_month_requested_date.split("-")[0]),finalizeDaysInMonth(Integer.parseInt(prev_month_requested_date.split("-")[1]),Integer.parseInt(prev_month_requested_date.split("-")[0])));
+
+
     }
 
 
