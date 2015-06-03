@@ -124,13 +124,17 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         CalendarGridAdapter.previousMonthNonCoincidingVacation = new ArrayList<Vacation>();
         CalendarGridAdapter.currentMonthNonCoincidingVacation = new ArrayList<Vacation>();
         CalendarGridAdapter.comingMonthNonCoincidingVacation = new ArrayList<Vacation>();
+        CalendarGridAdapter.previousMonthNonCoincidingVacation = previousMonthNonCoincidingVacation;
+        CalendarGridAdapter.currentMonthNonCoincidingVacation = currentMonthNonCoincidingVacation;
+        CalendarGridAdapter.comingMonthNonCoincidingVacation = comingMonthNonCoincidingVacation;
 
 
-        CalendarGridAdapter.previousMonthYearInfo= new ArrayList<MonthYearInfo>();
-        CalendarGridAdapter.currentMonthYearInfo=new ArrayList<MonthYearInfo>();
-        CalendarGridAdapter.comingMonthYearInfo=new ArrayList<MonthYearInfo>();
-
-
+        CalendarGridAdapter.previousMonthYearInfo = new ArrayList<MonthYearInfo>();
+        CalendarGridAdapter.currentMonthYearInfo = new ArrayList<MonthYearInfo>();
+        CalendarGridAdapter.comingMonthYearInfo = new ArrayList<MonthYearInfo>();
+        CalendarGridAdapter.previousMonthYearInfo = previousMonthYearInfo;
+        CalendarGridAdapter.currentMonthYearInfo = currentMonthYearInfo;
+        CalendarGridAdapter.comingMonthYearInfo = comingMonthYearInfo;
 
         month_for_which_calendar_get_populated = month;
         year_for_which_calendar_get_populated = year;
@@ -141,7 +145,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     }
 
     /*
-        * This constructor is called from MyScheduleFragment
+        * This constructor is called from MentorDetailsActivity
         *
         * */
     public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Slot> prev_month_data, ArrayList<Slot> current_month_data, ArrayList<Slot> coming_month_data, ArrayList<Vacation> previousMonthNonCoincidingVacation, ArrayList<Vacation> currentMonthNonCoincidingVacation, ArrayList<Vacation> comingMonthNonCoincidingVacation, ArrayList<MonthYearInfo> previousMonthYearInfo, ArrayList<MonthYearInfo> currentMonthYearInfo, ArrayList<MonthYearInfo> comingMonthYearInfo, String mentor_id, String availability_yn, String charges, ArrayList<String> arraylist_subcategory, String connection_status) {
@@ -172,6 +176,22 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         CalendarGridAdapter.prev_month_data = prev_month_data;
         CalendarGridAdapter.current_month_data = current_month_data;
         CalendarGridAdapter.coming_month_data = coming_month_data;
+
+        CalendarGridAdapter.previousMonthNonCoincidingVacation = new ArrayList<Vacation>();
+        CalendarGridAdapter.currentMonthNonCoincidingVacation = new ArrayList<Vacation>();
+        CalendarGridAdapter.comingMonthNonCoincidingVacation = new ArrayList<Vacation>();
+        CalendarGridAdapter.previousMonthNonCoincidingVacation = previousMonthNonCoincidingVacation;
+        CalendarGridAdapter.currentMonthNonCoincidingVacation = currentMonthNonCoincidingVacation;
+        CalendarGridAdapter.comingMonthNonCoincidingVacation = comingMonthNonCoincidingVacation;
+
+
+        CalendarGridAdapter.previousMonthYearInfo = new ArrayList<MonthYearInfo>();
+        CalendarGridAdapter.currentMonthYearInfo = new ArrayList<MonthYearInfo>();
+        CalendarGridAdapter.comingMonthYearInfo = new ArrayList<MonthYearInfo>();
+        CalendarGridAdapter.previousMonthYearInfo = previousMonthYearInfo;
+        CalendarGridAdapter.currentMonthYearInfo = currentMonthYearInfo;
+        CalendarGridAdapter.comingMonthYearInfo = comingMonthYearInfo;
+
 
         month_for_which_calendar_get_populated = month;
         year_for_which_calendar_get_populated = year;
@@ -290,7 +310,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             list.add(String
                     .valueOf((daysInPrevMonth - trailingSpaces + DAY_OFFSET)
                             + i)
-                    + "-GREY"
+                    + "-TRAIL"
                     + "-"
                     + getMonthAsString(prevMonth)
                     + "-"
@@ -302,15 +322,15 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         for (int i = 1; i <= daysInMonth; i++) {
 
             if (i == getCurrentDayOfMonth() && currentMonth == CURRENT_MONTH_OF_CALENDAR && yy == CURRENT_YEAR_OF_CALENDAR) {
-                list.add(String.valueOf(i) + "-BLUE" + "-" + getMonthAsString(currentMonth) + "-" + yy);
+                list.add(String.valueOf(i) + "-TODAY" + "-" + getMonthAsString(currentMonth) + "-" + yy);
             } else {
-                list.add(String.valueOf(i) + "-WHITE" + "-" + getMonthAsString(currentMonth) + "-" + yy);
+                list.add(String.valueOf(i) + "-CURRENT" + "-" + getMonthAsString(currentMonth) + "-" + yy);
             }
         }
 
         // Leading Month days
         for (int i = 0; i < list.size() % 7; i++) {
-            list.add(String.valueOf(i + 1) + "-GREY" + "-"
+            list.add(String.valueOf(i + 1) + "-LEAD" + "-"
                     + getMonthAsString(nextMonth) + "-" + nextYear);
         }
     }
@@ -354,68 +374,85 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         gridcell.setTag(theday + "-" + themonth + "-" + theyear);
 
 
-        if (day_color[1].equals("GREY")) {
+        if (day_color[1].equals("TRAIL") || day_color[1].equals("LEAD")) {
             gridcell.setTextColor(context.getResources().getColor(R.color.purple_light));
         }
-        if (day_color[1].equals("WHITE")) {
+        if (day_color[1].equals("CURRENT")) {
             gridcell.setTextColor(context.getResources().getColor(R.color.purple));
             allow_schedule_population = true;
         }
-        if (day_color[1].equals("BLUE")) {
+        if (day_color[1].equals("TODAY")) {
             gridcell.setTextColor(context.getResources().getColor(R.color.white));
             gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
             allow_schedule_population = true;
         }
         day_schedule_index = Integer.parseInt(theday) - 1;
         if (allow_data_population_from_server_data) {
-            if (allow_schedule_population) {
+            if (allow_schedule_population) {  /* This conditions is true for the foreground month of the calendar so all the dates coming in this are active dates i.e. neither trailing nor leading days of the calenar  */
 
+                /* Now current_Month_data size will be zero only when there is no slot found for this month */
+                /* So assuming that when size will be zero and we do not need to populate calendar */
+                if (current_month_data.size() > 0) {
+                    Slot slot = current_month_data.get(0);
+                    boolean slot_created_when_network_found = Boolean.parseBoolean(slot.isSlot_created_on_network_success());
 
-                if (current_month_data.size() <= 0) {
-                    if (allow_once) {
-                        // Toast.makeText(context, "Please refresh the schedule !", Toast.LENGTH_SHORT).show();
-                        if (myScheduleFragment != null) {
-                            String user_group = StorageHelper.getUserGroup(context, "user_group");
-                            myScheduleFragment.populate_calendar_from_adapter = true;
-                            MyScheduleFragment.month = month_for_which_calendar_get_populated;
-                            MyScheduleFragment.year = year_for_which_calendar_get_populated;
-                            if (user_group.equals("3")) {
-                                myScheduleFragment.getCalendarDetailsAPICall();
+                    if (!slot_created_when_network_found) {
+                        /* this is happening when user either go to previous, next month and device found network but earlier network was not available and arraylist for current_month_data made at that time then in this case we have to get this month data from server again*/
+                        if (allow_once) {
+                            // Toast.makeText(context, "Please refresh the schedule !", Toast.LENGTH_SHORT).show();
+                            if (myScheduleFragment != null) {
+                                String user_group = StorageHelper.getUserGroup(context, "user_group");
+                                myScheduleFragment.populate_calendar_from_adapter = true;
+                                MyScheduleFragment.month = month_for_which_calendar_get_populated;
+                                MyScheduleFragment.year = year_for_which_calendar_get_populated;
+                                if (user_group.equals("3")) {
+                                    myScheduleFragment.getCalendarDetailsAPICall();
 
-                            } else {
-                                if (user_group.equals("2")) {
+                                } else {
+                                    if (user_group.equals("2")) {
                                    /*mentee three months data will get called from here */
-                                    myScheduleFragment.getCalendarDetailsForMentee();
+                                        myScheduleFragment.getCalendarDetailsForMentee();
+                                    }
                                 }
+
                             }
 
+                            if (mentorDetailsActivity != null) {
+                                mentorDetailsActivity.populate_calendar_from_adapter = true;
+                                MyScheduleFragment.month = month_for_which_calendar_get_populated;
+                                MyScheduleFragment.year = year_for_which_calendar_get_populated;
+                                mentorDetailsActivity.getCalendarDetailsAPICall();
+
+                            }
+
+
                         }
+                        allow_once = false;
 
-                        if (mentorDetailsActivity != null) {
-                            mentorDetailsActivity.populate_calendar_from_adapter = true;
-                            MyScheduleFragment.month = month_for_which_calendar_get_populated;
-                            MyScheduleFragment.year = year_for_which_calendar_get_populated;
-                            mentorDetailsActivity.getCalendarDetailsAPICall();
-
-                        }
+                    } else {
+                        /* this proves this that there is some schedule for user in this month as there is slot and with true network status */
 
 
-                    }
-                    allow_once = false;
-
-                }
-                if (day_schedule_index < current_month_data.size()) {
-
-                    day = current_month_data.get(day_schedule_index);
 
                 /*
                 *
                 *
                 * success when CalendarGridAdapter is used by MyScheduleFragment class
                 * */
-                    if (myScheduleFragment != null) {
-                        if (StorageHelper.getUserDetails(context, "user_group").equals("3")) {
-                            List<DayEvent> dayEvents = day.getDayEvents();
+                        if (myScheduleFragment != null) {
+                            if (StorageHelper.getUserDetails(context, "user_group").equals("3")) {
+                            boolean slot_found=false, event_found=false, vacation_found=false;
+                            Calendar calendar_this_day=Calendar.getInstance();
+                                calendar_this_day.set(Integer.parseInt(theyear),Integer.parseInt(themonth),Integer.parseInt(theday));
+                                for(int current_month_data_index=0; current_month_data_index < current_month_data.size() ; current_month_data_index++){
+                                       Slot new_slot = current_month_data.get(current_month_data_index);
+                                       String slot_start_date = new_slot.getSlot_start_date();
+                                       String slot_stop_date = new_slot.getSlot_stop_date();
+
+                                       Calendar calendar_slot_start_date = Calendar.getInstance();
+                                }
+
+                            /*List<DayEvent> dayEvents = day.getDayEvents();
                             List<DaySlot> daySlots = day.getDaySlots();
                             List<DayVacation> dayVacations = day.getDayVacations();
 
@@ -425,10 +462,10 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                 } else {
                                     gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
                                 }
+                            }*/
                             }
-                        }
-                        if (StorageHelper.getUserDetails(context, "user_group").equals("2")) {
-                            List<DayEvent> dayEvents = day.getDayEvents();
+                            if (StorageHelper.getUserDetails(context, "user_group").equals("2")) {
+                            /*List<DayEvent> dayEvents = day.getDayEvents();
                             List<DayVacation> dayVacations = day.getDayVacations();
 
                             if (dayEvents.size() > 0) {
@@ -439,20 +476,20 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                 } else {
                                     gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
                                 }
+                            }*/
                             }
-                        }
 
 
-                    } else {
+                        } else {
                 /*
                 *
                 *
                 *
                 * success when CalendarGridAdapter is used by MentorDetailsActivity class
                 * */
-                        List<DayEvent> dayEvents = day.getDayEvents();
-                        List<DaySlot> daySlots = day.getDaySlots();
-                        List<DayVacation> dayVacations = day.getDayVacations();
+                            List<DayEvent> dayEvents = day.getDayEvents();
+                            List<DaySlot> daySlots = day.getDaySlots();
+                            List<DayVacation> dayVacations = day.getDayVacations();
 
                     /*if (daySlots.size() > 0 && dayEvents.size() <= 0) {
                         *//*  success when this day has only slots and there is no event coming from server*//*
@@ -466,14 +503,14 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                         gridcell.setTag(1, String.valueOf(free_slot));
 
                     } else {*/
-                        int free_slot = 0;
-                        if (daySlots.size() <= 0) {
+                            int free_slot = 0;
+                            if (daySlots.size() <= 0) {
                             /*   success when there is no slots i.e. slots array size is zero
                             *    In this condition, grid click event should be handled like we do not open week-view and give a message that mentor is not free on this day.
                             * */
-                            free_slot = -1;
+                                free_slot = -1;
 
-                        } else {
+                            } else {
                             /*
                             * success when this day his having slots.
                             * Now to decide any slot is free or not
@@ -482,69 +519,69 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             /*
                              * matching each slot of the day with all possible events, and on this match deciding whether this slot come as free slot or not.
                              * */
-                            for (int day_slot = 0; day_slot < daySlots.size(); day_slot++) {
-                                DaySlot daySlot = daySlots.get(day_slot);
-                                String slot_start_date = daySlot.getSlot_start_date();
-                                String slot_stop_date = daySlot.getSlot_stop_date();
-                                String slot_start_time = daySlot.getSlot_start_time();
-                                String slot_stop_time = daySlot.getSlot_stop_time();
-                                String slot_type = daySlot.getSlot_type();
-                                String slot_id = daySlot.getSlot_id();
-                                int slot_max_users = Integer.parseInt(daySlot.getSlot_max_users());
+                                for (int day_slot = 0; day_slot < daySlots.size(); day_slot++) {
+                                    DaySlot daySlot = daySlots.get(day_slot);
+                                    String slot_start_date = daySlot.getSlot_start_date();
+                                    String slot_stop_date = daySlot.getSlot_stop_date();
+                                    String slot_start_time = daySlot.getSlot_start_time();
+                                    String slot_stop_time = daySlot.getSlot_stop_time();
+                                    String slot_type = daySlot.getSlot_type();
+                                    String slot_id = daySlot.getSlot_id();
+                                    int slot_max_users = Integer.parseInt(daySlot.getSlot_max_users());
 
-                                int slot_stop_day = Integer.parseInt(slot_stop_date.split("-", 3)[2]);
-                                int slot_stop_month = Integer.parseInt(slot_stop_date.split("-", 3)[1]);
-                                int slot_stop_year = Integer.parseInt(slot_stop_date.split("-", 3)[0]);
+                                    int slot_stop_day = Integer.parseInt(slot_stop_date.split("-", 3)[2]);
+                                    int slot_stop_month = Integer.parseInt(slot_stop_date.split("-", 3)[1]);
+                                    int slot_stop_year = Integer.parseInt(slot_stop_date.split("-", 3)[0]);
 
-                                int slot_start_time_in_seconds = (Integer.parseInt(slot_start_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(slot_start_time.split(":")[1]) * 60);
-                                int slot_stop_time_in_seconds = (Integer.parseInt(slot_stop_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(slot_stop_time.split(":")[1]) * 60);
+                                    int slot_start_time_in_seconds = (Integer.parseInt(slot_start_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(slot_start_time.split(":")[1]) * 60);
+                                    int slot_stop_time_in_seconds = (Integer.parseInt(slot_stop_time.split(":")[0]) * 60 * 60) + (Integer.parseInt(slot_stop_time.split(":")[1]) * 60);
 
-                                long current_date_in_millis = System.currentTimeMillis();
+                                    long current_date_in_millis = System.currentTimeMillis();
 
-                                Calendar calendar = new GregorianCalendar();
-                                calendar.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
-                                long slot_stop_date_in_millis = calendar.getTimeInMillis();
-
-
-                                String grid_date = (String) gridcell.getTag();
-                                int grid_day = Integer.parseInt(grid_date.split("-", 3)[0]);
-                                String grid_month = grid_date.split("-", 3)[1];
-                                int month_index_of_grid = Arrays.asList(months).indexOf(grid_month);
-                                int grid_year = Integer.parseInt(grid_date.split("-", 3)[2]);
+                                    Calendar calendar = new GregorianCalendar();
+                                    calendar.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
+                                    long slot_stop_date_in_millis = calendar.getTimeInMillis();
 
 
-                                Calendar calendar1 = new GregorianCalendar();
-                                calendar1.set(grid_year, month_index_of_grid, grid_day);
-                                long grid_day_in_millis = calendar1.getTimeInMillis();
+                                    String grid_date = (String) gridcell.getTag();
+                                    int grid_day = Integer.parseInt(grid_date.split("-", 3)[0]);
+                                    String grid_month = grid_date.split("-", 3)[1];
+                                    int month_index_of_grid = Arrays.asList(months).indexOf(grid_month);
+                                    int grid_year = Integer.parseInt(grid_date.split("-", 3)[2]);
 
-                                if (current_date_in_millis > grid_day_in_millis)
-                                    break;
+
+                                    Calendar calendar1 = new GregorianCalendar();
+                                    calendar1.set(grid_year, month_index_of_grid, grid_day);
+                                    long grid_day_in_millis = calendar1.getTimeInMillis();
+
+                                    if (current_date_in_millis > grid_day_in_millis)
+                                        break;
 
 
-                                if (current_date_in_millis > slot_stop_date_in_millis)
-                                    break;
+                                    if (current_date_in_millis > slot_stop_date_in_millis)
+                                        break;
 
                                 /*
                                 *
                                 * For slot which are selected as Group
                                 * */
-                                if (slot_type.equalsIgnoreCase(context.getResources().getString(R.string.group))) {
-                                    boolean slot_match_with_event = false;
-                                    for (int day_event = 0; day_event < dayEvents.size(); day_event++) {    /* dayEvents is a list of DayEvent bean*/
-                                        DayEvent dayEvent1 = dayEvents.get(day_event);
-                                        String event_start_date = dayEvent1.getEvent_start_date();
-                                        String event_stop_date = dayEvent1.getEvent_stop_date();
-                                        String event_start_time = dayEvent1.getEvent_start_time();
-                                        String event_stop_time = dayEvent1.getEvent_stop_time();
-                                        String event_regarding_slot_id = dayEvent1.getSlot_id();   /* this will get slot_id regarding its matching slot */
-                                        int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
+                                    if (slot_type.equalsIgnoreCase(context.getResources().getString(R.string.group))) {
+                                        boolean slot_match_with_event = false;
+                                        for (int day_event = 0; day_event < dayEvents.size(); day_event++) {    /* dayEvents is a list of DayEvent bean*/
+                                            DayEvent dayEvent1 = dayEvents.get(day_event);
+                                            String event_start_date = dayEvent1.getEvent_start_date();
+                                            String event_stop_date = dayEvent1.getEvent_stop_date();
+                                            String event_start_time = dayEvent1.getEvent_start_time();
+                                            String event_stop_time = dayEvent1.getEvent_stop_time();
+                                            String event_regarding_slot_id = dayEvent1.getSlot_id();   /* this will get slot_id regarding its matching slot */
+                                            int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
                                         /* checking whether this particular event is similar to slot or not */
-                                        if (event_regarding_slot_id.equals(slot_id)) {
-                                            slot_match_with_event = true;
+                                            if (event_regarding_slot_id.equals(slot_id)) {
+                                                slot_match_with_event = true;
                                             /* if found similar then check whether the event_totoal_mentees from slot_max_users*/
-                                            if (event_total_mentees < slot_max_users) {
-                                                free_slot++;
-                                                break;
+                                                if (event_total_mentees < slot_max_users) {
+                                                    free_slot++;
+                                                    break;
 
 
 
@@ -578,10 +615,10 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                                                 }*/
 
-                                            } else
-                                                break;
+                                                } else
+                                                    break;
 
-                                        }
+                                            }
 /*
                                         if (event_start_date.equals(slot_start_date) && event_stop_date.equals(slot_stop_date) && event_start_time.equals(slot_start_time) && event_stop_time.equals(slot_stop_time)) {
                                             slot_match_with_event = true;
@@ -593,10 +630,10 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                             }
                                         }
 */
-                                    }
+                                        }
 
-                                    if (!slot_match_with_event) {
-                                        free_slot++;
+                                        if (!slot_match_with_event) {
+                                            free_slot++;
                                         /*if (vacationBeans.size() <= 0) {
                                             free_slot++;
                                         } else {
@@ -626,35 +663,35 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
                                         }*/
-                                    }
+                                        }
 
 
-                                } else {
+                                    } else {
                                     /*
                                     *
                                     * For slot which are selected as solo
                                     * */
-                                    boolean slot_match_with_event = false;
-                                    for (int day_event = 0; day_event < dayEvents.size(); day_event++) {
-                                        DayEvent dayEvent1 = dayEvents.get(day_event);
-                                        String event_start_date = dayEvent1.getEvent_start_date();
-                                        String event_stop_date = dayEvent1.getEvent_stop_date();
-                                        String event_start_time = dayEvent1.getEvent_start_time();
-                                        String event_stop_time = dayEvent1.getEvent_stop_time();
-                                        String event_regarding_slot_id = dayEvent1.getSlot_id();/* this will get slot_id regarding its matching slot */
-                                        int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
+                                        boolean slot_match_with_event = false;
+                                        for (int day_event = 0; day_event < dayEvents.size(); day_event++) {
+                                            DayEvent dayEvent1 = dayEvents.get(day_event);
+                                            String event_start_date = dayEvent1.getEvent_start_date();
+                                            String event_stop_date = dayEvent1.getEvent_stop_date();
+                                            String event_start_time = dayEvent1.getEvent_start_time();
+                                            String event_stop_time = dayEvent1.getEvent_stop_time();
+                                            String event_regarding_slot_id = dayEvent1.getSlot_id();/* this will get slot_id regarding its matching slot */
+                                            int event_total_mentees = Integer.parseInt(dayEvent1.getEvent_total_mentee());
                                         /* checking whether this particular event is similar to slot or not */
-                                        if (event_regarding_slot_id.equals(slot_id)) {
-                                            slot_match_with_event = true;
-                                            break;
+                                            if (event_regarding_slot_id.equals(slot_id)) {
+                                                slot_match_with_event = true;
+                                                break;
                                             /* if found similar then check whether the event_totoal_mentees from slot_max_users*/
+
+                                            }
 
                                         }
 
-                                    }
-
-                                    if (!slot_match_with_event) {
-                                        free_slot++;
+                                        if (!slot_match_with_event) {
+                                            free_slot++;
                                         /*if (vacationBeans.size() <= 0) {
                                             free_slot++;
                                         } else {
@@ -684,38 +721,88 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
                                         }*/
+                                        }
                                     }
+
                                 }
 
+
                             }
-
-
-                        }
                    /* }*/
                     /*
                             *
                             * if free_slot is having value greater than zero, it means this day has free slots and we have to populate calendar grid color
                             * */
-                        if (free_slot > 0) {
-                            if (day_color[1].equals("BLUE")) {
-                                gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                            if (free_slot > 0) {
+                                if (day_color[1].equals("BLUE")) {
+                                    gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                } else {
+                                    gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                }
                             } else {
-                                gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                if (day_color[1].equals("BLUE")) {
+                                    gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
+                                }
                             }
-                        } else {
-                            if (day_color[1].equals("BLUE")) {
-                                gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
-                            }
+
+
+                            gridcell.setTag(R.id.TAG_FREE_SLOT, String.valueOf(free_slot));
+
+
                         }
-
-
-                        gridcell.setTag(R.id.TAG_FREE_SLOT, String.valueOf(free_slot));
 
 
                     }
 
+                } else {
+
+                    if(currentMonthNonCoincidingVacation.size() > 0){
+                        Vacation vacation=currentMonthNonCoincidingVacation.get(0);
+                        Boolean vacation_made_at_network_status = Boolean.parseBoolean(vacation.getVacation_made_at_network_success());
+                        if(vacation_made_at_network_status){
+                        /* Only non coinciding vacation found on this day, Show this day with Vacation with handling mentor and mentee schedule separately */
+                            jhkhjkhjkjh
+                        }else{
+                            /* this is happening when user either go to previous, next month and device found network but earlier network was not available and arraylist for current_month_data made at that time then in this case we have to get this month data from server again*/
+                            if (allow_once) {
+                                // Toast.makeText(context, "Please refresh the schedule !", Toast.LENGTH_SHORT).show();
+                                if (myScheduleFragment != null) {
+                                    String user_group = StorageHelper.getUserGroup(context, "user_group");
+                                    myScheduleFragment.populate_calendar_from_adapter = true;
+                                    MyScheduleFragment.month = month_for_which_calendar_get_populated;
+                                    MyScheduleFragment.year = year_for_which_calendar_get_populated;
+                                    if (user_group.equals("3")) {
+                                        myScheduleFragment.getCalendarDetailsAPICall();
+
+                                    } else {
+                                        if (user_group.equals("2")) {
+                                   /*mentee three months data will get called from here */
+                                            myScheduleFragment.getCalendarDetailsForMentee();
+                                        }
+                                    }
+
+                                }
+
+                                if (mentorDetailsActivity != null) {
+                                    mentorDetailsActivity.populate_calendar_from_adapter = true;
+                                    MyScheduleFragment.month = month_for_which_calendar_get_populated;
+                                    MyScheduleFragment.year = year_for_which_calendar_get_populated;
+                                    mentorDetailsActivity.getCalendarDetailsAPICall();
+
+                                }
+
+
+                            }
+                            allow_once = false;
+
+                        }
+
+                    }else{
+                        /* Calendar days don't need to show any schedule as the current_month_data have no slot */
+                    }
 
                 }
+
 
             }
         }

@@ -3,31 +3,31 @@ package com.findmycoach.app.beans.CalendarSchedule;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by ved on 31/5/15.
  */
 public class Event implements Parcelable{
     private String event_id;
-    private String event_start_date;
     private String event_stop_date;
     private String event_total_mentee; /* Number of mentees having same event */
-    private String fname; /*fname when event_type is solo else not going to be used*/
-    private String lname; /*lname when event_type is solo else not going to be used*/
     private String sub_category_name;
+    private List<Mentee> mentees;   /* This is having different mentees data for this event like start date of event, first name and last name*/
 
+    public List<Mentee> getMentees() {
+        return mentees;
+    }
 
+    public void setMentees(List<Mentee> mentees) {
+        this.mentees = mentees;
+    }
 
     public Event() {
-
+        mentees = new ArrayList<Mentee>();
     }
 
-    public String getEvent_start_date() {
-        return event_start_date;
-    }
-
-    public void setEvent_start_date(String event_start_date) {
-        this.event_start_date = event_start_date;
-    }
 
     public String getEvent_stop_date() {
         return event_stop_date;
@@ -62,24 +62,6 @@ public class Event implements Parcelable{
         this.event_id = event_id;
     }
 
-    public String getFname() {
-        return fname;
-    }
-
-    public void setFname(String fname) {
-        this.fname = fname;
-    }
-
-    public String getLname() {
-        return lname;
-    }
-
-    public void setLname(String lname) {
-        this.lname = lname;
-    }
-
-
-
 
     public static Creator getCreator() {
         return CREATOR;
@@ -93,32 +75,22 @@ public class Event implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.event_id);
-        dest.writeString(this.event_start_date);
         dest.writeString(this.event_stop_date);
         dest.writeString(this.sub_category_name);
         dest.writeString(this.event_total_mentee);
-        dest.writeString(this.fname);
-        dest.writeString(this.lname);
-
-
-
+        dest.writeTypedList(this.mentees);
     }
 
     public Event(Parcel source){
     /*
      * Reconstruct from the Parcel
      */
-
+        this();
         this.event_id=source.readString();
-        this.event_start_date=source.readString();
         this.event_stop_date=source.readString();
         this.sub_category_name=source.readString();
         this.event_total_mentee=source.readString();
-        this.fname=source.readString();
-        this.lname=source.readString();
-
-
-
+        source.readTypedList(this.mentees,Mentee.CREATOR);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

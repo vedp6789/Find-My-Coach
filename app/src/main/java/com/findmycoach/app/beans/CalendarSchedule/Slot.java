@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,8 @@ import java.util.List;
  */
 public class Slot implements Parcelable{
     public Slot(){
-
+        events = new ArrayList<Event>();
+        vacations = new ArrayList<Vacation>();
     }
 
     public String slot_id;
@@ -27,6 +29,8 @@ public class Slot implements Parcelable{
     public List<Vacation> vacations;
     public String slot_created_on_network_success;
 
+
+
     public String isSlot_created_on_network_success() {
         return slot_created_on_network_success;
     }
@@ -34,6 +38,15 @@ public class Slot implements Parcelable{
     public void setSlot_created_on_network_success(String slot_created_on_network_success) {
         this.slot_created_on_network_success = slot_created_on_network_success;
     }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
 
     public String getSlot_id() {
         return slot_id;
@@ -100,14 +113,6 @@ public class Slot implements Parcelable{
     }
 
 
-    public List<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(List<Event> events) {
-        this.events = events;
-    }
-
     public List<Vacation> getVacations() {
         return vacations;
     }
@@ -141,6 +146,7 @@ public class Slot implements Parcelable{
     /*
      * Reconstruct from the Parcel
      */
+        this();
         this.slot_start_date=source.readString();
         this.slot_stop_date=source.readString();
         this.slot_start_time=source.readString();
@@ -178,4 +184,79 @@ public class Slot implements Parcelable{
 
         return classes;
     }
+
+
+
+    public boolean anyEventFound(long calendar_time_in_millis){     /* checking whether any event found for a specific day or not */
+        if(events.size() > 0){
+            boolean event_found=false;
+            for(int event_index = 0; event_index < events.size() ; event_index++){
+                Event event=events.get(event_index);
+
+                String stop_date = event.getEvent_stop_date();
+
+                Calendar calendar_event_start_date = Calendar.getInstance();
+                calendar_event_start_date.set(Integer.parseInt(start_date.split("-")[0]),Integer.parseInt(start_date.split("-")[1]),Integer.parseInt(start_date.split("-")[2]));
+                long event_start_date_in_millis =calendar_event_start_date.getTimeInMillis();
+
+
+                Calendar calendar_event_stop_date = Calendar.getInstance();
+                calendar_event_stop_date.set(Integer.parseInt(stop_date.split("-")[0]),Integer.parseInt(stop_date.split("-")[1]),Integer.parseInt(stop_date.split("-")[2]));
+                long event_stop_date_in_millis =calendar_event_stop_date.getTimeInMillis();
+
+
+                if((calendar_time_in_millis == event_start_date_in_millis)||
+                        (calendar_time_in_millis == event_stop_date_in_millis) ||
+                        (calendar_time_in_millis < event_stop_date_in_millis && calendar_time_in_millis > event_start_date_in_millis)){
+                    event_found =  true;
+                    break;
+                }else{
+                    event_found = false;
+                }
+
+
+            }
+            return event_found;
+        }else {
+            return false;
+        }
+    }
+
+
+    public boolean anyVacationFound(long calendar_time_in_millis){     /* checking whether any vacation found for a specific day or not */
+        if(vacations.size() > 0){
+            boolean vacation_found=false;
+            for(int vacation_index = 0; vacation_index < vacations.size() ; vacation_index++){
+                Vacation vacation=vacations.get(vacation_index);
+                String start_date = vacation.getStart_date();
+                String stop_date = vacation.getStop_date();
+
+                Calendar calendar_vacation_start_date = Calendar.getInstance();
+                calendar_vacation_start_date.set(Integer.parseInt(start_date.split("-")[0]),Integer.parseInt(start_date.split("-")[1]),Integer.parseInt(start_date.split("-")[2]));
+                long vacation_start_date_in_millis =calendar_vacation_start_date.getTimeInMillis();
+
+
+                Calendar calendar_vacation_stop_date = Calendar.getInstance();
+                calendar_vacation_stop_date.set(Integer.parseInt(stop_date.split("-")[0]),Integer.parseInt(stop_date.split("-")[1]),Integer.parseInt(stop_date.split("-")[2]));
+                long vacation_stop_date_in_millis =calendar_vacation_stop_date.getTimeInMillis();
+
+
+                if((calendar_time_in_millis == vacation_start_date_in_millis)||
+                        (calendar_time_in_millis == vacation_stop_date_in_millis) ||
+                        (calendar_time_in_millis < vacation_stop_date_in_millis && calendar_time_in_millis > vacation_start_date_in_millis)){
+                    vacation_found =  true;
+                    break;
+                }else{
+                    vacation_found = false;
+                }
+
+
+            }
+            return vacation_found;
+        }else {
+            return false;
+        }
+    }
+
+
 }

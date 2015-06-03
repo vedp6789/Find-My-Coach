@@ -31,6 +31,7 @@ import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
 import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
 import com.findmycoach.app.beans.CalendarSchedule.Event;
+import com.findmycoach.app.beans.CalendarSchedule.Mentee;
 import com.findmycoach.app.beans.CalendarSchedule.MentorInfo;
 import com.findmycoach.app.beans.CalendarSchedule.MonthYearInfo;
 import com.findmycoach.app.beans.CalendarSchedule.Slot;
@@ -1172,10 +1173,21 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 for (int event_jsonArray_index = 0; event_jsonArray_index < event_jsonArray.length(); event_jsonArray_index++) {
                     Event event = new Event();
                     JSONObject event_jsonObject = event_jsonArray.getJSONObject(event_jsonArray_index);
+                    JSONArray event_mentees=event_jsonObject.getJSONArray("mentee");
+                    List<Mentee> mentees=new ArrayList<Mentee>();
+                    for(int mentee_index=0; mentee_index < event_mentees.length(); mentee_index++ ){
+                        Mentee mentee=new Mentee();
+                        JSONObject mentee_jsonObject=event_mentees.getJSONObject(mentee_index);
+                        mentee.setEvent_start_date(mentee_jsonObject.getString("start_date"));
+                        mentee.setFirst_name(mentee_jsonObject.getString("first_name"));
+                        mentee.setLast_name(mentee_jsonObject.getString("last_name"));
+                        mentees.add(mentee);
+                    }
                     event.setEvent_id(event_jsonObject.getString("event_id"));
-                    event.setEvent_start_date(event_jsonObject.getString("start_date"));
                     event.setEvent_stop_date(event_jsonObject.getString("stop_date"));
                     event.setSub_category_name(event_jsonObject.getString("sub_category"));
+                    event.setEvent_total_mentee(event_jsonObject.getString("active_members"));
+                    event.setMentees(mentees);
                     events.add(event);
 
 
