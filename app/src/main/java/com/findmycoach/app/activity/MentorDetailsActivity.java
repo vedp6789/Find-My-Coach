@@ -33,6 +33,8 @@ import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
 import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
 import com.findmycoach.app.beans.CalendarSchedule.Event;
+import com.findmycoach.app.beans.CalendarSchedule.MentorInfo;
+import com.findmycoach.app.beans.CalendarSchedule.MonthYearInfo;
 import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.beans.CalendarSchedule.Vacation;
 import com.findmycoach.app.beans.mentor.Data;
@@ -90,9 +92,13 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     public ArrayList<Slot> previousMonthArrayList = null;
     public ArrayList<Slot> currentMonthArrayList = null;
     public ArrayList<Slot> comingMonthArrayList = null;
-    public ArrayList<Vacation> previousMonthNonCoincidingVacation=null;
-    public ArrayList<Vacation> currentMonthNonCoincidingVacation=null;
-    public ArrayList<Vacation> comingMonthNonCoincidingVacation=null;
+    public ArrayList<Vacation> previousMonthNonCoincidingVacation = null;
+    public ArrayList<Vacation> currentMonthNonCoincidingVacation = null;
+    public ArrayList<Vacation> comingMonthNonCoincidingVacation = null;
+    public ArrayList<MonthYearInfo> previousMonthYearInfo = null;
+    public ArrayList<MonthYearInfo> currentMonthYearInfo = null;
+    public ArrayList<MonthYearInfo> comingMonthYearInfo = null;
+    public ArrayList<MentorInfo> mentorInfos = null;
     public boolean b_three_months_data;
     public static int month_from_dialog, year_from_dialog;
     private String charges;
@@ -101,6 +107,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private static final String TAG = "FMC";
     private ArrayList<String> array_list_subCategory = null;
     private String previous_month_start_date;/* this will get initialized when api is requested for three months (previous, current, coming)*/
+    private String next_month_requested_date;
+    private String prev_month_requested_date;
     private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 
@@ -171,7 +179,13 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         previousMonthArrayList = new ArrayList<Slot>();
         currentMonthArrayList = new ArrayList<Slot>();
         comingMonthArrayList = new ArrayList<Slot>();
-
+        previousMonthNonCoincidingVacation = new ArrayList<Vacation>();
+        currentMonthNonCoincidingVacation = new ArrayList<Vacation>();
+        comingMonthNonCoincidingVacation = new ArrayList<Vacation>();
+        previousMonthYearInfo = new ArrayList<MonthYearInfo>();
+        comingMonthYearInfo = new ArrayList<MonthYearInfo>();
+        currentMonthYearInfo = new ArrayList<MonthYearInfo>();
+        mentorInfos = new ArrayList<MentorInfo>();
 
         if (month_from_dialog == 0 && year_from_dialog == 0) {
             if (populate_calendar_from_adapter) {
@@ -291,6 +305,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         requestParams.add("user_group", String.valueOf("3"));
         requestParams.add("mentor_id", userInfo.getId());
         requestParams.add("start_date", String.valueOf(stringBuilder));
+        prev_month_requested_date = String.valueOf(stringBuilder);
         requestParams.add("limit", String.valueOf(days_in_new_prev_month));
         networkCall2(requestParams);
 
@@ -349,6 +364,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         requestParams.add("user_group", String.valueOf("3"));
         requestParams.add("mentor_id", userInfo.getId());
         requestParams.add("start_date", String.valueOf(stringBuilder));
+        next_month_requested_date = String.valueOf(stringBuilder);
         requestParams.add("limit", String.valueOf(days_in_new_next_month));
         networkCall3(requestParams);
 
@@ -725,11 +741,51 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     }
 
     private void updateArrayListForThreeMonths() {
-        Slot  slot = new Slot();
+        Slot slot = new Slot();
         slot.setSlot_created_on_network_success("false");
         previousMonthArrayList.add(slot);
         currentMonthArrayList.add(slot);
         comingMonthArrayList.add(slot);
+
+        /* Making non-coinciding Arraylists updated with "false" network communication */
+        Vacation vacation = new Vacation();
+        vacation.setVacation_made_at_network_success("false");
+        previousMonthNonCoincidingVacation.add(vacation);
+        currentMonthNonCoincidingVacation.add(vacation);
+        comingMonthNonCoincidingVacation.add(vacation);
+
+
+        int previous_month = Integer.parseInt(previous_month_start_date.split("-")[1]);
+        int previous_month_year = Integer.parseInt(previous_month_start_date.split("-")[0]);
+
+        int current_month, current_year, coming_month, coming_year;
+        if (previous_month == 11) {
+            current_month = 12;
+            current_year = previous_month_year;
+            coming_month = 1;
+            coming_year = previous_month_year;
+            ++coming_year;
+        } else {
+            if (previous_month == 12) {
+                current_month = 1;
+                current_year = previous_month_year;
+                ++current_year;
+                coming_month = 2;
+                coming_year = current_year;
+            } else {
+                current_month = previous_month;
+                ++current_month;
+                current_year = previous_month_year;
+                coming_month = current_month;
+                ++coming_month;
+                coming_year = previous_month_year;
+            }
+        }
+
+        previousMonthYearInfo = getMonthYearForThis(previous_month, previous_month_year, finalizeDaysInMonth(previous_month, previous_month_year));
+        currentMonthYearInfo = getMonthYearForThis(current_month, current_year, finalizeDaysInMonth(current_month, current_year));
+        comingMonthYearInfo = getMonthYearForThis(coming_month, coming_year, finalizeDaysInMonth(coming_month, coming_year));
+
 
     }
 
@@ -738,9 +794,25 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         currentMonthArrayList = comingMonthArrayList;
         comingMonthArrayList = null;
         comingMonthArrayList = new ArrayList<Slot>();
-        Slot  slot = new Slot();
+        Slot slot = new Slot();
         slot.setSlot_created_on_network_success("false");
         comingMonthArrayList.add(slot);
+
+        previousMonthNonCoincidingVacation = currentMonthNonCoincidingVacation;
+        currentMonthNonCoincidingVacation = comingMonthNonCoincidingVacation;
+        currentMonthNonCoincidingVacation = null;
+        comingMonthNonCoincidingVacation = new ArrayList<Vacation>();
+        Vacation vacation = new Vacation();
+        vacation.setVacation_made_at_network_success("false");
+        comingMonthNonCoincidingVacation.add(vacation);
+
+
+        previousMonthYearInfo = currentMonthYearInfo;
+        currentMonthYearInfo = comingMonthYearInfo;
+        comingMonthYearInfo = null;
+        comingMonthYearInfo = new ArrayList<MonthYearInfo>();
+        comingMonthYearInfo = getMonthYearForThis(Integer.parseInt(next_month_requested_date.split("-")[1]), Integer.parseInt(next_month_requested_date.split("-")[0]), finalizeDaysInMonth(Integer.parseInt(next_month_requested_date.split("-")[1]), Integer.parseInt(next_month_requested_date.split("-")[0])));
+
     }
 
     public void updateArrayListsForPreviousMonth() {
@@ -748,9 +820,25 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         currentMonthArrayList = previousMonthArrayList;
         previousMonthArrayList = null;
         previousMonthArrayList = new ArrayList<Slot>();
-        Slot  slot = new Slot();
+        Slot slot = new Slot();
         slot.setSlot_created_on_network_success("false");
         previousMonthArrayList.add(slot);
+
+
+        comingMonthNonCoincidingVacation = currentMonthNonCoincidingVacation;
+        currentMonthNonCoincidingVacation = previousMonthNonCoincidingVacation;
+        previousMonthNonCoincidingVacation = null;
+        previousMonthNonCoincidingVacation = new ArrayList<Vacation>();
+        Vacation vacation = new Vacation();
+        vacation.setVacation_made_at_network_success("false");
+        previousMonthNonCoincidingVacation.add(vacation);
+
+        comingMonthYearInfo = currentMonthYearInfo;
+        currentMonthYearInfo = previousMonthYearInfo;
+        previousMonthYearInfo = null;
+        previousMonthYearInfo = new ArrayList<MonthYearInfo>();
+        previousMonthYearInfo = getMonthYearForThis(Integer.parseInt(prev_month_requested_date.split("-")[1]), Integer.parseInt(prev_month_requested_date.split("-")[0]), finalizeDaysInMonth(Integer.parseInt(prev_month_requested_date.split("-")[1]), Integer.parseInt(prev_month_requested_date.split("-")[0])));
+
     }
 
 
@@ -776,13 +864,19 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         try {
 
             JSONObject jsonObject = new JSONObject((String) object);
+            JSONObject jsonObject_mentor = jsonObject.getJSONObject("mentor");
             JSONArray jsonArray_data = jsonObject.getJSONArray("slots");
-            Log.d(TAG, "json array size : " + jsonArray_data.length());
-            Log.d(TAG, "Object got for three months data " + jsonObject.toString());
+            JSONArray jsonArray_vacation_non_coinciding = jsonObject.getJSONArray("vacations");
+
+
+            //  Log.d(TAG, "json array size : " + jsonArray_data.length());
+            // Log.d(TAG, "Object got for three months data " + jsonObject.toString());
 
             List<Slot> slots = new ArrayList<Slot>();
+            List<Vacation> vacations = new ArrayList<Vacation>();  /* list of non coinciding vacations*/
 
             parseSlots(slots, jsonArray_data, 3);
+            parseVacation(vacations, jsonArray_vacation_non_coinciding);
 
             int previous_month = Integer.parseInt(previous_month_start_date.split("-")[1]);
             int previous_month_year = Integer.parseInt(previous_month_start_date.split("-")[0]);
@@ -810,15 +904,21 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                     coming_year = previous_month_year;
                 }
             }
+
             previousMonthArrayList = getSlotsForThis(slots, previous_month, previous_month_year, finalizeDaysInMonth(previous_month, previous_month_year));
             currentMonthArrayList = getSlotsForThis(slots, current_month, current_year, finalizeDaysInMonth(current_month, current_year));
             comingMonthArrayList = getSlotsForThis(slots, coming_month, coming_year, finalizeDaysInMonth(coming_month, coming_year));
-
+            previousMonthNonCoincidingVacation = getVacationsForThis(vacations, previous_month, previous_month_year, finalizeDaysInMonth(previous_month, previous_month_year));
+            currentMonthNonCoincidingVacation = getVacationsForThis(vacations, current_month, current_year, finalizeDaysInMonth(current_month, current_year));
+            comingMonthNonCoincidingVacation = getVacationsForThis(vacations, coming_month, coming_year, finalizeDaysInMonth(coming_month, coming_year));
+            previousMonthYearInfo = getMonthYearForThis(previous_month, previous_month_year, finalizeDaysInMonth(previous_month, previous_month_year));
+            currentMonthYearInfo = getMonthYearForThis(current_month, current_year, finalizeDaysInMonth(current_month, current_year));
+            comingMonthYearInfo = getMonthYearForThis(coming_month, coming_year, finalizeDaysInMonth(coming_month, coming_year));
 
             Log.d(TAG, "Mentors slots info for mentee,  previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
             if (b_three_months_data) {   /*  program will come in this scope when user selects date from dialog i.e. user randomly selects a year and month */
                 Log.d(TAG, "Three months data get changed");
-                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
+                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
                 calendarView.setAdapter(adapter1);
                 adapter1.notifyDataSetChanged();
                 if (month_from_dialog == 0 && year_from_dialog == 0) {
@@ -827,7 +927,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
             } else {
                 Log.d(TAG, "three months data population");
-                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
+                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
                 calendarView.setAdapter(adapter1);
                 adapter1.notifyDataSetChanged();
             }
@@ -837,6 +937,83 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
+    }
+
+    private void parseVacation(List<Vacation> vacations, JSONArray jsonArray_vacation_non_coinciding) {
+        for (int vacation_index = 0; vacation_index < jsonArray_vacation_non_coinciding.length(); vacation_index++) {
+            try {
+                Vacation vacation = new Vacation();
+                JSONObject vacation_jsonObject = jsonArray_vacation_non_coinciding.getJSONObject(vacation_index);
+                vacation.setVacation_id(vacation_jsonObject.getString("vacation_id"));
+                vacation.setStart_date(vacation_jsonObject.getString("start_date"));
+                vacation.setStop_date(vacation_jsonObject.getString("stop_date"));
+                vacation.setCause_of_the_vacation(vacation_jsonObject.getString("cause_of_the_vacation"));
+                JSONArray vacation_weekdays = vacation_jsonObject.getJSONArray("weekdays");
+                String vacation_weekdays_array[] = new String[vacation_weekdays.length()];
+                for (int week_day = 0; week_day < vacation_weekdays.length(); week_day++) {
+                    vacation_weekdays_array[week_day] = vacation_weekdays.getString(week_day);   /* week_day is used to pass index */
+                }
+                vacation.setWeek_days(vacation_weekdays_array);
+                vacation.setStart_time(vacation_jsonObject.getString("start_time"));
+                vacation.setStop_time(vacation_jsonObject.getString("stop_time"));
+                vacation.setVacation_made_at_network_success("true");
+                vacations.add(vacation);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private ArrayList<Vacation> getVacationsForThis(List<Vacation> vacations, int previous_month, int previous_month_year, int days) {
+        ArrayList<Vacation> vacationArrayList = new ArrayList<Vacation>();
+
+        Calendar calendar_start_of_month = Calendar.getInstance();
+        calendar_start_of_month.set(year, month - 1, 1);
+        long month_start_date_in_millis = calendar_start_of_month.getTimeInMillis();
+
+        Calendar calendar_end_of_month = Calendar.getInstance();
+        calendar_end_of_month.set(year, month - 1, days);
+        long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
+
+
+        for (int vacation_no = 0; vacation_no < vacations.size(); vacation_no++) {
+            Vacation vacation = vacations.get(vacation_no);
+            String start_date = vacation.getStart_date();
+            String stop_date = vacation.getStop_date();
+
+            Calendar calendar_vacation_start_date = Calendar.getInstance();
+            calendar_vacation_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
+            long vacation_start_date_in_millis = calendar_vacation_start_date.getTimeInMillis();
+            Calendar calendar_vacation_end_date = Calendar.getInstance();
+            calendar_vacation_end_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
+            long vacation_stop_date_in_millis = calendar_vacation_end_date.getTimeInMillis();
+
+
+            if ((vacation_start_date_in_millis < month_start_date_in_millis && vacation_stop_date_in_millis > month_end_date_in_millis) ||
+                    (vacation_start_date_in_millis < month_start_date_in_millis && vacation_stop_date_in_millis > month_start_date_in_millis && vacation_stop_date_in_millis < month_end_date_in_millis) ||
+                    (vacation_start_date_in_millis > month_start_date_in_millis && vacation_start_date_in_millis < month_end_date_in_millis && vacation_stop_date_in_millis > month_end_date_in_millis) ||
+                    (vacation_start_date_in_millis > month_start_date_in_millis && vacation_start_date_in_millis < month_end_date_in_millis && vacation_stop_date_in_millis > month_start_date_in_millis && vacation_stop_date_in_millis < month_end_date_in_millis) ||
+                    (vacation_start_date_in_millis == month_start_date_in_millis && vacation_stop_date_in_millis == month_end_date_in_millis)) {
+
+                vacationArrayList.add(vacation);
+
+            }
+        }
+
+        return vacationArrayList;
+
+    }
+
+    private ArrayList<MonthYearInfo> getMonthYearForThis(int month, int year, int days) {
+        ArrayList<MonthYearInfo> monthYearInfos = new ArrayList<MonthYearInfo>();
+        MonthYearInfo monthYearInfo = new MonthYearInfo();
+        monthYearInfo.setMonth(month);
+        monthYearInfo.setYear(year);
+        monthYearInfo.setDays(days);
+        monthYearInfos.add(monthYearInfo);
+        return monthYearInfos;
 
 
     }
@@ -975,23 +1152,38 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         progressDialog.dismiss();
         try {
             JSONObject jsonObject = new JSONObject((String) object);
+            JSONObject jsonObject_mentor = jsonObject.getJSONObject("mentor");
             JSONArray jsonArray_data = jsonObject.getJSONArray("slots");
+            JSONArray jsonArray_vacation_non_coinciding = jsonObject.getJSONArray("vacations");
 
             List<Slot> slots = new ArrayList<Slot>();
+            List<Vacation> vacations = new ArrayList<Vacation>();  /* list of non coinciding vacations*/
 
             parseSlots(slots, jsonArray_data, 3);
+            parseVacation(vacations, jsonArray_vacation_non_coinciding);
 
             previousMonthArrayList = currentMonthArrayList;
             currentMonthArrayList = comingMonthArrayList;
             comingMonthArrayList = null;
             comingMonthArrayList = new ArrayList<Slot>();
-
             comingMonthArrayList = (ArrayList<Slot>) slots;
+
+            previousMonthNonCoincidingVacation = currentMonthNonCoincidingVacation;
+            currentMonthNonCoincidingVacation = comingMonthNonCoincidingVacation;
+            comingMonthNonCoincidingVacation = null;
+            comingMonthNonCoincidingVacation = new ArrayList<Vacation>();
+            comingMonthNonCoincidingVacation = (ArrayList<Vacation>) vacations;
+
+            previousMonthYearInfo = currentMonthYearInfo;
+            currentMonthYearInfo = comingMonthYearInfo;
+            comingMonthYearInfo = null;
+            comingMonthYearInfo = new ArrayList<MonthYearInfo>();
+            comingMonthYearInfo = getMonthYearForThis(Integer.parseInt(next_month_requested_date.split("-")[1]), Integer.parseInt(next_month_requested_date.split("-")[0]), finalizeDaysInMonth(Integer.parseInt(next_month_requested_date.split("-")[1]), Integer.parseInt(next_month_requested_date.split("-")[0])));
 
             Log.d(TAG, "comingMonthArrayList size" + comingMonthArrayList.size());
 
 
-            adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
+            adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
             _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
             tv_currentMonth.setText(DateFormat.format(dateTemplate,
                     _calendar.getTime()));
@@ -1012,22 +1204,38 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         progressDialog.dismiss();
         try {
             JSONObject jsonObject = new JSONObject((String) object);
+            JSONObject jsonObject_mentor = jsonObject.getJSONObject("mentor");
             JSONArray jsonArray_data = jsonObject.getJSONArray("slots");
+            JSONArray jsonArray_vacation_non_coinciding = jsonObject.getJSONArray("vacations");
 
-            List<Slot> slots= new ArrayList<Slot>();
+
+            List<Slot> slots = new ArrayList<Slot>();
+            List<Vacation> vacations = new ArrayList<Vacation>();  /* list of non coinciding vacations*/
 
             parseSlots(slots, jsonArray_data, 3);
+            parseVacation(vacations, jsonArray_vacation_non_coinciding);
 
             comingMonthArrayList = currentMonthArrayList;
             currentMonthArrayList = previousMonthArrayList;
             previousMonthArrayList = null;
             previousMonthArrayList = new ArrayList<Slot>();
-
             previousMonthArrayList = (ArrayList<Slot>) slots;
 
+            comingMonthNonCoincidingVacation = currentMonthNonCoincidingVacation;
+            currentMonthNonCoincidingVacation = previousMonthNonCoincidingVacation;
+            previousMonthNonCoincidingVacation = null;
+            previousMonthNonCoincidingVacation = new ArrayList<Vacation>();
+            previousMonthNonCoincidingVacation = (ArrayList<Vacation>) vacations;
 
 
-            adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
+            comingMonthYearInfo = currentMonthYearInfo;
+            currentMonthYearInfo = previousMonthYearInfo;
+            previousMonthYearInfo = null;
+            previousMonthYearInfo = new ArrayList<MonthYearInfo>();
+            previousMonthYearInfo = getMonthYearForThis(Integer.parseInt(prev_month_requested_date.split("-")[1]), Integer.parseInt(prev_month_requested_date.split("-")[0]), finalizeDaysInMonth(Integer.parseInt(prev_month_requested_date.split("-")[1]), Integer.parseInt(prev_month_requested_date.split("-")[0])));
+
+
+            adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
             _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
             tv_currentMonth.setText(DateFormat.format(dateTemplate,
                     _calendar.getTime()));

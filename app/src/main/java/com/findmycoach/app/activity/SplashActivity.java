@@ -73,6 +73,8 @@ public class SplashActivity extends Activity implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         /** Caching subcategories into database */
+
+
         dataBase.clearDatabase();
         long i = dataBase.insertData((Category) object);
         runHoldThread();

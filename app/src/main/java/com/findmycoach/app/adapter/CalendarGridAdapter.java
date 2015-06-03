@@ -18,7 +18,10 @@ import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
 import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
+import com.findmycoach.app.beans.CalendarSchedule.MentorInfo;
+import com.findmycoach.app.beans.CalendarSchedule.MonthYearInfo;
 import com.findmycoach.app.beans.CalendarSchedule.Slot;
+import com.findmycoach.app.beans.CalendarSchedule.Vacation;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
@@ -63,6 +66,13 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private static ArrayList<Slot> prev_month_data = null;
     private static ArrayList<Slot> current_month_data = null;
     private static ArrayList<Slot> coming_month_data = null;
+    private static ArrayList<Vacation> previousMonthNonCoincidingVacation = null;
+    private static ArrayList<Vacation> currentMonthNonCoincidingVacation = null;
+    private static ArrayList<Vacation> comingMonthNonCoincidingVacation = null;
+    private static ArrayList<MonthYearInfo> previousMonthYearInfo = null;
+    private static ArrayList<MonthYearInfo> currentMonthYearInfo = null;
+    private static ArrayList<MonthYearInfo> comingMonthYearInfo = null;
+    private static ArrayList<MentorInfo> mentorInfos = null;
     private static int day_schedule_index = 0;
     Day day = null;
     DayEvent dayEvent = null;
@@ -86,7 +96,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     * This constructor is called from MyScheduleFragment
     *
     * */
-    public CalendarGridAdapter(Context context, int month, int year, MyScheduleFragment myScheduleFragment, ArrayList<Slot> prev_month_data, ArrayList<Slot> current_month_data, ArrayList<Slot> coming_month_data) {
+    public CalendarGridAdapter(Context context, int month, int year, MyScheduleFragment myScheduleFragment, ArrayList<Slot> prev_month_data, ArrayList<Slot> current_month_data, ArrayList<Slot> coming_month_data, ArrayList<Vacation> previousMonthNonCoincidingVacation, ArrayList<Vacation> currentMonthNonCoincidingVacation, ArrayList<Vacation> comingMonthNonCoincidingVacation, ArrayList<MonthYearInfo> previousMonthYearInfo, ArrayList<MonthYearInfo> currentMonthYearInfo, ArrayList<MonthYearInfo> comingMonthYearInfo) {
         super();
         this.context = context;
         weekdays = context.getResources().getStringArray(R.array.week_days);
@@ -111,6 +121,17 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         CalendarGridAdapter.current_month_data = current_month_data;
         CalendarGridAdapter.coming_month_data = coming_month_data;
 
+        CalendarGridAdapter.previousMonthNonCoincidingVacation = new ArrayList<Vacation>();
+        CalendarGridAdapter.currentMonthNonCoincidingVacation = new ArrayList<Vacation>();
+        CalendarGridAdapter.comingMonthNonCoincidingVacation = new ArrayList<Vacation>();
+
+
+        CalendarGridAdapter.previousMonthYearInfo= new ArrayList<MonthYearInfo>();
+        CalendarGridAdapter.currentMonthYearInfo=new ArrayList<MonthYearInfo>();
+        CalendarGridAdapter.comingMonthYearInfo=new ArrayList<MonthYearInfo>();
+
+
+
         month_for_which_calendar_get_populated = month;
         year_for_which_calendar_get_populated = year;
         allow_data_population_from_server_data = true;   /* This constructor get called when there is successful network communication so data from server helps in calendar population*/
@@ -123,7 +144,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         * This constructor is called from MyScheduleFragment
         *
         * */
-    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Slot> prev_month_data, ArrayList<Slot> current_month_data, ArrayList<Slot> coming_month_data, String mentor_id, String availability_yn, String charges, ArrayList<String> arraylist_subcategory, String connection_status) {
+    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Slot> prev_month_data, ArrayList<Slot> current_month_data, ArrayList<Slot> coming_month_data, ArrayList<Vacation> previousMonthNonCoincidingVacation, ArrayList<Vacation> currentMonthNonCoincidingVacation, ArrayList<Vacation> comingMonthNonCoincidingVacation, ArrayList<MonthYearInfo> previousMonthYearInfo, ArrayList<MonthYearInfo> currentMonthYearInfo, ArrayList<MonthYearInfo> comingMonthYearInfo, String mentor_id, String availability_yn, String charges, ArrayList<String> arraylist_subcategory, String connection_status) {
         super();
         this.context = context;
         weekdays = context.getResources().getStringArray(R.array.week_days);

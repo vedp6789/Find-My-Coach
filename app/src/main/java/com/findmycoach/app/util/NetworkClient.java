@@ -852,7 +852,7 @@ public class NetworkClient {
                         try {
                             if (statusCode != 204) {
                                 String responseJson = new String(responseBody);
-                                Log.d(TAG, "Success: Response:" + responseJson);
+                                Log.d(TAG, "Success: Response: on splash metaData call " + responseJson);
                                 Log.d(TAG, "Success: Response Code:" + statusCode);
                                 if (statusCode == 200) {
                                     try {
