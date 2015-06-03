@@ -14,9 +14,20 @@ public class Vacation implements Parcelable {
     private String [] week_days;
     private String start_time;
     private String stop_time;
+    private String vacation_made_at_network_success;     /* This field is getting data only in case of non coinciding vacation array creation
+                                                           "true" when network is success otherwise "false"
+    */
 
     public Vacation(){
 
+    }
+
+    public String getVacation_made_at_network_success() {
+        return vacation_made_at_network_success;
+    }
+
+    public void setVacation_made_at_network_success(String vacation_made_at_network_success) {
+        this.vacation_made_at_network_success = vacation_made_at_network_success;
     }
 
     public String getStart_time() {

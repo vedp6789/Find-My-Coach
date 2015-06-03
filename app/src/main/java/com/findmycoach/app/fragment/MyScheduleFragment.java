@@ -824,6 +824,49 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         currentMonthArrayList.add(slot);
         comingMonthArrayList.add(slot);
 
+        /* Making non-coinciding arraylist updated with network status*/
+        Vacation vacation =new Vacation();
+        vacation.setVacation_made_at_network_success("false");
+        previousMonthNonCoincidingVacation.add(vacation);
+        currentMonthNonCoincidingVacation.add(vacation);
+        comingMonthNonCoincidingVacation.add(vacation);
+
+
+
+
+        int previous_month = Integer.parseInt(previous_month_start_date.split("-")[1]);
+        int previous_month_year = Integer.parseInt(previous_month_start_date.split("-")[0]);
+
+        int current_month, current_year, coming_month, coming_year;
+        if (previous_month == 11) {
+            current_month = 12;
+            current_year = previous_month_year;
+            coming_month = 1;
+            coming_year = previous_month_year;
+            ++coming_year;
+        } else {
+            if (previous_month == 12) {
+                current_month = 1;
+                current_year = previous_month_year;
+                ++current_year;
+                coming_month = 2;
+                coming_year = current_year;
+            } else {
+                current_month = previous_month;
+                ++current_month;
+                current_year = previous_month_year;
+                coming_month = current_month;
+                ++coming_month;
+                coming_year = previous_month_year;
+            }
+        }
+
+        previousMonthYearInfo=getMonthYearForThis(previous_month,previous_month_year,finalizeDaysInMonth(previous_month,previous_month_year));
+        currentMonthYearInfo=getMonthYearForThis(current_month,current_year,finalizeDaysInMonth(current_month,current_year));
+        comingMonthYearInfo=getMonthYearForThis(coming_month,coming_year,finalizeDaysInMonth(coming_month,coming_year));
+
+
+
     }
 
     public void updateArrayListsForNextMonth() {
@@ -834,6 +877,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         Slot slot = new Slot();
         slot.setSlot_created_on_network_success("false");
         comingMonthArrayList.add(slot);
+
+
+
+
     }
 
     public void updateArrayListsForPreviousMonth() {
@@ -1058,6 +1105,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 vacation.setWeek_days(vacation_weekdays_array);
                 vacation.setStart_time(vacation_jsonObject.getString("start_time"));
                 vacation.setStop_time(vacation_jsonObject.getString("stop_time"));
+                vacation.setVacation_made_at_network_success("true");
                 vacations.add(vacation);
             } catch (Exception e) {
                 e.printStackTrace();
