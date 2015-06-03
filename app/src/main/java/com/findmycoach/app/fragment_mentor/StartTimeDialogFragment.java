@@ -5,26 +5,29 @@ import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
+import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.AddNewSlotActivity;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by praka_000 on 3/2/2015.
  */
-public class StartTimeDialogFragment extends DialogFragment implements View.OnClickListener{
+public class StartTimeDialogFragment extends DialogFragment implements View.OnClickListener {
     public static TimePicker timePicker;
     Button b_ok, b_can;
-     AddNewSlotActivity addNewSlotActivity;
+    AddNewSlotActivity addNewSlotActivity;
+    private final static int TIME_PICKER_INTERVAL = 15;
     /*Calendar calendar;
     long time;
 */
@@ -41,11 +44,20 @@ public class StartTimeDialogFragment extends DialogFragment implements View.OnCl
         switch (v.getId()) {
             case R.id.b_ok:
                 String hour = String.valueOf(timePicker.getCurrentHour());
-                String minute = String.valueOf(timePicker.getCurrentMinute());
 
+                int minute = timePicker.getCurrentMinute();
+                String min = "";
+                if (minute == 0)
+                    min = "00";
+                else if (minute == 1)
+                    min = "15";
+                else if (minute == 2)
+                    min = "30";
+                else if (minute == 3)
+                    min = "45";
 
                 dismiss();
-                addNewSlotActivity.setSelectedStartTime(hour,minute);
+                addNewSlotActivity.setSelectedStartTime(hour, min);
 
                 break;
             case R.id.b_cancel:
@@ -109,6 +121,26 @@ public class StartTimeDialogFragment extends DialogFragment implements View.OnCl
         Dialog dialog = getDialog();
         dialog.setTitle(getString(R.string.set_time));
         dialog.setCanceledOnTouchOutside(false);
+
+
+        try {
+            Class<?> classForid = Class.forName("com.android.internal.R$id");
+            Field field = classForid.getField("minute");
+
+            NumberPicker mMinuteSpinner = (NumberPicker) timePicker
+                    .findViewById(field.getInt(null));
+            mMinuteSpinner.setMinValue(0);
+            mMinuteSpinner.setMaxValue((60 / TIME_PICKER_INTERVAL) - 1);
+            List<String> displayedValues = new ArrayList<String>();
+            for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
+                displayedValues.add(String.format("%02d", i));
+            }
+            mMinuteSpinner.setDisplayedValues(displayedValues
+                    .toArray(new String[0]));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return view;
     }
 

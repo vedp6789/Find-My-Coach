@@ -15,12 +15,9 @@ import java.util.List;
 public class TimePickerFragment extends TimePickerDialog  {
 
     private final static int TIME_PICKER_INTERVAL = 15;
-    private TimePicker timePicker;
-    private final OnTimeSetListener callback;
 
     public TimePickerFragment(Context context, OnTimeSetListener callBack, int hourOfDay, int minute, boolean is24HourView) {
         super(context, callBack, hourOfDay, minute, is24HourView);
-        this.callback = callBack;
     }
 
 
@@ -30,7 +27,7 @@ public class TimePickerFragment extends TimePickerDialog  {
         try {
             Class<?> classForid = Class.forName("com.android.internal.R$id");
             Field timePickerField = classForid.getField("timePicker");
-            this.timePicker = (TimePicker) findViewById(timePickerField
+            TimePicker timePicker = (TimePicker) findViewById(timePickerField
                     .getInt(null));
             Field field = classForid.getField("minute");
 

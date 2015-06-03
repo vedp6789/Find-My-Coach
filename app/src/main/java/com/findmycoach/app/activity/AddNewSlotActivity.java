@@ -1145,15 +1145,21 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     public void setSelectedStartTime(Object o1, Object o2) {
         String hour = (String) o1;
         start_hour = Integer.parseInt(hour);
+        int hourOfDay = start_hour % 12;
+        if (start_hour == 12)
+            hourOfDay = 12;
         String minute = (String) o2;
         start_min = Integer.parseInt(minute);
         time_from = hour + ":" + minute;
-        tv_start_time.setText(hour + ":" + minute);
+        tv_start_time.setText(" " + (hourOfDay < 10 ? ("0" + hourOfDay) : hourOfDay) + ":" + start_min + (start_hour > 11 ? " PM" : " AM"));
 
-        if (tv_stop_time.getText().toString() != null && tv_stop_time.getText().toString().contains(":")) {
-
+        if (!tv_stop_time.getText().toString().equals("") && tv_stop_time.getText().toString().contains(":")) {
+            if (hourOfDay == 12)
+                hourOfDay = 1;
+            else
+                hourOfDay++;
             stop_min = start_min;
-            tv_stop_time.setText(stop_hour + ":" + stop_min);
+            tv_stop_time.setText(" " + hourOfDay + ":" + start_min + (start_hour > 11 ? " PM" : " AM"));
 
         }
 
@@ -1165,9 +1171,12 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     public void setSelectedTillTime(Object o1, Object o2) {
         String hour = (String) o1;
         stop_hour = Integer.parseInt(hour);
+        int hourOfDay = stop_hour % 12;
+        if (stop_hour == 12)
+            hourOfDay = 12;
         String minute = (String) o2;
         stop_min = Integer.parseInt(minute);
         time_to = hour + ":" + minute;
-        tv_stop_time.setText(hour + ":" + minute);
+        tv_stop_time.setText(" " + (hourOfDay < 10 ? ("0" + hourOfDay) : hourOfDay) + ":" + stop_min + (stop_hour > 11 ? " PM" : " AM"));
     }
 }

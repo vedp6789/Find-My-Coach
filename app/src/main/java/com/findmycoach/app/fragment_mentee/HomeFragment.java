@@ -388,7 +388,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 int hourOfDay = c.get(Calendar.HOUR_OF_DAY);
                 int minute = c.get(Calendar.MINUTE);
                 int hour = hourOfDay % 12;
-                String min = minute + "";
+                if (hourOfDay == 12)
+                    hour = 12;
+                String min = "";
                 if (minute > 52 || minute < 8)
                     min = "00";
                 else if (minute > 7 && minute < 23)
@@ -397,9 +399,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                     min = "30";
                 else if (minute > 37 && minute < 53)
                     min = "45";
-                fromTimingInput.setText(hour++ + ":" + min + (hourOfDay > 11 ? " pm" : " am"));
+                fromTimingInput.setText(" " + (hour < 10 ? ("0" + hour) : hour) + ":" + min + (hourOfDay > 11 ? " PM" : " AM"));
                 fromTimingInput.setTag(fromTimingInput.getId(), hourOfDay++ + ":" + min);
-                toTimingInput.setText(hour + ":" + min + (hourOfDay > 11 ? " pm" : " am"));
+                if (hour == 12)
+                    hour = 1;
+                else
+                    hour++;
+                toTimingInput.setText(" " + (hour < 10 ? ("0" + hour) : hour) + ":" + min + (hourOfDay > 11 ? " PM" : " AM"));
                 toTimingInput.setTag(toTimingInput.getId(), hourOfDay + ":" + min);
 
                 getSelectedButtons();
@@ -430,7 +436,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         fragmentView.findViewById(R.id.toTime).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerFragment timePicker = new TimePickerFragment(getActivity(), HomeFragment.this, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), false);
+                int hour = c.get(Calendar.HOUR_OF_DAY);
+                TimePickerFragment timePicker = new TimePickerFragment(getActivity(), HomeFragment.this, ++hour, c.get(Calendar.MINUTE), false);
                 textView = toTimingInput;
                 timePicker.show();
             }
@@ -694,6 +701,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         int hour = hourOfDay % 12;
+        if (hourOfDay == 12)
+            hour = 12;
         if (textView != null) {
             String min = "";
             if (minute == 0)
@@ -704,7 +713,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 min = "30";
             else if (minute == 3)
                 min = "45";
-            textView.setText(hour + ":" + min + (hourOfDay > 11 ? " pm" : " am"));
+            textView.setText(" " + (hour < 10 ? ("0" + hour) : hour) + ":" + min + (hourOfDay > 11 ? " PM" : " AM"));
             textView.setTag(textView.getId(), hourOfDay + ":" + min);
             textView = null;
         }

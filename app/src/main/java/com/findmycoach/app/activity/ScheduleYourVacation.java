@@ -959,7 +959,12 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
         String minute = (String) o2;
         ScheduleYourVacation.start_min = Integer.parseInt(minute);
         ScheduleYourVacation.time_from = hour + ":" + minute;
-        tv_start_time.setText(hour + ":" + minute);
+
+        int hourOfDay = ScheduleYourVacation.start_hour % 12;
+        if (ScheduleYourVacation.start_hour == 12)
+            hourOfDay = 12;
+
+        tv_start_time.setText(" " + (hourOfDay < 10 ? ("0" + hourOfDay) : hourOfDay) + ":" + start_min + (start_hour > 11 ? " PM" : " AM"));
 
     }
 
@@ -970,7 +975,12 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
         String minute = (String) o2;
         ScheduleYourVacation.stop_min = Integer.parseInt(minute);
         ScheduleYourVacation.time_to = hour + ":" + minute;
-        tv_stop_time.setText(hour + ":" + minute);
+
+        int hourOfDay = ScheduleYourVacation.stop_hour % 12;
+        if (ScheduleYourVacation.stop_hour == 12)
+            hourOfDay = 12;
+
+        tv_stop_time.setText(" " + (hourOfDay < 10 ? ("0" + hourOfDay) : hourOfDay) + ":" + stop_min + (stop_hour > 11 ? " PM" : " AM"));
     }
 
 }
