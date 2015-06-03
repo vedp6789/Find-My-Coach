@@ -11,58 +11,73 @@
         android:layout_height="wrap_content"
         android:focusableInTouchMode="true"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
         tools:context=".MainActivity">
+
+        <include
+            android:id="@+id/header"
+            layout="@layout/header_back_name_menu" />
 
         <com.edmodo.cropper.CropImageView xmlns:custom="http://schemas.android.com/apk/res-auto"
             android:id="@+id/CropImageView"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/navigation_drawer_width"
+            android:layout_margin="@dimen/activity_vertical_margin"
             custom:imageResource="@drawable/user_icon" />
 
-
-        <Button
-            android:id="@+id/select_picture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/select_image" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp">
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/select_picture"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="@dimen/back_margin"
+                android:layout_weight="1"
+                android:background="@drawable/custom_button_click_white_bg"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:text="@string/select_image"
+                android:textColor="@color/custom_button_text_color_click_white_bg"
+                android:textSize="@dimen/profile_details" />
 
             <Button
                 android:id="@+id/Button_rotate"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="5dp"
+                android:layout_marginLeft="@dimen/back_margin"
                 android:layout_marginTop="20dp"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
+                android:layout_weight="1"
+                android:background="@drawable/custom_button_click_white_bg"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
                 android:text="@string/rotate"
-                android:textColor="#33B5E5" />
+                android:textColor="@color/custom_button_text_color_click_white_bg"
+                android:textSize="@dimen/profile_details" />
 
-            <Button
-                android:id="@+id/Button_crop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="20dp"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:text="@string/crop"
-                android:textColor="#33B5E5"
-                android:textSize="30sp" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/Button_crop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/custom_button_click_white_bg"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:text="@string/crop"
+            android:textColor="@color/custom_button_text_color_click_white_bg"
+            android:textSize="@dimen/profile_name" />
+
     </LinearLayout>
 
 </ScrollView>

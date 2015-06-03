@@ -761,9 +761,10 @@
     <string name="action_sign_up">Sign Up</string>
     <string name="action_save">Save</string>
     <string name="select_sub_category">Select category</string>
-    <string name="select_image">Select Image</string>
+    <string name="select_image">Choose</string>
+    <string name="update_image">Update profile picture</string>
     <string name="rotate">Rotate</string>
-    <string name="crop">Crop</string>
+    <string name="crop">Crop &amp; Save</string>
     <string name="type_here">Type here to send</string>
     <string name="action_logout">Logout</string>
     <string name="action_accept">Accept</string>
