@@ -483,6 +483,7 @@
     <string name="terms">Welcome to Chizzle. If you continue to use this app you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern ANI Technologies Private Limited relationship with you in relation to this website and the Service .The term Chizzle or us or we refers to the owner of the website whose registered office is ANI TECHNOLOGIES PRIVATE LIMITED.</string>
     <string name="dummy_contain_of_message">This is the dummy contain of message </string>
     <string name="enter_valid_email">Please enter valid email</string>
+    <string name="enter_valid_password">Please enter valid password</string>
     <string name="enter_valid_phone_no">Enter valid phone number</string>
     <string name="error">Error :</string>
     <string name="profile">Profile</string>
@@ -664,6 +665,7 @@
     <string name="prompt_password">Password</string>
     <string name="old_password">Old password:</string>
     <string name="new_password">New password:</string>
+    <string name="new_password_re">Re enter new password:</string>
     <string name="new_phone_no">Mobile number:</string>
     <string name="prompt_confirm_password">Confirm password</string>
     <string name="prompt_commit">Commit</string>
