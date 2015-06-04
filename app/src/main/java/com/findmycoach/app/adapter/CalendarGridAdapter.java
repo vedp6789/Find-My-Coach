@@ -445,11 +445,12 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             Calendar calendar_this_day=Calendar.getInstance();
                                 calendar_this_day.set(Integer.parseInt(theyear),Integer.parseInt(themonth),Integer.parseInt(theday));
                                 long this_day = calendar_this_day.getTimeInMillis();
+                                int week_day= calendar_this_day.get(Calendar.DAY_OF_WEEK);/* This will give week_day for this day, 1 to 7 for Sunday to Saturday */
                                 for(int current_month_data_index=0; current_month_data_index < current_month_data.size() ; current_month_data_index++){     /* current_month_data is having Slot*/
                                        Slot new_slot = current_month_data.get(current_month_data_index);
                                        String slot_start_date = new_slot.getSlot_start_date();
                                        String slot_stop_date = new_slot.getSlot_stop_date();
-
+                                       String [] slot_week_days=new_slot.getSlot_week_days();
                                        Calendar calendar_slot_start_date = Calendar.getInstance();
                                        calendar_slot_start_date.set(Integer.parseInt(slot_start_date.split("-")[0]),Integer.parseInt(slot_start_date.split("-")[1]),Integer.parseInt(slot_start_date.split("-")[2]));
                                        long slot_start_millis=calendar_slot_start_date.getTimeInMillis();
@@ -458,7 +459,16 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                     calendar_slot_stop_date.set(Integer.parseInt(slot_stop_date.split("-")[0]),Integer.parseInt(slot_stop_date.split("-")[1]),Integer.parseInt(slot_stop_date.split("-")[2]));
                                     long slot_stop_millis=calendar_slot_stop_date.getTimeInMillis();
 
-                                    if(this_day)
+                                    if((this_day == slot_start_millis) || (this_day == slot_stop_millis) || (this_day < slot_stop_millis && this_day > slot_start_millis)){
+
+                                    if(thisDayMatchesWithSlotWeekDays(slot_week_days,week_day)){
+                                        
+                                    }
+
+
+
+
+                                    }
 
 
 
