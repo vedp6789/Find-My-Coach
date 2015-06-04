@@ -1,229 +1,354 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/iv_user_icon"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/user_icon" />
+    <include
+        android:id="@+id/header"
+        layout="@layout/header_back_name_menu" />
 
-    <TextView
-        android:layout_toRightOf="@id/iv_user_icon"
-        android:layout_alignParentTop="true"
-        android:id="@+id/tv_schedule_request_title_message"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="10dp"
-        android:textStyle="bold"
-        android:layout_marginRight="10dp" />
+        android:layout_height="match_parent"
+        android:layout_above="@id/ll_actions"
+        android:layout_below="@+id/header">
 
-    <TextView
-        android:id="@+id/tv_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tv_schedule_request_title_message"
-        android:layout_marginRight="10dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        android:layout_marginTop="5dp" />
+            <ImageView
+                android:id="@+id/iv_user_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/user_icon" />
 
-    <TextView
-        android:id="@+id/tv_class_detail_title"
-        android:layout_below="@id/iv_user_icon"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/requested_class_details" />
+            <TextView
+                android:id="@+id/tv_schedule_request_title_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/iv_user_icon"
+                android:layout_margin="@dimen/back_margin"
+                android:layout_toEndOf="@+id/iv_user_icon"
+                android:layout_toRightOf="@+id/iv_user_icon"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_name"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/tv_schedule_request_title_message"
+                android:layout_marginRight="@dimen/back_margin"
+                android:textColor="@color/purple_light"
+                android:textSize="@dimen/profile_heading" />
 
-    <TextView
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:id="@+id/tv_start_date"
-        android:layout_below="@id/tv_class_detail_title"
-        android:text="@string/start_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_class_detail_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_user_icon"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:text="@string/requested_class_details"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_name"
+                android:textStyle="bold" />
 
-    <TextView
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:id="@+id/tv_start_date_val"
-        android:gravity="center"
-        android:layout_below="@id/tv_class_detail_title"
-        android:layout_toRightOf="@id/tv_start_date"
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-
-    <TextView
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:id="@+id/tv_stop_date"
-        android:layout_below="@id/tv_start_date"
-        android:text="@string/end_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:id="@+id/tv_stop_date_val"
-        android:gravity="center"
-        android:layout_toRightOf="@id/tv_stop_date"
-        android:layout_below="@id/tv_start_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/tv_class_detail_title"
+                android:layout_marginLeft="@dimen/back_margin"
+                android:layout_marginRight="@dimen/back_margin"
+                android:background="@color/purple_light" />
 
 
-    <TextView
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:id="@+id/tv_start_time"
-        android:layout_below="@id/tv_stop_date"
-        android:text="@string/start_time_of_class"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_class_detail_title"
+                android:layout_marginLeft="@dimen/back_margin"
+                android:layout_marginTop="@dimen/back_margin"
+                android:text="@string/start_date"
+                android:textColor="@color/purple_light"
+                android:textSize="@dimen/profile_details" />
 
-    <TextView
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:id="@+id/tv_start_time_val"
-        android:gravity="center"
-        android:layout_below="@id/tv_stop_date"
-        android:layout_toRightOf="@id/tv_start_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_start_date_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tv_week_days_val"
+                android:layout_alignStart="@+id/tv_week_days_val"
+                android:layout_alignTop="@+id/tv_start_date"
+                android:gravity="center"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
 
-
-    <TextView
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:id="@+id/tv_stop_time"
-        android:layout_below="@id/tv_start_time"
-        android:text="@string/stop_time_of_class"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:id="@+id/tv_stop_time_val"
-        android:gravity="center"
-        android:layout_below="@id/tv_start_time"
-        android:layout_toRightOf="@id/tv_stop_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignLeft="@+id/tv_schedule_request_title_message"
+                android:layout_alignStart="@+id/tv_schedule_request_title_message"
+                android:layout_below="@+id/tv_start_date_val"
+                android:layout_marginRight="@dimen/back_margin"
+                android:background="@color/purple_light" />
 
 
-    <TextView
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:id="@+id/tv_week_days"
-        android:layout_below="@id/tv_stop_time"
-        android:text="@string/week_days"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_stop_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_start_date"
+                android:layout_marginLeft="@dimen/back_margin"
+                android:layout_marginTop="@dimen/back_margin"
+                android:text="@string/end_date"
+                android:textColor="@color/purple_light"
+                android:textSize="@dimen/profile_details" />
 
-    <TextView
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:id="@+id/tv_week_days_val"
-        android:gravity="center"
-        android:layout_below="@id/tv_stop_time"
-        android:layout_toRightOf="@id/tv_week_days"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_stop_date_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tv_stop_date"
+                android:layout_alignLeft="@+id/tv_start_date_val"
+                android:layout_alignStart="@+id/tv_start_date_val"
+                android:layout_below="@id/tv_start_date"
+                android:layout_marginTop="@dimen/back_margin"
+                android:gravity="center"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
 
-
-    <TextView
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:id="@+id/tv_class_type"
-        android:layout_below="@id/tv_week_days_val"
-        android:text="@string/class_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:id="@+id/tv_class_type_val"
-        android:gravity="center"
-        android:layout_below="@id/tv_week_days_val"
-        android:layout_toRightOf="@id/tv_class_type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignLeft="@+id/tv_schedule_request_title_message"
+                android:layout_alignStart="@+id/tv_schedule_request_title_message"
+                android:layout_below="@+id/tv_stop_date"
+                android:layout_marginRight="@dimen/back_margin"
+                android:background="@color/purple_light" />
 
 
-    <TextView
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:id="@+id/tv_subject"
-        android:layout_below="@id/tv_class_type_val"
-        android:text="@string/subject"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_start_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_stop_date"
+                android:layout_marginLeft="@dimen/back_margin"
+                android:layout_marginTop="@dimen/back_margin"
+                android:text="@string/start_time_of_class"
+                android:textColor="@color/purple_light"
+                android:textSize="@dimen/profile_details" />
 
-    <TextView
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:id="@+id/tv_subject_val"
-        android:gravity="center"
-        android:layout_below="@id/tv_class_type_val"
-        android:layout_toRightOf="@id/tv_subject"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_start_time_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/tv_stop_time_val"
+                android:layout_alignLeft="@+id/tv_stop_date_val"
+                android:layout_alignStart="@+id/tv_stop_date_val"
+                android:layout_below="@id/tv_stop_date"
+                android:layout_marginTop="@dimen/back_margin"
+                android:gravity="center"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignLeft="@+id/tv_schedule_request_title_message"
+                android:layout_alignStart="@+id/tv_schedule_request_title_message"
+                android:layout_below="@+id/tv_start_time_val"
+                android:layout_marginRight="@dimen/back_margin"
+                android:background="@color/purple_light" />
 
 
-    <EditText
-        android:layout_marginTop="20dp"
-        android:id="@+id/et_mentor_response_message"
-        android:layout_below="@id/tv_subject"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:hint="@string/mentor_response_for_schedule_request_message" />
+            <TextView
+                android:id="@+id/tv_stop_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_start_time"
+                android:layout_marginLeft="@dimen/back_margin"
+                android:layout_marginTop="@dimen/back_margin"
+                android:text="@string/stop_time_of_class"
+                android:textColor="@color/purple_light"
+                android:textSize="@dimen/profile_details" />
+
+            <TextView
+                android:id="@+id/tv_stop_time_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/tv_week_days_val"
+                android:layout_alignLeft="@+id/tv_week_days_val"
+                android:layout_alignStart="@+id/tv_week_days_val"
+                android:layout_below="@id/tv_start_time"
+                android:layout_marginTop="@dimen/back_margin"
+                android:gravity="center"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignLeft="@+id/tv_schedule_request_title_message"
+                android:layout_alignStart="@+id/tv_schedule_request_title_message"
+                android:layout_below="@+id/tv_stop_time_val"
+                android:layout_marginRight="@dimen/back_margin"
+                android:background="@color/purple_light" />
 
 
-    <Button
-        android:id="@+id/b_profile"
-        android:layout_above="@+id/ll_actions"
-        android:text="@string/view_profile"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
+            <TextView
+                android:id="@+id/tv_week_days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_stop_time"
+                android:layout_marginLeft="@dimen/back_margin"
+                android:layout_marginTop="@dimen/back_margin"
+                android:text="@string/week_days"
+                android:textColor="@color/purple_light"
+                android:textSize="@dimen/profile_details" />
+
+            <TextView
+                android:id="@+id/tv_week_days_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/tv_date"
+                android:layout_alignRight="@+id/tv_date"
+                android:layout_below="@id/tv_stop_time"
+                android:layout_marginLeft="@dimen/back_margin"
+                android:layout_marginTop="@dimen/back_margin"
+                android:layout_toRightOf="@id/tv_week_days"
+                android:gravity="center"
+                android:paddingRight="@dimen/back_margin"
+                android:singleLine="true"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignLeft="@+id/tv_schedule_request_title_message"
+                android:layout_alignStart="@+id/tv_schedule_request_title_message"
+                android:layout_below="@+id/tv_week_days_val"
+                android:layout_marginRight="@dimen/back_margin"
+                android:background="@color/purple_light" />
+
+
+            <TextView
+                android:id="@+id/tv_class_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_week_days_val"
+                android:layout_marginLeft="@dimen/back_margin"
+                android:layout_marginTop="@dimen/back_margin"
+                android:text="@string/class_type"
+                android:textColor="@color/purple_light"
+                android:textSize="@dimen/profile_details" />
+
+            <TextView
+                android:id="@+id/tv_class_type_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tv_class_type"
+                android:layout_alignLeft="@+id/tv_week_days_val"
+                android:layout_alignStart="@+id/tv_week_days_val"
+                android:layout_below="@id/tv_week_days_val"
+                android:layout_marginTop="@dimen/back_margin"
+                android:gravity="center"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignLeft="@+id/tv_schedule_request_title_message"
+                android:layout_alignStart="@+id/tv_schedule_request_title_message"
+                android:layout_below="@+id/tv_class_type_val"
+                android:layout_marginRight="@dimen/back_margin"
+                android:background="@color/purple_light" />
+
+
+            <TextView
+                android:id="@+id/tv_subject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_class_type_val"
+                android:layout_marginLeft="@dimen/back_margin"
+                android:layout_marginTop="@dimen/back_margin"
+                android:text="@string/subject"
+                android:textColor="@color/purple_light"
+                android:textSize="@dimen/profile_details" />
+
+            <TextView
+                android:id="@+id/tv_subject_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/et_mentor_response_message"
+                android:layout_alignLeft="@+id/tv_week_days_val"
+                android:layout_alignStart="@+id/tv_week_days_val"
+                android:layout_alignTop="@+id/tv_subject"
+                android:gravity="center"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignLeft="@+id/tv_schedule_request_title_message"
+                android:layout_alignStart="@+id/tv_schedule_request_title_message"
+                android:layout_below="@+id/tv_subject_val"
+                android:layout_marginRight="@dimen/back_margin"
+                android:background="@color/purple_light" />
+
+
+            <EditText
+                android:id="@+id/et_mentor_response_message"
+                style="@style/EditTextCustomHoloPurple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_subject"
+                android:layout_margin="@dimen/back_margin"
+                android:gravity="center"
+                android:hint="@string/mentor_response_for_schedule_request_message" />
+        </RelativeLayout>
+    </ScrollView>
+
 
     <LinearLayout
         android:id="@+id/ll_actions"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/b_accept"
-            android:text="@string/action_accept"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/days_margin"
             android:layout_weight="1"
-            android:layout_height="wrap_content" />
+            android:background="@drawable/custom_button_click_white_bg"
+            android:text="@string/action_accept"
+            android:textColor="@color/custom_button_text_color_click_white_bg" />
 
         <Button
             android:id="@+id/b_decline"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/days_margin"
             android:layout_weight="1"
+            android:background="@drawable/custom_button_click_white_bg"
             android:text="@string/action_decline"
-            android:layout_height="wrap_content" />
+            android:textColor="@color/custom_button_text_color_click_white_bg" />
     </LinearLayout>
 
 </RelativeLayout>

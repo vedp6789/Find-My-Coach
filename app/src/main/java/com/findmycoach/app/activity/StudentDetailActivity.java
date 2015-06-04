@@ -23,7 +23,7 @@ import com.loopj.android.http.RequestParams;
 /**
  * Created by prem on 25/2/15.
  */
-public class StudentDetailActivity  extends Activity implements Callback {
+public class StudentDetailActivity extends Activity implements Callback {
 
     private ImageView profileImage;
     private TextView profileName;
@@ -47,28 +47,20 @@ public class StudentDetailActivity  extends Activity implements Callback {
     }
 
     private void getDataFromIntent() {
-        try{
+        try {
             String response = getIntent().getStringExtra("student_detail");
             ProfileResponse profileResponse = new Gson().fromJson(response, ProfileResponse.class);
             studentDetails = profileResponse.getData();
-            if(studentDetails != null) {
-                applyActionbarProperties();
+            if (studentDetails != null) {
                 populateFields();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             finish();
-            Toast.makeText(this, getResources().getString(R.string.problem_in_connection_server),Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.problem_in_connection_server), Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
     }
 
-    private void applyActionbarProperties() {
-//        ActionBar actionBar = getActionBar();
-//        if(actionBar != null){
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//            actionBar.setTitle(studentDetails.getFirstName());
-//        }
-    }
 
     private void initialize() {
         profileImage = (ImageView) findViewById(R.id.profile_image);
@@ -92,17 +84,18 @@ public class StudentDetailActivity  extends Activity implements Callback {
 
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(getResources().getString(R.string.title_student_details));
+
     }
 
     private void populateFields() {
         profileName.setText(studentDetails.getFirstName() + " " + studentDetails.getLastName());
-        try{
+        try {
             email.setText(studentDetails.getEmail());
-        }catch (Exception e){
+        } catch (Exception e) {
         }
-        try{
+        try {
             dob.setText((String) studentDetails.getDob());
-        }catch (Exception e){
+        } catch (Exception e) {
         }
         String address = "";
         if (studentDetails.getAddress() != null) {
@@ -126,6 +119,30 @@ public class StudentDetailActivity  extends Activity implements Callback {
         trainingLocation.setText((String) studentDetails.getTrainingLocation());
         coachingType.setText((String) studentDetails.getCoachingType());
         profilePhone.setText(studentDetails.getPhonenumber());
+
+        ImageView connectionButton = (ImageView) findViewById(R.id.menuItem);
+
+//        studentDetails.setConnectionStatus(getIntent().getStringExtra("connection_status"));
+        if (studentDetails.getConnectionStatus() == null || studentDetails.getConnectionStatus().equals("broken"))
+            studentDetails.setConnectionStatus("not connected");
+
+        if (studentDetails.getConnectionStatus().equals("accepted")) {
+            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.disconnect_small));
+            connectionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    disconnect(studentDetails.getConnectionId(), studentDetails.getId());
+                }
+            });
+        } else if (studentDetails.getConnectionStatus().equals("pending")) {
+            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.pending_small));
+            connectionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    respondToRequest("rejected");
+                }
+            });
+        }
     }
 
     private void disconnect(String connectionId, String oppositeUSerId) {
@@ -135,14 +152,14 @@ public class StudentDetailActivity  extends Activity implements Callback {
         RequestParams requestParams = new RequestParams();
         requestParams.add("id", connectionId);
         requestParams.add("user_id", oppositeUSerId);
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
         NetworkClient.breakConnection(this, requestParams, this, 21);
     }
 
     private void respondToRequest(String response) {
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
-        requestParams.add("id", NotificationAdapter.connection_id+"");
+        requestParams.add("id", NotificationAdapter.connection_id + "");
         requestParams.add("status", response);
         NetworkClient.respondToConnectionRequest(this, requestParams, this, 18);
     }
@@ -150,7 +167,7 @@ public class StudentDetailActivity  extends Activity implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        if(calledApiValue == 21 || calledApiValue == 18){
+        if (calledApiValue == 21 || calledApiValue == 18) {
             Intent intent = new Intent();
             intent.putExtra("status", "close_activity");
             setResult(RESULT_OK, intent);

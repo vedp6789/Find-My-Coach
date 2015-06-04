@@ -451,6 +451,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             progressDialog.dismiss();
             Intent intent = new Intent(this, StudentDetailActivity.class);
             intent.putExtra("coming_from", "ChatWidget");
+            intent.putExtra("connection_status", "accepted");
             intent.putExtra("student_detail", (String) object);
             startActivityForResult(intent, PROFILE_DETAILS);
             isGettingProfile = false;

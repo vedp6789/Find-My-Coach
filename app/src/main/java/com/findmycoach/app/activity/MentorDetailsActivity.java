@@ -374,11 +374,11 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         String jsonData = getIntent().getStringExtra("mentorDetails");
         connectionStatus = getIntent().getStringExtra("connection_status");
-        Log.d(TAG, "connection status : 2 " + connectionStatus);
-        if (connectionStatus == null)
+        if (connectionStatus == null || connectionStatus.trim().equals("null"))
             connectionStatus = "not connected";
         if (connectionStatus.equals("broken"))
             connectionStatus = "not connected";
+        Log.d(TAG, "connection status : 2 " + connectionStatus);
         Log.d(TAG, "json data :" + jsonData);
         Response mentorDetails = new Gson().fromJson(jsonData, Response.class);
         userInfo = mentorDetails.getData();
@@ -419,6 +419,34 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(getResources().getString(R.string.title_mentor_details));
+
+        ImageView connectionButton = (ImageView) findViewById(R.id.menuItem);
+
+        if (connectionStatus.equals("not connected")) {
+            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.connect_small));
+            connectionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showAlert();
+                }
+            });
+        } else if (connectionStatus.equals("accepted")) {
+            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.disconnect_small));
+            connectionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    disconnect(userInfo.getConnectionId(), userInfo.getId());
+                }
+            });
+        } else if (connectionStatus.equals("pending")) {
+            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.pending_small));
+            connectionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    disconnect(userInfo.getConnectionId(), userInfo.getId());
+                }
+            });
+        }
 
     }
 

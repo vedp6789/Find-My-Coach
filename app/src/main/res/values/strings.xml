@@ -650,6 +650,8 @@
     <string name="title_activity_user_list">Mentors</string>
     <string name="title_mentor_details">Mentor detail</string>
     <string name="title_student_details">Student detail</string>
+    <string name="new_connection">Connection request</string>
+    <string name="new_schedule">Schedule request</string>
     <string name="title_activity_areas_of_interest">AreasOfInterestActivity</string>
 
     <!-- Strings related to login -->

@@ -16,12 +16,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/textView_padding_margin"
-        android:layout_toLeftOf="@+id/tv_how_old_message"
-        android:layout_toStartOf="@+id/tv_how_old_message"
+        android:layout_toStartOf="@+id/tv_how_old_schedule_request"
         android:gravity="center_vertical"
         android:textColor="@color/purple"
-        android:textSize="@dimen/profile_details" />
+        android:textSize="@dimen/profile_details"
+        android:layout_marginRight="@dimen/textView_padding_margin"
+        android:layout_toLeftOf="@+id/tv_how_old_schedule_request" />
 
     <TextView
         android:id="@+id/tv_how_old_schedule_request"
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="@dimen/days_margin"
         android:gravity="center_vertical"
         android:maxWidth="@dimen/max_text_view_width"
         android:singleLine="true"

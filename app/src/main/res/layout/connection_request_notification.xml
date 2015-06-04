@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="@dimen/days_margin"
         android:gravity="center_vertical"
         android:maxWidth="@dimen/max_text_view_width"
         android:singleLine="true"
