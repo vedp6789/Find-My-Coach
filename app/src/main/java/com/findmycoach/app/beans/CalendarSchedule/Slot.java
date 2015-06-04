@@ -11,8 +11,8 @@ import java.util.List;
 /**
  * Created by ved on 31/5/15.
  */
-public class Slot implements Parcelable{
-    public Slot(){
+public class Slot implements Parcelable {
+    public Slot() {
         events = new ArrayList<Event>();
         vacations = new ArrayList<Vacation>();
     }
@@ -24,11 +24,10 @@ public class Slot implements Parcelable{
     public String slot_stop_date;
     public String slot_type;
     public String slot_max_users;
-    public String [] slot_week_days;
+    public String[] slot_week_days;
     public List<Event> events;
     public List<Vacation> vacations;
     public String slot_created_on_network_success;
-
 
 
     public String isSlot_created_on_network_success() {
@@ -142,22 +141,22 @@ public class Slot implements Parcelable{
     }
 
 
-    public Slot(Parcel source){
+    public Slot(Parcel source) {
     /*
      * Reconstruct from the Parcel
      */
         this();
-        this.slot_start_date=source.readString();
-        this.slot_stop_date=source.readString();
-        this.slot_start_time=source.readString();
-        this.slot_stop_time=source.readString();
-        this.slot_type=source.readString();
-        this.slot_max_users=source.readString();
-        this.slot_week_days=source.createStringArray();
-        this.slot_id=source.readString();
+        this.slot_start_date = source.readString();
+        this.slot_stop_date = source.readString();
+        this.slot_start_time = source.readString();
+        this.slot_stop_time = source.readString();
+        this.slot_type = source.readString();
+        this.slot_max_users = source.readString();
+        this.slot_week_days = source.createStringArray();
+        this.slot_id = source.readString();
         source.readTypedList(this.events, DayEvent.CREATOR);
         source.readTypedList(this.vacations, DayVacation.CREATOR);
-        this.slot_created_on_network_success=source.readString();
+        this.slot_created_on_network_success = source.readString();
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -175,96 +174,138 @@ public class Slot implements Parcelable{
      * Utility functions
      */
 
-    public List<ClassBean> getAvailablClasses(){
+    public List<ClassBean> getAvailablClasses() {
         return getAvailablClasses(new Date(this.slot_start_date), new Date(this.slot_stop_date));
     }
 
-    public List<ClassBean> getAvailablClasses(Date startDate, Date stopDate){
-        List<ClassBean> classes=new ArrayList<ClassBean>();
+    public List<ClassBean> getAvailablClasses(Date startDate, Date stopDate) {
+        List<ClassBean> classes = new ArrayList<ClassBean>();
 
         return classes;
     }
 
 
-
-    public boolean anyEventFound(long calendar_time_in_millis){     /* checking whether any event found for a specific day or not */
-        if(events.size() > 0){
-            boolean event_found=false;
-            for(int event_index = 0; event_index < events.size() ; event_index++){
-                Event event=events.get(event_index);
+    public boolean anyEventFound(long calendar_time_in_millis) {     /* checking whether any event found for a specific day or not */
+        if (events.size() > 0) {
+            boolean event_found = false;
+            for (int event_index = 0; event_index < events.size(); event_index++) {
+                Event event = events.get(event_index);
 
                 String stop_date = event.getEvent_stop_date();
 
-                List<Mentee> mentees=event.getMentees();
-                for(int mentee_no=0; mentee_no < mentees.size() ; mentee_no++){
-                    Mentee mentee=mentees.get(mentee_no);
+                List<Mentee> mentees = event.getMentees();
+                for (int mentee_no = 0; mentee_no < mentees.size(); mentee_no++) {
+                    Mentee mentee = mentees.get(mentee_no);
                     String start_date = mentee.getEvent_start_date();
 
                     Calendar calendar_event_start_date = Calendar.getInstance();
-                    calendar_event_start_date.set(Integer.parseInt(start_date.split("-")[0]),Integer.parseInt(start_date.split("-")[1]),Integer.parseInt(start_date.split("-")[2]));
-                    long event_start_date_in_millis =calendar_event_start_date.getTimeInMillis();
+                    calendar_event_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]), Integer.parseInt(start_date.split("-")[2]));
+                    long event_start_date_in_millis = calendar_event_start_date.getTimeInMillis();
 
 
                     Calendar calendar_event_stop_date = Calendar.getInstance();
-                    calendar_event_stop_date.set(Integer.parseInt(stop_date.split("-")[0]),Integer.parseInt(stop_date.split("-")[1]),Integer.parseInt(stop_date.split("-")[2]));
-                    long event_stop_date_in_millis =calendar_event_stop_date.getTimeInMillis();
+                    calendar_event_stop_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]), Integer.parseInt(stop_date.split("-")[2]));
+                    long event_stop_date_in_millis = calendar_event_stop_date.getTimeInMillis();
 
 
-                    if((calendar_time_in_millis == event_start_date_in_millis)||
+                    if ((calendar_time_in_millis == event_start_date_in_millis) ||
                             (calendar_time_in_millis == event_stop_date_in_millis) ||
-                            (calendar_time_in_millis < event_stop_date_in_millis && calendar_time_in_millis > event_start_date_in_millis)){
-                        event_found =  true;
+                            (calendar_time_in_millis < event_stop_date_in_millis && calendar_time_in_millis > event_start_date_in_millis)) {
+                        event_found = true;
                         break;
-                    }else{
+                    } else {
                         event_found = false;
                     }
                 }
 
-
-
-
-
             }
             return event_found;
-        }else {
+        } else {
             return false;
         }
     }
 
 
-    public boolean anyVacationFound(long calendar_time_in_millis){     /* checking whether any vacation found for a specific day or not */
-        if(vacations.size() > 0){
-            boolean vacation_found=false;
-            for(int vacation_index = 0; vacation_index < vacations.size() ; vacation_index++){
-                Vacation vacation=vacations.get(vacation_index);
+    public boolean anyVacationFound(Calendar grid_day) {     /* checking whether any vacation found for a specific day or not */
+
+        long calendar_time_in_millis=grid_day.getTimeInMillis();
+        int week_day_for_grid_day = grid_day.get(Calendar.DAY_OF_WEEK);
+        if (vacations.size() > 0) {
+            boolean vacation_found = false;
+            for (int vacation_index = 0; vacation_index < vacations.size(); vacation_index++) {
+                Vacation vacation = vacations.get(vacation_index);
                 String start_date = vacation.getStart_date();
                 String stop_date = vacation.getStop_date();
+                String [] vacation_week_days= vacation.getWeek_days();
 
                 Calendar calendar_vacation_start_date = Calendar.getInstance();
-                calendar_vacation_start_date.set(Integer.parseInt(start_date.split("-")[0]),Integer.parseInt(start_date.split("-")[1]),Integer.parseInt(start_date.split("-")[2]));
-                long vacation_start_date_in_millis =calendar_vacation_start_date.getTimeInMillis();
+                calendar_vacation_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]), Integer.parseInt(start_date.split("-")[2]));
+                long vacation_start_date_in_millis = calendar_vacation_start_date.getTimeInMillis();
 
 
                 Calendar calendar_vacation_stop_date = Calendar.getInstance();
-                calendar_vacation_stop_date.set(Integer.parseInt(stop_date.split("-")[0]),Integer.parseInt(stop_date.split("-")[1]),Integer.parseInt(stop_date.split("-")[2]));
-                long vacation_stop_date_in_millis =calendar_vacation_stop_date.getTimeInMillis();
+                calendar_vacation_stop_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]), Integer.parseInt(stop_date.split("-")[2]));
+                long vacation_stop_date_in_millis = calendar_vacation_stop_date.getTimeInMillis();
 
 
-                if((calendar_time_in_millis == vacation_start_date_in_millis)||
+                if ((calendar_time_in_millis == vacation_start_date_in_millis) ||
                         (calendar_time_in_millis == vacation_stop_date_in_millis) ||
-                        (calendar_time_in_millis < vacation_stop_date_in_millis && calendar_time_in_millis > vacation_start_date_in_millis)){
-                    vacation_found =  true;
-                    break;
-                }else{
+                        (calendar_time_in_millis < vacation_stop_date_in_millis && calendar_time_in_millis > vacation_start_date_in_millis)) {
+
+                    if(thisDayMatchesWithVacationWeekDays(vacation_week_days, week_day_for_grid_day)){
+                        vacation_found = true;
+                        /* this proves there is a coinciding vacation for the current grid day*/
+                        break;
+                    }
+
+
+
+                } else {
                     vacation_found = false;
                 }
 
 
             }
             return vacation_found;
-        }else {
+        } else {
             return false;
         }
+    }
+
+    private boolean thisDayMatchesWithVacationWeekDays(String[] vacation_week_days, int week_day_for_grid_day) {
+        boolean day_matches = false;
+        String this_day_week_day = null;   /* this will have the day which is calendar current day according to grid view position*/
+        switch (week_day_for_grid_day) {
+            case 1:
+                this_day_week_day = "S";
+                break;
+            case 2:
+                this_day_week_day = "M";
+                break;
+            case 3:
+                this_day_week_day = "T";
+                break;
+            case 4:
+                this_day_week_day = "W";
+                break;
+            case 5:
+                this_day_week_day = "Th";
+                break;
+            case 6:
+                this_day_week_day = "F";
+                break;
+            case 7:
+                this_day_week_day = "Sa";
+                break;
+        }
+
+        for (int vacation_week_day_index = 0; vacation_week_day_index < vacation_week_days.length; vacation_week_day_index++) {
+            if (this_day_week_day != null && this_day_week_day.equalsIgnoreCase(slot_week_days[vacation_week_day_index])) {
+                day_matches = true;
+            }
+        }
+
+        return day_matches;
     }
 
 

@@ -967,7 +967,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         }
     }
 
-    private ArrayList<Vacation> getVacationsForThis(List<Vacation> vacations, int previous_month, int previous_month_year, int days) {
+    private ArrayList<Vacation> getVacationsForThis(List<Vacation> vacations, int month, int year, int days) {
         ArrayList<Vacation> vacationArrayList = new ArrayList<Vacation>();
 
         Calendar calendar_start_of_month = Calendar.getInstance();
