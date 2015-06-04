@@ -66,7 +66,6 @@ public class SplashActivity extends Activity implements Callback {
      * Get Sub Categories
      */
     private void getCategories() {
-        /* TODO remove hard coded auth token */
         NetworkClient.getSubCategories(this, new RequestParams(), null, this, 34);
     }
 

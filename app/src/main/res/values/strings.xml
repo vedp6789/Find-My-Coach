@@ -803,7 +803,7 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_not_a_name">Enter valid name</string>
-    <string name="error_field_not_match">Password not matched</string>
+    <string name="error_field_not_match">Your new password(s) don’t match</string>
     <string name="error_phone_number_invalid">Invalid Phone Number</string>
     <string name="error_invalid_date">Date should less than current date</string>
     <string name="error_invalid_details">Invalid card number</string>

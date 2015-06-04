@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="@dimen/navigation_drawer_width"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/prompt_email_id"
+        android:textColor="@color/purple"
+        android:textSize="@dimen/profile_name"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/underline"
+        android:background="@color/purple" />
+
 
     <LinearLayout
+        android:layout_marginTop="@dimen/back_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -12,51 +31,60 @@
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@drawable/custom_edittext"
+            android:layout_margin="@dimen/calender_header_margin_arrow"
+            style="@style/EditTextCustomHoloPurple"
             android:hint="@string/prompt_email_id"
             android:inputType="textEmailAddress"
-            android:padding="4dp"
+            android:padding="@dimen/days_margin"
             android:singleLine="true" />
     </LinearLayout>
 
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="@dimen/login_button_height">
+
         <Button
+            android:background="@drawable/custom_button_click_white_bg"
+            android:textColor="@color/custom_button_text_color_click_white_bg"
+            android:layout_margin="@dimen/days_margin"
+            android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:textSize="18dp"
-            android:text="Cancel"
-            android:id="@+id/cancelButton"
-            android:textStyle="bold"
-            android:layout_toLeftOf="@+id/textView2"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/textView2"
+            android:gravity="center"
+            android:text="Cancel"
+            android:textSize="@dimen/profile_details"
+            android:textStyle="bold" />
 
         <TextView
+            android:background="@drawable/custom_button_click_white_bg"
+            android:textColor="@color/custom_button_text_color_click_white_bg"
+            android:layout_margin="@dimen/days_margin"
+            android:id="@+id/textView2"
             android:layout_width="1dp"
-            android:background="@android:color/white"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/textView2"/>
+            android:layout_centerHorizontal="true" />
 
         <Button
+            android:id="@+id/okButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            android:text="Ok"
-            android:id="@+id/okButton"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/textView2"
             android:layout_toRightOf="@+id/textView2"
-            android:layout_toEndOf="@+id/textView2"/>
+            android:gravity="center"
+            android:background="@drawable/custom_button_click_white_bg"
+            android:text="Ok"
+            android:textColor="@color/custom_button_text_color_click_white_bg"
+            android:layout_margin="@dimen/days_margin"
+            android:textSize="@dimen/profile_details"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 </LinearLayout>

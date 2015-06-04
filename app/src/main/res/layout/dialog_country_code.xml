@@ -1,18 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:gravity="center"
-    android:layout_height="match_parent">
-<TextView
     android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="@android:color/white"/>
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center"
+    android:minWidth="@dimen/navigation_drawer_width"
+    android:orientation="vertical">
 
-    <ListView
-        android:background="@android:color/white"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/select_country_code"
+        android:textColor="@color/purple"
+        android:textSize="@dimen/profile_name"
+        android:layout_margin="@dimen/days_margin"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/underline"
+        android:background="@color/purple"
+        android:layout_marginBottom="@dimen/days_margin"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/white" />
+
+    <ListView
         android:id="@+id/countryCodeListView"
-        android:divider="@android:color/black"
-        android:dividerHeight="1dp"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:divider="@color/purple_light"
+        android:dividerHeight="1dp" />
 </LinearLayout>

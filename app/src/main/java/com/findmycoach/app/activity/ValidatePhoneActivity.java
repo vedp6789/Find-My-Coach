@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -254,7 +255,8 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     private void getPhoneNumber(final RequestParams requestParams) {
         final String lastPhoneNumber = StorageHelper.getUserDetails(this, "phone_number");
         final Dialog dialog = new Dialog(this);
-        dialog.setTitle(getResources().getString(R.string.phone_no_must));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.phone_number_dialog);
         final EditText phoneEditText = (EditText) dialog.findViewById(R.id.phoneEditText);
@@ -292,7 +294,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                     else {
                         StorageHelper.storePreference(ValidatePhoneActivity.this, "phone_number", phnNum);
                         requestParams.add("phone_number", countryCodeTV.getText().toString().trim() + "-" + phnNum);
-                        Log.e("Validate phone dialog : phone_number", countryCodeTV.getText().toString().trim() + "-" + phnNum);
+                        Log.e("Validate phone dialog","phone_number : " +  countryCodeTV.getText().toString().trim() + "-" + phnNum);
                         Log.d(TAG, countryCodeTV.getText().toString().trim() + phnNum);
                         progressDialog.show();
                         NetworkClient.updatePhoneForSocialMedia(ValidatePhoneActivity.this, requestParams, ValidatePhoneActivity.this, 26);
@@ -318,11 +320,12 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
      */
     private void showCountryCodeDialog() {
         final Dialog countryDialog = new Dialog(this);
+        countryDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        countryDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         countryDialog.setCanceledOnTouchOutside(true);
-        countryDialog.setTitle(getResources().getString(R.string.select_country_code));
         countryDialog.setContentView(R.layout.dialog_country_code);
         ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
-        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, country_name));
+        listView.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, country_name));
         countryDialog.show();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
