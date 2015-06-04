@@ -48,6 +48,9 @@ import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -575,12 +578,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         RequestParams requestParams = new RequestParams();
         requestParams.add("location", location);
         requestParams.add("subcategory_id", subCategoryTextView.getTag() + "");
+        Log.e(TAG, "subcategory_id : " + subCategoryTextView.getTag() + " == " + location);
 
         if (timeBarrier) {
             String fromTiming = (String) fromTimingInput.getTag(fromTimingInput.getId());
             String toTiming = (String) toTimingInput.getTag(toTimingInput.getId());
-            requestParams.add("timing_from", fromTiming + ":00");
-            requestParams.add("timing_to", toTiming + ":00");
+            try {
+                JSONObject timings = new JSONObject();
+                timings.put("from", fromTiming);
+                timings.put("to", toTiming);
+                requestParams.add("timings", timings.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             String week = "";
 
