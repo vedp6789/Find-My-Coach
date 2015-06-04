@@ -836,6 +836,11 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
 
         /** Login is successful start DashBoard Activity */
+        try{
+            String name = response.getData().getFirstName() + " " + response.getData().getLastName();
+            StorageHelper.storePreference(this,"user_full_name", name);
+        }catch (Exception ignored){}
+
         if (statusCode == 200) {
             saveUserPhn("True");
             finish();

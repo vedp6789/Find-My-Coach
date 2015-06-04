@@ -18,7 +18,7 @@ public class StorageHelper {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(key, value);
-        editor.commit();
+        editor.apply();
     }
 
 
@@ -26,24 +26,21 @@ public class StorageHelper {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(key, value);
-        editor.commit();
+        editor.apply();
     }
     public static boolean getGcmRegIfSentToServer(Context context, String key){
         SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(context);
-        boolean reg_saved= preferences.getBoolean(key , false);
-        return reg_saved;
+        return preferences.getBoolean(key , false);
     }
 
     public static String getUserGroup(Context context, String key){
         SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(context);
-        String user_group= preferences.getString(key , null);
-        return user_group;
+        return preferences.getString(key , null);
     }
 
     public static String getUserDetails(Context context, String key) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String userToken = preferences.getString(key, null);
-        return userToken;
+        return preferences.getString(key, null);
     }
 
     public static String getGridClickDetails(Context context,String key){

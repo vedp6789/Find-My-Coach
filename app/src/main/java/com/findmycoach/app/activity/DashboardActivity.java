@@ -96,7 +96,7 @@ public class DashboardActivity extends FragmentActivity
     private ResideMenuItem itemHome;
     private ResideMenuItem itemNotification;
     private ResideMenuItem itemConnection;
-    private ResideMenuItem itemSchedule;
+    public ResideMenuItem itemSchedule;
     private ResideMenuItem itemSettings;
     private ResideMenuItem itemLogout;
 
@@ -431,7 +431,7 @@ public class DashboardActivity extends FragmentActivity
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(8, 8, 8, 8);
+        params.setMargins(18, 18, 18, 18);
         scrollView.addView(contentView);
         scrollView.setLayoutParams(params);
         alertDialog.setView(scrollView);

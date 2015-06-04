@@ -291,6 +291,11 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         progressDialog.dismiss();
 
         try{
+            String name = firstNameInput.getText().toString() + " " + lastNameInput.getText().toString();
+            StorageHelper.storePreference(this,"user_full_name", name);
+        }catch (Exception ignored){}
+
+        try{
             Response response = (Response) object;
             Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
             StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getData().getId());

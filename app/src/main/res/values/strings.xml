@@ -492,8 +492,8 @@
     <string name="payment">Payment</string>
     <string name="no_new_request">No new request for you.</string>
     <string name="not_connected">Not connected to anyone.</string>
-    <string name="yes">YES</string>
-    <string name="no">NO</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="gcm_notification">GCM notification</string>
     <string name="email_not_present_in_db">Email is not present in database.</string>
     <string name="email_not_registered">Email is not registered.</string>

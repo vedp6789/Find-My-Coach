@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.fragment.DatePickerFragment;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.StorageHelper;
 
 import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
@@ -58,6 +59,12 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
                 finish();
             }
         });
+
+        try{
+            inputCardName.setText(StorageHelper.getUserDetails(this, "user_full_name"));
+        }catch (Exception e){
+            inputCardName.setText("");
+        }
 
     }
 

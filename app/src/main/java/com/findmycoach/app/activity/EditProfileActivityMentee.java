@@ -538,6 +538,10 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             Intent intent = new Intent();
             intent.putExtra("user_info", new Gson().toJson(userInfo));
             setResult(Activity.RESULT_OK, intent);
+            try{
+                String name = profileFirstName.getText().toString() + " " + profileLastName.getText().toString();
+                StorageHelper.storePreference(this,"user_full_name", name);
+            }catch (Exception ignored){}
             finish();
 
             if (newUser != null && newUser.contains(userInfo.getId())) {
