@@ -107,7 +107,8 @@ public class UserListActivity extends Activity implements Callback {
         listView.setAdapter(mentorListAdapter);
 
         TextView title = (TextView) findViewById(R.id.title);
-        title.setText(getResources().getString(R.string.search_result));
+
+        title.setText(users.size() > 1 ? getResources().getString(R.string.mentors) : getResources().getString(R.string.mentor));
     }
 
     @Override

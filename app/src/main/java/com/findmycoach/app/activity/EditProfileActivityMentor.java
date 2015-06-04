@@ -653,11 +653,12 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             Intent intent = new Intent();
             intent.putExtra("user_info", new Gson().toJson(userInfo));
             setResult(Activity.RESULT_OK, intent);
-            try{
+            try {
                 String name = profileFirstName.getText().toString() + " " + profileLastName.getText().toString();
-                StorageHelper.storePreference(this,"user_full_name", name);
-            }catch (Exception ignored){}
-            finish();
+                StorageHelper.storePreference(this, "user_full_name", name);
+            } catch (Exception ignored) {
+            }
+
 
             if (newUser != null && newUser.contains(userInfo.getId())) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -666,8 +667,9 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
                 editor.apply();
                 DashboardActivity.dashboardActivity.container.setVisibility(View.VISIBLE);
                 DashboardActivity.dashboardActivity.showTermsAndConditions();
-                DashboardActivity.dashboardActivity.updateUI(DashboardActivity.dashboardActivity.itemSchedule);
+                startActivity(new Intent(this, AddNewSlotActivity.class));
             }
+            finish();
         }
     }
 

@@ -474,6 +474,7 @@
     <string name="preferred_time">Preferred Time</string>
     <string name="search">Search</string>
     <string name="search_result">Search results</string>
+    <string name="mentors">Mentors</string>
     <string name="hint_enter_card_number">Card number</string>
     <string name="hint_name_on_card">Name on card</string>
     <string name="hint_date_of_expiry">Date of expiry</string>
