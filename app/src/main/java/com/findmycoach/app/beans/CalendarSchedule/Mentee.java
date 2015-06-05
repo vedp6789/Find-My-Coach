@@ -3,23 +3,31 @@ package com.findmycoach.app.beans.CalendarSchedule;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by ved on 3/6/15.
  */
 public class Mentee implements Parcelable{
     public Mentee(){
-
+       eventDurations = new ArrayList<EventDuration>();
     }
-    private String event_start_date;
+    private List<EventDuration>  eventDurations;
     private String first_name;
     private String last_name;
 
-    public String getEvent_start_date() {
-        return event_start_date;
+
+    public List<EventDuration> getEventDurations() {
+        return eventDurations;
     }
 
-    public void setEvent_start_date(String event_start_date) {
-        this.event_start_date = event_start_date;
+    public void setEventDurations(List<EventDuration> eventDurations) {
+        this.eventDurations = eventDurations;
+    }
+
+    public static Creator getCreator() {
+        return CREATOR;
     }
 
     public String getFirst_name() {
@@ -45,13 +53,14 @@ public class Mentee implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.event_start_date);
+        dest.writeTypedList(eventDurations);
         dest.writeString(this.first_name);
         dest.writeString(this.last_name);
     }
 
     private Mentee(Parcel parcel){
-        this.event_start_date = parcel.readString();
+        this();
+        parcel.readTypedList(this.eventDurations,EventDuration.CREATOR);
         this.first_name = parcel.readString();
         this.last_name = parcel.readString();
 

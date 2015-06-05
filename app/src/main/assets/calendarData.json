@@ -28,7 +28,7 @@
     }]
 }
 
-
+********************************************************************
 
 {   "mentor":{},
     "slots": [{
@@ -63,4 +63,54 @@
                 "cause_of_the_vacation": "Going for holidays",
                 "weekdays": ["S", "T", "M"]
     }]
+}
+
+*********************************************************************
+
+
+{
+   “status”:””,
+   "message":"",
+   "data":{
+      "slots":[
+         {
+            "slot_id":"1",
+            "start_time":"01:00:00",
+            "stop_time":"02:00:00",
+            "start_date":"2015-01-01",
+            "slot_type":"Individual",
+            "max_users":"25",
+            "weekdays":["M”,”T”,”W”,”Th"]
+            "vacations":{
+               "vacation_id":"1",
+               "start_date":"2015-01-01",
+               "stop_date":"2016-08-08",
+               "cause_of_the_vacation":"",
+               "weekdays":["M”,”T”,”W”,”Th"]
+            },
+            "events":[
+               
+               {
+                  "event_id":"2",
+                  "sub_category":"Music",
+                  "active_members":"12",
+                  "mentee":[
+                     {
+                        “durations”:[{“start_date”:”2014-8-12”,”stop_date”:”2014-10-25”}]
+                        "first_name":"bdghdshdhxjxkxjxhxxhxjxjxhddsksksxhhdjdjjdhdhdhdhd",
+                        "last_name":"c"
+                     },
+                     {
+                        “durations”:[{“start_date”:”2014-8-12”,”stop_date”:”2014-10-25”}]
+                        "first_name":"bdghdshdhxjxkxjxhxxhxjxjxhddsksksxhhdjdjjdhdhdhdhd",
+                        "last_name":"c"
+                     }
+                  ]
+               }
+            ]
+         }
+      ],
+      "vacations":[ ],
+      "mentor":{ }
+   }
 }
