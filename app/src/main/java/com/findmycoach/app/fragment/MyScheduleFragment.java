@@ -31,6 +31,7 @@ import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
 import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
 import com.findmycoach.app.beans.CalendarSchedule.Event;
+import com.findmycoach.app.beans.CalendarSchedule.EventDuration;
 import com.findmycoach.app.beans.CalendarSchedule.Mentee;
 import com.findmycoach.app.beans.CalendarSchedule.MentorInfo;
 import com.findmycoach.app.beans.CalendarSchedule.MonthYearInfo;
@@ -1178,9 +1179,17 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     for(int mentee_index=0; mentee_index < event_mentees.length(); mentee_index++ ){
                         Mentee mentee=new Mentee();
                         JSONObject mentee_jsonObject=event_mentees.getJSONObject(mentee_index);
+                        JSONArray event_durations = mentee_jsonObject.getJSONArray("durations");
+                        List<EventDuration> eventDurations =new ArrayList<EventDuration>();
+                        for(int event_duration_no = 0 ; event_duration_no < event_durations.length(); event_duration_no++){
+                            JSONObject jsonObject_event_duration = event_durations.getJSONObject(event_duration_no);
+                            EventDuration eventDuration = new EventDuration();
+                            eventDuration.setStart_date(jsonObject_event_duration.getString("start_date"));
+                            eventDuration.setStop_date(jsonObject_event_duration.getString("stop_date"));
+                            eventDurations.add(eventDuration);
+                        }
 
-
-                        mentee.setEvent_start_date(mentee_jsonObject.getString("start_date"));
+                        mentee.setEventDurations(eventDurations);
                         mentee.setFirst_name(mentee_jsonObject.getString("first_name"));
                         mentee.setLast_name(mentee_jsonObject.getString("last_name"));
                         mentees.add(mentee);

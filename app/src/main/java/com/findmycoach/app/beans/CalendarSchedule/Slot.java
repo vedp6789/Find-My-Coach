@@ -185,7 +185,7 @@ public class Slot implements Parcelable {
     }
 
 
-    public boolean anyEventFound(long calendar_time_in_millis) {     /* checking whether any event found for a specific day or not */
+    public boolean anyEventFound(long calendar_time_in_millis) {     /* checking whether any event found for this specific day or not */
         if (events.size() > 0) {
             boolean event_found = false;
             for (int event_index = 0; event_index < events.size(); event_index++) {

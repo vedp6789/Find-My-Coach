@@ -399,23 +399,22 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                     Slot prev_month_slot;
                     boolean prev_month_slot_created_when_network_found = false;
-                    if(prev_month_data.size() > 0){
+                    if (prev_month_data.size() > 0) {
                         prev_month_slot = prev_month_data.get(0);
                         prev_month_slot_created_when_network_found = Boolean.parseBoolean(prev_month_slot.isSlot_created_on_network_success());
-                    }else{
+                    } else {
                         prev_month_slot_created_when_network_found = true; /* I am populating arrayLists for with one flag if network is not found and if there is no data coming from for the desired month then the arrayList for that month size is 0 */
                     }
 
 
                     Slot coming_month_slot;
                     boolean coming_month_slot_created_when_network_found;
-                    if(coming_month_data.size() > 0){
+                    if (coming_month_data.size() > 0) {
                         coming_month_slot = coming_month_data.get(0);
                         coming_month_slot_created_when_network_found = Boolean.parseBoolean(coming_month_slot.isSlot_created_on_network_success());
-                    }else{
-                        coming_month_slot_created_when_network_found =true;
+                    } else {
+                        coming_month_slot_created_when_network_found = true;
                     }
-
 
 
                     if (!slot_created_when_network_found || !prev_month_slot_created_when_network_found || !coming_month_slot_created_when_network_found) {   /* This is assuring that when all three month arrayLists made is on successful network succes then only it is populating data on calendar */
@@ -502,11 +501,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                                     availabilityFlags.vacation_found = true;  /* proves one of non coinciding vacation coming for this day*/
                                                     break;  /* as we have to just know that there is any vacation or not for this day (grid day which is going to be populated)*/
                                                 }
-
-
                                             }
-
-
                                         }
                                     }
                                 }
