@@ -72,7 +72,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     public static String[] subCategoryIds;
     private View fragmentView;
     private String location = "";
-    public static String location_auto_suggested_temp, location_auto_suggested;
     boolean flag_change_location = false;
     private boolean timeBarrier;
     private boolean isSearching = false;
@@ -95,13 +94,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        location_auto_suggested_temp = null;
-        location_auto_suggested = null;
     }
 
     @Override
@@ -141,8 +133,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     public void updateLocationFromAsync(String loc) {
         location = loc.trim();
-        location_auto_suggested_temp = location;
-        location_auto_suggested = location_auto_suggested_temp;
         updateLocationUI();
     }
 
@@ -358,7 +348,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
             @Override
             public void afterTextChanged(Editable s) {
-                location_auto_suggested_temp = null;
                 String input = locationInput.getText().toString();
                 if (input.length() >= 2) {
                     getAutoSuggestions(input);
@@ -375,8 +364,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         locationInput.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                location_auto_suggested_temp = arrayAdapter.getItem(position);
-                location_auto_suggested = location_auto_suggested_temp;
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(locationInput.getWindowToken(), 0);
             }
@@ -490,10 +477,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     }
 
     private void initialize(View view) {
-
-        location_auto_suggested_temp = null;
-        location_auto_suggested = null;
-
         locationInput = (AutoCompleteTextView) view.findViewById(R.id.input_location);
         currentLocationText = (TextView) view.findViewById(R.id.current_location_text_view);
         searchButton = (Button) view.findViewById(R.id.action_search);
@@ -621,35 +604,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     }
 
     boolean validateLocation() {
-        if (locationInput.getText().toString() != null) {
-            if (locationInput.getText().toString().trim().equalsIgnoreCase("")) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.choose_suggested_location), Toast.LENGTH_LONG).show();
-                locationInput.setError(getResources().getString(R.string.choose_suggested_location));
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        locationInput.setError(null);
-                    }
-                }, 3500);
-                return false;
-            }
-            if (!locationInput.getText().toString().trim().equalsIgnoreCase(location_auto_suggested_temp)) {
-                if (!locationInput.getText().toString().equalsIgnoreCase(location_auto_suggested)) {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.choose_suggested_location), Toast.LENGTH_LONG).show();
-                    locationInput.setError(getResources().getString(R.string.choose_suggested_location));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            locationInput.setError(null);
-                        }
-                    }, 3500);
-                    return false;
-                }
-
-            }
-        } else {
-            Toast.makeText(getActivity(), getResources().getString(R.string.choose_suggested_location), Toast.LENGTH_LONG).show();
-            locationInput.setError(getResources().getString(R.string.choose_suggested_location));
+        if (locationInput.getText().toString().trim().equalsIgnoreCase("")) {
+            locationInput.setError(getResources().getString(R.string.enter_address));
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -659,7 +615,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             return false;
         }
         return true;
-
     }
 
 

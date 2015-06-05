@@ -104,7 +104,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         initialize();
         mentorDetailsActivity = this;
         Log.d(TAG, "connection status : " + connectionStatus);
-        applyActionbarProperties();
         populateFields();
 
         month_from_dialog = 0;
@@ -360,15 +359,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
     }
 
-
-    private void applyActionbarProperties() {
-//        ActionBar actionBar = getActionBar();
-//        if (actionBar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//            actionBar.setTitle(userInfo.getFirstName());
-//        }
-    }
-
     private void initialize() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
@@ -475,7 +465,13 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         } catch (Exception e) {
         }
         if (userInfo.getExperience() != null) {
-            profileExperience.setText(userInfo.getExperience() + " year(s)");
+            int ex = 0;
+            try{
+                ex = Integer.parseInt(userInfo.getExperience());
+            }catch (Exception e){
+                ex = 0;
+            }
+            profileExperience.setText(ex > 1 ? ex + " " + getResources().getString(R.string.years) : ex + " " + getResources().getString(R.string.year));
         }
         if (userInfo.getAccomplishments() != null) {
             profileQualification.setText(userInfo.getAccomplishments());
@@ -483,9 +479,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         profileAddress.setText(address);
         if (userInfo.getCharges() != null) {
             charges = (userInfo.getCharges().equals("0") ? userInfo.getCharges() + " per hour" : userInfo.getCharges() + " per hour");
-
             Log.d(TAG, "Charges amount : " + charges.split("per", 2)[0] + "charges unit : " + charges.split("per", 2)[1]);
-            profileCharges.setText("\u20B9 " + charges);
+            profileCharges.setText(charges);
         }
         try {
             profileRatting.setRating(Float.parseFloat(userInfo.getRating()));

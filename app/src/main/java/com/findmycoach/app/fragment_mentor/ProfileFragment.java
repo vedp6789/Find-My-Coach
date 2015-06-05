@@ -180,10 +180,16 @@ public class ProfileFragment extends Fragment implements Callback {
             profileAccomplishment.setText(userInfo.getAccomplishments());
         }
         if (userInfo.getExperience() != null) {
-            profileExperience.setText(userInfo.getExperience() + " year(s)");
+            int ex = 0;
+            try{
+                ex = Integer.parseInt(userInfo.getExperience());
+            }catch (Exception e){
+                ex = 0;
+            }
+            profileExperience.setText(ex > 1 ? ex + " " + getResources().getString(R.string.years) : ex + " " + getResources().getString(R.string.year));
         }
         if (userInfo.getCharges() != null) {
-            profileCharges.setText("\u20B9 " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
+            profileCharges.setText((userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
 
         }
 

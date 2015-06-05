@@ -700,7 +700,7 @@
     <string name="prompt_willing_to_travel">Available to travel trainee location</string>
     <string name="prompt_charges">Coaching fee</string>
     <string name="prompt_experience">Experience</string>
-    <string name="prompt_experience_in_years">Experience in year(s)</string>
+    <string name="prompt_experience_in_years">Experience in year</string>
     <string name="prompt_facebook">Facebook</string>
     <string name="prompt_google_plus">Google +</string>
     <string name="days">Days</string>
@@ -854,6 +854,7 @@
     <string name="event_desc">Event description</string>
   <string name="month">Month</string>
     <string name="year">Year</string>
+    <string name="years">Years</string>
     <string name="calendar_by_loc">Calendar by location</string>
     <string name="loc">Location</string>
     <string name="mentor_response_for_schedule_request_message">Your reply to mentee!</string>
