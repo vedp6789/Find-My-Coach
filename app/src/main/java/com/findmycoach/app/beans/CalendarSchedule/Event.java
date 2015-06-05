@@ -11,7 +11,6 @@ import java.util.List;
  */
 public class Event implements Parcelable{
     private String event_id;
-    private String event_stop_date;
     private String event_total_mentee; /* Number of mentees having same event */
     private String sub_category_name;
     private List<Mentee> mentees;   /* This is having different mentees data for this event like start date of event, first name and last name*/
@@ -27,16 +26,6 @@ public class Event implements Parcelable{
     public Event() {
         mentees = new ArrayList<Mentee>();
     }
-
-
-    public String getEvent_stop_date() {
-        return event_stop_date;
-    }
-
-    public void setEvent_stop_date(String event_stop_date) {
-        this.event_stop_date = event_stop_date;
-    }
-
 
     public String getEvent_total_mentee() {
         return event_total_mentee;
@@ -75,7 +64,6 @@ public class Event implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.event_id);
-        dest.writeString(this.event_stop_date);
         dest.writeString(this.sub_category_name);
         dest.writeString(this.event_total_mentee);
         dest.writeTypedList(this.mentees);
@@ -87,7 +75,6 @@ public class Event implements Parcelable{
      */
         this();
         this.event_id=source.readString();
-        this.event_stop_date=source.readString();
         this.sub_category_name=source.readString();
         this.event_total_mentee=source.readString();
         source.readTypedList(this.mentees,Mentee.CREATOR);

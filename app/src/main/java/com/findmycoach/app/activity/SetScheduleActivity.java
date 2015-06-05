@@ -19,7 +19,11 @@ import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
 import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
+import com.findmycoach.app.beans.CalendarSchedule.Event;
+import com.findmycoach.app.beans.CalendarSchedule.MonthYearInfo;
+import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.beans.CalendarSchedule.SlotDurationDetailBean;
+import com.findmycoach.app.beans.CalendarSchedule.Vacation;
 import com.findmycoach.app.beans.CalendarSchedule.VacationCoincidingSlot;
 import com.findmycoach.app.beans.CalendarSchedule.VacationDurationDetailBean;
 import com.findmycoach.app.util.Callback;
@@ -46,9 +50,15 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     private static int day;
     private static int month;
     private static int year;
-    private static ArrayList<Day> prev_month = null;
-    private static ArrayList<Day> current_month = null;
-    private static ArrayList<Day> coming_month = null;
+    private static ArrayList<Slot> prev_month = null;
+    private static ArrayList<Slot> current_month = null;
+    private static ArrayList<Slot> coming_month = null;
+    private static ArrayList<Vacation> prev_month_non_coinciding_vacations = null;
+    private static ArrayList<Vacation> current_month_non_coinciding_vacations = null;
+    private static ArrayList<Vacation> coming_month_non_coinciding_vacations = null;
+    private static ArrayList<MonthYearInfo> previous_month_year_info = null;
+    private static ArrayList<MonthYearInfo> current_month_year_info = null;
+    private static ArrayList<MonthYearInfo> coming_month_year_info = null;
     private static final int slot_event_type = 0;
     private static final int event_type = 1;
     private static final int free_slot_event_type = 2;
@@ -60,58 +70,88 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     private ArrayList<String> arrayList_subcategory = null;
     private boolean show_free_Slot = true;
     private boolean vacation_found_in_between_slot = false;
+    private int weekView_previous_month, weekView_current_month, weekView_coming_month;  /*These are in relation to month and year of the calendar which get tapped to view the details for particular day*/
+    private int weekView_previous_month_year, weekView_current_month_year, weekView_coming_month_year;
+    private int weekView_previous_month_days, weekView_current_month_days, weekView_coming_month_days;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            Intent getIntent = getIntent();
+            if (getIntent != null) {
 
-        Intent getIntent = getIntent();
-        if (getIntent != null) {
+                this_activity_for = getIntent.getStringExtra("for");    /* this_activity_for defines its uses i.e. SetScheduleActivity is getting called from two places MyScheduleFragment and MentorDetailsActivity */
 
-            this_activity_for = getIntent.getStringExtra("for");    /* this_activity_for defines its uses i.e. SetScheduleActivity is getting called from two places MyScheduleFragment and MentorDetailsActivity */
+                if (this_activity_for.equals("MentorDetailsActivity")) {
+                    mentor_id = getIntent.getStringExtra("mentor_id");
+                    mentor_availablity = getIntent.getStringExtra("availability");
+                    charges = getIntent.getStringExtra("charges");
+                    arrayList_subcategory = getIntent.getStringArrayListExtra("arrayList_category");
+                } else {
+                    if (this_activity_for.equals("ScheduleFragments") && StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group").equals("3")) {
+                        prev_month_non_coinciding_vacations = new ArrayList<Vacation>();
+                        current_month_non_coinciding_vacations = new ArrayList<Vacation>();
+                        coming_month_non_coinciding_vacations = new ArrayList<Vacation>();
+                        prev_month_non_coinciding_vacations = (ArrayList<Vacation>) getIntent.getSerializableExtra("previous_month_non_coinciding_vacation");
+                        current_month_non_coinciding_vacations = (ArrayList<Vacation>) getIntent.getSerializableExtra("current_month_non_coinciding_vacation");
+                        coming_month_non_coinciding_vacations = (ArrayList<Vacation>) getIntent.getSerializableExtra("coming_month_non_coinciding_vacation");
+                    }
+                }
 
-            if (this_activity_for.equals("MentorDetailsActivity")) {
-                mentor_id = getIntent.getStringExtra("mentor_id");
-                mentor_availablity = getIntent.getStringExtra("availability");
-                charges = getIntent.getStringExtra("charges");
-                arrayList_subcategory = getIntent.getStringArrayListExtra("arrayList_category");
+                date_of_grid_selected_from_calendar = getIntent.getStringExtra("date");
+                day = getIntent.getExtras().getInt("day");
+                month = getIntent.getExtras().getInt("month");   /* According to calendar month array i.e. it is one less according to current month, if month is december its value is 11*/
+                year = getIntent.getExtras().getInt("year");
+                prev_month = new ArrayList<Slot>();
+                current_month = new ArrayList<Slot>();
+                coming_month = new ArrayList<Slot>();
+                prev_month = (ArrayList<Slot>) getIntent.getSerializableExtra("prev_month_data");
+                current_month = (ArrayList<Slot>) getIntent.getSerializableExtra("current_month_data");
+                coming_month = (ArrayList<Slot>) getIntent.getSerializableExtra("coming_month_data");
+                previous_month_year_info = new ArrayList<MonthYearInfo>();
+                current_month_year_info = new ArrayList<MonthYearInfo>();
+                coming_month_year_info = new ArrayList<MonthYearInfo>();
+                previous_month_year_info = (ArrayList<MonthYearInfo>) getIntent.getSerializableExtra("previous_month_year_info");
+                current_month_year_info = (ArrayList<MonthYearInfo>) getIntent.getSerializableExtra("current_month_year_info");
+                coming_month_year_info = (ArrayList<MonthYearInfo>) getIntent.getSerializableExtra("coming_month_year_info");
+
+                progressDialog = new ProgressDialog(SetScheduleActivity.this);
+                progressDialog.setMessage(getResources().getString(R.string.please_wait));
+
+                Log.d(TAG, "prev_month: " + prev_month.size() + ", current_month: " + current_month.size() + ", coming_month: " + coming_month.size());
+                //day_schedule = (ArrayList<Day>) getIntent.getSerializableExtra("day_bean");
+                Toast.makeText(this, "" + day + "/" + (month + 1) + "/" + year, Toast.LENGTH_LONG).show();
+
             }
-
-            date_of_grid_selected_from_calendar = getIntent.getStringExtra("date");
-            day = getIntent.getExtras().getInt("day");
-            month = getIntent.getExtras().getInt("month");
-            year = getIntent.getExtras().getInt("year");
-            prev_month = new ArrayList<Day>();
-            current_month = new ArrayList<Day>();
-            coming_month = new ArrayList<Day>();
-            prev_month = (ArrayList<Day>) getIntent.getSerializableExtra("prev_month_data");
-            current_month = (ArrayList<Day>) getIntent.getSerializableExtra("current_month_data");
-            coming_month = (ArrayList<Day>) getIntent.getSerializableExtra("coming_month_data");
-
-            progressDialog = new ProgressDialog(SetScheduleActivity.this);
-            progressDialog.setMessage(getResources().getString(R.string.please_wait));
+            StorageHelper.storePreference(SetScheduleActivity.this, "day", String.valueOf(day));
+            StorageHelper.storePreference(SetScheduleActivity.this, "month", String.valueOf(month));
+            StorageHelper.storePreference(SetScheduleActivity.this, "year", String.valueOf(year));
 
 
-            Log.d(TAG, "prev_month: " + prev_month.size() + ", current_month: " + current_month.size() + ", coming_month: " + coming_month.size());
-            //day_schedule = (ArrayList<Day>) getIntent.getSerializableExtra("day_bean");
-            Toast.makeText(this, "" + day + "/" + (month + 1) + "/" + year, Toast.LENGTH_LONG).show();
+            setContentView(R.layout.activity_set_schedule);
 
+            mWeekView = (WeekView) findViewById(R.id.weekView);
+
+            /*When SetScheduleActivity opens, it always get three months(previous, current(calendar tap day), coming) data to populate */
+
+            weekView_previous_month = previous_month_year_info.get(0).getMonth();
+            weekView_previous_month_year = previous_month_year_info.get(0).getYear();
+            weekView_previous_month_days = previous_month_year_info.get(0).getDays();
+
+            weekView_current_month = current_month_year_info.get(0).getMonth();
+            weekView_current_month_year = current_month_year_info.get(0).getYear();
+            weekView_current_month_days = current_month_year_info.get(0).getDays();
+
+            weekView_coming_month = coming_month_year_info.get(0).getMonth();
+            weekView_coming_month_year = coming_month_year_info.get(0).getYear();
+            weekView_coming_month_days = coming_month_year_info.get(0).getDays();
+
+            applyProperties();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        //  Day day1=day_schedule.get(day-1);
-
-
-        StorageHelper.storePreference(SetScheduleActivity.this, "day", String.valueOf(day));
-        StorageHelper.storePreference(SetScheduleActivity.this, "month", String.valueOf(month));
-        StorageHelper.storePreference(SetScheduleActivity.this, "year", String.valueOf(year));
-
-
-        setContentView(R.layout.activity_set_schedule);
-
-        mWeekView = (WeekView) findViewById(R.id.weekView);
-
-        applyProperties();
 
 
     }
@@ -139,66 +179,54 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         // Populate the week view with some events.
         List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
 
-        Day day11 = prev_month.get(0);
-        String date1 = day11.getDate(); /*  date of the first day of previous month*/
-
-
-        Day day1 = current_month.get(0);
-        String date = day1.getDate();  /*  date of the first day of current month*/
-
-
-        Day day12 = coming_month.get(0);
-        String date2 = day12.getDate(); /*  date of the first day of next month*/
-
-
-        if (Integer.parseInt(date1.split("-", 3)[1]) == newMonth && Integer.parseInt(date1.split("-", 3)[0]) == newYear) {
+        if (weekView_previous_month == newMonth && weekView_previous_month_year == newYear) {
             /*
             * success when this activity is going to be started from MentorDetailsActivity for previous month
             * */
             if (this_activity_for.equals("MentorDetailsActivity")) {
-                populateWeekViewForPreviousMonth1(events, newYear, newMonth);      /* call for the method to populate weekVeiw for previous month in MentorDetailsActivity i.e. mentee is trying to schedule a class from Calendar   */
+                populateWeekViewForPreviousMonth1(events, newYear, newMonth,weekView_previous_month_days);      /* call for the method to populate weekVeiw for previous month in MentorDetailsActivity i.e. mentee is trying to schedule a class from Calendar   */
             } else {
                 if (this_activity_for.equals("ScheduleFragments")) {
             /*
             * success when this activity is going to be started from MyScheduleFragment for previous month
             * */
-                    populateWeekViewForPreviousMonth2(events, newYear, newMonth);    /* call for the method to populate weekVeiw for previous month in Mentor Scedule Calendar   */
+                    populateWeekViewForPreviousMonth2(events, newYear, newMonth,weekView_previous_month_days);    /* call for the method to populate weekVeiw for previous month in Mentor Scedule Calendar   */
                 }
             }
 
 
         }
-        if (Integer.parseInt(date.split("-", 3)[1]) == newMonth && Integer.parseInt(date.split("-", 3)[0]) == newYear) {
+        if (weekView_current_month == newMonth && weekView_current_month_year == newYear) {
             /*
             * success when this activity is going to be started from MentorDetailsActivity for current month
             * */
             if (this_activity_for.equals("MentorDetailsActivity")) {
-                populateWeekViewForCurrentMonth1(events, newYear, newMonth);     /* call for the method to populate weekVeiw for current month in MentorDetailsActivity i.e. mentee is trying to schedule a class from Calendar   */
+                populateWeekViewForCurrentMonth1(events, newYear, newMonth, weekView_current_month_days);     /* call for the method to populate weekVeiw for current month in MentorDetailsActivity i.e. mentee is trying to schedule a class from Calendar   */
             } else {
                 if (this_activity_for.equals("ScheduleFragments")) {
             /*
             * success when this activity is going to be started from MyScheduleFragment for current month
             * */
-                    populateWeekViewForCurrentMonth2(events, newYear, newMonth);    /* call for the method to populate weekVeiw for current month in Mentor Scedule Calendar   */
+                    populateWeekViewForCurrentMonth2(events, newYear, newMonth, weekView_current_month_days);    /* call for the method to populate weekVeiw for current month in Mentor Scedule Calendar   */
                 }
             }
 
 
         }
 
-        if (Integer.parseInt(date2.split("-", 3)[1]) == newMonth && Integer.parseInt(date2.split("-", 3)[0]) == newYear) {
+        if (weekView_coming_month == newMonth && weekView_coming_month_year == newYear) {
 
             /*
             * success when this activity is going to be started from MentorDetailsActivity for next month
             * */
             if (this_activity_for.equals("MentorDetailsActivity")) {
-                populateWeekViewForNextMonth1(events, newYear, newMonth);       /* call for the method to populate weekVeiw for next month in MentorDetailsActivity i.e. mentee is trying to schedule a class from Calendar   */
+                populateWeekViewForNextMonth1(events, newYear, newMonth, weekView_coming_month_days);       /* call for the method to populate weekVeiw for next month in MentorDetailsActivity i.e. mentee is trying to schedule a class from Calendar   */
             } else {
                 if (this_activity_for.equals("ScheduleFragments")) {
             /*
             * success when this activity is going to be started from MyScheduleFragment for next month
             * */
-                    populateWeekViewForNextMonth2(events, newYear, newMonth);   /* call for the method to populate weekVeiw for next month in Mentor Scedule Calendar   */
+                    populateWeekViewForNextMonth2(events, newYear, newMonth,weekView_coming_month_days);   /* call for the method to populate weekVeiw for next month in Mentor Scedule Calendar   */
                 }
             }
 
@@ -209,47 +237,77 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         return events;
     }
 
-    private void populateWeekViewForNextMonth2(List<WeekViewEvent> events, int newYear, int newMonth) {
+    private void populateWeekViewForNextMonth2(List<WeekViewEvent> events, int newYear, int newMonth, int number_of_days_in_this_month) {
         // Log.d(TAG,"Going to create view for next month.");
 
         if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 2) {
-            for (Day d : coming_month) {
-                String date_for_d = d.getDate();
-                List<DayEvent> dayEvents = d.getDayEvents();
+            if(coming_month.size() > 0){
+                Slot slot =coming_month.get(0);
+                if(Boolean.parseBoolean(slot.isSlot_created_on_network_success())){  /* Checking whether the slots came in this month are either on network success as when there is network failure i am adding one slot with flag for network communication as false */
+                    for (int day_of_this_month=1; day_of_this_month <= number_of_days_in_this_month ; day_of_this_month++) {
+
+                        Calendar calendar_for_day_of_this_month =Calendar.getInstance();   /* each day of this month will get initialized as loop executes. For each day, matching the possible events or vacation coming for the mentee */
+                        calendar_for_day_of_this_month.set(newYear,newMonth,day_of_this_month);
 
 
-                DayEvent dayEvent;
-                if (dayEvents.size() > 0) {
-                    for (int event = 0; event < dayEvents.size(); event++) {
-                        dayEvent = dayEvents.get(event);
+                        for(int slot_number = 0 ; slot_number < coming_month.size() ; slot_number++){
+                            Slot slot1 =coming_month.get(slot_number);
+                            List<Event> events1=slot1.getEvents();
+                            if(events1.size() > 0){
 
-                        Calendar startTime;
-                        startTime = Calendar.getInstance();
-                        startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
-                        String start_time = dayEvent.getEvent_start_time();
-                        String stop_time = dayEvent.getEvent_stop_time();
-                        String f_name = dayEvent.getFname();
-                        String l_name = dayEvent.getLname();
-                        String event_id = dayEvent.getEvent_id();
-                        String sub_category_name = dayEvent.getSub_category_name();
-                        String slot_type = dayEvent.getEvent_type();
-                        //String event_name=dayEvent.getEvent_name();
-                        startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
-                        startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
-                        startTime.set(Calendar.MONTH, newMonth - 1);
-                        startTime.set(Calendar.YEAR, newYear);
-                        Calendar endTime;// = (Calendar) startTime.clone();
-                        endTime = (Calendar) startTime.clone();
-                        endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":", 3)[0]) - Integer.parseInt(start_time.split(":", 3)[0]));
-                        endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":", 3)[1]));
-                        WeekViewEvent weekViewEvent;
-                        weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name, sub_category_name, slot_type), startTime, endTime, slot_type, event_type);
-                        weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
-                        events.add(weekViewEvent);
+                            }else{
+                                /* No need to do any check for this day as this slot is having no slot */
+                            }
+                        }
 
+
+
+
+
+
+                        List<DayEvent> dayEvents = d.getDayEvents();
+
+
+                        DayEvent dayEvent;
+                        if (dayEvents.size() > 0) {
+                            for (int event = 0; event < dayEvents.size(); event++) {
+                                dayEvent = dayEvents.get(event);
+
+                                Calendar startTime;
+                                startTime = Calendar.getInstance();
+                                startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
+                                String start_time = dayEvent.getEvent_start_time();
+                                String stop_time = dayEvent.getEvent_stop_time();
+                                String f_name = dayEvent.getFname();
+                                String l_name = dayEvent.getLname();
+                                String event_id = dayEvent.getEvent_id();
+                                String sub_category_name = dayEvent.getSub_category_name();
+                                String slot_type = dayEvent.getEvent_type();
+                                //String event_name=dayEvent.getEvent_name();
+                                startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
+                                startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
+                                startTime.set(Calendar.MONTH, newMonth - 1);
+                                startTime.set(Calendar.YEAR, newYear);
+                                Calendar endTime;// = (Calendar) startTime.clone();
+                                endTime = (Calendar) startTime.clone();
+                                endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":", 3)[0]) - Integer.parseInt(start_time.split(":", 3)[0]));
+                                endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":", 3)[1]));
+                                WeekViewEvent weekViewEvent;
+                                weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name, sub_category_name, slot_type), startTime, endTime, slot_type, event_type);
+                                weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
+                                events.add(weekViewEvent);
+
+                            }
+                        }
                     }
+                }else{
+                    Log.e(TAG,"Network status false found while populating week_view for "+"month: "+newMonth+" year: "+newYear+ "this is found while populating weekView for mentee and in next month");
                 }
+            }else{
+                /* There is no slot for this month so in mentee does not have any event*/
             }
+
+
         }
         if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 3) {
             for (Day d : coming_month) {
@@ -326,7 +384,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         }
     }
 
-    private void populateWeekViewForNextMonth1(List<WeekViewEvent> events, int newYear, int newMonth) {
+    private void populateWeekViewForNextMonth1(List<WeekViewEvent> events, int newYear, int newMonth,int days) {
 
 
         poplateWeekView(coming_month, events, newYear, newMonth);
@@ -346,7 +404,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             List<DayEvent> dayEvents = d.getDayEvents();
             List<DayVacation> dayVacations = d.getDayVacations();
 
-            Log.d(TAG,"Day vacations: "+ dayVacations.size());
+            Log.d(TAG, "Day vacations: " + dayVacations.size());
 
             if (daySlots.size() <= 0) {
                  /*   success when there is no slots i.e. slots array size is zero
@@ -532,7 +590,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     }
 
     private void makeFreeSlotForeground(int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_year, int slot_stop_month, int slot_stop_day, String[] slot_on_week_days, List<DayVacation> dayVacations, int slot_start_time_in_seconds, int slot_stop_time_in_seconds, long slot_start_date_in_millis, long slot_stop_date_in_millis, String slot_start_time, String date_for_d, int newMonth, int newYear, String slot_stop_time, String slot_id, int slot_start_hour, int slot_start_minute, int slot_stop_hour, int slot_stop_minute, String slot_type, List<WeekViewEvent> events) {
-        Log.d(TAG,"makeFreeSlotForeground method call");
+        Log.d(TAG, "makeFreeSlotForeground method call");
 
         boolean slot_start_date_ahead_of_current = true;
         Calendar right_now = Calendar.getInstance();
@@ -583,8 +641,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             slot_coinciding_vacations = getSlotCoincidingVacations(dayVacations, slot_on_week_days, slot_start_time_in_seconds, slot_stop_time_in_seconds, right_now_in_millis, slot_stop_date_in_millis);
 
 
-
-        Log.d(TAG,"slot_coinciding_vacation size: "+slot_coinciding_vacations.size());
+        Log.d(TAG, "slot_coinciding_vacation size: " + slot_coinciding_vacations.size());
 
 
         if (slot_coinciding_vacations.size() <= 0) {
@@ -658,22 +715,22 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                 }
 
 
-                Log.d(TAG,"vacationDurationDetailBeans arrayList size: "+vacationDurationDetailBeans.size());
+                Log.d(TAG, "vacationDurationDetailBeans arrayList size: " + vacationDurationDetailBeans.size());
 
             }
 
-            Log.d(TAG,"slotDurationDetailBean arrayList size: "+slotDurationDetailBeans.size());
+            Log.d(TAG, "slotDurationDetailBean arrayList size: " + slotDurationDetailBeans.size());
             for (int coinciding_vacation = 0; coinciding_vacation < vacationDurationDetailBeans.size(); coinciding_vacation++) {
                 VacationDurationDetailBean vacationDurationDetailBean = vacationDurationDetailBeans.get(coinciding_vacation);
                 String date = vacationDurationDetailBean.getDate();
                 String week_day = vacationDurationDetailBean.getWeek_day();
-                Log.d(TAG,"Vacation date: "+date+"week_day: "+week_day);
+                Log.d(TAG, "Vacation date: " + date + "week_day: " + week_day);
 
                 for (int slot_duration_bean = 0; slot_duration_bean < slotDurationDetailBeans.size(); slot_duration_bean++) {
                     SlotDurationDetailBean slotDurationDetailBean = slotDurationDetailBeans.get(slot_duration_bean);
                     String slot_date = slotDurationDetailBean.getDate();
                     String slot_week_day = slotDurationDetailBean.getWeek_day();
-                    Log.d(TAG,"Class date: "+slot_date+"slot week_day: "+slot_week_day);
+                    Log.d(TAG, "Class date: " + slot_date + "slot week_day: " + slot_week_day);
 
                     if (slot_date.equals(date) && slot_week_day.equals(week_day)) {
                         slotDurationDetailBeans.remove(slot_duration_bean);
@@ -683,7 +740,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
                 }
             }
-            Log.d(TAG,"slotDurationDetailBean arrayList size after comparision: "+slotDurationDetailBeans.size());
+            Log.d(TAG, "slotDurationDetailBean arrayList size after comparision: " + slotDurationDetailBeans.size());
 
 
             if (slotDurationDetailBeans.size() > 0) {

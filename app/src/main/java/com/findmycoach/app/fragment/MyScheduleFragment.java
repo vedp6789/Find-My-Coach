@@ -88,7 +88,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public boolean cb_calendar_by_location_is_checked = false, b_three_months_data;
     private int NEW_SLT = 0, VAC_SCH = 1, RESULT_OK = 500;
     protected static int month_from_dialog, year_from_dialog; /* this is getting initialized from CustomDatePicker fragment when user wants to jump on an specific date*/
-    public boolean populate_calendar_from_adapter;
+    public boolean populate_calendar_from_adapter;   /* this is getting true when currentMonthArrayList or currentMonthNonCoincidingVacation having flag network communication false, Getting initialized from CalendarGridAdatpter */
     private String previous_month_start_date;/* this will get initialized when api is requested for three months (previous, current, coming)*/
     private String next_month_requested_date;
     private String prev_month_requested_date;
@@ -179,7 +179,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 startPointForCalendar();
             }
         } else {
-            month = month_from_dialog;
+            month = month_from_dialog;  /* CustomDatePicketFragment is assigning value to month_from_dailog and year_from_dialog*/
             year = year_from_dialog;
             currentMonth.setText(getResources().getStringArray(R.array.months)[month - 1] + " " + year);
         }

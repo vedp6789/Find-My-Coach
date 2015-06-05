@@ -397,10 +397,31 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                     Slot slot = current_month_data.get(0);
                     boolean slot_created_when_network_found = Boolean.parseBoolean(slot.isSlot_created_on_network_success());
 
-                    if (!slot_created_when_network_found) {
+                    Slot prev_month_slot;
+                    boolean prev_month_slot_created_when_network_found = false;
+                    if(prev_month_data.size() > 0){
+                        prev_month_slot = prev_month_data.get(0);
+                        prev_month_slot_created_when_network_found = Boolean.parseBoolean(prev_month_slot.isSlot_created_on_network_success());
+                    }else{
+                        prev_month_slot_created_when_network_found = true; /* I am populating arrayLists for with one flag if network is not found and if there is no data coming from for the desired month then the arrayList for that month size is 0 */
+                    }
+
+
+                    Slot coming_month_slot;
+                    boolean coming_month_slot_created_when_network_found;
+                    if(coming_month_data.size() > 0){
+                        coming_month_slot = coming_month_data.get(0);
+                        coming_month_slot_created_when_network_found = Boolean.parseBoolean(coming_month_slot.isSlot_created_on_network_success());
+                    }else{
+                        coming_month_slot_created_when_network_found =true;
+                    }
+
+
+
+                    if (!slot_created_when_network_found || !prev_month_slot_created_when_network_found || !coming_month_slot_created_when_network_found) {   /* This is assuring that when all three month arrayLists made is on successful network succes then only it is populating data on calendar */
                         /* this is happening when user either go to previous, next month and device found network but earlier network was not available and arraylist for current_month_data made at that time then in this case we have to get this month data from server again*/
                         if (allow_once) {
-                            // Toast.makeText(context, "Please refresh the schedule !", Toast.LENGTH_SHORT).show();
+                            // Toast.makeText(context, "Refreshing the schedule!", Toast.LENGTH_SHORT).show();
                             if (myScheduleFragment != null) {
                                 String user_group = StorageHelper.getUserGroup(context, "user_group");
                                 myScheduleFragment.populate_calendar_from_adapter = true;
@@ -457,7 +478,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
                                 /* Now to check whether any any coinciding vacation found after slot match for this day, if not found then we will check whether this day is having any non coinciding vacation or not, if found then we do not need to check */
-                                if (!availabilityFlags.vacation_found) {
+                                if (!availabilityFlags.vacation_found) {  /* here checking current status of availabilityFlags so that if there is already some vacation found then do not need to check for non coinciding vacation*/
                                     if (currentMonthNonCoincidingVacation.size() > 0) {
                                         for (int non_coinciding_vacation = 0; non_coinciding_vacation < currentMonthNonCoincidingVacation.size(); non_coinciding_vacation++) {
                                             Vacation vacation = currentMonthNonCoincidingVacation.get(non_coinciding_vacation);
@@ -583,13 +604,13 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             * if free_slot is having value greater than zero, it means this day has free slots and we have to populate calendar grid color
                             * */
                             if (free_slots > 0) {
-                                if (day_color[1].equals("BLUE")) {
+                                if (day_color[1].equals("CURRENT")) {
                                     gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
                                 } else {
                                     gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
                                 }
                             } else {
-                                if (day_color[1].equals("BLUE")) {
+                                if (day_color[1].equals("CURRENT")) {
                                     gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
                                 }
                             }
@@ -603,20 +624,104 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                     }
 
-                } else {
+                } else {    /* executes when there is no slot found for the current month */
 
                     if (currentMonthNonCoincidingVacation.size() > 0) {
+                        Calendar calendar_this_day = Calendar.getInstance();
+                        calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth), Integer.parseInt(theday));
+                        long this_day = calendar_this_day.getTimeInMillis();
+                        int week_day_for_this_day = calendar_this_day.get(Calendar.DAY_OF_WEEK);/* This will give week_day for this day, 1 to 7 for Sunday to Saturday */
+
+
                         Vacation vacation = currentMonthNonCoincidingVacation.get(0);
                         Boolean vacation_made_at_network_status = Boolean.parseBoolean(vacation.getVacation_made_at_network_success());
-                        if (vacation_made_at_network_status) {
+
+                        Vacation prev_month_vacation;
+                        boolean prev_month_vacation_created_when_network_found = false;
+                        if (previousMonthNonCoincidingVacation.size() > 0) {
+                            prev_month_vacation = previousMonthNonCoincidingVacation.get(0);
+                            prev_month_vacation_created_when_network_found = Boolean.parseBoolean(prev_month_vacation.getVacation_made_at_network_success());
+                        } else {
+                            prev_month_vacation_created_when_network_found = true; /* When the previousMonthNonCoincidingVacation arrayList size is 0 it means that network comm. is successful but there is no vacation found for this month*/
+                        }
+
+                        Vacation coming_month_vacation;
+                        boolean coming_month_slot_created_when_network_found = false;
+                        if (comingMonthNonCoincidingVacation.size() > 0) {
+                            coming_month_vacation = comingMonthNonCoincidingVacation.get(0);
+                            coming_month_slot_created_when_network_found = Boolean.parseBoolean(coming_month_vacation.getVacation_made_at_network_success());
+                        } else {
+                            coming_month_slot_created_when_network_found = true; /* When the comingMonthNonCoincidingVacation arrayList size is 0 it means that network comm. is successful but there is no vacation found for this month*/
+                        }
+
+
+                        if (vacation_made_at_network_status && prev_month_vacation_created_when_network_found && coming_month_slot_created_when_network_found) {/* This is assuring that when all three month arrayLists made is on successful network succes then only it is populating data on calendar */
                         /* Only non coinciding vacation found on this day, Show this day with Vacation with handling mentor schedule */
                             /* This case is needed to handle only for Mentor's Schedule as mentee has no concern for non coinciding vacations*/
+                            if (myScheduleFragment != null) {
+                                if (StorageHelper.getUserGroup(context, "user_group").equals("3")) {
+                                        /* for mentor schedule */
 
-                            if (StorageHelper.getUserDetails(context, "user_group").equals("3")) {
-                                
+                                    AvailabilityFlags availabilityFlags = new AvailabilityFlags();
+                                    for (int current_month_non_coinciding_vacation_index = 0; current_month_non_coinciding_vacation_index < currentMonthNonCoincidingVacation.size(); current_month_non_coinciding_vacation_index++) {
+                                        Vacation vacation1 = currentMonthNonCoincidingVacation.get(current_month_non_coinciding_vacation_index);
+                                        String vacation_start_date = vacation1.getStart_date();
+                                        String vacation_stop_date = vacation1.getStop_date();
+                                        String[] vacation_week_days = vacation1.getWeek_days();
+
+                                        Calendar calendar_vacation_start_date = Calendar.getInstance();
+                                        calendar_vacation_start_date.set(Integer.parseInt(vacation_start_date.split("-")[0]), Integer.parseInt(vacation_start_date.split("-")[1]), Integer.parseInt(vacation_start_date.split("-")[2]));
+                                        long vacation_start_millis = calendar_vacation_start_date.getTimeInMillis();
+
+                                        Calendar calendar_vacation_stop_date = Calendar.getInstance();
+                                        calendar_vacation_stop_date.set(Integer.parseInt(vacation_stop_date.split("-")[0]), Integer.parseInt(vacation_stop_date.split("-")[1]), Integer.parseInt(vacation_stop_date.split("-")[2]));
+                                        long vacation_stop_millis = calendar_vacation_stop_date.getTimeInMillis();
+
+
+                                        if ((this_day == vacation_start_millis) || (this_day == vacation_stop_millis) || (this_day < vacation_stop_millis && this_day > vacation_start_millis)) {
+
+                                            /* Now checking whether the_day is having week day similar to one of the vacation week days, if found then we have to consider this vacation for this day otherwise not*/
+                                            if (thisDayMatchesWithWeekDaysArray(vacation_week_days, week_day_for_this_day)) {
+                                                availabilityFlags.vacation_found = true;  /* proves one of non coinciding vacation coming for this day*/
+                                                break;  /* as we have to just know that there is any vacation or not for this day (grid day which is going to be populated)*/
+                                            }
+
+
+                                        }
+
+
+                                    }
+
+                                    if (availabilityFlags.vacation_found) {
+                                          /* only vacation found */
+                                    }
+
+
+                                }
+                            } else {
+                                /* for MentorDetailsActivity which is coming in mentee's app for mentor availability in mentor profile view*/
+                                int free_slots = -1;   /* it is for those slots where there are no slots for this day */
+
+
+                            /*
+                            * if free_slot is having value greater than zero, it means this day has free slots and we have to populate calendar grid color
+                            * */
+                                if (free_slots > 0) {
+                                    if (day_color[1].equals("CURRENT")) {
+                                        gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                    } else {
+                                        gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                    }
+                                } else {
+                                    if (day_color[1].equals("CURRENT")) {
+                                        gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
+                                    }
+                                }
+
+
+                                gridcell.setTag(R.id.TAG_FREE_SLOT, String.valueOf(free_slots));
+
                             }
-
-
 
                         } else {
                             /* this is happening when user either go to previous, next month and device found network but earlier network was not available and arraylist for current_month_data made at that time then in this case we have to get this month data from server again*/
@@ -655,6 +760,28 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                     } else {
                         /* Calendar days don't need to show any schedule as the current_month_data have no slot */
+                        /* For MentorDetailsActivity there is no slot found */
+                        int free_slots = -1;   /* it is for those slots where there are no slots for this day */
+
+
+                            /*
+                            * if free_slot is having value greater than zero, it means this day has free slots and we have to populate calendar grid color
+                            * */
+                        if (free_slots > 0) {
+                            if (day_color[1].equals("CURRENT")) {
+                                gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                            } else {
+                                gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                            }
+                        } else {
+                            if (day_color[1].equals("CURRENT")) {
+                                gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
+                            }
+                        }
+
+
+                        gridcell.setTag(R.id.TAG_FREE_SLOT, String.valueOf(free_slots));
+
                     }
 
                 }
@@ -850,7 +977,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         if (allow_data_population_from_server_data) {
             Intent intent = new Intent(context, SetScheduleActivity.class);
             String s = (String) view.getTag();
-            int no_of_free_slots = 0;
+            int no_of_free_slots = 0;   /* getting used for MentorDetailsActivity, to decide what to do on the particular grid or day click */
 
             int day = Integer.parseInt(s.split("-", 3)[0]);
 
@@ -858,6 +985,11 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             String year = s.split("-", 3)[2];
             if (myScheduleFragment != null) {
                 intent.putExtra("for", "ScheduleFragments");
+                if (StorageHelper.getUserGroup(context, "user_group").equals("3")) {  /* sending non coinciding vacations to SetScheduleActivity only in the case of Mentor's schedule */
+                    intent.putExtra("previous_month_non_coinciding_vacation", previousMonthNonCoincidingVacation);
+                    intent.putExtra("current_month_non_coinciding_vacation", currentMonthNonCoincidingVacation);
+                    intent.putExtra("coming_month_non_coinciding_vacation", comingMonthNonCoincidingVacation);
+                }
             } else {
                 intent.putExtra("for", "MentorDetailsActivity");
 
@@ -880,6 +1012,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             intent.putExtra("prev_month_data", prev_month_data);
             intent.putExtra("current_month_data", current_month_data);
             intent.putExtra("coming_month_data", coming_month_data);
+            intent.putExtra("previous_month_year_info", previousMonthYearInfo);
+            intent.putExtra("current_month_year_info", currentMonthYearInfo);
+            intent.putExtra("coming_month_year_info", comingMonthYearInfo);
 
 
             //intent.putExtra("day_bean", (android.os.Parcelable) three_months_data);
@@ -929,8 +1064,14 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                     if (no_of_free_slots == 0) {
                                         Toast.makeText(context, context.getResources().getString(R.string.mentor_is_not_free), Toast.LENGTH_SHORT).show();
                                     } else {
-                                        if (no_of_free_slots == -1)
+                                        if (no_of_free_slots == -1) {
                                             Toast.makeText(context, context.getResources().getString(R.string.no_slot_from_mentor), Toast.LENGTH_SHORT).show();
+
+                                        } else {
+                                            if (no_of_free_slots == -2) {
+                                                Toast.makeText(context, context.getResources().getString(R.string.past_day), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
                                     }
 
                                 } else {
