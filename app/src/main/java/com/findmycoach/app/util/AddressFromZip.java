@@ -27,7 +27,6 @@ public class AddressFromZip extends AsyncTask<String, Void, List<Address>> {
     public AddressFromZip(Context context, EditText editText) {
         this.context = context;
         this.editText = editText;
-        Log.e("AddressFromZip", "Constructor");
     }
 
     @Override
@@ -35,7 +34,6 @@ public class AddressFromZip extends AsyncTask<String, Void, List<Address>> {
 
         final Geocoder geocoder = new Geocoder(context);
         try {
-            Log.e("AddressFromZip", "do in back");
             zip = params[0];
             return geocoder.getFromLocationName(zip, 1);
         } catch (IOException ignored) {
@@ -62,13 +60,17 @@ public class AddressFromZip extends AsyncTask<String, Void, List<Address>> {
             } else if (context instanceof EditProfileActivityMentor) {
                 try {
                     address = address.replace(zip, "");
-                    editText.setText(address);
+                    if (address != null && !address.equals("")
+                            && editText.getText().toString().trim().equalsIgnoreCase(address.trim()))
+                        editText.setText(address);
                 } catch (Exception ignored) {
                 }
             } else if (context instanceof EditProfileActivityMentee) {
                 try {
                     address = address.replace(zip, "");
-                    editText.setText(address);
+                    if (address != null && !address.equals("")
+                            && editText.getText().toString().trim().equalsIgnoreCase(address.trim()))
+                        editText.setText(address);
                 } catch (Exception ignored) {
                 }
             }

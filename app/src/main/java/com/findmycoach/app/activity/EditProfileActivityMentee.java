@@ -257,7 +257,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (pinCode.getText().toString().length() > 4) {
+                if (pinCode.getText().toString().length() > 4 && pinCode.hasFocus()) {
                     try {
                         new AddressFromZip(EditProfileActivityMentee.this, profileAddress1).execute(pinCode.getText().toString());
                     } catch (Exception e) {
