@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,11 +36,14 @@ import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
+import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
@@ -80,7 +84,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
     private String imageInBinary = "";
     ArrayAdapter<String> arrayAdapter;
     private String city = null;
-    private String last_city_selected = null;
     private String TAG = "FMC";
     private String newUser;
 
@@ -90,10 +93,198 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         setContentView(R.layout.activity_edit_profile_mentor);
         newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
         initialize();
+        applyAction();
         populateUserData();
+
+        if(newUser != null)
+            getAddress();
     }
 
-    private void populateUserData() {
+    private void initialize() {
+        userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
+        profileGender = (Spinner) findViewById(R.id.input_gender);
+        profilePicture = (ImageView) findViewById(R.id.profile_image);
+        profileEmail = (TextView) findViewById(R.id.profile_email);
+        profileFirstName = (EditText) findViewById(R.id.input_first_name);
+        profileLastName = (EditText) findViewById(R.id.input_last_name);
+        profileAddress = (EditText) findViewById(R.id.input_address);
+        profileAddress1 = (AutoCompleteTextView) findViewById(R.id.input_address1);
+        profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
+        pinCode = (EditText) findViewById(R.id.input_pin);
+        chargeInput = (EditText) findViewById(R.id.input_charges);
+        accomplishment = (EditText) findViewById(R.id.input_accomplishment);
+        experienceInput = (Spinner) findViewById(R.id.input_experience);
+        experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview,
+                getResources().getStringArray(R.array.year_of_experience)));
+        isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
+        updateAction = (Button) findViewById(R.id.button_update);
+        chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
+        areaOfCoaching = (TextView) findViewById(R.id.input_areas_of_coaching);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
+
+        profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
+
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(getResources().getString(R.string.title_edit_profile_menu));
+    }
+
+    private void applyAction() {
+        profileDOB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDate(profileDOB);
+            }
+        });
+
+        profileAddress1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                city = null; /* making city null because if user do changes in city and does not select city from suggested city then this city string should be null which is used to validate the city */
+                String input = profileAddress1.getText().toString();
+                if (input.length() >= 2) {
+                    getAutoSuggestions(input);
+                }
+            }
+        });
+
+
+        profileAddress1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                city = arrayAdapter.getItem(position).toString();
+
+                Geocoder geocoder = new Geocoder(EditProfileActivityMentor.this, Locale.getDefault());
+                try {
+                    ArrayList<Address> addresses = (ArrayList<Address>) geocoder.getFromLocationName(city.toString(), 1);
+                    Address address = addresses.get(0);
+                    Log.i(TAG, "address according to Geo coder : " + "\n postal code : " + address.getPostalCode() + "\n country name : " + address.getCountryName() + "\n address line 0 : " + address.getAddressLine(0) + "\n address line 1 : " + address.getAddressLine(1));
+                    for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                        Log.i(TAG, "address line " + i + " : " + address.getAddressLine(i));
+                    }
+                    Log.i(TAG, "address locality " + address.getLocality() + "latitude : " + address.getLatitude() + "longitude : " + address.getLongitude());
+
+
+                    double latitude = address.getLatitude();
+                    double longitude = address.getLongitude();
+
+                    final ArrayList<Double> doubles = new ArrayList<Double>();
+                    doubles.add(latitude);
+                    doubles.add(longitude);
+
+
+                    new AsyncTask<ArrayList, Void, String>() {
+
+                        @Override
+                        protected String doInBackground(ArrayList... params) {
+                            ArrayList<Double> doubles1 = params[0];
+                            XPath xpath = XPathFactory.newInstance().newXPath();
+                            String expression = "//GeocodeResponse/result/address_component[type=\"postal_code\"]/long_name/text()";
+                            Log.d(TAG, "lat in async " + doubles1.get(0));
+                            Log.d(TAG, "long in async " + doubles1.get(1));
+
+                            InputSource inputSource = new InputSource("https://maps.googleapis.com/maps/api/geocode/xml?latlng=" + doubles1.get(0) + "," + doubles1.get(1) + "&sensor=true");
+                            String zipcode = null;
+                            try {
+                                zipcode = (String) xpath.evaluate(expression, inputSource, XPathConstants.STRING);
+                            } catch (XPathExpressionException e) {
+                                e.printStackTrace();
+                            }
+
+
+                            Log.i(TAG, "zip code 1 : " + zipcode);
+
+
+                            return zipcode;
+                        }
+
+
+                        @Override
+                        protected void onPostExecute(String s) {
+                            super.onPostExecute(s);
+                            if (s != null) {
+                                pinCode.setText(s);
+                            } else {
+                                pinCode.setText("");
+                            }
+
+
+                        }
+                    }.execute(doubles);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        profilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ChooseImageActivity.class);
+                profilePicture.buildDrawingCache();
+                Bitmap bitMap = profilePicture.getDrawingCache();
+                intent.putExtra("BitMap", BinaryForImage.getBinaryStringFromBitmap(bitMap));
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
+
+        updateAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (validateUserUpdate())
+                    callUpdateService();
+            }
+        });
+
+
+        findViewById(R.id.checkboxTextView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isReadyToTravel.setChecked(!isReadyToTravel.isChecked());
+            }
+        });
+
+        pinCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (pinCode.getText().toString().length() > 4) {
+                    try {
+                        new AddressFromZip(EditProfileActivityMentor.this, profileAddress1).execute(pinCode.getText().toString());
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        });
+
+    }
+
+    public void populateUserData() {
         if (userInfo == null) {
             return;
         }
@@ -124,10 +315,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         } catch (Exception ignored) {
         }
         try {
-            last_city_selected = city;
-        } catch (Exception ignored) {
-        }
-        try {
             profileDOB.setText((String) userInfo.getDob());
         } catch (Exception ignored) {
         }
@@ -135,9 +322,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             pinCode.setText((String) userInfo.getZip());
         } catch (Exception ignored) {
         }
-        /*chargeInput.setText(userInfo.getCharges().equals("0") ? userInfo.getChargesClass() : userInfo.getCharges());*/
-        /*chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"hour","class"}));
-        chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 1 : 0);*/
 
         try {
             chargeInput.setText(userInfo.getCharges());
@@ -202,209 +386,54 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         });
     }
 
-    private void initialize() {
-        userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
-        profileGender = (Spinner) findViewById(R.id.input_gender);
-        profilePicture = (ImageView) findViewById(R.id.profile_image);
-        profileEmail = (TextView) findViewById(R.id.profile_email);
-        profileFirstName = (EditText) findViewById(R.id.input_first_name);
-        profileLastName = (EditText) findViewById(R.id.input_last_name);
-        profileAddress = (EditText) findViewById(R.id.input_address);
-        profileAddress1 = (AutoCompleteTextView) findViewById(R.id.input_address1);
-        profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
-        pinCode = (EditText) findViewById(R.id.input_pin);
-        chargeInput = (EditText) findViewById(R.id.input_charges);
-        accomplishment = (EditText) findViewById(R.id.input_accomplishment);
-        experienceInput = (Spinner) findViewById(R.id.input_experience);
-        experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview,
-                getResources().getStringArray(R.array.year_of_experience)));
-        isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
-        updateAction = (Button) findViewById(R.id.button_update);
-        chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
-        areaOfCoaching = (TextView) findViewById(R.id.input_areas_of_coaching);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getResources().getString(R.string.please_wait));
-
-        profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
-
-        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        TextView title = (TextView) findViewById(R.id.title);
-        title.setText(getResources().getString(R.string.title_edit_profile_menu));
-
+    private void getAddress() {
         try {
-            if (userInfo == null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals("")) {
-                try {
-                    Address fullAddress = NetworkManager.getFullAddress(this);
-                    if (fullAddress != null) {
-                        int len = fullAddress.getMaxAddressLineIndex() - 1;
-                        StringBuilder address = new StringBuilder();
-                        for (int i = 0; i < len; i++) {
-                            address.append(fullAddress.getAddressLine(i));
-                            if (i != len - 1)
-                                address.append(", \n");
-                        }
-                        if (!address.toString().replace(",", "").trim().equals(""))
-                            userInfo.setAddress(address.toString());
-                        if (fullAddress.getLocality() != null || fullAddress.getAdminArea() != null)
-                            userInfo.setCity(fullAddress.getLocality() + ", " + fullAddress.getAdminArea());
-                        String zip = fullAddress.getPostalCode();
-                        if (zip != null)
-                            userInfo.setZip(zip);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
-        applyAction();
+            GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+                @Override
+                public void onMyLocationChange(Location location) {
+                    if (DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
+                        DashboardActivity.dashboardActivity.userCurrentAddress = NetworkManager.getCompleteAddressString(EditProfileActivityMentor.this, location.getLatitude(), location.getLongitude());
+
+                        if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
+                            map.setOnMyLocationChangeListener(null);
+                            updateAddress();
+                            populateUserData();
+                        }
+
+                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
+                        DashboardActivity.dashboardActivity.longitude = location.getLongitude();
+                    }
+                }
+            };
+            map.setMyLocationEnabled(true);
+            map.setOnMyLocationChangeListener(myLocationChangeListener);
+        } catch (Exception ignored) {
+        }
     }
 
-    private void applyAction() {
-        profileDOB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setDate(profileDOB);
+    public void updateAddress() {
+        if (userInfo != null && (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))) {
+            try {
+                userInfo.setAddress(NetworkManager.localityName);
+            } catch (Exception ignored) {
             }
-        });
+        }
 
-        profileAddress1.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        if (userInfo != null && (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))) {
+            try {
+                userInfo.setCity(NetworkManager.cityName);
+            } catch (Exception ignored) {
             }
+        }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (userInfo != null && (userInfo.getZip() == null || userInfo.getZip().toString().trim().equals("") || userInfo.getZip().toString().trim().equals("0"))) {
+            try {
+                userInfo.setZip(NetworkManager.postalCodeName);
+            } catch (Exception ignored) {
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                city = null; /* making city null because if user do changes in city and does not select city from suggested city then this city string should be null which is used to validate the city */
-                String input = profileAddress1.getText().toString();
-                if (input.length() >= 2) {
-                    getAutoSuggestions(input);
-                }
-            }
-        });
-
-
-        profileAddress1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                city = arrayAdapter.getItem(position).toString();
-                last_city_selected = city;
-
-                Geocoder geocoder = new Geocoder(EditProfileActivityMentor.this, Locale.getDefault());
-                try {
-                    ArrayList<Address> addresses = (ArrayList<Address>) geocoder.getFromLocationName(city.toString(), 1);
-                    Address address = addresses.get(0);
-                    Log.i(TAG, "address according to Geo coder : " + "\n postal code : " + address.getPostalCode() + "\n country name : " + address.getCountryName() + "\n address line 0 : " + address.getAddressLine(0) + "\n address line 1 : " + address.getAddressLine(1));
-                    for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-                        Log.i(TAG, "address line " + i + " : " + address.getAddressLine(i));
-                    }
-                    Log.i(TAG, "address locality " + address.getLocality() + "latitude : " + address.getLatitude() + "longitude : " + address.getLongitude());
-
-
-                    double latitude = address.getLatitude();
-                    double longitude = address.getLongitude();
-
-                    final ArrayList<Double> doubles = new ArrayList<Double>();
-                    doubles.add(latitude);
-                    doubles.add(longitude);
-
-
-                    new AsyncTask<ArrayList, Void, String>() {
-
-                        @Override
-                        protected String doInBackground(ArrayList... params) {
-                            ArrayList<Double> doubles1 = params[0];
-                            XPath xpath = XPathFactory.newInstance().newXPath();
-                            String expression = "//GeocodeResponse/result/address_component[type=\"postal_code\"]/long_name/text()";
-                            Log.d(TAG, "lat in async " + doubles1.get(0));
-                            Log.d(TAG, "long in async " + doubles1.get(1));
-
-                            InputSource inputSource = new InputSource("https://maps.googleapis.com/maps/api/geocode/xml?latlng=" + doubles1.get(0) + "," + doubles1.get(1) + "&sensor=true");
-                            String zipcode = null;
-                            try {
-                                zipcode = (String) xpath.evaluate(expression, inputSource, XPathConstants.STRING);
-                            } catch (XPathExpressionException e) {
-                                e.printStackTrace();
-                            }
-
-
-                            Log.i(TAG, "zip code 1 : " + zipcode);
-
-
-                            return zipcode;
-                        }
-
-
-                        @Override
-                        protected void onPostExecute(String s) {
-                            super.onPostExecute(s);
-                            if (s != null) {
-                                pinCode.setText(s);
-                            } else {
-                                pinCode.setText("");
-                            }
-
-
-                        }
-                    }.execute(doubles);
-
-
-
-
-
-
-
-                   /* Geocoder geocoder1 = new Geocoder(EditProfileActivityMentor.this, Locale.getDefault());
-                    List<Address> addresses1 = geocoder1.getFromLocation(latitude, longitude, 1);
-                    Address address1=addresses1.get(0);
-                    Log.i(TAG,"zip code 2 : "+ address1.getPostalCode());*/
-
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        profilePicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ChooseImageActivity.class);
-                profilePicture.buildDrawingCache();
-                Bitmap bitMap = profilePicture.getDrawingCache();
-                intent.putExtra("BitMap", BinaryForImage.getBinaryStringFromBitmap(bitMap));
-                startActivityForResult(intent, REQUEST_CODE);
-            }
-        });
-
-        updateAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (validateUserUpdate())
-                    callUpdateService();
-            }
-        });
-
-
-        findViewById(R.id.checkboxTextView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isReadyToTravel.setChecked(!isReadyToTravel.isChecked());
-            }
-        });
-
+        }
     }
 
 
@@ -413,39 +442,34 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
 
         boolean isValid = true;
 
-        if (profileAddress1.getText().toString() != null) {
-            if (profileAddress1.getText().toString().trim().equals("")) {
-                Toast.makeText(EditProfileActivityMentor.this, getResources().getString(R.string.choose_suggested_city), Toast.LENGTH_LONG).show();
-                profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        profileAddress1.setError(null);
-                    }
-                }, 3500);
-                isValid = false;
-            }
-            if (!profileAddress1.getText().toString().equalsIgnoreCase(city)) {
-                if (!profileAddress1.getText().toString().equalsIgnoreCase(last_city_selected)) {
-                    Toast.makeText(EditProfileActivityMentor.this, getResources().getString(R.string.choose_suggested_city), Toast.LENGTH_LONG).show();
-                    profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            profileAddress1.setError(null);
-                        }
-                    }, 3500);
-                    isValid = false;
-                }
-
-            }
-        } else {
-            Toast.makeText(EditProfileActivityMentor.this, getResources().getString(R.string.choose_suggested_city), Toast.LENGTH_LONG).show();
-            profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
+        if (profileAddress1.getText().toString().trim().equals("")) {
+            profileAddress1.setError(getResources().getString(R.string.enter_city));
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     profileAddress1.setError(null);
+                }
+            }, 3500);
+            isValid = false;
+        }
+
+        if (profileAddress.getText().toString().trim().equals("")) {
+            profileAddress.setError(getResources().getString(R.string.enter_address));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    profileAddress.setError(null);
+                }
+            }, 3500);
+            isValid = false;
+        }
+
+        if (pinCode.getText().toString().trim().equals("")) {
+            pinCode.setError(getResources().getString(R.string.enter_pin));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    pinCode.setError(null);
                 }
             }, 3500);
             isValid = false;
@@ -522,27 +546,11 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
             requestParams.add("city", profileAddress1.getText().toString());
             requestParams.add("zip", pinCode.getText().toString());
 
-
-            /*if(chargesPerUnit.getSelectedItemPosition() == 0){
-                Log.i(TAG,"select charges unit : "+ chargesPerUnit.getSelectedItemPosition());
-                requestParams.add("charges", chargeInput.getText().toString());
-                requestParams.add("charges_class", "0");
-            }else {
-                Log.i(TAG,"select charges unit : "+ chargesPerUnit.getSelectedItemPosition());
-                requestParams.add("charges", "0");
-                requestParams.add("charges_class", chargeInput.getText().toString());
-            }*/
-
             if (chargesPerUnit.getSelectedItemPosition() == 0) {
                 Log.i(TAG, "select charges unit : " + chargesPerUnit.getSelectedItemPosition());
                 requestParams.add("charges", chargeInput.getText().toString());
                 requestParams.add("charges_class", "0");
             }
-
-
-
-           /* requestParams.add("charges", chargeInput.getText().toString());
-            requestParams.add("charges_unit", chargesPerUnit.getSelectedItemPosition() + "");*/
 
             requestParams.add("experience", experienceInput.getSelectedItemPosition() + "");
             requestParams.add("accomplishments", accomplishment.getText().toString());
@@ -601,7 +609,6 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
         else
             Toast.makeText(this, R.string.prompt_update_profile, Toast.LENGTH_LONG).show();
     }
-
 
     public void setDate(View view) {
         showDialog(999);

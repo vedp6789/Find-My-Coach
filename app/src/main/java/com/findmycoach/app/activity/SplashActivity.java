@@ -9,8 +9,6 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
-import com.findmycoach.app.util.NetworkClient;
-import com.loopj.android.http.RequestParams;
 
 /**
  * Created by prem on 11/3/15.
@@ -66,7 +64,8 @@ public class SplashActivity extends Activity implements Callback {
      * Get Sub Categories
      */
     private void getCategories() {
-        NetworkClient.getSubCategories(this, new RequestParams(), null, this, 34);
+        runHoldThread();
+//        NetworkClient.getSubCategories(this, new RequestParams(), null, this, 34);
     }
 
     @Override

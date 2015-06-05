@@ -688,6 +688,9 @@
 
     <string name="prompt_address1">City state country</string>
     <string name="prompt_city">City</string>
+    <string name="enter_city">Enter city</string>
+    <string name="enter_address">Enter address</string>
+    <string name="enter_pin">Enter zip code</string>
     <string name="prompt_state">State</string>
     <string name="prompt_country">Country</string>
     <string name="prompt_pin">Pin Code</string>

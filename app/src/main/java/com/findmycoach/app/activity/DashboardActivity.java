@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -38,10 +39,13 @@ import com.findmycoach.app.reside_menu.ResideMenu;
 import com.findmycoach.app.reside_menu.ResideMenuItem;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
+import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
@@ -102,6 +106,36 @@ public class DashboardActivity extends FragmentActivity
 
     private HashMap<String, Integer> resideMenuItemIcons;
 
+
+    private GoogleMap map;
+    public String userCurrentAddress;
+    public double latitude;
+    public double longitude;
+
+    private GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+        @Override
+        public void onMyLocationChange(Location location) {
+            Log.e("MapTest", location.getLatitude() + " : " + location.getLongitude() + " : " + userCurrentAddress);
+            if (userCurrentAddress.equals("")) {
+                userCurrentAddress = NetworkManager.getCompleteAddressString(DashboardActivity.this, location.getLatitude(), location.getLongitude());
+                Log.e("MapTest", userCurrentAddress);
+
+                if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
+                    HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
+                    HomeFragment.homeFragmentMentee = null;
+                    map.setOnMyLocationChangeListener(null);
+                    map = null;
+                } else if (!userCurrentAddress.equals("")) {
+                    map.setOnMyLocationChangeListener(null);
+                    map = null;
+                }
+
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,10 +144,8 @@ public class DashboardActivity extends FragmentActivity
         fragmentManager = getSupportFragmentManager();
         isProfileOpen = false;
 
-
         String userId = StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id));
         String newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
-
 
         Log.e("SignUp", StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user)) + "");
 
@@ -136,6 +168,16 @@ public class DashboardActivity extends FragmentActivity
         }
         Log.e("FMC - user_group", "" + user_group);
         setContentView(R.layout.activity_dashboard);
+
+        try {
+            map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+            map.setMyLocationEnabled(true);
+            userCurrentAddress = "";
+            map.setOnMyLocationChangeListener(myLocationChangeListener);
+        } catch (Exception e) {
+            userCurrentAddress = "";
+        }
+
         container = (RelativeLayout) findViewById(R.id.container);
         if (!isProfileOpen)
             container.setVisibility(View.VISIBLE);
@@ -148,7 +190,6 @@ public class DashboardActivity extends FragmentActivity
 
         fragment_to_launch_from_notification = getIntent().getIntExtra("fragment", 0);
         group_push_notification = getIntent().getIntExtra("group", 0);
-
 
         if (fragment_to_launch_from_notification == 0) {
             // Check device for Play Services APK.
@@ -346,6 +387,13 @@ public class DashboardActivity extends FragmentActivity
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
+            HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
+            HomeFragment.homeFragmentMentee = null;
+            map.setOnMyLocationChangeListener(null);
+            map = null;
+        }
 
         Log.e(TAG, user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification);
 

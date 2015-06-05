@@ -42,7 +42,6 @@ import com.findmycoach.app.fragment.TimePickerFragment;
 import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
-import com.findmycoach.app.util.GetLocationAsync;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
@@ -86,6 +85,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private Button selectedCategory;
     private String type;
     private TextView textView;
+    public static HomeFragment homeFragmentMentee;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -130,16 +130,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             Log.d(TAG, "sub category api not called");
         }
 
-        new GetLocationAsync(this, getActivity()).execute();
+        homeFragmentMentee = this;
+
+        if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
+            updateLocationFromAsync(DashboardActivity.dashboardActivity.userCurrentAddress);
+        }
+
+        NetworkManager.getNetworkAndGpsStatus(getActivity());
     }
 
     public void updateLocationFromAsync(String loc) {
-
-        location = loc;
+        location = loc.trim();
         location_auto_suggested_temp = location;
         location_auto_suggested = location_auto_suggested_temp;
         updateLocationUI();
-
     }
 
 

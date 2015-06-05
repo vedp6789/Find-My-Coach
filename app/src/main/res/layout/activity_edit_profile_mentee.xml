@@ -215,14 +215,29 @@
                 </LinearLayout>
 
 
-                <TextView
+                <LinearLayout
                     android:layout_marginTop="@dimen/back_margin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/prompt_address"
-                    android:textSize="@dimen/profile_heading"
-                    android:textColor="@color/purple_light"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/purple_light"
+                        android:text="@string/prompt_address"
+                        android:textSize="@dimen/profile_heading"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/purple"
+                        android:text=" *"
+                        android:textSize="@dimen/profile_heading"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
                 <AutoCompleteTextView
                     android:textColor="@color/purple"
@@ -272,14 +287,29 @@
                     android:textColorHint="@color/purple_light"
                     android:inputType="textAutoComplete" />
 
-                <TextView
+                <LinearLayout
                     android:layout_marginTop="@dimen/back_margin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/prompt_pin"
-                    android:textColor="@color/purple_light"
-                    android:textSize="@dimen/profile_heading"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/purple_light"
+                        android:text="@string/prompt_pin"
+                        android:textSize="@dimen/profile_heading"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/purple"
+                        android:text=" *"
+                        android:textSize="@dimen/profile_heading"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
 
                 <EditText
@@ -398,6 +428,12 @@
 
 
             </LinearLayout>
+
+            <fragment android:id="@+id/map"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:visibility="gone"/>
         </LinearLayout>
 
     </ScrollView>

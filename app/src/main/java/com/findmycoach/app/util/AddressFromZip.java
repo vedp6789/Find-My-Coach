@@ -7,6 +7,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.findmycoach.app.activity.DashboardActivity;
+import com.findmycoach.app.activity.EditProfileActivityMentee;
+import com.findmycoach.app.activity.EditProfileActivityMentor;
 import com.findmycoach.app.fragment_mentee.HomeFragment;
 
 import java.io.IOException;
@@ -15,64 +18,60 @@ import java.util.List;
 /**
  * Created by ShekharKG on 29/4/15.
  */
-public class AddressFromZip extends AsyncTask<String, Void, String> {
+public class AddressFromZip extends AsyncTask<String, Void, List<Address>> {
 
     private Context context;
     private EditText editText;
+    private String zip;
 
     public AddressFromZip(Context context, EditText editText) {
         this.context = context;
         this.editText = editText;
+        Log.e("AddressFromZip", "Constructor");
     }
 
     @Override
-    protected String doInBackground(String... params) {
+    protected List<Address> doInBackground(String... params) {
 
         final Geocoder geocoder = new Geocoder(context);
         try {
-            List<Address> add = geocoder.getFromLocationName(params[0], 1);
-            if (add!= null && !add.isEmpty()) {
-                Address address = add.get(0);
-                // Use the address as needed
-                try {
-                    List<Address> addresses = geocoder.getFromLocation(address.getLatitude(), address.getLongitude(), 1);
-                    Address currentAddress = addresses.get(0);
-
-                    StringBuilder addressFromZip = new StringBuilder();
-                    // Fetch the address lines using getAddressLine,
-                    // join them, and send them to the thread.
-                    int len = currentAddress.getMaxAddressLineIndex();
-
-                    for (int i = 0; i < len; i++) {
-                        if (currentAddress.getAddressLine(i) != null)
-                            addressFromZip.append(currentAddress.getAddressLine(i));
-                        if (currentAddress.getAddressLine(i) != null && i != len - 1)
-                            addressFromZip.append(", ");
-                    }
-                    Log.e("GEOCODER", addressFromZip.toString());
-                    return addressFromZip.toString();
-                } catch (Exception e) {
-                }
-
-            }
-        } catch (IOException e) {
-            // handle exception
+            Log.e("AddressFromZip", "do in back");
+            zip = params[0];
+            return geocoder.getFromLocationName(zip, 1);
+        } catch (IOException ignored) {
         }
 
         return null;
     }
 
     @Override
-    protected void onPostExecute(String address) {
-        if(address != null && !address.trim().equals("") && address.trim().length() > 5){
-            try{
-                editText.setText(address);
-                HomeFragment.location_auto_suggested = address;
-                HomeFragment.location_auto_suggested_temp = address;
-            }catch (Exception e){
-
+    protected void onPostExecute(List<Address> addressList) {
+        if (addressList != null) {
+            String address = NetworkManager.updateVariables(addressList);
+            if (address == null)
+                return;
+            Log.e("AddressFromZip", address);
+            if (context instanceof DashboardActivity && !address.trim().equals("")
+                    && address.trim().length() > 5) {
+                try {
+                    editText.setText(address.trim());
+                    HomeFragment.location_auto_suggested = address;
+                    HomeFragment.location_auto_suggested_temp = address;
+                } catch (Exception ignored) {
+                }
+            } else if (context instanceof EditProfileActivityMentor) {
+                try {
+                    address = address.replace(zip, "");
+                    editText.setText(address);
+                } catch (Exception ignored) {
+                }
+            } else if (context instanceof EditProfileActivityMentee) {
+                try {
+                    address = address.replace(zip, "");
+                    editText.setText(address);
+                } catch (Exception ignored) {
+                }
             }
         }
-
     }
 }
