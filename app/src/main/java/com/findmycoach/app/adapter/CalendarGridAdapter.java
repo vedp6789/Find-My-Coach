@@ -467,7 +467,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
                                 Calendar calendar_this_day = Calendar.getInstance();
-                                calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth), Integer.parseInt(theday));
+                                calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth) -1, Integer.parseInt(theday));
                                 long this_day = calendar_this_day.getTimeInMillis();
                                 int week_day_for_this_day = calendar_this_day.get(Calendar.DAY_OF_WEEK);/* This will give week_day for this day, 1 to 7 for Sunday to Saturday */
 
@@ -486,11 +486,11 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                             String[] vacation_week_days = vacation.getWeek_days();
 
                                             Calendar calendar_vacation_start_date = Calendar.getInstance();
-                                            calendar_vacation_start_date.set(Integer.parseInt(vacation_start_date.split("-")[0]), Integer.parseInt(vacation_start_date.split("-")[1]), Integer.parseInt(vacation_start_date.split("-")[2]));
+                                            calendar_vacation_start_date.set(Integer.parseInt(vacation_start_date.split("-")[0]), Integer.parseInt(vacation_start_date.split("-")[1])-1, Integer.parseInt(vacation_start_date.split("-")[2]));
                                             long vacation_start_millis = calendar_vacation_start_date.getTimeInMillis();
 
                                             Calendar calendar_vacation_stop_date = Calendar.getInstance();
-                                            calendar_vacation_stop_date.set(Integer.parseInt(vacation_stop_date.split("-")[0]), Integer.parseInt(vacation_stop_date.split("-")[1]), Integer.parseInt(vacation_stop_date.split("-")[2]));
+                                            calendar_vacation_stop_date.set(Integer.parseInt(vacation_stop_date.split("-")[0]), Integer.parseInt(vacation_stop_date.split("-")[1])-1, Integer.parseInt(vacation_stop_date.split("-")[2]));
                                             long vacation_stop_millis = calendar_vacation_stop_date.getTimeInMillis();
 
 
@@ -549,7 +549,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
                                 Calendar calendar_this_day = Calendar.getInstance();
-                                calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth), Integer.parseInt(theday));
+                                calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth)-1, Integer.parseInt(theday));
                                 long this_day = calendar_this_day.getTimeInMillis();
                                 int week_day_for_this_day = calendar_this_day.get(Calendar.DAY_OF_WEEK);/* This will give week_day for this day, 1 to 7 for Sunday to Saturday */
 
@@ -577,7 +577,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                         } else {   /* For Mentors Detail Activity*/
 
                             Calendar calendar_this_day = Calendar.getInstance();
-                            calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth), Integer.parseInt(theday));
+                            calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth)-1, Integer.parseInt(theday));
                             long this_day = calendar_this_day.getTimeInMillis();
                             int week_day_for_this_day = calendar_this_day.get(Calendar.DAY_OF_WEEK);/* This will give week_day for this day, 1 to 7 for Sunday to Saturday */
 
@@ -665,11 +665,11 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                         String[] vacation_week_days = vacation1.getWeek_days();
 
                                         Calendar calendar_vacation_start_date = Calendar.getInstance();
-                                        calendar_vacation_start_date.set(Integer.parseInt(vacation_start_date.split("-")[0]), Integer.parseInt(vacation_start_date.split("-")[1]), Integer.parseInt(vacation_start_date.split("-")[2]));
+                                        calendar_vacation_start_date.set(Integer.parseInt(vacation_start_date.split("-")[0]), Integer.parseInt(vacation_start_date.split("-")[1])-1, Integer.parseInt(vacation_start_date.split("-")[2]));
                                         long vacation_start_millis = calendar_vacation_start_date.getTimeInMillis();
 
                                         Calendar calendar_vacation_stop_date = Calendar.getInstance();
-                                        calendar_vacation_stop_date.set(Integer.parseInt(vacation_stop_date.split("-")[0]), Integer.parseInt(vacation_stop_date.split("-")[1]), Integer.parseInt(vacation_stop_date.split("-")[2]));
+                                        calendar_vacation_stop_date.set(Integer.parseInt(vacation_stop_date.split("-")[0]), Integer.parseInt(vacation_stop_date.split("-")[1])-1, Integer.parseInt(vacation_stop_date.split("-")[2]));
                                         long vacation_stop_millis = calendar_vacation_stop_date.getTimeInMillis();
 
 
@@ -808,11 +808,11 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                 String[] slot_week_day = new_slot.getSlot_week_days();
 
                 Calendar calendar_slot_start_date = Calendar.getInstance();
-                calendar_slot_start_date.set(Integer.parseInt(slot_start_date.split("-")[0]), Integer.parseInt(slot_start_date.split("-")[1]), Integer.parseInt(slot_start_date.split("-")[2]));
+                calendar_slot_start_date.set(Integer.parseInt(slot_start_date.split("-")[0]), Integer.parseInt(slot_start_date.split("-")[1])-1, Integer.parseInt(slot_start_date.split("-")[2]));
                 long calendar_slot_start_date_in_millis = calendar_slot_start_date.getTimeInMillis();
 
                 Calendar calendar_slot_stop_date = Calendar.getInstance();
-                calendar_slot_stop_date.set(Integer.parseInt(slot_stop_date.split("-")[0]), Integer.parseInt(slot_stop_date.split("-")[1]), Integer.parseInt(slot_stop_date.split("-")[2]));
+                calendar_slot_stop_date.set(Integer.parseInt(slot_stop_date.split("-")[0]), Integer.parseInt(slot_stop_date.split("-")[1])-1, Integer.parseInt(slot_stop_date.split("-")[2]));
                 long calendar_slot_stop_date_in_millis = calendar_slot_stop_date.getTimeInMillis();
 
                 if ((calendar_this_day_millis == calendar_slot_start_date_in_millis) || (calendar_this_day_millis == calendar_slot_stop_date_in_millis) || (calendar_this_day_millis > calendar_slot_start_date_in_millis && calendar_this_day_millis < calendar_slot_stop_date_in_millis)) {
@@ -900,11 +900,11 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             String[] slot_week_days = new_slot.getSlot_week_days();
 
             Calendar calendar_slot_start_date = Calendar.getInstance();
-            calendar_slot_start_date.set(Integer.parseInt(slot_start_date.split("-")[0]), Integer.parseInt(slot_start_date.split("-")[1]), Integer.parseInt(slot_start_date.split("-")[2]));
+            calendar_slot_start_date.set(Integer.parseInt(slot_start_date.split("-")[0]), Integer.parseInt(slot_start_date.split("-")[1])-1, Integer.parseInt(slot_start_date.split("-")[2]));
             long slot_start_millis = calendar_slot_start_date.getTimeInMillis();
 
             Calendar calendar_slot_stop_date = Calendar.getInstance();
-            calendar_slot_stop_date.set(Integer.parseInt(slot_stop_date.split("-")[0]), Integer.parseInt(slot_stop_date.split("-")[1]), Integer.parseInt(slot_stop_date.split("-")[2]));
+            calendar_slot_stop_date.set(Integer.parseInt(slot_stop_date.split("-")[0]), Integer.parseInt(slot_stop_date.split("-")[1])-1, Integer.parseInt(slot_stop_date.split("-")[2]));
             long slot_stop_millis = calendar_slot_stop_date.getTimeInMillis();
 
             if ((this_day == slot_start_millis) || (this_day == slot_stop_millis) || (this_day < slot_stop_millis && this_day > slot_start_millis)) {

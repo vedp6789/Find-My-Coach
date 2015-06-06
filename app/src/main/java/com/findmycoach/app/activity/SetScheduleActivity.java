@@ -1081,7 +1081,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     }
 
-    private void populateWeekViewForPreviousMonth1(List<WeekViewEvent> events, int newYear, int newMonth) {
+    private void populateWeekViewForPreviousMonth1(List<WeekViewEvent> events, int newYear, int newMonth,int previous_month_days) {
         poplateWeekView(prev_month, events, newYear, newMonth);
 
     }

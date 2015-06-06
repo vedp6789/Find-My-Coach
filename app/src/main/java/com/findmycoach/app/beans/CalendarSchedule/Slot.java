@@ -2,6 +2,7 @@ package com.findmycoach.app.beans.CalendarSchedule;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,6 +13,8 @@ import java.util.List;
  * Created by ved on 31/5/15.
  */
 public class Slot implements Parcelable {
+    private static final String TAG = "FMC";
+
     public Slot() {
         events = new ArrayList<Event>();
         vacations = new ArrayList<Vacation>();
@@ -191,31 +194,37 @@ public class Slot implements Parcelable {
             for (int event_index = 0; event_index < events.size(); event_index++) {
                 Event event = events.get(event_index);
 
-                String stop_date = event.getEvent_stop_date();
-
                 List<Mentee> mentees = event.getMentees();
-                for (int mentee_no = 0; mentee_no < mentees.size(); mentee_no++) {
+                level_mentee: for (int mentee_no = 0; mentee_no < mentees.size(); mentee_no++) {
                     Mentee mentee = mentees.get(mentee_no);
-                    String start_date = mentee.getEvent_start_date();
+                    List<EventDuration> eventDurations =mentee.getEventDurations();  /* For each mentee, there event duration can be in broken chunk of durations. So we have to check whether the specific day of slot coming in between of one of the chunk with valid week-day or not. We have to find number of active classes between that chunk where this specific day lie and we have to match whether this day is similar to one of the active days or not  */
+                    for(int event_duration_no=0; event_duration_no < eventDurations.size() ; event_duration_no++ ){
+                        EventDuration eventDuration=eventDurations.get(event_duration_no);
+                        String start_date =eventDuration.getStart_date();
+                        Calendar calendar_start_date =Calendar.getInstance();
+                        calendar_start_date.set(Integer.parseInt(start_date.split("-")[0]),Integer.parseInt(start_date.split("-")[1])-1,Integer.parseInt(start_date.split("-")[2]));
+                        String stop_date =eventDuration.getStop_date();
+                        Calendar calendar_stop_date =Calendar.getInstance();
+                        calendar_stop_date.set(Integer.parseInt(stop_date.split("-")[0]),Integer.parseInt(stop_date.split("-")[1])-1,Integer.parseInt(stop_date.split("-")[2]));
 
-                    Calendar calendar_event_start_date = Calendar.getInstance();
-                    calendar_event_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]), Integer.parseInt(start_date.split("-")[2]));
-                    long event_start_date_in_millis = calendar_event_start_date.getTimeInMillis();
+                        ArrayList<SlotDurationDetailBean> activeClassDaysAndTheirWeekDay = calculateNoOfTotalClassDays(calendar_start_date,calendar_stop_date,slot_week_days);
+                        for(int activeClassDay = 0; activeClassDay < activeClassDaysAndTheirWeekDay.size() ; activeClassDay++ ){
+                            SlotDurationDetailBean slotDurationDetailBean = activeClassDaysAndTheirWeekDay.get(activeClassDay);
+                            String active_class_date = slotDurationDetailBean.getDate();
+                            Calendar calendar_active_class_date=Calendar.getInstance();
+                            calendar_active_class_date.set(Integer.parseInt(active_class_date.split("-")[0]),Integer.parseInt(active_class_date.split("-")[1])-1,Integer.parseInt(active_class_date.split("-")[2]));
+                            long active_class_in_millis =calendar_active_class_date.getTimeInMillis();
+
+                            if(active_class_in_millis == calendar_time_in_millis){
+                                /* The day of grid matches with one of mentee active class days */
+                                event_found = true;
+                                break level_mentee;
+                            }
+                        }
 
 
-                    Calendar calendar_event_stop_date = Calendar.getInstance();
-                    calendar_event_stop_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]), Integer.parseInt(stop_date.split("-")[2]));
-                    long event_stop_date_in_millis = calendar_event_stop_date.getTimeInMillis();
-
-
-                    if ((calendar_time_in_millis == event_start_date_in_millis) ||
-                            (calendar_time_in_millis == event_stop_date_in_millis) ||
-                            (calendar_time_in_millis < event_stop_date_in_millis && calendar_time_in_millis > event_start_date_in_millis)) {
-                        event_found = true;
-                        break;
-                    } else {
-                        event_found = false;
                     }
+
                 }
 
             }
@@ -239,12 +248,12 @@ public class Slot implements Parcelable {
                 String [] vacation_week_days= vacation.getWeek_days();
 
                 Calendar calendar_vacation_start_date = Calendar.getInstance();
-                calendar_vacation_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]), Integer.parseInt(start_date.split("-")[2]));
+                calendar_vacation_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1])-1, Integer.parseInt(start_date.split("-")[2]));
                 long vacation_start_date_in_millis = calendar_vacation_start_date.getTimeInMillis();
 
 
                 Calendar calendar_vacation_stop_date = Calendar.getInstance();
-                calendar_vacation_stop_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]), Integer.parseInt(stop_date.split("-")[2]));
+                calendar_vacation_stop_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1])-1, Integer.parseInt(stop_date.split("-")[2]));
                 long vacation_stop_date_in_millis = calendar_vacation_stop_date.getTimeInMillis();
 
 
@@ -306,6 +315,54 @@ public class Slot implements Parcelable {
         }
 
         return day_matches;
+    }
+
+    private ArrayList<SlotDurationDetailBean> calculateNoOfTotalClassDays(Calendar calendar_schedule_start_date, Calendar calendar_stop_date_of_schedule, String[] slot_on_week_days) {
+
+        int workDays = 0;
+        ArrayList<SlotDurationDetailBean> slotDurationDetailBeans = new ArrayList<SlotDurationDetailBean>();
+        //Return 0 if start and end are the same
+
+        /*if (calendar_schedule_start_date.getTimeInMillis() == calendar_stop_date_of_schedule.getTimeInMillis()) {
+            return slotDurationDetailBeans;
+        }*/
+
+        List<Integer> selectedDays = new ArrayList<Integer>();
+        for (String d : slot_on_week_days) {
+            if (d.equalsIgnoreCase("su"))
+                selectedDays.add(1);
+            if (d.equalsIgnoreCase("m"))
+                selectedDays.add(2);
+            if (d.equalsIgnoreCase("t"))
+                selectedDays.add(3);
+            if (d.equalsIgnoreCase("w"))
+                selectedDays.add(4);
+            if (d.equalsIgnoreCase("th"))
+                selectedDays.add(5);
+            if (d.equalsIgnoreCase("f"))
+                selectedDays.add(6);
+            if (d.equalsIgnoreCase("s"))
+                selectedDays.add(7);
+        }
+
+        do {
+            //excluding start date
+
+            if (selectedDays.contains(calendar_schedule_start_date.get(Calendar.DAY_OF_WEEK))) {
+                ++workDays;
+                SlotDurationDetailBean slotDurationDetailBean = new SlotDurationDetailBean();
+                Log.d(TAG, "year: " + calendar_schedule_start_date.get(Calendar.YEAR) + "month: " + calendar_schedule_start_date.get(Calendar.MONTH) + "day_of_month: " + calendar_schedule_start_date.get(Calendar.DAY_OF_MONTH) + "date: " + calendar_schedule_start_date.get(Calendar.DATE));
+                slotDurationDetailBean.setDate(calendar_schedule_start_date.get(Calendar.YEAR) + "-" + calendar_schedule_start_date.get(Calendar.MONTH) + "-" + calendar_schedule_start_date.get(Calendar.DAY_OF_MONTH));
+                slotDurationDetailBean.setWeek_day(String.valueOf(calendar_schedule_start_date.get(Calendar.DAY_OF_WEEK)));
+                slotDurationDetailBeans.add(slotDurationDetailBean);
+            }
+            calendar_schedule_start_date.add(Calendar.DAY_OF_MONTH, 1);
+
+
+        }
+        while (calendar_schedule_start_date.getTimeInMillis() <= calendar_stop_date_of_schedule.getTimeInMillis()); //excluding end date
+
+        return slotDurationDetailBeans;
     }
 
 
