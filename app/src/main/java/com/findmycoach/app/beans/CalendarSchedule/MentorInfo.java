@@ -73,6 +73,7 @@ public class MentorInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.mentor_id);
         dest.writeString(this.first_name);
         dest.writeString(this.last_name);
         dest.writeString(this.address);
@@ -81,6 +82,7 @@ public class MentorInfo implements Parcelable {
     }
 
     public MentorInfo(Parcel parcel){
+        this.mentor_id = parcel.readString();
         this.first_name=parcel.readString();
         this.last_name=parcel.readString();
         this.address=parcel.readString();
