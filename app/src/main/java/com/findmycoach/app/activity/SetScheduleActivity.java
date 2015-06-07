@@ -390,9 +390,12 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                 /*this day is coming in between slot duration, now to check whether the week_day of this day is one of the slot week_days, which will prove this day is slot or not  */
                                 if (thisDayMatchesWithArrayOfWeekDays(slot_week_days, this_day_week_day)) {
                                          availabilityFlags.slot_found = true;  /* making slot_found flag true for this day */
+
                                     List<Event> eventList = new_slot.getEvents();
+                                    List<Vacation> coincidingVacationList =new_slot.getVacations();
                                     String slot_id = new_slot.getSlot_id();
                                     String [] slot_on_week_days = new_slot.getSlot_week_days();
+                                    List<Mentee> menteeFoundOnThisDate = new ArrayList<Mentee>();  /* a list of mentee's who have class for this day of week_view */
 
                                     if(eventList.size() > 0){
                                         /* Event found, now to check whether this day is coming between one of the event duration for any of mentee or not */
@@ -400,22 +403,87 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                            String event_id = event.getEvent_id();
                                            if(event_id.equals(slot_id)){
                                                List<Mentee> mentees =event.getMentees();
+
                                                for(int mentee_no = 0; mentee_no < mentees.size() ; mentee_no++){
                                                    Mentee mentee = mentees.get(mentee_no);
                                                    List<EventDuration> eventDurations = mentee.getEventDurations();
-                                                   for(int event_duration_part = 0; event_duration_part < eventDurations.size() ; event_duration_part++){  /* One mentee can have event in one or many classes in subsection. Here subsection means, while placing a schedule with mentor if any vacation found during slot then there that event get discontinuity and leads to a subsection*/
+                                                   level_event_duration: for(int event_duration_part = 0; event_duration_part < eventDurations.size() ; event_duration_part++){  /* One mentee can have event in one or many classes in subsection. Here subsection means, while placing a schedule with mentor if any vacation found during slot then there that event get discontinuity and leads to a subsection*/
                                                        EventDuration eventDuration = eventDurations.get(event_duration_part);
+
                                                        String eventDuration_start_date = eventDuration.getStart_date();
                                                        Calendar calendar_event_start = Calendar.getInstance();
+                                                       calendar_event_start.set(Integer.parseInt(eventDuration_start_date.split("-")[0]),Integer.parseInt(eventDuration_start_date.split("-")[1])-1,Integer.parseInt(eventDuration_start_date.split("-")[2]));
 
                                                        String eventDuration_stop_date = eventDuration.getStop_date();
+                                                       Calendar calendar_event_stop = Calendar.getInstance();
+                                                       calendar_event_stop.set(Integer.parseInt(eventDuration_stop_date.split("-")[0]),Integer.parseInt(eventDuration_stop_date.split("-")[1])-1,Integer.parseInt(eventDuration_stop_date.split("-")[2]));
 
+                                                       ArrayList<SlotDurationDetailBean> slotDurationDetailBeans = calculateNoOfTotalClassDays(calendar_event_start,calendar_event_stop,slot_on_week_days);  /* active class dates found between two dates by matching slot weekdays*/
+                                                       for(int day_no = 0; day_no < slotDurationDetailBeans.size() ; day_no++){
+                                                           SlotDurationDetailBean slotDurationDetailBean = slotDurationDetailBeans.get(day_no);
+                                                           String date = slotDurationDetailBean.getDate();
+                                                           Calendar calendar_for_this_date = Calendar.getInstance();
+                                                           calendar_for_this_date.set(Integer.parseInt(date.split("-")[0]),Integer.parseInt(date.split("-")[1])-1,Integer.parseInt(date.split("-")[2]));
+                                                           long this_date_in_millis = calendar_for_this_date.getTimeInMillis();
+                                                           if(this_date_in_millis == this_day_in_millis){
+                                                               /*this mentee is having class on this day */
+                                                               menteeFoundOnThisDate.add(mentee);
+                                                               break level_event_duration;
+                                                           }
+                                                       }
                                                    }
                                                }
+
+                                               if(menteeFoundOnThisDate.size() > 0){ /* This proves that there is some event on this day also*/
+                                                    availabilityFlags.event_found =true;
+                                               }
+
                                            }
                                     }else{
                                         /* No event scheduled till now for this slot*/
                                     }
+
+                                    List<Vacation> coinciding_vacation_of_this_day_for_this_slot = new ArrayList<Vacation>();
+
+
+                                    if(!availabilityFlags.event_found){
+                                        /* will check for any coinciding vacation if there is no mentee found on this day */
+                                        if(coincidingVacationList.size() > 0){
+                                            /* Now to decide whether the vacation is coming on this day or not */
+                                            for(int coinciding_vacation = 0 ; coinciding_vacation < coincidingVacationList.size() ; coinciding_vacation++){
+                                                Vacation vacation =coincidingVacationList.get(coinciding_vacation);
+
+                                                String coin_vac_start_date = vacation.getStart_date();
+                                                Calendar cal_coin_vac_start_date = Calendar.getInstance();
+                                                cal_coin_vac_start_date.set(Integer.parseInt(coin_vac_start_date.split("-")[0]),Integer.parseInt(coin_vac_start_date.split("-")[1])-1,Integer.parseInt(coin_vac_start_date.split("-")[2]));
+                                                long cal_coin_vac_start_millis = cal_coin_vac_start_date.getTimeInMillis();
+
+                                                String coin_vac_stop_date = vacation.getStop_date();
+                                                Calendar cal_coin_vac_stop_date = Calendar.getInstance();
+                                                cal_coin_vac_stop_date.set(Integer.parseInt(coin_vac_stop_date.split("-")[0]),Integer.parseInt(coin_vac_stop_date.split("-")[1])-1,Integer.parseInt(coin_vac_stop_date.split("-")[2]));
+                                                long cal_coin_vac_stop_millis = cal_coin_vac_stop_date.getTimeInMillis();
+
+                                                if((this_day_in_millis == cal_coin_vac_start_millis) || (this_day_in_millis == cal_coin_vac_stop_millis) || (this_day_in_millis > cal_coin_vac_start_millis && this_day_in_millis < cal_coin_vac_stop_millis)){
+                                                    if(thisDayMatchesWithArrayOfWeekDays(vacation.getWeek_days(),this_day_week_day)){
+                                                        /* Vacation found for this slot of the day*/
+                                                        coinciding_vacation_of_this_day_for_this_slot.add(vacation);
+                                                        availabilityFlags.vacation_found=true;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    /* Now to check which type of event we have to show for this slot*/
+
+                                    if(availabilityFlags.slot_found){
+                                        
+                                    }
+
+
+
+
 
                                 }
                             }else{
