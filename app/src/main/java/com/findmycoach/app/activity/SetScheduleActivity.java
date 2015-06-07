@@ -20,6 +20,8 @@ import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
 import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
 import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
 import com.findmycoach.app.beans.CalendarSchedule.Event;
+import com.findmycoach.app.beans.CalendarSchedule.EventDuration;
+import com.findmycoach.app.beans.CalendarSchedule.Mentee;
 import com.findmycoach.app.beans.CalendarSchedule.MonthYearInfo;
 import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.beans.CalendarSchedule.SlotDurationDetailBean;
@@ -59,9 +61,10 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     private static ArrayList<MonthYearInfo> previous_month_year_info = null;
     private static ArrayList<MonthYearInfo> current_month_year_info = null;
     private static ArrayList<MonthYearInfo> coming_month_year_info = null;
-    private static final int slot_event_type = 0;
-    private static final int event_type = 1;
-    private static final int free_slot_event_type = 2;
+    private static final int slot_event_type = 0;  /* taking slot as event because WeekView only understand event*/
+    private static final int event_type = 1;/* taking scheduled class with mentee as one event*/
+    private static final int vacation_event_type = 3;  /* taking vacation as one event for weekview*/
+    private static final int free_slot_event_type = 2; /* taking scheduled class with mentee as one event*/
     private static String this_activity_for = null;
     private static ProgressDialog progressDialog;
     private String mentor_id = null;
@@ -184,13 +187,13 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             * success when this activity is going to be started from MentorDetailsActivity for previous month
             * */
             if (this_activity_for.equals("MentorDetailsActivity")) {
-                populateWeekViewForPreviousMonth1(events, newYear, newMonth,weekView_previous_month_days);      /* call for the method to populate weekVeiw for previous month in MentorDetailsActivity i.e. mentee is trying to schedule a class from Calendar   */
+                populateWeekViewForPreviousMonth1(events, newYear, newMonth, weekView_previous_month_days);      /* call for the method to populate weekVeiw for previous month in MentorDetailsActivity i.e. mentee is trying to schedule a class from Calendar   */
             } else {
                 if (this_activity_for.equals("ScheduleFragments")) {
             /*
             * success when this activity is going to be started from MyScheduleFragment for previous month
             * */
-                    populateWeekViewForPreviousMonth2(events, newYear, newMonth,weekView_previous_month_days);    /* call for the method to populate weekVeiw for previous month in Mentor Scedule Calendar   */
+                    populateWeekViewForPreviousMonth2(events, newYear, newMonth, weekView_previous_month_days);    /* call for the method to populate weekVeiw for previous month in Mentor Scedule Calendar   */
                 }
             }
 
@@ -226,7 +229,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             /*
             * success when this activity is going to be started from MyScheduleFragment for next month
             * */
-                    populateWeekViewForNextMonth2(events, newYear, newMonth,weekView_coming_month_days);   /* call for the method to populate weekVeiw for next month in Mentor Scedule Calendar   */
+                    populateWeekViewForNextMonth2(events, newYear, newMonth, weekView_coming_month_days);   /* call for the method to populate weekVeiw for next month in Mentor Scedule Calendar   */
                 }
             }
 
@@ -237,25 +240,70 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         return events;
     }
 
+    public class AvailabilityFlags {
+        boolean event_found = false;
+        boolean vacation_found = false;
+        boolean slot_found = false;
+    }
+
+
+    /* method to know whether one week day is among one of week days array like ["M","W","F","Su"] or not*/
+    private boolean thisDayMatchesWithArrayOfWeekDays(String[] week_days, int week_day_of_the_day) {
+        boolean day_matches = false;
+        String this_day_week_day = null;   /* this will have the day which is calendar current day according to grid view position*/
+        switch (week_day_of_the_day) {
+            case 1:
+                this_day_week_day = "S";
+                break;
+            case 2:
+                this_day_week_day = "M";
+                break;
+            case 3:
+                this_day_week_day = "T";
+                break;
+            case 4:
+                this_day_week_day = "W";
+                break;
+            case 5:
+                this_day_week_day = "Th";
+                break;
+            case 6:
+                this_day_week_day = "F";
+                break;
+            case 7:
+                this_day_week_day = "Sa";
+                break;
+        }
+
+        for (int week_day_index = 0; week_day_index < week_days.length; week_day_index++) {
+            if (this_day_week_day != null && this_day_week_day.equalsIgnoreCase(week_days[week_day_index])) {
+                day_matches = true;
+            }
+        }
+
+        return day_matches;
+    }
+
+
     private void populateWeekViewForNextMonth2(List<WeekViewEvent> events, int newYear, int newMonth, int number_of_days_in_this_month) {
         // Log.d(TAG,"Going to create view for next month.");
 
         if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 2) {
-            if(coming_month.size() > 0){
-                Slot slot =coming_month.get(0);
-                if(Boolean.parseBoolean(slot.isSlot_created_on_network_success())){  /* Checking whether the slots came in this month are either on network success as when there is network failure i am adding one slot with flag for network communication as false */
-                    for (int day_of_this_month=1; day_of_this_month <= number_of_days_in_this_month ; day_of_this_month++) {
+            if (coming_month.size() > 0) {
+                Slot slot = coming_month.get(0);
+                if (Boolean.parseBoolean(slot.isSlot_created_on_network_success())) {  /* Checking whether the slots came in this month are either on network success as when there is network failure i am adding one slot with flag for network communication as false */
+                    for (int day_of_this_month = 1; day_of_this_month <= number_of_days_in_this_month; day_of_this_month++) {
 
-                        Calendar calendar_for_day_of_this_month =Calendar.getInstance();   /* each day of this month will get initialized as loop executes. For each day, matching the possible events or vacation coming for the mentee */
-                        calendar_for_day_of_this_month.set(newYear,newMonth,day_of_this_month);
+                        Calendar calendar_for_day_of_this_month = Calendar.getInstance();   /* each day of this month will get initialized as loop executes. For each day, matching the possible events or vacation coming for the mentee */
+                        calendar_for_day_of_this_month.set(newYear, newMonth - 1, day_of_this_month);
 
 
-                        for(int slot_number = 0 ; slot_number < coming_month.size() ; slot_number++){
-                            Slot slot1 =coming_month.get(slot_number);
-                            List<Event> events1=slot1.getEvents();
-                            if(events1.size() > 0){
+                        for (int slot_number = 0; slot_number < coming_month.size(); slot_number++) {
+                            Slot slot1 = coming_month.get(slot_number);
+                            List<Event> events1 = slot1.getEvents();
+                            if (events1.size() > 0) {
 
-                            }else{
+                            } else {
                                 /* No need to do any check for this day as this slot is having no slot */
                             }
                         }
@@ -265,7 +313,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
 
 
-                        List<DayEvent> dayEvents = d.getDayEvents();
+/*                        List<DayEvent> dayEvents = d.getDayEvents();
 
 
                         DayEvent dayEvent;
@@ -298,19 +346,101 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                 events.add(weekViewEvent);
 
                             }
-                        }
+                        }*/
                     }
-                }else{
-                    Log.e(TAG,"Network status false found while populating week_view for "+"month: "+newMonth+" year: "+newYear+ "this is found while populating weekView for mentee and in next month");
+                } else {
+                    Log.e(TAG, "Network status false found while populating week_view for " + "month: " + newMonth + " year: " + newYear + "this is found while populating weekView for mentee and in next month");
                 }
-            }else{
-                /* There is no slot for this month so in mentee does not have any event*/
+            } else {
+                /* There is no slot for this month,so mentee does not have any event on this day*/
             }
 
 
         }
+
         if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 3) {
-            for (Day d : coming_month) {
+
+            if (coming_month.size() > 0) {
+                Slot slot = coming_month.get(0);
+                if (Boolean.parseBoolean(slot.isSlot_created_on_network_success())) {  /* Checking whether the slots came in this month are either on network success as when there is network failure i am adding one slot with flag for network communication as false */
+                    for (int day_of_this_month = 1; day_of_this_month <= number_of_days_in_this_month; day_of_this_month++) { /* This for loop will iterate through first to last day of next month. For each day what possible class, event or vacation can be possible will bet populated*/
+
+                        Calendar calendar_for_day_of_this_month = Calendar.getInstance();   /* each day of this month will get initialized as loop executes. For each day, matching the possible events or vacation coming for the mentee */
+                        calendar_for_day_of_this_month.set(newYear, newMonth - 1, day_of_this_month);  /*creating each day instance, as loop iterates  */
+                        long this_day_in_millis = calendar_for_day_of_this_month.getTimeInMillis();
+                        int this_day_week_day = calendar_for_day_of_this_month.get(Calendar.DAY_OF_WEEK);
+
+                        for (int slot_number = 0; slot_number < coming_month.size(); slot_number++) {   /*Will match possible slot, event or coinciding vacation for the matching slot of this day. */
+                            AvailabilityFlags availabilityFlags= new AvailabilityFlags();
+                            Slot new_slot = coming_month.get(slot_number);
+
+                            String[] slot_week_days = new_slot.getSlot_week_days();
+
+                            String start_date = new_slot.getSlot_start_date();
+                            Calendar calendar_slot_start_date = Calendar.getInstance();
+                            calendar_slot_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
+                            long slot_start_date_in_millis = calendar_slot_start_date.getTimeInMillis();
+
+                            String stop_date = new_slot.getSlot_stop_date();
+                            Calendar calendar_slot_stop_date = Calendar.getInstance();
+                            calendar_slot_stop_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
+                            long slot_stop_date_in_millis = calendar_slot_stop_date.getTimeInMillis();
+
+                            if ((this_day_in_millis == slot_start_date_in_millis) || (this_day_in_millis == slot_stop_date_in_millis) || (this_day_in_millis > slot_start_date_in_millis && this_day_in_millis < slot_stop_date_in_millis)) {
+                                /*this day is coming in between slot duration, now to check whether the week_day of this day is one of the slot week_days, which will prove this day is slot or not  */
+                                if (thisDayMatchesWithArrayOfWeekDays(slot_week_days, this_day_week_day)) {
+                                         availabilityFlags.slot_found = true;  /* making slot_found flag true for this day */
+                                    List<Event> eventList = new_slot.getEvents();
+                                    String slot_id = new_slot.getSlot_id();
+                                    String [] slot_on_week_days = new_slot.getSlot_week_days();
+
+                                    if(eventList.size() > 0){
+                                        /* Event found, now to check whether this day is coming between one of the event duration for any of mentee or not */
+                                           Event event =eventList.get(0);  /* Only one event is expected on a slot. There can be more than one mentee on this event*/
+                                           String event_id = event.getEvent_id();
+                                           if(event_id.equals(slot_id)){
+                                               List<Mentee> mentees =event.getMentees();
+                                               for(int mentee_no = 0; mentee_no < mentees.size() ; mentee_no++){
+                                                   Mentee mentee = mentees.get(mentee_no);
+                                                   List<EventDuration> eventDurations = mentee.getEventDurations();
+                                                   for(int event_duration_part = 0; event_duration_part < eventDurations.size() ; event_duration_part++){  /* One mentee can have event in one or many classes in subsection. Here subsection means, while placing a schedule with mentor if any vacation found during slot then there that event get discontinuity and leads to a subsection*/
+                                                       EventDuration eventDuration = eventDurations.get(event_duration_part);
+                                                       String eventDuration_start_date = eventDuration.getStart_date();
+                                                       Calendar calendar_event_start = Calendar.getInstance();
+
+                                                       String eventDuration_stop_date = eventDuration.getStop_date();
+
+                                                   }
+                                               }
+                                           }
+                                    }else{
+                                        /* No event scheduled till now for this slot*/
+                                    }
+
+                                }
+                            }else{
+                                /* this day is not coming between the duration for this slot */
+                            }
+                        }
+
+                        if (coming_month_non_coinciding_vacations.size() > 0) {  /* There can be some non coinciding vacation  */
+
+                        }
+
+
+                    }
+                } else {
+                    Log.e(TAG, "Network status false found while populating week_view for " + "month: " + newMonth + " year: " + newYear + "This is found while populating weekView for mentor='s next month");
+                }
+            } else {
+                /* There is no slot for this month,so mentee does not have any event on this day*/
+            }
+
+
+
+
+
+            /*for (Day d : coming_month) {
                 String date_for_d = d.getDate();
                 List<DayEvent> dayEvents = d.getDayEvents();
                 List<DaySlot> daySlots = d.getDaySlots();
@@ -380,11 +510,11 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
                     }
                 }
-            }
+            }*/
         }
     }
 
-    private void populateWeekViewForNextMonth1(List<WeekViewEvent> events, int newYear, int newMonth,int days) {
+    private void populateWeekViewForNextMonth1(List<WeekViewEvent> events, int newYear, int newMonth, int days) {
 
 
         poplateWeekView(coming_month, events, newYear, newMonth);
@@ -1081,7 +1211,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     }
 
-    private void populateWeekViewForPreviousMonth1(List<WeekViewEvent> events, int newYear, int newMonth,int previous_month_days) {
+    private void populateWeekViewForPreviousMonth1(List<WeekViewEvent> events, int newYear, int newMonth, int previous_month_days) {
         poplateWeekView(prev_month, events, newYear, newMonth);
 
     }
