@@ -84,7 +84,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public ArrayList<MonthYearInfo> previousMonthYearInfo = null;
     public ArrayList<MonthYearInfo> currentMonthYearInfo = null;
     public ArrayList<MonthYearInfo> comingMonthYearInfo = null;
-    public ArrayList<MentorInfo> mentorInfos = null;
+    public ArrayList<MentorInfo> previousMonthMentorInfos = null;
+    public ArrayList<MentorInfo> currentMonthMentorInfos = null;
+    public ArrayList<MentorInfo> comingMonthMentorInfos = null;
+
     public String calendar_by_location = null;
     public boolean cb_calendar_by_location_is_checked = false, b_three_months_data;
     private int NEW_SLT = 0, VAC_SCH = 1, RESULT_OK = 500;
@@ -170,8 +173,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         previousMonthYearInfo = new ArrayList<MonthYearInfo>();
         comingMonthYearInfo = new ArrayList<MonthYearInfo>();
         currentMonthYearInfo = new ArrayList<MonthYearInfo>();
-        mentorInfos = new ArrayList<MentorInfo>();
-
+        previousMonthMentorInfos = new ArrayList<MentorInfo>();
+        currentMonthMentorInfos = new ArrayList<MentorInfo>();
+        comingMonthMentorInfos = new ArrayList<MentorInfo>();
         if (month_from_dialog == 0 && year_from_dialog == 0) {
             if (populate_calendar_from_adapter) {
                 populate_calendar_from_adapter = false;
@@ -325,7 +329,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         previousMonthYearInfo = new ArrayList<MonthYearInfo>();
         comingMonthYearInfo = new ArrayList<MonthYearInfo>();
         currentMonthYearInfo = new ArrayList<MonthYearInfo>();
-        mentorInfos = new ArrayList<MentorInfo>();
+        previousMonthMentorInfos = new ArrayList<MentorInfo>();
+        currentMonthMentorInfos = new ArrayList<MentorInfo>();
+        comingMonthMentorInfos = new ArrayList<MentorInfo>();
 
 
         if (month_from_dialog == 0 && year_from_dialog == 0) {
@@ -969,9 +975,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             try {
 
                 JSONObject jsonObject = new JSONObject((String) object);
-                JSONObject jsonObject_mentor = jsonObject.getJSONObject("mentor");
-                JSONArray jsonArray_data = jsonObject.getJSONArray("slots");
-                JSONArray jsonArray_vacation_non_coinciding = jsonObject.getJSONArray("vacations");
+                JSONObject jsonObject_data =jsonObject.getJSONObject("data");
+                JSONArray jsonArray_mentor = jsonObject_data.getJSONArray("mentor");
+                JSONArray jsonArray_data = jsonObject_data.getJSONArray("slots");
+                JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");
 
                 List<Slot> slots = new ArrayList<Slot>();
                 List<Vacation> vacations = new ArrayList<Vacation>();  /* list of non coinciding vacations*/
@@ -1016,7 +1023,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 previousMonthYearInfo = getMonthYearForThis(previous_month, previous_month_year, finalizeDaysInMonth(previous_month, previous_month_year));
                 currentMonthYearInfo = getMonthYearForThis(current_month, current_year, finalizeDaysInMonth(current_month, current_year));
                 comingMonthYearInfo = getMonthYearForThis(coming_month, coming_year, finalizeDaysInMonth(coming_month, coming_year));
-
+                previousMonthMentorInfos =getMentorInfo(jsonArray_mentor);
+                currentMonthMentorInfos =getMentorInfo(jsonArray_mentor);
+                comingMonthMentorInfos =getMentorInfo(jsonArray_mentor);
                 Log.d(TAG, "For mentor, previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
                 if (b_three_months_data) {
                     Log.d(TAG, "Three months data get changed");
@@ -1106,6 +1115,13 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         }
 
 
+    }
+
+    private ArrayList<MentorInfo> getMentorInfo(JSONArray jsonArray_mentor) {
+        ArrayList<MentorInfo>  mentorInfos = new ArrayList<MentorInfo>();
+        for(int array_index =0; array_index < jsonArray_mentor.length() ; array_index++){
+
+        }
     }
 
     private ArrayList<MonthYearInfo> getMonthYearForThis(int month, int year, int days) {

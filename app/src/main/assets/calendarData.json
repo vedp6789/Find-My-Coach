@@ -75,6 +75,7 @@
       "slots":[
          {
             "slot_id":"1",
+            "mentor_id":"203",
             "start_time":"01:00:00",
             "stop_time":"02:00:00",
             "start_date":"2015-01-01",
@@ -111,6 +112,6 @@
          }
       ],
       "vacations":[ ],
-      "mentor":{ }
+      "mentor":[{"mentor_id":"203","first_name":"xyz","last_name":"xyz"}]   // in case of user group 3 there would be only one JsonObject and in case of user_group 2 there can be multiple JsonObjects inside mentor JsonArray
    }
 }

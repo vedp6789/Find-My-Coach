@@ -478,7 +478,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                     /* Now to check which type of event we have to show for this slot*/
 
                                     if(availabilityFlags.slot_found){
-                                        
+
                                     }
 
 

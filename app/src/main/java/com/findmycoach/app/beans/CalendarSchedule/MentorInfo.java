@@ -11,12 +11,20 @@ public class MentorInfo implements Parcelable {
     public MentorInfo(){
 
     }
-
+    String mentor_id;
     String first_name;
     String last_name;
     String address;
     String contact_number;
     String gender;
+
+    public String getMentor_id() {
+        return mentor_id;
+    }
+
+    public void setMentor_id(String mentor_id) {
+        this.mentor_id = mentor_id;
+    }
 
     public String getFirst_name() {
         return first_name;
