@@ -67,7 +67,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
 
         for (Datum d : category.getData()) {
             for (DatumSub sub : d.getDataSub())
-                list.add(new InterestsAdapter.SubCategoryItems(sub.getName(), 0));
+                list.add(new InterestsAdapter.SubCategoryItems(sub.getName(), 0, true));
         }
 
 
@@ -77,7 +77,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
             for (String s : interests) {
                 for (InterestsAdapter.SubCategoryItems i : list) {
                     if (i.getItemName().trim().equalsIgnoreCase(s.trim())) {
-                        i.setSelected(1);
+                        i.setIsSelected(1);
                     }
                 }
             }
@@ -93,7 +93,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         Collections.sort(list, new Comparator<InterestsAdapter.SubCategoryItems>() {
             @Override
             public int compare(InterestsAdapter.SubCategoryItems lhs, InterestsAdapter.SubCategoryItems rhs) {
-                return rhs.isSelected() - lhs.isSelected();
+                return rhs.getIsSelected() - lhs.getIsSelected();
             }
         });
 
@@ -120,7 +120,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
                 Intent intent = new Intent();
                 List<String> listTemp = new ArrayList<>();
                 for (InterestsAdapter.SubCategoryItems l : list) {
-                    if (l.isSelected() == 1)
+                    if (l.getIsSelected() == 1)
                         listTemp.add(l.getItemName());
                 }
                 intent.putExtra("interests", new Gson().toJson(listTemp));

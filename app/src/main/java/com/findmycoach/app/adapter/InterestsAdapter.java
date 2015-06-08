@@ -5,8 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.findmycoach.app.R;
@@ -49,22 +48,24 @@ public class InterestsAdapter extends BaseAdapter {
         View view = inflater.inflate(R.layout.area_of_interest_list_item, null);
 
         final TextView itemName = (TextView) view.findViewById(R.id.item_name);
-        final CheckBox checkBox = (CheckBox) view.findViewById(R.id.radio);
+        final ImageView imageView = (ImageView) view.findViewById(R.id.radio);
 
         final SubCategoryItems items = list.get(position);
-
-        if(items.isSelected() == 1)
-            checkBox.setChecked(true);
+        if (items.getIsSelected() == 1)
+            imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.radio_btn_selected_small));
         else
-        checkBox.setChecked(false);
+            imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.radio_btn_unselected_small));
 
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                    items.setSelected(1);
-                else
-                    items.setSelected(0);
+            public void onClick(View v) {
+                if(items.getIsSelected() == 0){
+                    items.setIsSelected(1);
+                    imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.radio_btn_selected_small));
+                }else if(items.getIsSelected() == 1){
+                    items.setIsSelected(0);
+                    imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.radio_btn_unselected_small));
+                }
             }
         });
 
@@ -72,7 +73,7 @@ public class InterestsAdapter extends BaseAdapter {
         itemName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkBox.setChecked(!checkBox.isChecked());
+                imageView.callOnClick();
             }
         });
         return view;
@@ -81,10 +82,28 @@ public class InterestsAdapter extends BaseAdapter {
     public static class SubCategoryItems {
         private String itemName;
         private int isSelected;
+        private boolean isChild;
 
-        public SubCategoryItems(String itemName, int isSelected) {
+        public SubCategoryItems(String itemName, int isSelected, boolean isChild) {
             this.itemName = itemName;
             this.isSelected = isSelected;
+            this.isChild = isChild;
+        }
+
+        public int getIsSelected() {
+            return isSelected;
+        }
+
+        public void setIsSelected(int isSelected) {
+            this.isSelected = isSelected;
+        }
+
+        public boolean isChild() {
+            return isChild;
+        }
+
+        public void setIsChild(boolean isChild) {
+            this.isChild = isChild;
         }
 
         public String getItemName() {
@@ -93,14 +112,6 @@ public class InterestsAdapter extends BaseAdapter {
 
         public void setItemName(String itemName) {
             this.itemName = itemName;
-        }
-
-        public int isSelected() {
-            return isSelected;
-        }
-
-        public void setSelected(int isSelected) {
-            this.isSelected = isSelected;
         }
     }
 }
