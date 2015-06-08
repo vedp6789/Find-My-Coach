@@ -2,7 +2,6 @@ package com.findmycoach.app.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,9 +36,9 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
 
     private EditText verificationCode;
     private String email;
-    private ProgressDialog progressDialog;
+    private Dialog progressDialog;
     private int user_group;
-    private TextView countryCodeTV;
+    private TextView countryCodeTV, msg;
     private String[] country_code, country_name;
 
     public static ValidatePhoneActivity validatePhoneActivity;
@@ -86,7 +85,11 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
      */
     private void initView() {
         email = StorageHelper.getUserDetails(this, "user_email");
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new Dialog(this);
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        progressDialog.setContentView(R.layout.progressbar_textview);
+        msg = (TextView) progressDialog.findViewById(R.id.msg);
         verificationCode = (EditText) findViewById(R.id.verificationCodeET);
         findViewById(R.id.btnVerify).setOnClickListener(this);
         findViewById(R.id.btnResend).setOnClickListener(this);
@@ -147,7 +150,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         /** Verifying entered OTP by sending it to server */
         else {
             if (email != null && NetworkManager.isNetworkConnected(this)) {
-                progressDialog.setMessage(getResources().getString(R.string.verifying));
+                msg.setText(getResources().getString(R.string.verifying));
                 progressDialog.show();
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("email", email);
@@ -282,7 +285,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                 } else {
                     dialog.dismiss();
                     requestParams.add("user_group", user_group + "");
-                    progressDialog.setMessage(getResources().getString(R.string.sending_code));
+                    msg.setText(getResources().getString(R.string.sending_code));
 
                     /** Phone number is not changed, sending OTP to registered phone number */
                     if (lastPhoneNumber != null && lastPhoneNumber.equals(phnNum)) {
