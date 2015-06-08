@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.findmycoach.app.R;
-import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
@@ -19,7 +18,6 @@ public class SplashActivity extends Activity implements Callback {
 
     private DataBase dataBase;
     private boolean isStart;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +71,7 @@ public class SplashActivity extends Activity implements Callback {
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         /** Caching subcategories into database */
         dataBase.clearDatabase();
-        long i = dataBase.insertData((Category) object);
+        dataBase.insertData((String) object);
         runHoldThread();
     }
 

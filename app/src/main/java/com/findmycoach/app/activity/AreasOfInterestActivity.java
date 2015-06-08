@@ -13,7 +13,6 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.InterestsAdapter;
 import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.category.Datum;
-import com.findmycoach.app.beans.category.DatumSub;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
@@ -22,8 +21,6 @@ import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class AreasOfInterestActivity extends Activity implements Callback {
@@ -51,10 +48,18 @@ public class AreasOfInterestActivity extends Activity implements Callback {
      */
     private void checkSUbCategory() {
         dataBase = DataBase.singleton(this);
-        category = dataBase.selectAllSubCategory();
+
+        try {
+            String categoryData = dataBase.getAll();
+            Log.e("AreaOfInterest", categoryData);
+            category = new Gson().fromJson(categoryData, Category.class);
+        } catch (Exception e) {
+            category = null;
+            e.printStackTrace();
+        }
 
         /** If not then call api to get sub categories */
-        if (category.getData().size() < 1) {
+        if (category == null || category.getData().size() < 1) {
             Log.d(TAG, "sub category api called");
             getSubCategories();
         } else
@@ -64,12 +69,6 @@ public class AreasOfInterestActivity extends Activity implements Callback {
 
     private void populateData() {
         String interestsString = getIntent().getStringExtra("interests");
-
-        for (Datum d : category.getData()) {
-            for (DatumSub sub : d.getDataSub())
-                list.add(new InterestsAdapter.SubCategoryItems(sub.getName(), 0, true));
-        }
-
 
         if (interestsString != null) {
             String[] interests = interestsString.split(",");
@@ -83,19 +82,30 @@ public class AreasOfInterestActivity extends Activity implements Callback {
             }
         }
 
-        Collections.sort(list, new Comparator<InterestsAdapter.SubCategoryItems>() {
-            @Override
-            public int compare(InterestsAdapter.SubCategoryItems lhs, InterestsAdapter.SubCategoryItems rhs) {
-                return lhs.getItemName().compareToIgnoreCase(rhs.getItemName());
-            }
-        });
+//        Collections.sort(list, new Comparator<InterestsAdapter.SubCategoryItems>() {
+//            @Override
+//            public int compare(InterestsAdapter.SubCategoryItems lhs, InterestsAdapter.SubCategoryItems rhs) {
+//                return lhs.getItemName().compareToIgnoreCase(rhs.getItemName());
+//            }
+//        });
+//
+//        Collections.sort(list, new Comparator<InterestsAdapter.SubCategoryItems>() {
+//            @Override
+//            public int compare(InterestsAdapter.SubCategoryItems lhs, InterestsAdapter.SubCategoryItems rhs) {
+//                return rhs.getIsSelected() - lhs.getIsSelected();
+//            }
+//        });
 
-        Collections.sort(list, new Comparator<InterestsAdapter.SubCategoryItems>() {
-            @Override
-            public int compare(InterestsAdapter.SubCategoryItems lhs, InterestsAdapter.SubCategoryItems rhs) {
-                return rhs.getIsSelected() - lhs.getIsSelected();
-            }
-        });
+        Log.d(TAG, "+========================================================================================");
+        Log.d(TAG, "Message : " + category.getMessage());
+        Log.d(TAG, "Data Size : " + category.getData().size());
+
+        for (Datum datum : category.getData()) {
+            Log.e(TAG, "Name : " + datum.getName() + ", Sub category size : " + datum.getSubCategories().size() + ", Category size : " + datum.getCategories().size()
+                    + ", Parent id : " + datum.getParentId() + ", ID : " + datum.getId());
+
+            list.add(new InterestsAdapter.SubCategoryItems(datum.getName(), 0, datum.getCategories().size() <= 0));
+        }
 
         adapter = new InterestsAdapter(this, list);
         listView.setAdapter(adapter);
@@ -154,9 +164,12 @@ public class AreasOfInterestActivity extends Activity implements Callback {
      */
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        dataBase.insertData((Category) object);
-        category = dataBase.selectAllSubCategory();
-        populateData();
+        dataBase.insertData((String) object);
+        String categoryData = dataBase.getAll();
+        Log.e("AreaOfInterest", categoryData);
+        category = new Gson().fromJson(categoryData, Category.class);
+        if (category != null)
+            populateData();
     }
 
     @Override

@@ -37,7 +37,6 @@ import com.findmycoach.app.beans.mentor.Response;
 import com.findmycoach.app.fragment.CustomDatePickerFragment;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
-import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.StorageHelper;
@@ -374,12 +373,12 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         userInfo = mentorDetails.getData();
 
         String searchedKeyWord = getIntent().getStringExtra("searched_keyword");
-        if (searchedKeyWord != null && !searchedKeyWord.equals("-1")) {
-            searchedKeyWord = DataBase.singleton(this).getSubCategory(searchedKeyWord);
-            List<String> newSubCategory = new ArrayList<String>();
-            newSubCategory.add(searchedKeyWord);
-            userInfo.setSubCategoryName(newSubCategory);
-        }
+//        if (searchedKeyWord != null && !searchedKeyWord.equals("-1")) {
+//            searchedKeyWord = DataBase.singleton(this).getSubCategory(searchedKeyWord);
+//            List<String> newSubCategory = new ArrayList<String>();
+//            newSubCategory.add(searchedKeyWord);
+//            userInfo.setSubCategoryName(newSubCategory);
+//        }
 
         array_list_subCategory = (ArrayList<String>) userInfo.getSubCategoryName();
 

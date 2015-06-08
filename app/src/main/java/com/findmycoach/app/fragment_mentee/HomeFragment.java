@@ -45,6 +45,7 @@ import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
+import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
@@ -113,7 +114,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
         DataBase dataBase = DataBase.singleton(getActivity());
 
-        Category categoryFromDb = dataBase.selectAllSubCategory();
+        String categoryData = dataBase.getAll();
+        Category categoryFromDb = new Gson().fromJson(categoryData, Category.class);
         if (categoryFromDb.getData().size() < 1) {
             getCategories();
             Log.d(TAG, "sub category api called");
@@ -624,9 +626,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
         } else if (object instanceof Category) {
-            setTabForCategory((Category) object);
+            setTabForCategory(new Gson().fromJson((String) object, Category.class));
             DataBase dataBase = DataBase.singleton(getActivity());
-            dataBase.insertData((Category) object);
+            dataBase.insertData((String) object);
         } else {
             progressDialog.dismiss();
             Intent intent = new Intent(getActivity(), UserListActivity.class);

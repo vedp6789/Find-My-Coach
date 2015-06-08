@@ -9,6 +9,26 @@ public class DatumSub {
     private String id;
     @Expose
     private String name;
+    @Expose
+    private String price;
+    @Expose
+    private String level;
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
 
     /**
      * @return The id
