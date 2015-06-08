@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,13 +26,11 @@ import java.util.List;
 
 public class AreasOfInterestActivity extends Activity implements Callback {
 
-    private static InterestsAdapter adapter;
     private Button saveAction;
     private final String TAG = "FMC";
     private DataBase dataBase;
-    private Category category;
+    public static Category category;
     private ListView listView;
-    private List<InterestsAdapter.SubCategoryItems> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +42,12 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         checkSUbCategory();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        category = null;
+    }
+
     /**
      * Checking whether subcategory is already cached or not
      */
@@ -51,7 +56,6 @@ public class AreasOfInterestActivity extends Activity implements Callback {
 
         try {
             String categoryData = dataBase.getAll();
-            Log.e("AreaOfInterest", categoryData);
             category = new Gson().fromJson(categoryData, Category.class);
         } catch (Exception e) {
             category = null;
@@ -70,17 +74,14 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     private void populateData() {
         String interestsString = getIntent().getStringExtra("interests");
 
-        if (interestsString != null) {
-            String[] interests = interestsString.split(",");
+        List<InterestsAdapter.SubCategoryItems> list = new ArrayList<>();
 
-            for (String s : interests) {
-                for (InterestsAdapter.SubCategoryItems i : list) {
-                    if (i.getItemName().trim().equalsIgnoreCase(s.trim())) {
-                        i.setIsSelected(1);
-                    }
-                }
-            }
+        for (Datum datum : category.getData()) {
+            Log.e(TAG, "Name : " + datum.getName() + ", Sub category size : " + datum.getSubCategories().size() + ", Category size : " + datum.getCategories().size()
+                    + ", Parent id : " + datum.getParentId() + ", ID : " + datum.getId());
+            list.add(new InterestsAdapter.SubCategoryItems(datum.getName(), 1));
         }
+        list.add(new InterestsAdapter.SubCategoryItems(getResources().getString(R.string.all), 1));
 
 //        Collections.sort(list, new Comparator<InterestsAdapter.SubCategoryItems>() {
 //            @Override
@@ -88,27 +89,18 @@ public class AreasOfInterestActivity extends Activity implements Callback {
 //                return lhs.getItemName().compareToIgnoreCase(rhs.getItemName());
 //            }
 //        });
-//
-//        Collections.sort(list, new Comparator<InterestsAdapter.SubCategoryItems>() {
-//            @Override
-//            public int compare(InterestsAdapter.SubCategoryItems lhs, InterestsAdapter.SubCategoryItems rhs) {
-//                return rhs.getIsSelected() - lhs.getIsSelected();
-//            }
-//        });
 
-        Log.d(TAG, "+========================================================================================");
-        Log.d(TAG, "Message : " + category.getMessage());
-        Log.d(TAG, "Data Size : " + category.getData().size());
-
-        for (Datum datum : category.getData()) {
-            Log.e(TAG, "Name : " + datum.getName() + ", Sub category size : " + datum.getSubCategories().size() + ", Category size : " + datum.getCategories().size()
-                    + ", Parent id : " + datum.getParentId() + ", ID : " + datum.getId());
-
-            list.add(new InterestsAdapter.SubCategoryItems(datum.getName(), 0, datum.getCategories().size() <= 0));
-        }
-
-        adapter = new InterestsAdapter(this, list);
+        InterestsAdapter adapter = new InterestsAdapter(this, list);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(AreasOfInterestActivity.this, AreaOfInterestSub.class);
+                intent.putExtra("index", position);
+                startActivityForResult(intent, 2000);
+            }
+        });
     }
 
     /**
@@ -129,11 +121,11 @@ public class AreasOfInterestActivity extends Activity implements Callback {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 List<String> listTemp = new ArrayList<>();
-                for (InterestsAdapter.SubCategoryItems l : list) {
-                    if (l.getIsSelected() == 1)
-                        listTemp.add(l.getItemName());
-                }
-                intent.putExtra("interests", new Gson().toJson(listTemp));
+//                for (InterestsAdapter.SubCategoryItems l : list) {
+//                    if (l.getIsSelected() == 1)
+//                        listTemp.add(l.getItemName());
+//                }
+//                intent.putExtra("interests", new Gson().toJson(listTemp));
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -145,9 +137,9 @@ public class AreasOfInterestActivity extends Activity implements Callback {
      * Getting references of views
      */
     private void initialize() {
+        category = null;
         listView = (ListView) findViewById(R.id.areas_of_interest_list);
         saveAction = (Button) findViewById(R.id.save_interests);
-        list = new ArrayList<>();
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,7 +158,6 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         dataBase.insertData((String) object);
         String categoryData = dataBase.getAll();
-        Log.e("AreaOfInterest", categoryData);
         category = new Gson().fromJson(categoryData, Category.class);
         if (category != null)
             populateData();

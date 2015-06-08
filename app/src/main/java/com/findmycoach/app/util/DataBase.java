@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 /**
  * Created by prem on 9/3/15.
@@ -57,7 +56,6 @@ public class DataBase extends SQLiteOpenHelper {
      * Inserting sub categories into table TableSubCategory
      */
     public long insertData(String category) {
-        Log.e("Database", category);
         ContentValues contentValues = new ContentValues();
         contentValues.put(CATEGORY, category);
         db.insert(TABLE_NAME, null, contentValues);
@@ -77,7 +75,6 @@ public class DataBase extends SQLiteOpenHelper {
      * Clear all from database
      */
     public void clearDatabase() {
-        Log.e("DataBase", "Delete");
         db.delete(TABLE_NAME, null, null);
     }
 

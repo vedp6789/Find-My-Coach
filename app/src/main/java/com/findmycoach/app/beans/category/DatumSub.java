@@ -2,17 +2,29 @@ package com.findmycoach.app.beans.category;
 
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class DatumSub {
 
     @Expose
     private String id;
+    @SerializedName("sub_category_name")
     @Expose
     private String name;
     @Expose
     private String price;
     @Expose
     private String level;
+
+    private boolean isSelected;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setIsSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
 
     public String getPrice() {
         return price;

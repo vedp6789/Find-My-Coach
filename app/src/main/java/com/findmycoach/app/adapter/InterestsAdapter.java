@@ -50,60 +50,26 @@ public class InterestsAdapter extends BaseAdapter {
         final TextView itemName = (TextView) view.findViewById(R.id.item_name);
         final ImageView imageView = (ImageView) view.findViewById(R.id.radio);
 
-        final SubCategoryItems items = list.get(position);
-        if (items.getIsSelected() == 1)
+        final SubCategoryItems item = list.get(position);
+        itemName.setText(item.getItemName());
+
+        if (item.getValue() == 1)
+            imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.clander_next_arrow_small));
+        else if (item.getValue() == 3)
             imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.radio_btn_selected_small));
-        else
+        else if (item.getValue() == 2)
             imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.radio_btn_unselected_small));
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(items.getIsSelected() == 0){
-                    items.setIsSelected(1);
-                    imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.radio_btn_selected_small));
-                }else if(items.getIsSelected() == 1){
-                    items.setIsSelected(0);
-                    imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.radio_btn_unselected_small));
-                }
-            }
-        });
-
-        itemName.setText(items.getItemName());
-        itemName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageView.callOnClick();
-            }
-        });
         return view;
     }
 
     public static class SubCategoryItems {
         private String itemName;
-        private int isSelected;
-        private boolean isChild;
+        private int value; /*1 for >, 2 for not selected, 3 for selected*/
 
-        public SubCategoryItems(String itemName, int isSelected, boolean isChild) {
+        public SubCategoryItems(String itemName, int value) {
             this.itemName = itemName;
-            this.isSelected = isSelected;
-            this.isChild = isChild;
-        }
-
-        public int getIsSelected() {
-            return isSelected;
-        }
-
-        public void setIsSelected(int isSelected) {
-            this.isSelected = isSelected;
-        }
-
-        public boolean isChild() {
-            return isChild;
-        }
-
-        public void setIsChild(boolean isChild) {
-            this.isChild = isChild;
+            this.value = value;
         }
 
         public String getItemName() {
@@ -112,6 +78,14 @@ public class InterestsAdapter extends BaseAdapter {
 
         public void setItemName(String itemName) {
             this.itemName = itemName;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public void setValue(int value) {
+            this.value = value;
         }
     }
 }
