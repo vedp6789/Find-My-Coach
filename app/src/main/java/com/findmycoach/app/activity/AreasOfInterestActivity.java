@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.InterestsAdapter;
@@ -96,7 +97,6 @@ public class AreasOfInterestActivity extends Activity implements Callback {
             }
         });
 
-
         adapter = new InterestsAdapter(this, list);
         listView.setAdapter(adapter);
     }
@@ -119,8 +119,8 @@ public class AreasOfInterestActivity extends Activity implements Callback {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 List<String> listTemp = new ArrayList<>();
-                for(InterestsAdapter.SubCategoryItems l : list){
-                    if(l.isSelected() == 1)
+                for (InterestsAdapter.SubCategoryItems l : list) {
+                    if (l.isSelected() == 1)
                         listTemp.add(l.getItemName());
                 }
                 intent.putExtra("interests", new Gson().toJson(listTemp));
@@ -138,6 +138,14 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         listView = (ListView) findViewById(R.id.areas_of_interest_list);
         saveAction = (Button) findViewById(R.id.save_interests);
         list = new ArrayList<>();
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(getResources().getString(R.string.prompt_area_of_coaching));
     }
 
 
