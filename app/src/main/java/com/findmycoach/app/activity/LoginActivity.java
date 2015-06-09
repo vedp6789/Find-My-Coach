@@ -102,7 +102,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         /** If user is already logged-in in app then open Dashboard Activity */
         if (userToken != null && phnVerified != null) {
-            Intent intent = new Intent(this, AreasOfInterestActivity.class);
+            Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
             this.finish();
         }

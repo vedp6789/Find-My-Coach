@@ -65,7 +65,7 @@ public class InterestsAdapter extends BaseAdapter {
 
     public static class SubCategoryItems {
         private String itemName;
-        private int value; /*1 for >, 2 for not selected, 3 for selected*/
+        private int value; /*1 for has child, 2 for not selected, 3 for selected*/
 
         public SubCategoryItems(String itemName, int value) {
             this.itemName = itemName;

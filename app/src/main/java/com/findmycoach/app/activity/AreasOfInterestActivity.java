@@ -14,6 +14,7 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.InterestsAdapter;
 import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.category.Datum;
+import com.findmycoach.app.beans.category.DatumSub;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
@@ -22,6 +23,7 @@ import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AreasOfInterestActivity extends Activity implements Callback {
@@ -30,6 +32,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     private final String TAG = "FMC";
     private DataBase dataBase;
     public static Category category;
+    public static List<DatumSub> datumSubs;
     private ListView listView;
 
     @Override
@@ -46,6 +49,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     protected void onDestroy() {
         super.onDestroy();
         category = null;
+        datumSubs = null;
     }
 
     /**
@@ -72,7 +76,36 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     }
 
     private void populateData() {
-        String interestsString = getIntent().getStringExtra("interests");
+        try {
+            String interestsString = getIntent().getStringExtra("interests");
+            Log.d(TAG, interestsString);
+            List<String> selectedAreaOfInterest = new ArrayList<>();
+            if(interestsString != null) {
+                Collections.addAll(selectedAreaOfInterest, interestsString.split(","));
+                for(int i = 0; i < selectedAreaOfInterest.size(); i++)
+                    selectedAreaOfInterest.set(i, selectedAreaOfInterest.get(i).trim());
+            }
+
+
+            for (Datum datum : category.getData()) {
+                for (DatumSub datumSub : datum.getSubCategories()) {
+                    datumSubs.add(datumSub);
+                    if (selectedAreaOfInterest.contains(datumSub.getName().trim())) {
+                        datumSub.setIsSelected(true);
+                    }
+                }
+
+                for (Datum datum1 : datum.getCategories())
+                    for (DatumSub datumSub : datum1.getSubCategories()) {
+                        datumSubs.add(datumSub);
+                        if (selectedAreaOfInterest.contains(datumSub.getName().trim()))
+                            datumSub.setIsSelected(true);
+                    }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         List<InterestsAdapter.SubCategoryItems> list = new ArrayList<>();
 
@@ -83,13 +116,6 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         }
         list.add(new InterestsAdapter.SubCategoryItems(getResources().getString(R.string.all), 1));
 
-//        Collections.sort(list, new Comparator<InterestsAdapter.SubCategoryItems>() {
-//            @Override
-//            public int compare(InterestsAdapter.SubCategoryItems lhs, InterestsAdapter.SubCategoryItems rhs) {
-//                return lhs.getItemName().compareToIgnoreCase(rhs.getItemName());
-//            }
-//        });
-
         InterestsAdapter adapter = new InterestsAdapter(this, list);
         listView.setAdapter(adapter);
 
@@ -98,7 +124,8 @@ public class AreasOfInterestActivity extends Activity implements Callback {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(AreasOfInterestActivity.this, AreaOfInterestSub.class);
                 intent.putExtra("index", position);
-                startActivityForResult(intent, 2000);
+                intent.putExtra("level", 2);
+                startActivity(intent);
             }
         });
     }
@@ -121,11 +148,11 @@ public class AreasOfInterestActivity extends Activity implements Callback {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 List<String> listTemp = new ArrayList<>();
-//                for (InterestsAdapter.SubCategoryItems l : list) {
-//                    if (l.getIsSelected() == 1)
-//                        listTemp.add(l.getItemName());
-//                }
-//                intent.putExtra("interests", new Gson().toJson(listTemp));
+                for (DatumSub d : datumSubs) {
+                    if (d.isSelected())
+                        listTemp.add(d.getName());
+                }
+                intent.putExtra("interests", new Gson().toJson(listTemp));
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -138,6 +165,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
      */
     private void initialize() {
         category = null;
+        datumSubs = new ArrayList<>();
         listView = (ListView) findViewById(R.id.areas_of_interest_list);
         saveAction = (Button) findViewById(R.id.save_interests);
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
