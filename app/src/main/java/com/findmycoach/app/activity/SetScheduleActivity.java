@@ -360,225 +360,310 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
         if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 3) {
 
-            if (coming_month.size() > 0) {
-                Slot slot = coming_month.get(0);
-                if (Boolean.parseBoolean(slot.isSlot_created_on_network_success())) {  /* Checking whether the slots came in this month are either on network success as when there is network failure i am adding one slot with flag for network communication as false */
-                    for (int day_of_this_month = 1; day_of_this_month <= number_of_days_in_this_month; day_of_this_month++) { /* This for loop will iterate through first to last day of next month. For each day what possible class, event or vacation can be possible will bet populated*/
+            populateWeekViewForMentorSchedule(coming_month,coming_month_non_coinciding_vacations,number_of_days_in_this_month,events,newMonth,newYear);
+
+        }
+    }
+
+    private void populateWeekViewForMentorSchedule(ArrayList<Slot> coming_month, ArrayList<Vacation> coming_month_non_coinciding_vacations, int number_of_days_in_this_month, List<WeekViewEvent> events, int newMonth, int newYear) {
+        if (coming_month.size() > 0) {     /* here coming_month can have slots for previous, current or coming in three different cases and coming_month_non_coinciding_vacations can also of three types i.e. previous, current or coming */
+            Slot slot = coming_month.get(0);
+            if (Boolean.parseBoolean(slot.isSlot_created_on_network_success())) {  /* Checking whether the slots came in this month are either on network success as when there is network failure i am adding one slot with flag for network communication as false */
+                for (int day_of_this_month = 1; day_of_this_month <= number_of_days_in_this_month; day_of_this_month++) { /* This for loop will iterate through first to last day of next month. For each day what possible class, event or vacation can be possible will bet populated*/
+
+                    Calendar calendar_for_day_of_this_month = Calendar.getInstance();   /* each day of this month will get initialized as loop executes. For each day, matching the possible events or vacation coming for the mentee */
+                    calendar_for_day_of_this_month.set(newYear, newMonth - 1, day_of_this_month);  /*creating each day instance, as loop iterates  */
+                    long this_day_in_millis = calendar_for_day_of_this_month.getTimeInMillis();
+                    int this_day_week_day = calendar_for_day_of_this_month.get(Calendar.DAY_OF_WEEK);
+
+                    for (int slot_number = 0; slot_number < coming_month.size(); slot_number++) {   /*Will match possible slot, event or coinciding vacation for the matching slot of this day. */
+                        AvailabilityFlags availabilityFlags = new AvailabilityFlags();
+                        Slot new_slot = coming_month.get(slot_number);
+
+                        String[] slot_week_days = new_slot.getSlot_week_days();
+                        String slot_id = new_slot.getSlot_id();
+                        String start_date = new_slot.getSlot_start_date();
+                        String slot_start_time = new_slot.getSlot_start_time();
+                        String slot_stop_time = new_slot.getSlot_stop_time();
+                        String sub_category_name = null;  /* slot scheduled for which type of subject, it get decided from event */
+                        String slot_type = new_slot.getSlot_type();
+                        String slot_max_users = new_slot.getSlot_max_users();
+                        Calendar calendar_slot_start_date = Calendar.getInstance();
+                        calendar_slot_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
+                        long slot_start_date_in_millis = calendar_slot_start_date.getTimeInMillis();
+
+                        String stop_date = new_slot.getSlot_stop_date();
+                        Calendar calendar_slot_stop_date = Calendar.getInstance();
+                        calendar_slot_stop_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
+                        long slot_stop_date_in_millis = calendar_slot_stop_date.getTimeInMillis();
+
+                        if ((this_day_in_millis == slot_start_date_in_millis) || (this_day_in_millis == slot_stop_date_in_millis) || (this_day_in_millis > slot_start_date_in_millis && this_day_in_millis < slot_stop_date_in_millis)) {
+                                /*this day is coming in between slot duration, now to check whether the week_day of this day is one of the slot week_days, which will prove this day is slot or not  */
+                            if (thisDayMatchesWithArrayOfWeekDays(slot_week_days, this_day_week_day)) {
+                                availabilityFlags.slot_found = true;  /* making slot_found flag true for this day */
+
+                                List<Event> eventList = new_slot.getEvents();
+                                List<Vacation> coincidingVacationList = new_slot.getVacations();
+                                String[] slot_on_week_days = new_slot.getSlot_week_days();
+                                List<Mentee> menteeFoundOnThisDate = new ArrayList<Mentee>();  /* a list of mentee's who have class for this day of week_view */
+
+                                if (eventList.size() > 0) {
+                                        /* Event found, now to check whether this day is coming between one of the event duration for any of mentee or not */
+                                    Event event = eventList.get(0);  /* Only one event is expected on a slot. There can be more than one mentee on this event*/
+                                    String event_id = event.getEvent_id();
+                                    sub_category_name = event.getSub_category_name();
+                                    if (event_id.equals(slot_id)) {
+                                        List<Mentee> mentees = event.getMentees();
+
+                                        for (int mentee_no = 0; mentee_no < mentees.size(); mentee_no++) {
+                                            Mentee mentee = mentees.get(mentee_no);
+                                            List<EventDuration> eventDurations = mentee.getEventDurations();
+                                            level_event_duration:
+                                            for (int event_duration_part = 0; event_duration_part < eventDurations.size(); event_duration_part++) {  /* One mentee can have event in one or many classes in subsection. Here subsection means, while placing a schedule with mentor if any vacation found during slot then there that event get discontinuity and leads to a subsection*/
+                                                EventDuration eventDuration = eventDurations.get(event_duration_part);
+
+                                                String eventDuration_start_date = eventDuration.getStart_date();
+                                                Calendar calendar_event_start = Calendar.getInstance();
+                                                calendar_event_start.set(Integer.parseInt(eventDuration_start_date.split("-")[0]), Integer.parseInt(eventDuration_start_date.split("-")[1]) - 1, Integer.parseInt(eventDuration_start_date.split("-")[2]));
+
+                                                String eventDuration_stop_date = eventDuration.getStop_date();
+                                                Calendar calendar_event_stop = Calendar.getInstance();
+                                                calendar_event_stop.set(Integer.parseInt(eventDuration_stop_date.split("-")[0]), Integer.parseInt(eventDuration_stop_date.split("-")[1]) - 1, Integer.parseInt(eventDuration_stop_date.split("-")[2]));
+
+                                                ArrayList<SlotDurationDetailBean> slotDurationDetailBeans = calculateNoOfTotalClassDays(calendar_event_start, calendar_event_stop, slot_on_week_days);  /* active class dates found between two dates by matching slot weekdays*/
+                                                for (int day_no = 0; day_no < slotDurationDetailBeans.size(); day_no++) {
+                                                    SlotDurationDetailBean slotDurationDetailBean = slotDurationDetailBeans.get(day_no);
+                                                    String date = slotDurationDetailBean.getDate();
+                                                    Calendar calendar_for_this_date = Calendar.getInstance();
+                                                    calendar_for_this_date.set(Integer.parseInt(date.split("-")[0]), Integer.parseInt(date.split("-")[1]) - 1, Integer.parseInt(date.split("-")[2]));
+                                                    long this_date_in_millis = calendar_for_this_date.getTimeInMillis();
+                                                    if (this_date_in_millis == this_day_in_millis) {
+                                                               /*this mentee is having class on this day */
+                                                        menteeFoundOnThisDate.add(mentee);
+                                                        break level_event_duration;
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        if (menteeFoundOnThisDate.size() > 0) { /* This proves that there is some event on this day also*/
+                                            availabilityFlags.event_found = true;
+                                        }
+
+                                    }
+                                } else {
+                                        /* No event scheduled till now for this slot*/
+                                }
+
+                                List<Vacation> coinciding_vacation_of_this_day_for_this_slot = new ArrayList<Vacation>();
+
+
+                                if (!availabilityFlags.event_found) {
+                                        /* will check for any coinciding vacation if there is no mentee found on this day */
+                                    if (coincidingVacationList.size() > 0) {
+                                            /* Now to decide whether the vacation is coming on this day or not */
+                                        for (int coinciding_vacation = 0; coinciding_vacation < coincidingVacationList.size(); coinciding_vacation++) {
+                                            Vacation vacation = coincidingVacationList.get(coinciding_vacation);
+
+                                            String coin_vac_start_date = vacation.getStart_date();
+                                            Calendar cal_coin_vac_start_date = Calendar.getInstance();
+                                            cal_coin_vac_start_date.set(Integer.parseInt(coin_vac_start_date.split("-")[0]), Integer.parseInt(coin_vac_start_date.split("-")[1]) - 1, Integer.parseInt(coin_vac_start_date.split("-")[2]));
+                                            long cal_coin_vac_start_millis = cal_coin_vac_start_date.getTimeInMillis();
+
+                                            String coin_vac_stop_date = vacation.getStop_date();
+                                            Calendar cal_coin_vac_stop_date = Calendar.getInstance();
+                                            cal_coin_vac_stop_date.set(Integer.parseInt(coin_vac_stop_date.split("-")[0]), Integer.parseInt(coin_vac_stop_date.split("-")[1]) - 1, Integer.parseInt(coin_vac_stop_date.split("-")[2]));
+                                            long cal_coin_vac_stop_millis = cal_coin_vac_stop_date.getTimeInMillis();
+
+                                            if ((this_day_in_millis == cal_coin_vac_start_millis) || (this_day_in_millis == cal_coin_vac_stop_millis) || (this_day_in_millis > cal_coin_vac_start_millis && this_day_in_millis < cal_coin_vac_stop_millis)) {
+                                                if (thisDayMatchesWithArrayOfWeekDays(vacation.getWeek_days(), this_day_week_day)) {
+                                                        /* Vacation found for this slot of the day*/
+                                                    coinciding_vacation_of_this_day_for_this_slot.add(vacation);
+                                                    availabilityFlags.vacation_found = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                    /* Now to check which type of event we have to show for this slot*/
+
+                                if (availabilityFlags.slot_found) {
+                                    if (availabilityFlags.event_found) {
+                                            /* Class found for this slot, making class information on week view */
+                                        Calendar startTime;
+                                        startTime = Calendar.getInstance();
+                                        startTime.set(Calendar.DAY_OF_MONTH, day_of_this_month);
+                                        startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_start_time.split(":", 3)[0]));
+                                        startTime.set(Calendar.MINUTE, Integer.parseInt(slot_start_time.split(":", 3)[1]));
+                                        startTime.set(Calendar.MONTH, newMonth - 1);
+                                        startTime.set(Calendar.YEAR, newYear);
+                                        Calendar endTime;// = (Calendar) startTime.clone();
+                                        endTime = (Calendar) startTime.clone();
+                                        endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
+                                        endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
+                                        WeekViewEvent weekViewEvent;
+                                        weekViewEvent = new WeekViewEvent(Long.parseLong(slot_id), getEventTitle(startTime, Integer.parseInt(slot_stop_time.split(":", 3)[0]), Integer.parseInt(slot_stop_time.split(":", 3)[1]), sub_category_name, slot_type), startTime, endTime, menteeFoundOnThisDate, slot_type, new_slot, 12345);  /* For making a scheduled class information on week view */
+                                        weekViewEvent.setColor(getResources().getColor(R.color.event_color_02));
+                                        events.add(weekViewEvent);
+
+                                    } else {
+                                        if (availabilityFlags.vacation_found) {
+                                                /* vacation found on this slot */
+                                            Calendar startTime;
+                                            startTime = Calendar.getInstance();
+                                            startTime.set(Calendar.DAY_OF_MONTH, day_of_this_month);
+                                            startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_start_time.split(":", 3)[0]));
+                                            startTime.set(Calendar.MINUTE, Integer.parseInt(slot_start_time.split(":", 3)[1]));
+                                            startTime.set(Calendar.MONTH, newMonth - 1);
+                                            startTime.set(Calendar.YEAR, newYear);
+                                            Calendar endTime;// = (Calendar) startTime.clone();
+                                            endTime = (Calendar) startTime.clone();
+                                            endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
+                                            endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
+                                            WeekViewEvent weekViewEvent;
+                                            weekViewEvent = new WeekViewEvent(Long.parseLong(slot_id), getVacationTitle(startTime, Integer.parseInt(slot_stop_time.split(":", 3)[0]), Integer.parseInt(slot_stop_time.split(":", 3)[1])), startTime, endTime, coinciding_vacation_of_this_day_for_this_slot, new_slot, 123);  /* For making a coinciding vacation information on week view. I am showing vacation for slot_duration time i.e. if any vacation coming for just some fraction of time of slot time, in this case also i am showing vacation for full slot time  */
+                                            weekViewEvent.setColor(getResources().getColor(R.color.event_color_03));
+                                            events.add(weekViewEvent);
+                                        } else {
+                                                /* neither any vacation nor any class scheduled till now */
+                                            Calendar startTime;
+                                            startTime = Calendar.getInstance();
+                                            startTime.set(Calendar.DAY_OF_MONTH, day_of_this_month);
+                                            startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_start_time.split(":", 3)[0]));
+                                            startTime.set(Calendar.MINUTE, Integer.parseInt(slot_start_time.split(":", 3)[1]));
+                                            startTime.set(Calendar.MONTH, newMonth - 1);
+                                            startTime.set(Calendar.YEAR, newYear);
+                                            Calendar endTime;// = (Calendar) startTime.clone();
+                                            endTime = (Calendar) startTime.clone();
+                                            endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
+                                            endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
+                                            WeekViewEvent weekViewEvent;
+                                            weekViewEvent = new WeekViewEvent(Long.parseLong(slot_id), getSlotTitle(start_date, stop_date, slot_start_time, slot_stop_time, slot_type, slot_week_days, slot_max_users), startTime, endTime, new_slot, 432);  /* For making a free slot information on week view */
+                                            weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
+                                            events.add(weekViewEvent);
+                                        }
+                                    }
+                                }
+
+
+                            }
+                        } else {
+                                /* this day is not coming between the duration for this slot */
+                        }
+                    }
+
+                    if (coming_month_non_coinciding_vacations.size() > 0) {  /* There can be some non coinciding vacation  */
+                        for (int vacation_no = 0; vacation_no < coming_month_non_coinciding_vacations.size(); vacation_no++) {
+                            Vacation vacation = coming_month_non_coinciding_vacations.get(vacation_no);
+                            String vacation_start_date = vacation.getStart_date();
+                            String vacation_stop_date = vacation.getStop_date();
+                            String[] vacation_week_days = vacation.getWeek_days();
+                            String vacation_start_time = vacation.getStart_time();
+                            String vacation_stop_time = vacation.getStop_time();
+                            String vacation_id = vacation.getVacation_id();  /* Only using this in non coinciding vacation*/
+
+
+                            Calendar calendar_vacation_start_date = Calendar.getInstance();
+                            calendar_vacation_start_date.set(Integer.parseInt(vacation_start_date.split("-")[0]), Integer.parseInt(vacation_start_date.split("-")[1]) - 1, Integer.parseInt(vacation_start_date.split("-")[2]));
+                            long vac_start_date_millis = calendar_vacation_start_date.getTimeInMillis();
+
+                            Calendar calendar_vacation_stop_date = Calendar.getInstance();
+                            calendar_vacation_stop_date.set(Integer.parseInt(vacation_stop_date.split("-")[0]), Integer.parseInt(vacation_stop_date.split("-")[1]) - 1, Integer.parseInt(vacation_stop_date.split("-")[2]));
+                            long vac_stop_date_millis = calendar_vacation_stop_date.getTimeInMillis();
+
+
+                            if ((this_day_in_millis == vac_start_date_millis) || (this_day_in_millis == vac_stop_date_millis) || (this_day_in_millis > vac_start_date_millis && this_day_in_millis < vac_stop_date_millis)) {
+                                if (thisDayMatchesWithArrayOfWeekDays(vacation_week_days, this_day_week_day)) {
+                                         /* this prove non coinciding vacation on this day */
+                                    Calendar startTime;
+                                    startTime = Calendar.getInstance();
+                                    startTime.set(Calendar.DAY_OF_MONTH, day_of_this_month);
+                                    startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(vacation_start_time.split(":", 3)[0]));
+                                    startTime.set(Calendar.MINUTE, Integer.parseInt(vacation_start_time.split(":", 3)[1]));
+                                    startTime.set(Calendar.MONTH, newMonth - 1);
+                                    startTime.set(Calendar.YEAR, newYear);
+                                    Calendar endTime;// = (Calendar) startTime.clone();
+                                    endTime = (Calendar) startTime.clone();
+                                    endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(vacation_stop_time.split(":", 3)[0]) - Integer.parseInt(vacation_start_time.split(":", 3)[0]));
+                                    endTime.set(Calendar.MINUTE, Integer.parseInt(vacation_stop_time.split(":", 3)[1]));
+                                    WeekViewEvent weekViewEvent;
+                                    weekViewEvent = new WeekViewEvent(Long.parseLong(vacation_id), getVacationTitle(startTime, Integer.parseInt(vacation_stop_time.split(":", 3)[0]), Integer.parseInt(vacation_stop_time.split(":", 3)[1])), startTime, endTime, vacation, 21);  /* For making a non coinciding vacation over weekview */
+                                    weekViewEvent.setColor(getResources().getColor(R.color.event_color_01));
+                                    events.add(weekViewEvent);
+                                }
+                            }
+
+
+                        }
+                    }
+
+
+                }
+            } else {
+                Log.e(TAG, "Network status false found while populating week_view for " + "month: " + newMonth + " year: " + newYear + "This is found while populating weekView for mentor='s next month");
+            }
+        } else {
+                /* There is no slot for this month,so mentee does not have any event on this day*/
+
+            if (coming_month_non_coinciding_vacations.size() > 0) {
+                Vacation vacation = coming_month_non_coinciding_vacations.get(0);
+                if (Boolean.parseBoolean(vacation.getVacation_made_at_network_success())) {
+                    for (int day_of_this_month = 1; day_of_this_month <= number_of_days_in_this_month; day_of_this_month++) {
+                         /* This for loop will iterate through first to last day of next month. For each day what possible class, event or vacation can be possible will bet populated*/
 
                         Calendar calendar_for_day_of_this_month = Calendar.getInstance();   /* each day of this month will get initialized as loop executes. For each day, matching the possible events or vacation coming for the mentee */
                         calendar_for_day_of_this_month.set(newYear, newMonth - 1, day_of_this_month);  /*creating each day instance, as loop iterates  */
                         long this_day_in_millis = calendar_for_day_of_this_month.getTimeInMillis();
                         int this_day_week_day = calendar_for_day_of_this_month.get(Calendar.DAY_OF_WEEK);
 
-                        for (int slot_number = 0; slot_number < coming_month.size(); slot_number++) {   /*Will match possible slot, event or coinciding vacation for the matching slot of this day. */
-                            AvailabilityFlags availabilityFlags= new AvailabilityFlags();
-                            Slot new_slot = coming_month.get(slot_number);
-
-                            String[] slot_week_days = new_slot.getSlot_week_days();
-
-                            String start_date = new_slot.getSlot_start_date();
-                            Calendar calendar_slot_start_date = Calendar.getInstance();
-                            calendar_slot_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
-                            long slot_start_date_in_millis = calendar_slot_start_date.getTimeInMillis();
-
-                            String stop_date = new_slot.getSlot_stop_date();
-                            Calendar calendar_slot_stop_date = Calendar.getInstance();
-                            calendar_slot_stop_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
-                            long slot_stop_date_in_millis = calendar_slot_stop_date.getTimeInMillis();
-
-                            if ((this_day_in_millis == slot_start_date_in_millis) || (this_day_in_millis == slot_stop_date_in_millis) || (this_day_in_millis > slot_start_date_in_millis && this_day_in_millis < slot_stop_date_in_millis)) {
-                                /*this day is coming in between slot duration, now to check whether the week_day of this day is one of the slot week_days, which will prove this day is slot or not  */
-                                if (thisDayMatchesWithArrayOfWeekDays(slot_week_days, this_day_week_day)) {
-                                         availabilityFlags.slot_found = true;  /* making slot_found flag true for this day */
-
-                                    List<Event> eventList = new_slot.getEvents();
-                                    List<Vacation> coincidingVacationList =new_slot.getVacations();
-                                    String slot_id = new_slot.getSlot_id();
-                                    String [] slot_on_week_days = new_slot.getSlot_week_days();
-                                    List<Mentee> menteeFoundOnThisDate = new ArrayList<Mentee>();  /* a list of mentee's who have class for this day of week_view */
-
-                                    if(eventList.size() > 0){
-                                        /* Event found, now to check whether this day is coming between one of the event duration for any of mentee or not */
-                                           Event event =eventList.get(0);  /* Only one event is expected on a slot. There can be more than one mentee on this event*/
-                                           String event_id = event.getEvent_id();
-                                           if(event_id.equals(slot_id)){
-                                               List<Mentee> mentees =event.getMentees();
-
-                                               for(int mentee_no = 0; mentee_no < mentees.size() ; mentee_no++){
-                                                   Mentee mentee = mentees.get(mentee_no);
-                                                   List<EventDuration> eventDurations = mentee.getEventDurations();
-                                                   level_event_duration: for(int event_duration_part = 0; event_duration_part < eventDurations.size() ; event_duration_part++){  /* One mentee can have event in one or many classes in subsection. Here subsection means, while placing a schedule with mentor if any vacation found during slot then there that event get discontinuity and leads to a subsection*/
-                                                       EventDuration eventDuration = eventDurations.get(event_duration_part);
-
-                                                       String eventDuration_start_date = eventDuration.getStart_date();
-                                                       Calendar calendar_event_start = Calendar.getInstance();
-                                                       calendar_event_start.set(Integer.parseInt(eventDuration_start_date.split("-")[0]),Integer.parseInt(eventDuration_start_date.split("-")[1])-1,Integer.parseInt(eventDuration_start_date.split("-")[2]));
-
-                                                       String eventDuration_stop_date = eventDuration.getStop_date();
-                                                       Calendar calendar_event_stop = Calendar.getInstance();
-                                                       calendar_event_stop.set(Integer.parseInt(eventDuration_stop_date.split("-")[0]),Integer.parseInt(eventDuration_stop_date.split("-")[1])-1,Integer.parseInt(eventDuration_stop_date.split("-")[2]));
-
-                                                       ArrayList<SlotDurationDetailBean> slotDurationDetailBeans = calculateNoOfTotalClassDays(calendar_event_start,calendar_event_stop,slot_on_week_days);  /* active class dates found between two dates by matching slot weekdays*/
-                                                       for(int day_no = 0; day_no < slotDurationDetailBeans.size() ; day_no++){
-                                                           SlotDurationDetailBean slotDurationDetailBean = slotDurationDetailBeans.get(day_no);
-                                                           String date = slotDurationDetailBean.getDate();
-                                                           Calendar calendar_for_this_date = Calendar.getInstance();
-                                                           calendar_for_this_date.set(Integer.parseInt(date.split("-")[0]),Integer.parseInt(date.split("-")[1])-1,Integer.parseInt(date.split("-")[2]));
-                                                           long this_date_in_millis = calendar_for_this_date.getTimeInMillis();
-                                                           if(this_date_in_millis == this_day_in_millis){
-                                                               /*this mentee is having class on this day */
-                                                               menteeFoundOnThisDate.add(mentee);
-                                                               break level_event_duration;
-                                                           }
-                                                       }
-                                                   }
-                                               }
-
-                                               if(menteeFoundOnThisDate.size() > 0){ /* This proves that there is some event on this day also*/
-                                                    availabilityFlags.event_found =true;
-                                               }
-
-                                           }
-                                    }else{
-                                        /* No event scheduled till now for this slot*/
-                                    }
-
-                                    List<Vacation> coinciding_vacation_of_this_day_for_this_slot = new ArrayList<Vacation>();
+                        for(int non_coinciding_vacation = 0; non_coinciding_vacation < coming_month_non_coinciding_vacations.size() ; non_coinciding_vacation++){
+                            Vacation vacation1 = coming_month_non_coinciding_vacations.get(non_coinciding_vacation);
+                            String vacation_start_date = vacation1.getStart_date();
+                            String vacation_stop_date = vacation1.getStop_date();
+                            String[] vacation_week_days = vacation1.getWeek_days();
+                            String vacation_start_time = vacation1.getStart_time();
+                            String vacation_stop_time = vacation1.getStop_time();
+                            String vacation_id = vacation1.getVacation_id();  /* Only using this in non coinciding vacation*/
 
 
-                                    if(!availabilityFlags.event_found){
-                                        /* will check for any coinciding vacation if there is no mentee found on this day */
-                                        if(coincidingVacationList.size() > 0){
-                                            /* Now to decide whether the vacation is coming on this day or not */
-                                            for(int coinciding_vacation = 0 ; coinciding_vacation < coincidingVacationList.size() ; coinciding_vacation++){
-                                                Vacation vacation =coincidingVacationList.get(coinciding_vacation);
+                            Calendar calendar_vacation_start_date = Calendar.getInstance();
+                            calendar_vacation_start_date.set(Integer.parseInt(vacation_start_date.split("-")[0]), Integer.parseInt(vacation_start_date.split("-")[1]) - 1, Integer.parseInt(vacation_start_date.split("-")[2]));
+                            long vac_start_date_millis = calendar_vacation_start_date.getTimeInMillis();
 
-                                                String coin_vac_start_date = vacation.getStart_date();
-                                                Calendar cal_coin_vac_start_date = Calendar.getInstance();
-                                                cal_coin_vac_start_date.set(Integer.parseInt(coin_vac_start_date.split("-")[0]),Integer.parseInt(coin_vac_start_date.split("-")[1])-1,Integer.parseInt(coin_vac_start_date.split("-")[2]));
-                                                long cal_coin_vac_start_millis = cal_coin_vac_start_date.getTimeInMillis();
-
-                                                String coin_vac_stop_date = vacation.getStop_date();
-                                                Calendar cal_coin_vac_stop_date = Calendar.getInstance();
-                                                cal_coin_vac_stop_date.set(Integer.parseInt(coin_vac_stop_date.split("-")[0]),Integer.parseInt(coin_vac_stop_date.split("-")[1])-1,Integer.parseInt(coin_vac_stop_date.split("-")[2]));
-                                                long cal_coin_vac_stop_millis = cal_coin_vac_stop_date.getTimeInMillis();
-
-                                                if((this_day_in_millis == cal_coin_vac_start_millis) || (this_day_in_millis == cal_coin_vac_stop_millis) || (this_day_in_millis > cal_coin_vac_start_millis && this_day_in_millis < cal_coin_vac_stop_millis)){
-                                                    if(thisDayMatchesWithArrayOfWeekDays(vacation.getWeek_days(),this_day_week_day)){
-                                                        /* Vacation found for this slot of the day*/
-                                                        coinciding_vacation_of_this_day_for_this_slot.add(vacation);
-                                                        availabilityFlags.vacation_found=true;
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    /* Now to check which type of event we have to show for this slot*/
-
-                                    if(availabilityFlags.slot_found){
-
-                                    }
+                            Calendar calendar_vacation_stop_date = Calendar.getInstance();
+                            calendar_vacation_stop_date.set(Integer.parseInt(vacation_stop_date.split("-")[0]), Integer.parseInt(vacation_stop_date.split("-")[1]) - 1, Integer.parseInt(vacation_stop_date.split("-")[2]));
+                            long vac_stop_date_millis = calendar_vacation_stop_date.getTimeInMillis();
 
 
-
-
-
+                            if ((this_day_in_millis == vac_start_date_millis) || (this_day_in_millis == vac_stop_date_millis) || (this_day_in_millis > vac_start_date_millis && this_day_in_millis < vac_stop_date_millis)) {
+                                if (thisDayMatchesWithArrayOfWeekDays(vacation_week_days, this_day_week_day)) {
+                                         /* this prove non coinciding vacation on this day */
+                                    Calendar startTime;
+                                    startTime = Calendar.getInstance();
+                                    startTime.set(Calendar.DAY_OF_MONTH, day_of_this_month);
+                                    startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(vacation_start_time.split(":", 3)[0]));
+                                    startTime.set(Calendar.MINUTE, Integer.parseInt(vacation_start_time.split(":", 3)[1]));
+                                    startTime.set(Calendar.MONTH, newMonth - 1);
+                                    startTime.set(Calendar.YEAR, newYear);
+                                    Calendar endTime;// = (Calendar) startTime.clone();
+                                    endTime = (Calendar) startTime.clone();
+                                    endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(vacation_stop_time.split(":", 3)[0]) - Integer.parseInt(vacation_start_time.split(":", 3)[0]));
+                                    endTime.set(Calendar.MINUTE, Integer.parseInt(vacation_stop_time.split(":", 3)[1]));
+                                    WeekViewEvent weekViewEvent;
+                                    weekViewEvent = new WeekViewEvent(Long.parseLong(vacation_id), getVacationTitle(startTime, Integer.parseInt(vacation_stop_time.split(":", 3)[0]), Integer.parseInt(vacation_stop_time.split(":", 3)[1])), startTime, endTime, vacation, 21);  /* For making a non coinciding vacation over weekview */
+                                    weekViewEvent.setColor(getResources().getColor(R.color.event_color_01));
+                                    events.add(weekViewEvent);
                                 }
-                            }else{
-                                /* this day is not coming between the duration for this slot */
                             }
-                        }
-
-                        if (coming_month_non_coinciding_vacations.size() > 0) {  /* There can be some non coinciding vacation  */
 
                         }
-
 
                     }
-                } else {
-                    Log.e(TAG, "Network status false found while populating week_view for " + "month: " + newMonth + " year: " + newYear + "This is found while populating weekView for mentor='s next month");
+
                 }
-            } else {
-                /* There is no slot for this month,so mentee does not have any event on this day*/
             }
-
-
-
-
-
-            /*for (Day d : coming_month) {
-                String date_for_d = d.getDate();
-                List<DayEvent> dayEvents = d.getDayEvents();
-                List<DaySlot> daySlots = d.getDaySlots();
-                List<DayVacation> dayVacations = d.getDayVacations();
-
-
-                DaySlot daySlot;
-                if (daySlots.size() > 0) {
-                    for (int slot = 0; slot < daySlots.size(); slot++) {
-                        Log.d(TAG, "Populating slot data for: " + date_for_d);
-                        daySlot = daySlots.get(slot);
-                        Calendar startTime;
-                        startTime = Calendar.getInstance();
-                        startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
-                        String slot_start_time = daySlot.getSlot_start_time();
-                        String slot_stop_time = daySlot.getSlot_stop_time();
-                        String slot_start_date = daySlot.getSlot_start_date();
-                        String slot_stop_date = daySlot.getSlot_stop_date();
-                        String[] slot_on_week_days = daySlot.getSlot_week_days();
-                        String slot_type = daySlot.getSlot_type();
-                        String slot_max_users = daySlot.getSlot_max_users();
-                        //String event_name=dayEvent.getEvent_name();
-                        startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_start_time.split(":", 3)[0]));
-                        startTime.set(Calendar.MINUTE, Integer.parseInt(slot_start_time.split(":", 3)[1]));
-                        startTime.set(Calendar.MONTH, newMonth - 1);
-                        startTime.set(Calendar.YEAR, newYear);
-                        Calendar endTime;// = (Calendar) startTime.clone();
-                        endTime = (Calendar) startTime.clone();
-                        endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
-                        endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
-                        WeekViewEvent weekViewEvent;
-                        weekViewEvent = new WeekViewEvent(4, getSlotTitle(slot_start_date, slot_stop_date, slot_start_time, slot_stop_time, slot_type, slot_on_week_days, slot_max_users), startTime, endTime, slot_type, slot_event_type);
-                        weekViewEvent.setColor(getResources().getColor(R.color.event_color_02));
-                        events.add(weekViewEvent);
-
-                    }
-                }
-
-                DayEvent dayEvent;
-                if (dayEvents.size() > 0) {
-                    for (int event = 0; event < dayEvents.size(); event++) {
-                        dayEvent = dayEvents.get(event);
-
-                        Calendar startTime;
-                        startTime = Calendar.getInstance();
-                        startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
-                        String start_time = dayEvent.getEvent_start_time();
-                        String stop_time = dayEvent.getEvent_stop_time();
-                        String f_name = dayEvent.getFname();
-                        String l_name = dayEvent.getLname();
-                        String event_id = dayEvent.getEvent_id();
-                        String sub_category_name = dayEvent.getSub_category_name();
-                        String slot_type = dayEvent.getEvent_type();
-                        //String event_name=dayEvent.getEvent_name();
-                        startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
-                        startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
-                        startTime.set(Calendar.MONTH, newMonth - 1);
-                        startTime.set(Calendar.YEAR, newYear);
-                        Calendar endTime;// = (Calendar) startTime.clone();
-                        endTime = (Calendar) startTime.clone();
-                        endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":", 3)[0]) - Integer.parseInt(start_time.split(":", 3)[0]));
-                        endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":", 3)[1]));
-                        WeekViewEvent weekViewEvent;
-                        weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name, sub_category_name, slot_type), startTime, endTime, slot_type, event_type);
-                        weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
-                        events.add(weekViewEvent);
-
-                    }
-                }
-            }*/
         }
     }
 
@@ -1159,7 +1244,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         return vacationDurationDetailBeans;
     }
 
-    private void populateWeekViewForCurrentMonth2(List<WeekViewEvent> events, int newYear, int newMonth) {
+    private void populateWeekViewForCurrentMonth2(List<WeekViewEvent> events, int newYear, int newMonth, int number_of_days_in_this_month ) {
 
         // Log.d(TAG,"Going to create view for current month.");
 
@@ -1203,74 +1288,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             }
         }
         if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 3) {
-            for (Day d : current_month) {
-                String date_for_d = d.getDate();
-                List<DayEvent> dayEvents = d.getDayEvents();
-
-                List<DaySlot> daySlots = d.getDaySlots();
-                DaySlot daySlot;
-                if (daySlots.size() > 0) {
-                    for (int slot = 0; slot < daySlots.size(); slot++) {
-                        Log.d(TAG, "Populating slot data for: " + date_for_d);
-                        daySlot = daySlots.get(slot);
-                        Calendar startTime;
-                        startTime = Calendar.getInstance();
-                        startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
-                        String slot_start_time = daySlot.getSlot_start_time();
-                        String slot_stop_time = daySlot.getSlot_stop_time();
-                        String slot_start_date = daySlot.getSlot_start_date();
-                        String slot_stop_date = daySlot.getSlot_stop_date();
-                        String[] slot_on_week_days = daySlot.getSlot_week_days();
-                        String slot_type = daySlot.getSlot_type();
-                        String slot_max_users = daySlot.getSlot_max_users();
-
-                        startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_start_time.split(":", 3)[0]));
-                        startTime.set(Calendar.MINUTE, Integer.parseInt(slot_start_time.split(":", 3)[1]));
-                        startTime.set(Calendar.MONTH, newMonth - 1);
-                        startTime.set(Calendar.YEAR, newYear);
-                        Calendar endTime;// = (Calendar) startTime.clone();
-                        endTime = (Calendar) startTime.clone();
-                        endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
-                        endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
-                        WeekViewEvent weekViewEvent;
-                        weekViewEvent = new WeekViewEvent(4, getSlotTitle(slot_start_date, slot_stop_date, slot_start_time, slot_stop_time, slot_type, slot_on_week_days, slot_max_users), startTime, endTime, slot_type, slot_event_type);
-                        weekViewEvent.setColor(getResources().getColor(R.color.event_color_02));
-                        events.add(weekViewEvent);
-
-                    }
-                }
-
-                DayEvent dayEvent;
-                if (dayEvents.size() > 0) {
-                    for (int event = 0; event < dayEvents.size(); event++) {
-                        dayEvent = dayEvents.get(event);
-
-                        Calendar startTime;
-                        startTime = Calendar.getInstance();
-                        startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
-                        String start_time = dayEvent.getEvent_start_time();
-                        String stop_time = dayEvent.getEvent_stop_time();
-                        String f_name = dayEvent.getFname();
-                        String l_name = dayEvent.getLname();
-                        String event_id = dayEvent.getEvent_id();
-                        String sub_category_name = dayEvent.getSub_category_name();
-                        String slot_type = dayEvent.getEvent_type();
-                        startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
-                        startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
-                        startTime.set(Calendar.MONTH, newMonth - 1);
-                        startTime.set(Calendar.YEAR, newYear);
-                        Calendar endTime;// = (Calendar) startTime.clone();
-                        endTime = (Calendar) startTime.clone();
-                        endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":", 3)[0]) - Integer.parseInt(start_time.split(":", 3)[0]));
-                        endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":", 3)[1]));
-                        WeekViewEvent weekViewEvent;
-                        weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name, sub_category_name, slot_type), startTime, endTime, slot_type, event_type);
-                        weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
-                        events.add(weekViewEvent);
-
-                    }
-                }
-            }
+            populateWeekViewForMentorSchedule(current_month,current_month_non_coinciding_vacations,number_of_days_in_this_month,events,newMonth,newYear);
         }
     }
 
@@ -1284,7 +1302,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     }
 
-    private void populateWeekViewForPreviousMonth2(List<WeekViewEvent> events, int newYear, int newMonth) {
+    private void populateWeekViewForPreviousMonth2(List<WeekViewEvent> events, int newYear, int newMonth,int number_of_days_in_this_month ) {
         // Log.d(TAG,"Going to create view for previous month.");
         if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 2) {
             for (Day d : prev_month) {
@@ -1328,176 +1346,24 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             }
         }
         if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 3) {
-            for (Day d : prev_month) {
-                String date_for_d = d.getDate();
-                List<DayEvent> dayEvents = d.getDayEvents();
-
-                List<DaySlot> daySlots = d.getDaySlots();
-                DaySlot daySlot;
-                if (daySlots.size() > 0) {
-                    Log.d(TAG, "Populating slot data for: " + date_for_d);
-                    for (int slot = 0; slot < daySlots.size(); slot++) {
-                        daySlot = daySlots.get(slot);
-                        Calendar startTime;
-                        startTime = Calendar.getInstance();
-                        startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
-                        String slot_start_time = daySlot.getSlot_start_time();
-                        String slot_stop_time = daySlot.getSlot_stop_time();
-                        String slot_start_date = daySlot.getSlot_start_date();
-                        String slot_stop_date = daySlot.getSlot_stop_date();
-                        String[] slot_on_week_days = daySlot.getSlot_week_days();
-                        String slot_type = daySlot.getSlot_type();
-                        String slot_max_users = daySlot.getSlot_max_users();
-                        //String event_name=dayEvent.getEvent_name();
-                        startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_start_time.split(":", 3)[0]));
-                        startTime.set(Calendar.MINUTE, Integer.parseInt(slot_start_time.split(":", 3)[1]));
-                        startTime.set(Calendar.MONTH, newMonth - 1);
-                        startTime.set(Calendar.YEAR, newYear);
-                        Calendar endTime;// = (Calendar) startTime.clone();
-                        endTime = (Calendar) startTime.clone();
-                        endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
-                        endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
-                        WeekViewEvent weekViewEvent;
-                        weekViewEvent = new WeekViewEvent(4, getSlotTitle(slot_start_date, slot_stop_date, slot_start_time, slot_stop_time, slot_type, slot_on_week_days, slot_max_users), startTime, endTime, slot_type, slot_event_type);
-                        weekViewEvent.setColor(getResources().getColor(R.color.event_color_02));
-                        events.add(weekViewEvent);
-
-                    }
-                }
-
-                DayEvent dayEvent;
-                if (dayEvents.size() > 0) {
-
-
-                    for (int event = 0; event < dayEvents.size(); event++) {
-                        dayEvent = dayEvents.get(event);
-                        Calendar startTime;
-                        startTime = Calendar.getInstance();
-                        startTime.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_for_d.split("-", 3)[2]));
-                        String start_time = dayEvent.getEvent_start_time();
-                        String stop_time = dayEvent.getEvent_stop_time();
-                        String f_name = dayEvent.getFname();
-                        String l_name = dayEvent.getLname();
-                        String event_id = dayEvent.getEvent_id();
-                        String sub_category_name = dayEvent.getSub_category_name();
-                        String slot_type = dayEvent.getEvent_type();
-                        //String event_name=dayEvent.getEvent_name();
-                        startTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(start_time.split(":", 3)[0]));
-                        startTime.set(Calendar.MINUTE, Integer.parseInt(start_time.split(":", 3)[1]));
-                        startTime.set(Calendar.MONTH, newMonth - 1);
-                        startTime.set(Calendar.YEAR, newYear);
-                        Calendar endTime;// = (Calendar) startTime.clone();
-                        endTime = (Calendar) startTime.clone();
-                        endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(stop_time.split(":", 3)[0]) - Integer.parseInt(start_time.split(":", 3)[0]));
-                        endTime.set(Calendar.MINUTE, Integer.parseInt(stop_time.split(":", 3)[1]));
-                        WeekViewEvent weekViewEvent;
-                        weekViewEvent = new WeekViewEvent(Integer.parseInt(event_id), getEventTitle(startTime, Integer.parseInt(stop_time.split(":", 3)[0]), Integer.parseInt(stop_time.split(":", 3)[1]), f_name, l_name, sub_category_name, slot_type), startTime, endTime, slot_type, event_type);
-                        weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
-                        events.add(weekViewEvent);
-
-                    }
-                }
-            }
+            populateWeekViewForMentorSchedule(prev_month,prev_month_non_coinciding_vacations,number_of_days_in_this_month,events,newMonth,newYear);
         }
     }
 
-    private String getEventTitle(Calendar time, int stop_hour, int stop_min, String fname, String lname, String sub_category_name, String slot_type) {
-        Log.d(TAG, "First name :" + fname + " Last name : " + lname);
 
-        if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 3) {
-            if (fname.equals("")) {
-                if (sub_category_name != null) {
-                    return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "Subject: " + sub_category_name;
-                } else {
-                    return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
-                }
-
-            } else {
-                if (lname.equals("")) {
-                    if (slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
-                        if (sub_category_name != null) {
-                            return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "Subject: " + sub_category_name;
-                        } else {
-                            return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
-                        }
-                    } else {
-                        if (sub_category_name != null) {
-                            return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + getResources().getString(R.string.with) + "" + fname + "\n" + "Subject: " + sub_category_name;
-                        } else {
-                            return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + getResources().getString(R.string.with) + "" + fname;
-                        }
-                    }
-
-                }
-            }
-            if (fname.trim().length() > 0 && lname.trim().length() > 0) {
-                if (slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
-                    if (sub_category_name != null) {
-                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "Subject: " + sub_category_name;
-                    } else {
-                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
-                    }
-                } else {
-                    if (sub_category_name != null) {
-                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + getResources().getString(R.string.with) + " " + fname + " " + lname + "\n" + "Subject: " + sub_category_name;
-                    } else {
-                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + getResources().getString(R.string.with) + " " + fname + " " + lname;
-                    }
-                }
-
-            }
-
-            //return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "\n" + "with " + fname + " " + lname+"\n"+sub_category_name;
+    private String getEventTitle(Calendar time, int stop_hour, int stop_min, String sub_category_name, String slot_type) {
+        if (sub_category_name != null) {
+            return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "Subject: " + sub_category_name;
+        } else {
+            return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
         }
-        if (Integer.parseInt(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group")) == 2) {
 
-            if (fname.equals("0")) {
-                if (sub_category_name != null) {
-                    return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "Subject: " + sub_category_name;
-                } else {
-                    return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
-                }
-            } else {
-                if (slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
-                    if (lname.equals("0")) {
-                        if (sub_category_name != null) {
-                            return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "Subject: " + sub_category_name;
-                        } else {
-                            return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
-                        }
-                    }
-                } else {
-                    if (lname.equals("0")) {
-                        if (sub_category_name != null) {
-                            return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + getResources().getString(R.string.with) + " " + fname + "\n" + "Subject: " + sub_category_name;
-                        } else {
-                            return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + getResources().getString(R.string.with) + " " + fname;
-                        }
-                    }
-                }
+    }
 
-            }
-            if (fname.trim().length() > 0 && lname.trim().length() > 0) {
-                if (slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
-                    if (sub_category_name != null) {
-                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "Subject: " + sub_category_name;
-                    } else {
-                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
-                    }
-                } else {
-                    if (sub_category_name != null) {
-                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + getResources().getString(R.string.with) + " " + fname + " " + lname + "\n" + "Subject: " + sub_category_name;
-                    } else {
-                        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + getResources().getString(R.string.with) + " " + fname + " " + lname;
-                    }
-                }
 
-            }
+    private String getVacationTitle(Calendar time, int stop_hour, int stop_min) {
 
-        }
-        return null;
-        //return String.format("Event of %02d:%02d to %02d:%02d %s/%d ", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE),stop_hour,stop_min, time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
-        //return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE),stop_hour,stop_min)+"\n"+event_name;
+        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
 
     }
 
@@ -1627,9 +1493,31 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
         // Toast.makeText(SetScheduleActivity.this, getResources().getString(R.string.clicked) + event.getName(), Toast.LENGTH_SHORT).show();
 
+        int event_type = event.getEvent_type();
+        if(this_activity_for.equals("MentorDetailsActivity")){
+
+        }else{
+            if(this_activity_for.equals("ScheduleFragments")){
+                if(StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group").equals("3")){
+
+                }else{
+                    switch (event_type){
+                        case 12345:
+                            break;
+                        case 123:
+                            break;
+                        case 432:
+                            break;
+                        case 21:
+                            break;
+                    }
+                }
+            }
+        }
+
         Log.d(TAG, "Event Id: " + event.getId() + ", Event start time: " + event.getStartTime() + "Event stop time: " + event.getEndTime());
 
-        int event_type = event.getEventType();
+
         if (event_type == 1) {
             RequestParams requestParams = new RequestParams();
             requestParams.add("user_group", StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group"));

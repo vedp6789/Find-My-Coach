@@ -1,11 +1,15 @@
 package com.findmycoach.app.util;
 
+import com.findmycoach.app.beans.CalendarSchedule.Mentee;
+import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.beans.CalendarSchedule.SlotDurationDetailBean;
+import com.findmycoach.app.beans.CalendarSchedule.Vacation;
 import com.findmycoach.app.beans.CalendarSchedule.VacationCoincidingSlot;
 import com.findmycoach.app.beans.CalendarSchedule.VacationDurationDetailBean;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by praka_000 on 3/4/2015.
@@ -17,7 +21,6 @@ public class WeekViewEvent {
     private Calendar mEndTime;
     private String mName;
     private int mColor;
-    private int eventType;
     private int slot_start_day;
     private int slot_start_month;
     private int slot_start_year;
@@ -37,6 +40,51 @@ public class WeekViewEvent {
     private ArrayList<SlotDurationDetailBean> slotDurationDetailBeans;
     private ArrayList<VacationDurationDetailBean> vacationDurationDetailBeans;
     private ArrayList<VacationCoincidingSlot> vacationCoincidingSlots;
+    private List<Mentee> menteeFoundOnThisDate;
+    private List<Vacation> coincidingVacations;
+    private Slot slot;
+    private Vacation vacation;
+    private int event_type;
+
+    public Vacation getVacation() {
+        return vacation;
+    }
+
+    public void setVacation(Vacation vacation) {
+        this.vacation = vacation;
+    }
+
+    public Slot getSlot() {
+        return slot;
+    }
+
+    public void setSlot(Slot slot) {
+        this.slot = slot;
+    }
+
+    public List<Vacation> getCoincidingVacations() {
+        return coincidingVacations;
+    }
+
+    public void setCoincidingVacations(List<Vacation> coincidingVacations) {
+        this.coincidingVacations = coincidingVacations;
+    }
+
+    public int getEvent_type() {
+        return event_type;
+    }
+
+    public void setEvent_type(int event_type) {
+        this.event_type = event_type;
+    }
+
+    public List<Mentee> getMenteeFoundOnThisDate() {
+        return menteeFoundOnThisDate;
+    }
+
+    public void setMenteeFoundOnThisDate(List<Mentee> menteeFoundOnThisDate) {
+        this.menteeFoundOnThisDate = menteeFoundOnThisDate;
+    }
 
     public ArrayList<VacationCoincidingSlot> getVacationCoincidingSlots() {
         return vacationCoincidingSlots;
@@ -218,13 +266,7 @@ public class WeekViewEvent {
         this.mentor_availablity = mentor_availablity;
     }
 
-    public int getEventType() {
-        return eventType;
-    }
 
-    public void setEventType(int eventType) {
-        this.eventType = eventType;
-    }
 
     public WeekViewEvent() {
 
@@ -279,10 +321,64 @@ public class WeekViewEvent {
         this.mName = name;
         this.mStartTime = startTime;
         this.mEndTime = endTime;
-        this.eventType = event_type;
+        this.event_type = event_type;
         this.slot_type=slot_type;
 
     }
+
+/* This weekViewEvnent constructor is for Event(class detail) on mentor week view */
+    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime,List<Mentee> menteeFoundOnThisDate,String slot_type,Slot slot,int event_type) {  /* Here event_type differentate this constructor as Class event*/
+        this.mId = id;
+        this.mName = name;
+        this.mStartTime = startTime;
+        this.mEndTime = endTime;
+        this.menteeFoundOnThisDate = menteeFoundOnThisDate;
+        this.slot_type=slot_type;
+        this.slot = slot;
+        this.event_type = event_type;
+
+
+    }
+
+
+    /* This weekViewEvnent constructor is for coincidingVacations on mentor week view */
+    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime,List<Vacation> coincidingVacations,Slot slot, int event_type) {
+        this.mId = id;
+        this.mName = name;
+        this.mStartTime = startTime;
+        this.mEndTime = endTime;
+        this.menteeFoundOnThisDate = menteeFoundOnThisDate;
+        this.slot_type=slot_type;
+        this.slot = slot;
+        this.event_type = event_type;
+
+
+    }
+
+/* This if for  Mentor slot where nither vacation nor any class found in mentor schedule weekview */
+    public WeekViewEvent(long id, String name,Calendar startTime,Calendar endTime, Slot slot,int event_type){
+        this.mId = id;
+        this.mName = name;
+        this.mStartTime = startTime;
+        this.mEndTime = endTime;
+        this.slot = slot;
+        this.event_type = event_type;
+    }
+
+
+    /* for non coinciding vacation in mentor schedule weekview */
+    public WeekViewEvent(long id, String name,Calendar startTime,Calendar endTime,Vacation vacation,int event_type){
+        this.mId = id;
+        this.mName = name;
+        this.mStartTime = startTime;
+        this.mEndTime = endTime;
+        this.event_type = event_type;
+        this.vacation = vacation;
+    }
+
+
+
+
 
     /**
      * Initializes the event for week view, this week-view will display free slots available and mentee can select one free slot for his schedule request with mentor.
@@ -307,7 +403,7 @@ public class WeekViewEvent {
         this.slot_on_week_days=slot_on_week_days;
         this.mentor_id = mentor_id;
         this.mentor_availablity = mentor_availability;
-        this.eventType=free_slot_event_type;
+        this.event_type=free_slot_event_type;
         this.charges=charges;
         this.arrayList_sub_category=arrayList_sub_category;
         this.slotDurationDetailBeans=slotDurationDetailBeans;

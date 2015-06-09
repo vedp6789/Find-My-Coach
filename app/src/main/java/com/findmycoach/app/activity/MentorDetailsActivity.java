@@ -100,7 +100,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     public ArrayList<MonthYearInfo> previousMonthYearInfo = null;
     public ArrayList<MonthYearInfo> currentMonthYearInfo = null;
     public ArrayList<MonthYearInfo> comingMonthYearInfo = null;
-    public ArrayList<MentorInfo> mentorInfos = null;
+    public ArrayList<MentorInfo> previousMonthMentorInfos = null;
+    public ArrayList<MentorInfo> currentMonthMentorInfos = null;
+    public ArrayList<MentorInfo> comingMonthMentorInfos = null;
     public boolean b_three_months_data;
     public static int month_from_dialog, year_from_dialog;
     private String charges;
@@ -187,7 +189,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         previousMonthYearInfo = new ArrayList<MonthYearInfo>();
         comingMonthYearInfo = new ArrayList<MonthYearInfo>();
         currentMonthYearInfo = new ArrayList<MonthYearInfo>();
-        mentorInfos = new ArrayList<MentorInfo>();
+        previousMonthMentorInfos = new ArrayList<MentorInfo>();
+        currentMonthMentorInfos = new ArrayList<MentorInfo>();
+        comingMonthMentorInfos = new ArrayList<MentorInfo>();
 
         if (month_from_dialog == 0 && year_from_dialog == 0) {
             if (populate_calendar_from_adapter) {
@@ -815,6 +819,12 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         comingMonthYearInfo = new ArrayList<MonthYearInfo>();
         comingMonthYearInfo = getMonthYearForThis(Integer.parseInt(next_month_requested_date.split("-")[1]), Integer.parseInt(next_month_requested_date.split("-")[0]), finalizeDaysInMonth(Integer.parseInt(next_month_requested_date.split("-")[1]), Integer.parseInt(next_month_requested_date.split("-")[0])));
 
+        previousMonthMentorInfos = currentMonthMentorInfos;
+        currentMonthMentorInfos = comingMonthMentorInfos;
+        comingMonthMentorInfos = null;
+        comingMonthMentorInfos = new ArrayList<MentorInfo>();
+
+
     }
 
     public void updateArrayListsForPreviousMonth() {
@@ -841,6 +851,12 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         previousMonthYearInfo = new ArrayList<MonthYearInfo>();
         previousMonthYearInfo = getMonthYearForThis(Integer.parseInt(prev_month_requested_date.split("-")[1]), Integer.parseInt(prev_month_requested_date.split("-")[0]), finalizeDaysInMonth(Integer.parseInt(prev_month_requested_date.split("-")[1]), Integer.parseInt(prev_month_requested_date.split("-")[0])));
 
+        comingMonthMentorInfos = currentMonthMentorInfos;
+        currentMonthMentorInfos = previousMonthMentorInfos;
+        previousMonthMentorInfos = null;
+        previousMonthMentorInfos = new ArrayList<MentorInfo>();
+
+
     }
 
 
@@ -866,9 +882,11 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         try {
 
             JSONObject jsonObject = new JSONObject((String) object);
-            JSONObject jsonObject_mentor = jsonObject.getJSONObject("mentor");
-            JSONArray jsonArray_data = jsonObject.getJSONArray("slots");
-            JSONArray jsonArray_vacation_non_coinciding = jsonObject.getJSONArray("vacations");
+            JSONObject jsonObject_data =jsonObject.getJSONObject("data");
+            JSONArray jsonArray_mentor = jsonObject_data.getJSONArray("mentor");
+            JSONArray jsonArray_data = jsonObject_data.getJSONArray("slots");
+            JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");
+
 
 
             //  Log.d(TAG, "json array size : " + jsonArray_data.length());
@@ -916,11 +934,13 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             previousMonthYearInfo = getMonthYearForThis(previous_month, previous_month_year, finalizeDaysInMonth(previous_month, previous_month_year));
             currentMonthYearInfo = getMonthYearForThis(current_month, current_year, finalizeDaysInMonth(current_month, current_year));
             comingMonthYearInfo = getMonthYearForThis(coming_month, coming_year, finalizeDaysInMonth(coming_month, coming_year));
-
+            previousMonthMentorInfos =getMentorInfo(jsonArray_mentor);
+            currentMonthMentorInfos =getMentorInfo(jsonArray_mentor);
+            comingMonthMentorInfos =getMentorInfo(jsonArray_mentor);
             Log.d(TAG, "Mentors slots info for mentee,  previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
             if (b_three_months_data) {   /*  program will come in this scope when user selects date from dialog i.e. user randomly selects a year and month */
                 Log.d(TAG, "Three months data get changed");
-                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
+                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
                 calendarView.setAdapter(adapter1);
                 adapter1.notifyDataSetChanged();
                 if (month_from_dialog == 0 && year_from_dialog == 0) {
@@ -929,7 +949,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
             } else {
                 Log.d(TAG, "three months data population");
-                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
+                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos,currentMonthMentorInfos,comingMonthMentorInfos,userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
                 calendarView.setAdapter(adapter1);
                 adapter1.notifyDataSetChanged();
             }
@@ -941,6 +961,23 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         }
 
 
+    }
+
+    private ArrayList<MentorInfo> getMentorInfo(JSONArray jsonArray_mentor) {
+        ArrayList<MentorInfo>  mentorInfos = new ArrayList<MentorInfo>();
+        for(int array_index =0; array_index < jsonArray_mentor.length() ; array_index++){
+            try {
+                JSONObject jsonObject = jsonArray_mentor.getJSONObject(array_index);
+                MentorInfo mentorInfo =new MentorInfo();
+                mentorInfo.setMentor_id(jsonObject.getString("mentor_id"));
+                mentorInfo.setFirst_name(jsonObject.getString("first_name"));
+                mentorInfo.setLast_name(jsonObject.getString("last_name"));
+                mentorInfos.add(mentorInfo);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return mentorInfos;
     }
 
     private void parseVacation(List<Vacation> vacations, JSONArray jsonArray_vacation_non_coinciding) {
@@ -1174,9 +1211,10 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         progressDialog.dismiss();
         try {
             JSONObject jsonObject = new JSONObject((String) object);
-            JSONObject jsonObject_mentor = jsonObject.getJSONObject("mentor");
-            JSONArray jsonArray_data = jsonObject.getJSONArray("slots");
-            JSONArray jsonArray_vacation_non_coinciding = jsonObject.getJSONArray("vacations");
+            JSONObject jsonObject_data =jsonObject.getJSONObject("data");
+            JSONArray jsonArray_mentor = jsonObject_data.getJSONArray("mentor");
+            JSONArray jsonArray_data = jsonObject_data.getJSONArray("slots");
+            JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");
 
             List<Slot> slots = new ArrayList<Slot>();
             List<Vacation> vacations = new ArrayList<Vacation>();  /* list of non coinciding vacations*/
@@ -1202,10 +1240,16 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             comingMonthYearInfo = new ArrayList<MonthYearInfo>();
             comingMonthYearInfo = getMonthYearForThis(Integer.parseInt(next_month_requested_date.split("-")[1]), Integer.parseInt(next_month_requested_date.split("-")[0]), finalizeDaysInMonth(Integer.parseInt(next_month_requested_date.split("-")[1]), Integer.parseInt(next_month_requested_date.split("-")[0])));
 
+            previousMonthMentorInfos = currentMonthMentorInfos;
+            currentMonthMentorInfos = comingMonthMentorInfos;
+            comingMonthMentorInfos = null;
+            comingMonthMentorInfos = new ArrayList<MentorInfo>();
+            comingMonthMentorInfos = getMentorInfo(jsonArray_mentor);
+
             Log.d(TAG, "comingMonthArrayList size" + comingMonthArrayList.size());
 
 
-            adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
+            adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
             _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
             tv_currentMonth.setText(DateFormat.format(dateTemplate,
                     _calendar.getTime()));
@@ -1226,9 +1270,10 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         progressDialog.dismiss();
         try {
             JSONObject jsonObject = new JSONObject((String) object);
-            JSONObject jsonObject_mentor = jsonObject.getJSONObject("mentor");
-            JSONArray jsonArray_data = jsonObject.getJSONArray("slots");
-            JSONArray jsonArray_vacation_non_coinciding = jsonObject.getJSONArray("vacations");
+            JSONObject jsonObject_data =jsonObject.getJSONObject("data");
+            JSONArray jsonArray_mentor = jsonObject_data.getJSONArray("mentor");
+            JSONArray jsonArray_data = jsonObject_data.getJSONArray("slots");
+            JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");
 
 
             List<Slot> slots = new ArrayList<Slot>();
@@ -1257,7 +1302,13 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             previousMonthYearInfo = getMonthYearForThis(Integer.parseInt(prev_month_requested_date.split("-")[1]), Integer.parseInt(prev_month_requested_date.split("-")[0]), finalizeDaysInMonth(Integer.parseInt(prev_month_requested_date.split("-")[1]), Integer.parseInt(prev_month_requested_date.split("-")[0])));
 
 
-            adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
+            comingMonthMentorInfos = currentMonthMentorInfos;
+            currentMonthMentorInfos = previousMonthMentorInfos;
+            previousMonthMentorInfos = null;
+            previousMonthMentorInfos = new ArrayList<MentorInfo>();
+            previousMonthMentorInfos = getMentorInfo(jsonArray_mentor);
+
+            adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo,previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
             _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
             tv_currentMonth.setText(DateFormat.format(dateTemplate,
                     _calendar.getTime()));

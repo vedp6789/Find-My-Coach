@@ -875,6 +875,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
 
 
+
+
+
     }
 
     public void updateArrayListsForNextMonth() {
@@ -901,6 +904,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         comingMonthYearInfo=null;
         comingMonthYearInfo= new ArrayList<MonthYearInfo>();
         comingMonthYearInfo=getMonthYearForThis(Integer.parseInt(next_month_requested_date.split("-")[1]),Integer.parseInt(next_month_requested_date.split("-")[0]),finalizeDaysInMonth(Integer.parseInt(next_month_requested_date.split("-")[1]),Integer.parseInt(next_month_requested_date.split("-")[0])));
+
+
+        previousMonthMentorInfos = currentMonthMentorInfos;
+        currentMonthMentorInfos = comingMonthMentorInfos;
+        comingMonthMentorInfos = null;
+        comingMonthMentorInfos = new ArrayList<MentorInfo>();
 
 
 
@@ -930,6 +939,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         previousMonthYearInfo = getMonthYearForThis(Integer.parseInt(prev_month_requested_date.split("-")[1]),Integer.parseInt(prev_month_requested_date.split("-")[0]),finalizeDaysInMonth(Integer.parseInt(prev_month_requested_date.split("-")[1]),Integer.parseInt(prev_month_requested_date.split("-")[0])));
 
 
+        comingMonthMentorInfos = currentMonthMentorInfos;
+        currentMonthMentorInfos = previousMonthMentorInfos;
+        previousMonthMentorInfos = null;
+        previousMonthMentorInfos = new ArrayList<MentorInfo>();
     }
 
 

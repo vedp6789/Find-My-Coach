@@ -73,7 +73,10 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private static ArrayList<MonthYearInfo> previousMonthYearInfo = null;
     private static ArrayList<MonthYearInfo> currentMonthYearInfo = null;
     private static ArrayList<MonthYearInfo> comingMonthYearInfo = null;
-    private static ArrayList<MentorInfo> mentorInfos = null;
+    public ArrayList<MentorInfo> previousMonthMentorInfos = null;
+    public ArrayList<MentorInfo> currentMonthMentorInfos = null;
+    public ArrayList<MentorInfo> comingMonthMentorInfos = null;
+
     private static int day_schedule_index = 0;
     Day day = null;
     DayEvent dayEvent = null;
@@ -97,7 +100,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     * This constructor is called from MyScheduleFragment
     *
     * */
-    public CalendarGridAdapter(Context context, int month, int year, MyScheduleFragment myScheduleFragment, ArrayList<Slot> prev_month_data, ArrayList<Slot> current_month_data, ArrayList<Slot> coming_month_data, ArrayList<Vacation> previousMonthNonCoincidingVacation, ArrayList<Vacation> currentMonthNonCoincidingVacation, ArrayList<Vacation> comingMonthNonCoincidingVacation, ArrayList<MonthYearInfo> previousMonthYearInfo, ArrayList<MonthYearInfo> currentMonthYearInfo, ArrayList<MonthYearInfo> comingMonthYearInfo) {
+    public CalendarGridAdapter(Context context, int month, int year, MyScheduleFragment myScheduleFragment, ArrayList<Slot> prev_month_data, ArrayList<Slot> current_month_data, ArrayList<Slot> coming_month_data, ArrayList<Vacation> previousMonthNonCoincidingVacation, ArrayList<Vacation> currentMonthNonCoincidingVacation, ArrayList<Vacation> comingMonthNonCoincidingVacation, ArrayList<MonthYearInfo> previousMonthYearInfo, ArrayList<MonthYearInfo> currentMonthYearInfo, ArrayList<MonthYearInfo> comingMonthYearInfo,ArrayList<MentorInfo> previousMonthMentorInfos, ArrayList<MentorInfo> currentMonthMentorInfos, ArrayList<MentorInfo> comingMonthMentorInfos) {
         super();
         this.context = context;
         weekdays = context.getResources().getStringArray(R.array.week_days);
@@ -149,7 +152,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         * This constructor is called from MentorDetailsActivity
         *
         * */
-    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Slot> prev_month_data, ArrayList<Slot> current_month_data, ArrayList<Slot> coming_month_data, ArrayList<Vacation> previousMonthNonCoincidingVacation, ArrayList<Vacation> currentMonthNonCoincidingVacation, ArrayList<Vacation> comingMonthNonCoincidingVacation, ArrayList<MonthYearInfo> previousMonthYearInfo, ArrayList<MonthYearInfo> currentMonthYearInfo, ArrayList<MonthYearInfo> comingMonthYearInfo, String mentor_id, String availability_yn, String charges, ArrayList<String> arraylist_subcategory, String connection_status) {
+    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Slot> prev_month_data, ArrayList<Slot> current_month_data, ArrayList<Slot> coming_month_data, ArrayList<Vacation> previousMonthNonCoincidingVacation, ArrayList<Vacation> currentMonthNonCoincidingVacation, ArrayList<Vacation> comingMonthNonCoincidingVacation, ArrayList<MonthYearInfo> previousMonthYearInfo, ArrayList<MonthYearInfo> currentMonthYearInfo, ArrayList<MonthYearInfo> comingMonthYearInfo,ArrayList<MentorInfo> previousMonthMentorInfos, ArrayList<MentorInfo> currentMonthMentorInfos, ArrayList<MentorInfo> comingMonthMentorInfos, String mentor_id, String availability_yn, String charges, ArrayList<String> arraylist_subcategory, String connection_status) {
         super();
         this.context = context;
         weekdays = context.getResources().getStringArray(R.array.week_days);
@@ -1010,6 +1013,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             intent.putExtra("previous_month_year_info", previousMonthYearInfo);
             intent.putExtra("current_month_year_info", currentMonthYearInfo);
             intent.putExtra("coming_month_year_info", comingMonthYearInfo);
+            intent.putExtra("prev_month_mentor",previousMonthMentorInfos);
+            intent.putExtra("current_month_mentor",currentMonthMentorInfos);
+            intent.putExtra("coming_month_mentor",comingMonthMentorInfos);
 
 
             //intent.putExtra("day_bean", (android.os.Parcelable) three_months_data);
