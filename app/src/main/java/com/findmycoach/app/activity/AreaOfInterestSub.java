@@ -41,7 +41,6 @@ public class AreaOfInterestSub extends Activity {
                 finish();
             }
         });
-        findViewById(R.id.save_interests).setVisibility(View.INVISIBLE);
     }
 
     private void initView() {

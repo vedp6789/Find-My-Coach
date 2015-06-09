@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,12 +27,12 @@ import java.util.List;
 
 public class AreasOfInterestActivity extends Activity implements Callback {
 
-    private Button saveAction;
     private final String TAG = "FMC";
     private DataBase dataBase;
     public static Category category;
     public static List<DatumSub> datumSubs;
     private ListView listView;
+    private List<InterestsAdapter.SubCategoryItems> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +40,6 @@ public class AreasOfInterestActivity extends Activity implements Callback {
 
         setContentView(R.layout.activity_areas_of_interest);
         initialize();
-        applyActions();
         checkSUbCategory();
     }
 
@@ -80,9 +78,9 @@ public class AreasOfInterestActivity extends Activity implements Callback {
             String interestsString = getIntent().getStringExtra("interests");
             Log.d(TAG, interestsString);
             List<String> selectedAreaOfInterest = new ArrayList<>();
-            if(interestsString != null) {
+            if (interestsString != null) {
                 Collections.addAll(selectedAreaOfInterest, interestsString.split(","));
-                for(int i = 0; i < selectedAreaOfInterest.size(); i++)
+                for (int i = 0; i < selectedAreaOfInterest.size(); i++)
                     selectedAreaOfInterest.set(i, selectedAreaOfInterest.get(i).trim());
             }
 
@@ -92,14 +90,17 @@ public class AreasOfInterestActivity extends Activity implements Callback {
                     datumSubs.add(datumSub);
                     if (selectedAreaOfInterest.contains(datumSub.getName().trim())) {
                         datumSub.setIsSelected(true);
+                        datum.setSelectedItems(datum.getSelectedItems() + 1);
                     }
                 }
 
                 for (Datum datum1 : datum.getCategories())
                     for (DatumSub datumSub : datum1.getSubCategories()) {
                         datumSubs.add(datumSub);
-                        if (selectedAreaOfInterest.contains(datumSub.getName().trim()))
+                        if (selectedAreaOfInterest.contains(datumSub.getName().trim())) {
                             datumSub.setIsSelected(true);
+                            datum1.setSelectedItems(datum1.getSelectedItems() + 1);
+                        }
                     }
             }
 
@@ -107,13 +108,8 @@ public class AreasOfInterestActivity extends Activity implements Callback {
             e.printStackTrace();
         }
 
-        List<InterestsAdapter.SubCategoryItems> list = new ArrayList<>();
+        updateMainList();
 
-        for (Datum datum : category.getData()) {
-            Log.e(TAG, "Name : " + datum.getName() + ", Sub category size : " + datum.getSubCategories().size() + ", Category size : " + datum.getCategories().size()
-                    + ", Parent id : " + datum.getParentId() + ", ID : " + datum.getId());
-            list.add(new InterestsAdapter.SubCategoryItems(datum.getName(), 1));
-        }
         list.add(new InterestsAdapter.SubCategoryItems(getResources().getString(R.string.all), 1));
 
         InterestsAdapter adapter = new InterestsAdapter(this, list);
@@ -130,6 +126,30 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         });
     }
 
+    private void updateMainList() {
+        list = new ArrayList<>();
+        for (Datum datum : category.getData()) {
+            Log.e(TAG, "Name : " + datum.getName() + ", Sub category size : "
+                    + datum.getSubCategories().size() + ", Category size : "
+                    + datum.getCategories().size()
+                    + ", Parent id : " + datum.getParentId() + ", ID : " + datum.getId());
+            String title = datum.getName();
+
+            if (datum.getSelectedItems() > 0)
+                title = title + "<font color='#AFA4C4'> - " + datum.getSelectedItems()
+                        + " " + getResources().getString(R.string.selected) + "</font>";
+
+            list.add(new InterestsAdapter.SubCategoryItems(title, 1));
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateMainList();
+        Log.e(TAG, "onResume called");
+    }
+
     /**
      * Calling category api
      */
@@ -140,10 +160,13 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     }
 
     /**
-     * Passing data back to calling class
+     * Getting references of views
      */
-    private void applyActions() {
-        saveAction.setOnClickListener(new View.OnClickListener() {
+    private void initialize() {
+        category = null;
+        datumSubs = new ArrayList<>();
+        listView = (ListView) findViewById(R.id.areas_of_interest_list);
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -154,23 +177,6 @@ public class AreasOfInterestActivity extends Activity implements Callback {
                 }
                 intent.putExtra("interests", new Gson().toJson(listTemp));
                 setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
-
-    }
-
-    /**
-     * Getting references of views
-     */
-    private void initialize() {
-        category = null;
-        datumSubs = new ArrayList<>();
-        listView = (ListView) findViewById(R.id.areas_of_interest_list);
-        saveAction = (Button) findViewById(R.id.save_interests);
-        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 finish();
             }
         });

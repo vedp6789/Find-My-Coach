@@ -22,6 +22,16 @@ public class Datum {
     @SerializedName("categories")
     @Expose
     private List<Datum> categories = new ArrayList<Datum>();
+    @Expose
+    private int selectedItems;
+
+    public int getSelectedItems() {
+        return selectedItems;
+    }
+
+    public void setSelectedItems(int selectedItems) {
+        this.selectedItems = selectedItems;
+    }
 
     public int getParentId() {
         return parentId;

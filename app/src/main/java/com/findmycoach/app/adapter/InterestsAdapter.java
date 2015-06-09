@@ -1,6 +1,7 @@
 package com.findmycoach.app.adapter;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,7 @@ public class InterestsAdapter extends BaseAdapter {
         final ImageView imageView = (ImageView) view.findViewById(R.id.radio);
 
         final SubCategoryItems item = list.get(position);
-        itemName.setText(item.getItemName());
+        itemName.setText(Html.fromHtml(item.getItemName()));
 
         if (item.getValue() == 1)
             imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.clander_next_arrow_small));

@@ -719,6 +719,7 @@
     <string name="start_date1">Start date</string>
     <string name="till">Until:</string>
     <string name="select">Select</string>
+    <string name="selected">Selected</string>
     <string name="forever">Forever</string>
     <string name="how_long">How long?</string>
     <string name="date_picker_from">From</string>
