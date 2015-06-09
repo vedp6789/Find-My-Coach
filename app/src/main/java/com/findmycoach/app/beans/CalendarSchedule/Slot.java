@@ -21,6 +21,7 @@ public class Slot implements Parcelable {
     }
 
     public String slot_id;
+    public String mentor_id;
     public String slot_start_time;
     public String slot_stop_time;
     public String slot_start_date;
@@ -32,6 +33,13 @@ public class Slot implements Parcelable {
     public List<Vacation> vacations;
     public String slot_created_on_network_success;
 
+    public String getMentor_id() {
+        return mentor_id;
+    }
+
+    public void setMentor_id(String mentor_id) {
+        this.mentor_id = mentor_id;
+    }
 
     public String isSlot_created_on_network_success() {
         return slot_created_on_network_success;
@@ -138,6 +146,7 @@ public class Slot implements Parcelable {
         dest.writeString(this.slot_max_users);
         dest.writeStringArray(this.slot_week_days);
         dest.writeString(this.slot_id);
+        dest.writeString(this.mentor_id);
         dest.writeTypedList(this.events);
         dest.writeTypedList(this.vacations);
         dest.writeString(this.slot_created_on_network_success);
@@ -157,6 +166,7 @@ public class Slot implements Parcelable {
         this.slot_max_users = source.readString();
         this.slot_week_days = source.createStringArray();
         this.slot_id = source.readString();
+        this.mentor_id = source.readString();
         source.readTypedList(this.events, DayEvent.CREATOR);
         source.readTypedList(this.vacations, DayVacation.CREATOR);
         this.slot_created_on_network_success = source.readString();

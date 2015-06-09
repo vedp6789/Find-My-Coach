@@ -1127,6 +1127,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
                 JSONObject slot_jsonObject = jsonArray_data.getJSONObject(json_Array_data_index);
                 slot.setSlot_id(slot_jsonObject.getString("slot_id"));
+                slot.setMentor_id(slot_jsonObject.getString("mentor_id"));
                 slot.setSlot_start_time(slot_jsonObject.getString("start_time"));
                 slot.setSlot_stop_time(slot_jsonObject.getString("stop_time"));
                 slot.setSlot_start_date(slot_jsonObject.getString("start_date"));

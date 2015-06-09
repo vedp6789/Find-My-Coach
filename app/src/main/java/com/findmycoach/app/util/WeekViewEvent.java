@@ -1,6 +1,7 @@
 package com.findmycoach.app.util;
 
 import com.findmycoach.app.beans.CalendarSchedule.Mentee;
+import com.findmycoach.app.beans.CalendarSchedule.MentorInfo;
 import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.beans.CalendarSchedule.SlotDurationDetailBean;
 import com.findmycoach.app.beans.CalendarSchedule.Vacation;
@@ -45,6 +46,15 @@ public class WeekViewEvent {
     private Slot slot;
     private Vacation vacation;
     private int event_type;
+    private MentorInfo mentorInfo;
+
+    public MentorInfo getMentorInfo() {
+        return mentorInfo;
+    }
+
+    public void setMentorInfo(MentorInfo mentorInfo) {
+        this.mentorInfo = mentorInfo;
+    }
 
     public Vacation getVacation() {
         return vacation;
@@ -376,6 +386,34 @@ public class WeekViewEvent {
         this.vacation = vacation;
     }
 
+
+
+    /* for class info to mentee  */
+    public WeekViewEvent(long id, String name,Calendar startTime,Calendar endTime,Slot slot, MentorInfo mentorInfo, List<Mentee> menteeFoundOnThisDate,int event_type){
+        this.mId = id;
+        this.mName = name;
+        this.mStartTime = startTime;
+        this.mEndTime = endTime;
+        this.event_type = event_type;
+        this.slot = slot;
+        this.mentorInfo = mentorInfo;
+        this.menteeFoundOnThisDate = menteeFoundOnThisDate;
+
+
+    }
+
+    /* Vacation in mentee schedule */
+    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime, Slot slot,MentorInfo mentorInfo,int event_type,List<Vacation> coinciding_vacation_of_this_day_for_this_slot){
+        this.mId = id;
+        this.mName = name;
+        this.mStartTime = startTime;
+        this.mEndTime = endTime;
+        this.event_type = event_type;
+        this.slot = slot;
+        this.mentorInfo = mentorInfo;
+        this.coincidingVacations = coinciding_vacation_of_this_day_for_this_slot;
+
+    }
 
 
 
