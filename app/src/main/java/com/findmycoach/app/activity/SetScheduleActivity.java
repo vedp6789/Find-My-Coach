@@ -316,7 +316,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         }
     }
 
-    private void populateWeekViewForMenteeSchedule(List<WeekViewEvent> events,ArrayList<Slot> coming_month, ArrayList<MentorInfo> comingMonthMentorInfo, int number_of_days_in_this_month, int newMonth, int newYear,) {
+    private void populateWeekViewForMenteeSchedule(List<WeekViewEvent> events,ArrayList<Slot> coming_month, ArrayList<MentorInfo> comingMonthMentorInfo, int number_of_days_in_this_month, int newMonth, int newYear) {
 
         if (coming_month.size() > 0) {
             Slot slot = coming_month.get(0);
@@ -644,7 +644,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                         endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
                                         endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                                         WeekViewEvent weekViewEvent;
-                                        weekViewEvent = new WeekViewEvent(Long.parseLong(slot_id), getEventTitle(startTime, Integer.parseInt(slot_stop_time.split(":", 3)[0]), Integer.parseInt(slot_stop_time.split(":", 3)[1]), sub_category_name, slot_type), startTime, endTime, menteeFoundOnThisDate, slot_type, new_slot, 12345);  /* For making a scheduled class information on week view */
+                                        weekViewEvent = new WeekViewEvent(Long.parseLong(slot_id), getEventTitle(startTime, Integer.parseInt(slot_stop_time.split(":", 3)[0]), Integer.parseInt(slot_stop_time.split(":", 3)[1])), startTime, endTime, menteeFoundOnThisDate, slot_type, new_slot, 12345);  /* For making a scheduled class information on week view */
                                         weekViewEvent.setColor(getResources().getColor(R.color.event_color_02));
                                         events.add(weekViewEvent);
 
@@ -807,11 +807,10 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         }
     }
 
-    private void populateWeekViewForNextMonth1(List<WeekViewEvent> events, int newYear, int newMonth, int days) {
+    private void populateWeekViewForNextMonth1(List<WeekViewEvent> events, int newYear, int newMonth, int coming_month_days) {
 
 
-        poplateWeekView(coming_month, events, newYear, newMonth);
-
+        poplateWeekView(coming_month,coming_month_days,comingMonthMentorInfo, events, newYear, newMonth);
 
     }
 
@@ -820,7 +819,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
      * This will populate week_view for free slot representation in mentee's calendar
      */
 
-    private void poplateWeekView(ArrayList<Day> month, List<WeekViewEvent> events, int newYear, int newMonth) {
+    private void poplateWeekView(ArrayList<Slot> month,int days_in_month,ArrayList<MentorInfo> month_mentor_info,List<WeekViewEvent> events,int newYear, int newMonth) {
         for (Day d : month) {
             String date_for_d = d.getDate();
             List<DaySlot> daySlots = d.getDaySlots();
@@ -1396,13 +1395,13 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         }
     }
 
-    private void populateWeekViewForCurrentMonth1(List<WeekViewEvent> events, int newYear, int newMonth) {
-        poplateWeekView(current_month, events, newYear, newMonth);
+    private void populateWeekViewForCurrentMonth1(List<WeekViewEvent> events, int newYear, int newMonth,int current_month_days) {
+        poplateWeekView(current_month,current_month_days,currentMonthMentorInfo, events, newYear, newMonth);
 
     }
 
     private void populateWeekViewForPreviousMonth1(List<WeekViewEvent> events, int newYear, int newMonth, int previous_month_days) {
-        poplateWeekView(prev_month, events, newYear, newMonth);
+        poplateWeekView(prev_month,previous_month_days,previousMonthMentorInfo, events, newYear, newMonth);
 
     }
 
@@ -1417,7 +1416,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     }
 
 
-    private String getEventTitle(Calendar time, int stop_hour, int stop_min, String slot_type) {
+    private String getEventTitle(Calendar time, int stop_hour, int stop_min) {
 
             return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) ;
 
