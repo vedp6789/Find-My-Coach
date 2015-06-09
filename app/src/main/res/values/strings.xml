@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <integer name="category">2</integer>
+    <integer name="sub_category">3</integer>
+
     <string-array name="coaching_type">
         <item>Individual</item>
         <item>Group</item>

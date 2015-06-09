@@ -41,7 +41,7 @@ public class AreaOfInterestSub extends Activity {
                 finish();
             }
         });
-        findViewById(R.id.save_interests).setVisibility(View.GONE);
+        findViewById(R.id.save_interests).setVisibility(View.INVISIBLE);
     }
 
     private void initView() {
@@ -99,6 +99,7 @@ public class AreaOfInterestSub extends Activity {
                 list.add(new InterestsAdapter.SubCategoryItems(datumSub.getName(),
                         datumSub.isSelected() ? 3 : 2));
             }
+            title.setText(getResources().getString(R.string.all));
             populateListAddListener(list, AreasOfInterestActivity.datumSubs);
         }
     }
