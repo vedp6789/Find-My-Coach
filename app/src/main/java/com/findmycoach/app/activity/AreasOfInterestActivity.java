@@ -76,7 +76,6 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     private void populateData() {
         try {
             String interestsString = getIntent().getStringExtra("interests");
-            Log.d(TAG, interestsString);
             List<String> selectedAreaOfInterest = new ArrayList<>();
             if (interestsString != null) {
                 Collections.addAll(selectedAreaOfInterest, interestsString.split(","));
@@ -110,6 +109,37 @@ public class AreasOfInterestActivity extends Activity implements Callback {
 
         updateMainList();
 
+    }
+
+    private void updateMainList() {
+        list = new ArrayList<>();
+        for (Datum datum : category.getData()) {
+            Log.e(TAG, "Name : " + datum.getName() + ", Sub category size : "
+                    + datum.getSubCategories().size() + ", Category size : "
+                    + datum.getCategories().size()
+                    + ", Parent id : " + datum.getParentId() + ", ID : " + datum.getId()
+                    + ", Selected items : " + datum.getSelectedItems());
+
+            String title = datum.getName();
+
+            if (datum.getSelectedItems() > 0)
+                title = title + "<font color='#AFA4C4'> - " + datum.getSelectedItems()
+                        + " " + getResources().getString(R.string.selected) + "</font>";
+
+            if (datum.getCategories().size() > 0) {
+                int count = 0;
+                for (Datum datum1 : datum.getCategories()) {
+                    count = count + datum1.getSelectedItems();
+                }
+
+                if (count > 0)
+                    title = title + "<font color='#AFA4C4'> - " + count
+                            + " " + getResources().getString(R.string.selected) + "</font>";
+            }
+
+            list.add(new InterestsAdapter.SubCategoryItems(title, 1));
+        }
+
         list.add(new InterestsAdapter.SubCategoryItems(getResources().getString(R.string.all), 1));
 
         InterestsAdapter adapter = new InterestsAdapter(this, list);
@@ -126,28 +156,10 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         });
     }
 
-    private void updateMainList() {
-        list = new ArrayList<>();
-        for (Datum datum : category.getData()) {
-            Log.e(TAG, "Name : " + datum.getName() + ", Sub category size : "
-                    + datum.getSubCategories().size() + ", Category size : "
-                    + datum.getCategories().size()
-                    + ", Parent id : " + datum.getParentId() + ", ID : " + datum.getId());
-            String title = datum.getName();
-
-            if (datum.getSelectedItems() > 0)
-                title = title + "<font color='#AFA4C4'> - " + datum.getSelectedItems()
-                        + " " + getResources().getString(R.string.selected) + "</font>";
-
-            list.add(new InterestsAdapter.SubCategoryItems(title, 1));
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
         updateMainList();
-        Log.e(TAG, "onResume called");
     }
 
     /**

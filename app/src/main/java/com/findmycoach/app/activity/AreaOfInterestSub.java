@@ -3,7 +3,6 @@ package com.findmycoach.app.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -61,8 +60,13 @@ public class AreaOfInterestSub extends Activity {
                             sub.isSelected() ? 3 : 2));
                 populateListAddListener(list, datum.getSubCategories());
             } else if (datum.getCategories().size() > 0) {
-                for (Datum sub : datum.getCategories())
-                    list.add(new InterestsAdapter.SubCategoryItems(sub.getName(), 1));
+                for (Datum sub : datum.getCategories()) {
+                    String title = sub.getName();
+                    if (sub.getSelectedItems() > 0)
+                        title = title + "<font color='#AFA4C4'> - " + sub.getSelectedItems()
+                                + " " + getResources().getString(R.string.selected) + "</font>";
+                    list.add(new InterestsAdapter.SubCategoryItems(title, 1));
+                }
                 InterestsAdapter adapter = new InterestsAdapter(this, list);
                 listView.setAdapter(adapter);
 
@@ -114,19 +118,43 @@ public class AreaOfInterestSub extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 InterestsAdapter.SubCategoryItems item = list.get(position);
-                Log.d(TAG, datumSubList.get(position).getName() + " : " +
-                        datumSubList.get(position).isSelected());
+//                Log.d(TAG, datumSubList.get(position).getName() + " : " +
+//                        datumSubList.get(position).isSelected());
                 if (item.getValue() == 2) {
                     item.setValue(3);
                     datumSubList.get(position).setIsSelected(true);
+                    updateParentCategorySelectedItems(datumSubList.get(position), 1);
 
                 } else {
                     item.setValue(2);
                     datumSubList.get(position).setIsSelected(false);
+                    updateParentCategorySelectedItems(datumSubList.get(position), -1);
                 }
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    private void updateParentCategorySelectedItems(DatumSub datumSub, int i) {
+        for (Datum datum : AreasOfInterestActivity.category.getData()) {
+            for (DatumSub datumSub1 : datum.getSubCategories()) {
+                if (datumSub.getId().equals(datumSub1.getId())) {
+                    datum.setSelectedItems(datum.getSelectedItems() + i);
+//                    Log.e(TAG, i + " : " + datum.getName() + " : " + datumSub.getName());
+                    return;
+                }
+            }
+
+            for (Datum datum1 : datum.getCategories()) {
+                for (DatumSub datumSub1 : datum1.getSubCategories()) {
+                    if (datumSub.getId().equals(datumSub1.getId())) {
+                        datum1.setSelectedItems(datum1.getSelectedItems() + i);
+//                        Log.e(TAG, i + " : " + datum1.getName() + " : " + datumSub1.getName());
+                        return;
+                    }
+                }
+            }
+        }
     }
 
     @Override
