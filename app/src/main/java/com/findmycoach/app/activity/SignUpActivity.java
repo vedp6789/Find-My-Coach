@@ -85,13 +85,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
 
         findViewById(R.id.action_login).setOnClickListener(this);
 
-        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
         confirmPasswordInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
@@ -119,10 +112,12 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     private void showCountryCodeDialog() {
         final Dialog countryDialog = new Dialog(this);
         countryDialog.setCanceledOnTouchOutside(true);
+        countryDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        countryDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         countryDialog.setTitle(getResources().getString(R.string.select_country_code));
         countryDialog.setContentView(R.layout.dialog_country_code);
         ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
-        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, country_name));
+        listView.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, country_name));
         countryDialog.show();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -188,6 +183,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     private boolean validate(String firstName, String lastName, String phone, String email, String password, String confirmPassword, String countryCode) {
 
         boolean isCorrect = true;
+        firstName = firstName.replaceAll(" ", "");
+        lastName = lastName.replaceAll(" ", "");
 
         if (firstName.equals("")) {
             showErrorMessage(firstNameInput, getResources().getString(R.string.error_field_required));
@@ -216,11 +213,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         }
         if(isCorrect)
             lastNameInput.setError(null);
-
-        if (countryCode.trim().equalsIgnoreCase("Select")) {
-            showErrorMessage(countryCodeTV, getResources().getString(R.string.select_country_code));
-            isCorrect = false;
-        }
 
         if (phone.equals("")) {
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_field_required));
@@ -257,6 +249,10 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         if(isCorrect)
             confirmPasswordInput.setError(null);
 
+        if (countryCode.trim().equalsIgnoreCase("Select") && isCorrect) {
+            showErrorMessage(countryCodeTV, getResources().getString(R.string.select_country_code));
+            isCorrect = false;
+        }
 
         return isCorrect;
     }

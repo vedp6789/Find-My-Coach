@@ -66,6 +66,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private int user_group;
     private TextView countryCodeTV;
     private String[] country_code, country_name;
+    private int retryFbLogin;
 
     /**
      * Related to G+
@@ -80,7 +81,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private int mSignInProgress;
     private PendingIntent mSignInIntent;
     private int mSignInError;
-    private ImageButton mSignInButton;
 
     public static LoginActivity loginActivity;
 
@@ -133,7 +133,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private void initialize(Bundle savedInstanceState) {
 
         /** G+ related */
-        mSignInButton = (ImageButton) findViewById(R.id.sign_in_button);
+        ImageButton mSignInButton = (ImageButton) findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(this);
         if (savedInstanceState != null) {
             mSignInProgress = savedInstanceState.getInt(SAVED_PROGRESS, STATE_DEFAULT);
@@ -312,7 +312,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             Log.d(TAG, "fb login result : " + resultCode);
             Session session = Session.getActiveSession();
             session.onActivityResult(this, requestCode, resultCode, data);
-            if (resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK || retryFbLogin++ == 0) {
                 Log.d(TAG, "get session");
                 getSession();
             }

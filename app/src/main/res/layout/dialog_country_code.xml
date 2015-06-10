@@ -14,7 +14,7 @@
         android:text="@string/select_country_code"
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_name"
-        android:layout_margin="@dimen/days_margin"
+        android:layout_margin="@dimen/calender_header_margin_arrow"
         android:textStyle="bold" />
 
     <TextView

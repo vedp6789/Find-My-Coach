@@ -457,7 +457,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             isValid = false;
         }
 
-        String firstName = profileFirstName.getText().toString().trim();
+        String firstName = profileFirstName.getText().toString().trim().replaceAll(" ", "");
         if (firstName.equals("")) {
             showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
             isValid = false;
@@ -470,7 +470,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             }
         }
 
-        String lastName = profileLastName.getText().toString().trim();
+        String lastName = profileLastName.getText().toString().trim().replaceAll(" ", "");
         if (lastName.equals("")) {
             showErrorMessage(profileLastName, getResources().getString(R.string.error_field_required));
             isValid = false;
