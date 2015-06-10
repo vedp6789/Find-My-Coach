@@ -69,6 +69,18 @@ public class Data {
     @Expose
     private boolean newUser;
 
+    @SerializedName("training_location")
+    @Expose
+    private Object trainingLocation;
+
+    public Object isTrainingLocation() {
+        return trainingLocation;
+    }
+
+    public void setTrainingLocation(Object trainingLocation) {
+        this.trainingLocation = trainingLocation;
+    }
+
     public String getChargesClass() {
         return chargesClass;
     }

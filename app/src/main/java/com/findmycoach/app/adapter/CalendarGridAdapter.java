@@ -822,7 +822,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                     if (thisDayMatchesWithWeekDaysArray(slot_week_day, week_day_of_this_day)) {
                            /* This proves that this day is coming between this slot */
                            /* Now to check whether this slot is free or not */
-                        if (slot_type.equalsIgnoreCase(context.getResources().getString(R.string.group))) {   /* Group slot type */
+                        if (slot_type.equalsIgnoreCase("group")) {   /* Group slot type */
                             if (events.size() > 0) {
                                 Event event = events.get(0);
                                 int active_users = Integer.parseInt(event.getEvent_total_mentee());

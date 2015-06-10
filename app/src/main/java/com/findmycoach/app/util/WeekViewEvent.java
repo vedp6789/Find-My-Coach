@@ -361,6 +361,7 @@ public class WeekViewEvent {
         this.slot_type=slot_type;
         this.slot = slot;
         this.event_type = event_type;
+        this.coincidingVacations = coincidingVacations;
 
 
     }
@@ -422,31 +423,18 @@ public class WeekViewEvent {
      * Initializes the event for week view, this week-view will display free slots available and mentee can select one free slot for his schedule request with mentor.
      */
 
-    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime, int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_day, int slot_stop_month, int slot_stop_year, int slot_start_hour, int slot_start_minute, int slot_stop_hour, int slot_stop_minute, String slot_type,String [] slot_on_week_days, String mentor_id, String mentor_availability,int free_slot_event_type,String charges,ArrayList<String> arrayList_sub_category,ArrayList<SlotDurationDetailBean> slotDurationDetailBeans, ArrayList<VacationCoincidingSlot> vacationCoincidingSlots) {
+    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime,Slot slot,MentorInfo mentorInfo, String mentor_id, String mentor_availability,int free_slot_event_type,String charges,ArrayList<String> arrayList_sub_category) {
         this.mId = id;
         this.mName = name;
         this.mStartTime = startTime;
         this.mEndTime = endTime;
-        this.slot_start_day = slot_start_day;
-        this.slot_start_month = slot_start_month;
-        this.slot_start_year = slot_start_year;
-        this.slot_stop_day = slot_stop_day;
-        this.slot_stop_month = slot_stop_month;
-        this.slot_stop_year = slot_stop_year;
-        this.slot_start_hour = slot_start_hour;
-        this.slot_start_minute = slot_start_minute;
-        this.slot_stop_hour = slot_stop_hour;
-        this.slot_stop_minute = slot_stop_minute;
-        this.slot_type = slot_type;
-        this.slot_on_week_days=slot_on_week_days;
+        this.slot = slot;
+        this.mentorInfo = mentorInfo;
         this.mentor_id = mentor_id;
         this.mentor_availablity = mentor_availability;
         this.event_type=free_slot_event_type;
         this.charges=charges;
         this.arrayList_sub_category=arrayList_sub_category;
-        this.slotDurationDetailBeans=slotDurationDetailBeans;
-        this.vacationCoincidingSlots=vacationCoincidingSlots;
-
     }
 
 

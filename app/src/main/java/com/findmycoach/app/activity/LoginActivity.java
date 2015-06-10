@@ -743,6 +743,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private void saveUser(String authToken, String userId) {
         StorageHelper.storePreference(this, "auth_token", authToken);
         StorageHelper.storePreference(this, "user_id", userId);
+
     }
 
     /**
@@ -788,6 +789,25 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         if (response.getAuthToken() != null && response.getData() != null && response.getData().getId() != null) {
             saveUser(response.getAuthToken(), response.getData().getId());
         }
+
+        /** Saving address, city and zip of user */
+        if(response.getData().getAddress() != null){
+            StorageHelper.storePreference(this,"user_local_address", (String) response.getData().getAddress());
+            if(response.getData().getCity() != null){
+                StorageHelper.storePreference(this,"user_city_state", (String) response.getData().getCity());
+            }
+
+            if(response.getData().getZip() != null){
+                StorageHelper.storePreference(this,"user_zip_code", (String) response.getData().getZip());
+            }
+
+        }
+        /* Saving training location for mentee type user */
+        if(StorageHelper.getUserGroup(LoginActivity.this,"user_group").equals("2") && response.getData().isTrainingLocation() != null){
+           StorageHelper.storePreference(this,"training_location",(String) response.getData().isTrainingLocation());
+        }
+
+
 
         /**phone number not present*/
         if (statusCode == 206) {

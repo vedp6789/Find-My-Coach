@@ -49,7 +49,7 @@ import java.util.TreeSet;
 public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
     Spinner sp_slot_type;
-    EditText et_maximum_students;
+    EditText et_maximum_students,et_tutorial_location;
     LinearLayout ll_slot_maximum_students;
     public static TextView tv_start_date, tv_till_date, tv_start_time, tv_stop_time;
     public boolean boo_mon_checked, boo_tue_checked,
@@ -109,6 +109,30 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         boo_sun_checked = false;
 
         initialize();
+
+        StringBuilder stringBuilder_address = new StringBuilder();
+        String local_Address = StorageHelper.AddressInformation(AddNewSlotActivity.this,"user_local_address");
+        String city = StorageHelper.AddressInformation(AddNewSlotActivity.this,"user_city_state");
+        String zip = StorageHelper.AddressInformation(AddNewSlotActivity.this, "user_zip_code");
+        if(local_Address != null){
+            stringBuilder_address.append(local_Address);
+            if(city != null){
+                stringBuilder_address.append(", "+city.trim().toString());
+                if(zip != null){
+                    stringBuilder_address.append(", "+zip.trim().toString());
+                }
+            }
+            et_tutorial_location.setText(stringBuilder_address.toString());
+        }else{
+            String user_current_address = DashboardActivity.dashboardActivity.userCurrentAddress;
+            if(!user_current_address.equals("")){
+
+            }else{
+                et_tutorial_location.setText(user_current_address);
+            }
+        }
+
+
         progressDialog = new ProgressDialog(AddNewSlotActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
 
@@ -348,6 +372,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                             Log.d(TAG, "max users : " + maximum_students);
 
                         }
+
+                        requestParams.add("location",et_tutorial_location.getText().toString());
 
                         String auth_token = StorageHelper.getUserDetails(AddNewSlotActivity.this, "auth_token");
                         progressDialog.show();
@@ -765,11 +791,9 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                     return false;
 
                 } else {
-                    slot_time_value = stop_time - start_time;
-                    int minimum_difference = (Integer.parseInt(getResources().getString(R.string.slot_time_difference_in_hour)) * 60) * 60;
 
-                    if (slot_time_value < minimum_difference) {
-                        Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.slot_time_difference), Toast.LENGTH_SHORT).show();
+                    if (et_tutorial_location.getText().toString().trim().length() <=0) {
+                        Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.tutorial_address_not_found), Toast.LENGTH_SHORT).show();
                         return false;
                     } else {
                         if ((slot_time_value % 3600) > 0) {
@@ -1033,6 +1057,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         ll_slot_maximum_students = (LinearLayout) findViewById(R.id.ll_max_students);
         ll_slot_maximum_students.setVisibility(View.GONE);
         et_maximum_students = (EditText) findViewById(R.id.et_maximum_students);
+        et_tutorial_location = (EditText) findViewById(R.id.et_tutorial_location);
         b_create_slot = (Button) findViewById(R.id.b_create_slot);
         ScrollableGridView gridView = (ScrollableGridView) findViewById(R.id.calendar);
         gridView.setAdapter(new AddSlotAdapter(this, getResources().getStringArray(R.array.week_days_mon)));

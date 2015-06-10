@@ -46,10 +46,12 @@ public class StorageHelper {
         return userToken;
     }
 
-    public static String getGridClickDetails(Context context,String key){
+    public static String AddressInformation(Context context,String key){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getString(key, null);
+        String  information= preferences.getString(key, null);
+        return information;
     }
+
 
     public static void clearUser(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);

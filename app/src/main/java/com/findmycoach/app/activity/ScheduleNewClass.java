@@ -23,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.beans.CalendarSchedule.MentorInfo;
+import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.beans.CalendarSchedule.SlotDurationDetailBean;
 import com.findmycoach.app.beans.CalendarSchedule.VacationCoincidingSlot;
 import com.findmycoach.app.beans.CalendarSchedule.VacationDurationDetailBean;
@@ -45,7 +47,7 @@ import java.util.List;
  */
 public class ScheduleNewClass extends Activity implements Button.OnClickListener, Callback {
 
-    private LinearLayout ll_child_dob, ll_location,ll_vacation;
+    private LinearLayout ll_child_dob, ll_location, ll_vacation;
     public static TextView tv_child_dob;
     private static TextView tv_from_date, tv_to_date, tv_class_timing, tv_subject, tv_total_charges;
     Spinner sp_subjects, sp_mentor_for;
@@ -59,7 +61,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     public static String child_DOB = null;
     Bundle bundle;
     private String selected_subject = null;
-
+    private Slot slot;
+    private MentorInfo mentorInfo;
     private Long slot_id;
     private String mentor_id;
     private String mentor_availability;
@@ -81,44 +84,33 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private ArrayList<VacationCoincidingSlot> vacationCoincidingSlots;
     private ScrollableGridView gridView;
     private TextView title;
-    private TextView tv_number_of_classes,tv_vacation;
-
+    private TextView tv_number_of_classes, tv_vacation;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_new_class);
-        String fname = getIntent().getExtras().getString("fname");
+
+        bundle = getIntent().getBundleExtra("slot_bundle");
+        slot = (Slot) bundle.getSerializable("slot");
+        mentorInfo = (MentorInfo) bundle.getSerializable("mentor_info");
+        mentor_id = bundle.getString("mentor_id");
+        mentor_availability = bundle.getString("mentor_availability");
+        charges = bundle.getString("charges");
+        arrayList_subcategory = bundle.getStringArrayList("arrayList_sub_category");
+
+
         progressDialog = new ProgressDialog(ScheduleNewClass.this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
-        applyActionbarProperties(fname);
+        applyActionbarProperties(mentorInfo.getFirst_name());
         initialize();
-        bundle = getIntent().getBundleExtra("slot_bundle");
+
         finalizeDateTimeAndCharges();
         populateFields();
     }
 
     private void finalizeDateTimeAndCharges() {
-        slot_id = bundle.getLong("slot_id");
-        mentor_id = bundle.getString("mentor_id");
-        mentor_availability = bundle.getString("mentor_availability");
-        slot_start_day = bundle.getInt("slot_start_day");
-        slot_start_month = bundle.getInt("slot_start_month");
-        slot_start_year = bundle.getInt("slot_start_year");
-        slot_stop_day = bundle.getInt("slot_stop_day");
-        slot_stop_month = bundle.getInt("slot_stop_month");
-        slot_stop_year = bundle.getInt("slot_stop_year");
-        slot_start_hour = bundle.getInt("slot_start_hour");
-        slot_start_minute = bundle.getInt("slot_start_minute");
-        slot_stop_hour = bundle.getInt("slot_stop_hour");
-        slot_stop_minute = bundle.getInt("slot_stop_minute");
-        slot_on_week_days = bundle.getStringArray("slot_on_week_days");
-        charges = bundle.getString("charges");
-        arrayList_subcategory = bundle.getStringArrayList("arrayList_sub_category");
-        slot_type = bundle.getString("slot_type");
-        slotDurationDetailBeans=bundle.getParcelableArrayList("slot_duration_detail");
-        vacationCoincidingSlots = bundle.getParcelableArrayList("slot_coinciding_vacation");
 
 
         /*
@@ -128,32 +120,22 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         *
         * */
 
-        Log.d(TAG,"slot_type : "+slot_type);
+        Log.d(TAG, "slot_type : " + slot_type);
 
-         if (slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
+        if (slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
             ll_location.setVisibility(View.GONE);
-        }
-
-        if(vacationCoincidingSlots.size() <= 0)
-            ll_vacation.setVisibility(View.GONE);
-        else{
-            StringBuilder stringBuilder_comma_separated_vacation_duration=new StringBuilder();
-            for(int vacation_coinciding_slot=0; vacation_coinciding_slot < vacationCoincidingSlots.size(); vacation_coinciding_slot++){
-                VacationCoincidingSlot va=vacationCoincidingSlots.get(vacation_coinciding_slot);
-                String vacation_start_date = va.getVacation_start_date();
-                String vacation_stop_date = va.getVacation_stop_date();
-                if(vacation_coinciding_slot == (vacationCoincidingSlots.size()-1))
-                stringBuilder_comma_separated_vacation_duration.append(String.format("%02d-%02d-%d to %02d-%02d-%d",Integer.parseInt(vacation_start_date.split("-")[2]),Integer.parseInt(vacation_start_date.split("-")[1]),Integer.parseInt(vacation_start_date.split("-")[0]),Integer.parseInt(vacation_stop_date.split("-")[2]),Integer.parseInt(vacation_stop_date.split("-")[1]),Integer.parseInt(vacation_stop_date.split("-")[0])));
-                else
-                    stringBuilder_comma_separated_vacation_duration.append(String.format("%02d-%02d-%d to %02d-%02d-%d, ",Integer.parseInt(vacation_start_date.split("-")[2]),Integer.parseInt(vacation_start_date.split("-")[1]),Integer.parseInt(vacation_start_date.split("-")[0]),Integer.parseInt(vacation_stop_date.split("-")[2]),Integer.parseInt(vacation_stop_date.split("-")[1]),Integer.parseInt(vacation_stop_date.split("-")[0])));
-
+        }else{
+            if(mentor_availability!= null && mentor_availability.equals("1")){
+               String tutorial_location = StorageHelper.AddressInformation(ScheduleNewClass.this,"training_location");
+                if(tutorial_location.trim().length() <=0){
+                    if(!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")){
+                        et_location.setText(DashboardActivity.dashboardActivity.userCurrentAddress);
+                    }
+                }else{
+                    et_location.setText(tutorial_location);
+                }
             }
-            tv_vacation.setText(stringBuilder_comma_separated_vacation_duration.toString());
         }
-
-
-        tv_number_of_classes.setText(String.valueOf(slotDurationDetailBeans.size()));
-
 
 
         if (arrayList_subcategory.size() > 1) {
@@ -167,6 +149,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                     selected_subject = (String) parent.getItemAtPosition(position);
 
                 }
+
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
 
@@ -224,24 +207,24 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         int current_hour = rightNow.get(Calendar.HOUR_OF_DAY);
         int current_minute = rightNow.get(Calendar.MINUTE);
 
-        Log.d(TAG,"right now in millis: "+rightNow_in_millis+" slot_start_date in millis: "+slot_start_date);
+        Log.d(TAG, "right now in millis: " + rightNow_in_millis + " slot_start_date in millis: " + slot_start_date);
         if (rightNow_in_millis >= slot_start_date) {
 
             /* Mentee is looking to schedule when class slot is already behind the current date i.e. he is looking to join class in mid of class schedule  */
 
             String from_date;
-            if(current_hour > slot_start_hour){
+            if (current_hour > slot_start_hour) {
                 /* increasing schedule start date by one day i.e. slot_start_date is before current date and current time is also greater than slot_start_time*/
-                from_date = String.format("%02d-%02d-%d", rightNow.get(Calendar.DAY_OF_MONTH)+1, (rightNow.get(Calendar.MONTH) + 1), rightNow.get(Calendar.YEAR));
-            }else{
+                from_date = String.format("%02d-%02d-%d", rightNow.get(Calendar.DAY_OF_MONTH) + 1, (rightNow.get(Calendar.MONTH) + 1), rightNow.get(Calendar.YEAR));
+            } else {
 
                     /* if current hour is behing slot start hour or it is equal to it , then start day of class schedule will be from this current date */
-                    from_date = String.format("%02d-%02d-%d", rightNow.get(Calendar.DAY_OF_MONTH), (rightNow.get(Calendar.MONTH) + 1), rightNow.get(Calendar.YEAR));
+                from_date = String.format("%02d-%02d-%d", rightNow.get(Calendar.DAY_OF_MONTH), (rightNow.get(Calendar.MONTH) + 1), rightNow.get(Calendar.YEAR));
 
             }
 
 
-           tv_from_date.setText(from_date);
+            tv_from_date.setText(from_date);
         } else {
             String to_date = String.format("%02d-%02d-%d", slot_start_day, slot_start_month, slot_start_year);
             tv_from_date.setText(to_date);
@@ -250,18 +233,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         String to_date = String.format("%02d-%02d-%d", slot_stop_day, slot_stop_month, slot_stop_year);
         tv_to_date.setText(to_date);
-
-
-        if (mentor_availability != null && mentor_availability.equals("1")){
-            if(slot_type.equalsIgnoreCase(getResources().getString(R.string.group))){
-                ll_location.setVisibility(View.GONE);
-            }else{
-                ll_location.setVisibility(View.VISIBLE);
-            }
-        }
-
-
-
 
         String class_schedule_start_date = tv_from_date.getText().toString();   /* Date which is getting prompted to student, from where student class schedule starts */
         int class_schedule_start_day = Integer.parseInt(class_schedule_start_date.split("-", 3)[0]);
@@ -274,6 +245,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         Calendar calendar_schedule_start_date = Calendar.getInstance();
         calendar_schedule_start_date.set(class_schedule_start_year, class_schedule_start_month - 1, class_schedule_start_day);
+
+
 
         /*int valid_class_days = 0;
 
@@ -298,16 +271,16 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         */
 
         int total_class_days;
-        int total_amount=0;
-        int cost = Integer.parseInt(charges.split(" per ",2)[0]);
-        String cost_basis = charges.split(" per ",2)[0];
-        if(cost_basis.equalsIgnoreCase("hour")){
-            total_class_days=slotDurationDetailBeans.size();
-            int no_of_hours_in_a_day=slot_stop_hour - slot_start_hour;
-            int no_of_total_hours= total_class_days * no_of_hours_in_a_day;
+        int total_amount = 0;
+        int cost = Integer.parseInt(charges.split(" per ", 2)[0]);
+        String cost_basis = charges.split(" per ", 2)[0];
+        if (cost_basis.equalsIgnoreCase("hour")) {
+            total_class_days = slotDurationDetailBeans.size();
+            int no_of_hours_in_a_day = slot_stop_hour - slot_start_hour;
+            int no_of_total_hours = total_class_days * no_of_hours_in_a_day;
             total_amount = no_of_total_hours * cost;
 
-        }else{
+        } else {
              /*this will not allowed now as there is only cost_basis that is per hour*/
         }
 
@@ -413,9 +386,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         ll_location = (LinearLayout) findViewById(R.id.ll_location);
         ll_location.setVisibility(View.GONE);
         sp_mentor_for = (Spinner) findViewById(R.id.sp_mentor_for);
-        tv_number_of_classes= (TextView) findViewById(R.id.tv_number_of_classes);
-        ll_vacation= (LinearLayout) findViewById(R.id.ll_vacations);
-        tv_vacation= (TextView) findViewById(R.id.tv_vacations);
+        tv_number_of_classes = (TextView) findViewById(R.id.tv_number_of_classes);
+        ll_vacation = (LinearLayout) findViewById(R.id.ll_vacations);
+        tv_vacation = (TextView) findViewById(R.id.tv_vacations);
 
         gridView = (ScrollableGridView) findViewById(R.id.calendar);
 
@@ -495,7 +468,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     }
 
 
-
     private void applyActionbarProperties(String name) {
 //        ActionBar actionBar = getActionBar();
 //        if (actionBar != null) {
@@ -546,7 +518,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private boolean validate() {
 
         if (mentor_availability.equals("1")) {
-            if(!slot_type.equalsIgnoreCase(getResources().getString(R.string.group))){
+            if (!slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
                 if (et_location.getText().toString().trim().length() <= 0) {
 
                     Toast.makeText(this, getResources().getString(R.string.your_address_please), Toast.LENGTH_SHORT).show();
