@@ -2,7 +2,8 @@
 <resources>
 
     <!-- Facebook Credentials -->
-    <string name="facebook_app_id">879635545420247</string>
+    <!--<string name="facebook_app_id">879635545420247</string>-->
+    <string name="facebook_app_id">835344249849377</string>
 
     <!-- Google Location Api Key -->
     <string name="google_location_api_key">AIzaSyBEXECi4hIR7axoaQiJQiRHvJN_ZIK3ORM</string>

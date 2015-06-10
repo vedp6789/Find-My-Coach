@@ -309,9 +309,11 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         /** Attempt to login with FB */
         else {
+            Log.d(TAG, "fb login result : " + resultCode);
             Session session = Session.getActiveSession();
             session.onActivityResult(this, requestCode, resultCode, data);
             if (resultCode == RESULT_OK) {
+                Log.d(TAG, "get session");
                 getSession();
             }
             StorageHelper.storePreference(this, "login_with", "fb");

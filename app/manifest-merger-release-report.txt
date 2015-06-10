@@ -225,11 +225,11 @@ ADDED from AndroidManifest.xml:93:9
 activity#com.findmycoach.app.activity.DashboardActivity
 ADDED from AndroidManifest.xml:99:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:102:13
+		ADDED from AndroidManifest.xml:103:13
 	android:label
 		ADDED from AndroidManifest.xml:101:13
 	android:launchMode
-		ADDED from AndroidManifest.xml:103:13
+		ADDED from AndroidManifest.xml:102:13
 	android:windowSoftInputMode
 		ADDED from AndroidManifest.xml:104:13
 	android:name
@@ -382,52 +382,58 @@ ADDED from AndroidManifest.xml:183:9
 		ADDED from AndroidManifest.xml:185:13
 	android:name
 		ADDED from AndroidManifest.xml:184:13
+activity#com.findmycoach.app.activity.AreaOfInterestSub
+ADDED from AndroidManifest.xml:187:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:189:13
+	android:name
+		ADDED from AndroidManifest.xml:188:13
 activity#io.card.payment.CardIOActivity
-ADDED from AndroidManifest.xml:198:9
+ADDED from AndroidManifest.xml:202:9
 MERGED from io.card:android-sdk:5.0.0:22:9
 	android:configChanges
-		ADDED from AndroidManifest.xml:200:13
+		ADDED from AndroidManifest.xml:204:13
 	android:name
-		ADDED from AndroidManifest.xml:199:13
+		ADDED from AndroidManifest.xml:203:13
 activity#io.card.payment.DataEntryActivity
-ADDED from AndroidManifest.xml:201:9
+ADDED from AndroidManifest.xml:205:9
 MERGED from io.card:android-sdk:5.0.0:25:9
 	android:name
-		ADDED from AndroidManifest.xml:201:19
+		ADDED from AndroidManifest.xml:205:19
 receiver#com.findmycoach.app.GcmBroadcastReceiver
-ADDED from AndroidManifest.xml:203:9
+ADDED from AndroidManifest.xml:207:9
 	android:permission
-		ADDED from AndroidManifest.xml:205:13
+		ADDED from AndroidManifest.xml:209:13
 	android:name
-		ADDED from AndroidManifest.xml:204:13
+		ADDED from AndroidManifest.xml:208:13
 intent-filter#com.findmycoach.app+com.google.android.c2dm.intent.RECEIVE
-ADDED from AndroidManifest.xml:206:13
+ADDED from AndroidManifest.xml:210:13
 action#com.google.android.c2dm.intent.RECEIVE
-ADDED from AndroidManifest.xml:207:17
+ADDED from AndroidManifest.xml:211:17
 	android:name
-		ADDED from AndroidManifest.xml:207:25
+		ADDED from AndroidManifest.xml:211:25
 category#com.findmycoach.app
-ADDED from AndroidManifest.xml:208:17
+ADDED from AndroidManifest.xml:212:17
 	android:name
-		ADDED from AndroidManifest.xml:208:27
+		ADDED from AndroidManifest.xml:212:27
 receiver#com.findmycoach.app.broadcast.IncomingSms
-ADDED from AndroidManifest.xml:212:9
+ADDED from AndroidManifest.xml:216:9
 	android:name
-		ADDED from AndroidManifest.xml:212:19
+		ADDED from AndroidManifest.xml:216:19
 intent-filter#android.provider.Telephony.SMS_RECEIVED
-ADDED from AndroidManifest.xml:213:13
+ADDED from AndroidManifest.xml:217:13
 action#android.provider.Telephony.SMS_RECEIVED
-ADDED from AndroidManifest.xml:214:17
+ADDED from AndroidManifest.xml:218:17
 	android:name
-		ADDED from AndroidManifest.xml:214:25
+		ADDED from AndroidManifest.xml:218:25
 service#com.findmycoach.app.GcmFmcService
-ADDED from AndroidManifest.xml:218:9
+ADDED from AndroidManifest.xml:222:9
 	android:name
-		ADDED from AndroidManifest.xml:218:18
+		ADDED from AndroidManifest.xml:222:18
 service#com.findmycoach.app.BackgroundService
-ADDED from AndroidManifest.xml:219:9
+ADDED from AndroidManifest.xml:223:9
 	android:name
-		ADDED from AndroidManifest.xml:219:18
+		ADDED from AndroidManifest.xml:223:18
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.facebook.android:facebook:3.21.0:20:5
