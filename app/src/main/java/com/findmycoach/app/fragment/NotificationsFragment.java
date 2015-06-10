@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,6 +35,7 @@ public class NotificationsFragment extends Fragment implements Callback {
     private ProgressDialog progressDialog;
     private JSONArray jsonArray_notifications;
     String action_for;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,8 @@ public class NotificationsFragment extends Fragment implements Callback {
     }
 
     private void getNotifications() {
-        progressDialog.show();
+        if (mSwipeRefreshLayout != null && !mSwipeRefreshLayout.isRefreshing())
+            progressDialog.show();
         RequestParams requestParams = new RequestParams();
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         requestParams.add("user_group", StorageHelper.getUserGroup(getActivity(), "user_group"));
@@ -57,7 +60,7 @@ public class NotificationsFragment extends Fragment implements Callback {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_mentee_notifications);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -102,12 +105,22 @@ public class NotificationsFragment extends Fragment implements Callback {
                 })
         );
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.purple);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getNotifications();
+            }
+        });
+
         return view;
     }
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
+        mSwipeRefreshLayout.setRefreshing(false);
         try {
             JSONObject jsonObject = new JSONObject((String) object);
             String status = jsonObject.getString("status");
@@ -128,6 +141,7 @@ public class NotificationsFragment extends Fragment implements Callback {
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
+        mSwipeRefreshLayout.setRefreshing(false);
         Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
     }
 
