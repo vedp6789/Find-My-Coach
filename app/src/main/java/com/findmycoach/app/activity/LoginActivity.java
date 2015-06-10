@@ -437,6 +437,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 else {
                     dialog.dismiss();
                     requestParams.add("email", email);
+                    StorageHelper.storePreference(LoginActivity.this, "user_email", email);
                     NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
                     progressDialog.show();
                 }
@@ -687,7 +688,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                     requestParams.add("phone_number", countryCodeTV.getText().toString().trim() + "-" + phnNum);
                     requestParams.add("user_group", String.valueOf(user_group));
                     saveUserPhoneNumber(phnNum);
-                    Log.e("Login dialog","phone_number : " + countryCodeTV.getText().toString().trim() + "-" + phnNum);
+                    Log.e("Login dialog", "phone_number : " + countryCodeTV.getText().toString().trim() + "-" + phnNum);
                     NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 26);
                     progressDialog.show();
                 }
