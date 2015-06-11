@@ -486,7 +486,6 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                             Vacation vacation = currentMonthNonCoincidingVacation.get(non_coinciding_vacation);
                                             String vacation_start_date = vacation.getStart_date();
                                             String vacation_stop_date = vacation.getStop_date();
-                                            String[] vacation_week_days = vacation.getWeek_days();
 
                                             Calendar calendar_vacation_start_date = Calendar.getInstance();
                                             calendar_vacation_start_date.set(Integer.parseInt(vacation_start_date.split("-")[0]), Integer.parseInt(vacation_start_date.split("-")[1])-1, Integer.parseInt(vacation_start_date.split("-")[2]));
@@ -500,10 +499,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                             if ((this_day == vacation_start_millis) || (this_day == vacation_stop_millis) || (this_day < vacation_stop_millis && this_day > vacation_start_millis)) {
 
                                             /* Now checking whether the_day is having week day similar to one of the vacation week days, if found then we have to consider this vacation for this day otherwise not*/
-                                                if (thisDayMatchesWithWeekDaysArray(vacation_week_days, week_day_for_this_day)) {
                                                     availabilityFlags.vacation_found = true;  /* proves one of non coinciding vacation coming for this day*/
                                                     break;  /* as we have to just know that there is any vacation or not for this day (grid day which is going to be populated)*/
-                                                }
                                             }
                                         }
                                     }
@@ -665,7 +662,6 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                         Vacation vacation1 = currentMonthNonCoincidingVacation.get(current_month_non_coinciding_vacation_index);
                                         String vacation_start_date = vacation1.getStart_date();
                                         String vacation_stop_date = vacation1.getStop_date();
-                                        String[] vacation_week_days = vacation1.getWeek_days();
 
                                         Calendar calendar_vacation_start_date = Calendar.getInstance();
                                         calendar_vacation_start_date.set(Integer.parseInt(vacation_start_date.split("-")[0]), Integer.parseInt(vacation_start_date.split("-")[1])-1, Integer.parseInt(vacation_start_date.split("-")[2]));
@@ -679,10 +675,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                         if ((this_day == vacation_start_millis) || (this_day == vacation_stop_millis) || (this_day < vacation_stop_millis && this_day > vacation_start_millis)) {
 
                                             /* Now checking whether the_day is having week day similar to one of the vacation week days, if found then we have to consider this vacation for this day otherwise not*/
-                                            if (thisDayMatchesWithWeekDaysArray(vacation_week_days, week_day_for_this_day)) {
                                                 availabilityFlags.vacation_found = true;  /* proves one of non coinciding vacation coming for this day*/
                                                 break;  /* as we have to just know that there is any vacation or not for this day (grid day which is going to be populated)*/
-                                            }
 
 
                                         }
@@ -864,12 +858,12 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
     private int checkForVacations(List<Vacation> vacations, long calendar_this_day_millis, int week_day_of_this_day) {
         int free_slot = 0;
+        boolean vacation_found = false;
         if (vacations.size() > 0) {
             for (int vacation_number = 0; vacation_number < vacations.size(); vacation_number++) {
                 Vacation vacation = vacations.get(vacation_number);
                 String vacation_start_date = vacation.getStart_date();
                 String vacation_stop_date = vacation.getStop_date();
-                String[] vacation_week_days = vacation.getWeek_days();
                 Calendar calendar_vacation_start_date = Calendar.getInstance();
                 calendar_vacation_start_date.set(Integer.parseInt(vacation_start_date.split("-")[0]), Integer.parseInt(vacation_start_date.split("-")[1]), Integer.parseInt(vacation_start_date.split("-")[2]));
                 long calendar_vacation_start_date_in_millis = calendar_vacation_start_date.getTimeInMillis();
@@ -879,15 +873,16 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                 long calendar_vacation_stop_date_in_millis = calendar_vacation_stop_date.getTimeInMillis();
 
                 if ((calendar_this_day_millis == calendar_vacation_start_date_in_millis) || (calendar_this_day_millis == calendar_vacation_stop_date_in_millis) || (calendar_this_day_millis > calendar_vacation_start_date_in_millis && calendar_this_day_millis < calendar_vacation_stop_date_in_millis)) {
-                    if (thisDayMatchesWithWeekDaysArray(vacation_week_days, week_day_of_this_day)) {
-                                                        /* this confirms that there is vacation on this slot for this day so slot cannot be treated as free slot */
-                    } else {
-                        free_slot++;
-                    }
+         vacation_found = true;
+                    break;
                 }
 
 
             }
+            if(!vacation_found){
+                free_slot++;
+            }
+
         } else {
             free_slot++;
         }

@@ -255,7 +255,7 @@ public class Slot implements Parcelable {
                 Vacation vacation = vacations.get(vacation_index);
                 String start_date = vacation.getStart_date();
                 String stop_date = vacation.getStop_date();
-                String [] vacation_week_days= vacation.getWeek_days();
+
 
                 Calendar calendar_vacation_start_date = Calendar.getInstance();
                 calendar_vacation_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1])-1, Integer.parseInt(start_date.split("-")[2]));
@@ -271,11 +271,9 @@ public class Slot implements Parcelable {
                         (calendar_time_in_millis == vacation_stop_date_in_millis) ||
                         (calendar_time_in_millis < vacation_stop_date_in_millis && calendar_time_in_millis > vacation_start_date_in_millis)) {
 
-                    if(thisDayMatchesWithVacationWeekDays(vacation_week_days, week_day_for_grid_day)){
                         vacation_found = true;
                         /* this proves there is a coinciding vacation for the current grid day*/
                         break;
-                    }
 
 
 
@@ -327,7 +325,7 @@ public class Slot implements Parcelable {
         return day_matches;
     }
 
-    private ArrayList<SlotDurationDetailBean> calculateNoOfTotalClassDays(Calendar calendar_schedule_start_date, Calendar calendar_stop_date_of_schedule, String[] slot_on_week_days) {
+    public ArrayList<SlotDurationDetailBean> calculateNoOfTotalClassDays(Calendar calendar_schedule_start_date, Calendar calendar_stop_date_of_schedule, String[] slot_on_week_days) {
 
         int workDays = 0;
         ArrayList<SlotDurationDetailBean> slotDurationDetailBeans = new ArrayList<SlotDurationDetailBean>();
@@ -367,6 +365,7 @@ public class Slot implements Parcelable {
                 slotDurationDetailBeans.add(slotDurationDetailBean);
             }
             calendar_schedule_start_date.add(Calendar.DAY_OF_MONTH, 1);
+
 
 
         }

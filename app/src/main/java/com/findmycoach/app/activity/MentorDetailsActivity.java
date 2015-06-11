@@ -994,7 +994,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 for (int week_day = 0; week_day < vacation_weekdays.length(); week_day++) {
                     vacation_weekdays_array[week_day] = vacation_weekdays.getString(week_day);   /* week_day is used to pass index */
                 }
-                vacation.setWeek_days(vacation_weekdays_array);
                 vacation.setStart_time(vacation_jsonObject.getString("start_time"));
                 vacation.setStop_time(vacation_jsonObject.getString("stop_time"));
                 vacation.setVacation_made_at_network_success("true");
@@ -1189,7 +1188,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                     for (int week_day = 0; week_day < vacation_weekdays.length(); week_day++) {
                         vacation_weekdays_array[week_day] = vacation_weekdays.getString(week_day);   /* week_day is used to pass index */
                     }
-                    vacation.setWeek_days(vacation_weekdays_array);
                     vacation.setStart_time(vacation_jsonObject.getString("start_time"));
                     vacation.setStop_time(vacation_jsonObject.getString("stop_time"));
                     vacations.add(vacation);

@@ -418,12 +418,10 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                             long cal_coin_vac_stop_millis = cal_coin_vac_stop_date.getTimeInMillis();
 
                                             if ((this_day_in_millis == cal_coin_vac_start_millis) || (this_day_in_millis == cal_coin_vac_stop_millis) || (this_day_in_millis > cal_coin_vac_start_millis && this_day_in_millis < cal_coin_vac_stop_millis)) {
-                                                if (thisDayMatchesWithArrayOfWeekDays(vacation.getWeek_days(), this_day_week_day)) {
                                                         /* Vacation found for this slot of the day*/
                                                     coinciding_vacation_of_this_day_for_this_slot.add(vacation);
                                                     availabilityFlags.vacation_found = true;
 
-                                                }
                                             }
                                         }
 
@@ -603,12 +601,10 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                             long cal_coin_vac_stop_millis = cal_coin_vac_stop_date.getTimeInMillis();
 
                                             if ((this_day_in_millis == cal_coin_vac_start_millis) || (this_day_in_millis == cal_coin_vac_stop_millis) || (this_day_in_millis > cal_coin_vac_start_millis && this_day_in_millis < cal_coin_vac_stop_millis)) {
-                                                if (thisDayMatchesWithArrayOfWeekDays(vacation.getWeek_days(), this_day_week_day)) {
                                                         /* Vacation found for this slot of the day*/
                                                     coinciding_vacation_of_this_day_for_this_slot.add(vacation);
                                                     availabilityFlags.vacation_found = true;
 
-                                                }
                                             }
                                         }
                                     }
@@ -686,7 +682,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             Vacation vacation = coming_month_non_coinciding_vacations.get(vacation_no);
                             String vacation_start_date = vacation.getStart_date();
                             String vacation_stop_date = vacation.getStop_date();
-                            String[] vacation_week_days = vacation.getWeek_days();
+
                             String vacation_start_time = vacation.getStart_time();
                             String vacation_stop_time = vacation.getStop_time();
                             String vacation_id = vacation.getVacation_id();  /* Only using this in non coinciding vacation*/
@@ -702,7 +698,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
 
                             if ((this_day_in_millis == vac_start_date_millis) || (this_day_in_millis == vac_stop_date_millis) || (this_day_in_millis > vac_start_date_millis && this_day_in_millis < vac_stop_date_millis)) {
-                                if (thisDayMatchesWithArrayOfWeekDays(vacation_week_days, this_day_week_day)) {
                                          /* this prove non coinciding vacation on this day */
                                     Calendar startTime;
                                     startTime = Calendar.getInstance();
@@ -719,7 +714,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                     weekViewEvent = new WeekViewEvent(Long.parseLong(vacation_id), getVacationTitle(startTime, Integer.parseInt(vacation_stop_time.split(":", 3)[0]), Integer.parseInt(vacation_stop_time.split(":", 3)[1])), startTime, endTime, vacation, 21);  /* For making a non coinciding vacation over weekview */
                                     weekViewEvent.setColor(getResources().getColor(R.color.event_color_01));
                                     events.add(weekViewEvent);
-                                }
                             }
 
 
@@ -749,7 +743,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             Vacation vacation1 = coming_month_non_coinciding_vacations.get(non_coinciding_vacation);
                             String vacation_start_date = vacation1.getStart_date();
                             String vacation_stop_date = vacation1.getStop_date();
-                            String[] vacation_week_days = vacation1.getWeek_days();
                             String vacation_start_time = vacation1.getStart_time();
                             String vacation_stop_time = vacation1.getStop_time();
                             String vacation_id = vacation1.getVacation_id();  /* Only using this in non coinciding vacation*/
@@ -765,7 +758,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
 
                             if ((this_day_in_millis == vac_start_date_millis) || (this_day_in_millis == vac_stop_date_millis) || (this_day_in_millis > vac_start_date_millis && this_day_in_millis < vac_stop_date_millis)) {
-                                if (thisDayMatchesWithArrayOfWeekDays(vacation_week_days, this_day_week_day)) {
                                          /* this prove non coinciding vacation on this day */
                                     Calendar startTime;
                                     startTime = Calendar.getInstance();
@@ -782,7 +774,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                     weekViewEvent = new WeekViewEvent(Long.parseLong(vacation_id), getVacationTitle(startTime, Integer.parseInt(vacation_stop_time.split(":", 3)[0]), Integer.parseInt(vacation_stop_time.split(":", 3)[1])), startTime, endTime, vacation, 21);  /* For making a non coinciding vacation over weekview */
                                     weekViewEvent.setColor(getResources().getColor(R.color.event_color_01));
                                     events.add(weekViewEvent);
-                                }
                             }
 
                         }
@@ -961,7 +952,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             Vacation vacation = vacations.get(vacation_no);
             String vac_start_date = vacation.getStart_date();
             String vac_stop_date = vacation.getStop_date();
-            String vac_week_days[] = vacation.getWeek_days();
 
             Calendar cal_vac_start_date = Calendar.getInstance();
             cal_vac_start_date.set(Integer.parseInt(vac_start_date.split("-")[0]), Integer.parseInt(vac_start_date.split("-")[1]) - 1, Integer.parseInt(vac_start_date.split("-")[2]));
@@ -972,10 +962,8 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             long cal_vac_stop_date_millis = cal_vac_stop_date.getTimeInMillis();
 
             if ((this_day_in_millis == cal_vac_start_date_millis) || (this_day_in_millis == cal_vac_stop_date_millis) || (this_day_in_millis > cal_vac_start_date_millis && this_day_in_millis < cal_vac_stop_date_millis)) {
-                if (thisDayMatchesWithArrayOfWeekDays(vac_week_days, this_day_week_day)) {
                     vacation_found = true;
                     break;
-                }
             }
         }
         return  vacation_found;

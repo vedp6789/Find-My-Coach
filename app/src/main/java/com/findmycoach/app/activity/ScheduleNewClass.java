@@ -26,6 +26,7 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.beans.CalendarSchedule.MentorInfo;
 import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.beans.CalendarSchedule.SlotDurationDetailBean;
+import com.findmycoach.app.beans.CalendarSchedule.Vacation;
 import com.findmycoach.app.beans.CalendarSchedule.VacationCoincidingSlot;
 import com.findmycoach.app.beans.CalendarSchedule.VacationDurationDetailBean;
 import com.findmycoach.app.adapter.AddSlotAdapter;
@@ -76,6 +77,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private int slot_start_minute;
     private int slot_stop_hour;
     private int slot_stop_minute;
+    private List<Vacation> vacations_on_the_slot;
     private ArrayList<String> arrayList_subcategory = null;
     private String slot_type;
     private String[] slot_on_week_days;
@@ -100,6 +102,26 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         charges = bundle.getString("charges");
         arrayList_subcategory = bundle.getStringArrayList("arrayList_sub_category");
 
+
+        slot_start_day = Integer.parseInt(slot.getSlot_start_date().split("-")[2]);
+        slot_start_month = Integer.parseInt(slot.getSlot_start_date().split("-")[1]);
+        slot_start_year = Integer.parseInt(slot.getSlot_start_date().split("-")[0]);
+
+        slot_stop_day = Integer.parseInt(slot.getSlot_stop_date().split("-")[2]);
+        slot_stop_month = Integer.parseInt(slot.getSlot_stop_date().split("-")[1]);
+        slot_stop_year = Integer.parseInt(slot.getSlot_stop_date().split("-")[0]);
+
+        slot_start_hour = Integer.parseInt(slot.getSlot_start_time().split(":")[0]);
+        slot_start_minute = Integer.parseInt(slot.getSlot_start_time().split(":")[1]);
+
+        slot_stop_hour = Integer.parseInt(slot.getSlot_stop_time().split(":")[0]);
+        slot_stop_minute = Integer.parseInt(slot.getSlot_stop_time().split(":")[1]);
+
+        slot_type = slot.getSlot_type();
+        slot_on_week_days = slot.getSlot_week_days();
+
+        vacations_on_the_slot = new ArrayList<Vacation>();
+        vacations_on_the_slot = slot.getVacations();
 
         progressDialog = new ProgressDialog(ScheduleNewClass.this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
@@ -161,6 +183,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             selected_subject = arrayList_subcategory.get(0);
             tv_subject.setText(selected_subject);
         }
+
+
+
         String timing = String.format("%02d:%02d to %02d:%02d", slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute);
         tv_class_timing.setText(timing);
 
@@ -196,7 +221,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         Log.d(TAG, "mentor availability : " + bundle.getString("mentor_availability"));
 
-/* Here i'm checking whether the current date is ahead of class start time or not , If ahead then this mentee's class schedule will start from the current date */
+        /* Here i'm checking whether the current date is ahead of class start time or not , If ahead then this mentee's class schedule will start from the current date */
         Calendar cal = new GregorianCalendar();
         cal.set(slot_start_year, slot_start_month - 1, slot_start_day);
         long slot_start_date = cal.getTimeInMillis();
@@ -242,9 +267,66 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         Calendar calendar_stop_date_of_schedule = Calendar.getInstance();
         calendar_stop_date_of_schedule.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
+        long stop_date_of_this_class_in_millis = calendar_stop_date_of_schedule.getTimeInMillis();
 
-        Calendar calendar_schedule_start_date = Calendar.getInstance();
+        Calendar calendar_schedule_start_date = Calendar.getInstance();    /* Possible start date of this class */
         calendar_schedule_start_date.set(class_schedule_start_year, class_schedule_start_month - 1, class_schedule_start_day);
+        long start_date_of_this_class_millis = calendar_schedule_start_date.getTimeInMillis();
+
+
+        Calendar calendar_temp_start_date  = Calendar.getInstance();
+        calendar_temp_start_date = (Calendar) calendar_schedule_start_date.clone();
+
+        int no_of_possible_classes_without_considering_vacation = new Slot().calculateNoOfTotalClassDays(calendar_schedule_start_date,calendar_stop_date_of_schedule,slot_on_week_days).size();
+
+        ArrayList<Integer> class_days_after_reducing_vacation = new ArrayList<Integer>();
+        if(no_of_possible_classes_without_considering_vacation > 0 ){
+            List<DurationOfSuccessfulClassDays> durationOfSuccessfulClassDayses = new ArrayList<DurationOfSuccessfulClassDays>();
+            if(vacations_on_the_slot.size() > 0 ){
+
+                for(int vacation_no = 0 ; vacation_no < vacations_on_the_slot.size();  vacation_no++){
+
+                    if(calendar_temp_start_date.getTimeInMillis() <= stop_date_of_this_class_in_millis ){
+                        Vacation vacation = vacations_on_the_slot.get(vacation_no);
+                        String start_date = vacation.getStart_date();
+                        String stop_date = vacation.getStop_date();
+
+                        Calendar calendar_vacation_start = Calendar.getInstance();
+                        calendar_vacation_start.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
+                        long vacation_start_in_millis = calendar_vacation_start.getTimeInMillis();
+
+                        Calendar calendar_vacation_stop = Calendar.getInstance();
+                        calendar_vacation_stop.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
+                        long vacation_stop_in_millis = calendar_vacation_stop.getTimeInMillis();
+
+                        if(vacation_start_in_millis > calendar_temp_start_date.getTimeInMillis()){
+                            Calendar temp_stop_date = Calendar.getInstance();
+                            calendar_vacation_start.add(Calendar.DAY_OF_MONTH,-1);
+                            temp_stop_date = (Calendar) calendar_vacation_start.clone();
+
+                            int days = new Slot().calculateNoOfTotalClassDays(calendar_schedule_start_date,temp_stop_date,slot_on_week_days).size();
+                            if(days > 0){
+                                
+                            }
+
+
+                        }else{
+
+                        }
+                    }else{
+                        break;
+                    }
+
+                }
+            }else{
+                /* No vacation found */
+            }
+
+        }else{
+            /* No class can be possible to schedule */
+        }
+
+
 
 
 
@@ -269,6 +351,10 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         }
 
         */
+
+
+
+
 
         int total_class_days;
         int total_amount = 0;
@@ -582,5 +668,27 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         Toast.makeText(ScheduleNewClass.this, (String) object, Toast.LENGTH_SHORT).show();
 
+    }
+
+
+    class DurationOfSuccessfulClassDays{
+        private  String start_date;
+        private String stop_date;
+
+        public String getStart_date() {
+            return start_date;
+        }
+
+        public void setStart_date(String start_date) {
+            this.start_date = start_date;
+        }
+
+        public String getStop_date() {
+            return stop_date;
+        }
+
+        public void setStop_date(String stop_date) {
+            this.stop_date = stop_date;
+        }
     }
 }
