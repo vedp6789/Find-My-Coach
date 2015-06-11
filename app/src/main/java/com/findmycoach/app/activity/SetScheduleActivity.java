@@ -13,13 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-//import com.alamkanak.weekview.WeekView;
-//import com.alamkanak.weekview.WeekViewEvent;
-import com.findmycoach.app.adapter.CalendarGridAdapter;
-import com.findmycoach.app.beans.CalendarSchedule.Day;
-import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
-import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
-import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
+
 import com.findmycoach.app.beans.CalendarSchedule.Event;
 import com.findmycoach.app.beans.CalendarSchedule.EventDuration;
 import com.findmycoach.app.beans.CalendarSchedule.Mentee;
@@ -28,8 +22,6 @@ import com.findmycoach.app.beans.CalendarSchedule.MonthYearInfo;
 import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.beans.CalendarSchedule.SlotDurationDetailBean;
 import com.findmycoach.app.beans.CalendarSchedule.Vacation;
-import com.findmycoach.app.beans.CalendarSchedule.VacationCoincidingSlot;
-import com.findmycoach.app.beans.CalendarSchedule.VacationDurationDetailBean;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -40,7 +32,6 @@ import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 
