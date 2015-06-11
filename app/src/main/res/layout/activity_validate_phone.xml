@@ -17,29 +17,12 @@
         android:text="@string/verify_phone"
         android:textStyle="bold"
         android:textColor="@color/white"
-        android:textSize="26sp" />
-
-    <TextView
-        android:layout_marginTop="@dimen/margin_top"
-        android:id="@+id/action_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:clickable="true"
-        android:drawableLeft="@drawable/logout"
-        android:drawablePadding="6dp"
-        android:gravity="center"
-        android:padding="4dp"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/header"
-        android:text="@string/action_logout"
-        android:textColor="@color/white"
-        android:textSize="18sp" />
+        android:textSize="@dimen/header" />
 
 
     <EditText
         android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:layout_below="@+id/action_logout"
+        android:layout_below="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/verificationCodeET"
@@ -67,5 +50,23 @@
         android:textColor="@color/custom_button_text_color_click"
         android:id="@+id/btnResend"
         android:layout_below="@+id/btnVerify" />
+
+
+    <TextView
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:id="@+id/action_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:drawableLeft="@drawable/skip_small"
+        android:drawablePadding="@dimen/days_margin"
+        android:gravity="center"
+        android:padding="@dimen/days_margin"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/btnResend"
+        android:text="@string/back"
+        android:textColor="@color/white"
+        android:textSize="@dimen/profile_details" />
 
 </RelativeLayout>

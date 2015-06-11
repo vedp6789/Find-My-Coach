@@ -52,6 +52,7 @@ import org.xml.sax.InputSource;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -62,7 +63,6 @@ import javax.xml.xpath.XPathFactory;
 
 public class EditProfileActivityMentee extends Activity implements DatePickerDialog.OnDateSetListener, Callback {
 
-    int year = 1990, month = 1, day = 1;
     int REQUEST_CODE = 100;
     private ImageView profilePicture;
     private TextView profileEmail;
@@ -246,25 +246,15 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             }
         });
 
-        pinCode.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (pinCode.getText().toString().length() > 4 && pinCode.hasFocus()) {
+        pinCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
                     try {
                         new AddressFromZip(EditProfileActivityMentee.this, profileAddress1).execute(pinCode.getText().toString());
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
+                return false;
             }
         });
 
@@ -559,8 +549,14 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
     @Override
     protected Dialog onCreateDialog(int id) {
         if (id == 999) {
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
+            Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int day = c.get(Calendar.DATE);
+            int month = c.get(Calendar.MONTH);
+            c.set(Calendar.YEAR, year - 5);
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year - 15, month, day);
             datePickerDialog.setTitle(getResources().getString(R.string.dob));
+            datePickerDialog.getDatePicker().setMaxDate(c.getTimeInMillis());
             return datePickerDialog;
         }
         return null;

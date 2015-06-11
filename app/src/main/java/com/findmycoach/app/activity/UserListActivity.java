@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,7 @@ public class UserListActivity extends Activity implements Callback {
     private int selectedPosition = -1;
     private String connection_status_for_Selected_mentor;
     private String searchFor;
+    private ImageView menuItem;
 
 
     @Override
@@ -107,8 +109,10 @@ public class UserListActivity extends Activity implements Callback {
         listView.setAdapter(mentorListAdapter);
 
         TextView title = (TextView) findViewById(R.id.title);
-
-        title.setText(users.size() > 1 ? getResources().getString(R.string.mentors) : getResources().getString(R.string.mentor));
+        String titleName = users.size() > 1 ? getResources().getString(R.string.mentors) : getResources().getString(R.string.mentor);
+        title.setText(titleName + " " + getResources().getString(R.string.forrr) + " " + getIntent().getStringExtra("search_for").split("-")[0]);
+        menuItem = (ImageView) findViewById(R.id.menuItem);
+//        menuItem.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_sort_by_size));
     }
 
     @Override

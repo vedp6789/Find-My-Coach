@@ -47,6 +47,8 @@ public class AreaOfInterestSub extends Activity {
         index = getIntent().getIntExtra("index", -2);
         int level = getIntent().getIntExtra("level", -1);
 
+        findViewById(R.id.buttonSave).setVisibility(View.GONE);
+
         Datum datum = null;
         if (index != -2 && index != AreasOfInterestActivity.category.getData().size()
                 && level == 2) {

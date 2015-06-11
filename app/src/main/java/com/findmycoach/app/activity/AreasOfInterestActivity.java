@@ -181,19 +181,30 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                List<String> listTemp = new ArrayList<>();
-                for (DatumSub d : datumSubs) {
-                    if (d.isSelected())
-                        listTemp.add(d.getName());
-                }
-                intent.putExtra("interests", new Gson().toJson(listTemp));
-                setResult(RESULT_OK, intent);
                 finish();
             }
         });
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(getResources().getString(R.string.prompt_area_of_coaching));
+
+        findViewById(R.id.buttonSave).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnResult();
+            }
+        });
+    }
+
+    private void returnResult() {
+        Intent intent = new Intent();
+        List<String> listTemp = new ArrayList<>();
+        for (DatumSub d : datumSubs) {
+            if (d.isSelected())
+                listTemp.add(d.getName());
+        }
+        intent.putExtra("interests", new Gson().toJson(listTemp));
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
 

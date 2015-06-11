@@ -66,6 +66,11 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     }
 
     @Override
+    public void onBackPressed() {
+        logout();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         validatePhoneActivity = null;
@@ -108,7 +113,6 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 logout();
-                startActivity(new Intent(ValidatePhoneActivity.this, LoginActivity.class));
             }
         });
     }
@@ -234,6 +238,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         }
 
         this.finish();
+        startActivity(new Intent(ValidatePhoneActivity.this, LoginActivity.class));
     }
 
     /**

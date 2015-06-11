@@ -58,7 +58,7 @@ public class AddressFromZip extends AsyncTask<String, Void, List<Address>> {
                 try {
                     address = address.replace(zip, "");
                     if (address != null && !address.equals("")
-                            && editText.getText().toString().trim().equalsIgnoreCase(address.trim()))
+                            && !editText.getText().toString().trim().equalsIgnoreCase(address.trim()))
                         editText.setText(address);
                 } catch (Exception ignored) {
                 }
@@ -66,7 +66,7 @@ public class AddressFromZip extends AsyncTask<String, Void, List<Address>> {
                 try {
                     address = address.replace(zip, "");
                     if (address != null && !address.equals("")
-                            && editText.getText().toString().trim().equalsIgnoreCase(address.trim()))
+                            && !editText.getText().toString().trim().equalsIgnoreCase(address.trim()))
                         editText.setText(address);
                 } catch (Exception ignored) {
                 }

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/calender_header_margin_arrow"
         android:gravity="center"
-        android:text="@string/prompt_email_id"
+        android:text="@string/connection_request"
         android:textColor="@color/white"
         android:textSize="@dimen/profile_name"
         android:textStyle="bold" />
@@ -22,28 +22,19 @@
         android:background="@color/white" />
 
 
-    <LinearLayout
+    <EditText
+        android:id="@+id/editText"
+        style="@style/EditTextCustomHolo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/back_margin"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/emailEditText"
-            style="@style/EditTextCustomHolo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/calender_header_margin_arrow"
-            android:hint="@string/prompt_email_id"
-            android:inputType="textEmailAddress"
-            android:padding="@dimen/days_margin"
-            android:singleLine="true" />
-    </LinearLayout>
+        android:layout_margin="@dimen/calender_header_margin_arrow"
+        android:hint="@string/connection_request_msg"
+        android:padding="@dimen/days_margin" />
 
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/login_button_height">
+        android:layout_height="40dp">
 
         <Button
             android:id="@+id/cancelButton"

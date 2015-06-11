@@ -50,41 +50,41 @@
                 android:gravity="center_vertical"
                 android:numStars="5" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/textView_padding_margin"
-                android:text="@string/prompt_email_id"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_heading"
-                android:textStyle="bold" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:layout_marginTop="@dimen/textView_padding_margin"-->
+                <!--android:text="@string/prompt_email_id"-->
+                <!--android:textColor="@color/purple"-->
+                <!--android:textSize="@dimen/profile_heading"-->
+                <!--android:textStyle="bold" />-->
 
-            <TextView
-                android:id="@+id/profile_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_details" />
+            <!--<TextView-->
+                <!--android:id="@+id/profile_email"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:textColor="@color/purple"-->
+                <!--android:textSize="@dimen/profile_details" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/textView_padding_margin"
-                android:text="@string/prompt_phone"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_heading"
-                android:textStyle="bold" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:layout_marginTop="@dimen/textView_padding_margin"-->
+                <!--android:text="@string/prompt_phone"-->
+                <!--android:textColor="@color/purple"-->
+                <!--android:textSize="@dimen/profile_heading"-->
+                <!--android:textStyle="bold" />-->
 
-            <TextView
-                android:id="@+id/profile_phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_details" />
+            <!--<TextView-->
+                <!--android:id="@+id/profile_phone"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:textColor="@color/purple"-->
+                <!--android:textSize="@dimen/profile_details" />-->
 
             <TextView
                 android:layout_width="wrap_content"

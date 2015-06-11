@@ -1,10 +1,8 @@
 package com.findmycoach.app.activity;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
@@ -18,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -60,11 +59,11 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private TextView profileAddress;
     private RatingBar profileRatting;
     private TextView profileCharges;
-    private TextView profileEmail;
+//    private TextView profileEmail;
     private TextView profileExperience;
     private TextView profileQualification;
     private TextView profileTravelAvailable;
-    private TextView profilePhone;
+//    private TextView profilePhone;
     private TextView profileDob;
     private LinearLayout areaOfCoaching;
     private Data userInfo = null;
@@ -391,8 +390,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         profileCharges = (TextView) findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) findViewById(R.id.profile_travel_available);
         areaOfCoaching = (LinearLayout) findViewById(R.id.areas_of_coaching);
-        profilePhone = (TextView) findViewById(R.id.profile_phone);
-        profileEmail = (TextView) findViewById(R.id.profile_email);
+//        profilePhone = (TextView) findViewById(R.id.profile_phone);
+//        profileEmail = (TextView) findViewById(R.id.profile_email);
         profileDob = (TextView) findViewById(R.id.profile_dob);
 
         tv_currentMonth = (TextView) findViewById(R.id.tv_currentMonth);
@@ -442,10 +441,10 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
     private void populateFields() {
         profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
-        try {
-            profileEmail.setText(userInfo.getEmail());
-        } catch (Exception e) {
-        }
+//        try {
+//            profileEmail.setText(userInfo.getEmail());
+//        } catch (Exception e) {
+//        }
         String address = "";
         if (userInfo.getAddress() != null) {
             address = address + userInfo.getAddress() + ", ";
@@ -511,7 +510,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             }
             populateViews(areaOfCoaching, buttons, this);
         }
-        profilePhone.setText(userInfo.getPhonenumber());
+//        profilePhone.setText(userInfo.getPhonenumber());
     }
 
     private void populateViews(LinearLayout linearLayout, List<Button> views, Context context) {
@@ -535,7 +534,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             LL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
             view.measure(0, 0);
-            params = new LinearLayout.LayoutParams(view.getMeasuredWidth(), profileEmail.getHeight());
+            params = new LinearLayout.LayoutParams(view.getMeasuredWidth(), profileDob.getHeight());
             params.setMargins(2, 2, 2, 2);
 
             LL.addView(view, params);
@@ -545,7 +544,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 linearLayout.addView(newLL);
 
                 newLL = new LinearLayout(context);
-                newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, profileEmail.getHeight()));
+                newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, profileDob.getHeight()));
                 newLL.setOrientation(LinearLayout.HORIZONTAL);
                 newLL.setGravity(Gravity.CENTER_HORIZONTAL);
                 params = new LinearLayout.LayoutParams(LL.getMeasuredWidth(), LL.getMeasuredHeight());
@@ -623,39 +622,32 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     }
 
     private void showAlert() {
-        final String defaultMessage = getResources().getString(R.string.connection_request_msg);
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle(getResources().getString(R.string.connection_request));
-        alertDialog.setMessage(getResources().getString(R.string.enter_msg));
-        final EditText input = new EditText(this);
-        input.setHint(defaultMessage);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(8, 8, 8, 8);
-        input.setLayoutParams(params);
-        alertDialog.setView(input);
-        input.setBackgroundDrawable(getResources().getDrawable(R.drawable.custom_edittext));
-        alertDialog.setPositiveButton(getResources().getString(R.string.send),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        String message = input.getText().toString();
-                        if (message.trim().length() < 1)
-                            message = defaultMessage;
-                        sendConnectionRequest(message);
-                    }
-                }
-        );
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.send_coonection_request_dialog);
+        final EditText editText = (EditText) dialog.findViewById(R.id.editText);
+        final Button cancelButton = (Button) dialog.findViewById(R.id.cancelButton);
+        Button okButton = (Button) dialog.findViewById(R.id.okButton);
 
-        alertDialog.setNegativeButton(getResources().getString(R.string.cancel),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                }
-        );
-        alertDialog.setCancelable(false);
-        alertDialog.show();
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String message = editText.getText().toString();
+                if (message.trim().length() < 1)
+                    message = getResources().getString(R.string.connection_request_msg);
+                sendConnectionRequest(message);
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
     private void sendConnectionRequest(String message) {

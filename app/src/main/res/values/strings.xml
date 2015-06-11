@@ -611,7 +611,7 @@
 
     <!-- Dialog message strings-->
     <string name="connecting">Connecting...</string>
-    <string name="sending">Sending...</string>
+    <string name="sending">Sending</string>
     <string name="please_wait">Please wait...</string>
     <string name="dob">Date of Birth</string>
     <string name="phone_no_must">Phone number is must!!!</string>
@@ -622,13 +622,14 @@
     <string name="logging_in">Logging in...</string>
     <string name="verifying">Verifying...</string>
     <string name="verify">Verify</string>
-    <string name="verify_phone">Verify phone</string>
-    <string name="sending_code">Sending code...</string>
+    <string name="verify_phone">Verify your mobile number</string>
+    <string name="sending_code">Sending code</string>
     <string name="already_slot_found">Sorry, there is already a slot between\n</string>
     <string name="and">\tand\t</string>
     <string name="from1">\tfrom\t</string>
     <string name="to2">\tto\t</string>
     <string name="for1">\tfor\t</string>
+    <string name="forrr">for</string>
     <string name="cannot_placed">\nSo this slot cannot be placed!</string>
     <string name="new_slot_with_vacation">Hi, you have placed a new slot with a vacation between \n</string>
 
@@ -793,6 +794,7 @@
     <string name="schedule_vacation">Vacation schedule</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="back">Back</string>
     <string name="start_time">Select</string>
     <string name="stop_time">Select</string>
     <string name="submit_rating">Submit rating</string>
