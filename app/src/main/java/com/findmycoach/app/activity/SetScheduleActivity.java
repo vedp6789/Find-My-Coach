@@ -58,10 +58,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     private static ArrayList<MentorInfo> currentMonthMentorInfo = null;
     private static ArrayList<MentorInfo> comingMonthMentorInfo = null;
 
-    private static final int slot_event_type = 0;  /* taking slot as event because WeekView only understand event*/
-    private static final int event_type = 1;/* taking scheduled class with mentee as one event*/
-    private static final int vacation_event_type = 3;  /* taking vacation as one event for weekview*/
-    private static final int free_slot_event_type = 2; /* taking scheduled class with mentee as one event*/
     private static String this_activity_for = null;
     private static ProgressDialog progressDialog;
     private String mentor_id = null;
@@ -1223,6 +1219,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                 if (StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group").equals("3")) {
                     switch (event_type) {
                         case 12345:
+             
                             break;
                         case 123:
                             break;

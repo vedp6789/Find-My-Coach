@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
@@ -37,6 +38,9 @@ import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -87,6 +91,10 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private ScrollableGridView gridView;
     private TextView title;
     private TextView tv_number_of_classes, tv_vacation;
+    private int class_days_after_reducing_vacation = 0; /* No of days which will be possible for class i.e. if vacation found then these are coming from reducing vacations */
+    List<DurationOfSuccessfulClassDays> durationOfSuccessfulClassDayses = new ArrayList<DurationOfSuccessfulClassDays>();
+    private boolean class_not_possible;
+    private ImageButton ib_info;
 
 
     @Override
@@ -122,6 +130,14 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         vacations_on_the_slot = new ArrayList<Vacation>();
         vacations_on_the_slot = slot.getVacations();
+        if(vacations_on_the_slot.size() > 0){
+            ib_info.setVisibility(View.VISIBLE);
+        }else{
+            ib_info.setVisibility(View.GONE);
+        }
+
+        durationOfSuccessfulClassDayses = new ArrayList<DurationOfSuccessfulClassDays>();
+
 
         progressDialog = new ProgressDialog(ScheduleNewClass.this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
@@ -146,16 +162,18 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         if (slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
             ll_location.setVisibility(View.GONE);
-        }else{
-            if(mentor_availability!= null && mentor_availability.equals("1")){
-               String tutorial_location = StorageHelper.AddressInformation(ScheduleNewClass.this,"training_location");
-                if(tutorial_location.trim().length() <=0){
-                    if(!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")){
+        } else {
+            if (mentor_availability != null && mentor_availability.equals("1")) {
+                String tutorial_location = StorageHelper.AddressInformation(ScheduleNewClass.this, "training_location");
+                if (tutorial_location.trim().length() <= 0) {
+                    if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
                         et_location.setText(DashboardActivity.dashboardActivity.userCurrentAddress);
                     }
-                }else{
+                } else {
                     et_location.setText(tutorial_location);
                 }
+            }else{
+                ll_location.setVisibility(View.GONE);
             }
         }
 
@@ -183,7 +201,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             selected_subject = arrayList_subcategory.get(0);
             tv_subject.setText(selected_subject);
         }
-
 
 
         String timing = String.format("%02d:%02d to %02d:%02d", slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute);
@@ -274,19 +291,19 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         long start_date_of_this_class_millis = calendar_schedule_start_date.getTimeInMillis();
 
 
-        Calendar calendar_temp_start_date  = Calendar.getInstance();
+        Calendar calendar_temp_start_date = Calendar.getInstance();
         calendar_temp_start_date = (Calendar) calendar_schedule_start_date.clone();
 
-        int no_of_possible_classes_without_considering_vacation = new Slot().calculateNoOfTotalClassDays(calendar_schedule_start_date,calendar_stop_date_of_schedule,slot_on_week_days).size();
+        int no_of_possible_classes_without_considering_vacation = new Slot().calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_stop_date_of_schedule, slot_on_week_days).size();
 
-        ArrayList<Integer> class_days_after_reducing_vacation = new ArrayList<Integer>();
-        if(no_of_possible_classes_without_considering_vacation > 0 ){
-            List<DurationOfSuccessfulClassDays> durationOfSuccessfulClassDayses = new ArrayList<DurationOfSuccessfulClassDays>();
-            if(vacations_on_the_slot.size() > 0 ){
 
-                for(int vacation_no = 0 ; vacation_no < vacations_on_the_slot.size();  vacation_no++){
+        if (no_of_possible_classes_without_considering_vacation > 0) {
 
-                    if(calendar_temp_start_date.getTimeInMillis() <= stop_date_of_this_class_in_millis ){
+            if (vacations_on_the_slot.size() > 0) {
+
+                for (int vacation_no = 0; vacation_no < vacations_on_the_slot.size(); vacation_no++) {
+
+                    if (calendar_temp_start_date.getTimeInMillis() <= stop_date_of_this_class_in_millis) {
                         Vacation vacation = vacations_on_the_slot.get(vacation_no);
                         String start_date = vacation.getStart_date();
                         String stop_date = vacation.getStop_date();
@@ -299,85 +316,97 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                         calendar_vacation_stop.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
                         long vacation_stop_in_millis = calendar_vacation_stop.getTimeInMillis();
 
-                        if(vacation_start_in_millis > calendar_temp_start_date.getTimeInMillis()){
-                            Calendar temp_stop_date = Calendar.getInstance();
-                            calendar_vacation_start.add(Calendar.DAY_OF_MONTH,-1);
-                            temp_stop_date = (Calendar) calendar_vacation_start.clone();
+                        if (vacation_start_in_millis > calendar_temp_start_date.getTimeInMillis()) {    /* This is the case when a vacation start date is ahead of temp_slot_start_date*/
+                            Calendar calendar_temp_stop_date = Calendar.getInstance();
+                            calendar_temp_stop_date = (Calendar) calendar_vacation_start.clone();
+                            calendar_temp_stop_date.add(Calendar.DAY_OF_MONTH, -1);
 
-                            int days = new Slot().calculateNoOfTotalClassDays(calendar_schedule_start_date,temp_stop_date,slot_on_week_days).size();
-                            if(days > 0){
-                                
+                            int days = new Slot().calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_temp_stop_date, slot_on_week_days).size();
+                            if (days > 0) {
+                                class_days_after_reducing_vacation += days;
+                                DurationOfSuccessfulClassDays durationOfSuccessfulClassDays = new DurationOfSuccessfulClassDays();
+                                String temp_start_date = String.format("%d-%02d-%02d", calendar_temp_start_date.get(Calendar.YEAR), calendar_temp_start_date.get(Calendar.MONTH) + 1, calendar_temp_start_date.get(Calendar.DAY_OF_MONTH));
+                                String temp_stop_date = String.format("%d-%02d-%02d", calendar_temp_stop_date.get(Calendar.YEAR), calendar_temp_stop_date.get(Calendar.MONTH) + 1, calendar_temp_stop_date.get(Calendar.DAY_OF_MONTH));
+                                durationOfSuccessfulClassDays.setStart_date(temp_start_date);
+                                durationOfSuccessfulClassDays.setStop_date(temp_stop_date);
+                                durationOfSuccessfulClassDayses.add(durationOfSuccessfulClassDays);
                             }
+                            calendar_temp_start_date = (Calendar) calendar_vacation_stop.clone();
+                            calendar_temp_start_date.add(Calendar.DAY_OF_MONTH, 1);    /* Once checked for the span of slot time for availble class days, again initiating temp start date of slot to day next to vacation completion date */
 
-
-                        }else{
-
+                        } else {    /*  Start date of slot is found either equal to Vacation start of found inbetween of vacation, so in case we have to make next day of vacation completion day as temp start date of slot */
+                            calendar_temp_start_date = (Calendar) calendar_vacation_stop.clone();
+                            calendar_temp_start_date.add(Calendar.DAY_OF_MONTH, 1);
                         }
-                    }else{
+                    } else {
                         break;
                     }
 
                 }
-            }else{
+                /* after the completion of for loop it means all vacation are traversed, and after this if calendar_temp_start_date is behind stop date of calendar_stop_date_schedule then we have to check for this period of time for possible classes*/
+                if (calendar_temp_start_date.getTimeInMillis() < stop_date_of_this_class_in_millis) {
+                    int days = new Slot().calculateNoOfTotalClassDays(calendar_temp_start_date, calendar_stop_date_of_schedule, slot_on_week_days).size();
+                    if (days > 0) {
+                        class_days_after_reducing_vacation += days;
+                        DurationOfSuccessfulClassDays durationOfSuccessfulClassDays = new DurationOfSuccessfulClassDays();
+                        String temp_start_date = String.format("%d-%02d-%02d", calendar_temp_start_date.get(Calendar.YEAR), calendar_temp_start_date.get(Calendar.MONTH) + 1, calendar_temp_start_date.get(Calendar.DAY_OF_MONTH));
+                        String temp_stop_date = String.format("%d-%02d-%02d", calendar_stop_date_of_schedule.get(Calendar.YEAR), calendar_stop_date_of_schedule.get(Calendar.MONTH) + 1, calendar_stop_date_of_schedule.get(Calendar.DAY_OF_MONTH));
+                        durationOfSuccessfulClassDays.setStart_date(temp_start_date);
+                        durationOfSuccessfulClassDays.setStop_date(temp_stop_date);
+                        durationOfSuccessfulClassDayses.add(durationOfSuccessfulClassDays);
+                    }
+                }
+
+
+            } else {
                 /* No vacation found */
+                int days = new Slot().calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_stop_date_of_schedule, slot_on_week_days).size();
+                if (days > 0) {
+                    class_days_after_reducing_vacation += days;   /* In case of no vacations found on one slot */
+                    DurationOfSuccessfulClassDays durationOfSuccessfulClassDays = new DurationOfSuccessfulClassDays();
+                    String temp_start_date = String.format("%d-%02d-%02d", calendar_schedule_start_date.get(Calendar.YEAR), calendar_schedule_start_date.get(Calendar.MONTH) + 1, calendar_schedule_start_date.get(Calendar.DAY_OF_MONTH));
+                    String temp_stop_date = String.format("%d-%02d-%02d", calendar_stop_date_of_schedule.get(Calendar.YEAR), calendar_stop_date_of_schedule.get(Calendar.MONTH) + 1, calendar_stop_date_of_schedule.get(Calendar.DAY_OF_MONTH));
+                    durationOfSuccessfulClassDays.setStart_date(temp_start_date);
+                    durationOfSuccessfulClassDays.setStop_date(temp_stop_date);
+                    durationOfSuccessfulClassDayses.add(durationOfSuccessfulClassDays);
+                }
             }
 
-        }else{
+        } else {
             /* No class can be possible to schedule */
+
         }
 
 
+        if (class_days_after_reducing_vacation > 0) {
+            tv_number_of_classes.setText("" + class_days_after_reducing_vacation + "\t" + getResources().getString(R.string.class_days));
 
 
+            int total_amount = 0;
+            int cost = Integer.parseInt(charges.split(" per ", 2)[0]);
+            String cost_basis = charges.split(" per ", 2)[0];
+            if (cost_basis.equalsIgnoreCase("hour")) {
+                class_days_after_reducing_vacation = slotDurationDetailBeans.size();
+                int no_of_hours_in_a_day = slot_stop_hour - slot_start_hour;
+                int no_of_total_hours = class_days_after_reducing_vacation * no_of_hours_in_a_day;
+                total_amount = no_of_total_hours * cost;
 
-        /*int valid_class_days = 0;
-
-        valid_class_days = calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_stop_date_of_schedule, slot_on_week_days);
-
-
-
-        Log.d(TAG, "valid days " + valid_class_days);
-        int total_amount = 0;
-        int cost = Integer.parseInt(charges.split(" per ", 2)[0]);
-        String cost_basis=charges.split(" per ",2)[1];
-        if(cost_basis.equalsIgnoreCase("hour")){
-            if(valid_class_days == 0)
-                valid_class_days=1;
-            int no_of_hours_in_a_day=slot_stop_hour-slot_start_hour;
-            int no_of_total_hours= valid_class_days * no_of_hours_in_a_day;
-            total_amount=no_of_total_hours*cost;
-        }else{
-            *//*  this will not allowed now as there is only cost_basis that is per hour*//*
-        }
-
-        */
+            } else {
+             /*this will not allowed now as there is only cost_basis that is per hour*/
+            }
 
 
-
-
-
-        int total_class_days;
-        int total_amount = 0;
-        int cost = Integer.parseInt(charges.split(" per ", 2)[0]);
-        String cost_basis = charges.split(" per ", 2)[0];
-        if (cost_basis.equalsIgnoreCase("hour")) {
-            total_class_days = slotDurationDetailBeans.size();
-            int no_of_hours_in_a_day = slot_stop_hour - slot_start_hour;
-            int no_of_total_hours = total_class_days * no_of_hours_in_a_day;
-            total_amount = no_of_total_hours * cost;
+            Log.d(TAG, "Total amount :" + total_amount);
+            try {
+                tv_total_charges.setText("\u20B9 " + String.valueOf(total_amount));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         } else {
-             /*this will not allowed now as there is only cost_basis that is per hour*/
+            class_not_possible = true;
+            Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.no_class_possible), Toast.LENGTH_SHORT).show();
         }
-
-
-        Log.d(TAG, "Total amount :" + total_amount);
-        try {
-            tv_total_charges.setText("\u20B9 " + String.valueOf(total_amount));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     private int calculateNoOfTotalClassDays(Calendar calendar_schedule_start_date, Calendar calendar_stop_date_of_schedule, String[] slot_on_week_days) {
@@ -475,7 +504,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         tv_number_of_classes = (TextView) findViewById(R.id.tv_number_of_classes);
         ll_vacation = (LinearLayout) findViewById(R.id.ll_vacations);
         tv_vacation = (TextView) findViewById(R.id.tv_vacations);
-
+ib_info = (ImageButton) findViewById(R.id.ib_info);
         gridView = (ScrollableGridView) findViewById(R.id.calendar);
 
 
@@ -516,27 +545,10 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         alertDialog.setPositiveButton(getResources().getString(R.string.ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        RequestParams requestParams1 = new RequestParams();
-                        requestParams1.add("id", slot_id.toString());
-                        requestParams1.add("mentor_id", mentor_id);
-                        String student_id = StorageHelper.getUserDetails(ScheduleNewClass.this, "user_id");
-                        Log.d(TAG, "student_id what getting sent to server : " + student_id);
-                        requestParams1.add("student_id", student_id);
-                        String from_date = tv_from_date.getText().toString();
-                        requestParams1.add("start_date", from_date.split("-", 3)[2] + "-" + from_date.split("-", 3)[1] + "-" + from_date.split("-", 3)[0]);
-                        requestParams1.add("slot_type", slot_type);
-                        if (mentor_availability.equals("1")) {
-                            requestParams1.add("location", et_location.getText().toString());
-                        }
-                        int sub_category_id = DataBase.singleton(ScheduleNewClass.this).getSubCategoryId(selected_subject);
-                        requestParams1.add("sub_category_id", String.valueOf(sub_category_id));
-                        if (selected_mentor_for.equalsIgnoreCase("child")) {
-                            String date_of_birth_kid = tv_child_dob.getText().toString().split("-", 3)[2] + "-" + tv_child_dob.getText().toString().split("-", 3)[1] + "-" + tv_child_dob.getText().toString().split("-", 3)[0];
-                            requestParams1.add("date_of_birth_kid", date_of_birth_kid);
-                        }
-                        requestParams1.add("total_price", tv_total_charges.getText().toString());
+
+
                         progressDialog.show();
-                        NetworkClient.postScheduleRequest(ScheduleNewClass.this, requestParams1, ScheduleNewClass.this, 46);
+                        NetworkClient.postScheduleRequest(ScheduleNewClass.this, getRequestParamsRelatedToThisClass(), ScheduleNewClass.this, 46);
                         // Log.d(TAG,"id : "+slot_id.toString()+"student_id"+student_id+"mentor_id: "+mentor_id+" start_date : "+from_date.split("-",3)[2]+"-"+from_date.split("-",3)[1]+"-"+from_date.split("-",3)[0]+"slot_type : "+slot_type+" sub_category_id : "+sub_category_id+" total_price : "+tv_total_charges.getText().toString()+"date_of_birth_kid"+tv_child_dob.getText().toString().split("-",3)[2]+"-"+tv_child_dob.getText().toString().split("-",3)[1]+"-"+tv_child_dob.getText().toString().split("-",3)[0]);
 
                     }
@@ -554,22 +566,89 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     }
 
 
+    private void showAlertMessageForCoincidingVacation() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle(getResources().getString(R.string.vacations));
+        ScrollView scrollView = new ScrollView(this);
+
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int vacation_no =0; vacation_no < vacations_on_the_slot.size() ; vacation_no++){
+            Vacation vacation = vacations_on_the_slot.get(vacation_no);
+            if(vacation_no == 0)
+            stringBuilder.append("Vacation "+ ++vacation_no+": "+String.format("%02d-%02d-%d - %02d-%02d-%d",Integer.parseInt(vacation.getStart_date().split("-")[0]),Integer.parseInt(vacation.getStart_date().split("-")[1]),Integer.parseInt(vacation.getStart_date().split("-")[2]),Integer.parseInt(vacation.getStop_date().split("-")[0]),Integer.parseInt(vacation.getStop_date().split("-")[1]),Integer.parseInt(vacation.getStop_date().split("-")[2])));
+            else
+            stringBuilder.append("\nVacation "+ ++vacation_no+": "+String.format("%02d-%02d-%d - %02d-%02d-%d",Integer.parseInt(vacation.getStart_date().split("-")[0]),Integer.parseInt(vacation.getStart_date().split("-")[1]),Integer.parseInt(vacation.getStart_date().split("-")[2]),Integer.parseInt(vacation.getStop_date().split("-")[0]),Integer.parseInt(vacation.getStop_date().split("-")[1]),Integer.parseInt(vacation.getStop_date().split("-")[2])));
+
+        }
+
+        final TextView contentView = new TextView(this);
+        contentView.setText(stringBuilder.toString());
+
+
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(8, 8, 8, 8);
+        scrollView.addView(contentView);
+        scrollView.setLayoutParams(params);
+        alertDialog.setView(scrollView);
+        alertDialog.setCancelable(true);
+        alertDialog.setPositiveButton(getResources().getString(R.string.ok),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }
+        );
+
+        alertDialog.show();
+    }
+
+
+    private RequestParams getRequestParamsRelatedToThisClass() {
+        RequestParams requestParams1 = new RequestParams();
+        requestParams1.add("id", slot_id.toString());
+        requestParams1.add("mentor_id", mentor_id);
+        String student_id = StorageHelper.getUserDetails(ScheduleNewClass.this, "user_id");
+        Log.d(TAG, "student_id what getting sent to server : " + student_id);
+        requestParams1.add("student_id", student_id);
+
+        JSONArray jsonArray = new JSONArray();
+        for (int duration_number = 0; duration_number < durationOfSuccessfulClassDayses.size(); duration_number++) {
+            DurationOfSuccessfulClassDays durationOfSuccessfulClassDays = durationOfSuccessfulClassDayses.get(duration_number);
+            JSONArray jsonArray1 = new JSONArray();
+            jsonArray1.put(durationOfSuccessfulClassDays.getStart_date());
+            jsonArray1.put(durationOfSuccessfulClassDays.getStop_date());
+            jsonArray.put(jsonArray1);
+        }
+
+
+        String from_date = tv_from_date.getText().toString();
+        requestParams1.add("dates", jsonArray.toString());
+        requestParams1.add("slot_type", slot_type);
+        if (mentor_availability.equals("1") && slot_type.equalsIgnoreCase("individual")) {
+            requestParams1.add("location", et_location.getText().toString());
+        }
+        int sub_category_id = DataBase.singleton(ScheduleNewClass.this).getSubCategoryId(selected_subject);
+        requestParams1.add("sub_category_id", String.valueOf(sub_category_id));
+        if (selected_mentor_for.equalsIgnoreCase("child")) {
+            String date_of_birth_kid = tv_child_dob.getText().toString().split("-", 3)[2] + "-" + tv_child_dob.getText().toString().split("-", 3)[1] + "-" + tv_child_dob.getText().toString().split("-", 3)[0];
+            requestParams1.add("date_of_birth_kid", date_of_birth_kid);
+        }
+        requestParams1.add("total_price", tv_total_charges.getText().toString());
+        return requestParams1;
+    }
+
+
     private void applyActionbarProperties(String name) {
-//        ActionBar actionBar = getActionBar();
-//        if (actionBar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//            actionBar.setTitle(name);
-//        }
     }
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        /*if (id == R.id.action_connect) {
-            showAlert();
-            return true;
-        }*/
         if (id == android.R.id.home) {
             finish();
         }
@@ -580,14 +659,18 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.b_proceed_to_payment:
-                if (rb_pay_now.isChecked()) {
-                    if (validate()) {
-                        Toast.makeText(ScheduleNewClass.this, "Waiting for payment gateway integration. ", Toast.LENGTH_SHORT).show();
+                if (class_not_possible) {
+                    Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.no_days_free_to_schedule), Toast.LENGTH_SHORT).show();
+                } else {
+                    if (rb_pay_now.isChecked()) {
+                        if (validate()) {
+                            Toast.makeText(ScheduleNewClass.this, "Waiting for payment gateway integration. ", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-                if (rb_pay_personally.isChecked()) {
-                    if (validate()) {
-                        showAlertMessageOnPayPersonally();
+                    if (rb_pay_personally.isChecked()) {
+                        if (validate()) {
+                            showAlertMessageOnPayPersonally();
+                        }
                     }
                 }
                 break;
@@ -598,6 +681,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 childDOB.scheduleNewClass = ScheduleNewClass.this;
                 childDOB.show(fragmentManager2, null);
                 break;
+
+            case R.id.ib_info:
+                showAlertMessageForCoincidingVacation();
         }
     }
 
@@ -644,13 +730,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        /*try {
-           // JSONObject jsonObject=new JSONObject((String)object);
-           // String message=jsonObject.getString("message");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
         Toast.makeText(ScheduleNewClass.this, (String) object, Toast.LENGTH_SHORT).show();
 
     }
@@ -658,21 +737,13 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        /*try {
-            JSONObject jsonObject=new JSONObject((String)object);
-            String message=jsonObject.getString("message");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
-
         Toast.makeText(ScheduleNewClass.this, (String) object, Toast.LENGTH_SHORT).show();
 
     }
 
 
-    class DurationOfSuccessfulClassDays{
-        private  String start_date;
+    class DurationOfSuccessfulClassDays {
+        private String start_date;
         private String stop_date;
 
         public String getStart_date() {

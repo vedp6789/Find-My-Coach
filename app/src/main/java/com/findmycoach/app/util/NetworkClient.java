@@ -66,12 +66,12 @@ import org.json.JSONObject;
     *       categories                      34
     *       availableSlots                  35
     *       exceptions                      36
-    *       calenderDetails 3 months        37
-    *       calenderDetails next month      38
-    *       calenderDetails previous month  39
-    *       calenderDetailsMentee  3months            40
-    *       calenderDetailsMentee  next month         41
-    *       calenderDetailsMentee  prev month         42
+    *       calenderDetails  3 months        37
+    *       calenderDetails  next month      38
+    *       calenderDetails  previous month  39
+    *       calenderDetails  3months mentee            40
+    *       calenderDetails  next month menteec        41
+    *       calenderDetails  prev month mentee         42
     *       calenderEvents                  43
     *       resetPassword                   44
     *       setPhoneNumber                  45     // To change Phone number

@@ -263,7 +263,7 @@
             </LinearLayout>
 
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/ll_number_of_classes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -272,6 +272,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/ll_total_class"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
 
@@ -285,7 +286,8 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_toRightOf="@+id/ll_total_class"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:focusable="true"
@@ -294,7 +296,7 @@
                     <TextView
                         android:id="@+id/tv_number_of_classes"
                         style="@style/EditTextCustomHoloPurple"
-                        android:layout_width="match_parent"
+                        android:layout_width="202dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:maxLength="200"
@@ -302,8 +304,16 @@
 
                 </LinearLayout>
 
+                <ImageButton
+                    android:id="@+id/ib_info"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"
+                    android:background="@android:drawable/ic_menu_info_details"/>
 
-            </LinearLayout>
+
+            </RelativeLayout>
 
 
             <LinearLayout
@@ -312,7 +322,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_number_of_classes"
                 android:layout_margin="@dimen/back_margin"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="wrap_content"

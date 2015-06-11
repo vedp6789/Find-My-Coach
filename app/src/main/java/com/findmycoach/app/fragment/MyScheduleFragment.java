@@ -247,7 +247,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     void networkCallForMentee(RequestParams requestParams) {
         progressDialog.show();
-        NetworkClient.getMenteeCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 40);  /*Network operation for getting details for three months */
+        NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 40);  /*Network operation for getting details for three months */
     }
 
     private void applyListeners() {
@@ -637,7 +637,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             prev_month_requested_date = String.valueOf(stringBuilder);
             requestParams.add("limit", String.valueOf(days_in_new_prev_month));
             progressDialog.show();
-            NetworkClient.getMenteeCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 42);
+            NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 42);
         }
 
 
@@ -729,7 +729,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
             requestParams.add("limit", String.valueOf(days_in_new_next_month));
             progressDialog.show();
-            NetworkClient.getMenteeCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 41);
+            NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 41);
         }
 
 
