@@ -33,7 +33,6 @@
         android:padding="@dimen/textView_padding_margin"
         android:layout_alignParentRight="true"
         android:id="@+id/menuItem"
-        android:src="@drawable/side_menu_small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/textView_padding_margin"

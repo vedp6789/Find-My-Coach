@@ -141,7 +141,8 @@ public class NotificationsFragment extends Fragment implements Callback {
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        mSwipeRefreshLayout.setRefreshing(false);
+        if (mSwipeRefreshLayout != null)
+            mSwipeRefreshLayout.setRefreshing(false);
         Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
     }
 

@@ -144,7 +144,8 @@ public class MyConnectionsFragment extends Fragment implements Callback {
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        mSwipeRefreshLayout.setRefreshing(false);
+        if(mSwipeRefreshLayout != null)
+            mSwipeRefreshLayout.setRefreshing(false);
         String msg = (String) object;
         if (msg.equals("Success")) {
             connectionListView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.no_data_found, new String[]{getResources().getString(R.string.not_connected)}));

@@ -307,7 +307,7 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
 
 
                                 String failure_response = (String) object;
-                                if (failure_response.equals(getResources().getString(R.string.problem_in_connection_server))) {
+                                if (statusCode == -1) {
                                     Log.d(TAG, "failure response : " + failure_response);
                                     Toast.makeText(ScheduleYourVacation.this, failure_response, Toast.LENGTH_SHORT).show();
                                 } else {
@@ -319,8 +319,8 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-                                    progressDialog.dismiss();
                                 }
+                                progressDialog.dismiss();
 
                             }
                         }, 36);
