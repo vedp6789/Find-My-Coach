@@ -528,7 +528,6 @@
     <string name="yesterday">Yesterday</string>
 
 
-
     <!-- end of unique strings block-->
 
     <!-- Toast message strings-->
@@ -596,7 +595,6 @@
     <string name="request_declined">\'s request get declined</string>
     <string name="schedule_accepted"> schedule get confirmed</string>
     <string name="schedule_rejected"> schedule get rejected</string>
-
 
 
     <!--  Minimum time difference between start time and stop time of a slot   i.e in hours-->
@@ -762,6 +760,17 @@
         <item>Schedules</item>
     </string-array>
 
+    <string-array name="decade_array">
+        <item>1941-1950</item>
+        <item>1951-1960</item>
+        <item>1961-1970</item>
+        <item>1971-1980</item>
+        <item>1981-1990</item>
+        <item>1991-2000</item>
+        <item>2001-2010</item>
+        <item>2011-Onwards</item>
+    </string-array>
+
     <!-- String s related to Actions -->
     <string name="action_sign_in">Login</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -858,7 +867,7 @@
     <string name="accept_req">Accept</string>
     <string name="reject_req">Reject</string>
     <string name="event_desc">Event description</string>
-  <string name="month">Month</string>
+    <string name="month">Month</string>
     <string name="year">Year</string>
     <string name="years">Years</string>
     <string name="calendar_by_loc">Calendar by location</string>
@@ -933,7 +942,7 @@
         <item>December</item>
     </string-array>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
 
 </resources>

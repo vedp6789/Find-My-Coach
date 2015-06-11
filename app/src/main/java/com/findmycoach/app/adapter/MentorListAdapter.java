@@ -171,7 +171,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     private void showAlert(final String userId) {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.send_coonection_request_dialog);
+        dialog.setContentView(R.layout.send_connection_request_dialog);
         final EditText editText = (EditText) dialog.findViewById(R.id.editText);
         final Button cancelButton = (Button) dialog.findViewById(R.id.cancelButton);
         Button okButton = (Button) dialog.findViewById(R.id.okButton);

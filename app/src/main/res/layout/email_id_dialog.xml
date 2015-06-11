@@ -55,7 +55,7 @@
             android:layout_toLeftOf="@+id/textView2"
             android:background="@drawable/custom_button_click"
             android:gravity="center"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textColor="@color/custom_button_text_color_click"
             android:textSize="@dimen/profile_details"
             android:textStyle="bold" />
@@ -82,7 +82,7 @@
             android:layout_toRightOf="@+id/textView2"
             android:background="@drawable/custom_button_click"
             android:gravity="center"
-            android:text="Ok"
+            android:text="@string/ok"
             android:textColor="@color/custom_button_text_color_click"
             android:textSize="@dimen/profile_details"
             android:textStyle="bold" />

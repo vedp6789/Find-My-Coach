@@ -1,8 +1,6 @@
 package com.findmycoach.app.activity;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -43,6 +40,7 @@ import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
+import com.findmycoach.app.views.DobPicker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
@@ -61,7 +59,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-public class EditProfileActivityMentee extends Activity implements DatePickerDialog.OnDateSetListener, Callback {
+public class EditProfileActivityMentee extends Activity implements Callback {
 
     int REQUEST_CODE = 100;
     private ImageView profilePicture;
@@ -135,7 +133,7 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
         profileDOB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setDate(profileDOB);
+                new DobPicker(EditProfileActivityMentee.this, profileDOB, Calendar.getInstance().get(Calendar.YEAR));
             }
         });
 
@@ -540,36 +538,6 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             finish();
         else
             Toast.makeText(this, R.string.prompt_update_profile, Toast.LENGTH_LONG).show();
-    }
-
-    public void setDate(View view) {
-        showDialog(999);
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        if (id == 999) {
-            Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int day = c.get(Calendar.DATE);
-            int month = c.get(Calendar.MONTH);
-            c.set(Calendar.YEAR, year - 5);
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year - 15, month, day);
-            datePickerDialog.setTitle(getResources().getString(R.string.dob));
-            datePickerDialog.getDatePicker().setMaxDate(c.getTimeInMillis());
-            return datePickerDialog;
-        }
-        return null;
-    }
-
-    private void showDate(int year, int month, int day) {
-        profileDOB.setText(new StringBuilder().append(day).append("-")
-                .append(month).append("-").append(year));
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        showDate(year, monthOfYear + 1, dayOfMonth);
     }
 
     private void updateAutoSuggestion(Suggestion suggestion) {
