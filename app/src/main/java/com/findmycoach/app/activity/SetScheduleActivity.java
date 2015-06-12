@@ -1209,23 +1209,54 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             }
         } else {
             if (this_activity_for.equals("ScheduleFragments")) {
+                Intent intent = new Intent(SetScheduleActivity.this, AboutWeekViewEvent.class);
+                Bundle bundle = new Bundle();
+
                 if (StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group").equals("3")) {
+
                     switch (event_type) {
                         case 12345:
-
+                            intent.putExtra("for", "scheduled_class_mentor");
+                            bundle.putParcelableArrayList("mentees", (ArrayList<? extends android.os.Parcelable>) event.getMenteeFoundOnThisDate());
+                            bundle.putParcelable("slot", event.getSlot());
+                            intent.putExtra("scheduled_class_bundle", bundle);
+                            startActivity(intent);
                             break;
                         case 123:
+                            intent.putExtra("for", "coinciding_vacation_mentor");
+                            bundle.putParcelableArrayList("coinciding_vacations", (ArrayList<? extends android.os.Parcelable>) event.getCoincidingVacations());
+                            bundle.putParcelable("slot", event.getSlot());
+                            intent.putExtra("coinciding_vacation_bundle", bundle);
+                            startActivity(intent);
                             break;
                         case 432:
+                            intent.putExtra("for", "slot_not_scheduled");
+                            bundle.putParcelable("slot", event.getSlot());
+                            intent.putExtra("unscheduled_slot_bundle", bundle);
                             break;
                         case 21:
+                            intent.putExtra("for", "non_coinciding_vacation");
+                            bundle.putParcelable("vacation", event.getVacation());
+                            intent.putExtra("vacation_bundle", bundle);
                             break;
                     }
                 } else {
                     switch (event_type) {
                         case 103:
+                            intent.putExtra("for", "scheduled_class_mentee");
+                            bundle.putParcelableArrayList("mentee", (ArrayList<? extends android.os.Parcelable>) event.getMenteeFoundOnThisDate());
+                            bundle.putParcelable("slot", event.getSlot());
+                            bundle.putParcelable("mentor_info", event.getMentorInfo());
+                            intent.putExtra("scheduled_class_bundle", bundle);
+                            startActivity(intent);
                             break;
                         case 105:
+                            intent.putExtra("for", "coinciding_vacation_mentee");
+                            bundle.putParcelableArrayList("coinciding_vacations", (ArrayList<? extends android.os.Parcelable>) event.getCoincidingVacations());
+                            bundle.putParcelable("slot", event.getSlot());
+                            bundle.putParcelable("mentor_info", event.getMentorInfo());
+                            intent.putExtra("coinciding_vacation_bundle", bundle);
+                            startActivity(intent);
                             break;
 
                     }
@@ -1291,7 +1322,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        Intent intent = new Intent(SetScheduleActivity.this, AboutEvent.class);
+        Intent intent = new Intent(SetScheduleActivity.this, AboutWeekViewEvent.class);
         intent.putExtra("about_event", (String) object);
         Log.d(TAG, "event id data for event : " + (String) object);
         startActivity(intent);

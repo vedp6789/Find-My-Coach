@@ -1,18 +1,15 @@
 package com.findmycoach.app.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.util.StorageHelper;
-import com.roomorama.caldroid.WeekdayArrayAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +20,7 @@ import java.util.ArrayList;
 /**
  * Created by ved on 12/3/15.
  */
-public class AboutEvent extends Activity {
+public class AboutWeekViewEvent extends Activity {
     TextView tv_mentor_name, tv_mentor_name_val, tv_mentee_name, tv_mentee_name_val, tv_subject_val, tv_address_type, tv_address_val, tv_start_date_val, tv_end_date_val, tv_time_val;
     ListView lv_week_days;
     private static final String TAG = "FMC";
@@ -54,12 +51,12 @@ public class AboutEvent extends Activity {
 
     private void populateView() {
 
-        if (Integer.parseInt(StorageHelper.getUserGroup(AboutEvent.this, "user_group")) == 3) {
+        if (Integer.parseInt(StorageHelper.getUserGroup(AboutWeekViewEvent.this, "user_group")) == 3) {
 
             //tv_address_type.setText(getResources().getString(R.string.mentee_add));      // address is not coming from server
 
         }
-        if (Integer.parseInt(StorageHelper.getUserGroup(AboutEvent.this, "user_group")) == 2) {
+        if (Integer.parseInt(StorageHelper.getUserGroup(AboutWeekViewEvent.this, "user_group")) == 2) {
             //tv_address_type.setText(getResources().getString(R.string.mentor_add));       // address is not coming from server
 
         }
@@ -198,7 +195,7 @@ public class AboutEvent extends Activity {
                 tv_subject_val.setText("");
             }
 
-            arrayAdapter = new ArrayAdapter(AboutEvent.this, android.R.layout.simple_list_item_1, days.toArray());
+            arrayAdapter = new ArrayAdapter(AboutWeekViewEvent.this, android.R.layout.simple_list_item_1, days.toArray());
             lv_week_days.setAdapter(arrayAdapter);
 
 

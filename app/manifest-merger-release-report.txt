@@ -348,7 +348,7 @@ activity#com.findmycoach.app.activity.SubCategoryActivity
 ADDED from AndroidManifest.xml:164:9
 	android:name
 		ADDED from AndroidManifest.xml:164:19
-activity#com.findmycoach.app.activity.AboutEvent
+activity#com.findmycoach.app.activity.AboutWeekViewEvent
 ADDED from AndroidManifest.xml:166:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:169:13
