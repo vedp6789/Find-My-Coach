@@ -23,7 +23,6 @@
             android:layout_height="@dimen/login_button_height"
             android:background="@color/purple"
             android:gravity="center"
-            android:text="sssssssssssssss"
             android:textColor="@color/white"
             android:textSize="@dimen/profile_details"
             android:layout_centerVertical="true"

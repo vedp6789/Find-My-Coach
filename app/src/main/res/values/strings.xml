@@ -807,6 +807,7 @@
     <string name="start_time">Select</string>
     <string name="stop_time">Select</string>
     <string name="submit_rating">Submit rating</string>
+    <string name="comments">Please provide comments</string>
     <string name="view_profile">View profile</string>
 
     <string name="beginner">Beginner</string>
