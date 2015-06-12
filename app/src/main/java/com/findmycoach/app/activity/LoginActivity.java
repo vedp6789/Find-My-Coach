@@ -808,6 +808,14 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
 
 
+        if(StorageHelper.getUserGroup(LoginActivity.this,"user_group").equals("3")){
+
+        }
+
+
+
+
+
 
         /**phone number not present*/
         if (statusCode == 206) {

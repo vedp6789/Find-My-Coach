@@ -34,6 +34,12 @@ public class StorageHelper {
         return reg_saved;
     }
 
+
+    public static String getGridClickDetails(Context context,String key){
+        SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString(key,null);
+    }
+
     public static String getUserGroup(Context context, String key){
         SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(context);
         String user_group= preferences.getString(key , null);
