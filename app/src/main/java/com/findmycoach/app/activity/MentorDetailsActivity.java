@@ -423,7 +423,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             connectionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    disconnect(userInfo.getConnectionId(), userInfo.getId());
+                    showDisconnectDialog(userInfo.getConnectionId(), userInfo.getId());
                 }
             });
         } else if (connectionStatus.equals("pending")) {
@@ -431,11 +431,34 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             connectionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    disconnect(userInfo.getConnectionId(), userInfo.getId());
+                    showDisconnectDialog(userInfo.getConnectionId(), userInfo.getId());
                 }
             });
         }
 
+    }
+
+    private void showDisconnectDialog(final String connectionId, final String id) {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.disconnect_confirmation_dialog);
+
+        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                disconnect(connectionId, id);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
 
@@ -636,6 +659,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 if (message.trim().length() < 1)
                     message = getResources().getString(R.string.connection_request_msg);
                 sendConnectionRequest(message);
+                dialog.dismiss();
             }
         });
 

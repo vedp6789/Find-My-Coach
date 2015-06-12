@@ -844,6 +844,7 @@
     <string name="mentor">Mentor</string>
     <string name="action_connect">Connect</string>
     <string name="action_disconnect">Disconnect</string>
+    <string name="alert_disconnect">Are you sure want to disconnect?</string>
     <string name="action_pending">Disconnect (Request already sent)</string>
     <string name="set_time">Set time</string>
     <string name="schedule_vacation_note">Out of class</string>

@@ -151,7 +151,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
                 @Override
                 public void onClick(View v) {
                     clickedPosition = position;
-                    disconnect(user.getConnectionId(), user.getId());
+                    showDisconnectDialog(user.getConnectionId(), user.getId());
                 }
             });
         } else {
@@ -165,6 +165,29 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
             });
         }
         return view;
+    }
+
+    private void showDisconnectDialog(final String connectionId, final String id) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.disconnect_confirmation_dialog);
+
+        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                disconnect(connectionId, id);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
 
@@ -183,6 +206,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
                 if (message.trim().length() < 1)
                     message = context.getResources().getString(R.string.connection_request_msg);
                 sendConnectionRequest(message, userId);
+                dialog.dismiss();
             }
         });
 
