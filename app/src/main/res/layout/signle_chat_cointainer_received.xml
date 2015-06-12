@@ -1,34 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="left">
 
-
-    <ImageView
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:id="@+id/userPic"
-        android:layout_marginTop="15dp"
-        android:src="@drawable/user_icon"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/messageTV"
-        android:textStyle="bold"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/userPic"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="5dp"/>
+        android:layout_gravity="left"
+        android:layout_marginLeft="@dimen/back_margin"
+        android:layout_marginRight="@dimen/distance_tv_max_width"
+        android:background="@drawable/message_received"
+        android:paddingLeft="@dimen/textView_padding_margin"
+        android:paddingRight="@dimen/textView_padding_margin">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/messageTV"
-        android:layout_marginTop="15dp"
-        android:background="@android:color/black"
-        android:layout_marginLeft="50dp"/>
-</RelativeLayout>
+        <TextView
+            android:id="@+id/messageTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/back_margin"
+            android:src="@drawable/image_thumb"
+            android:textColor="@color/white"
+            android:textSize="@dimen/profile_details" />
+    </RelativeLayout>
+</LinearLayout>

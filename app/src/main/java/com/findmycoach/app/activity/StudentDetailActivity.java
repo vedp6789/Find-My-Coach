@@ -1,11 +1,13 @@
 package com.findmycoach.app.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -131,7 +133,7 @@ public class StudentDetailActivity extends Activity implements Callback {
             connectionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    disconnect(studentDetails.getConnectionId(), studentDetails.getId());
+                    showDisconnectDialog(studentDetails.getConnectionId(), studentDetails.getId());
                 }
             });
         } else if (studentDetails.getConnectionStatus().equals("pending")) {
@@ -143,6 +145,29 @@ public class StudentDetailActivity extends Activity implements Callback {
                 }
             });
         }
+    }
+
+    private void showDisconnectDialog(final String connectionId, final String id) {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.disconnect_confirmation_dialog);
+
+        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                disconnect(connectionId, id);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     private void disconnect(String connectionId, String oppositeUSerId) {

@@ -110,7 +110,6 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         msgToSend = (EditText) findViewById(R.id.msgToSendET);
         currentUserId = StorageHelper.getUserDetails(this, "user_id");
         findViewById(R.id.sendButton).setOnClickListener(this);
-        chatWidgetLv.setDivider(null);
         chatWidgetLv.setSelector(new ColorDrawable(0));
 
         TextView title = (TextView) findViewById(R.id.title);
@@ -136,8 +135,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             public void onClick(View v) {
                 final Dialog dialog = new Dialog(ChatWidgetActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                ListView listView = new ListView(ChatWidgetActivity.this);
-                dialog.setContentView(listView);
+                dialog.setContentView(R.layout.listview);
+                ListView listView = (ListView) dialog.findViewById(R.id.listView);
                 listView.setAdapter(new ArrayAdapter<>(ChatWidgetActivity.this, R.layout.textview, new String[]{"Image", "Video"}));
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override

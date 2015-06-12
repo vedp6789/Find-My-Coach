@@ -5,38 +5,65 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/header_back_name_menu"
-        android:id="@+id/include" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/header_back_name_menu" />
 
     <ListView
         android:id="@+id/chatWidgetLv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:stackFromBottom="true"
+        android:layout_above="@+id/bottomLayout"
         android:layout_below="@+id/include"
-        android:layout_above="@+id/sendButton" />
+        android:layout_gravity="bottom"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="@dimen/days_margin"
+        android:stackFromBottom="true" />
 
-    <ImageButton
-        android:id="@+id/sendButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="right|bottom"
-        android:background="@android:color/transparent"
-        android:src="@android:drawable/ic_menu_send"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <EditText
-        android:id="@+id/msgToSendET"
+    <RelativeLayout
+        android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="left|bottom"
-        android:hint="@string/type_here"
+        android:layout_height="@dimen/margin_top"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/sendButton"
-        android:layout_toStartOf="@+id/sendButton" />
+        android:layout_marginTop="@dimen/textView_padding_margin"
+        android:background="@drawable/custom_rounded_corner_purple_light"
+        android:gravity="center">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_button_height"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/textView_padding_margin"
+            android:layout_marginRight="@dimen/textView_padding_margin"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:background="@color/white"
+                android:id="@+id/sendButton"
+                android:layout_width="@dimen/connection_button"
+                android:layout_height="@dimen/connection_button"
+                android:src="@drawable/send"
+
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+            <EditText
+                android:background="@color/white"
+                android:id="@+id/msgToSendET"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/days_margin"
+                android:layout_toLeftOf="@+id/sendButton"
+                android:layout_toStartOf="@+id/sendButton"
+                android:hint="@string/type_here"
+                android:textColor="@color/purple"
+                android:textColorHint="@color/purple_light" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
 </RelativeLayout>
