@@ -28,7 +28,7 @@
     <dimen name="underline">2dp</dimen>
 
 
-    <dimen name="profile_heading">12sp</dimen>
+    <dimen name="profile_heading">16sp</dimen>
     <dimen name="profile_details">16sp</dimen>
     <dimen name="profile_name">20sp</dimen>
     <dimen name="header">26sp</dimen>

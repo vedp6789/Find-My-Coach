@@ -13,5 +13,7 @@
         android:left="2dip"
         android:right="2dip"
         android:top="4dip" />
+
+    <corners android:radius="1dip" />
 </shape>
 

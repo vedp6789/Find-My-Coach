@@ -486,12 +486,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                     int tag = (Integer) b.getTag(b.getId());
                     if (tag == 0) {
                         b.setTag(b.getId(), 1);
-                        b.setBackgroundColor(getActivity().getResources()
-                                .getColor(R.color.purple_light));
+                        b.setBackgroundDrawable(getActivity().getResources()
+                                .getDrawable(R.drawable.custom_rounded_corner_purple_light));
                         b.setTextColor(getActivity().getResources().getColor(R.color.white));
                     } else {
                         b.setTag(b.getId(), 0);
-                        b.setBackgroundColor(getActivity().getResources().getColor(R.color.white));
+                        b.setBackgroundDrawable(getActivity().getResources()
+                                .getDrawable(R.drawable.custom_rounded_corner_white));
                         b.setTextColor(getActivity().getResources().getColor(R.color.purple));
                     }
 

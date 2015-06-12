@@ -51,7 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/calender_margin"
-                    android:background="@color/purple"
+                    android:background="@drawable/custom_rounded_corner_purple"
                     android:gravity="center"
                     android:text="Today"
                     android:textColor="@color/white"
@@ -76,7 +76,7 @@
                     android:layout_centerVertical="true"
                     android:layout_gravity="start"
                     android:layout_margin="@dimen/days_margin"
-                    android:background="@color/purple_light"
+                    android:background="@drawable/custom_rounded_corner_purple_light"
                     android:padding="@dimen/calender_header_margin_arrow"
                     android:src="@drawable/scheduled_prev_month" />
 
@@ -100,7 +100,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_margin="@dimen/days_margin"
-                    android:background="@color/purple_light"
+                    android:background="@drawable/custom_rounded_corner_purple_light"
                     android:padding="@dimen/calender_header_margin_arrow"
                     android:src="@drawable/scheduled_next_month" />
             </RelativeLayout>
@@ -220,7 +220,7 @@
                 android:layout_width="@dimen/indicator"
                 android:layout_height="@dimen/indicator"
                 android:layout_margin="@dimen/calender_margin"
-                android:background="@color/purple_light"
+                android:background="@drawable/custom_rounded_corner_purple_light"
                 android:gravity="center" />
 
             <TextView
@@ -240,7 +240,7 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/calender_margin"
                 android:layout_marginTop="@dimen/calender_margin"
-                android:background="@color/purple"
+                android:background="@drawable/custom_rounded_corner_purple"
                 android:gravity="center" />
 
             <TextView
