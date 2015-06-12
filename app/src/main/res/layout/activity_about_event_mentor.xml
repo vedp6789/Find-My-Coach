@@ -188,7 +188,7 @@
             android:text="@string/trainee" />
 
         <ListView
-            android:id="@+id/tv_list_of_mentees"
+            android:id="@+id/lv_list_of_mentees"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
@@ -208,7 +208,7 @@
             android:text="@string/coinciding_vacation" />
 
         <ListView
-            android:id="@+id/tv_list_of_coinciding_vacations"
+            android:id="@+id/lv_list_of_coinciding_vacations"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
