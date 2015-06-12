@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_mentor_class_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:gravity="left"
+            android:text="@string/mentor_details"
+            android:textSize="25dp" />
+
+
+        <LinearLayout
+            android:id="@+id/ll_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_title"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mentor_name" />
+
+            <TextView
+                android:id="@+id/tv_name_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_start_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_name"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/start_date" />
+
+            <TextView
+                android:id="@+id/tv_start_date_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_end_date"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_start_date"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_end_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/end_date" />
+
+            <TextView
+                android:id="@+id/tv_end_date_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_start_time"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_end_date"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_start_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/start_time_of_class" />
+
+            <TextView
+                android:id="@+id/tv_start_time_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_end_time"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_start_time"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_end_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/class_stop_time" />
+
+            <TextView
+                android:id="@+id/tv_end_time_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_week_days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_end_time"
+            android:layout_margin="5dp">
+
+            <TextView
+                android:id="@+id/tv_week_days_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_slot_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_week_days"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_slot_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/class_type" />
+
+            <TextView
+                android:id="@+id/tv_slot_type_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_max_students"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_slot_type"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_max_users"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/max_students" />
+
+            <TextView
+                android:id="@+id/tv_max_users_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/ll_mentee_class_schedule"
+        android:layout_below="@id/ll_mentor_class_details"
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/your_class_schedule"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000"/>
+
+        <LinearLayout
+            android:id="@+id/ll_class_subject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_subject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/subject" />
+
+            <TextView
+                android:id="@+id/tv_subject_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/lv_class_durations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_coinciding_vacations"
+        android:layout_below="@id/ll_mentee_class_schedule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ListView
+            android:id="@+id/lv_coinciding_vacations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+
+
+</RelativeLayout>
+
+
+

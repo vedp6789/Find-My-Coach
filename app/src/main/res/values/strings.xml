@@ -470,6 +470,8 @@
     <string name="hint_enter_code">Enter 6 digits code here.</string>
     <string name="resend_code">Resend verification code</string>
     <string name="find_mentor">Find mentor</string>
+    <string name="trainee">Trainees</string>
+    <string name="coinciding_vacation">Vacations</string>
     <string name="change_location">Change</string>
     <string name="preferred_time">Preferred Time</string>
     <string name="search">Search</string>
@@ -506,6 +508,7 @@
     <string name="fmc_service">FMC Service</string>
     <string name="fmc_service_description">FMC running in service to allow push notification.</string>
     <string name="class_schedule">Class schedule</string>
+    <string name="your_class_schedule">Your class schedule</string>
     <string name="payment_details">Payment details</string>
     <string name="payment_details_method">Add payment method</string>
     <string name="not_free">Not free</string>
@@ -522,6 +525,9 @@
     <string name="class_type">Type</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
+    <string name="class_info">Class slot details</string>
+    <string name="mentor_details">Mentor's information</string>
+
 
 
 
@@ -549,6 +555,7 @@
     <string name="select_start_and_end_time">Please select starting time and completion time for this slot.</string>
     <string name="select_start_time">Please select starting time of this slot.</string>
     <string name="select_end_time">Please select completion time of this slot.</string>
+    <string name="class_stop_time">Stop time</string>
     <string name="created_new_slot_successfully">You have successfully created a new slot.</string>
     <string name="switch_login">Switch your user login.</string>
     <string name="vacation_scheduled_success">Your vacation get scheduled successfully.</string>
