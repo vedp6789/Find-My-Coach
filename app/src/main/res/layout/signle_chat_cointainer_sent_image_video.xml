@@ -3,13 +3,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="right">
+    android:gravity="right"
+    android:orientation="horizontal">
 
     <RelativeLayout
         android:layout_width="@dimen/img_vid"
         android:layout_height="@dimen/img_vid"
         android:layout_gravity="right"
-        android:layout_marginRight="@dimen/back_margin"
         android:background="@drawable/message_sent"
         android:padding="@dimen/textView_padding_margin">
 
@@ -29,4 +29,10 @@
             android:layout_centerInParent="true"
             android:visibility="gone" />
     </RelativeLayout>
+
+    <ImageView
+        android:layout_width="@dimen/textView_padding_margin"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/back_margin"
+        android:src="@drawable/chat_right_arrow" />
 </LinearLayout>

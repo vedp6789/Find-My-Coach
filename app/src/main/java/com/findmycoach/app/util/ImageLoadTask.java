@@ -87,7 +87,6 @@ public class ImageLoadTask extends AsyncTask<Void, Void, OutputStream> {
             Toast.makeText(context, e+"",Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
-        Toast.makeText(context,"Downloaded",Toast.LENGTH_LONG).show();
     }
 
 }
