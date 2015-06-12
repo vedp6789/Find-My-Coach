@@ -138,7 +138,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 ListView listView = new ListView(ChatWidgetActivity.this);
                 dialog.setContentView(listView);
-                listView.setAdapter(new ArrayAdapter<String>(ChatWidgetActivity.this, R.layout.textview, new String[]{"Image", "Video"}));
+                listView.setAdapter(new ArrayAdapter<>(ChatWidgetActivity.this, R.layout.textview, new String[]{"Image", "Video"}));
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -345,24 +345,26 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             String msg = jsonMessage.getString("message");
             String messageType = jsonMessage.getString("message_type");
             /** Text message received */
-            if (messageType.equals("text")) {
-                chatWidgetAdapter.updateMessageList(msg, 1, 0);
-                chatWidgetAdapter.notifyDataSetChanged();
-                chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
-            }
+            switch (messageType) {
+                case "text":
+                    chatWidgetAdapter.updateMessageList(msg, 1, 0);
+                    chatWidgetAdapter.notifyDataSetChanged();
+                    chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+                    break;
 
-            /** Image message received */
-            else if (messageType.equals("image")) {
-                chatWidgetAdapter.updateMessageList(msg, 1, 1);
-                chatWidgetAdapter.notifyDataSetChanged();
-                chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
-            }
+                /** Image message received */
+                case "image":
+                    chatWidgetAdapter.updateMessageList(msg, 1, 1);
+                    chatWidgetAdapter.notifyDataSetChanged();
+                    chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+                    break;
 
-            /** Video message received */
-            else if (messageType.equals("video")) {
-                chatWidgetAdapter.updateMessageList(msg, 1, 2);
-                chatWidgetAdapter.notifyDataSetChanged();
-                chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+                /** Video message received */
+                case "video":
+                    chatWidgetAdapter.updateMessageList(msg, 1, 2);
+                    chatWidgetAdapter.notifyDataSetChanged();
+                    chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+                    break;
             }
         } catch (JSONException e) {
             e.printStackTrace();

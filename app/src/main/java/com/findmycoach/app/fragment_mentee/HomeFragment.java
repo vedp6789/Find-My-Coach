@@ -166,7 +166,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         for (Datum datum : data) {
             final Button button = new Button(getActivity());
             button.setTextColor(getActivity().getResources().getColor(R.color.white));
-            button.setBackground(getActivity().getResources().getDrawable(R.drawable.button_unselected));
+            button.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.button_unselected));
             button.setText(datum.getName());
             button.setLayoutParams(layoutParams);
 
@@ -186,11 +186,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 @Override
                 public void onClick(View v) {
                     for (Button btn : buttonList) {
-                        btn.setBackground(getActivity().getResources()
+                        btn.setBackgroundDrawable(getActivity().getResources()
                                 .getDrawable(R.drawable.button_unselected));
                         btn.setTextColor(getActivity().getResources().getColor(R.color.white));
                     }
-                    button.setBackground(getActivity().getResources()
+                    button.setBackgroundDrawable(getActivity().getResources()
                             .getDrawable(R.drawable.button_selected));
                     button.setTextColor(getActivity().getResources().getColor(R.color.purple));
 

@@ -86,6 +86,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     private String city = null;
     private String TAG = "FMC";
     private String newUser;
+    private boolean isGetAdress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +96,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         initialize();
         applyAction();
         populateUserData();
+        isGetAdress = false;
 
         if (newUser != null)
             getAddress();
@@ -393,10 +395,16 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                 startActivityForResult(intent, 500);
             }
         });
+
+        if (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
+            getAddress();
     }
 
     private void getAddress() {
+        if (isGetAdress)
+            return;
         try {
+            isGetAdress = true;
             final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
             GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
@@ -413,6 +421,10 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
                         DashboardActivity.dashboardActivity.latitude = location.getLatitude();
                         DashboardActivity.dashboardActivity.longitude = location.getLongitude();
+                    } else if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
+                        map.setOnMyLocationChangeListener(null);
+                        updateAddress();
+                        populateUserData();
                     }
                 }
             };

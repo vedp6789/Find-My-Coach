@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -400,9 +399,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                             if (dayEvents.size() > 0) {
                                 if (day_color[1].equals("BLUE")) {
-                                    gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
                                 } else {
-                                    gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
                                 }
                             }
                         }
@@ -414,9 +413,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
                                 if (day_color[1].equals("BLUE")) {
-                                    gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
                                 } else {
-                                    gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
                                 }
                             }
                         }
@@ -677,9 +676,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             * */
                         if (free_slot > 0) {
                             if (day_color[1].equals("BLUE")) {
-                                gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
                             } else {
-                                gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
                             }
                         } else {
                             if (day_color[1].equals("BLUE")) {

@@ -32,7 +32,6 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     public static Category category;
     public static List<DatumSub> datumSubs;
     private ListView listView;
-    private List<InterestsAdapter.SubCategoryItems> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +111,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     }
 
     private void updateMainList() {
-        list = new ArrayList<>();
+        List<InterestsAdapter.SubCategoryItems> list = new ArrayList<>();
         for (Datum datum : category.getData()) {
             Log.e(TAG, "Name : " + datum.getName() + ", Sub category size : "
                     + datum.getSubCategories().size() + ", Category size : "
