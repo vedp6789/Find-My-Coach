@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.findmycoach.app.R;
 
 import java.io.File;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by prem on 1/1/15.
@@ -21,6 +24,19 @@ public class StorageHelper {
         editor.commit();
     }
 
+
+    public static  void storeListOfCoachingSubCategories(Context context, Set<String> stringSet){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putStringSet("area_of_coaching_set",stringSet);
+        editor.commit();
+    }
+
+    public static Set<String> getListOfCoachingSubCategories(Context context,String key){
+        SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.getStringSet(key,null);
+        return preferences.getStringSet(key,null);
+    }
 
     public static void checkGcmRegIdSentToSever(Context context, String key, boolean value){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -39,6 +55,9 @@ public class StorageHelper {
         SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getString(key,null);
     }
+
+
+
 
     public static String getUserGroup(Context context, String key){
         SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(context);

@@ -47,8 +47,11 @@ import org.xml.sax.InputSource;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -83,6 +86,7 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
     private String last_city_selected = null;
     private String TAG = "FMC";
     private String newUser;
+    private Set<String> area_of_coaching_stringSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -553,6 +557,13 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
 
             requestParams.add("sub_category", areaOfCoaching.getText().toString().length() < 2 ? " " : areaOfCoaching.getText().toString());
 
+            /* area of coaching to get updated in shared preferences*/
+            String area_of_coaching []= areaOfCoaching.getText().toString().split(",");
+            area_of_coaching_stringSet = new HashSet<String>();
+            for(int i=0; i < area_of_coaching.length ; i++){
+                area_of_coaching_stringSet.add(area_of_coaching[i].trim());
+            }
+
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
@@ -672,6 +683,9 @@ public class EditProfileActivityMentor extends Activity implements DatePickerDia
                     StorageHelper.storePreference(this,"user_zip_code", pinCode.getText().toString());
                 }
             }
+
+            /* Storing updated area of coaching in shared preferences when updation is successful*/
+            StorageHelper.storeListOfCoachingSubCategories(EditProfileActivityMentor.this,area_of_coaching_stringSet);
         }
     }
 

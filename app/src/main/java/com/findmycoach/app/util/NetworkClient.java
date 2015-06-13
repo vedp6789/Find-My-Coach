@@ -1630,9 +1630,9 @@ public class NetworkClient {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
-                    Log.d(TAG, "Success : Status code : " + statusCode);
+                    Log.d(TAG, "Success : Status code : " + statusCode+"\ncalled_api+"+calledApiValue);
                     String responseJson = new String(responseBody);
-                    Log.d(TAG, "Success : Response : " + responseJson);
+                    Log.d(TAG, "Success : Response : " + responseJson+"\ncalled_api+"+calledApiValue);
                     callback.successOperation(responseJson, statusCode, calledApiValue);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1643,14 +1643,14 @@ public class NetworkClient {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
-                    Log.d(TAG, "Failure : Status code : " + statusCode);
+                    Log.d(TAG, "Failure : Status code : " + statusCode+"\ncalled_api+"+calledApiValue);
                     String responseJson = new String(responseBody);
-                    Log.d(TAG, "Failure : Response : " + responseJson);
+                    Log.d(TAG, "Failure : Response : " + responseJson+"\ncalled_api+"+calledApiValue);
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
                     try{
-                        Log.d(TAG, "Failure: Error:" + e.getMessage());
+                        Log.d(TAG, "Failure: Error:" + e.getMessage()+"\ncalled_api+"+calledApiValue);
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
                     }catch (Exception ignored){}                 }
             }

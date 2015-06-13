@@ -40,7 +40,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -48,10 +50,10 @@ import java.util.TreeSet;
  */
 public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
-    Spinner sp_slot_type;
+    Spinner sp_slot_type,sp_coaching_subjects;
     EditText et_maximum_students,et_tutorial_location;
-    LinearLayout ll_slot_maximum_students;
-    public static TextView tv_start_date, tv_till_date, tv_start_time, tv_stop_time;
+    LinearLayout ll_slot_maximum_students,ll_coaching_subjects,ll_single_subject;
+    public static TextView tv_start_date, tv_till_date, tv_start_time, tv_stop_time,tv_coaching_subject;
     public boolean boo_mon_checked, boo_tue_checked,
             boo_wed_checked, boo_thurs_checked,
             boo_fri_checked, boo_sat_checked,
@@ -75,6 +77,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     private int maximum_students;
     private boolean allow_slot_type_message;
     private Date newDate;
+    private Set<String> set_of_coaching_subjects;
+    private String coaching_subject=null;
 
 
     private static final String TAG = "FMC";
@@ -132,6 +136,57 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             }
         }
 
+
+
+
+        set_of_coaching_subjects = StorageHelper.getListOfCoachingSubCategories(AddNewSlotActivity.this,"area_of_coaching_set");
+        if(set_of_coaching_subjects != null){
+            Log.d(TAG,"set of sub size: "+set_of_coaching_subjects.size());
+
+            Iterator<String>  iterator = set_of_coaching_subjects.iterator();
+
+            if(set_of_coaching_subjects.size() > 1){
+                ll_single_subject.setVisibility(View.GONE);
+                ll_coaching_subjects.setVisibility(View.VISIBLE);
+                ArrayList<String> arrayOfSubjects = new ArrayList<String>();
+                while(iterator.hasNext()){
+                    String subject= iterator.next();
+                    arrayOfSubjects.add(subject);
+                }
+
+                Log.d(TAG,"arraylIst of subjets size :"+arrayOfSubjects.size());
+
+                ArrayAdapter arrayAdapter1_subject = new ArrayAdapter(this, R.layout.textview, arrayOfSubjects);
+                arrayAdapter1_subject.setDropDownViewResource(R.layout.textview);
+                sp_coaching_subjects.setAdapter(arrayAdapter1_subject);
+                sp_coaching_subjects.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+
+                        coaching_subject = (String) parent.getItemAtPosition(position);
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+
+                    }
+                });
+
+
+            }else{
+                ll_coaching_subjects.setVisibility(View.GONE);
+                ll_single_subject.setVisibility(View.VISIBLE);
+                if(set_of_coaching_subjects.size() >0){
+                    while (iterator.hasNext()){
+                        coaching_subject= iterator.next();
+                        tv_coaching_subject.setText(coaching_subject);
+                    }
+                }
+            }
+        }
 
         progressDialog = new ProgressDialog(AddNewSlotActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
@@ -371,6 +426,12 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                             Log.d(TAG, "slot_type :" + slot_type);
                             Log.d(TAG, "max users : " + maximum_students);
 
+                        }
+
+                        if(coaching_subject != null){
+                            requestParams.add("sub_category_name",coaching_subject);
+                        }else{
+                            Log.e(TAG,"coaching_subject null found");
                         }
 
                         requestParams.add("location",et_tutorial_location.getText().toString());
@@ -1053,9 +1114,13 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         tv_till_date = (TextView) findViewById(R.id.tv_slot_till_date);
         tv_start_time = (TextView) findViewById(R.id.tv_slot_start_time);
         tv_stop_time = (TextView) findViewById(R.id.tv_slot_stop_time);
+        tv_coaching_subject = (TextView) findViewById(R.id.tv_coaching_subject);
         sp_slot_type = (Spinner) findViewById(R.id.sp_slot_type);
+        sp_coaching_subjects = (Spinner) findViewById(R.id.sp_coaching_subjects);
         ll_slot_maximum_students = (LinearLayout) findViewById(R.id.ll_max_students);
         ll_slot_maximum_students.setVisibility(View.GONE);
+        ll_coaching_subjects = (LinearLayout) findViewById(R.id.ll_coaching_subjects);
+        ll_single_subject = (LinearLayout) findViewById(R.id.ll_single_subject);
         et_maximum_students = (EditText) findViewById(R.id.et_maximum_students);
         et_tutorial_location = (EditText) findViewById(R.id.et_tutorial_location);
         b_create_slot = (Button) findViewById(R.id.b_create_slot);

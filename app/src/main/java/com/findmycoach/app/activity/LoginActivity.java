@@ -44,6 +44,10 @@ import com.google.android.gms.plus.model.people.Person;
 import com.loopj.android.http.RequestParams;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -807,10 +811,28 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
            StorageHelper.storePreference(this,"training_location",(String) response.getData().isTrainingLocation());
         }
 
-
+/*Saving mentor's area of coaching i.e. subcategories to sharedpreference in string set*/
         if(StorageHelper.getUserGroup(LoginActivity.this,"user_group").equals("3")){
+            List<String> sub_category_list =  response.getData().getSubCategoryName();
+            Set<String> sub_category_stringSet = new HashSet<String>();
+            for(int i = 0 ; i < sub_category_list.size() ; i++){
+                  sub_category_stringSet.add(sub_category_list.get(i));
+            }
+            StorageHelper.storeListOfCoachingSubCategories(LoginActivity.this,sub_category_stringSet);
 
-        }
+
+            /*try{
+                Log.d(TAG,"set size: "+sub_category_stringSet.size());
+                Iterator<String> stringIterator=sub_category_stringSet.iterator();
+                while(stringIterator.hasNext()){
+                    Log.d(TAG,"set test"+stringIterator.next());
+
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+*/
+      }
 
 
 

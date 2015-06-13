@@ -80,6 +80,7 @@
             "stop_time":"02:00:00",
             "start_date":"2015-01-01",
             "slot_type":"Individual",
+            "subject":"",
             "max_users":"25",
             "weekdays":["M”,”T”,”W”,”Th"]
             "vacations":{
