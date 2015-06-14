@@ -41,7 +41,7 @@ public class AboutWeekViewEvent extends Activity {
     TextView tv_slot_start_date, tv_slot_stop_date, tv_slot_start_time,
             tv_slot_stop_time, tv_slot_week_days, tv_slot_type, tv_max_students,
             tv_vacation_start_date, tv_vacation_stop_date, tv_vacation_start_time,
-            tv_vacation_stop_time, tv_name, tv_subject;
+            tv_vacation_stop_time, tv_name, tv_subject,tv_slot_subject_val;
     ListView lv_list_of_mentees, lv_list_of_coinciding_vacations, lv_list_class_durations;
     Button b_delete;
     LinearLayout ll_class_slot_details, ll_list_of_mentees, ll_list_of_coincidingVacations, ll_non_coincidingLinearLayout,
@@ -170,7 +170,8 @@ public class AboutWeekViewEvent extends Activity {
 
                 tv_name.setText(mentorInfo.getFirst_name()+"\t"+mentorInfo.getLast_name().trim());
                 populateSlotInfo(slot);
-                tv_subject.setText("");  /*  Not setting because this value is not available correctly*/
+                //tv_subject.setText(""); /* not required as mentee class is similar to slot subject*/
+                // /*  Not setting because this value is not available correctly*/
 
                 ListOfClassDuration listOfClassDuration=new ListOfClassDuration(AboutWeekViewEvent.this,menteeFoundOnTheDate);
                 lv_list_class_durations.setAdapter(listOfClassDuration);
@@ -205,6 +206,7 @@ public class AboutWeekViewEvent extends Activity {
         tv_slot_stop_date = (TextView) findViewById(R.id.tv_end_date_val);
         tv_slot_start_time = (TextView) findViewById(R.id.tv_start_time_val);
         tv_slot_stop_time = (TextView) findViewById(R.id.tv_end_time_val);
+        tv_slot_subject_val = (TextView) findViewById(R.id.tv_slot_subject_val);
         tv_slot_week_days = (TextView) findViewById(R.id.tv_week_days_val);
         tv_slot_type = (TextView) findViewById(R.id.tv_slot_type_val);
         tv_max_students = (TextView) findViewById(R.id.tv_max_users_val);
@@ -225,7 +227,10 @@ public class AboutWeekViewEvent extends Activity {
         tv_slot_start_time.setText(getTime(slot.getSlot_start_time()));
         tv_slot_stop_time.setText(getTime(slot.getSlot_stop_time()));
 
+        tv_slot_subject_val.setText(slot.getSlot_subject());
         tv_slot_week_days.setText(getWeekDays(slot.getSlot_week_days()));
+
+
 
         String slot_type = slot.getSlot_type();
         if (slot_type.equalsIgnoreCase("group")) {
@@ -245,6 +250,7 @@ public class AboutWeekViewEvent extends Activity {
         tv_slot_stop_date = (TextView) findViewById(R.id.tv_end_date_val);
         tv_slot_start_time = (TextView) findViewById(R.id.tv_start_time_val);
         tv_slot_stop_time = (TextView) findViewById(R.id.tv_end_time_val);
+        tv_slot_subject_val = (TextView) findViewById(R.id.tv_slot_subject_val);
         tv_slot_week_days = (TextView) findViewById(R.id.tv_week_days_val);
         tv_slot_type = (TextView) findViewById(R.id.tv_slot_type_val);
         tv_max_students = (TextView) findViewById(R.id.tv_max_users_val);

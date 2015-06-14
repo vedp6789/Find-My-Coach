@@ -1264,7 +1264,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 }
                 slot.setVacations(vacations);
                 slot.setSlot_created_on_network_success("true");
-
+                slot.setSlot_subject(slot_jsonObject.getString("subject"));
                 slots.add(slot);
             } catch (Exception e) {
                 e.printStackTrace();

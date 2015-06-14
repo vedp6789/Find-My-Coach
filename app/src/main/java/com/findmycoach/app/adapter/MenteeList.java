@@ -87,7 +87,7 @@ public class MenteeList extends BaseAdapter {
                 if(mentees.size()> 0){
                     Mentee mentee= mentees.get(position);
                     menteeViewHolder.tv_name.setText(mentee.getFirst_name()+"\t"+mentee.getLast_name().trim());
-                    menteeViewHolder.tv_subject.setText("");
+                    menteeViewHolder.tv_subject.setVisibility(View.GONE);
                     menteeViewHolder.tv_start_date.setVisibility(View.GONE);
                     menteeViewHolder.tv_stop_date.setVisibility(View.GONE);
                 }

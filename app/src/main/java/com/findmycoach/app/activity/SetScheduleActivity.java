@@ -809,7 +809,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         String slot_start_date = new_Slot.getSlot_start_date();
                         String slot_stop_date = new_Slot.getSlot_stop_date();
                         String slot_week_days[] = new_Slot.getSlot_week_days();
-
+                        String slot_subject = new_Slot.getSlot_subject();
                         Calendar cal_slot_start_date = Calendar.getInstance();
                         cal_slot_start_date.set(Integer.parseInt(slot_start_date.split("-")[0]), Integer.parseInt(slot_start_date.split("-")[1]) - 1, Integer.parseInt(slot_start_date.split("-")[2]));
                         long cal_slot_start_date_millis = cal_slot_start_date.getTimeInMillis();
@@ -932,7 +932,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
         endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
         WeekViewEvent weekViewEvent;
-        weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(Integer.parseInt(new_slot.getSlot_start_date().split("-")[2]), Integer.parseInt(new_slot.getSlot_start_date().split("-")[1]), Integer.parseInt(new_slot.getSlot_start_date().split("-")[0]), Integer.parseInt(new_slot.getSlot_stop_date().split("-")[2]), Integer.parseInt(new_slot.getSlot_stop_date().split("-")[1]), Integer.parseInt(new_slot.getSlot_stop_date().split("-")[0]), Integer.parseInt(new_slot.getSlot_start_time().split(":")[0]), Integer.parseInt(new_slot.getSlot_start_time().split(":")[1]), Integer.parseInt(new_slot.getSlot_stop_time().split(":")[0]), Integer.parseInt(new_slot.getSlot_stop_time().split(":")[1]), new_slot.getSlot_type(), new_slot.getSlot_week_days()), startTime, endTime, new_slot, mentorInfo, mentor_id, mentor_availablity, 202, charges, arrayList_subcategory);
+        weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(new_slot.getSlot_subject(),Integer.parseInt(new_slot.getSlot_start_date().split("-")[2]), Integer.parseInt(new_slot.getSlot_start_date().split("-")[1]), Integer.parseInt(new_slot.getSlot_start_date().split("-")[0]), Integer.parseInt(new_slot.getSlot_stop_date().split("-")[2]), Integer.parseInt(new_slot.getSlot_stop_date().split("-")[1]), Integer.parseInt(new_slot.getSlot_stop_date().split("-")[0]), Integer.parseInt(new_slot.getSlot_start_time().split(":")[0]), Integer.parseInt(new_slot.getSlot_start_time().split(":")[1]), Integer.parseInt(new_slot.getSlot_stop_time().split(":")[0]), Integer.parseInt(new_slot.getSlot_stop_time().split(":")[1]), new_slot.getSlot_type(), new_slot.getSlot_week_days()), startTime, endTime, new_slot, mentorInfo, mentor_id, mentor_availablity, 202, charges, arrayList_subcategory);
         weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
         events.add(weekViewEvent);
     }
@@ -1131,7 +1131,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     }
 
 
-    private String getFreeSlotTitle(int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_day, int slot_stop_month, int slot_stop_year, int slot_start_hour, int slot_start_min, int slot_stop_hour, int slot_stop_min, String slot_type, String[] slot_on_week_days) {
+    private String getFreeSlotTitle(String slot_subject,int slot_start_day, int slot_start_month, int slot_start_year, int slot_stop_day, int slot_stop_month, int slot_stop_year, int slot_start_hour, int slot_start_min, int slot_stop_hour, int slot_stop_min, String slot_type, String[] slot_on_week_days) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int slot_week_day = 0; slot_week_day < slot_on_week_days.length; slot_week_day++) {
             String week_day = slot_on_week_days[slot_week_day];
@@ -1185,7 +1185,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
         }
 
-        return String.format("Free slot: %02d-%02d-%d to %02d-%02d-%d \nTiming: %02d:%02d to %02d:%02d \n", slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_min, slot_stop_hour, slot_stop_min) + "Slot type: " + slot_type + "\n" + "Week-days: " + stringBuilder.toString();
+        return String.format("Free slot: %02d-%02d-%d to %02d-%02d-%d \nTiming: %02d:%02d to %02d:%02d \n", slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_min, slot_stop_hour, slot_stop_min) + "Slot type: " + slot_type +", Subject: "+slot_subject +"\n" + "Week-days: " + stringBuilder.toString();
     }
 
     @Override
@@ -1266,52 +1266,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             }
         }
 
-        Log.d(TAG, "Event Id: " + event.getId() + ", Event start time: " + event.getStartTime() + "Event stop time: " + event.getEndTime());
-
-
-        if (event_type == 1) {
-            RequestParams requestParams = new RequestParams();
-            requestParams.add("user_group", StorageHelper.getUserGroup(SetScheduleActivity.this, "user_group"));
-            requestParams.add("id", String.valueOf(event.getId()));
-
-            Log.d(TAG, "event_id :" + String.valueOf(event.getId()) + " slot_type" + event.getSlot_type());
-            progressDialog.show();
-            NetworkClient.getCalenderEvent(SetScheduleActivity.this, requestParams, StorageHelper.getUserDetails(SetScheduleActivity.this, "auth_token"), this, 43);
-        } else {
-            if (event_type == 2) {    /* envent_type 2 is for free slot duration*/
-                /* ScheduleNewClass activity will open now, and SetScheduleActivity will send all desired data for this free slot to ScheduleNewClass */
-                Intent intent = new Intent(SetScheduleActivity.this, ScheduleNewClass.class);
-                Bundle bundle = new Bundle();
-                bundle.putLong("slot_id", event.getId());
-                bundle.putString("mentor_id", event.getMentor_id());
-                bundle.putString("mentor_availability", event.getMentor_availablity());
-                bundle.putInt("slot_start_day", event.getSlot_start_day());
-                bundle.putInt("slot_start_month", event.getSlot_start_month());
-                bundle.putInt("slot_start_year", event.getSlot_start_year());
-                bundle.putInt("slot_stop_day", event.getSlot_stop_day());
-                bundle.putInt("slot_stop_month", event.getSlot_stop_month());
-                bundle.putInt("slot_stop_year", event.getSlot_stop_year());
-                bundle.putInt("slot_start_hour", event.getSlot_start_hour());
-                bundle.putInt("slot_start_minute", event.getSlot_start_minute());
-                bundle.putInt("slot_stop_hour", event.getSlot_stop_hour());
-                bundle.putInt("slot_stop_minute", event.getSlot_stop_minute());
-                bundle.putStringArray("slot_on_week_days", event.getSlot_on_week_days());
-                bundle.putString("charges", event.getCharges());
-                bundle.putString("slot_type", event.getSlot_type());
-                bundle.putStringArrayList("arrayList_sub_category", arrayList_subcategory);
-                bundle.putParcelableArrayList("slot_duration_detail", event.getSlotDurationDetailBeans());    /* In this arraylist we have possible class days and its week_day bean*/
-                bundle.putParcelableArrayList("slot_coinciding_vacation", event.getVacationCoincidingSlots());  /* In this arrayList we have possible vacation duration coming in between class duration, date and week_day can be found*/
-
-                intent.putExtra("slot_bundle", bundle);
-                startActivity(intent);
-
-
-            } else {
-                if (event_type == 0) {
-                    //Toast.makeText()
-                }
-            }
-        }
 
 
     }

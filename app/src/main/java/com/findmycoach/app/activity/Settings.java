@@ -31,6 +31,8 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
             findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
         if (DashboardActivity.dashboardActivity.user_group == 2)
             findViewById(R.id.paymentOption).setVisibility(View.VISIBLE);
+        if(DashboardActivity.dashboardActivity.user_group == 3)
+         findViewById(R.id.ll_calendarPreferences).setVisibility(View.VISIBLE);
         initView();
     }
 
@@ -40,7 +42,7 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
         findViewById(R.id.change_phone_no).setOnClickListener(this);
         findViewById(R.id.paymentMethods).setOnClickListener(this);
         findViewById(R.id.backButton).setOnClickListener(this);
-
+        findViewById(R.id.tv_calendar_preferences).setOnClickListener(this);
         TextView textView = (TextView) findViewById(R.id.title);
         textView.setText(getResources().getString(R.string.action_settings));
 
@@ -80,6 +82,10 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
 
             case R.id.paymentMethods:
                 startActivity(new Intent(this, PaymentDetailsActivity.class));
+                break;
+
+            case R.id.tv_calendar_preferences:
+                startActivity(new Intent(this, CalendarPreferences.class));
                 break;
 
             case R.id.backButton:

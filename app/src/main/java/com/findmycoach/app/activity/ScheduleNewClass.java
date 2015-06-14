@@ -110,7 +110,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         charges = bundle.getString("charges");
         arrayList_subcategory = bundle.getStringArrayList("arrayList_sub_category");
 
-
         slot_start_day = Integer.parseInt(slot.getSlot_start_date().split("-")[2]);
         slot_start_month = Integer.parseInt(slot.getSlot_start_date().split("-")[1]);
         slot_start_year = Integer.parseInt(slot.getSlot_start_date().split("-")[0]);
@@ -177,8 +176,13 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             }
         }
 
-
-        if (arrayList_subcategory.size() > 1) {
+        if(slot.getSlot_subject() != null){
+            tv_subject.setVisibility(View.VISIBLE);
+            selected_subject =slot.getSlot_subject();
+            tv_subject.setText(selected_subject);
+            sp_subjects.setVisibility(View.GONE);
+        }
+/*        if (arrayList_subcategory.size() > 1) {
             sp_subjects.setVisibility(View.VISIBLE);
             ArrayAdapter arrayAdapter_sub_category = new ArrayAdapter(this, R.layout.textview, arrayList_subcategory);
             arrayAdapter_sub_category.setDropDownViewResource(R.layout.textview);
@@ -200,7 +204,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             tv_subject.setVisibility(View.VISIBLE);
             selected_subject = arrayList_subcategory.get(0);
             tv_subject.setText(selected_subject);
-        }
+        }*/
 
 
         String timing = String.format("%02d:%02d to %02d:%02d", slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute);

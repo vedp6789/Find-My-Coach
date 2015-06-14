@@ -83,5 +83,29 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/ll_calendarPreferences">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/payment"
+            android:padding="@dimen/textView_padding_margin"
+            android:textColor="@color/purple"
+            android:id="@+id/tv_calendar_preferences" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:orientation="vertical"
+            android:background="@color/purple_light" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

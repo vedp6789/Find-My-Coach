@@ -857,6 +857,7 @@
     <string name="year">Year</string>
     <string name="calendar_by_loc">Calendar by location</string>
     <string name="loc">Location</string>
+    <string name="view_calendar_by">View schedule calendar by</string>
     <string name="mentor_response_for_schedule_request_message">Your reply to mentee!</string>
     <!-- Static Text -->
 
