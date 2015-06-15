@@ -409,11 +409,13 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         } else {
             class_not_possible = true;
-            Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.no_class_possible), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.no_class_possible),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
-    private int calculateNoOfTotalClassDays(Calendar calendar_schedule_start_date, Calendar calendar_stop_date_of_schedule, String[] slot_on_week_days) {
+    private int calculateNoOfTotalClassDays(Calendar calendar_schedule_start_date,
+                                            Calendar calendar_stop_date_of_schedule, String[] slot_on_week_days) {
 
         int workDays = 0;
 
@@ -552,8 +554,16 @@ ib_info = (ImageButton) findViewById(R.id.ib_info);
 
 
                         progressDialog.show();
-                        NetworkClient.postScheduleRequest(ScheduleNewClass.this, getRequestParamsRelatedToThisClass(), ScheduleNewClass.this, 46);
-                        // Log.d(TAG,"id : "+slot_id.toString()+"student_id"+student_id+"mentor_id: "+mentor_id+" start_date : "+from_date.split("-",3)[2]+"-"+from_date.split("-",3)[1]+"-"+from_date.split("-",3)[0]+"slot_type : "+slot_type+" sub_category_id : "+sub_category_id+" total_price : "+tv_total_charges.getText().toString()+"date_of_birth_kid"+tv_child_dob.getText().toString().split("-",3)[2]+"-"+tv_child_dob.getText().toString().split("-",3)[1]+"-"+tv_child_dob.getText().toString().split("-",3)[0]);
+                        NetworkClient.postScheduleRequest(ScheduleNewClass.this,
+                                getRequestParamsRelatedToThisClass(), ScheduleNewClass.this, 46);
+                        // Log.d(TAG,"id : "+slot_id.toString()+"student_id"+student_id+"mentor_id:
+                        // "+mentor_id+" start_date : "+from_date.split("-",3)[2]+"-"+
+                        // from_date.split("-",3)[1]+"-"+from_date.split("-",3)[0]+"slot_type :
+                        // "+slot_type+" sub_category_id : "+sub_category_id+" total_price : "+
+                        // tv_total_charges.getText().toString()+"date_of_birth_kid"+
+                        // tv_child_dob.getText().toString().split("-",3)[2]+"-"+
+                        // tv_child_dob.getText().toString().split("-",3)[1]+"-"+
+                        // tv_child_dob.getText().toString().split("-",3)[0]);
 
                     }
                 }
@@ -580,9 +590,23 @@ ib_info = (ImageButton) findViewById(R.id.ib_info);
         for(int vacation_no =0; vacation_no < vacations_on_the_slot.size() ; vacation_no++){
             Vacation vacation = vacations_on_the_slot.get(vacation_no);
             if(vacation_no == 0)
-            stringBuilder.append("Vacation "+ ++vacation_no+": "+String.format("%02d-%02d-%d - %02d-%02d-%d",Integer.parseInt(vacation.getStart_date().split("-")[0]),Integer.parseInt(vacation.getStart_date().split("-")[1]),Integer.parseInt(vacation.getStart_date().split("-")[2]),Integer.parseInt(vacation.getStop_date().split("-")[0]),Integer.parseInt(vacation.getStop_date().split("-")[1]),Integer.parseInt(vacation.getStop_date().split("-")[2])));
+            stringBuilder.append("Vacation "+ ++vacation_no+": "+
+                    String.format("%02d-%02d-%d - %02d-%02d-%d",
+                            Integer.parseInt(vacation.getStart_date().split("-")[0]),
+                            Integer.parseInt(vacation.getStart_date().split("-")[1]),
+                            Integer.parseInt(vacation.getStart_date().split("-")[2]),
+                            Integer.parseInt(vacation.getStop_date().split("-")[0]),
+                            Integer.parseInt(vacation.getStop_date().split("-")[1]),
+                            Integer.parseInt(vacation.getStop_date().split("-")[2])));
             else
-            stringBuilder.append("\nVacation "+ ++vacation_no+": "+String.format("%02d-%02d-%d - %02d-%02d-%d",Integer.parseInt(vacation.getStart_date().split("-")[0]),Integer.parseInt(vacation.getStart_date().split("-")[1]),Integer.parseInt(vacation.getStart_date().split("-")[2]),Integer.parseInt(vacation.getStop_date().split("-")[0]),Integer.parseInt(vacation.getStop_date().split("-")[1]),Integer.parseInt(vacation.getStop_date().split("-")[2])));
+            stringBuilder.append("\nVacation "+ ++vacation_no+": "+
+                    String.format("%02d-%02d-%d - %02d-%02d-%d",
+                            Integer.parseInt(vacation.getStart_date().split("-")[0]),
+                            Integer.parseInt(vacation.getStart_date().split("-")[1]),
+                            Integer.parseInt(vacation.getStart_date().split("-")[2]),
+                            Integer.parseInt(vacation.getStop_date().split("-")[0]),
+                            Integer.parseInt(vacation.getStop_date().split("-")[1]),
+                            Integer.parseInt(vacation.getStop_date().split("-")[2])));
 
         }
 
@@ -620,8 +644,10 @@ ib_info = (ImageButton) findViewById(R.id.ib_info);
         requestParams1.add("student_id", student_id);
 
         JSONArray jsonArray = new JSONArray();
-        for (int duration_number = 0; duration_number < durationOfSuccessfulClassDayses.size(); duration_number++) {
-            DurationOfSuccessfulClassDays durationOfSuccessfulClassDays = durationOfSuccessfulClassDayses.get(duration_number);
+        for (int duration_number = 0; duration_number < durationOfSuccessfulClassDayses.size();
+             duration_number++) {
+            DurationOfSuccessfulClassDays durationOfSuccessfulClassDays =
+                    durationOfSuccessfulClassDayses.get(duration_number);
             JSONArray jsonArray1 = new JSONArray();
             jsonArray1.put(durationOfSuccessfulClassDays.getStart_date());
             jsonArray1.put(durationOfSuccessfulClassDays.getStop_date());
@@ -635,10 +661,13 @@ ib_info = (ImageButton) findViewById(R.id.ib_info);
         if (mentor_availability.equals("1") && slot_type.equalsIgnoreCase("individual")) {
             requestParams1.add("location", et_location.getText().toString());
         }
-        int sub_category_id = DataBase.singleton(ScheduleNewClass.this).getSubCategoryId(selected_subject);
+        int sub_category_id = DataBase.singleton(ScheduleNewClass.this).
+                getSubCategoryId(selected_subject);
         requestParams1.add("sub_category_id", String.valueOf(sub_category_id));
         if (selected_mentor_for.equalsIgnoreCase("child")) {
-            String date_of_birth_kid = tv_child_dob.getText().toString().split("-", 3)[2] + "-" + tv_child_dob.getText().toString().split("-", 3)[1] + "-" + tv_child_dob.getText().toString().split("-", 3)[0];
+            String date_of_birth_kid = tv_child_dob.getText().toString().split("-", 3)[2] + "-" +
+                    tv_child_dob.getText().toString().split("-", 3)[1] + "-" +
+                    tv_child_dob.getText().toString().split("-", 3)[0];
             requestParams1.add("date_of_birth_kid", date_of_birth_kid);
         }
         requestParams1.add("total_price", tv_total_charges.getText().toString());
@@ -664,11 +693,15 @@ ib_info = (ImageButton) findViewById(R.id.ib_info);
         switch (v.getId()) {
             case R.id.b_proceed_to_payment:
                 if (class_not_possible) {
-                    Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.no_days_free_to_schedule), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ScheduleNewClass.this,
+                            getResources().getString(R.string.no_days_free_to_schedule),
+                            Toast.LENGTH_SHORT).show();
                 } else {
                     if (rb_pay_now.isChecked()) {
                         if (validate()) {
-                            Toast.makeText(ScheduleNewClass.this, "Waiting for payment gateway integration. ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ScheduleNewClass.this,
+                                    "Waiting for payment gateway integration. ",
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                     if (rb_pay_personally.isChecked()) {

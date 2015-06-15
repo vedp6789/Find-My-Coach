@@ -17,7 +17,8 @@
         android:gravity="center"
         android:text="@string/select_days"
         android:textColor="@color/purple"
-        android:textSize="@dimen/profile_name" />
+        android:textSize="@dimen/profile_name"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/upperLine"
@@ -34,7 +35,8 @@
         android:background="@color/purple_light"
         android:horizontalSpacing="0.5dp"
         android:numColumns="7"
-        android:verticalSpacing="0.5dp" />
+        android:verticalSpacing="0.5dp"
+        android:visibility="gone"/>
 
 
     <TextView
@@ -42,7 +44,8 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_below="@+id/calendar"
-        android:background="@color/purple_light" />
+        android:background="@color/purple_light"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/chooseTime"

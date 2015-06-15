@@ -263,7 +263,7 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
 
                         requestParams.add("name", StorageHelper.getUserDetails(ScheduleYourVacation.this, "user_id") + "_vacation_schedule");
 
-                        requestParams.add("dates", stringBuilder1.toString());
+                        /* requestParams.add("dates", stringBuilder1.toString()); */  // commented as week_Days are not needed to saved in case of Vacation schedule.
                         Log.d(TAG, "Week days selected and sent to api : " + stringBuilder1.toString());
 
                         String[] arr = stringBuilder1.toString().split(",");

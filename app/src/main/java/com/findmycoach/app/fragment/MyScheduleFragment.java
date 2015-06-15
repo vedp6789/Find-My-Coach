@@ -97,6 +97,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     private String next_month_requested_date;
     private String prev_month_requested_date;
     private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    private int class_type_from_pref;  /* this is getting initialised from shared preference for class type*/
+
 
     public MyScheduleFragment() {
         // Required empty public constructor
@@ -207,8 +209,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             */
             Calendar calendar = new GregorianCalendar(year - 1, 11, 1);
             stringBuilder.append((year - 1));
-            stringBuilder.append("/" + 12);
-            stringBuilder.append("/" + 1);
+            stringBuilder.append("-" + 12);
+            stringBuilder.append("-" + 1);
 
             days_in_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         } else {
@@ -217,8 +219,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             Start date for three months data request from server get build
             */
             stringBuilder.append(year);
-            stringBuilder.append("/" + (month - 1));
-            stringBuilder.append("/" + 1);
+            stringBuilder.append("-" + (month - 1));
+            stringBuilder.append("-" + 1);
 
             days_in_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         }
@@ -334,6 +336,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         comingMonthMentorInfos = new ArrayList<MentorInfo>();
 
 
+        class_type_from_pref = StorageHelper.getClassTypePreference(getActivity());
+
+        Log.d(TAG,"MyScheduleFragment: class_type preference value form shared preference: "+class_type_from_pref);
+
         if (month_from_dialog == 0 && year_from_dialog == 0) {
             if (populate_calendar_from_adapter) {
                 populate_calendar_from_adapter = false;
@@ -356,6 +362,24 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         requestParams.add("user_group", String.valueOf("3"));
         requestParams.add("mentor_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
 
+        if(class_type_from_pref != -1){
+            switch (class_type_from_pref){
+                case 0:/* in case of 0 user selected All types of classes so it does needed to send to server*/
+                    break;
+                case 1:
+                    requestParams.add("slot_type","Individual");
+                    break;
+                case 2:
+                    requestParams.add("slot_type","Group");
+                    break;
+            }
+        }
+        else{
+            /* user does not selected class type preference*/
+        }
+
+
+
         StringBuilder stringBuilder = new StringBuilder();
 
         /*Checking previous month possibilities for month and year as we have to get no. of days from previous month and adding this with current and coming month */
@@ -367,8 +391,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             Start date for three months data request from server get build
             */
             stringBuilder.append((year - 1));
-            stringBuilder.append("/" + 12);
-            stringBuilder.append("/" + 1);
+            stringBuilder.append("-" + 12);
+            stringBuilder.append("-" + 1);
 
             days_in_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         } else {
@@ -377,8 +401,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             Start date for three months data request from server get build
             */
             stringBuilder.append(year);
-            stringBuilder.append("/" + (month - 1));
-            stringBuilder.append("/" + 1);
+            stringBuilder.append("-" + (month - 1));
+            stringBuilder.append("-" + 1);
 
             days_in_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         }
@@ -402,8 +426,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
 
         previous_month_start_date = String.valueOf(stringBuilder);    /* this will be used to identify previous, current, coming month date (yyyy-mm-dd) */
+        Log.d(TAG,"MyScheduleFragment, mentor_id: "+"mentor_id : "+StorageHelper.getUserDetails(getActivity(), "user_id")+", start date :"+String.valueOf(stringBuilder)+", limit: "+String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
 
-        if (cb_calendar_by_location_is_checked) {
+        networkCall1(requestParams);  /* Now not needed to check calendar by location here*/
+
+
+        /*if (cb_calendar_by_location_is_checked) {
             Log.d(TAG, "calendar_by_location is checked true");
             if (calendar_by_location != null && !calendar_by_location.trim().equals("")) {
                 Log.d(TAG, "Calendar_by_location getting passed to server : " + calendar_by_location);
@@ -422,12 +450,13 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             Log.d(TAG, "start networkCall1");
             networkCall1(requestParams);
         }
-
+*/
 
     }
 
     public void networkCall1(RequestParams requestParams) {
         progressDialog.show();
+        Log.d(TAG,"MyScheudleFragment, auth_token "+StorageHelper.getUserDetails(getActivity(), "auth_token"));
         NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 37); /* Network operation for getting details for three months */
         Log.d(TAG, "FMC auth token :" + StorageHelper.getUserDetails(getActivity(), "auth_token"));
     }
@@ -612,7 +641,25 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             requestParams.add("start_date", String.valueOf(stringBuilder));
             prev_month_requested_date = String.valueOf(stringBuilder);
             requestParams.add("limit", String.valueOf(days_in_new_prev_month));
-            if (cb_calendar_by_location_is_checked) {
+
+            if(class_type_from_pref != -1){
+                switch (class_type_from_pref){
+                    case 0:/* in case of 0 user selected All types of classes so it does needed to send to server*/
+                        break;
+                    case 1:
+                        requestParams.add("slot_type","Individual");
+                        break;
+                    case 2:
+                        requestParams.add("slot_type","Group");
+                        break;
+                }
+            }
+            else{
+            /* user does not selected class type preference*/
+            }
+  networkCall2(requestParams);
+
+            /*if (cb_calendar_by_location_is_checked) {
                 if (calendar_by_location != null) {
                     Log.d(TAG, "Calendar_by_location getting passed to server : " + calendar_by_location);
                     requestParams.add("location", calendar_by_location);
@@ -620,13 +667,13 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     networkCall2(requestParams);
                 } else {
                     Toast.makeText(getActivity(), getResources().getString(R.string.please_provide_location_to_access_details), Toast.LENGTH_SHORT).show();
-                    getLocationFromDialog();  /* start LocationFromDialog to get the location */
+                    getLocationFromDialog();  *//* start LocationFromDialog to get the location *//*
                 }
             } else {
                 Log.d(TAG, " Request for calendar details for prev month " + "start _date: " + String.valueOf(stringBuilder) + " limit : " + String.valueOf(days_in_new_prev_month));
                 networkCall2(requestParams);
             }
-
+*/
         }
         if (DashboardActivity.dashboardActivity.user_group == 2) {
             Log.d(TAG, "calling getMenteeCalendarDetails api for prev month");
@@ -701,8 +748,27 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             next_month_requested_date = String.valueOf(stringBuilder);
 
             requestParams.add("limit", String.valueOf(days_in_new_next_month));
+
+            if(class_type_from_pref != -1){
+                switch (class_type_from_pref){
+                    case 0:/* in case of 0 user selected All types of classes so it does needed to send to server*/
+                        break;
+                    case 1:
+                        requestParams.add("slot_type","Individual");
+                        break;
+                    case 2:
+                        requestParams.add("slot_type","Group");
+                        break;
+                }
+            }
+            else{
+            /* user does not selected class type preference*/
+            }
+
             Log.i(TAG, "user_group : " + String.valueOf("3") + " mentor id : " + StorageHelper.getUserDetails(getActivity(), "user_id") + " start date : " + String.valueOf(stringBuilder) + " limit : " + String.valueOf(days_in_new_next_month));
-            if (cb_calendar_by_location_is_checked) {
+            networkCall3(requestParams);
+
+            /*if (cb_calendar_by_location_is_checked) {
                 if (calendar_by_location != null) {
                     Log.d(TAG, "Calendar_by_location getting passed to server : " + calendar_by_location);
                     requestParams.add("location", calendar_by_location);
@@ -710,12 +776,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     networkCall3(requestParams);
                 } else {
                     Toast.makeText(getActivity(), getResources().getString(R.string.please_provide_location_to_access_details), Toast.LENGTH_SHORT).show();
-                    getLocationFromDialog();  /* start LocationFromDialog to get the location */
+                    getLocationFromDialog();  *//* start LocationFromDialog to get the location *//*
                 }
             } else {
                 Log.d(TAG, " Request for calendar details for prev month " + "start _date: " + String.valueOf(stringBuilder) + " limit : " + String.valueOf(days_in_new_next_month));
                 networkCall3(requestParams);
-            }
+            }*/
 
 
         }
@@ -780,9 +846,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         Log.d(TAG, "API " + calledApiValue + " failure");
+        progressDialog.dismiss();
         switch (calledApiValue) {
             case 37:
-
                 Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
                 updateArrayListForThreeMonths();
                 updateCalendarOnFailure();
@@ -826,59 +892,57 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     }
 
     private void updateArrayListForThreeMonths() {
-        Slot slot = new Slot();
-        slot.setSlot_created_on_network_success("false");
-        previousMonthArrayList.add(slot);
-        currentMonthArrayList.add(slot);
-        comingMonthArrayList.add(slot);
+        try{
+            Slot slot = new Slot();
+            slot.setSlot_created_on_network_success("false");
+            previousMonthArrayList.add(slot);
+            currentMonthArrayList.add(slot);
+            comingMonthArrayList.add(slot);
 
         /* Making non-coinciding Arraylists updated with "false" network communication */
-        Vacation vacation =new Vacation();
-        vacation.setVacation_made_at_network_success("false");
-        previousMonthNonCoincidingVacation.add(vacation);
-        currentMonthNonCoincidingVacation.add(vacation);
-        comingMonthNonCoincidingVacation.add(vacation);
+            Vacation vacation =new Vacation();
+            vacation.setVacation_made_at_network_success("false");
+            previousMonthNonCoincidingVacation.add(vacation);
+            currentMonthNonCoincidingVacation.add(vacation);
+            comingMonthNonCoincidingVacation.add(vacation);
 
 
 
 
-        int previous_month = Integer.parseInt(previous_month_start_date.split("-")[1]);
-        int previous_month_year = Integer.parseInt(previous_month_start_date.split("-")[0]);
+            int previous_month = Integer.parseInt(previous_month_start_date.split("-")[1]);
+            int previous_month_year = Integer.parseInt(previous_month_start_date.split("-")[0]);
 
-        int current_month, current_year, coming_month, coming_year;
-        if (previous_month == 11) {
-            current_month = 12;
-            current_year = previous_month_year;
-            coming_month = 1;
-            coming_year = previous_month_year;
-            ++coming_year;
-        } else {
-            if (previous_month == 12) {
-                current_month = 1;
+            int current_month, current_year, coming_month, coming_year;
+            if (previous_month == 11) {
+                current_month = 12;
                 current_year = previous_month_year;
-                ++current_year;
-                coming_month = 2;
-                coming_year = current_year;
-            } else {
-                current_month = previous_month;
-                ++current_month;
-                current_year = previous_month_year;
-                coming_month = current_month;
-                ++coming_month;
+                coming_month = 1;
                 coming_year = previous_month_year;
+                ++coming_year;
+            } else {
+                if (previous_month == 12) {
+                    current_month = 1;
+                    current_year = previous_month_year;
+                    ++current_year;
+                    coming_month = 2;
+                    coming_year = current_year;
+                } else {
+                    current_month = previous_month;
+                    ++current_month;
+                    current_year = previous_month_year;
+                    coming_month = current_month;
+                    ++coming_month;
+                    coming_year = previous_month_year;
+                }
             }
+
+            previousMonthYearInfo=getMonthYearForThis(previous_month,previous_month_year,finalizeDaysInMonth(previous_month,previous_month_year));
+            currentMonthYearInfo=getMonthYearForThis(current_month,current_year,finalizeDaysInMonth(current_month,current_year));
+            comingMonthYearInfo=getMonthYearForThis(coming_month,coming_year,finalizeDaysInMonth(coming_month,coming_year));
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
-        previousMonthYearInfo=getMonthYearForThis(previous_month,previous_month_year,finalizeDaysInMonth(previous_month,previous_month_year));
-        currentMonthYearInfo=getMonthYearForThis(current_month,current_year,finalizeDaysInMonth(current_month,current_year));
-        comingMonthYearInfo=getMonthYearForThis(coming_month,coming_year,finalizeDaysInMonth(coming_month,coming_year));
-
-
-
-
-
-
-    }
+}
 
     public void updateArrayListsForNextMonth() {
         previousMonthArrayList = currentMonthArrayList;

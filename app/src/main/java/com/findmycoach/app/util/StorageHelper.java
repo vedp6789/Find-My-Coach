@@ -34,8 +34,19 @@ public class StorageHelper {
 
     public static Set<String> getListOfCoachingSubCategories(Context context,String key){
         SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(context);
-        preferences.getStringSet(key,null);
         return preferences.getStringSet(key,null);
+    }
+
+    public static void storeClassTypePreference(Context context,int position){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("class_type",position);
+        editor.commit();
+    }
+
+    public static int getClassTypePreference(Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getInt("class_type",-1);
     }
 
     public static void checkGcmRegIdSentToSever(Context context, String key, boolean value){
@@ -85,6 +96,17 @@ public class StorageHelper {
         editor.remove("user_id");
         editor.remove("user_email");
         editor.remove("phone_verified");
+        editor.remove("user_local_address");
+        editor.remove("user_city_state");
+        editor.remove("user_zip_code");
+
+        if(StorageHelper.getUserGroup(context,"user_group").equals("2"))
+            editor.remove("training_location");
+
+        if(StorageHelper.getUserGroup(context,"user_group").equals("3")){
+            editor.remove("area_of_coaching_set");
+            editor.remove("class_type");
+        }
         editor.apply();
     }
 

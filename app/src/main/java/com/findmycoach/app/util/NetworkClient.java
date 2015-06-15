@@ -19,6 +19,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.apache.http.message.BasicHeader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -79,6 +80,8 @@ import org.json.JSONObject;
     *       getCardDetails                  47     // used to get saved card and PayPal details from server
     *       payMentor                       48
     *       eventFinalize                   49
+    *       exceptions                      50   // deleteVacation
+    *       availableSlots                  51 // deleteClassSlot
     * */
 
 
@@ -127,9 +130,11 @@ public class NetworkClient {
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    try{
+                    try {
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -167,10 +172,11 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         e.printStackTrace();
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}
+                    } catch (Exception ignored) {
+                    }
                 }
             }
         });
@@ -209,10 +215,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         e.printStackTrace();
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -250,10 +258,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         e.printStackTrace();
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -288,9 +298,10 @@ public class NetworkClient {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Failure: Response:" + responseJson);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
-                    }catch (Exception ignored){}
+                    } catch (Exception ignored) {
+                    }
                 }
             }
         });
@@ -333,9 +344,11 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -383,9 +396,11 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -430,9 +445,11 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
 
@@ -467,10 +484,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -508,10 +527,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -567,10 +588,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -613,10 +636,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -659,10 +684,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -707,10 +734,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -752,10 +781,12 @@ public class NetworkClient {
                     Log.d(TAG, "Failure: Response:" + new String(responseBody));
 
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -792,10 +823,12 @@ public class NetworkClient {
                     Log.d(TAG, "Failure: Response Code:" + statusCode);
 
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -830,10 +863,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -871,10 +906,12 @@ public class NetworkClient {
                     @Override
                     public void onFailure(int statusCode, Header[] headers,
                                           byte[] responseBody, Throwable error) {
-                        try{
+                        try {
                             Log.d(TAG, "Success: Response:" + statusCode);
                             callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                        }catch (Exception ignored){}                     }
+                        } catch (Exception ignored) {
+                        }
+                    }
                 }
 
         );
@@ -919,10 +956,12 @@ public class NetworkClient {
                     SearchResponse searchResponse = new Gson().fromJson(responseJson, SearchResponse.class);
                     callback.failureOperation(searchResponse.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
 
             }
         });
@@ -961,10 +1000,12 @@ public class NetworkClient {
                     @Override
                     public void onFailure(int statusCode, Header[] headers,
                                           byte[] responseBody, Throwable error) {
-                        try{
+                        try {
                             Log.d(TAG, "Failure: Response:" + statusCode);
                             callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                        }catch (Exception ignored){}                     }
+                        } catch (Exception ignored) {
+                        }
+                    }
                 }
 
         );
@@ -1006,10 +1047,12 @@ public class NetworkClient {
                             e.printStackTrace();
                             callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
                         } catch (Exception e) {
-                            try{
+                            try {
                                 Log.d(TAG, "Failure: Error:" + e.getMessage());
                                 callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                            }catch (Exception ignored){}                         }
+                            } catch (Exception ignored) {
+                            }
+                        }
                     }
                 }
 
@@ -1046,10 +1089,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -1091,11 +1136,13 @@ public class NetworkClient {
                     callback.failureOperation(new String(responseBody), statusCode, calledApiValue);
                 } catch (Exception e) {
 
-                    try{
+                    try {
                         Log.d(TAG, " inside onFailure catch for createNewSlot method ");
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -1136,11 +1183,13 @@ public class NetworkClient {
                     Log.d(TAG, "Failure: Response Code:" + statusCode);
                     callback.failureOperation(new String(responseBody), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, " inside onFailure catch for schedule vaccation method");
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -1177,10 +1226,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -1217,13 +1268,106 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
+
+
+    public static void deleteClassSlot(final Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
+        if (!NetworkManager.isNetworkConnected(context)) {
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
+        Header[] headers = {new BasicHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value)), new BasicHeader(context.getResources().getString(R.string.auth_key), authToken)};
+
+
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.delete(context, getAbsoluteURL("availableSlots", context), headers, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    Log.d(TAG, "Success : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success : Response : " + responseJson);
+                    callback.successOperation(responseJson, statusCode, calledApiValue);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseBody, null);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    Log.d(TAG, "Failure : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    try {
+                        Log.d(TAG, "Failure: Error:" + e.getMessage());
+                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        });
+
+    }
+
+
+    public static void deleteVacation(final Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
+        if (!NetworkManager.isNetworkConnected(context)) {
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
+        Header[] headers = {new BasicHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value)), new BasicHeader(context.getResources().getString(R.string.auth_key), authToken)};
+
+
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.delete(context, getAbsoluteURL("exceptions", context), headers, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    Log.d(TAG, "Success : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success : Response : " + responseJson);
+                    callback.successOperation(responseJson, statusCode, calledApiValue);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseBody, null);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    Log.d(TAG, "Failure : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    try {
+                        Log.d(TAG, "Failure: Error:" + e.getMessage());
+                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        });
+
+    }
+
 
 
     public static void getCalenderEvent(final Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
@@ -1257,10 +1401,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -1303,10 +1449,12 @@ public class NetworkClient {
                     JSONObject jsonObject = new JSONObject(new String(responseBody));
                     callback.failureOperation(jsonObject.get("message"), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -1346,10 +1494,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -1390,10 +1540,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -1431,20 +1583,15 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(new String(responseBody), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
-
-
-
-
-
-
-
 
 
     public static void postScheduleRequest(final Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
@@ -1454,10 +1601,10 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, context.getString(R.string.auth_token)));
-       client.post(context, getAbsoluteURL("event", context), requestParams, new AsyncHttpResponseHandler() {
+        client.post(context, getAbsoluteURL("event", context), requestParams, new AsyncHttpResponseHandler() {
 //            client.post(context, getAbsoluteURL("event", context), requestParams, new AsyncHttpResponseHandler() {
 
-                @Override
+            @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
                     Log.d(TAG, "Success : Status code : " + statusCode);
@@ -1483,10 +1630,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(new JSONObject(new String(responseBody)).get("message"), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -1525,10 +1674,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -1567,10 +1718,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -1610,10 +1763,12 @@ public class NetworkClient {
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
+                    try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
@@ -1630,9 +1785,9 @@ public class NetworkClient {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
-                    Log.d(TAG, "Success : Status code : " + statusCode+"\ncalled_api+"+calledApiValue);
+                    Log.d(TAG, "Success : Status code : " + statusCode + "\ncalled_api+" + calledApiValue);
                     String responseJson = new String(responseBody);
-                    Log.d(TAG, "Success : Response : " + responseJson+"\ncalled_api+"+calledApiValue);
+                    Log.d(TAG, "Success : Response : " + responseJson + "\ncalled_api+" + calledApiValue);
                     callback.successOperation(responseJson, statusCode, calledApiValue);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1643,20 +1798,21 @@ public class NetworkClient {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
-                    Log.d(TAG, "Failure : Status code : " + statusCode+"\ncalled_api+"+calledApiValue);
+                    Log.d(TAG, "Failure : Status code : " + statusCode + "\ncalled_api+" + calledApiValue);
                     String responseJson = new String(responseBody);
-                    Log.d(TAG, "Failure : Response : " + responseJson+"\ncalled_api+"+calledApiValue);
+                    Log.d(TAG, "Failure : Response : " + responseJson + "\ncalled_api+" + calledApiValue);
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
-                    try{
-                        Log.d(TAG, "Failure: Error:" + e.getMessage()+"\ncalled_api+"+calledApiValue);
+                    try {
+                        Log.d(TAG, "Failure: Error:" + e.getMessage() + "\ncalled_api+" + calledApiValue);
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    }catch (Exception ignored){}                 }
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         });
     }
-
 
 
 }

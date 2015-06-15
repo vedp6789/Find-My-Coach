@@ -57,29 +57,34 @@ public class GcmFmcService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Bundle extras = intent.getExtras();
-        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
-        String messageType = gcm.getMessageType(intent);
-        Log.d(TAG,"String getting from gcm cloud: "+messageType);
-        if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
+        try {
+            Bundle extras = intent.getExtras();
+            GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
+            String messageType = gcm.getMessageType(intent);
+            Log.d(TAG,"String getting from gcm cloud: "+messageType);
+            if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
 
-            if (GoogleCloudMessaging.
-                    MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-                Log.d(TAG, "MESSAGE_TYPE_SEND_ERROR: " + "error message from GCM server!");
-                //sendNotification("Send error: " + extras.toString());
-            } else if (GoogleCloudMessaging.
-                    MESSAGE_TYPE_DELETED.equals(messageType)) {
-                //sendNotification("Deleted messages on server: " +extras.toString());
-                Log.d(TAG, "MESSAGE_TYPE_DELETED: " + "message from GCM server!");
-                // If it's a regular GCM message, do some work.
-            } else if (GoogleCloudMessaging.
-                    MESSAGE_TYPE_MESSAGE.equals(messageType)) {
+                if (GoogleCloudMessaging.
+                        MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
+                    Log.d(TAG, "MESSAGE_TYPE_SEND_ERROR: " + "error message from GCM server!");
+                    //sendNotification("Send error: " + extras.toString());
+                } else if (GoogleCloudMessaging.
+                        MESSAGE_TYPE_DELETED.equals(messageType)) {
+                    //sendNotification("Deleted messages on server: " +extras.toString());
+                    Log.d(TAG, "MESSAGE_TYPE_DELETED: " + "message from GCM server!");
+                    // If it's a regular GCM message, do some work.
+                } else if (GoogleCloudMessaging.
+                        MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                     sendNotification(extras.get("data").toString());
 
+                }
             }
+            // Release the wake lock provided by the WakefulBroadcastReceiver.
+            GcmBroadcastReceiver.completeWakefulIntent(intent);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        // Release the wake lock provided by the WakefulBroadcastReceiver.
-        GcmBroadcastReceiver.completeWakefulIntent(intent);
+
     }
 
     private void sendNotification(String push_message) {
@@ -282,22 +287,27 @@ public class GcmFmcService extends IntentService {
     }
 
     void createNotification(int notification_id){
-        mNotificationManager = (NotificationManager)
-                this.getSystemService(Context.NOTIFICATION_SERVICE);
+        try{
+            mNotificationManager = (NotificationManager)
+                    this.getSystemService(Context.NOTIFICATION_SERVICE);
 
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle(contentTitle)
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(message))
-                        .setAutoCancel(true)
-                        .setContentText(message);
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setContentTitle(contentTitle)
+                            .setStyle(new NotificationCompat.BigTextStyle()
+                                    .bigText(message))
+                            .setAutoCancel(true)
+                            .setContentText(message);
 
 
-        mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(notification_id, mBuilder.build());
+            mBuilder.setContentIntent(contentIntent);
+            mNotificationManager.notify(notification_id, mBuilder.build());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 }

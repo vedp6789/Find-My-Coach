@@ -446,7 +446,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                                 progressDialog.dismiss();
 
                                 String success_response = (String) object;
-                                Log.d(TAG, "success response for add new slot activity : " + success_response);
+                                Log.d(TAG, "success response for add new slot activity :" + success_response);
                                 JSONObject jO_success_response = null;
                                 JSONArray jA_coinciding_Exceptions = null;
                                 JSONArray jA_coinciding_Slots = null;
@@ -478,6 +478,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                                         } else {
                                             if (jA_coinciding_Slots.length() > 0) {
                                                 coincideOf(jA_coinciding_Slots, 0);
+                                            }else{
+                                                /* It is the case when there is vacation found which is not allowing any class, so in this case we can show message from server */
                                             }
                                         }
                                     } catch (JSONException e) {
@@ -538,14 +540,18 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             JSONObject jO_coinciding_detail = null;
             try {
                 jO_coinciding_detail = jsonArray.getJSONObject(0);
-                JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
-                if (jA_Week_days.length() > 0) {
 
-                    for (int jA_Week_day = 0; jA_Week_day < jA_Week_days.length(); jA_Week_day++) {
-                        tset_days.add(jA_Week_days.getString(jA_Week_day));
+                if(flag == 0){    /* Slot is having */
+                    JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
+                    if (jA_Week_days.length() > 0) {
+
+                        for (int jA_Week_day = 0; jA_Week_day < jA_Week_days.length(); jA_Week_day++) {
+                            tset_days.add(jA_Week_days.getString(jA_Week_day));
+                        }
+
                     }
-
                 }
+
                 s_date = jO_coinciding_detail.getString("start_date");
                 st_date = jO_coinciding_detail.getString("stop_date");
                 s_time = jO_coinciding_detail.getString("start_time");
@@ -576,12 +582,15 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 JSONObject jO_coinciding_detail1 = null;
                 try {
                     jO_coinciding_detail1 = jsonArray.getJSONObject(i);
-                    JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
-                    if (jA_Week_days.length() > 0) {
-                        for (int jA_Week_day = 0; jA_Week_day < jA_Week_days.length(); jA_Week_day++) {
-                            tset_days.add(jA_Week_days.getString(jA_Week_day));
+                    if(flag == 0){
+                        JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
+                        if (jA_Week_days.length() > 0) {
+                            for (int jA_Week_day = 0; jA_Week_day < jA_Week_days.length(); jA_Week_day++) {
+                                tset_days.add(jA_Week_days.getString(jA_Week_day));
+                            }
                         }
                     }
+
                     s_date = jO_coinciding_detail.getString("start_date");
                     st_date = jO_coinciding_detail.getString("stop_date");
                     s_time = jO_coinciding_detail.getString("start_time");
@@ -685,14 +694,18 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 try {
                     String s_date, st_date, s_time, st_time;
                     ArrayList<String> days = new ArrayList<String>();
-
                     JSONObject jO_coinciding_detail = jsonArray.getJSONObject(0);
-                    JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
-                    if (jA_Week_days.length() > 0) {
-                        for (int jA_index = 0; jA_index < jA_Week_days.length(); jA_index++) {
-                            days.add(jA_Week_days.getString(jA_index));
+
+                    if(flag == 0){
+                        JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
+                        if (jA_Week_days.length() > 0) {
+                            for (int jA_index = 0; jA_index < jA_Week_days.length(); jA_index++) {
+                                days.add(jA_Week_days.getString(jA_index));
+                            }
                         }
                     }
+
+
                     s_date = jO_coinciding_detail.getString("start_date");
                     st_date = jO_coinciding_detail.getString("stop_date");
                     s_time = jO_coinciding_detail.getString("start_time");
@@ -711,7 +724,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
                     Log.d(TAG, "days : " + days);
 
-                    if (days != null) {
+                    if (days != null && flag == 0) {
 
                         StringBuilder stringBuilder1 = new StringBuilder();
                         String day1 = days.get(0);

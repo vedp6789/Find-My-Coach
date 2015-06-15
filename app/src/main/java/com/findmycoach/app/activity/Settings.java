@@ -33,6 +33,7 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
             findViewById(R.id.paymentOption).setVisibility(View.VISIBLE);
         if(DashboardActivity.dashboardActivity.user_group == 3)
          findViewById(R.id.ll_calendarPreferences).setVisibility(View.VISIBLE);
+
         initView();
     }
 

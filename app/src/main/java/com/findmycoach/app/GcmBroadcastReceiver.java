@@ -11,27 +11,24 @@ import android.util.Log;
 /**
  * Created by praka_000 on 2/13/2015.
  */
-public class GcmBroadcastReceiver extends WakefulBroadcastReceiver{
-    private static final String TAG="FMC:";
+public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
+    private static final String TAG = "FMC:";
 
     @Override
     public void onReceive(Context context, Intent intent) {
 // Explicitly specify that GcmIntentService will handle the intent.
-        Log.e(TAG,"Broadcastreciver :  GCM Message arrived ");
+        Log.e(TAG, "Broadcastreciver :  GCM Message arrived ");
 
-
+        try {
             Log.d(TAG, "Inside GCM Broadcast receiver");
             ComponentName comp = new ComponentName(context.getPackageName(),
                     GcmFmcService.class.getName());
             // Start the service, keeping the device awake while it is launching.
             startWakefulService(context, (intent.setComponent(comp)));
             setResultCode(Activity.RESULT_OK);
-
-
-
-
-
-
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
     }

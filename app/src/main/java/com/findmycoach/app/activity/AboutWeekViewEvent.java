@@ -1,6 +1,9 @@
 package com.findmycoach.app.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -9,8 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.facebook.Request;
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.ListOfClassDuration;
 import com.findmycoach.app.adapter.MenteeList;
@@ -19,7 +24,10 @@ import com.findmycoach.app.beans.CalendarSchedule.Mentee;
 import com.findmycoach.app.beans.CalendarSchedule.MentorInfo;
 import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.beans.CalendarSchedule.Vacation;
+import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,17 +44,17 @@ import javax.xml.datatype.Duration;
 /**
  * Created by ved on 12/3/15.
  */
-public class AboutWeekViewEvent extends Activity {
+public class AboutWeekViewEvent extends Activity implements Callback {
 
     TextView tv_slot_start_date, tv_slot_stop_date, tv_slot_start_time,
             tv_slot_stop_time, tv_slot_week_days, tv_slot_type, tv_max_students,
             tv_vacation_start_date, tv_vacation_stop_date, tv_vacation_start_time,
-            tv_vacation_stop_time, tv_name, tv_subject,tv_slot_subject_val;
+            tv_vacation_stop_time, tv_name, tv_subject, tv_slot_subject_val;
     ListView lv_list_of_mentees, lv_list_of_coinciding_vacations, lv_list_class_durations;
     Button b_delete;
-    LinearLayout ll_class_slot_details, ll_list_of_mentees, ll_list_of_coincidingVacations, ll_non_coincidingLinearLayout,
+    LinearLayout ll_class_slot_details, ll_list_of_mentees, ll_list_of_coincidingVacations,
+            ll_non_coincidingLinearLayout,
             ll_mentee_class_schedule, ll_coinciding_vacations;
-
 
     ArrayList<Mentee> menteeFoundOnTheDate;
     Slot slot;
@@ -55,6 +63,7 @@ public class AboutWeekViewEvent extends Activity {
     MentorInfo mentorInfo;
     Bundle bundle;
     private String for_which_event = null;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -62,7 +71,8 @@ public class AboutWeekViewEvent extends Activity {
         super.onCreate(savedInstanceState);
 
         for_which_event = getIntent().getStringExtra("for");
-
+        progressDialog = new ProgressDialog(AboutWeekViewEvent.this);
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
         switch (for_which_event) {
             case "scheduled_class_mentor":
                 setContentView(R.layout.activity_about_event_mentor);
@@ -79,7 +89,8 @@ public class AboutWeekViewEvent extends Activity {
                 b_delete.setVisibility(View.GONE);
 
 
-                MenteeList menteeList = new MenteeList(AboutWeekViewEvent.this, menteeFoundOnTheDate);
+                MenteeList menteeList = new MenteeList(AboutWeekViewEvent.this,
+                        menteeFoundOnTheDate);
                 lv_list_of_mentees.setAdapter(menteeList);
 
                 break;
@@ -97,7 +108,8 @@ public class AboutWeekViewEvent extends Activity {
                 b_delete.setVisibility(View.GONE);
 
 
-                MenteeList menteeList1 = new MenteeList(coinciding_vacations, AboutWeekViewEvent.this);
+                MenteeList menteeList1 = new MenteeList(coinciding_vacations,
+                        AboutWeekViewEvent.this);
                 lv_list_of_coinciding_vacations.setAdapter(menteeList1);
 
                 break;
@@ -107,30 +119,39 @@ public class AboutWeekViewEvent extends Activity {
                 slot = bundle.getParcelable("slot");
                 init1();
                 populateSlotInfo(slot);
-                
+
                 ll_list_of_mentees.setVisibility(View.GONE);
                 ll_non_coincidingLinearLayout.setVisibility(View.GONE);
                 ll_list_of_coincidingVacations.setVisibility(View.GONE);
                 b_delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        
+                        RequestParams requestParams = new RequestParams();
+                        requestParams.add("slot_id", slot.getSlot_id());
+                        showAlertOnDelete(0, requestParams);
+
                     }
-                });                
+                });
                 break;
             case "non_coinciding_vacation":
                 setContentView(R.layout.activity_about_event_mentor);
                 bundle = getIntent().getBundleExtra("vacation_bundle");
                 non_coinciding_vacation = bundle.getParcelable("vacation");
-                
+
                 init1();
-                
+
                 ll_class_slot_details.setVisibility(View.GONE);
                 ll_list_of_coincidingVacations.setVisibility(View.GONE);
                 ll_list_of_mentees.setVisibility(View.GONE);
 
-                tv_vacation_start_date.setText(String.format("%02d-%02d-%d", Integer.parseInt(non_coinciding_vacation.getStart_date().split("-")[2]), Integer.parseInt(non_coinciding_vacation.getStop_date().split("-")[1]), Integer.parseInt(non_coinciding_vacation.getStop_date().split("-")[0])));
-                tv_vacation_stop_date.setText(String.format("%02d-%02d-%d", Integer.parseInt(non_coinciding_vacation.getStop_date().split("-")[2]), Integer.parseInt(non_coinciding_vacation.getStop_date().split("-")[1]), Integer.parseInt(non_coinciding_vacation.getStop_date().split("-")[0])));
+                tv_vacation_start_date.setText(String.format("%02d-%02d-%d",
+                        Integer.parseInt(non_coinciding_vacation.getStart_date().split("-")[2]),
+                        Integer.parseInt(non_coinciding_vacation.getStop_date().split("-")[1]),
+                        Integer.parseInt(non_coinciding_vacation.getStop_date().split("-")[0])));
+                tv_vacation_stop_date.setText(String.format("%02d-%02d-%d",
+                        Integer.parseInt(non_coinciding_vacation.getStop_date().split("-")[2]),
+                        Integer.parseInt(non_coinciding_vacation.getStop_date().split("-")[1]),
+                        Integer.parseInt(non_coinciding_vacation.getStop_date().split("-")[0])));
 
                 tv_vacation_start_time.setText(getTime(non_coinciding_vacation.getStart_time()));
                 tv_vacation_stop_time.setText(getTime(non_coinciding_vacation.getStop_time()));
@@ -145,18 +166,19 @@ public class AboutWeekViewEvent extends Activity {
                 }
 
                 tv_max_students.setText(slot.getSlot_max_users());
-                
-                
-                
-                
+
+
                 b_delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        
+                        RequestParams requestParams = new RequestParams();
+                        requestParams.add("vacation_id", non_coinciding_vacation.getVacation_id());
+                        showAlertOnDelete(1, requestParams);
+
                     }
                 });
-               
-                
+
+
                 break;
             case "scheduled_class_mentee":
                 setContentView(R.layout.activity_about_event_mentee);
@@ -164,21 +186,21 @@ public class AboutWeekViewEvent extends Activity {
                 menteeFoundOnTheDate = bundle.getParcelableArrayList("mentees");
                 slot = bundle.getParcelable("slot");
                 mentorInfo = bundle.getParcelable("mentor_info");
-                
+
                 init2();
 
 
-                tv_name.setText(mentorInfo.getFirst_name()+"\t"+mentorInfo.getLast_name().trim());
+                tv_name.setText(mentorInfo.getFirst_name() + "\t" + mentorInfo.getLast_name().
+                        trim());
                 populateSlotInfo(slot);
                 //tv_subject.setText(""); /* not required as mentee class is similar to slot subject*/
                 // /*  Not setting because this value is not available correctly*/
 
-                ListOfClassDuration listOfClassDuration=new ListOfClassDuration(AboutWeekViewEvent.this,menteeFoundOnTheDate);
+                ListOfClassDuration listOfClassDuration =
+                        new ListOfClassDuration(AboutWeekViewEvent.this, menteeFoundOnTheDate);
                 lv_list_class_durations.setAdapter(listOfClassDuration);
                 ll_coinciding_vacations.setVisibility(View.GONE);
 
-
-                
                 break;
             case "coinciding_vacation_mentee":
                 setContentView(R.layout.activity_about_event_mentee);
@@ -188,12 +210,14 @@ public class AboutWeekViewEvent extends Activity {
                 mentorInfo = bundle.getParcelable("mentor_info");
 
                 init2();
-                tv_name.setText(mentorInfo.getFirst_name() + "\t" + mentorInfo.getLast_name().trim());
+                tv_name.setText(mentorInfo.getFirst_name() + "\t" +
+                        mentorInfo.getLast_name().trim());
                 populateSlotInfo(slot);
 
                 ll_mentee_class_schedule.setVisibility(View.GONE);
 
-                ListOfClassDuration listOfClassDuration1 = new ListOfClassDuration(coinciding_vacations,AboutWeekViewEvent.this);
+                ListOfClassDuration listOfClassDuration1 =
+                        new ListOfClassDuration(coinciding_vacations, AboutWeekViewEvent.this);
                 lv_list_of_coinciding_vacations.setAdapter(listOfClassDuration1);
 
                 break;
@@ -221,15 +245,20 @@ public class AboutWeekViewEvent extends Activity {
     }
 
     private void populateSlotInfo(Slot slot) {
-        tv_slot_start_date.setText(String.format("%02d-%02d-%d", Integer.parseInt(slot.getSlot_start_date().split("-")[2]), Integer.parseInt(slot.getSlot_start_date().split("-")[1]), Integer.parseInt(slot.getSlot_start_date().split("-")[0])));
-        tv_slot_stop_date.setText(String.format("%02d-%02d-%d", Integer.parseInt(slot.getSlot_stop_date().split("-")[2]), Integer.parseInt(slot.getSlot_stop_date().split("-")[1]), Integer.parseInt(slot.getSlot_stop_date().split("-")[0])));
+        tv_slot_start_date.setText(String.format("%02d-%02d-%d",
+                Integer.parseInt(slot.getSlot_start_date().split("-")[2]),
+                Integer.parseInt(slot.getSlot_start_date().split("-")[1]),
+                Integer.parseInt(slot.getSlot_start_date().split("-")[0])));
+        tv_slot_stop_date.setText(String.format("%02d-%02d-%d",
+                Integer.parseInt(slot.getSlot_stop_date().split("-")[2]),
+                Integer.parseInt(slot.getSlot_stop_date().split("-")[1]),
+                Integer.parseInt(slot.getSlot_stop_date().split("-")[0])));
 
         tv_slot_start_time.setText(getTime(slot.getSlot_start_time()));
         tv_slot_stop_time.setText(getTime(slot.getSlot_stop_time()));
 
         tv_slot_subject_val.setText(slot.getSlot_subject());
         tv_slot_week_days.setText(getWeekDays(slot.getSlot_week_days()));
-
 
 
         String slot_type = slot.getSlot_type();
@@ -354,4 +383,69 @@ public class AboutWeekViewEvent extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
+        if (calledApiValue == 50) {
+    /* vacation delet*/
+        } else {
+    /* slot delete*/
+        }
+    }
+
+    @Override
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
+
+    }
+
+    private void showAlertOnDelete(final int flag, final RequestParams requestParams) {  /* flag is 0 when this method is called to delete
+                                                      slot and 1 when called to delete vacation*/
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle(getResources().getString(R.string.confirm_delete));
+        ScrollView scrollView = new ScrollView(this);
+        final TextView contentView = new TextView(this);
+        if (flag == 0) {
+            contentView.setText(getResources().getString(R.string.slot_delete_warning_message));
+        } else {
+            contentView.setText(getResources().getString(R.string.vacations_delete_warning_message));
+        }
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(8, 8, 8, 8);
+        scrollView.addView(contentView);
+        scrollView.setLayoutParams(params);
+        alertDialog.setView(scrollView);
+        alertDialog.setCancelable(false);
+        alertDialog.setPositiveButton(getResources().getString(R.string.ok),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (flag == 0) {
+                            NetworkClient.deleteClassSlot(AboutWeekViewEvent.this, requestParams,
+                                    StorageHelper.getUserDetails(AboutWeekViewEvent.this,
+                                            "auth_token")
+                                    , AboutWeekViewEvent.this, 51);
+                        } else {
+                            NetworkClient.deleteVacation(AboutWeekViewEvent.this, requestParams,
+                                    StorageHelper.getUserDetails(AboutWeekViewEvent.this,
+                                            "auth_token")
+                                    , AboutWeekViewEvent.this, 50);
+                        }
+
+
+                    }
+                }
+        );
+        alertDialog.setNegativeButton(getResources().getString(R.string.cancel),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+
+                    }
+                }
+        );
+        alertDialog.show();
+    }
+
+
 }

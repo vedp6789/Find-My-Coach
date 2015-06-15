@@ -255,6 +255,9 @@
 
         </LinearLayout>
 
+
+
+
         <RadioButton
             android:layout_margin="@dimen/back_margin"
             android:layout_gravity="center"
@@ -264,7 +267,8 @@
             android:button="@drawable/custom_check_box"
             android:paddingLeft="@dimen/radio_button_padding"
             android:textColor="@color/purple"
-            android:text="@string/calendar_by_loc" />
+            android:text="@string/calendar_by_loc"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/tv_add_new_slot"

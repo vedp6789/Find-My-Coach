@@ -2,6 +2,7 @@ package com.findmycoach.app.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -100,7 +101,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     * This constructor is called from MyScheduleFragment
     *
     * */
-    public CalendarGridAdapter(Context context, int month, int year, MyScheduleFragment myScheduleFragment, ArrayList<Slot> prev_month_data, ArrayList<Slot> current_month_data, ArrayList<Slot> coming_month_data, ArrayList<Vacation> previousMonthNonCoincidingVacation, ArrayList<Vacation> currentMonthNonCoincidingVacation, ArrayList<Vacation> comingMonthNonCoincidingVacation, ArrayList<MonthYearInfo> previousMonthYearInfo, ArrayList<MonthYearInfo> currentMonthYearInfo, ArrayList<MonthYearInfo> comingMonthYearInfo,ArrayList<MentorInfo> previousMonthMentorInfos, ArrayList<MentorInfo> currentMonthMentorInfos, ArrayList<MentorInfo> comingMonthMentorInfos) {
+    public CalendarGridAdapter(Context context, int month, int year, MyScheduleFragment myScheduleFragment, ArrayList<Slot> prev_month_data, ArrayList<Slot> current_month_data, ArrayList<Slot> coming_month_data, ArrayList<Vacation> previousMonthNonCoincidingVacation, ArrayList<Vacation> currentMonthNonCoincidingVacation, ArrayList<Vacation> comingMonthNonCoincidingVacation, ArrayList<MonthYearInfo> previousMonthYearInfo, ArrayList<MonthYearInfo> currentMonthYearInfo, ArrayList<MonthYearInfo> comingMonthYearInfo, ArrayList<MentorInfo> previousMonthMentorInfos, ArrayList<MentorInfo> currentMonthMentorInfos, ArrayList<MentorInfo> comingMonthMentorInfos) {
         super();
         this.context = context;
         weekdays = context.getResources().getStringArray(R.array.week_days);
@@ -152,7 +153,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         * This constructor is called from MentorDetailsActivity
         *
         * */
-    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Slot> prev_month_data, ArrayList<Slot> current_month_data, ArrayList<Slot> coming_month_data, ArrayList<Vacation> previousMonthNonCoincidingVacation, ArrayList<Vacation> currentMonthNonCoincidingVacation, ArrayList<Vacation> comingMonthNonCoincidingVacation, ArrayList<MonthYearInfo> previousMonthYearInfo, ArrayList<MonthYearInfo> currentMonthYearInfo, ArrayList<MonthYearInfo> comingMonthYearInfo,ArrayList<MentorInfo> previousMonthMentorInfos, ArrayList<MentorInfo> currentMonthMentorInfos, ArrayList<MentorInfo> comingMonthMentorInfos, String mentor_id, String availability_yn, String charges, ArrayList<String> arraylist_subcategory, String connection_status) {
+    public CalendarGridAdapter(Context context, int month, int year, MentorDetailsActivity mentorDetailsActivity, ArrayList<Slot> prev_month_data, ArrayList<Slot> current_month_data, ArrayList<Slot> coming_month_data, ArrayList<Vacation> previousMonthNonCoincidingVacation, ArrayList<Vacation> currentMonthNonCoincidingVacation, ArrayList<Vacation> comingMonthNonCoincidingVacation, ArrayList<MonthYearInfo> previousMonthYearInfo, ArrayList<MonthYearInfo> currentMonthYearInfo, ArrayList<MonthYearInfo> comingMonthYearInfo, ArrayList<MentorInfo> previousMonthMentorInfos, ArrayList<MentorInfo> currentMonthMentorInfos, ArrayList<MentorInfo> comingMonthMentorInfos, String mentor_id, String availability_yn, String charges, ArrayList<String> arraylist_subcategory, String connection_status) {
         super();
         this.context = context;
         weekdays = context.getResources().getStringArray(R.array.week_days);
@@ -470,7 +471,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
                                 Calendar calendar_this_day = Calendar.getInstance();
-                                calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth) -1, Integer.parseInt(theday));
+                                calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth) - 1, Integer.parseInt(theday));
                                 long this_day = calendar_this_day.getTimeInMillis();
                                 int week_day_for_this_day = calendar_this_day.get(Calendar.DAY_OF_WEEK);/* This will give week_day for this day, 1 to 7 for Sunday to Saturday */
 
@@ -488,19 +489,19 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                             String vacation_stop_date = vacation.getStop_date();
 
                                             Calendar calendar_vacation_start_date = Calendar.getInstance();
-                                            calendar_vacation_start_date.set(Integer.parseInt(vacation_start_date.split("-")[0]), Integer.parseInt(vacation_start_date.split("-")[1])-1, Integer.parseInt(vacation_start_date.split("-")[2]));
+                                            calendar_vacation_start_date.set(Integer.parseInt(vacation_start_date.split("-")[0]), Integer.parseInt(vacation_start_date.split("-")[1]) - 1, Integer.parseInt(vacation_start_date.split("-")[2]));
                                             long vacation_start_millis = calendar_vacation_start_date.getTimeInMillis();
 
                                             Calendar calendar_vacation_stop_date = Calendar.getInstance();
-                                            calendar_vacation_stop_date.set(Integer.parseInt(vacation_stop_date.split("-")[0]), Integer.parseInt(vacation_stop_date.split("-")[1])-1, Integer.parseInt(vacation_stop_date.split("-")[2]));
+                                            calendar_vacation_stop_date.set(Integer.parseInt(vacation_stop_date.split("-")[0]), Integer.parseInt(vacation_stop_date.split("-")[1]) - 1, Integer.parseInt(vacation_stop_date.split("-")[2]));
                                             long vacation_stop_millis = calendar_vacation_stop_date.getTimeInMillis();
 
 
                                             if ((this_day == vacation_start_millis) || (this_day == vacation_stop_millis) || (this_day < vacation_stop_millis && this_day > vacation_start_millis)) {
 
                                             /* Now checking whether the_day is having week day similar to one of the vacation week days, if found then we have to consider this vacation for this day otherwise not*/
-                                                    availabilityFlags.vacation_found = true;  /* proves one of non coinciding vacation coming for this day*/
-                                                    break;  /* as we have to just know that there is any vacation or not for this day (grid day which is going to be populated)*/
+                                                availabilityFlags.vacation_found = true;  /* proves one of non coinciding vacation coming for this day*/
+                                                break;  /* as we have to just know that there is any vacation or not for this day (grid day which is going to be populated)*/
                                             }
                                         }
                                     }
@@ -511,23 +512,26 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                     if (availabilityFlags.event_found) {
                                         if (availabilityFlags.vacation_found) {
                                             /* event and vacation both are there */
+                                            gridcell.setBackgroundColor(Color.RED);
+
 
                                         } else {
                                             /*only event found*/
-
+                                            gridcell.setBackgroundColor(Color.CYAN);
                                         }
                                     } else {
                                         if (availabilityFlags.vacation_found) {
                                             /* only vacation found */
+                                            gridcell.setBackgroundColor(Color.BLUE);
                                         } else {
                                             /* neither event found nor vacation, only slot is there */
-
+                                            gridcell.setBackgroundColor(Color.LTGRAY);
                                         }
                                     }
                                 } else {
                                     if (availabilityFlags.vacation_found) {
                                         /* no slot found on this day there is only vacation */
-
+                                        gridcell.setBackgroundColor(Color.YELLOW);
                                     }
                                 }
 
@@ -549,7 +553,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
                                 Calendar calendar_this_day = Calendar.getInstance();
-                                calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth)-1, Integer.parseInt(theday));
+                                calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth) - 1, Integer.parseInt(theday));
                                 long this_day = calendar_this_day.getTimeInMillis();
                                 int week_day_for_this_day = calendar_this_day.get(Calendar.DAY_OF_WEEK);/* This will give week_day for this day, 1 to 7 for Sunday to Saturday */
 
@@ -561,12 +565,15 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                     if (availabilityFlags.event_found) {
                                         if (availabilityFlags.vacation_found) {
                                             /* both event and vacation found */
+                                            gridcell.setBackgroundColor(Color.YELLOW);
                                         } else {
                                             /* only event found*/
+                                            gridcell.setBackgroundColor(Color.LTGRAY);
                                         }
                                     } else {
                                         if (availabilityFlags.vacation_found) {
                                             /* only vacation found*/
+                                            gridcell.setBackgroundColor(Color.BLUE);
                                         }
                                     }
 
@@ -577,7 +584,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                         } else {   /* For Mentors Detail Activity*/
 
                             Calendar calendar_this_day = Calendar.getInstance();
-                            calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth)-1, Integer.parseInt(theday));
+                            calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth) - 1, Integer.parseInt(theday));
                             long this_day = calendar_this_day.getTimeInMillis();
                             int week_day_for_this_day = calendar_this_day.get(Calendar.DAY_OF_WEEK);/* This will give week_day for this day, 1 to 7 for Sunday to Saturday */
 
@@ -664,19 +671,19 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                         String vacation_stop_date = vacation1.getStop_date();
 
                                         Calendar calendar_vacation_start_date = Calendar.getInstance();
-                                        calendar_vacation_start_date.set(Integer.parseInt(vacation_start_date.split("-")[0]), Integer.parseInt(vacation_start_date.split("-")[1])-1, Integer.parseInt(vacation_start_date.split("-")[2]));
+                                        calendar_vacation_start_date.set(Integer.parseInt(vacation_start_date.split("-")[0]), Integer.parseInt(vacation_start_date.split("-")[1]) - 1, Integer.parseInt(vacation_start_date.split("-")[2]));
                                         long vacation_start_millis = calendar_vacation_start_date.getTimeInMillis();
 
                                         Calendar calendar_vacation_stop_date = Calendar.getInstance();
-                                        calendar_vacation_stop_date.set(Integer.parseInt(vacation_stop_date.split("-")[0]), Integer.parseInt(vacation_stop_date.split("-")[1])-1, Integer.parseInt(vacation_stop_date.split("-")[2]));
+                                        calendar_vacation_stop_date.set(Integer.parseInt(vacation_stop_date.split("-")[0]), Integer.parseInt(vacation_stop_date.split("-")[1]) - 1, Integer.parseInt(vacation_stop_date.split("-")[2]));
                                         long vacation_stop_millis = calendar_vacation_stop_date.getTimeInMillis();
 
 
                                         if ((this_day == vacation_start_millis) || (this_day == vacation_stop_millis) || (this_day < vacation_stop_millis && this_day > vacation_start_millis)) {
 
                                             /* Now checking whether the_day is having week day similar to one of the vacation week days, if found then we have to consider this vacation for this day otherwise not*/
-                                                availabilityFlags.vacation_found = true;  /* proves one of non coinciding vacation coming for this day*/
-                                                break;  /* as we have to just know that there is any vacation or not for this day (grid day which is going to be populated)*/
+                                            availabilityFlags.vacation_found = true;  /* proves one of non coinciding vacation coming for this day*/
+                                            break;  /* as we have to just know that there is any vacation or not for this day (grid day which is going to be populated)*/
 
 
                                         }
@@ -686,6 +693,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                                     if (availabilityFlags.vacation_found) {
                                           /* only vacation found */
+                                        gridcell.setBackgroundColor(Color.YELLOW);
                                     }
 
 
@@ -805,11 +813,11 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                 String[] slot_week_day = new_slot.getSlot_week_days();
 
                 Calendar calendar_slot_start_date = Calendar.getInstance();
-                calendar_slot_start_date.set(Integer.parseInt(slot_start_date.split("-")[0]), Integer.parseInt(slot_start_date.split("-")[1])-1, Integer.parseInt(slot_start_date.split("-")[2]));
+                calendar_slot_start_date.set(Integer.parseInt(slot_start_date.split("-")[0]), Integer.parseInt(slot_start_date.split("-")[1]) - 1, Integer.parseInt(slot_start_date.split("-")[2]));
                 long calendar_slot_start_date_in_millis = calendar_slot_start_date.getTimeInMillis();
 
                 Calendar calendar_slot_stop_date = Calendar.getInstance();
-                calendar_slot_stop_date.set(Integer.parseInt(slot_stop_date.split("-")[0]), Integer.parseInt(slot_stop_date.split("-")[1])-1, Integer.parseInt(slot_stop_date.split("-")[2]));
+                calendar_slot_stop_date.set(Integer.parseInt(slot_stop_date.split("-")[0]), Integer.parseInt(slot_stop_date.split("-")[1]) - 1, Integer.parseInt(slot_stop_date.split("-")[2]));
                 long calendar_slot_stop_date_in_millis = calendar_slot_stop_date.getTimeInMillis();
 
                 if ((calendar_this_day_millis == calendar_slot_start_date_in_millis) || (calendar_this_day_millis == calendar_slot_stop_date_in_millis) || (calendar_this_day_millis > calendar_slot_start_date_in_millis && calendar_this_day_millis < calendar_slot_stop_date_in_millis)) {
@@ -873,13 +881,13 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                 long calendar_vacation_stop_date_in_millis = calendar_vacation_stop_date.getTimeInMillis();
 
                 if ((calendar_this_day_millis == calendar_vacation_start_date_in_millis) || (calendar_this_day_millis == calendar_vacation_stop_date_in_millis) || (calendar_this_day_millis > calendar_vacation_start_date_in_millis && calendar_this_day_millis < calendar_vacation_stop_date_in_millis)) {
-         vacation_found = true;
+                    vacation_found = true;
                     break;
                 }
 
 
             }
-            if(!vacation_found){
+            if (!vacation_found) {
                 free_slot++;
             }
 
@@ -898,11 +906,11 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             String[] slot_week_days = new_slot.getSlot_week_days();
 
             Calendar calendar_slot_start_date = Calendar.getInstance();
-            calendar_slot_start_date.set(Integer.parseInt(slot_start_date.split("-")[0]), Integer.parseInt(slot_start_date.split("-")[1])-1, Integer.parseInt(slot_start_date.split("-")[2]));
+            calendar_slot_start_date.set(Integer.parseInt(slot_start_date.split("-")[0]), Integer.parseInt(slot_start_date.split("-")[1]) - 1, Integer.parseInt(slot_start_date.split("-")[2]));
             long slot_start_millis = calendar_slot_start_date.getTimeInMillis();
 
             Calendar calendar_slot_stop_date = Calendar.getInstance();
-            calendar_slot_stop_date.set(Integer.parseInt(slot_stop_date.split("-")[0]), Integer.parseInt(slot_stop_date.split("-")[1])-1, Integer.parseInt(slot_stop_date.split("-")[2]));
+            calendar_slot_stop_date.set(Integer.parseInt(slot_stop_date.split("-")[0]), Integer.parseInt(slot_stop_date.split("-")[1]) - 1, Integer.parseInt(slot_stop_date.split("-")[2]));
             long slot_stop_millis = calendar_slot_stop_date.getTimeInMillis();
 
             if ((this_day == slot_start_millis) || (this_day == slot_stop_millis) || (this_day < slot_stop_millis && this_day > slot_start_millis)) {
@@ -1008,9 +1016,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             intent.putExtra("previous_month_year_info", previousMonthYearInfo);
             intent.putExtra("current_month_year_info", currentMonthYearInfo);
             intent.putExtra("coming_month_year_info", comingMonthYearInfo);
-            intent.putExtra("prev_month_mentor",previousMonthMentorInfos);
-            intent.putExtra("current_month_mentor",currentMonthMentorInfos);
-            intent.putExtra("coming_month_mentor",comingMonthMentorInfos);
+            intent.putExtra("prev_month_mentor", previousMonthMentorInfos);
+            intent.putExtra("current_month_mentor", currentMonthMentorInfos);
+            intent.putExtra("coming_month_mentor", comingMonthMentorInfos);
 
 
             //intent.putExtra("day_bean", (android.os.Parcelable) three_months_data);
