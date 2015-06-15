@@ -2,10 +2,13 @@ package com.findmycoach.app.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.util.AppFonts;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
@@ -24,13 +27,24 @@ public class SplashActivity extends Activity implements Callback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AppFonts.HelveticaNeue = Typeface.createFromAsset(getAssets(), "HelveticaNeue.dfont");
+        AppFonts.HelveticaNeueMedium = Typeface.createFromAsset(getAssets(), "HelveticaNeue-Medium.otf");
+
         setContentView(R.layout.activity_splash);
+
+        TextView textView = (TextView) findViewById(R.id.banner);
+        textView.setTypeface(AppFonts.HelveticaNeueMedium);
+
+
         isStart = true;
         getDataFromServer();
         TimeZone tz = TimeZone.getDefault();
         NetworkClient.timeZone = tz.getDisplayName(false, TimeZone.SHORT);
         NetworkClient.timeZone = NetworkClient.timeZone.replace("GMT", "");
         Log.e("TimeZone : ", NetworkClient.timeZone + " Timezone id :: " + tz.getID());
+
+
     }
 
     /**
