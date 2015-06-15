@@ -23,10 +23,11 @@
     <dimen name="indicator">20dp</dimen>
     <dimen name="max_text_view_width">150dp</dimen>
 
-    <dimen name="img_vid">200dp</dimen>
+    <dimen name="img_vid">140dp</dimen>
 
 
     <dimen name="days_margin">4dp</dimen>
+    <dimen name="cross_margin">6dp</dimen>
     <dimen name="underline">2dp</dimen>
 
 

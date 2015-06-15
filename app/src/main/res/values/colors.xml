@@ -8,8 +8,17 @@
     <color name="today_highlight_color">#0033b5e5</color>
 
     <color name="white">#ffffff</color>
-    <color name="purple">#392366</color>
-    <color name="purple_light">#AFA4C4</color>
+    <color name="purple">#22214B</color>
+    <color name="purple_dark_light">#827191</color>
+    <color name="purple_light">#B8B3C9</color>
+
+    <color name="category_selected">#6C4E8A</color>
+    <color name="category_unselected">#3A1B5E</color>
+
+
+    <color name="bg_center">#3A256B</color>
+    <color name="bg_end">#212048</color>
+    <color name="bg_start">#5D339F</color>
 
     <!-- The app wide background color -->
     <color name="background_color">#fafafa</color>

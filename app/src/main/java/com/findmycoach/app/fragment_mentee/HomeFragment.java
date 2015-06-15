@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -59,8 +60,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements View.OnClickListener, Callback
-        , TimePickerDialog.OnTimeSetListener {
+public class HomeFragment extends Fragment implements View.OnClickListener, Callback, TimePickerDialog.OnTimeSetListener {
 
     private AutoCompleteTextView locationInput;
     private Button searchButton;
@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private static final String TAG = "FMC";
     private LinearLayout subCategoryLayout;
     private TextView subCategoryTextView;
-    ArrayAdapter<String> arrayAdapter;
+    private ArrayAdapter<String> arrayAdapter;
     private List<Button> daysButton;
     private TextView textView;
     public static HomeFragment homeFragmentMentee;
@@ -178,7 +178,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 button.setTag(subCategoryLayout.getId(), datum.getCategories());
             }
 
-            button.setTextSize(12.0f);
+            button.setTextSize(14.0f);
             subCategoryLayout.addView(button);
             buttonList.add(button);
 
@@ -224,8 +224,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                                         public void onItemClick(AdapterView<?> parent,
                                                                 View view, int position, long id) {
                                             showSubCategoryDialog(getResources()
-                                                            .getColor(R.color.purple_light),
-                                                    getResources().getColor(R.color.purple),
+                                                            .getColor(R.color.category_selected),
+                                                    getResources().getColor(R.color.category_unselected),
                                                     d.get(position).getSubCategories(),
                                                     d.get(position).getName());
                                             dialog.dismiss();
@@ -246,8 +246,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                         subCategoryTextView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                showSubCategoryDialog(getResources().getColor(R.color.purple_light)
-                                        , getResources().getColor(R.color.purple), d, null);
+                                showSubCategoryDialog(getResources().getColor(R.color.category_selected)
+                                        , getResources().getColor(R.color.category_unselected), d, null);
                             }
                         });
                     }
@@ -427,7 +427,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             }
         });
 
-        final Button clearFilter = (Button) fragmentView.findViewById(R.id.clear);
+        final ImageView clearFilter = (ImageView) fragmentView.findViewById(R.id.clear);
         clearFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

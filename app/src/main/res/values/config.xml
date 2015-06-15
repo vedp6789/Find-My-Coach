@@ -8,9 +8,10 @@
     <!-- Google Location Api Key -->
     <string name="google_location_api_key">AIzaSyBEXECi4hIR7axoaQiJQiRHvJN_ZIK3ORM</string>
 
-    <!-- FMC API KEY -->
+    <!-- FMC API KEY HEADER KEY AND VALUES -->
     <string name="api_key">FMC-API-KEY</string>
     <string name="auth_key">FMC-AUTH-TOKEN</string>
+    <string name="time_zone">GMT</string>
     <string name="api_key_value">01b0c1d332f6516fdc63d3d3dcf7b79273cdeb58</string>
 
     <!-- GCM API DETAILS -->

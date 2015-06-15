@@ -28,7 +28,9 @@ public class SplashActivity extends Activity implements Callback {
         isStart = true;
         getDataFromServer();
         TimeZone tz = TimeZone.getDefault();
-        Log.e("TimeZone : ", tz.getDisplayName(false, TimeZone.SHORT) + " Timezone id :: " + tz.getID());
+        NetworkClient.timeZone = tz.getDisplayName(false, TimeZone.SHORT);
+        NetworkClient.timeZone = NetworkClient.timeZone.replace("GMT", "");
+        Log.e("TimeZone : ", NetworkClient.timeZone + " Timezone id :: " + tz.getID());
     }
 
     /**

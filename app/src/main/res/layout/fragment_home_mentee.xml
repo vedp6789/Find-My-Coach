@@ -320,7 +320,7 @@
                             android:text="@string/s"
                             android:textColor="@color/purple" />
 
-                        <Button
+                        <ImageView
                             android:id="@+id/clear"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -328,10 +328,8 @@
                             android:layout_margin="@dimen/days_margin"
                             android:layout_weight="1"
                             android:background="@drawable/custom_rounded_corner_red"
-                            android:text="X"
-                            android:textColor="@color/white"
-                            android:textSize="22sp"
-                            android:textStyle="bold" />
+                            android:padding="@dimen/cross_margin"
+                            android:src="@drawable/close_icon" />
 
                     </LinearLayout>
 
@@ -351,6 +349,7 @@
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
+
 
     </ScrollView>
 
