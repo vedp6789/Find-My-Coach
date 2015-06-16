@@ -39,7 +39,6 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_details);
         initialize();
-        applyActionbarProperties();
     }
 
     private void initialize() {
@@ -66,12 +65,6 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
             inputCardName.setText("");
         }
 
-    }
-
-    private void applyActionbarProperties() {
-//        ActionBar actionBar = getActionBar();
-//        if(actionBar != null)
-//        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
