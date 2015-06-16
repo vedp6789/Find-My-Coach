@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -21,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.adapter.CountryCodeAdapter;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
@@ -43,7 +43,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     private RadioButton radioButton_mentee_signup, radioButton_mentor_signup;
     private int user_group = 3;
     private TextView countryCodeTV;
-    private String[] country_code, country_name;
+    private String[] country_code;
     private String email, phoneNumber;
     private ScrollView scrollView;
 
@@ -61,7 +61,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
      */
     private void initialize() {
         country_code = this.getResources().getStringArray(R.array.country_codes);
-        country_name = this.getResources().getStringArray(R.array.country_names);
         radioButton_mentee_signup = (RadioButton) findViewById(R.id.radio_button_mentee_signup);
         radioButton_mentor_signup = (RadioButton) findViewById(R.id.radio_button_mentor_signup);
         firstNameInput = (EditText) findViewById(R.id.input_first_name);
@@ -73,7 +72,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         countryCodeTV = (TextView) findViewById(R.id.countryCodeTV);
         scrollView = (ScrollView) findViewById(R.id.scrollView);
         String code = getCountryZipCode();
-        countryCodeTV.setText(code.equals("") ? country_code[0] : code);
+        countryCodeTV.setText(code.equals("") ? getResources().getString(R.string.select) : code);
         countryCodeTV.setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
         progressDialog = new Dialog(this);
@@ -117,7 +116,9 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         countryDialog.setTitle(getResources().getString(R.string.select_country_code));
         countryDialog.setContentView(R.layout.dialog_country_code);
         ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
-        listView.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, country_name));
+        listView.setAdapter(new CountryCodeAdapter(getResources()
+                .getStringArray(R.array.country_names),
+                getResources().getStringArray(R.array.country_codes_only), this));
         countryDialog.show();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

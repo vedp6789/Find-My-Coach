@@ -18,7 +18,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -33,6 +32,7 @@ import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.findmycoach.app.R;
+import com.findmycoach.app.adapter.CountryCodeAdapter;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
@@ -65,7 +65,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private Dialog progressDialog;
     private int user_group;
     private TextView countryCodeTV;
-    private String[] country_code, country_name;
+    private String[] country_code;
     private int retryFbLogin;
 
     /**
@@ -725,7 +725,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         countryDialog.setCanceledOnTouchOutside(true);
         countryDialog.setContentView(R.layout.dialog_country_code);
         ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
-        listView.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, country_name));
+        listView.setAdapter(new CountryCodeAdapter(getResources()
+                .getStringArray(R.array.country_names),
+                getResources().getStringArray(R.array.country_codes_only), LoginActivity.this));
         countryDialog.show();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -745,7 +747,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         CountryID = manager.getSimCountryIso().toUpperCase();
         country_code = this.getResources().getStringArray(R.array.country_codes);
-        country_name = this.getResources().getStringArray(R.array.country_names);
         for (int i = 1; i < country_code.length; i++) {
             String[] g = country_code[i].split(",");
             if (g[1].trim().equals(CountryID.trim())) {

@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,6 +22,7 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.ValidatePhoneActivity;
+import com.findmycoach.app.adapter.CountryCodeAdapter;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -35,7 +35,7 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
 
     private TextView countryCodeTV;
     private EditText phoneEditText;
-    private String[] country_code, country_name;
+    private String[] country_code;
     private ProgressDialog progressDialog;
     private final String TAG = "FMC";
 
@@ -107,7 +107,6 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
         dialog.setCanceledOnTouchOutside(true);
 
         country_code = this.getResources().getStringArray(R.array.country_codes);
-        country_name = this.getResources().getStringArray(R.array.country_names);
 
         countryCodeTV = (TextView) view.findViewById(R.id.countryCodeTV);
         countryCodeTV.setText(getCountryZipCode());
@@ -147,7 +146,9 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
         countryDialog.setCanceledOnTouchOutside(true);
         countryDialog.setContentView(R.layout.dialog_country_code);
         ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
-        listView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.textview, country_name));
+        listView.setAdapter(new CountryCodeAdapter(getResources()
+                .getStringArray(R.array.country_names),
+                getResources().getStringArray(R.array.country_codes_only), getActivity()));
         countryDialog.show();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

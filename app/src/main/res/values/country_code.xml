@@ -2,7 +2,6 @@
 <resources>
 
     <string-array name="country_codes">
-        <item>Select</item>
         <item>61,AU</item>
         <item>91,IN</item>
         <item>65,SG</item>
@@ -11,12 +10,19 @@
     </string-array>
 
     <string-array name="country_names">
-        <item>Select</item>
-        <item>Australia (61)</item>
-        <item>India (91)</item>
-        <item>Singapore (65)</item>
-        <item>Sweden (46)</item>
-        <item>United Kingdom (44)</item>
+        <item>Australia</item>
+        <item>India</item>
+        <item>Singapore</item>
+        <item>Sweden</item>
+        <item>United Kingdom</item>
+    </string-array>
+
+    <string-array name="country_codes_only">
+        <item>(61)</item>
+        <item>(91)</item>
+        <item>(65)</item>
+        <item>(46)</item>
+        <item>(44)</item>
     </string-array>
 
     <!--<string-array name="country_codes" >-->
