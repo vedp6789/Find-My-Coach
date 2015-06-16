@@ -29,12 +29,12 @@ import java.util.List;
  * Created by ved on 14/6/15.
  */
 public class CalendarPreferences extends Activity implements Callback {
-Spinner sp_class_type;
+    Spinner sp_class_type;
     AutoCompleteTextView auto_tv_location;
     Button b_save;
-    public String TAG="FMC";
-    private String location=null;
-    private String last_location_selected=null;
+    public String TAG = "FMC";
+    private String location = null;
+    private String last_location_selected = null;
     ArrayAdapter<String> arrayAdapter;
     int class_type_index;
 
@@ -74,7 +74,7 @@ Spinner sp_class_type;
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 location = arrayAdapter.getItem(position).toString();
-                last_location_selected=location;
+                last_location_selected = location;
 
             }
         });
@@ -92,12 +92,12 @@ Spinner sp_class_type;
 
             @Override
             public void afterTextChanged(Editable s) {
-                location=null;    /* making location string null because if user do changes in location and doest not select location from suggested location then this location string should be null which is used to validate the location */
-                if(location != null){
+                location = null;    /* making location string null because if user do changes in location and doest not select location from suggested location then this location string should be null which is used to validate the location */
+                if (location != null) {
                     Log.d(TAG, "Location after text changed  : " + location);
 
-                }else{
-                    Log.d(TAG,"Location after text changed : "+" not set correctly yet ");
+                } else {
+                    Log.d(TAG, "Location after text changed : " + " not set correctly yet ");
 
                 }
                 String input = auto_tv_location.getText().toString();
@@ -111,11 +111,10 @@ Spinner sp_class_type;
             @Override
             public void onClick(View v) {
                 /* adding selected value as preference for calendar view */
-
-                StorageHelper.storeClassTypePreference(CalendarPreferences.this,class_type_index);
+                StorageHelper.storeClassTypePreference(CalendarPreferences.this, class_type_index);
+                finish();
             }
         });
-
 
 
     }
@@ -124,7 +123,7 @@ Spinner sp_class_type;
         RequestParams requestParams = new RequestParams();
         requestParams.add("input", input);
         requestParams.add("key", getResources().getString(R.string.google_location_api_key));
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
         NetworkClient.autoComplete(CalendarPreferences.this, requestParams, this, 32);
     }
 
@@ -143,7 +142,7 @@ Spinner sp_class_type;
         for (int index = 0; index < suggestions.size(); index++) {
             list.add(suggestions.get(index).getDescription());
         }
-        arrayAdapter=new ArrayAdapter<String>(CalendarPreferences.this,android.R.layout.simple_list_item_1,list);
+        arrayAdapter = new ArrayAdapter<String>(CalendarPreferences.this, android.R.layout.simple_list_item_1, list);
         auto_tv_location.setAdapter(arrayAdapter);
         //auto_tv_location.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list));
 
@@ -151,7 +150,7 @@ Spinner sp_class_type;
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
-        Log.d(TAG,"AutoComplete for location "+(String)object);
+        Log.d(TAG, "AutoComplete for location " + (String) object);
 
     }
 }

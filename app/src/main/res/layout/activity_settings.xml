@@ -84,7 +84,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:visibility="gone"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -94,7 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/payment"
+            android:text="@string/calendar_preference"
             android:padding="@dimen/textView_padding_margin"
             android:textColor="@color/purple"
             android:id="@+id/tv_calendar_preferences" />

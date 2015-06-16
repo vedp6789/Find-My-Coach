@@ -497,6 +497,7 @@
     <string name="change_password">Change password</string>
     <string name="change_phone">Change phone number</string>
     <string name="payment">Payment</string>
+    <string name="calendar_preference">Calendar preferences</string>
     <string name="no_new_request">No new request for you.</string>
     <string name="not_connected">Not connected to anyone.</string>
     <string name="yes">YES</string>

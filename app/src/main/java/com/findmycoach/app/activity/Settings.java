@@ -1,5 +1,6 @@
 package com.findmycoach.app.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -7,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.findmycoach.app.R;
@@ -21,23 +23,42 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
 
 //    private ActionBar actionbar;
 
+    LinearLayout ll_calendar_preferences;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        String loginWith = StorageHelper.getUserDetails(this, "login_with");
-        Log.e("LOGIN", loginWith);
-        if (!loginWith.equalsIgnoreCase("Login"))
-            findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
-        if (DashboardActivity.dashboardActivity.user_group == 2)
-            findViewById(R.id.paymentOption).setVisibility(View.VISIBLE);
-        if(DashboardActivity.dashboardActivity.user_group == 3)
-         findViewById(R.id.ll_calendarPreferences).setVisibility(View.VISIBLE);
 
         initView();
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("FMC","onPause");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
     private void initView() {
+        String loginWith = StorageHelper.getUserDetails(this, "login_with");
+        Log.e("LOGIN", loginWith);
+        ll_calendar_preferences = (LinearLayout) findViewById(R.id.ll_calendarPreferences);
+
+        if (!loginWith.equalsIgnoreCase("Login"))
+            findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
+        if (DashboardActivity.dashboardActivity.user_group == 2) {
+            findViewById(R.id.paymentOption).setVisibility(View.VISIBLE);
+            ll_calendar_preferences.setVisibility(View.GONE);
+        }
+
         findViewById(R.id.profileSettings).setOnClickListener(this);
         findViewById(R.id.change_password).setOnClickListener(this);
         findViewById(R.id.change_phone_no).setOnClickListener(this);

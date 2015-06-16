@@ -849,15 +849,17 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         progressDialog.dismiss();
         switch (calledApiValue) {
             case 37:
+                Log.d(TAG,"inside 37 failure");
                 Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
                 updateArrayListForThreeMonths();
                 updateCalendarOnFailure();
                 break;
             case 38:
-
+                Log.d(TAG,"inside 38 failure");
                 updateMonthAndYearOnNextMonthClick();
                 Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
                 updateArrayListsForNextMonth();
+
                 updateCalendarOnFailure();
                 break;
             case 39:
@@ -945,72 +947,84 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 }
 
     public void updateArrayListsForNextMonth() {
-        previousMonthArrayList = currentMonthArrayList;
-        currentMonthArrayList = comingMonthArrayList;
-        comingMonthArrayList = null;
-        comingMonthArrayList = new ArrayList<Slot>();
-        Slot slot = new Slot();
-        slot.setSlot_created_on_network_success("false");
-        comingMonthArrayList.add(slot);
+        try{
+            previousMonthArrayList = currentMonthArrayList;
+            currentMonthArrayList = comingMonthArrayList;
+            comingMonthArrayList = null;
+            comingMonthArrayList = new ArrayList<Slot>();
+            Slot slot = new Slot();
+            slot.setSlot_created_on_network_success("false");
+            comingMonthArrayList.add(slot);
 
 
-        previousMonthNonCoincidingVacation =currentMonthNonCoincidingVacation;
-        currentMonthNonCoincidingVacation = comingMonthNonCoincidingVacation;
-        currentMonthNonCoincidingVacation = null;
-        comingMonthNonCoincidingVacation = new ArrayList<Vacation>();
-        Vacation vacation=new Vacation();
-        vacation.setVacation_made_at_network_success("false");
-        comingMonthNonCoincidingVacation.add(vacation);
+            previousMonthNonCoincidingVacation =currentMonthNonCoincidingVacation;
+            currentMonthNonCoincidingVacation = comingMonthNonCoincidingVacation;
+            currentMonthNonCoincidingVacation = null;
+            comingMonthNonCoincidingVacation = new ArrayList<Vacation>();
+            Vacation vacation=new Vacation();
+            vacation.setVacation_made_at_network_success("false");
+            comingMonthNonCoincidingVacation.add(vacation);
 
 
-        previousMonthYearInfo= currentMonthYearInfo;
-        currentMonthYearInfo=comingMonthYearInfo;
-        comingMonthYearInfo=null;
-        comingMonthYearInfo= new ArrayList<MonthYearInfo>();
-        comingMonthYearInfo=getMonthYearForThis(Integer.parseInt(next_month_requested_date.split("-")[1]),Integer.parseInt(next_month_requested_date.split("-")[0]),finalizeDaysInMonth(Integer.parseInt(next_month_requested_date.split("-")[1]),Integer.parseInt(next_month_requested_date.split("-")[0])));
+            previousMonthYearInfo= currentMonthYearInfo;
+            currentMonthYearInfo=comingMonthYearInfo;
+            comingMonthYearInfo=null;
+            comingMonthYearInfo= new ArrayList<MonthYearInfo>();
+            comingMonthYearInfo=getMonthYearForThis(Integer.parseInt(next_month_requested_date.split("-")[1]),Integer.parseInt(next_month_requested_date.split("-")[0]),finalizeDaysInMonth(Integer.parseInt(next_month_requested_date.split("-")[1]),Integer.parseInt(next_month_requested_date.split("-")[0])));
 
 
-        previousMonthMentorInfos = currentMonthMentorInfos;
-        currentMonthMentorInfos = comingMonthMentorInfos;
-        comingMonthMentorInfos = null;
-        comingMonthMentorInfos = new ArrayList<MentorInfo>();
+            previousMonthMentorInfos = currentMonthMentorInfos;
+            currentMonthMentorInfos = comingMonthMentorInfos;
+            comingMonthMentorInfos = null;
+            comingMonthMentorInfos = new ArrayList<MentorInfo>();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
 
 
 
     }
 
     public void updateArrayListsForPreviousMonth() {
-        comingMonthArrayList = currentMonthArrayList;
-        currentMonthArrayList = previousMonthArrayList;
-        previousMonthArrayList = null;
-        previousMonthArrayList = new ArrayList<Slot>();
-        Slot slot = new Slot();
-        slot.setSlot_created_on_network_success("false");
-        previousMonthArrayList.add(slot);
+        try{
+            comingMonthArrayList = currentMonthArrayList;
+            currentMonthArrayList = previousMonthArrayList;
+            previousMonthArrayList = null;
+            previousMonthArrayList = new ArrayList<Slot>();
+            Slot slot = new Slot();
+            slot.setSlot_created_on_network_success("false");
+            previousMonthArrayList.add(slot);
 
-        comingMonthNonCoincidingVacation =currentMonthNonCoincidingVacation;
-        currentMonthNonCoincidingVacation=previousMonthNonCoincidingVacation;
-        previousMonthNonCoincidingVacation =null;
-        previousMonthNonCoincidingVacation = new ArrayList<Vacation>();
-        Vacation vacation = new Vacation();
-        vacation.setVacation_made_at_network_success("false");
-        previousMonthNonCoincidingVacation.add(vacation);
+            comingMonthNonCoincidingVacation =currentMonthNonCoincidingVacation;
+            currentMonthNonCoincidingVacation=previousMonthNonCoincidingVacation;
+            previousMonthNonCoincidingVacation =null;
+            previousMonthNonCoincidingVacation = new ArrayList<Vacation>();
+            Vacation vacation = new Vacation();
+            vacation.setVacation_made_at_network_success("false");
+            previousMonthNonCoincidingVacation.add(vacation);
 
-        comingMonthYearInfo = currentMonthYearInfo;
-        currentMonthYearInfo = previousMonthYearInfo;
-        previousMonthYearInfo = null;
-        previousMonthYearInfo = new ArrayList<MonthYearInfo>();
-        previousMonthYearInfo = getMonthYearForThis(Integer.parseInt(prev_month_requested_date.split("-")[1]),Integer.parseInt(prev_month_requested_date.split("-")[0]),finalizeDaysInMonth(Integer.parseInt(prev_month_requested_date.split("-")[1]),Integer.parseInt(prev_month_requested_date.split("-")[0])));
+            comingMonthYearInfo = currentMonthYearInfo;
+            currentMonthYearInfo = previousMonthYearInfo;
+            previousMonthYearInfo = null;
+            previousMonthYearInfo = new ArrayList<MonthYearInfo>();
+            previousMonthYearInfo = getMonthYearForThis(Integer.parseInt(prev_month_requested_date.split("-")[1]),Integer.parseInt(prev_month_requested_date.split("-")[0]),finalizeDaysInMonth(Integer.parseInt(prev_month_requested_date.split("-")[1]),Integer.parseInt(prev_month_requested_date.split("-")[0])));
 
 
-        comingMonthMentorInfos = currentMonthMentorInfos;
-        currentMonthMentorInfos = previousMonthMentorInfos;
-        previousMonthMentorInfos = null;
-        previousMonthMentorInfos = new ArrayList<MentorInfo>();
+            comingMonthMentorInfos = currentMonthMentorInfos;
+            currentMonthMentorInfos = previousMonthMentorInfos;
+            previousMonthMentorInfos = null;
+            previousMonthMentorInfos = new ArrayList<MentorInfo>();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 
     private void updateCalendarOnFailure() {
+        Log.d(TAG,"updateCalendarOnFailure call ");
 
         adapter1 = new CalendarGridAdapter(getActivity(), month, year, this);
         _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));

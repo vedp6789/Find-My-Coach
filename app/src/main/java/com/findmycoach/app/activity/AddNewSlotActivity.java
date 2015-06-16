@@ -50,10 +50,10 @@ import java.util.TreeSet;
  */
 public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
-    Spinner sp_slot_type,sp_coaching_subjects;
-    EditText et_maximum_students,et_tutorial_location;
-    LinearLayout ll_slot_maximum_students,ll_coaching_subjects,ll_single_subject;
-    public static TextView tv_start_date, tv_till_date, tv_start_time, tv_stop_time,tv_coaching_subject;
+    Spinner sp_slot_type, sp_coaching_subjects;
+    EditText et_maximum_students, et_tutorial_location;
+    LinearLayout ll_slot_maximum_students, ll_coaching_subjects, ll_single_subject;
+    public static TextView tv_start_date, tv_till_date, tv_start_time, tv_stop_time, tv_coaching_subject;
     public boolean boo_mon_checked, boo_tue_checked,
             boo_wed_checked, boo_thurs_checked,
             boo_fri_checked, boo_sat_checked,
@@ -78,7 +78,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     private boolean allow_slot_type_message;
     private Date newDate;
     private Set<String> set_of_coaching_subjects;
-    private String coaching_subject=null;
+    private String coaching_subject = null;
 
 
     private static final String TAG = "FMC";
@@ -115,46 +115,44 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         initialize();
 
         StringBuilder stringBuilder_address = new StringBuilder();
-        String local_Address = StorageHelper.AddressInformation(AddNewSlotActivity.this,"user_local_address");
-        String city = StorageHelper.AddressInformation(AddNewSlotActivity.this,"user_city_state");
+        String local_Address = StorageHelper.AddressInformation(AddNewSlotActivity.this, "user_local_address");
+        String city = StorageHelper.AddressInformation(AddNewSlotActivity.this, "user_city_state");
         String zip = StorageHelper.AddressInformation(AddNewSlotActivity.this, "user_zip_code");
-        if(local_Address != null){
+        if (local_Address != null) {
             stringBuilder_address.append(local_Address);
-            if(city != null){
-                stringBuilder_address.append(", "+city.trim().toString());
-                if(zip != null){
-                    stringBuilder_address.append(", "+zip.trim().toString());
+            if (city != null) {
+                stringBuilder_address.append(", " + city.trim().toString());
+                if (zip != null) {
+                    stringBuilder_address.append(", " + zip.trim().toString());
                 }
             }
             et_tutorial_location.setText(stringBuilder_address.toString());
-        }else{
+        } else {
             String user_current_address = DashboardActivity.dashboardActivity.userCurrentAddress;
-            if(!user_current_address.equals("")){
+            if (!user_current_address.equals("")) {
 
-            }else{
+            } else {
                 et_tutorial_location.setText(user_current_address);
             }
         }
 
 
+        set_of_coaching_subjects = StorageHelper.getListOfCoachingSubCategories(AddNewSlotActivity.this, "area_of_coaching_set");
+        if (set_of_coaching_subjects != null) {
+            Log.d(TAG, "set of sub size: " + set_of_coaching_subjects.size());
 
+            Iterator<String> iterator = set_of_coaching_subjects.iterator();
 
-        set_of_coaching_subjects = StorageHelper.getListOfCoachingSubCategories(AddNewSlotActivity.this,"area_of_coaching_set");
-        if(set_of_coaching_subjects != null){
-            Log.d(TAG,"set of sub size: "+set_of_coaching_subjects.size());
-
-            Iterator<String>  iterator = set_of_coaching_subjects.iterator();
-
-            if(set_of_coaching_subjects.size() > 1){
+            if (set_of_coaching_subjects.size() > 1) {
                 ll_single_subject.setVisibility(View.GONE);
                 ll_coaching_subjects.setVisibility(View.VISIBLE);
                 ArrayList<String> arrayOfSubjects = new ArrayList<String>();
-                while(iterator.hasNext()){
-                    String subject= iterator.next();
+                while (iterator.hasNext()) {
+                    String subject = iterator.next();
                     arrayOfSubjects.add(subject);
                 }
 
-                Log.d(TAG,"arraylIst of subjets size :"+arrayOfSubjects.size());
+                Log.d(TAG, "arraylIst of subjets size :" + arrayOfSubjects.size());
 
                 ArrayAdapter arrayAdapter1_subject = new ArrayAdapter(this, R.layout.textview, arrayOfSubjects);
                 arrayAdapter1_subject.setDropDownViewResource(R.layout.textview);
@@ -176,12 +174,12 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 });
 
 
-            }else{
+            } else {
                 ll_coaching_subjects.setVisibility(View.GONE);
                 ll_single_subject.setVisibility(View.VISIBLE);
-                if(set_of_coaching_subjects.size() >0){
-                    while (iterator.hasNext()){
-                        coaching_subject= iterator.next();
+                if (set_of_coaching_subjects.size() > 0) {
+                    while (iterator.hasNext()) {
+                        coaching_subject = iterator.next();
                         tv_coaching_subject.setText(coaching_subject);
                     }
                 }
@@ -299,13 +297,20 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         b_create_slot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                StringBuilder selected_days_of_this_slot = new StringBuilder();
+                String class_start_date;
+                String class_stop_date;
+                String class_start_time;
+                String class_stop_time;
+                String class_type;  /* Individual or Group  */
+                String class_max_users;
+                String class_subject;
+                String class_slot_type;
                 if (validate()) {
 
                     days_array = new ArrayList<String>();
 
                     if (boo_mon_checked) {
-
                         days_array.add("M");
                     }
                     if (boo_tue_checked) {
@@ -349,6 +354,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                         Log.d(TAG, "start date:" + stringBuilder.toString());
 
                         requestParams.add("start_date", stringBuilder.toString());
+                        class_start_date = String.format("%02d-%02d-%d", Integer.parseInt(stringBuilder.toString().split("-")[2]), Integer.parseInt(stringBuilder.toString().split("-")[1]), Integer.parseInt(stringBuilder.toString().split("-")[0]));
+
 
                         if (tv_till_date.getText().toString().trim().equalsIgnoreCase(getResources().getString(R.string.forever))) {
                             StringBuilder stringBuilder2 = new StringBuilder();
@@ -366,6 +373,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                             Log.d(TAG, "till date1:" + stringBuilder2.toString());
 
                             requestParams.add("stop_date", stringBuilder2.toString());
+                            class_stop_date = String.format("%02d-%02d-%d", Integer.parseInt(stringBuilder2.toString().split("-")[2]), Integer.parseInt(stringBuilder2.toString().split("-")[1]), Integer.parseInt(stringBuilder2.toString().split("-")[0]));
+
                         } else {
                             StringBuilder stringBuilder3 = new StringBuilder();
                             stringBuilder3.append(String.valueOf(till_year));
@@ -382,20 +391,72 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                             Log.d(TAG, "till date2:" + stringBuilder3.toString());
 
                             requestParams.add("stop_date", stringBuilder3.toString());
+                            class_stop_date = String.format("%02d-%02d-%d", Integer.parseInt(stringBuilder3.toString().split("-")[2]), Integer.parseInt(stringBuilder3.toString().split("-")[1]), Integer.parseInt(stringBuilder3.toString().split("-")[0]));
+
                         }
 
                         requestParams.add("start_time", start_hour + ":" + start_min + ":" + "00");
+                        class_start_time = getTime(start_hour + ":" + start_min + ":" + "00");
                         requestParams.add("stop_time", stop_hour + ":" + stop_min + ":" + "00");
+                        class_stop_time = getTime(stop_hour + ":" + stop_min + ":" + "00");
 
                         StringBuilder stringBuilder1 = new StringBuilder();
                         stringBuilder1.append(days_array.get(0));
                         if (days_array.size() > 1) {
                             for (int i = 1; i < days_array.size(); i++) {
-                                stringBuilder1.append("," + days_array.get(i));
+                                if (i == (days_array.size() - 1)) {
+                                    stringBuilder1.append(days_array.get(i));
+                                    switch (days_array.get(i)) {
+                                        case "M":
+                                            selected_days_of_this_slot.append("Monday");
+                                            break;
+                                        case "T":
+                                            selected_days_of_this_slot.append("Tuesday");
+                                            break;
+                                        case "W":
+                                            selected_days_of_this_slot.append("Wednesday");
+                                            break;
+                                        case "Th":
+                                            selected_days_of_this_slot.append("Thursday");
+                                            break;
+                                        case "F":
+                                            selected_days_of_this_slot.append("Friday");
+                                            break;
+                                        case "S":
+                                            selected_days_of_this_slot.append("Saturday");
+                                            break;
+                                        case "Su":
+                                            selected_days_of_this_slot.append("Sunday");
+                                            break;
+                                    }
+                                } else {
+                                    stringBuilder1.append(days_array.get(i) + ", ");
+                                    switch (days_array.get(i)) {
+                                        case "M":
+                                            selected_days_of_this_slot.append("Monday, ");
+                                            break;
+                                        case "T":
+                                            selected_days_of_this_slot.append("Tuesday, ");
+                                            break;
+                                        case "W":
+                                            selected_days_of_this_slot.append("Wednesday, ");
+                                            break;
+                                        case "Th":
+                                            selected_days_of_this_slot.append("Thursday, ");
+                                            break;
+                                        case "F":
+                                            selected_days_of_this_slot.append("Friday, ");
+                                            break;
+                                        case "S":
+                                            selected_days_of_this_slot.append("Saturday, ");
+                                            break;
+                                        case "Su":
+                                            selected_days_of_this_slot.append("Sunday, ");
+                                            break;
+                                    }
+                                }
                             }
                         }
-
-
                         requestParams.add("name", StorageHelper.getUserDetails(AddNewSlotActivity.this, "user_id") + "_Slot");
                         requestParams.add("dates", stringBuilder1.toString());
 
@@ -416,7 +477,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                         Log.d(TAG, "Slot time value from AddNewSlotActivity" + slot_time_value / (60 * 60));
                         requestParams.add("slot_time_value", String.valueOf(slot_time_value));
                         requestParams.add("slot_type", slot_type);
-                        Log.d(TAG, "slot_type : " + slot_type);
+                        class_slot_type = slot_type;
+                                Log.d(TAG, "slot_type : " + slot_type);
                         if (slot_type.equals(getResources().getString(R.string.group))) {
                             requestParams.add("max_users", et_maximum_students.getText().toString());
                             Log.d(TAG, "slot_type :" + slot_type);
@@ -428,13 +490,13 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
                         }
 
-                        if(coaching_subject != null){
-                            requestParams.add("sub_category_name",coaching_subject);
-                        }else{
-                            Log.e(TAG,"coaching_subject null found");
+                        if (coaching_subject != null) {
+                            requestParams.add("sub_category_name", coaching_subject);
+                        } else {
+                            Log.e(TAG, "coaching_subject null found");
                         }
 
-                        requestParams.add("location",et_tutorial_location.getText().toString());
+                        requestParams.add("location", et_tutorial_location.getText().toString());
 
                         String auth_token = StorageHelper.getUserDetails(AddNewSlotActivity.this, "auth_token");
                         progressDialog.show();
@@ -450,75 +512,50 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                                 JSONObject jO_success_response = null;
                                 JSONArray jA_coinciding_Exceptions = null;
                                 JSONArray jA_coinciding_Slots = null;
-
-                                if (success_response.equals(getResources().getString(R.string.problem_in_connection_server))) {
-                                    Toast.makeText(AddNewSlotActivity.this, (String) object, Toast.LENGTH_SHORT).show();
-                                    // progressDialog.dismiss();
-                                } else {
-                                    try {
-                                        jO_success_response = new JSONObject(success_response);
-                                        jA_coinciding_Slots = jO_success_response.getJSONArray("coincidingSlots");
-                                        jA_coinciding_Exceptions = jO_success_response.getJSONArray("coincidingExceptions");
-                                        String message = jO_success_response.getString("message");
-                                        if (message.equalsIgnoreCase("Success")) {
-                                            if (jA_coinciding_Slots.length() > 0) {
-                                                coincideOf(jA_coinciding_Slots, 0);
-                                            } else {
-                                                if (jA_coinciding_Exceptions.length() > 0) {
-                                                    coincideOf(jA_coinciding_Exceptions, 1);
-
-                                                } else {
-                                                    Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully), Toast.LENGTH_SHORT).show();
-                                                    setResult(500);
-                                                    finish();
-                                                }
+                                int status;
 
 
-                                            }
+                                try {
+                                    jO_success_response = new JSONObject(success_response);
+                                    status = Integer.parseInt(jO_success_response.getString("status"));  /* status 1 for success and 2 for failure */
+                                    jA_coinciding_Slots = jO_success_response.getJSONArray("coincidingSlots");
+                                    jA_coinciding_Exceptions = jO_success_response.getJSONArray("coincidingExceptions");
+                                    String message = jO_success_response.getString("message");
+                                    if (status == 1) {
+                                        if (jA_coinciding_Slots.length() > 0) {
+                                            coincideOf(jA_coinciding_Slots, 0);
                                         } else {
-                                            if (jA_coinciding_Slots.length() > 0) {
-                                                coincideOf(jA_coinciding_Slots, 0);
-                                            }else{
-                                                /* It is the case when there is vacation found which is not allowing any class, so in this case we can show message from server */
+                                            if (jA_coinciding_Exceptions.length() > 0) {
+                                                coincideOf(jA_coinciding_Exceptions, 1);
+
+                                            } else {
+                                                Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully), Toast.LENGTH_SHORT).show();
+
+                                                setResult(500);
+                                                finish();
                                             }
+
+
                                         }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                    } else {
+                                        if (jA_coinciding_Slots.length() > 0) {
+                                            coincideOf(jA_coinciding_Slots, 0);
+                                        } else {
+                                            Toast.makeText(AddNewSlotActivity.this, jO_success_response.getString("message"), Toast.LENGTH_LONG).show();
+                                                /* It is the case when there is vacation found which is not allowing any class, so in this case we can show message from server */
+                                        }
                                     }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
+
                             }
 
                             @Override
                             public void failureOperation(Object object, int statusCode, int calledApiValue) {
                                 progressDialog.dismiss();
-                                String failure_response = (String) object;
-                                Log.d(TAG, "failure  response for add new slot activity : " + failure_response);
 
-                                JSONObject jO_failure_resp = null;
-                                JSONArray jA_coinciding_slots = null, jA_coinciding_Exceptions = null;
-                                if (failure_response.equals(getResources().getString(R.string.problem_in_connection_server))) {
-                                    Toast.makeText(AddNewSlotActivity.this, (String) object, Toast.LENGTH_SHORT).show();
-                                    // progressDialog.dismiss();
-                                } else {
-                                    try {
-                                        jO_failure_resp = new JSONObject(failure_response);
-                                        jA_coinciding_slots = jO_failure_resp.getJSONArray("coincidingSlots");
-                                        jA_coinciding_Exceptions = jO_failure_resp.getJSONArray("coincidingExceptions");
-
-                                        if (jA_coinciding_slots != null) {
-                                            coincideOf(jA_coinciding_slots, 0);
-                                        }
-                                        if (jA_coinciding_Exceptions != null) {
-                                            coincideOf(jA_coinciding_Exceptions, 1);
-                                        }
-
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-
-
+                                Toast.makeText(AddNewSlotActivity.this, (String) object, Toast.LENGTH_SHORT).show();
                             }
                         }, 35);
                     }
@@ -541,7 +578,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             try {
                 jO_coinciding_detail = jsonArray.getJSONObject(0);
 
-                if(flag == 0){    /* Slot is having */
+                if (flag == 0) {    /* Slot is having */
                     JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
                     if (jA_Week_days.length() > 0) {
 
@@ -582,7 +619,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 JSONObject jO_coinciding_detail1 = null;
                 try {
                     jO_coinciding_detail1 = jsonArray.getJSONObject(i);
-                    if(flag == 0){
+                    if (flag == 0) {
                         JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
                         if (jA_Week_days.length() > 0) {
                             for (int jA_Week_day = 0; jA_Week_day < jA_Week_days.length(); jA_Week_day++) {
@@ -696,7 +733,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                     ArrayList<String> days = new ArrayList<String>();
                     JSONObject jO_coinciding_detail = jsonArray.getJSONObject(0);
 
-                    if(flag == 0){
+                    if (flag == 0) {
                         JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
                         if (jA_Week_days.length() > 0) {
                             for (int jA_index = 0; jA_index < jA_Week_days.length(); jA_index++) {
@@ -801,6 +838,20 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         }
     }
 
+    private String getTime(String hr_24_format_time) {
+        String time = null;
+        try {
+            SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat _12HourSDF = new SimpleDateFormat("hh:mm a");
+            Date _24HourDt = _24HourSDF.parse(hr_24_format_time);
+            time = _12HourSDF.format(_24HourDt);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return time;
+
+    }
 
     void showCoincidingAlertMessage(String message, int flag) {
         if (flag == 0) {
@@ -866,7 +917,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
                 } else {
 
-                    if (et_tutorial_location.getText().toString().trim().length() <=0) {
+                    if (et_tutorial_location.getText().toString().trim().length() <= 0) {
                         Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.tutorial_address_not_found), Toast.LENGTH_SHORT).show();
                         return false;
                     } else {

@@ -42,8 +42,10 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -206,9 +208,14 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             tv_subject.setText(selected_subject);
         }*/
 
-
+        String hr_24_start_time=String.format("%02d:%02d",slot_start_hour, slot_start_minute);
+        String hr_24_stop_time=String.format("%02d:%02d",slot_stop_hour, slot_stop_minute);
+        String hr_12_start= getTime(hr_24_start_time);
+        String hr_12_stop = getTime(hr_24_stop_time);
+        StringBuilder stringBuilder= new StringBuilder();
+        stringBuilder.append(hr_12_start+" to "+hr_12_stop);
         String timing = String.format("%02d:%02d to %02d:%02d", slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute);
-        tv_class_timing.setText(timing);
+        tv_class_timing.setText(stringBuilder.toString());
 
 
         List<Integer> selectedDays = new ArrayList<>();
@@ -413,6 +420,23 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                     Toast.LENGTH_SHORT).show();
         }
     }
+
+
+    private String getTime(String hr_24_format_time) {
+        String time = null;
+        try {
+            SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat _12HourSDF = new SimpleDateFormat("hh:mm a");
+            Date _24HourDt = _24HourSDF.parse(hr_24_format_time);
+            time = _12HourSDF.format(_24HourDt);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return time;
+
+    }
+
 
     private int calculateNoOfTotalClassDays(Calendar calendar_schedule_start_date,
                                             Calendar calendar_stop_date_of_schedule, String[] slot_on_week_days) {

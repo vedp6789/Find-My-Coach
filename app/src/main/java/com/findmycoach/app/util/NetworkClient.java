@@ -1132,8 +1132,11 @@ public class NetworkClient {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
                     Log.d(TAG, "Failure: Response:" + new String(responseBody));
+                    String responseJson = new String(responseBody);
                     Log.d(TAG, "Failure: Response Code:" + statusCode);
-                    callback.failureOperation(new String(responseBody), statusCode, calledApiValue);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+
                 } catch (Exception e) {
 
                     try {
@@ -1141,6 +1144,7 @@ public class NetworkClient {
                         Log.d(TAG, "Failure: Error:" + e.getMessage());
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
                     } catch (Exception ignored) {
+
                     }
                 }
             }
@@ -1332,8 +1336,9 @@ public class NetworkClient {
         Header[] headers = {new BasicHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value)), new BasicHeader(context.getResources().getString(R.string.auth_key), authToken)};
 
 
-        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        /*client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        */
         client.delete(context, getAbsoluteURL("exceptions", context), headers, requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1369,15 +1374,14 @@ public class NetworkClient {
     }
 
 
-
     public static void getCalenderEvent(final Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
         if (!NetworkManager.isNetworkConnected(context)) {
             callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
             return;
         }
-        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        /*client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        // client.get(context, getAbsoluteURL("calenderDetails", context), requestParams, new AsyncHttpResponseHandler() {
+        */
         client.get(context, getAbsoluteURL("calenderEvents", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {

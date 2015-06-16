@@ -168,6 +168,9 @@
             android:label="@string/event_desc"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".activity.CalendarPreferences"
+            android:label="@string/calendar_preference"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.MentorNotificationActions"
             android:screenOrientation="portrait" />
@@ -175,6 +178,7 @@
         <activity
             android:name=".activity.MenteeNotificationActions"
             android:screenOrientation="portrait" />
+
 
         <!-- Activities and service responsible for gathering customer consent and for future payments  -->
         <service

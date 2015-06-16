@@ -300,7 +300,8 @@ public class MentorNotificationActions extends Activity implements Callback {
             case "connection_request":
                 try {
                     JSONObject jsonObject = new JSONObject((String) object);
-                    if (jsonObject.getString("message").equals("Success")) {
+                    int status = Integer.parseInt(jsonObject.getString("status"));  /* 1 for success and 2 for failure*/
+                    if (status == 1) {
                         if (action.equals("accept")) {
                             Toast.makeText(MentorNotificationActions.this, first_name.trim() + " " + getResources().getString(R.string.is_in_connection), Toast.LENGTH_SHORT).show();
                         } else {

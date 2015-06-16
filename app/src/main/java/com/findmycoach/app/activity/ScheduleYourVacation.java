@@ -305,22 +305,7 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                             @Override
                             public void failureOperation(Object object, int statusCode, int calledApiValue) {
 
-
-                                String failure_response = (String) object;
-                                if (failure_response.equals(getResources().getString(R.string.problem_in_connection_server))) {
-                                    Log.d(TAG, "failure response : " + failure_response);
-                                    Toast.makeText(ScheduleYourVacation.this, failure_response, Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Log.d(TAG, "failure response : " + failure_response);
-                                    try {
-                                        JSONObject jO_failure_resp = new JSONObject(failure_response);
-                                        JSONArray jA_coincidingExceptions = jO_failure_resp.getJSONArray("coincidingExceptions");
-                                        coincidingExceptionMessage(jA_coincidingExceptions);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    progressDialog.dismiss();
-                                }
+                                Toast.makeText(ScheduleYourVacation.this, (String) object, Toast.LENGTH_SHORT).show();
 
                             }
                         }, 36);

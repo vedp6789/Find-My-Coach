@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.Request;
 import com.findmycoach.app.R;
@@ -387,15 +388,58 @@ public class AboutWeekViewEvent extends Activity implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         if (calledApiValue == 50) {
-    /* vacation delet*/
+    /* vacation deletion*/
+            progressDialog.dismiss();
+            try {
+                JSONObject jsonObject = new JSONObject((String) object);
+                int status = Integer.parseInt(jsonObject.getString("status"));
+                String message = jsonObject.getString("message");
+                if (status == 1) {
+                    /*success*/
+                    Toast.makeText(AboutWeekViewEvent.this, message, Toast.LENGTH_SHORT).show();
+                } else {
+                    if (status == 2) {
+                        /* failure*/
+                        Toast.makeText(AboutWeekViewEvent.this, message, Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (status == 3)
+                            Toast.makeText(AboutWeekViewEvent.this, message, Toast.LENGTH_SHORT).show();
+                                                    /* wrong vacation id*/
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         } else {
-    /* slot delete*/
+    /* slot deletion*/
+            progressDialog.dismiss();
+            try {
+                JSONObject jsonObject = new JSONObject((String) object);
+                int status = Integer.parseInt(jsonObject.getString("status"));
+                String message = jsonObject.getString("message");
+                if (status == 1) {
+                    /*success*/
+                    Toast.makeText(AboutWeekViewEvent.this, message, Toast.LENGTH_SHORT).show();
+                } else {
+                    if (status == 2) {
+                        /* failure*/
+                        Toast.makeText(AboutWeekViewEvent.this, message, Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (status == 3)
+                            Toast.makeText(AboutWeekViewEvent.this, message, Toast.LENGTH_SHORT).show();
+                                    /* wrong vacation id*/
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
-
+        Toast.makeText(AboutWeekViewEvent.this, (String) object, Toast.LENGTH_SHORT).show();
     }
 
     private void showAlertOnDelete(final int flag, final RequestParams requestParams) {  /* flag is 0 when this method is called to delete
@@ -421,11 +465,13 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         if (flag == 0) {
+                            progressDialog.show();
                             NetworkClient.deleteClassSlot(AboutWeekViewEvent.this, requestParams,
                                     StorageHelper.getUserDetails(AboutWeekViewEvent.this,
                                             "auth_token")
                                     , AboutWeekViewEvent.this, 51);
                         } else {
+                            progressDialog.show();
                             NetworkClient.deleteVacation(AboutWeekViewEvent.this, requestParams,
                                     StorageHelper.getUserDetails(AboutWeekViewEvent.this,
                                             "auth_token")
