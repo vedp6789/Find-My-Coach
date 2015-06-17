@@ -48,6 +48,7 @@ import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
+import com.findmycoach.app.views.ChizzleButton;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
@@ -81,7 +82,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private LinearLayout subCategoryLayout;
     private TextView subCategoryTextView;
     private ArrayAdapter<String> arrayAdapter;
-    private List<Button> daysButton;
+    private List<com.findmycoach.app.views.ChizzleButton> daysButton;
     private TextView textView;
     public static HomeFragment homeFragmentMentee;
     private String type;
@@ -161,10 +162,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         final ViewGroup.LayoutParams layoutParams = new LinearLayout
                 .LayoutParams(widthSubCategoryButton, (int) getResources()
                 .getDimension(R.dimen.login_button_height));
-        final List<Button> buttonList = new ArrayList<>();
+        final List<com.findmycoach.app.views.ChizzleButton> buttonList = new ArrayList<>();
 
         for (Datum datum : data) {
-            final Button button = new Button(getActivity());
+            final ChizzleButton button = new ChizzleButton(getActivity());
             button.setTextColor(getActivity().getResources().getColor(R.color.white));
             button.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.button_unselected));
             button.setText(datum.getName());
@@ -180,7 +181,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
             button.setTextSize(14.0f);
             subCategoryLayout.addView(button);
-            buttonList.add(button);
+            buttonList.add((ChizzleButton) button);
 
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -466,13 +467,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private void getSelectedButtons() {
         daysButton = new ArrayList<>();
 
-        daysButton.add((Button) fragmentView.findViewById(R.id.sun));
-        daysButton.add((Button) fragmentView.findViewById(R.id.mon));
-        daysButton.add((Button) fragmentView.findViewById(R.id.tue));
-        daysButton.add((Button) fragmentView.findViewById(R.id.wed));
-        daysButton.add((Button) fragmentView.findViewById(R.id.thu));
-        daysButton.add((Button) fragmentView.findViewById(R.id.fri));
-        daysButton.add((Button) fragmentView.findViewById(R.id.sat));
+        daysButton.add((ChizzleButton) fragmentView.findViewById(R.id.sun));
+        daysButton.add((ChizzleButton) fragmentView.findViewById(R.id.mon));
+        daysButton.add((ChizzleButton) fragmentView.findViewById(R.id.tue));
+        daysButton.add((ChizzleButton) fragmentView.findViewById(R.id.wed));
+        daysButton.add((ChizzleButton) fragmentView.findViewById(R.id.thu));
+        daysButton.add((ChizzleButton) fragmentView.findViewById(R.id.fri));
+        daysButton.add((ChizzleButton) fragmentView.findViewById(R.id.sat));
 
         for (final Button b : daysButton) {
             b.setTag(b.getId(), 0);

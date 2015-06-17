@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/tv_mentor_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,10 +14,9 @@
         android:layout_marginTop="10dp"
         android:text="@string/mentor_name"
         android:textColor="#000000"
-        android:textSize="15sp"
-        />
+        android:textSize="15sp" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/tv_mentor_name_val"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,10 +27,10 @@
         android:hint="@string/mentor_name"
         android:textColor="#000000"
         android:textSize="15sp"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/tv_mentee_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,9 +41,9 @@
         android:text="@string/mentee_name"
         android:textColor="#000000"
         android:textSize="15sp"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/tv_mentee_name_val"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,7 +54,7 @@
         android:hint="@string/mentor_name"
         android:textColor="#000000"
         android:textSize="15sp"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
 
     <LinearLayout
@@ -68,7 +67,7 @@
         android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/tv_subject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -76,7 +75,7 @@
             android:textColor="#000000"
             android:textSize="15sp" />
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/tv_subject_Val"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -85,30 +84,30 @@
             android:textSize="15sp" />
     </LinearLayout>
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/tv_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/ll_event_subject"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
         android:hint="@string/location"
         android:textColor="#000000"
-        android:visibility="gone"
-        ></TextView>
-    <TextView
-        android:id="@+id/tv_address_val"
-        android:layout_below="@id/tv_address"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
+        android:textSize="15sp"
+        android:visibility="gone" />
 
+    <com.findmycoach.app.views.ChizzleTextView
+        android:id="@+id/tv_address_val"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/tv_address"
+
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:textColor="#000000"
         android:textSize="15sp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 
     <LinearLayout
@@ -121,7 +120,7 @@
         android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/tv_event_start_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -129,7 +128,7 @@
             android:textColor="#000000"
             android:textSize="15sp" />
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/tv_event_start_date_val"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -148,7 +147,7 @@
         android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/tv_event_end_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -156,7 +155,7 @@
             android:textColor="#000000"
             android:textSize="15sp" />
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/tv_event_end_date_val"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -176,7 +175,7 @@
         android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -184,7 +183,7 @@
             android:textColor="#000000"
             android:textSize="15sp" />
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/tv_event_time_val"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -202,21 +201,19 @@
         android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="start"
             android:text="@string/week_days"
             android:textColor="#000000"
-            android:textSize="15sp"
-            android:gravity="start"/>
+            android:textSize="15sp" />
 
         <ListView
             android:id="@+id/lv_week_days"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></ListView>
     </LinearLayout>
-    
 
-    
 
 </RelativeLayout>

@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
 
-    <EditText
+   <com.findmycoach.app.views.ChizzleEditText
         android:id="@+id/et_mentor_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,16 +18,18 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <com.findmycoach.app.views.ChizzleButton
             android:id="@+id/b_accept"
             android:layout_width="0dp"
+            android:textSize="@dimen/button_text_size"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/accept_req" />
 
-        <Button
+        <com.findmycoach.app.views.ChizzleButton
             android:id="@+id/b_reject"
             android:layout_width="0dp"
+            android:textSize="@dimen/button_text_size"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/reject_req" />

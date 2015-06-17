@@ -52,7 +52,7 @@
                 android:background="@color/white"
                 android:src="@drawable/send" />
 
-            <EditText
+           <com.findmycoach.app.views.ChizzleEditText
                 android:id="@+id/msgToSendET"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

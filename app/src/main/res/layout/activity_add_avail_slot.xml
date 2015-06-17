@@ -8,7 +8,7 @@
         android:id="@+id/header"
         layout="@layout/header_back_name_menu" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/tv_days"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_name" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/upperLine"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
@@ -37,14 +37,14 @@
         android:verticalSpacing="0.5dp" />
 
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/lowerLine"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_below="@+id/calendar"
         android:background="@color/purple_light" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/chooseTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
             android:orientation="horizontal"
             android:padding="@dimen/textView_padding_margin">
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/textView_padding_margin"
@@ -86,7 +86,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/tv_slot_start_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
             android:orientation="horizontal"
             android:padding="@dimen/textView_padding_margin">
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/textView_padding_margin"
@@ -118,7 +118,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/tv_slot_stop_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -131,7 +131,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/chooseDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -163,7 +163,7 @@
             android:orientation="horizontal"
             android:padding="@dimen/textView_padding_margin">
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/textView_padding_margin"
@@ -172,7 +172,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/tv_slot_start_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -194,7 +194,7 @@
             android:orientation="horizontal"
             android:padding="@dimen/textView_padding_margin">
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/textView_padding_margin"
@@ -203,7 +203,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/tv_slot_till_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -225,7 +225,7 @@
         android:layout_margin="@dimen/back_margin"
         android:orientation="horizontal">
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:layout_width="0dp"
             android:layout_height="@dimen/login_button_height"
             android:layout_weight="1"
@@ -260,7 +260,7 @@
                     android:layout_marginBottom="-1dp"
                     android:src="@drawable/drop_down_arrow_purple_small" />
 
-                <TextView
+                <com.findmycoach.app.views.ChizzleTextView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_alignParentLeft="true"
@@ -281,7 +281,7 @@
         android:layout_marginRight="@dimen/back_margin"
         android:orientation="horizontal">
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:layout_width="0dp"
             android:layout_height="@dimen/login_button_height"
             android:layout_weight="1"
@@ -298,7 +298,7 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
-            <EditText
+           <com.findmycoach.app.views.ChizzleEditText
                 android:id="@+id/et_maximum_students"
                 style="@style/EditTextCustomHoloPurple"
                 android:layout_width="match_parent"
@@ -308,7 +308,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Button
+    <com.findmycoach.app.views.ChizzleButton
         android:id="@+id/b_create_slot"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_button_height"
@@ -320,6 +320,7 @@
         android:background="@drawable/custom_button_click_white_bg"
         android:text="@string/create_slot"
         android:textAllCaps="false"
+        android:textSize="@dimen/button_text_size"
         android:textColor="@color/custom_button_text_color_click_white_bg" />
 
 

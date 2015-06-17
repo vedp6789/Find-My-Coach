@@ -33,7 +33,7 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:weightSum="2">
 
-            <Button
+            <com.findmycoach.app.views.ChizzleButton
                 android:id="@+id/select_picture"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -45,9 +45,9 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:text="@string/select_image"
                 android:textColor="@color/custom_button_text_color_click_white_bg"
-                android:textSize="@dimen/profile_details" />
+                android:textSize="@dimen/button_text_size" />
 
-            <Button
+            <com.findmycoach.app.views.ChizzleButton
                 android:id="@+id/Button_rotate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -56,17 +56,17 @@
                 android:layout_marginLeft="@dimen/back_margin"
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
+                android:textSize="@dimen/button_text_size"
                 android:background="@drawable/custom_button_click_white_bg"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:text="@string/rotate"
-                android:textColor="@color/custom_button_text_color_click_white_bg"
-                android:textSize="@dimen/profile_details" />
+                android:textColor="@color/custom_button_text_color_click_white_bg" />
 
 
         </LinearLayout>
 
-        <Button
+        <com.findmycoach.app.views.ChizzleButton
             android:id="@+id/Button_crop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:text="@string/crop"
             android:textColor="@color/custom_button_text_color_click_white_bg"
-            android:textSize="@dimen/profile_name" />
+            android:textSize="@dimen/button_text_size" />
 
     </LinearLayout>
 

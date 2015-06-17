@@ -14,7 +14,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -25,7 +25,7 @@
         android:layout_toLeftOf="@+id/detailsTV"
         android:layout_above="@+id/lastMsgTV" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -35,7 +35,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignBottom="@+id/nameTV" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/lastMsgTV"

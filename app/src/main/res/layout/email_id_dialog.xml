@@ -6,7 +6,7 @@
     android:minWidth="@dimen/navigation_drawer_width"
     android:orientation="vertical">
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/calender_header_margin_arrow"
@@ -16,7 +16,7 @@
         android:textSize="@dimen/profile_name"
         android:textStyle="bold" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="match_parent"
         android:layout_height="@dimen/underline"
         android:background="@color/white" />
@@ -28,7 +28,7 @@
         android:layout_marginTop="@dimen/back_margin"
         android:orientation="horizontal">
 
-        <EditText
+       <com.findmycoach.app.views.ChizzleEditText
             android:id="@+id/emailEditText"
             style="@style/EditTextCustomHolo"
             android:layout_width="match_parent"
@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_button_height">
 
-        <Button
+        <com.findmycoach.app.views.ChizzleButton
             android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -57,10 +57,10 @@
             android:gravity="center"
             android:text="@string/cancel"
             android:textColor="@color/custom_button_text_color_click"
-            android:textSize="@dimen/profile_details"
+            android:textSize="@dimen/button_text_size"
             android:textStyle="bold" />
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/textView2"
             android:layout_width="1dp"
             android:layout_height="match_parent"
@@ -70,7 +70,7 @@
             android:background="@drawable/custom_button_click"
             android:textColor="@color/custom_button_text_color_click" />
 
-        <Button
+        <com.findmycoach.app.views.ChizzleButton
             android:id="@+id/okButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -84,7 +84,7 @@
             android:gravity="center"
             android:text="@string/ok"
             android:textColor="@color/custom_button_text_color_click"
-            android:textSize="@dimen/profile_details"
+            android:textSize="@dimen/button_text_size"
             android:textStyle="bold" />
 
     </RelativeLayout>

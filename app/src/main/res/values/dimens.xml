@@ -31,9 +31,10 @@
     <dimen name="underline">2dp</dimen>
 
 
-    <dimen name="profile_heading">16sp</dimen>
-    <dimen name="profile_details">16sp</dimen>
+    <dimen name="profile_heading">14sp</dimen>
+    <dimen name="profile_details">14sp</dimen>
     <dimen name="profile_name">20sp</dimen>
+    <dimen name="button_text_size">18sp</dimen>
     <dimen name="header">26sp</dimen>
 
     <dimen name="user_image_height_width">80dp</dimen>

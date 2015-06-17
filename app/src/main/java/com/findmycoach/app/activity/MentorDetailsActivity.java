@@ -39,6 +39,7 @@ import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.StorageHelper;
+import com.findmycoach.app.views.ChizzleButton;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
@@ -524,19 +525,19 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
         List<String> areaOfInterests = userInfo.getSubCategoryName();
         if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).trim().equals("")) {
-            List<Button> buttons = new ArrayList<>();
+            List<com.findmycoach.app.views.ChizzleButton> buttons = new ArrayList<>();
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             for (String areaOfInterest : areaOfInterests) {
                 Button button = (Button) inflater.inflate(R.layout.button, null);
                 button.setText(areaOfInterest);
-                buttons.add(button);
+                buttons.add((ChizzleButton) button);
             }
             populateViews(areaOfCoaching, buttons, this);
         }
 //        profilePhone.setText(userInfo.getPhonenumber());
     }
 
-    private void populateViews(LinearLayout linearLayout, List<Button> views, Context context) {
+    private void populateViews(LinearLayout linearLayout, List<com.findmycoach.app.views.ChizzleButton> views, Context context) {
 
         Display display = getWindowManager().getDefaultDisplay();
         linearLayout.removeAllViews();

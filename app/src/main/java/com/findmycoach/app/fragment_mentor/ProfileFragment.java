@@ -30,6 +30,7 @@ import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
+import com.findmycoach.app.views.ChizzleButton;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
@@ -196,12 +197,12 @@ public class ProfileFragment extends Fragment implements Callback {
         profilePhone.setText(userInfo.getPhonenumber());
         List<String> areaOfInterests = userInfo.getSubCategoryName();
         if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).trim().equals("")) {
-            List<Button> buttons = new ArrayList<>();
+            List<com.findmycoach.app.views.ChizzleButton> buttons = new ArrayList<>();
             LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             for (String areaOfInterest : areaOfInterests) {
                 Button button = (Button) inflater.inflate(R.layout.button, null);
                 button.setText(areaOfInterest);
-                buttons.add(button);
+                buttons.add((ChizzleButton) button);
             }
             populateViews(areaOfCoaching, buttons, getActivity());
         }
@@ -240,7 +241,7 @@ public class ProfileFragment extends Fragment implements Callback {
     }
 
 
-    private void populateViews(LinearLayout linearLayout, List<Button> views, Context context) {
+    private void populateViews(LinearLayout linearLayout, List<com.findmycoach.app.views.ChizzleButton> views, Context context) {
 
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         linearLayout.removeAllViews();

@@ -5,14 +5,14 @@
     android:gravity="center"
     android:orientation="horizontal">
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/wk_label"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/d0_label"
         style="@style/TextAppearance.MonthView_MiniDayLabel"
         android:layout_width="0dip"
@@ -21,7 +21,7 @@
         android:gravity="center"
         android:text="@string/m" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/d1_label"
         style="@style/TextAppearance.MonthView_MiniDayLabel"
         android:layout_width="0dip"
@@ -30,7 +30,7 @@
         android:gravity="center"
         android:text="@string/t" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/d2_label"
         style="@style/TextAppearance.MonthView_MiniDayLabel"
         android:layout_width="0dip"
@@ -39,7 +39,7 @@
         android:gravity="center"
         android:text="@string/w" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/d3_label"
         style="@style/TextAppearance.MonthView_MiniDayLabel"
         android:layout_width="0dip"
@@ -48,7 +48,7 @@
         android:gravity="center"
         android:text="@string/th" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/d4_label"
         style="@style/TextAppearance.MonthView_MiniDayLabel"
         android:layout_width="0dip"
@@ -57,7 +57,7 @@
         android:gravity="center"
         android:text="@string/f" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/d5_label"
         style="@style/TextAppearance.MonthView_MiniDayLabel"
         android:layout_width="0dip"
@@ -66,7 +66,7 @@
         android:gravity="center"
         android:text="@string/s" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/d6_label"
         style="@style/TextAppearance.MonthView_MiniDayLabel"
         android:layout_width="0dip"

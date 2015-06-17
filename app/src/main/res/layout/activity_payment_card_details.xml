@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/tv_select_card"
         android:layout_alignParentTop="true"
         android:layout_marginTop="5dp"
@@ -14,7 +14,7 @@
         android:textSize="20sp"
         android:textStyle="bold"/>
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:layout_marginTop="5dp"
         android:id="@+id/tv_add_new_card"
         android:layout_below="@id/tv_select_card"

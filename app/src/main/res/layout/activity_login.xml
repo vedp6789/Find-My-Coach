@@ -31,7 +31,8 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-                <TextView
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:id="@+id/banner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
@@ -66,7 +67,7 @@
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.findmycoach.app.views.ChizzleTextView
                         android:id="@+id/action_register"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/list_view_image_height"
@@ -135,7 +136,7 @@
                     </LinearLayout>
 
 
-                    <TextView
+                    <com.findmycoach.app.views.ChizzleTextView
                         android:id="@+id/or"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -145,7 +146,7 @@
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
-                    <EditText
+                   <com.findmycoach.app.views.ChizzleEditText
                         android:id="@+id/input_login_id"
                         style="@style/EditTextCustomHolo"
                         android:layout_width="match_parent"
@@ -156,7 +157,7 @@
                         android:minHeight="@dimen/abc_action_bar_stacked_max_height"
                         android:singleLine="true" />
 
-                    <EditText
+                   <com.findmycoach.app.views.ChizzleEditText
                         android:id="@+id/input_login_password"
                         style="@style/EditTextCustomHolo"
                         android:layout_width="match_parent"
@@ -171,13 +172,14 @@
                         android:singleLine="true" />
 
 
-                    <Button
+                    <com.findmycoach.app.views.ChizzleButton
                         android:id="@+id/email_sign_in_button"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/login_button_height"
                         android:layout_marginTop="@dimen/back_margin"
                         android:background="@drawable/custom_button_click"
                         android:text="@string/action_sign_in"
+                        android:textSize="@dimen/button_text_size"
                         android:textAllCaps="false"
                         android:textColor="@color/custom_button_text_color_click"
                         android:textStyle="bold" />
@@ -197,7 +199,7 @@
                     android:visibility="gone"
                     android:weightSum="2">
 
-                    <Button
+                    <com.findmycoach.app.views.ChizzleButton
                         android:id="@+id/sign_out_button"
                         style="?android:textAppearanceSmall"
                         android:layout_width="match_parent"
@@ -205,7 +207,7 @@
                         android:layout_weight="1"
                         android:text="@string/plus_sign_out" />
 
-                    <Button
+                    <com.findmycoach.app.views.ChizzleButton
                         android:id="@+id/revoke_access_button"
                         style="?android:textAppearanceSmall"
                         android:layout_width="match_parent"
@@ -216,7 +218,7 @@
             </LinearLayout>
 
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/action_forgot_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

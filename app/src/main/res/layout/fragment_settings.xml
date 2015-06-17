@@ -5,7 +5,7 @@
     android:background="@android:color/darker_gray"
     tools:context="com.findmycoach.app.fragment_mentor.SettingsFragment">
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Settings Fragment" />

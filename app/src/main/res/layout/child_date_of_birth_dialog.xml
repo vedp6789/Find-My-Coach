@@ -22,17 +22,19 @@
         android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
-        <Button
+        <com.findmycoach.app.views.ChizzleButton
             android:id="@+id/b_ok"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:textSize="@dimen/button_text_size"
             android:layout_weight="1"
             android:text="@string/ok" />
 
-        <Button
+        <com.findmycoach.app.views.ChizzleButton
             android:id="@+id/b_cancel"
             android:layout_width="0dp"
+            android:textSize="@dimen/button_text_size"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_weight="1"

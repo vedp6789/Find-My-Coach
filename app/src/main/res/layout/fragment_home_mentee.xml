@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/textView_padding_margin"
@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <com.findmycoach.app.views.ChizzleTextView
                         android:id="@+id/current_location_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -53,13 +53,14 @@
                         android:textColor="@color/white"
                         android:textSize="18dp" />
 
-                    <Button
+                    <com.findmycoach.app.views.ChizzleButton
                         android:id="@+id/change_location"
                         android:layout_width="15dp"
                         android:layout_height="20dp"
                         android:layout_alignParentRight="true"
                         android:layout_margin="8dp"
-                        android:background="@drawable/map_small" />
+                        android:background="@drawable/map_small"
+                        android:textSize="@dimen/button_text_size" />
                 </RelativeLayout>
 
                 <AutoCompleteTextView
@@ -94,7 +95,7 @@
                             android:orientation="horizontal" />
                     </HorizontalScrollView>
 
-                    <TextView
+                    <com.findmycoach.app.views.ChizzleTextView
                         android:id="@+id/subCategoryTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -117,7 +118,7 @@
                             android:layout_marginBottom="-1dp"
                             android:src="@drawable/drop_down_arrow_small" />
 
-                        <TextView
+                        <com.findmycoach.app.views.ChizzleTextView
                             android:id="@+id/underLine"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
@@ -132,7 +133,7 @@
 
                 <!--Tabs for category ends-->
 
-                <TextView
+                <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/preferredTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -178,7 +179,7 @@
                             android:orientation="horizontal"
                             android:padding="@dimen/textView_padding_margin">
 
-                            <TextView
+                            <com.findmycoach.app.views.ChizzleTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_marginLeft="@dimen/textView_padding_margin"
@@ -187,7 +188,7 @@
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
-                            <TextView
+                            <com.findmycoach.app.views.ChizzleTextView
                                 android:id="@+id/from_timing"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -209,7 +210,7 @@
                             android:orientation="horizontal"
                             android:padding="@dimen/textView_padding_margin">
 
-                            <TextView
+                            <com.findmycoach.app.views.ChizzleTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_marginLeft="@dimen/textView_padding_margin"
@@ -218,7 +219,7 @@
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
-                            <TextView
+                            <com.findmycoach.app.views.ChizzleTextView
                                 android:id="@+id/to_timing"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -241,7 +242,7 @@
                         android:orientation="horizontal"
                         android:weightSum="4">
 
-                        <Button
+                        <com.findmycoach.app.views.ChizzleButton
                             android:id="@+id/sun"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -249,9 +250,10 @@
                             android:layout_weight="1"
                             android:background="@drawable/custom_rounded_corner_white"
                             android:text="@string/su"
-                            android:textColor="@color/purple" />
+                            android:textColor="@color/purple"
+                            android:textSize="@dimen/button_text_size" />
 
-                        <Button
+                        <com.findmycoach.app.views.ChizzleButton
                             android:id="@+id/mon"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -259,9 +261,10 @@
                             android:layout_weight="1"
                             android:background="@drawable/custom_rounded_corner_white"
                             android:text="@string/m"
-                            android:textColor="@color/purple" />
+                            android:textColor="@color/purple"
+                            android:textSize="@dimen/button_text_size" />
 
-                        <Button
+                        <com.findmycoach.app.views.ChizzleButton
                             android:id="@+id/tue"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -269,9 +272,10 @@
                             android:layout_weight="1"
                             android:background="@drawable/custom_rounded_corner_white"
                             android:text="@string/t"
-                            android:textColor="@color/purple" />
+                            android:textColor="@color/purple"
+                            android:textSize="@dimen/button_text_size" />
 
-                        <Button
+                        <com.findmycoach.app.views.ChizzleButton
                             android:id="@+id/wed"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -279,7 +283,8 @@
                             android:layout_weight="1"
                             android:background="@drawable/custom_rounded_corner_white"
                             android:text="@string/w"
-                            android:textColor="@color/purple" />
+                            android:textColor="@color/purple"
+                            android:textSize="@dimen/button_text_size" />
 
                     </LinearLayout>
 
@@ -290,7 +295,7 @@
                         android:orientation="horizontal"
                         android:weightSum="4">
 
-                        <Button
+                        <com.findmycoach.app.views.ChizzleButton
                             android:id="@+id/thu"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -298,9 +303,10 @@
                             android:layout_weight="1"
                             android:background="@drawable/custom_rounded_corner_white"
                             android:text="@string/th"
-                            android:textColor="@color/purple" />
+                            android:textColor="@color/purple"
+                            android:textSize="@dimen/button_text_size" />
 
-                        <Button
+                        <com.findmycoach.app.views.ChizzleButton
                             android:id="@+id/fri"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -308,9 +314,10 @@
                             android:layout_weight="1"
                             android:background="@drawable/custom_rounded_corner_white"
                             android:text="@string/f"
-                            android:textColor="@color/purple" />
+                            android:textColor="@color/purple"
+                            android:textSize="@dimen/button_text_size" />
 
-                        <Button
+                        <com.findmycoach.app.views.ChizzleButton
                             android:id="@+id/sat"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -318,7 +325,8 @@
                             android:layout_weight="1"
                             android:background="@drawable/custom_rounded_corner_white"
                             android:text="@string/s"
-                            android:textColor="@color/purple" />
+                            android:textColor="@color/purple"
+                            android:textSize="@dimen/button_text_size" />
 
                         <ImageView
                             android:id="@+id/clear"
@@ -335,7 +343,7 @@
 
                 </LinearLayout>
 
-                <Button
+                <com.findmycoach.app.views.ChizzleButton
                     android:id="@+id/action_search"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_button_height"
@@ -346,6 +354,7 @@
                     android:text="@string/search"
                     android:textAllCaps="false"
                     android:textColor="@color/custom_button_text_color_click"
+                    android:textSize="@dimen/button_text_size"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>

@@ -17,7 +17,7 @@
             android:visibility="invisible"
             android:id="@+id/backButton"/>
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/login_button_height"

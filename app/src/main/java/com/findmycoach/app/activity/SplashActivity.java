@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.util.AppFonts;
@@ -32,9 +31,6 @@ public class SplashActivity extends Activity implements Callback {
         AppFonts.HelveticaNeueMedium = Typeface.createFromAsset(getAssets(), "HelveticaNeue-Medium.otf");
 
         setContentView(R.layout.activity_splash);
-
-        TextView textView = (TextView) findViewById(R.id.banner);
-        textView.setTypeface(AppFonts.HelveticaNeueMedium);
 
         isStart = true;
         TimeZone tz = TimeZone.getDefault();

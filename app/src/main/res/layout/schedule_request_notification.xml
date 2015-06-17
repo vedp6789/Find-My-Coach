@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/back_margin"
     android:paddingTop="@dimen/textView_padding_margin">
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/tv_schedule_request_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         android:layout_marginRight="@dimen/textView_padding_margin"
         android:layout_toLeftOf="@+id/tv_how_old_schedule_request" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/tv_how_old_schedule_request"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

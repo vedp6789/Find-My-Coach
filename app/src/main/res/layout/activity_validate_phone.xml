@@ -8,7 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@drawable/bg">
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/header"
         android:layout_marginTop="@dimen/margin_top"
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
         android:textSize="@dimen/header" />
 
 
-    <EditText
+   <com.findmycoach.app.views.ChizzleEditText
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_below="@+id/header"
         android:layout_width="match_parent"
@@ -30,29 +30,31 @@
         style="@style/EditTextCustomHolo"
         android:inputType="number" />
 
-    <Button
+    <com.findmycoach.app.views.ChizzleButton
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_button_height"
         android:text="@string/verify"
+        android:textSize="@dimen/button_text_size"
         android:id="@+id/btnVerify"
         android:background="@drawable/custom_button_click"
         android:textColor="@color/custom_button_text_color_click"
         android:layout_below="@+id/verificationCodeET"
         android:layout_centerHorizontal="true" />
 
-    <Button
+    <com.findmycoach.app.views.ChizzleButton
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_button_height"
         android:text="@string/resend_code"
+        android:textSize="@dimen/button_text_size"
         android:background="@drawable/custom_button_click"
         android:textColor="@color/custom_button_text_color_click"
         android:id="@+id/btnResend"
         android:layout_below="@+id/btnVerify" />
 
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:id="@+id/action_logout"
         android:layout_width="wrap_content"

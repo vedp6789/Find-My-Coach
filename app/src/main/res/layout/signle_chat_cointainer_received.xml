@@ -21,7 +21,7 @@
         android:paddingLeft="@dimen/textView_padding_margin"
         android:paddingRight="@dimen/textView_padding_margin">
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/messageTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
