@@ -86,7 +86,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     private String city = null;
     private String TAG = "FMC";
     private String newUser;
-    private boolean isGetAdress;
+    private boolean isGettingAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +96,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         initialize();
         applyAction();
         populateUserData();
-        isGetAdress = false;
+        isGettingAddress = false;
 
         if (newUser != null)
             getAddress();
@@ -114,6 +114,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         pinCode = (EditText) findViewById(R.id.input_pin);
         chargeInput = (EditText) findViewById(R.id.input_charges);
+        chargeInput.setSelectAllOnFocus(true);
         accomplishment = (EditText) findViewById(R.id.input_accomplishment);
         experienceInput = (Spinner) findViewById(R.id.input_experience);
         experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview,
@@ -220,9 +221,15 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                         protected void onPostExecute(String s) {
                             super.onPostExecute(s);
                             if (s != null) {
-                                pinCode.setText(s);
+                                try {
+                                    pinCode.setText(s);
+                                } catch (Exception ignored) {
+                                }
                             } else {
-                                pinCode.setText("");
+                                try {
+                                    pinCode.setText("");
+                                } catch (Exception ignored) {
+                                }
                             }
 
 
@@ -401,10 +408,10 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     }
 
     private void getAddress() {
-        if (isGetAdress)
+        if (isGettingAddress)
             return;
         try {
-            isGetAdress = true;
+            isGettingAddress = true;
             final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
             GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
@@ -485,6 +492,17 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             isValid = false;
         }
 
+        if (profileDOB.getText().toString().trim().equals("")) {
+            profileDOB.setError(getResources().getString(R.string.enter_dob));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    profileDOB.setError(null);
+                }
+            }, 3500);
+            isValid = false;
+        }
+
         if (pinCode.getText().toString().trim().equals("")) {
             pinCode.setError(getResources().getString(R.string.enter_pin));
             new Handler().postDelayed(new Runnable() {
@@ -523,11 +541,27 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             }
         }
 
-
         if (areaOfCoaching.getText().toString().trim().equals("")) {
             showErrorMessage(areaOfCoaching, getResources().getString(R.string.error_field_required));
-            Toast.makeText(EditProfileActivityMentor.this, getResources().getString(R.string.please_add_area_of_coaching), Toast.LENGTH_SHORT).show();
             isValid = false;
+        }
+
+        if (isValid) {
+            int experienceInYears = 0;
+            try {
+                experienceInYears = Integer.parseInt(experienceInput.getSelectedItemPosition() + "");
+            } catch (Exception e) {
+                experienceInYears = 0;
+            }
+            int dobYear = 0;
+            try {
+                dobYear = Integer.parseInt(profileDOB.getText().toString().split("-")[0]);
+            } catch (Exception e) {
+                dobYear = 0;
+            }
+
+            if (dobYear > 0 && experienceInYears > 0 && (Calendar.getInstance().get(Calendar.YEAR) - (dobYear + experienceInYears) < 16))
+                Toast.makeText(this, getResources().getString(R.string.age_review_message), Toast.LENGTH_LONG).show();
         }
 
         return isValid;

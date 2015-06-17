@@ -211,9 +211,15 @@ public class EditProfileActivityMentee extends Activity implements Callback {
                         protected void onPostExecute(String s) {
                             super.onPostExecute(s);
                             if (s != null) {
-                                pinCode.setText(s);
+                                try {
+                                    pinCode.setText(s);
+                                } catch (Exception ignored) {
+                                }
                             } else {
-                                pinCode.setText("");
+                                try {
+                                    pinCode.setText("");
+                                } catch (Exception ignored) {
+                                }
                             }
 
 

@@ -26,7 +26,7 @@
         android:layout_toLeftOf="@+id/chargesTV"
         android:layout_toRightOf="@+id/mentor_image"
         android:layout_toStartOf="@+id/chargesTV"
-        android:singleLine="true"
+        android:maxLines="2"
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_name"
         android:textStyle="bold" />
@@ -36,14 +36,13 @@
         style="?android:attr/ratingBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/mentor_image"
         android:layout_gravity="left"
-        android:layout_margin="@dimen/textView_padding_margin"
-        android:layout_toEndOf="@+id/mentor_image"
-        android:layout_toRightOf="@+id/mentor_image"
         android:isIndicator="true"
         android:numStars="5"
-        android:stepSize="0.3" />
+        android:stepSize="0.3"
+        android:layout_alignBottom="@+id/mentor_image"
+        android:layout_alignLeft="@+id/mentor_name"
+        android:layout_alignStart="@+id/mentor_name" />
 
     <ImageView
         android:padding="@dimen/days_margin"
