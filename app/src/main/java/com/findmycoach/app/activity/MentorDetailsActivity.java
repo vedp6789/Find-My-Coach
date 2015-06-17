@@ -221,15 +221,15 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         if (month == 1) {
             Calendar calendar = new GregorianCalendar(year - 1, 11, 1);
             stringBuilder.append((year - 1));
-            stringBuilder.append("/" + 12);
-            stringBuilder.append("/" + 1);
+            stringBuilder.append("-" + 12);
+            stringBuilder.append("-" + 1);
 
             days_in_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         } else {
             Calendar calendar = new GregorianCalendar(year, (month - 1) - 1, 1);
             stringBuilder.append(year);
-            stringBuilder.append("/" + (month - 1));
-            stringBuilder.append("/" + 1);
+            stringBuilder.append("-" + (month - 1));
+            stringBuilder.append("-" + 1);
 
             days_in_prev_month = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         }
@@ -299,8 +299,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         }
 
         stringBuilder.append(year_for_this);
-        stringBuilder.append("/" + month_for_this);
-        stringBuilder.append("/" + 1);
+        stringBuilder.append("-" + month_for_this);
+        stringBuilder.append("-" + 1);
 
 
         Calendar calendar = new GregorianCalendar(year_for_this, (month_for_this - 1), 1);
@@ -358,8 +358,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         }
 
         stringBuilder.append(year_for_this);
-        stringBuilder.append("/" + month_for_this);
-        stringBuilder.append("/" + 1);
+        stringBuilder.append("-" + month_for_this);
+        stringBuilder.append("-" + 1);
 
 
         Calendar calendar = new GregorianCalendar(year_for_this, (month_for_this - 1), 1);

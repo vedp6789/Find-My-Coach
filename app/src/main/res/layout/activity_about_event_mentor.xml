@@ -340,10 +340,11 @@
 
 
     <Button
+        android:layout_alignParentBottom="true"
         android:id="@+id/b_delete_slot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ll_non_coinciding_vacation" />
+     />
 
 
 </RelativeLayout>

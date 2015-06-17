@@ -633,6 +633,7 @@
     <string name="t_and_c">Terms and Conditions</string>
     <string name="payment_note_title">Please note</string>
     <string name="confirm_delete">Confirm delete</string>
+    <string name="delete">Delete</string>
     <string name="vacations_for_this_slot">Vacations</string>
     <string name="payment_note_content">If you pay personally to the mentor, the mentor will not be verified by Chizzle! </string>
     <string name="slot_delete_warning_message">Hey, you are going to delete this slot!</string>

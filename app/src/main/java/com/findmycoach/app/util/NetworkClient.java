@@ -1291,9 +1291,9 @@ public class NetworkClient {
         Header[] headers = {new BasicHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value)), new BasicHeader(context.getResources().getString(R.string.auth_key), authToken)};
 
 
-        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        /*client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.delete(context, getAbsoluteURL("availableSlots", context), headers, requestParams, new AsyncHttpResponseHandler() {
+        */client.delete(context, getAbsoluteURL("availableSlots", context), headers, requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
@@ -1379,9 +1379,8 @@ public class NetworkClient {
             callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
             return;
         }
-        /*client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        */
         client.get(context, getAbsoluteURL("calenderEvents", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {

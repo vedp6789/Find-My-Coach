@@ -256,6 +256,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
     private String getMonthAsString(int i) {
+
         return months[i];
     }
 
@@ -381,6 +382,13 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         String[] day_color = list.get(position).split("-");
         String theday = day_color[0];
         String themonth = day_color[2];
+        int the_current_month =0;   /* current month in 0 to 11 format */
+
+        for(int i =0; i < months.length; i++){
+            if(months[i].equals(themonth)){
+                the_current_month =i;
+            }
+        }
         String theyear = day_color[3];
 
         boolean allow_schedule_population = false;
@@ -482,7 +490,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
                                 Calendar calendar_this_day = Calendar.getInstance();
-                                calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth) - 1, Integer.parseInt(theday));
+                                calendar_this_day.set(Integer.parseInt(theyear), the_current_month, Integer.parseInt(theday));
                                 long this_day = calendar_this_day.getTimeInMillis();
                                 int week_day_for_this_day = calendar_this_day.get(Calendar.DAY_OF_WEEK);/* This will give week_day for this day, 1 to 7 for Sunday to Saturday */
 
@@ -564,7 +572,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
 
                                 Calendar calendar_this_day = Calendar.getInstance();
-                                calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth) - 1, Integer.parseInt(theday));
+                                calendar_this_day.set(Integer.parseInt(theyear),the_current_month, Integer.parseInt(theday));
                                 long this_day = calendar_this_day.getTimeInMillis();
                                 int week_day_for_this_day = calendar_this_day.get(Calendar.DAY_OF_WEEK);/* This will give week_day for this day, 1 to 7 for Sunday to Saturday */
 
@@ -595,7 +603,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                         } else {   /* For Mentors Detail Activity*/
 
                             Calendar calendar_this_day = Calendar.getInstance();
-                            calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth) - 1, Integer.parseInt(theday));
+                            calendar_this_day.set(Integer.parseInt(theyear), the_current_month, Integer.parseInt(theday));
                             long this_day = calendar_this_day.getTimeInMillis();
                             int week_day_for_this_day = calendar_this_day.get(Calendar.DAY_OF_WEEK);/* This will give week_day for this day, 1 to 7 for Sunday to Saturday */
 
@@ -641,7 +649,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                     if (currentMonthNonCoincidingVacation.size() > 0) {
                         Calendar calendar_this_day = Calendar.getInstance();
-                        calendar_this_day.set(Integer.parseInt(theyear), Integer.parseInt(themonth), Integer.parseInt(theday));
+                        calendar_this_day.set(Integer.parseInt(theyear),the_current_month, Integer.parseInt(theday));
                         long this_day = calendar_this_day.getTimeInMillis();
                         int week_day_for_this_day = calendar_this_day.get(Calendar.DAY_OF_WEEK);/* This will give week_day for this day, 1 to 7 for Sunday to Saturday */
 

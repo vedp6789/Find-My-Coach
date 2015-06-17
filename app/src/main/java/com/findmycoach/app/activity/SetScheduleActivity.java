@@ -77,9 +77,10 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         try {
             Intent getIntent = getIntent();
             if (getIntent != null) {
-
+Log.d(TAG,"inside SetScheduleActivity onCreate");
+                this_activity_for = "";
                 this_activity_for = getIntent.getStringExtra("for");    /* this_activity_for defines its uses i.e. SetScheduleActivity is getting called from two places MyScheduleFragment and MentorDetailsActivity */
-
+                Log.d(TAG,"activity_for: "+this_activity_for);
                 if (this_activity_for.equals("MentorDetailsActivity")) {
                     mentor_id = getIntent.getStringExtra("mentor_id");
                     mentor_availablity = getIntent.getStringExtra("availability");
@@ -192,7 +193,9 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             /*
             * success when this activity is going to be started from MyScheduleFragment for previous month
             * */
-                    populateWeekViewForPreviousMonth2(events, newYear, newMonth, weekView_previous_month_days);    /* call for the method to populate weekVeiw for previous month in Mentor Scedule Calendar   */
+                    Log.d(TAG,"populate week_view for previous month");
+
+                     populateWeekViewForPreviousMonth2(events, newYear, newMonth, weekView_previous_month_days);    /* call for the method to populate weekVeiw for previous month in Mentor Scedule Calendar   */
                 }
             }
 
@@ -209,6 +212,8 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             /*
             * success when this activity is going to be started from MyScheduleFragment for current month
             * */
+
+                    Log.d(TAG,"populate week_view for current month");
                     populateWeekViewForCurrentMonth2(events, newYear, newMonth, weekView_current_month_days);    /* call for the method to populate weekVeiw for current month in Mentor Scedule Calendar   */
                 }
             }
@@ -228,6 +233,8 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             /*
             * success when this activity is going to be started from MyScheduleFragment for next month
             * */
+                    Log.d(TAG,"populate week_view for coming month");
+
                     populateWeekViewForNextMonth2(events, newYear, newMonth, weekView_coming_month_days);   /* call for the method to populate weekVeiw for next month in Mentor Scedule Calendar   */
                 }
             }
@@ -725,8 +732,13 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                 /* There is no slot for this month,so mentee does not have any event on this day*/
 
             if (coming_month_non_coinciding_vacations.size() > 0) {
+
+                Log.d(TAG,"inside SetScheueduleActivity and populate non_coinciding vac, size of array"+coming_month_non_coinciding_vacations.size()+"days in month"+number_of_days_in_this_month);
+
                 Vacation vacation = coming_month_non_coinciding_vacations.get(0);
+                Log.d(TAG,"network value: "+vacation.getVacation_made_at_network_success());
                 if (Boolean.parseBoolean(vacation.getVacation_made_at_network_success())) {
+                    Log.d(TAG,"vacation found on network success");
                     for (int day_of_this_month = 1; day_of_this_month <= number_of_days_in_this_month; day_of_this_month++) {
                          /* This for loop will iterate through first to last day of next month. For each day what possible class, event or vacation can be possible will bet populated*/
 

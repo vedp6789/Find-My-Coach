@@ -177,19 +177,19 @@ public class Slot implements Parcelable {
         this.slot_week_days = source.createStringArray();
         this.slot_id = source.readString();
         this.mentor_id = source.readString();
-        source.readTypedList(this.events, DayEvent.CREATOR);
-        source.readTypedList(this.vacations, DayVacation.CREATOR);
+        source.readTypedList(this.events, Event.CREATOR);
+        source.readTypedList(this.vacations, Vacation.CREATOR);
         this.slot_created_on_network_success = source.readString();
         this.slot_subject =source.readString();
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public DaySlot createFromParcel(Parcel in) {
-            return new DaySlot(in);
+        public Slot createFromParcel(Parcel in) {
+            return new Slot(in);
         }
 
-        public DaySlot[] newArray(int size) {
-            return new DaySlot[size];
+        public Slot[] newArray(int size) {
+            return new Slot[size];
         }
     };
 

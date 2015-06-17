@@ -90,6 +90,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     String class_subject;
     String class_slot_type;    /* Individual or Group  */
     String class_location;
+    JSONObject jsonObject_exception;
 
 
     private static final String TAG = "FMC";
@@ -530,9 +531,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                                     jO_success_response = new JSONObject(success_response);
                                     status = Integer.parseInt(jO_success_response.getString("status"));  /* status 1 for success and 2 for failure */
                                     jA_coinciding_Slots = jO_success_response.getJSONArray("coincidingSlots");
-                                    jA_coinciding_Exceptions = jO_success_response.getJSONArray("coincidingExceptions");
                                     String message = jO_success_response.getString("message");
                                     if (status == 1) {
+                                        jA_coinciding_Exceptions = jO_success_response.getJSONArray("coincidingExceptions");
+
 
                                         if (jA_coinciding_Exceptions.length() > 0) {
                                             coincideOf(jA_coinciding_Exceptions, 1);
@@ -542,13 +544,14 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                                             showSummaryAsAlert();
                                         }
                                     } else {
+                                        jsonObject_exception = jO_success_response.getJSONObject("coincidingExceptions");
                                         if (jA_coinciding_Slots.length() > 0) {
                                             Log.d(TAG, "failure of adding slot because coinciding slot array is bigger ");
                                             coincideOf(jA_coinciding_Slots, 0);
                                         } else {
                                             Toast.makeText(AddNewSlotActivity.this, jO_success_response.getString("message"), Toast.LENGTH_LONG).show();
                                                 /* It is the case when there is vacation found which is not allowing any class, so in this case we can show message from server */
-                                            coincideOf(jA_coinciding_Exceptions,2);  /* flag is 2 , means mentor request for new slot, is cannot be possible as there is one vacation schedule which is having start date earlier or equal to that of mentor new slot request start date and the stop date of new requested slot is coming equal or less than vacation stop date  */
+                                            coincideOf(null,2);  /* flag is 2 , means mentor request for new slot, is cannot be possible as there is one vacation schedule which is having start date earlier or equal to that of mentor new slot request start date and the stop date of new requested slot is coming equal or less than vacation stop date  */
                                         }
                                     }
                                 } catch (JSONException e) {
@@ -628,7 +631,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     /* This method generates message when either slots coincide or there is coinciding exceptions like vaccation*/
     void coincideOf(JSONArray jsonArray, int flag) {      /* flag 0 means slot is coinciding and 1 means there is some exceptions while this schedule like mentor has already scheduled some vaccations*/
         Log.d(TAG, "inside coincideOf method!");       /* flag is 2 when vacation duration is bigger than requested slot duration, slot duration is coming in between vacation*/
-        if (jsonArray.length() > 1) {
+        if (jsonArray != null && jsonArray.length() > 1) {
             String s_date, st_date, s_time, st_time;
 
             Date start_date = null, stop_date = null;
@@ -788,7 +791,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
 
         } else {
-            if (jsonArray.length() > 0) {
+            if (jsonArray!= null && jsonArray.length() > 0) {
                 try {
                     String s_date, st_date, s_time, st_time;
                     ArrayList<String> days = new ArrayList<String>();
@@ -903,6 +906,38 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }else {
+                String ss_date=null, sst_date=null, ss_time=null, sst_time=null;
+                ArrayList<String> days = new ArrayList<String>();
+
+
+                try {
+                    ss_date = jsonObject_exception.getString("start_date");
+                    sst_date = jsonObject_exception.getString("stop_date");
+                    ss_time = jsonObject_exception.getString("start_time");
+                    sst_time = jsonObject_exception.getString("stop_time");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                StringBuilder stringBuilder = new StringBuilder();
+                Date start_date = null, stop_date = null;
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                try {
+                    start_date = dateFormat.parse(ss_date);
+                    stop_date = dateFormat.parse(sst_date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+
+
+                stringBuilder.append(getResources().getString(R.string.vacation_similar_to_slot_request) + simpleDateFormat.format(start_date) + "\t"+getResources().getString(R.string.to1) +"\t"+ simpleDateFormat.format(stop_date) + getResources().getString(R.string.from1) + ss_time.substring(0, 5) + getResources().getString(R.string.to2) + sst_time.substring(0, 5));
+                showCoincidingAlertMessage(stringBuilder.toString(), flag);
+                Log.d(TAG, "Message for coinciding exception while add new slot : " + stringBuilder.toString());
+
+
             }
 
         }

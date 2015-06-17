@@ -127,8 +127,8 @@ public class HomeFragment extends Fragment implements Callback {
         if (calledApiValue == 19) {
             try {
                 JSONObject jsonObject = new JSONObject(mentor_notifications);
-                String status = jsonObject.getString("status");
-                if (status.equals("true")) {
+                int status = Integer.parseInt(jsonObject.getString("status"));
+                if (status == 1) {
 
 
                     ArrayList<ConnectionRequest> connectionRequests = new ArrayList<ConnectionRequest>(); pagerSlidingTabStrip.setViewPager(notifications_on_viewpager);

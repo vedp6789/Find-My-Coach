@@ -81,12 +81,12 @@ public class Event implements Parcelable{
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public DayEvent createFromParcel(Parcel in) {
-            return new DayEvent(in);
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
         }
 
-        public DayEvent[] newArray(int size) {
-            return new DayEvent[size];
+        public Event[] newArray(int size) {
+            return new Event[size];
         }
     };
 

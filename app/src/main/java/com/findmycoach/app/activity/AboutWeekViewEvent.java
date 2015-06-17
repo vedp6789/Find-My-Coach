@@ -120,6 +120,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 slot = bundle.getParcelable("slot");
                 init1();
                 populateSlotInfo(slot);
+                b_delete.setText(getResources().getString(R.string.delete));
 
                 ll_list_of_mentees.setVisibility(View.GONE);
                 ll_non_coincidingLinearLayout.setVisibility(View.GONE);
@@ -156,8 +157,9 @@ public class AboutWeekViewEvent extends Activity implements Callback {
 
                 tv_vacation_start_time.setText(getTime(non_coinciding_vacation.getStart_time()));
                 tv_vacation_stop_time.setText(getTime(non_coinciding_vacation.getStop_time()));
+                b_delete.setText(getResources().getString(R.string.delete));
 
-                String slot_type = slot.getSlot_type();
+               /* String slot_type = slot.getSlot_type();
                 if (slot_type.equalsIgnoreCase("group")) {
                     tv_slot_type.setText(getResources().getString(R.string.group));
                 } else {
@@ -165,8 +167,9 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                         tv_slot_type.setText(getResources().getString(R.string.individual));
                     }
                 }
-
                 tv_max_students.setText(slot.getSlot_max_users());
+*/
+
 
 
                 b_delete.setOnClickListener(new View.OnClickListener() {
@@ -290,6 +293,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
         tv_vacation_stop_date = (TextView) findViewById(R.id.tv_vacation_end_date_val);
         tv_vacation_start_time = (TextView) findViewById(R.id.tv_vacation_start_time_val);
         tv_vacation_stop_time = (TextView) findViewById(R.id.tv_vacation_end_time_val);
+        b_delete = (Button) findViewById(R.id.b_delete_slot);
 
         ll_class_slot_details = (LinearLayout) findViewById(R.id.ll_class_slot_details);
         ll_list_of_mentees = (LinearLayout) findViewById(R.id.ll_list_of_mentees);
@@ -440,6 +444,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         Toast.makeText(AboutWeekViewEvent.this, (String) object, Toast.LENGTH_SHORT).show();
+        progressDialog.dismiss();
     }
 
     private void showAlertOnDelete(final int flag, final RequestParams requestParams) {  /* flag is 0 when this method is called to delete

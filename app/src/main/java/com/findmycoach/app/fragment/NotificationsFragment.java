@@ -110,8 +110,8 @@ public class NotificationsFragment extends Fragment implements Callback {
         progressDialog.dismiss();
         try {
             JSONObject jsonObject = new JSONObject((String) object);
-            String status = jsonObject.getString("status");
-            if (Boolean.parseBoolean(status)) {
+            int status = Integer.parseInt(jsonObject.getString("status"));
+            if (status == 1) {
                 jsonArray_notifications = jsonObject.getJSONArray("data");
                 if (jsonArray_notifications.length() > 0) {
                     adapter = new MenteeNotificationRecyclerViewAdapter(getActivity(), jsonArray_notifications);

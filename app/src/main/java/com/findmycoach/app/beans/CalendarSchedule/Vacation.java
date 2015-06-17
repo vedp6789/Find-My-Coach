@@ -88,29 +88,32 @@ public class Vacation implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.vacation_id);
         dest.writeString(this.start_date);
         dest.writeString(this.stop_date);
         dest.writeString(this.cause_of_the_vacation);
-
         dest.writeString(this.start_time);
         dest.writeString(this.stop_time);
+        dest.writeString(this.vacation_made_at_network_success);
     }
 
     public Vacation(Parcel parcel){
+        this.vacation_id=parcel.readString();
         this.start_date=parcel.readString();
         this.stop_date=parcel.readString();
         this.cause_of_the_vacation=parcel.readString();
         this.start_time=parcel.readString();
         this.stop_time=parcel.readString();
+        this.vacation_made_at_network_success=parcel.readString();
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public DayVacation createFromParcel(Parcel in) {
-            return new DayVacation(in);
+        public Vacation createFromParcel(Parcel in) {
+            return new Vacation(in);
         }
 
-        public DayVacation[] newArray(int size) {
-            return new DayVacation[size];
+        public Vacation[] newArray(int size) {
+            return new Vacation[size];
         }
     };
 
