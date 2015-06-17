@@ -117,8 +117,12 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         chargeInput.setSelectAllOnFocus(true);
         accomplishment = (EditText) findViewById(R.id.input_accomplishment);
         experienceInput = (Spinner) findViewById(R.id.input_experience);
-        experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview,
-                getResources().getStringArray(R.array.year_of_experience)));
+
+        String[] yearOfExperience = new String[51];
+        for(int i = 0; i<yearOfExperience.length; i ++){
+            yearOfExperience[i] = String.valueOf(i);
+        }
+        experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview,yearOfExperience));
         isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
         updateAction = (Button) findViewById(R.id.button_update);
         chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
@@ -555,7 +559,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             }
             int dobYear = 0;
             try {
-                dobYear = Integer.parseInt(profileDOB.getText().toString().split("-")[0]);
+                dobYear = Integer.parseInt(profileDOB.getText().toString().split("-")[2]);
             } catch (Exception e) {
                 dobYear = 0;
             }

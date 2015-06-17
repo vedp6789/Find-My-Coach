@@ -125,7 +125,7 @@ public class DobPicker {
     }
 
     public void setDob() {
-        textView.setText(selectedYear + "-" + selectedMonth + "-" + selectedDay);
+        textView.setText(selectedDay + "-" + selectedMonth.substring(0, 3) + "-" + selectedYear);
         dialog.dismiss();
     }
 }
