@@ -1,40 +1,49 @@
 package com.findmycoach.app.fragment;
 
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.TimePickerDialog;
-import android.os.Bundle;
-import android.widget.TextView;
+import android.content.Context;
+import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
-import java.util.Calendar;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by prem on 9/3/15.
  */
-public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+public class TimePickerFragment extends TimePickerDialog  {
 
-    public TextView textView;
+    private final static int TIME_PICKER_INTERVAL = 15;
 
-    public TimePickerFragment(){
-
+    public TimePickerFragment(Context context, OnTimeSetListener callBack, int hourOfDay, int minute, boolean is24HourView) {
+        super(context, callBack, hourOfDay, minute, is24HourView);
     }
 
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the current date as the default date in the picker
-        final Calendar c = Calendar.getInstance();
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-        int min = c.get(Calendar.MINUTE);
-
-        // Create a new instance of DatePickerDialog and return it
-        return new TimePickerDialog(getActivity(), this, hour, min, false);
-    }
 
     @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        int hour = hourOfDay % 12;
-        if(textView != null)
-            textView.setText(hour + ":" + minute + (hourOfDay > 11 ? " pm" : " am"));
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        try {
+            Class<?> classForid = Class.forName("com.android.internal.R$id");
+            Field timePickerField = classForid.getField("timePicker");
+            TimePicker timePicker = (TimePicker) findViewById(timePickerField
+                    .getInt(null));
+            Field field = classForid.getField("minute");
+
+            NumberPicker mMinuteSpinner = (NumberPicker) timePicker
+                    .findViewById(field.getInt(null));
+            mMinuteSpinner.setMinValue(0);
+            mMinuteSpinner.setMaxValue((60 / TIME_PICKER_INTERVAL) - 1);
+            List<String> displayedValues = new ArrayList<String>();
+            for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
+                displayedValues.add(String.format("%02d", i));
+            }
+            mMinuteSpinner.setDisplayedValues(displayedValues
+                    .toArray(new String[0]));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

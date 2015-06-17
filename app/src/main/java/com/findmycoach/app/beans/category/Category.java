@@ -2,6 +2,7 @@ package com.findmycoach.app.beans.category;
 
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +12,9 @@ public class Category {
 
     @Expose
     private String message;
+    @SerializedName("categories")
     @Expose
-    private List<Datum> data = new ArrayList<Datum>();
+    private List<Datum> data = new ArrayList<>();
 
     /**
      * @return The message

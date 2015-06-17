@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/purple"
+    android:minWidth="@dimen/navigation_drawer_width"
+    android:orientation="vertical">
+
+    <com.findmycoach.app.views.ChizzleTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/calender_header_margin_arrow"
+        android:gravity="center"
+        android:text="@string/alert_disconnect"
+        android:textColor="@color/white"
+        android:textSize="@dimen/profile_name"
+        android:textStyle="bold" />
+
+    <com.findmycoach.app.views.ChizzleTextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/underline"
+        android:background="@color/white" />
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <com.findmycoach.app.views.ChizzleButton
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="@dimen/days_margin"
+            android:layout_toLeftOf="@+id/textView2"
+            android:background="@drawable/custom_button_click"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="@color/custom_button_text_color_click"
+            android:textSize="@dimen/button_text_size"
+            android:textStyle="bold" />
+
+        <com.findmycoach.app.views.ChizzleTextView
+            android:id="@+id/textView2"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/days_margin"
+            android:background="@drawable/custom_button_click"
+            android:textColor="@color/custom_button_text_color_click" />
+
+        <com.findmycoach.app.views.ChizzleButton
+            android:id="@+id/okButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="@dimen/days_margin"
+            android:layout_toEndOf="@+id/textView2"
+            android:layout_toRightOf="@+id/textView2"
+            android:background="@drawable/custom_button_click"
+            android:gravity="center"
+            android:text="@string/ok"
+            android:textSize="@dimen/button_text_size"
+            android:textColor="@color/custom_button_text_color_click"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+</LinearLayout>

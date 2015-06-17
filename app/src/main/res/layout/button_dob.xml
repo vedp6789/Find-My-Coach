@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.findmycoach.app.views.ChizzleButton xmlns:android="http://schemas.android.com/apk/res/android"
+    android:textColor="@color/purple"
+    android:background="@color/white"
+    android:textSize="@dimen/button_text_size"
+    android:layout_gravity="center"
+    android:id="@+id/button"
+    android:layout_width="wrap_content"
+    android:layout_height="30dp" />

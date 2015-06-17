@@ -6,8 +6,6 @@ import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
-import com.findmycoach.app.fragment_mentee.HomeFragment;
-
 /**
  * Created by ShekharKG on 8/5/15.
  */
@@ -31,13 +29,13 @@ public class GetLocationAsync extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void s) {
 
-        String loc = NetworkManager.getCurrentLocation(activity);
-
-        Log.e("GetLocationAsync", "onPostExecute " + loc);
-
-        if(fragment instanceof HomeFragment){
-            ((HomeFragment) fragment).updateLocationFromAsync(loc);
-        }
+//        String loc = NetworkManager.getCurrentLocation(activity);
+//
+//        Log.e("GetLocationAsync", "onPostExecute " + loc);
+//
+//        if (fragment instanceof HomeFragment) {
+//            ((HomeFragment) fragment).updateLocationFromAsync(loc);
+//        }
 
     }
 }

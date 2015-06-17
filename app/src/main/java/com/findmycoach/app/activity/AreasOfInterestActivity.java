@@ -5,8 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.InterestsAdapter;
@@ -22,18 +23,15 @@ import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class AreasOfInterestActivity extends Activity implements Callback {
 
-    private static InterestsAdapter adapter;
-    private Button saveAction;
     private final String TAG = "FMC";
     private DataBase dataBase;
-    private Category category;
+    public static Category category;
+    public static List<DatumSub> datumSubs;
     private ListView listView;
-    private List<InterestsAdapter.SubCategoryItems> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +39,14 @@ public class AreasOfInterestActivity extends Activity implements Callback {
 
         setContentView(R.layout.activity_areas_of_interest);
         initialize();
-        applyActions();
         checkSUbCategory();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        category = null;
+        datumSubs = null;
     }
 
     /**
@@ -50,10 +54,17 @@ public class AreasOfInterestActivity extends Activity implements Callback {
      */
     private void checkSUbCategory() {
         dataBase = DataBase.singleton(this);
-        category = dataBase.selectAllSubCategory();
+
+        try {
+            String categoryData = dataBase.getAll();
+            category = new Gson().fromJson(categoryData, Category.class);
+        } catch (Exception e) {
+            category = null;
+            e.printStackTrace();
+        }
 
         /** If not then call api to get sub categories */
-        if (category.getData().size() < 1) {
+        if (category == null || category.getData().size() < 1) {
             Log.d(TAG, "sub category api called");
             getSubCategories();
         } else
@@ -62,43 +73,92 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     }
 
     private void populateData() {
-        String interestsString = getIntent().getStringExtra("interests");
+        try {
+            String interestsString = getIntent().getStringExtra("interests");
+            List<String> selectedAreaOfInterest = new ArrayList<>();
+            if (interestsString != null) {
+                Collections.addAll(selectedAreaOfInterest, interestsString.split(","));
+                for (int i = 0; i < selectedAreaOfInterest.size(); i++)
+                    selectedAreaOfInterest.set(i, selectedAreaOfInterest.get(i).trim());
+            }
 
-        for (Datum d : category.getData()) {
-            for (DatumSub sub : d.getDataSub())
-                list.add(new InterestsAdapter.SubCategoryItems(sub.getName(), 0));
-        }
 
-
-        if (interestsString != null) {
-            String[] interests = interestsString.split(",");
-
-            for (String s : interests) {
-                for (InterestsAdapter.SubCategoryItems i : list) {
-                    if (i.getItemName().trim().equalsIgnoreCase(s.trim())) {
-                        i.setSelected(1);
+            for (Datum datum : category.getData()) {
+                for (DatumSub datumSub : datum.getSubCategories()) {
+                    datumSubs.add(datumSub);
+                    if (selectedAreaOfInterest.contains(datumSub.getName().trim())) {
+                        datumSub.setIsSelected(true);
+                        datum.setSelectedItems(datum.getSelectedItems() + 1);
                     }
                 }
+
+                for (Datum datum1 : datum.getCategories())
+                    for (DatumSub datumSub : datum1.getSubCategories()) {
+                        datumSubs.add(datumSub);
+                        if (selectedAreaOfInterest.contains(datumSub.getName().trim())) {
+                            datumSub.setIsSelected(true);
+                            datum1.setSelectedItems(datum1.getSelectedItems() + 1);
+                        }
+                    }
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        Collections.sort(list, new Comparator<InterestsAdapter.SubCategoryItems>() {
-            @Override
-            public int compare(InterestsAdapter.SubCategoryItems lhs, InterestsAdapter.SubCategoryItems rhs) {
-                return lhs.getItemName().compareToIgnoreCase(rhs.getItemName());
+        updateMainList();
+
+    }
+
+    private void updateMainList() {
+        List<InterestsAdapter.SubCategoryItems> list = new ArrayList<>();
+        for (Datum datum : category.getData()) {
+            Log.e(TAG, "Name : " + datum.getName() + ", Sub category size : "
+                    + datum.getSubCategories().size() + ", Category size : "
+                    + datum.getCategories().size()
+                    + ", Parent id : " + datum.getParentId() + ", ID : " + datum.getId()
+                    + ", Selected items : " + datum.getSelectedItems());
+
+            String title = datum.getName();
+
+            if (datum.getSelectedItems() > 0)
+                title = title + "<font color='#AFA4C4'> - " + datum.getSelectedItems()
+                        + " " + getResources().getString(R.string.selected) + "</font>";
+
+            if (datum.getCategories().size() > 0) {
+                int count = 0;
+                for (Datum datum1 : datum.getCategories()) {
+                    count = count + datum1.getSelectedItems();
+                }
+
+                if (count > 0)
+                    title = title + "<font color='#AFA4C4'> - " + count
+                            + " " + getResources().getString(R.string.selected) + "</font>";
             }
-        });
 
-        Collections.sort(list, new Comparator<InterestsAdapter.SubCategoryItems>() {
-            @Override
-            public int compare(InterestsAdapter.SubCategoryItems lhs, InterestsAdapter.SubCategoryItems rhs) {
-                return rhs.isSelected() - lhs.isSelected();
-            }
-        });
+            list.add(new InterestsAdapter.SubCategoryItems(title, 1));
+        }
 
+        list.add(new InterestsAdapter.SubCategoryItems(getResources().getString(R.string.all), 1));
 
-        adapter = new InterestsAdapter(this, list);
+        InterestsAdapter adapter = new InterestsAdapter(this, list);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(AreasOfInterestActivity.this, AreaOfInterestSub.class);
+                intent.putExtra("index", position);
+                intent.putExtra("level", 2);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateMainList();
     }
 
     /**
@@ -111,33 +171,39 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     }
 
     /**
-     * Passing data back to calling class
-     */
-    private void applyActions() {
-        saveAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                List<String> listTemp = new ArrayList<>();
-                for(InterestsAdapter.SubCategoryItems l : list){
-                    if(l.isSelected() == 1)
-                        listTemp.add(l.getItemName());
-                }
-                intent.putExtra("interests", new Gson().toJson(listTemp));
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
-
-    }
-
-    /**
      * Getting references of views
      */
     private void initialize() {
+        category = null;
+        datumSubs = new ArrayList<>();
         listView = (ListView) findViewById(R.id.areas_of_interest_list);
-        saveAction = (Button) findViewById(R.id.save_interests);
-        list = new ArrayList<>();
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(getResources().getString(R.string.prompt_area_of_coaching));
+
+        findViewById(R.id.buttonSave).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnResult();
+            }
+        });
+    }
+
+    private void returnResult() {
+        Intent intent = new Intent();
+        List<String> listTemp = new ArrayList<>();
+        for (DatumSub d : datumSubs) {
+            if (d.isSelected())
+                listTemp.add(d.getName());
+        }
+        intent.putExtra("interests", new Gson().toJson(listTemp));
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
 
@@ -146,9 +212,11 @@ public class AreasOfInterestActivity extends Activity implements Callback {
      */
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        dataBase.insertData((Category) object);
-        category = dataBase.selectAllSubCategory();
-        populateData();
+        dataBase.insertData((String) object);
+        String categoryData = dataBase.getAll();
+        category = new Gson().fromJson(categoryData, Category.class);
+        if (category != null)
+            populateData();
     }
 
     @Override

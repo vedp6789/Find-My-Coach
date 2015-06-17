@@ -6,15 +6,17 @@
     android:background="@color/purple">
 
     <ImageView
-        android:layout_alignParentLeft="true"
-        android:layout_width="@dimen/action_bar_height"
-        android:layout_height="match_parent"
-        android:src="@drawable/back"
-        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/back_small"
+        android:layout_gravity="center"
         android:padding="@dimen/textView_padding_margin"
-        android:id="@+id/backButton" />
+        android:id="@+id/backButton"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,12 +30,13 @@
         android:layout_toLeftOf="@+id/menuItem" />
 
     <ImageView
-        android:padding="@dimen/back_margin"
+        android:padding="@dimen/textView_padding_margin"
         android:layout_alignParentRight="true"
         android:id="@+id/menuItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/textView_padding_margin"
+        android:paddingLeft="@dimen/textView_padding_margin"
+        android:paddingRight="@dimen/textView_padding_margin"
         android:layout_alignBottom="@+id/backButton"
         android:layout_alignTop="@+id/backButton" />
 

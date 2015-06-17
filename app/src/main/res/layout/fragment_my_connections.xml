@@ -5,9 +5,16 @@
     android:background="@color/white"
     tools:context="com.findmycoach.app.fragment_mentor.MyConnectionsFragment">
 
-    <ListView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/connectionListView"/>
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/connectionListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>

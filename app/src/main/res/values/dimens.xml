@@ -4,15 +4,16 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">32dp</dimen>
     <dimen name="activity_vertical_margin">32dp</dimen>
-    <dimen name="navigation_drawer_width">200dp</dimen>
+    <dimen name="navigation_drawer_width">150dp</dimen>
     <dimen name="textView_padding_margin">8dp</dimen>
     <dimen name="back_margin">16dp</dimen>
     <dimen name="margin_top">50dp</dimen>
     <dimen name="login_button_height">40dp</dimen>
     <dimen name="sliding_tab_height">48dp</dimen>
     <dimen name="days_button_height">35dp</dimen>
-    <dimen name="radio_button_padding">10dp</dimen>
+    <dimen name="radio_button_padding">25dp</dimen>
     <dimen name="action_bar_height">50dp</dimen>
+    <dimen name="category_button_padding">70dp</dimen>
     <dimen name="list_view_image_height">60dp</dimen>
     <dimen name="distance_tv_max_width">70dp</dimen>
     <dimen name="connection_button">30dp</dimen>
@@ -22,16 +23,18 @@
     <dimen name="indicator">20dp</dimen>
     <dimen name="max_text_view_width">150dp</dimen>
 
-
-
+    <dimen name="img_vid">140dp</dimen>
 
 
     <dimen name="days_margin">4dp</dimen>
+    <dimen name="cross_margin">6dp</dimen>
+    <dimen name="underline">2dp</dimen>
 
 
-    <dimen name="profile_heading">12sp</dimen>
-    <dimen name="profile_details">16sp</dimen>
+    <dimen name="profile_heading">14sp</dimen>
+    <dimen name="profile_details">14sp</dimen>
     <dimen name="profile_name">20sp</dimen>
+    <dimen name="button_text_size">18sp</dimen>
     <dimen name="header">26sp</dimen>
 
     <dimen name="user_image_height_width">80dp</dimen>

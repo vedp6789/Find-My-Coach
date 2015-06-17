@@ -11,7 +11,7 @@
         android:layout_gravity="center"
         android:weightSum="7">
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -21,7 +21,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/profile_heading"
             android:layout_weight="1"/>
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -31,7 +31,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/profile_heading"
             android:layout_weight="1"/>
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -41,7 +41,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/profile_heading"
             android:layout_weight="1"/>
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -51,7 +51,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/profile_heading"
             android:layout_weight="1"/>
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -61,7 +61,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/profile_heading"
             android:layout_weight="1"/>
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -71,7 +71,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/profile_heading"
             android:layout_weight="1"/>
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="match_parent"

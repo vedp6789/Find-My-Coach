@@ -2,15 +2,18 @@ package com.findmycoach.app.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.findmycoach.app.R;
-import com.findmycoach.app.beans.category.Category;
+import com.findmycoach.app.util.AppFonts;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
 import com.loopj.android.http.RequestParams;
+
+import java.util.TimeZone;
 
 /**
  * Created by prem on 11/3/15.
@@ -20,15 +23,24 @@ public class SplashActivity extends Activity implements Callback {
     private DataBase dataBase;
     private boolean isStart;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-        isStart = true;
-        getDataFromServer();
-    }
 
+        AppFonts.HelveticaNeue = Typeface.createFromAsset(getAssets(), "HelveticaNeue.dfont");
+        AppFonts.HelveticaNeueMedium = Typeface.createFromAsset(getAssets(), "HelveticaNeue-Medium.otf");
+
+        setContentView(R.layout.activity_splash);
+
+        isStart = true;
+        TimeZone tz = TimeZone.getDefault();
+        NetworkClient.timeZone = tz.getDisplayName(false, TimeZone.SHORT);
+        NetworkClient.timeZone = NetworkClient.timeZone.replace("GMT", "");
+        Log.e("TimeZone : ", NetworkClient.timeZone + " Timezone id :: " + tz.getID());
+        getDataFromServer();
+
+
+    }
 
     /**
      * Updating app data from server
@@ -66,7 +78,6 @@ public class SplashActivity extends Activity implements Callback {
      * Get Sub Categories
      */
     private void getCategories() {
-        /* TODO remove hard coded auth token */
         NetworkClient.getSubCategories(this, new RequestParams(), null, this, 34);
     }
 
@@ -76,7 +87,7 @@ public class SplashActivity extends Activity implements Callback {
 
 
         dataBase.clearDatabase();
-        long i = dataBase.insertData((Category) object);
+        dataBase.insertData((String) object);
         runHoldThread();
     }
 

@@ -14,7 +14,7 @@
         android:src="@drawable/user_icon" />
 
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextViewBold
         android:id="@+id/mentor_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,27 +26,27 @@
         android:layout_toLeftOf="@+id/chargesTV"
         android:layout_toRightOf="@+id/mentor_image"
         android:layout_toStartOf="@+id/chargesTV"
-        android:singleLine="true"
+        android:maxLines="2"
         android:textColor="@color/purple"
-        android:textSize="@dimen/profile_name"
+        android:textSize="@dimen/profile_details"
         android:textStyle="bold" />
 
     <RatingBar
+        android:layout_marginBottom="@dimen/textView_padding_margin"
         android:id="@+id/mentor_rating"
         style="?android:attr/ratingBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/mentor_image"
         android:layout_gravity="left"
-        android:layout_margin="@dimen/textView_padding_margin"
-        android:layout_toEndOf="@+id/mentor_image"
-        android:layout_toRightOf="@+id/mentor_image"
         android:isIndicator="true"
         android:numStars="5"
-        android:stepSize="0.3" />
+        android:stepSize="0.3"
+        android:layout_alignBottom="@+id/mentor_image"
+        android:layout_alignLeft="@+id/mentor_name"
+        android:layout_alignStart="@+id/mentor_name" />
 
     <ImageView
-        android:padding="3dp"
+        android:padding="@dimen/days_margin"
         android:id="@+id/connect_mentor"
         android:layout_width="@dimen/connection_button"
         android:layout_height="@dimen/connection_button"
@@ -55,7 +55,7 @@
         android:layout_margin="@dimen/textView_padding_margin"
         android:src="@drawable/connect" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:textStyle="bold"
         android:id="@+id/distanceTV"
         android:layout_width="wrap_content"
@@ -69,7 +69,7 @@
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_heading" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:textStyle="bold"
         android:id="@+id/chargesTV"
         android:layout_width="wrap_content"
@@ -82,7 +82,8 @@
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_heading" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
+        android:visibility="gone"
         android:textStyle="bold"
         android:id="@+id/subCatTV"
         android:layout_width="wrap_content"
@@ -96,7 +97,7 @@
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_heading" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:textStyle="bold"
         android:id="@+id/daysTV"
         android:layout_width="wrap_content"

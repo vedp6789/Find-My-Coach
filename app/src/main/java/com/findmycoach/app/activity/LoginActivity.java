@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,10 +12,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -31,6 +32,7 @@ import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.findmycoach.app.R;
+import com.findmycoach.app.adapter.CountryCodeAdapter;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
@@ -64,10 +66,11 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     public static boolean doLogout = false;
     private EditText inputUserName;
     private EditText inputPassword;
-    private ProgressDialog progressDialog;
+    private Dialog progressDialog;
     private int user_group;
     private TextView countryCodeTV;
-    private String[] country_code, country_name;
+    private String[] country_code;
+    private int retryFbLogin;
 
     /**
      * Related to G+
@@ -82,7 +85,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private int mSignInProgress;
     private PendingIntent mSignInIntent;
     private int mSignInError;
-    private ImageButton mSignInButton;
 
     public static LoginActivity loginActivity;
 
@@ -135,7 +137,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private void initialize(Bundle savedInstanceState) {
 
         /** G+ related */
-        mSignInButton = (ImageButton) findViewById(R.id.sign_in_button);
+        ImageButton mSignInButton = (ImageButton) findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(this);
         if (savedInstanceState != null) {
             mSignInProgress = savedInstanceState.getInt(SAVED_PROGRESS, STATE_DEFAULT);
@@ -159,8 +161,21 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         forgotAction.setOnClickListener(this);
 
         /** initializing progress dialog and setting up progress message*/
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getResources().getString(R.string.logging_in));
+        progressDialog = new Dialog(this);
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        progressDialog.setContentView(R.layout.progressbar_textview);
+        TextView msg = (TextView) progressDialog.findViewById(R.id.msg);
+        msg.setText(getResources().getString(R.string.logging_in));
+
+        inputPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    logIn();
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -236,10 +251,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         if (!isEmailValid(userId)) {
             isValid = false;
             showErrorMessage(inputUserName, getResources().getString(R.string.error_invalid_email));
-        } else if (userPassword.equals("")) {
-            isValid = false;
-            showErrorMessage(inputPassword, getResources().getString(R.string.error_field_required));
-        } else if (userPassword.length() < 5) {
+        }
+        if (userPassword.equals("") || userPassword.length() < 5) {
             isValid = false;
             showErrorMessage(inputPassword, getResources().getString(R.string.error_password_size));
         }
@@ -300,9 +313,11 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         /** Attempt to login with FB */
         else {
+            Log.d(TAG, "fb login result : " + resultCode);
             Session session = Session.getActiveSession();
             session.onActivityResult(this, requestCode, resultCode, data);
-            if (resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK || retryFbLogin++ == 0) {
+                Log.d(TAG, "get session");
                 getSession();
             }
             StorageHelper.storePreference(this, "login_with", "fb");
@@ -391,7 +406,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         progressDialog.dismiss();
         final Dialog dialog = new Dialog(this);
-        dialog.setTitle(getResources().getString(R.string.prompt_email_id));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.email_id_dialog);
         final EditText emailET = (EditText) dialog.findViewById(R.id.emailEditText);
@@ -425,6 +441,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 else {
                     dialog.dismiss();
                     requestParams.add("email", email);
+                    StorageHelper.storePreference(LoginActivity.this, "user_email", email);
                     NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
                     progressDialog.show();
                 }
@@ -632,7 +649,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private void getPhoneNumber(final RequestParams requestParams) {
         progressDialog.dismiss();
         final Dialog dialog = new Dialog(this);
-        dialog.setTitle(getResources().getString(R.string.phone_no_must));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.phone_number_dialog);
         countryCodeTV = (TextView) dialog.findViewById(R.id.countryCodeTV);
@@ -674,7 +692,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                     requestParams.add("phone_number", countryCodeTV.getText().toString().trim() + "-" + phnNum);
                     requestParams.add("user_group", String.valueOf(user_group));
                     saveUserPhoneNumber(phnNum);
-                    Log.e("Login dialog : phone_number", countryCodeTV.getText().toString().trim() + "-" + phnNum);
+                    Log.e("Login dialog", "phone_number : " + countryCodeTV.getText().toString().trim() + "-" + phnNum);
                     NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 26);
                     progressDialog.show();
                 }
@@ -706,11 +724,14 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
      */
     private void showCountryCodeDialog() {
         final Dialog countryDialog = new Dialog(this);
+        countryDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        countryDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         countryDialog.setCanceledOnTouchOutside(true);
-        countryDialog.setTitle(getResources().getString(R.string.select_country_code));
         countryDialog.setContentView(R.layout.dialog_country_code);
         ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
-        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, country_name));
+        listView.setAdapter(new CountryCodeAdapter(getResources()
+                .getStringArray(R.array.country_names),
+                getResources().getStringArray(R.array.country_codes_only), LoginActivity.this));
         countryDialog.show();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -730,7 +751,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         CountryID = manager.getSimCountryIso().toUpperCase();
         country_code = this.getResources().getStringArray(R.array.country_codes);
-        country_name = this.getResources().getStringArray(R.array.country_names);
         for (int i = 1; i < country_code.length; i++) {
             String[] g = country_code[i].split(",");
             if (g[1].trim().equals(CountryID.trim())) {
@@ -870,6 +890,12 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
 
         /** Login is successful start DashBoard Activity */
+        try {
+            String name = response.getData().getFirstName() + " " + response.getData().getLastName();
+            StorageHelper.storePreference(this, "user_full_name", name);
+        } catch (Exception ignored) {
+        }
+
         if (statusCode == 200) {
             saveUserPhn("True");
             finish();

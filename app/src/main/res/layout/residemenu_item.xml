@@ -8,7 +8,7 @@
     android:paddingTop="15dp"
     android:paddingBottom="15dp">
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"

@@ -1,14 +1,13 @@
 package com.findmycoach.app.activity;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,12 +15,13 @@ import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -34,11 +34,15 @@ import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
+import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
+import com.findmycoach.app.views.DobPicker;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
@@ -46,6 +50,7 @@ import org.xml.sax.InputSource;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -54,9 +59,8 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-public class EditProfileActivityMentee extends Activity implements DatePickerDialog.OnDateSetListener, Callback {
+public class EditProfileActivityMentee extends Activity implements Callback {
 
-    int year = 1990, month = 1, day = 1;
     int REQUEST_CODE = 100;
     private ImageView profilePicture;
     private TextView profileEmail;
@@ -77,9 +81,9 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
     private String[] coachingTypeOptions;
     ArrayAdapter<String> arrayAdapter;
     private String city = null;
-    private String last_city_selected = null;
     private static final String TAG = "FMC";
     private String newUser;
+    private boolean isGetAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,83 +91,12 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
         setContentView(R.layout.activity_edit_profile_mentee);
         newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
         initialize();
+        applyAction();
         populateUserData();
-    }
+        isGetAddress = false;
 
-    private void
-    populateUserData() {
-        if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-            ImageLoader imgLoader = new ImageLoader(profilePicture);
-            imgLoader.execute((String) userInfo.getPhotograph());
-        }
-
-        try {
-            mentorFor.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, new String[]{"Self", "Kid"}));
-        } catch (Exception ignored) {
-        }
-        try {
-            profileEmail.setText(userInfo.getEmail());
-        } catch (Exception ignored) {
-        }
-        try {
-            profileFirstName.setText(userInfo.getFirstName());
-        } catch (Exception ignored) {
-        }
-        try {
-            profileLastName.setText(userInfo.getLastName());
-        } catch (Exception ignored) {
-        }
-        try {
-            profileAddress.setText((String) userInfo.getAddress());
-        } catch (Exception ignored) {
-        }
-        try {
-            profileAddress1.setText((String) userInfo.getCity());
-        } catch (Exception ignored) {
-        }
-        try {
-            city = (String) userInfo.getCity();  /* city string initially set to the city i.e. earlier get updated*/
-        } catch (Exception ignored) {
-        }
-        try {
-            last_city_selected = city;
-        } catch (Exception ignored) {
-        }
-        try {
-            profileDOB.setText((String) userInfo.getDob());
-        } catch (Exception ignored) {
-        }
-        try {
-            pinCode.setText((String) userInfo.getZip());
-        } catch (Exception ignored) {
-        }
-        try {
-            if (userInfo.getMentorFor().equalsIgnoreCase("kid"))
-                mentorFor.setSelection(1);
-        } catch (Exception ignored) {
-        }
-
-        if (userInfo.getGender() != null) {
-            if (userInfo.getGender().equals("M"))
-                profileGender.setSelection(0);
-            else
-                profileGender.setSelection(1);
-        }
-        try {
-            trainingLocation.setText((String) userInfo.getTrainingLocation());
-        } catch (Exception ignored) {
-        }
-        try {
-            String selectedCoachingType = (String) userInfo.getCoachingType();
-            coachingType.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, coachingTypeOptions));
-            if (selectedCoachingType.equalsIgnoreCase(coachingTypeOptions[0]))
-                coachingType.setSelection(0);
-            else
-                coachingType.setSelection(1);
-        } catch (Exception ignored) {
-        }
-
-
+        if (newUser != null)
+            getAddress();
     }
 
     private void initialize() {
@@ -194,44 +127,18 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             }
         });
 
-        if (userInfo == null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals("")) {
-            try {
-                Address fullAddress = NetworkManager.getFullAddress(this);
-                if (fullAddress != null) {
-                    int len = fullAddress.getMaxAddressLineIndex() - 1;
-                    StringBuilder address = new StringBuilder();
-                    for (int i = 0; i < len; i++) {
-                        address.append(fullAddress.getAddressLine(i));
-                        if (i != len - 1)
-                            address.append(", \n");
-                    }
-                    if (!address.toString().replace(",", "").trim().equals(""))
-                        userInfo.setAddress(address.toString());
-                    if (fullAddress.getLocality() != null || fullAddress.getAdminArea() != null)
-                        userInfo.setCity(fullAddress.getLocality() + ", " + fullAddress.getAdminArea());
-                    String zip = fullAddress.getPostalCode();
-                    if (zip != null)
-                        userInfo.setZip(zip);
-                }
-            } catch (Exception ignored) {
-            }
-        }
-
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(getResources().getString(R.string.title_edit_profile_menu));
-
-        applyAction();
-    }
-
-    private void getAutoSuggestions(String input) {
-        RequestParams requestParams = new RequestParams();
-        requestParams.add("input", input);
-        requestParams.add("key", getResources().getString(R.string.google_location_api_key));
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
-        NetworkClient.autoComplete(getApplicationContext(), requestParams, this, 32);
     }
 
     private void applyAction() {
+        profileDOB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DobPicker(EditProfileActivityMentee.this, profileDOB, Calendar.getInstance().get(Calendar.YEAR));
+            }
+        });
+
         profileAddress1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -251,13 +158,10 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             }
         });
 
-
         profileAddress1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 city = arrayAdapter.getItem(position).toString();
-                last_city_selected = city;
-
                 Geocoder geocoder = new Geocoder(EditProfileActivityMentee.this, Locale.getDefault());
                 try {
                     ArrayList<Address> addresses = (ArrayList<Address>) geocoder.getFromLocationName(city.toString(), 1);
@@ -307,9 +211,15 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
                         protected void onPostExecute(String s) {
                             super.onPostExecute(s);
                             if (s != null) {
-                                pinCode.setText(s);
+                                try {
+                                    pinCode.setText(s);
+                                } catch (Exception ignored) {
+                                }
                             } else {
-                                pinCode.setText("");
+                                try {
+                                    pinCode.setText("");
+                                } catch (Exception ignored) {
+                                }
                             }
 
 
@@ -342,77 +252,255 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             }
         });
 
+        pinCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    try {
+                        new AddressFromZip(EditProfileActivityMentee.this, profileAddress1).execute(pinCode.getText().toString());
+                    } catch (Exception ignored) {
+                    }
+                }
+                return false;
+            }
+        });
+
+        profileAddress.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    profileAddress1.setFocusable(true);
+                }
+                return false;
+            }
+        });
+
+        profileAddress1.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    pinCode.setFocusable(true);
+                }
+                return false;
+            }
+        });
+
+    }
+
+    public void populateUserData() {
+
+        if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
+            ImageLoader imgLoader = new ImageLoader(profilePicture);
+            imgLoader.execute((String) userInfo.getPhotograph());
+        }
+
+        try {
+            mentorFor.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, new String[]{"Self", "Kid"}));
+        } catch (Exception ignored) {
+        }
+        try {
+            profileEmail.setText(userInfo.getEmail());
+        } catch (Exception ignored) {
+        }
+        try {
+            profileFirstName.setText(userInfo.getFirstName());
+        } catch (Exception ignored) {
+        }
+        try {
+            profileLastName.setText(userInfo.getLastName());
+        } catch (Exception ignored) {
+        }
+        try {
+            profileAddress.setText((String) userInfo.getAddress());
+        } catch (Exception ignored) {
+        }
+        try {
+            profileAddress1.setText((String) userInfo.getCity());
+        } catch (Exception ignored) {
+        }
+        try {
+            city = (String) userInfo.getCity();  /* city string initially set to the city i.e. earlier get updated*/
+        } catch (Exception ignored) {
+        }
+        try {
+            profileDOB.setText((String) userInfo.getDob());
+        } catch (Exception ignored) {
+        }
+        try {
+            pinCode.setText((String) userInfo.getZip());
+        } catch (Exception ignored) {
+        }
+        try {
+            if (userInfo.getMentorFor().equalsIgnoreCase("kid"))
+                mentorFor.setSelection(1);
+        } catch (Exception ignored) {
+        }
+
+        if (userInfo.getGender() != null) {
+            if (userInfo.getGender().equals("M"))
+                profileGender.setSelection(0);
+            else
+                profileGender.setSelection(1);
+        }
+        try {
+            String temp = (String) userInfo.getTrainingLocation();
+            if (temp == null || temp.equals(""))
+                userInfo.setTrainingLocation(userInfo.getCity());
+            trainingLocation.setText((String) userInfo.getTrainingLocation());
+        } catch (Exception ignored) {
+        }
+        try {
+            String selectedCoachingType = (String) userInfo.getCoachingType();
+            coachingType.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, coachingTypeOptions));
+            if (selectedCoachingType.equalsIgnoreCase(coachingTypeOptions[0]))
+                coachingType.setSelection(0);
+            else
+                coachingType.setSelection(1);
+        } catch (Exception ignored) {
+        }
+
+        if (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
+            getAddress();
+
+    }
+
+    private void getAddress() {
+        if (isGetAddress)
+            return;
+        try {
+            isGetAddress = true;
+            final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+
+            GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+                @Override
+                public void onMyLocationChange(Location location) {
+                    if (DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
+                        DashboardActivity.dashboardActivity.userCurrentAddress = NetworkManager.getCompleteAddressString(EditProfileActivityMentee.this, location.getLatitude(), location.getLongitude());
+
+                        if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
+                            map.setOnMyLocationChangeListener(null);
+                            updateAddress();
+                            populateUserData();
+                        }
+
+                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
+                        DashboardActivity.dashboardActivity.longitude = location.getLongitude();
+                    } else if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
+                        map.setOnMyLocationChangeListener(null);
+                        updateAddress();
+                        populateUserData();
+                    }
+                }
+            };
+            map.setMyLocationEnabled(true);
+            map.setOnMyLocationChangeListener(myLocationChangeListener);
+        } catch (Exception ignored) {
+        }
+    }
+
+    public void updateAddress() {
+        if (userInfo != null && (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))) {
+            try {
+                userInfo.setAddress(NetworkManager.localityName);
+            } catch (Exception ignored) {
+            }
+        }
+
+        if (userInfo != null && (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))) {
+            try {
+                userInfo.setCity(NetworkManager.cityName);
+            } catch (Exception ignored) {
+            }
+        }
+
+        if (userInfo != null && (userInfo.getZip() == null || userInfo.getZip().toString().trim().equals("") || userInfo.getZip().toString().trim().equals("0"))) {
+            try {
+                userInfo.setZip(NetworkManager.postalCodeName);
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
+    private void getAutoSuggestions(String input) {
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("input", input);
+        requestParams.add("key", getResources().getString(R.string.google_location_api_key));
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+        NetworkClient.autoComplete(getApplicationContext(), requestParams, this, 32);
     }
 
     // Validate user first name, last name and address
     private boolean validateUserUpdate() {
-        if (profileAddress1.getText().toString() != null) {
-            if (profileAddress1.getText().toString().trim().equals("")) {
-                Toast.makeText(EditProfileActivityMentee.this, getResources().getString(R.string.choose_suggested_city), Toast.LENGTH_LONG).show();
-                profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        profileAddress1.setError(null);
-                    }
-                }, 3500);
-                return false;
-            }
-            if (!profileAddress1.getText().toString().equalsIgnoreCase(city)) {
-                if (!profileAddress1.getText().toString().equalsIgnoreCase(last_city_selected)) {
-                    Toast.makeText(EditProfileActivityMentee.this, getResources().getString(R.string.choose_suggested_city), Toast.LENGTH_LONG).show();
-                    profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            profileAddress1.setError(null);
-                        }
-                    }, 3500);
-                    return false;
-                }
-
-            }
-
-        } else {
-            Toast.makeText(EditProfileActivityMentee.this, getResources().getString(R.string.choose_suggested_city), Toast.LENGTH_LONG).show();
-            profileAddress1.setError(getResources().getString(R.string.choose_suggested_city));
+        boolean isValid = true;
+        if (profileAddress1.getText().toString().trim().equals("")) {
+            profileAddress1.setError(getResources().getString(R.string.enter_city));
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     profileAddress1.setError(null);
                 }
             }, 3500);
-            return false;
+            isValid = false;
         }
 
-        String firstName = profileFirstName.getText().toString();
+        if (profileAddress.getText().toString().trim().equals("")) {
+            profileAddress.setError(getResources().getString(R.string.enter_address));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    profileAddress.setError(null);
+                }
+            }, 3500);
+            isValid = false;
+        }
+
+        if (profileDOB.getText().toString().trim().equals("")) {
+            profileDOB.setError(getResources().getString(R.string.enter_dob));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    profileDOB.setError(null);
+                }
+            }, 3500);
+            isValid = false;
+        }
+
+        if (pinCode.getText().toString().trim().equals("")) {
+            pinCode.setError(getResources().getString(R.string.enter_pin));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    pinCode.setError(null);
+                }
+            }, 3500);
+            isValid = false;
+        }
+
+        String firstName = profileFirstName.getText().toString().trim().replaceAll(" ", "");
         if (firstName.equals("")) {
             showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
-            return false;
+            isValid = false;
         } else {
             for (int i = 0; i < firstName.length(); i++) {
                 if (!Character.isLetter(firstName.charAt(i))) {
                     showErrorMessage(profileFirstName, getResources().getString(R.string.error_not_a_name));
-                    return false;
+                    isValid = false;
                 }
             }
         }
 
-        String lastName = profileLastName.getText().toString();
+        String lastName = profileLastName.getText().toString().trim().replaceAll(" ", "");
         if (lastName.equals("")) {
             showErrorMessage(profileLastName, getResources().getString(R.string.error_field_required));
-            return false;
+            isValid = false;
         } else {
             for (int i = 0; i < lastName.length(); i++) {
                 if (!Character.isLetter(lastName.charAt(i))) {
                     showErrorMessage(profileLastName, getResources().getString(R.string.error_not_a_name));
-                    return false;
+                    isValid = false;
                 }
             }
         }
 
 
-        return true;
+        return isValid;
 
 
     }
@@ -458,7 +546,6 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
         }
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -479,32 +566,6 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             finish();
         else
             Toast.makeText(this, R.string.prompt_update_profile, Toast.LENGTH_LONG).show();
-    }
-
-
-    public void setDate(View view) {
-        showDialog(999);
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        if (id == 999) {
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
-            datePickerDialog.setTitle(getResources().getString(R.string.dob));
-            return datePickerDialog;
-        }
-        return null;
-    }
-
-    private void showDate(int year, int month, int day) {
-        profileDOB.setText(new StringBuilder().append(day).append("-")
-                .append(month).append("-").append(year));
-    }
-
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        showDate(year, monthOfYear + 1, dayOfMonth);
     }
 
     private void updateAutoSuggestion(Suggestion suggestion) {
@@ -530,6 +591,11 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
             Intent intent = new Intent();
             intent.putExtra("user_info", new Gson().toJson(userInfo));
             setResult(Activity.RESULT_OK, intent);
+            try {
+                String name = profileFirstName.getText().toString() + " " + profileLastName.getText().toString();
+                StorageHelper.storePreference(this, "user_full_name", name);
+            } catch (Exception ignored) {
+            }
             finish();
 
             if (newUser != null && newUser.contains(userInfo.getId())) {
@@ -537,6 +603,8 @@ public class EditProfileActivityMentee extends Activity implements DatePickerDia
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.remove(getResources().getString(R.string.new_user));
                 editor.apply();
+                DashboardActivity.dashboardActivity.container.setVisibility(View.VISIBLE);
+                DashboardActivity.dashboardActivity.showTermsAndConditions();
             }
 
             /* Saving address, city and zip */

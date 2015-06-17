@@ -2,22 +2,25 @@ package com.findmycoach.app.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.adapter.CountryCodeAdapter;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
@@ -36,12 +39,13 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     private EditText confirmPasswordInput;
     private EditText emailInput;
     private EditText phoneNumberInput;
-    private ProgressDialog progressDialog;
+    private Dialog progressDialog;
     private RadioButton radioButton_mentee_signup, radioButton_mentor_signup;
-    private int user_group = 0;
+    private int user_group = 3;
     private TextView countryCodeTV;
-    private String[] country_code, country_name;
+    private String[] country_code;
     private String email, phoneNumber;
+    private ScrollView scrollView;
 
 
     @Override
@@ -57,7 +61,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
      */
     private void initialize() {
         country_code = this.getResources().getStringArray(R.array.country_codes);
-        country_name = this.getResources().getStringArray(R.array.country_names);
         radioButton_mentee_signup = (RadioButton) findViewById(R.id.radio_button_mentee_signup);
         radioButton_mentor_signup = (RadioButton) findViewById(R.id.radio_button_mentor_signup);
         firstNameInput = (EditText) findViewById(R.id.input_first_name);
@@ -67,18 +70,26 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         confirmPasswordInput = (EditText) findViewById(R.id.input_confirm_password);
         phoneNumberInput = (EditText) findViewById(R.id.input_phone);
         countryCodeTV = (TextView) findViewById(R.id.countryCodeTV);
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
         String code = getCountryZipCode();
-        countryCodeTV.setText(code.equals("") ? country_code[0] : code);
+        countryCodeTV.setText(code.equals("") ? getResources().getString(R.string.select) : code);
         countryCodeTV.setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getResources().getString(R.string.please_wait));
+        progressDialog = new Dialog(this);
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        progressDialog.setContentView(R.layout.progressbar_textview);
+        TextView msg = (TextView) progressDialog.findViewById(R.id.msg);
+        msg.setText(getResources().getString(R.string.please_wait));
+
         findViewById(R.id.action_login).setOnClickListener(this);
 
-        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+        confirmPasswordInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    scrollView.fullScroll(View.FOCUS_DOWN);
+                }
+                return false;
             }
         });
     }
@@ -100,10 +111,14 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     private void showCountryCodeDialog() {
         final Dialog countryDialog = new Dialog(this);
         countryDialog.setCanceledOnTouchOutside(true);
+        countryDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        countryDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         countryDialog.setTitle(getResources().getString(R.string.select_country_code));
         countryDialog.setContentView(R.layout.dialog_country_code);
         ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
-        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, country_name));
+        listView.setAdapter(new CountryCodeAdapter(getResources()
+                .getStringArray(R.array.country_names),
+                getResources().getStringArray(R.array.country_codes_only), this));
         countryDialog.show();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -168,72 +183,79 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
      */
     private boolean validate(String firstName, String lastName, String phone, String email, String password, String confirmPassword, String countryCode) {
 
+        boolean isCorrect = true;
+        firstName = firstName.replaceAll(" ", "");
+        lastName = lastName.replaceAll(" ", "");
+
         if (firstName.equals("")) {
             showErrorMessage(firstNameInput, getResources().getString(R.string.error_field_required));
-            return false;
+            isCorrect = false;
         } else {
             for (int i = 0; i < firstName.length() - 1; i++) {
                 if (!Character.isLetter(firstName.charAt(i))) {
                     showErrorMessage(firstNameInput, getResources().getString(R.string.error_not_a_name));
-                    return false;
+                    isCorrect = false;
                 }
             }
         }
-        firstNameInput.setError(null);
+        if(isCorrect)
+            firstNameInput.setError(null);
 
         if (lastName.equals("")) {
             showErrorMessage(lastNameInput, getResources().getString(R.string.error_field_required));
-            return false;
+            isCorrect = false;
         } else {
             for (int i = 0; i < lastName.length() - 1; i++) {
                 if (!Character.isLetter(lastName.charAt(i))) {
                     showErrorMessage(lastNameInput, getResources().getString(R.string.error_not_a_name));
-                    return false;
+                    isCorrect = false;
                 }
             }
         }
-        lastNameInput.setError(null);
-
-        if (countryCode.trim().equalsIgnoreCase("Select")) {
-            showErrorMessage(countryCodeTV, getResources().getString(R.string.select_country_code));
-            return false;
-        }
+        if(isCorrect)
+            lastNameInput.setError(null);
 
         if (phone.equals("")) {
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_field_required));
-            return false;
+            isCorrect = false;
         } else if (phone.length() < 8) {
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_phone_number_invalid));
-            return false;
+            isCorrect = false;
         }
-        phoneNumberInput.setError(null);
+        if(isCorrect)
+            phoneNumberInput.setError(null);
 
         if (!isEmailValid(email)) {
             showErrorMessage(emailInput, getResources().getString(R.string.enter_valid_email));
-            return false;
+            isCorrect = false;
         }
-        emailInput.setError(null);
+        if(isCorrect)
+            emailInput.setError(null);
 
-        if (password.equals("")) {
-            showErrorMessage(passwordInput, getResources().getString(R.string.error_field_required));
-            return false;
-        } else if (password.length() < 5) {
+        if (password.equals("") || password.length() < 5) {
             showErrorMessage(passwordInput, getResources().getString(R.string.error_password_size));
-            return false;
+            isCorrect = false;
         }
-        passwordInput.setError(null);
+        if(isCorrect)
+            passwordInput.setError(null);
 
         if (confirmPassword.equals("")) {
             showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_required));
-            return false;
+            isCorrect = false;
         } else if (!password.equals(confirmPassword)) {
             showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_not_match));
-            return false;
+            isCorrect = false;
         }
-        confirmPasswordInput.setError(null);
 
+        if(isCorrect)
+            confirmPasswordInput.setError(null);
 
-        return true;
+        if (countryCode.trim().equalsIgnoreCase("Select") && isCorrect) {
+            showErrorMessage(countryCodeTV, getResources().getString(R.string.select_country_code));
+            isCorrect = false;
+        }
+
+        return isCorrect;
     }
 
     /**
@@ -264,6 +286,11 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
+
+        try{
+            String name = firstNameInput.getText().toString() + " " + lastNameInput.getText().toString();
+            StorageHelper.storePreference(this,"user_full_name", name);
+        }catch (Exception ignored){}
 
         try{
             Response response = (Response) object;

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,12 +31,13 @@ public class UserListActivity extends Activity implements Callback {
     private ProgressDialog progressDialog;
     private Datum datum;
     private boolean isGettingMentor = false;
-    private static final String TAG="FMC";
+    private static final String TAG = "FMC";
     private static final int NEED_TO_REFRESH = 100;
     private MentorListAdapter mentorListAdapter;
     private int selectedPosition = -1;
     private String connection_status_for_Selected_mentor;
     private String searchFor;
+    private ImageView menuItem;
 
 
     @Override
@@ -50,12 +52,12 @@ public class UserListActivity extends Activity implements Callback {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                connection_status_for_Selected_mentor=null;
+                connection_status_for_Selected_mentor = null;
                 if (users != null) {
-                    Log.d(TAG,"ListView click");
+                    Log.d(TAG, "ListView click");
                     selectedPosition = position;
                     datum = users.get(position);
-                    connection_status_for_Selected_mentor=datum.getConnectionStatus();
+                    connection_status_for_Selected_mentor = datum.getConnectionStatus();
                     getMentorDetails(datum.getId());
                 }
             }
@@ -70,24 +72,24 @@ public class UserListActivity extends Activity implements Callback {
     }
 
     private void getMentorDetails(String id) {
-        if(isGettingMentor){
-            Toast.makeText(this, getResources().getString(R.string.get_mentor_is_already_called),Toast.LENGTH_SHORT).show();
+        if (isGettingMentor) {
+            Toast.makeText(this, getResources().getString(R.string.get_mentor_is_already_called), Toast.LENGTH_SHORT).show();
             return;
         }
         isGettingMentor = true;
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
         requestParams.add("id", id);
-        requestParams.add("owner_id",StorageHelper.getUserDetails(this,"user_id"));
+        requestParams.add("owner_id", StorageHelper.getUserDetails(this, "user_id"));
         int limit = 7;                                          //  This is a limit for getting free slots details for this mentor in terms of limit days from current date
         requestParams.add("limit", String.valueOf(limit));
         String authToken = StorageHelper.getUserDetails(this, "auth_token");
-        String user_group=StorageHelper.getUserGroup(UserListActivity.this,"user_group");
-        if(user_group != null){
-            requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        String user_group = StorageHelper.getUserGroup(UserListActivity.this, "user_group");
+        if (user_group != null) {
+            requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
             NetworkClient.getMentorDetails(this, requestParams, authToken, this, 24);
-        }else{
-            Toast.makeText(UserListActivity.this,getResources().getString(R.string.check_network_connection),Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(UserListActivity.this, getResources().getString(R.string.check_network_connection), Toast.LENGTH_SHORT).show();
         }
 
 
@@ -107,17 +109,20 @@ public class UserListActivity extends Activity implements Callback {
         listView.setAdapter(mentorListAdapter);
 
         TextView title = (TextView) findViewById(R.id.title);
-        title.setText(getResources().getString(R.string.search_result));
+        String titleName = users.size() > 1 ? getResources().getString(R.string.mentors) : getResources().getString(R.string.mentor);
+        title.setText(titleName + " " + getResources().getString(R.string.forrr) + " " + getIntent().getStringExtra("search_for").split("-")[0]);
+        menuItem = (ImageView) findViewById(R.id.menuItem);
+//        menuItem.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_sort_by_size));
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && requestCode == NEED_TO_REFRESH){
-            if(users != null && selectedPosition != -1){
-                try{
+        if (resultCode == RESULT_OK && requestCode == NEED_TO_REFRESH) {
+            if (users != null && selectedPosition != -1) {
+                try {
                     users.get(selectedPosition).setConnectionId(data.getStringExtra("connectionId"));
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 users.get(selectedPosition).setConnectionStatus(data.getStringExtra("connectionStatus"));
@@ -131,11 +136,11 @@ public class UserListActivity extends Activity implements Callback {
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         // For displaying selected Mentor details
-        if(calledApiValue == 24){
+        if (calledApiValue == 24) {
             Intent intent = new Intent(getApplicationContext(), MentorDetailsActivity.class);
             intent.putExtra("mentorDetails", (String) object);
             intent.putExtra("searched_keyword", getIntent().getStringExtra("searched_keyword"));
-            intent.putExtra("connection_status",connection_status_for_Selected_mentor);
+            intent.putExtra("connection_status", connection_status_for_Selected_mentor);
             datum = null;
             startActivityForResult(intent, NEED_TO_REFRESH);
             isGettingMentor = false;

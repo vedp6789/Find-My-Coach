@@ -12,6 +12,7 @@ import com.findmycoach.app.beans.chats.Chats;
 import com.findmycoach.app.beans.requests.ConnectionRequestsResponse;
 import com.findmycoach.app.beans.search.SearchResponse;
 import com.findmycoach.app.beans.student.ProfileResponse;
+import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
@@ -90,6 +91,7 @@ public class NetworkClient {
     private static AsyncHttpClient client = new AsyncHttpClient();
 
     private static final String TAG = "FMC";
+    public static String timeZone;
 
     public static String getAuthAbsoluteURL(String relativeUrl, Context context) {
         return context.getResources().getString(R.string.BASE_URL_WITH_AUTH) + relativeUrl;
@@ -105,6 +107,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAuthAbsoluteURL("register", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -145,6 +148,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(getAuthAbsoluteURL("login", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -188,6 +192,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAuthAbsoluteURL("socialAuthentication", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -231,6 +236,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAuthAbsoluteURL("setPhoneNumber", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -274,6 +280,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
         client.post(context, getAbsoluteURL("deviceRegistration", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -313,6 +320,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(getAuthAbsoluteURL("forgotPassword", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -359,6 +367,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
         client.get(context, getAbsoluteURL("profile", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -412,6 +421,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAbsoluteURL("profile", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -461,6 +471,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAuthAbsoluteURL("repostOtp", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -500,6 +511,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAuthAbsoluteURL("validateOtp", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -537,7 +549,7 @@ public class NetworkClient {
         });
     }
 
-    public static void autoComplete(Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
+    public static void autoComplete(final Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
         client.get(context, "https://maps.googleapis.com/maps/api/place/autocomplete/json", requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -546,6 +558,15 @@ public class NetworkClient {
                     Log.d(TAG, "Success: Response:" + responseJson);
                     Log.d(TAG, "Success: Response Code:" + statusCode);
                     Suggestion suggestion = new Gson().fromJson(responseJson, Suggestion.class);
+                    if (!(context instanceof DashboardActivity)) {
+                        for (Prediction p : suggestion.getPredictions()) {
+                            String[] tempArray = p.getDescription().split(",");
+                            if (tempArray.length > 3) {
+                                String desc = tempArray[tempArray.length - 3] + ", " + tempArray[tempArray.length - 2] + ", " + tempArray[tempArray.length - 1];
+                                p.setDescription(desc);
+                            }
+                        }
+                    }
                     callback.successOperation(suggestion, statusCode, calledApiValue);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -565,6 +586,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.get(context, getAbsoluteURL("connectionRequest", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -604,6 +626,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAbsoluteURL("respondToConnectionRequest", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -652,6 +675,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAbsoluteURL("breakConnection", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -700,6 +724,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, "auth_token"));
         Log.d(TAG, StorageHelper.getUserDetails(context, "auth_token"));
         client.get(context, getAbsoluteURL("connections", context), requestParams, new AsyncHttpResponseHandler() {
@@ -751,6 +776,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, "auth_token"));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAbsoluteURL("attachment", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -798,6 +824,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, "auth_token"));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.get(context, getAbsoluteURL("chats", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -840,6 +867,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.get(context, getAbsoluteURL("studentDetails", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -881,6 +909,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.get(context, getAuthAbsoluteURL("metaData", context), requestParams, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -891,10 +920,88 @@ public class NetworkClient {
                                 Log.d(TAG, "Success: Response Code:" + statusCode);
                                 if (statusCode == 200) {
                                     try {
-                                        Category categories = new Gson().fromJson(responseJson, Category.class);
-                                        callback.successOperation(categories, statusCode, calledApiValue);
+                                        String xxx = "{\n" +
+                                                "  \"message\": \"success\",\n" +
+                                                "  \"otp_position\": 3,\n" +
+                                                "  \"otp_length\": 6,\n" +
+                                                "  \"categories\": [\n" +
+                                                "    {\n" +
+                                                "      \"id\": \"1\",\n" +
+                                                "      \"name\": \"Sports\",\n" +
+                                                "      \"parent_id\": \"1\",\n" +
+                                                "      \"sub_categories\": [\n" +
+                                                "        {\n" +
+                                                "          \"sub_category_name\": \"Tennis\",\n" +
+                                                "          \"price\": \"0\",\n" +
+                                                "          \"level\": \"Intermediate\",\n" +
+                                                "          \"id\": \"39\"\n" +
+                                                "        },\n" +
+                                                "        {\n" +
+                                                "          \"sub_category_name\": \"Swimming\",\n" +
+                                                "          \"price\": \"0\",\n" +
+                                                "          \"level\": \"Intermediate\",\n" +
+                                                "          \"id\": \"40\"\n" +
+                                                "        }\n" +
+                                                "      ]\n" +
+                                                "    },\n" +
+                                                "    {\n" +
+                                                "      \"id\": \"2\",\n" +
+                                                "      \"name\": \"Passion\",\n" +
+                                                "      \"parent_id\": \"2\",\n" +
+                                                "      \"categories\": [\n" +
+                                                "        {\n" +
+                                                "          \"id\": \"6\",\n" +
+                                                "          \"name\": \"Music\",\n" +
+                                                "          \"parent_id\": \"2\",\n" +
+                                                "          \"sub_categories\": [\n" +
+                                                "            {\n" +
+                                                "              \"sub_category_name\": \"Piano\",\n" +
+                                                "              \"price\": \"0\",\n" +
+                                                "              \"level\": \"Intermediate\",\n" +
+                                                "              \"id\": \"54\"\n" +
+                                                "            }\n" +
+                                                "          ]\n" +
+                                                "        },\n" +
+                                                "        {\n" +
+                                                "          \"id\": \"7\",\n" +
+                                                "          \"name\": \"Language\",\n" +
+                                                "          \"parent_id\": \"2\",\n" +
+                                                "          \"sub_categories\": [\n" +
+                                                "            {\n" +
+                                                "              \"sub_category_name\": \"Mandarin\",\n" +
+                                                "              \"price\": \"0\",\n" +
+                                                "              \"level\": \"Intermediate\",\n" +
+                                                "              \"id\": \"55\"\n" +
+                                                "            }\n" +
+                                                "          ]\n" +
+                                                "        }\n" +
+                                                "      ]\n" +
+                                                "    },\n" +
+                                                "    {\n" +
+                                                "      \"id\": \"4\",\n" +
+                                                "      \"name\": \"Education\",\n" +
+                                                "      \"parent_id\": \"4\",\n" +
+                                                "      \"sub_categories\": [\n" +
+                                                "        {\n" +
+                                                "          \"sub_category_name\": \"Mathematics\",\n" +
+                                                "          \"price\": \"0\",\n" +
+                                                "          \"level\": \"Intermediate\",\n" +
+                                                "          \"id\": \"58\"\n" +
+                                                "        },\n" +
+                                                "        {\n" +
+                                                "          \"sub_category_name\": \"Physics\",\n" +
+                                                "          \"price\": \"0\",\n" +
+                                                "          \"level\": \"Intermediate\",\n" +
+                                                "          \"id\": \"59\"\n" +
+                                                "        }\n" +
+                                                "      ]\n" +
+                                                "    }\n" +
+                                                "  ]\n" +
+                                                "}";
+                                        callback.successOperation(xxx, statusCode, calledApiValue);
                                     } catch (Exception e) {
                                         e.printStackTrace();
+                                        callback.failureOperation("", statusCode, calledApiValue);
                                     }
                                 }
                             }
@@ -924,6 +1031,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.get(context, getAbsoluteURL("search", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -975,6 +1083,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAbsoluteURL("categorySubCategory", context), requestParams, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1018,6 +1127,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAbsoluteURL("connectionRequest", context), requestParams, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1066,6 +1176,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.get(context, getAbsoluteURL("mentorDetails", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1106,6 +1217,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), auth_token);
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         //requestParams.add(userGroup, "3");
         client.post(getAbsoluteURL("availableSlots", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -1158,6 +1270,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), auth_token);
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         //requestParams.add(userGroup, "3");
         client.post(getAbsoluteURL("exceptions", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -1206,6 +1319,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         // client.get(context, getAbsoluteURL("calenderDetails", context), requestParams, new AsyncHttpResponseHandler() {
         client.get(context, getAbsoluteURL("calenderDetails", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -1248,6 +1362,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         // client.get(context, getAbsoluteURL("calenderDetails", context), requestParams, new AsyncHttpResponseHandler() {
         client.get(context, getAbsoluteURL("calenderDetailsMentee", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -1381,6 +1496,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
+        // client.get(context, getAbsoluteURL("calenderDetails", context), requestParams, new AsyncHttpResponseHandler() {
         client.get(context, getAbsoluteURL("calenderEvents", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1422,6 +1539,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), auth_token);
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         //requestParams.add(userGroup, "3");
         client.post(getAuthAbsoluteURL("resetPassword", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -1469,6 +1587,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, context.getString(R.string.auth_token)));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAuthAbsoluteURL("setPhoneNumber", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1476,7 +1595,6 @@ public class NetworkClient {
                     Log.d(TAG, "Success : Status code : " + statusCode);
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Success : Response : " + responseJson);
-                    Response response = new Gson().fromJson(responseJson, Response.class);
                     JSONObject jsonObject = new JSONObject(new String(responseBody));
                     if (statusCode == 200)
                         callback.successOperation(jsonObject.getString("message"), statusCode, calledApiValue);
@@ -1515,6 +1633,7 @@ public class NetworkClient {
         }
         Log.d("API", getAuthAbsoluteURL("mentorRating", context));
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAbsoluteURL("mentorRating", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1559,6 +1678,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAbsoluteURL("event", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1583,7 +1703,6 @@ public class NetworkClient {
                     Log.d(TAG, "Failure : Status code : " + statusCode);
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Failure : Response : " + responseJson);
-                    Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(new String(responseBody), statusCode, calledApiValue);
                 } catch (Exception e) {
                     try {
@@ -1604,6 +1723,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, context.getString(R.string.auth_token)));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAbsoluteURL("event", context), requestParams, new AsyncHttpResponseHandler() {
 //            client.post(context, getAbsoluteURL("event", context), requestParams, new AsyncHttpResponseHandler() {
 
@@ -1630,7 +1750,6 @@ public class NetworkClient {
                     Log.d(TAG, "Failure : Status code : " + statusCode);
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Failure : Response : " + responseJson);
-                    Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(new JSONObject(new String(responseBody)).get("message"), statusCode, calledApiValue);
                 } catch (Exception e) {
                     try {
@@ -1650,6 +1769,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAbsoluteURL("getCardDetails", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1694,6 +1814,7 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context, getAbsoluteURL("getCardDetails", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1739,6 +1860,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, context.getString(R.string.auth_token)));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(getAbsoluteURL("eventFinalize", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1784,6 +1906,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.get(context, getAbsoluteURL("notification", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {

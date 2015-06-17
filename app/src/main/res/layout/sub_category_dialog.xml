@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_button_height"
         android:weightSum="3">
 
-        <Button
-            android:singleLine="true"
-            android:textSize="14sp"
+        <com.findmycoach.app.views.ChizzleButton
             android:id="@+id/beginner"
-            android:background="@color/purple"
-            android:textColor="@color/white"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/category_unselected"
+            android:singleLine="true"
             android:text="@string/beginner"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:textColor="@color/white"
+            android:textSize="@dimen/button_text_size" />
 
-        <Button
-            android:singleLine="true"
-            android:textSize="14sp"
+        <com.findmycoach.app.views.ChizzleButton
             android:id="@+id/intermediate"
-            android:background="@color/purple"
-            android:textColor="@color/white"
-            android:text="@string/intermediate"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <Button
+            android:layout_weight="1"
+            android:background="@color/category_unselected"
             android:singleLine="true"
-            android:textSize="14sp"
-            android:id="@+id/advance"
-            android:background="@color/purple"
+            android:text="@string/intermediate"
             android:textColor="@color/white"
-            android:text="@string/advance"
+            android:textSize="@dimen/button_text_size" />
+
+        <com.findmycoach.app.views.ChizzleButton
+            android:id="@+id/advance"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@color/category_unselected"
+            android:singleLine="true"
+            android:text="@string/advance"
+            android:textColor="@color/white"
+            android:textSize="@dimen/button_text_size" />
 
     </LinearLayout>
 

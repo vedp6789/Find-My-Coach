@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,10 +35,11 @@ public class MyConnectionsFragment extends Fragment implements Callback {
     private ConnectionAdapter connectionAdapter;
     public static boolean needToRefresh = false;
     private static final String TAG = "FMC";
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public MyConnectionsFragment() {
         // Required empty public constructor
-        needToRefresh= false;
+        needToRefresh = false;
     }
 
     public static MyConnectionsFragment newInstance(String param1, String param2) {
@@ -48,7 +50,7 @@ public class MyConnectionsFragment extends Fragment implements Callback {
     @Override
     public void onResume() {
         super.onResume();
-        if(needToRefresh) {
+        if (needToRefresh) {
             getConnectionList();
             needToRefresh = false;
         }
@@ -71,6 +73,15 @@ public class MyConnectionsFragment extends Fragment implements Callback {
         connectionListView = (ListView) rootView.findViewById(R.id.connectionListView);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.purple);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getConnectionList();
+            }
+        });
     }
 
     @Override
@@ -83,25 +94,26 @@ public class MyConnectionsFragment extends Fragment implements Callback {
         getConnectionList();
     }
 
-    private void getConnectionList(){
+    private void getConnectionList() {
         //connections
-        progressDialog.show();
+        if (mSwipeRefreshLayout != null && !mSwipeRefreshLayout.isRefreshing())
+            progressDialog.show();
         RequestParams requestParams = new RequestParams();
-        requestParams.add("user_id", StorageHelper.getUserDetails(getActivity(),"user_id"));
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        requestParams.add("user_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
         NetworkClient.getAllConnectionRequest(getActivity(), requestParams, this, 22);
     }
 
     private void populateData(final List<Data> data) {
         List<Data> dataToShow = new ArrayList<Data>();
-        for(Data d : data){
+        for (Data d : data) {
             boolean flag = false;
-            for(Data d1 : dataToShow){
-                if(d1.getInviteeId().equals(d.getInviteeId()) && d1.getOwnerId().equals(d.getOwnerId())){
+            for (Data d1 : dataToShow) {
+                if (d1.getInviteeId().equals(d.getInviteeId()) && d1.getOwnerId().equals(d.getOwnerId())) {
                     flag = true;
                 }
             }
-            if(!flag)
+            if (!flag)
                 dataToShow.add(d);
         }
         Log.d(TAG, "Actual connection size : " + data.size() + ", current size : " + dataToShow.size());
@@ -122,21 +134,23 @@ public class MyConnectionsFragment extends Fragment implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
+        mSwipeRefreshLayout.setRefreshing(false);
         connectionRequestsResponse = (ConnectionRequestsResponse) object;
-        if(connectionRequestsResponse.getData() != null && connectionRequestsResponse.getData().size() > 0) {
-                populateData(connectionRequestsResponse.getData());
+        if (connectionRequestsResponse.getData() != null && connectionRequestsResponse.getData().size() > 0) {
+            populateData(connectionRequestsResponse.getData());
         }
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
+        if(mSwipeRefreshLayout != null)
+            mSwipeRefreshLayout.setRefreshing(false);
         String msg = (String) object;
-        if(msg.equals("Success")) {
+        if (msg.equals("Success")) {
             connectionListView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.no_data_found, new String[]{getResources().getString(R.string.not_connected)}));
             connectionListView.setSelector(new ColorDrawable(0));
-        }
-        else
+        } else
             Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
     }
 }

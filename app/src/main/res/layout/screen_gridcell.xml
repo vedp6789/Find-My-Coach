@@ -2,18 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
-    <Button
+    <com.findmycoach.app.views.ChizzleButton
         android:id="@+id/calendar_day_gridcell"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@color/white"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/purple" >
-    </Button>
-
+        android:textColor="@color/purple"
+        android:textSize="@dimen/button_text_size" />
 
 
 </RelativeLayout>

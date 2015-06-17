@@ -13,18 +13,20 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_bar_height"
         android:orientation="horizontal"
-        android:background="@android:color/transparent">
+        android:background="@color/bg_end">
 
         <ImageView
-            android:layout_alignParentLeft="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/back"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="@dimen/textView_padding_margin"
-            android:id="@+id/backButton" />
+            android:src="@drawable/back_small"
+            android:layout_gravity="center"
+            android:padding="@dimen/textView_padding_margin"
+            android:id="@+id/backButton"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -43,18 +45,25 @@
             android:id="@+id/menuButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/textView_padding_margin"
-            android:layout_marginRight="@dimen/textView_padding_margin"
+            android:paddingLeft="@dimen/textView_padding_margin"
+            android:paddingRight="@dimen/textView_padding_margin"
             android:layout_alignBottom="@+id/backButton"
             android:layout_alignTop="@+id/backButton" />
 
     </RelativeLayout>
 
     <RelativeLayout
+        android:visibility="invisible"
         android:layout_below="@id/header"
         android:id="@+id/container"
+        android:background="@drawable/bg"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent" />
+        android:layout_height="match_parent" />
+
+    <fragment android:id="@+id/map"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:visibility="gone"/>
 
 </RelativeLayout>

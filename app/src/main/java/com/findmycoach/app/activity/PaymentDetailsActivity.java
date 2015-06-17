@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.fragment.DatePickerFragment;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.StorageHelper;
 
 import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
@@ -38,7 +39,6 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_details);
         initialize();
-        applyActionbarProperties();
     }
 
     private void initialize() {
@@ -59,12 +59,12 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
             }
         });
 
-    }
+        try{
+            inputCardName.setText(StorageHelper.getUserDetails(this, "user_full_name"));
+        }catch (Exception e){
+            inputCardName.setText("");
+        }
 
-    private void applyActionbarProperties() {
-//        ActionBar actionBar = getActionBar();
-//        if(actionBar != null)
-//        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

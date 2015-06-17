@@ -1,19 +1,20 @@
 package com.findmycoach.app.adapter;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,8 @@ import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -47,9 +50,9 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         this.users = users;
         this.progressDialog = progressDialog;
         studentId = StorageHelper.getUserDetails(context, "user_id");
-        try{
+        try {
             this.searchFor = searchFor.split("-")[0];
-        }catch (Exception e){
+        } catch (Exception e) {
             this.searchFor = "";
         }
     }
@@ -88,6 +91,31 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         final ImageView imageConnect = (ImageView) view.findViewById(R.id.connect_mentor);
 
 
+        try {
+            ArrayList<String> days = new ArrayList<>();
+            Collections.addAll(days, user.getAvailableDays().split(","));
+            String daysAsString = "";
+            String[] daysArray = {"M", "T", "W", "Th", "F", "S", "Su"};
+            String fontPurple = "<font color='#392366'>";
+            String fontPurpleLight = "<font color='#AFA4C4'>";
+            String fontEnd = "</font>";
+            for (String d : daysArray) {
+                if (days.contains(d)) {
+                    daysAsString = daysAsString + " " + fontPurple + d + fontEnd;
+                } else
+                    daysAsString = daysAsString + " " + fontPurpleLight + d + fontEnd;
+            }
+            daysTV.setText(Html.fromHtml(daysAsString));
+        } catch (Exception ignored) {
+        }
+
+
+        try {
+            int charges = user.getChargesClass();
+            chargesTV.setText(charges == 0 ? user.getChargesHour() + "/hr" : charges + "/cl");
+        } catch (Exception ignored) {
+        }
+
 
         LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(context.getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);
@@ -96,7 +124,11 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
 
         nameTV.setText(user.getFirstName());
         subCategoryTV.setText(searchFor);
-        distanceTV.setText(String.format("%.2f", Double.parseDouble(user.getDistance())) + " km");
+        try {
+            distanceTV.setText(String.format("%.2f", Double.parseDouble(user.getDistance())) + " km");
+        } catch (Exception e) {
+            distanceTV.setText("");
+        }
         try {
             ratingBar.setRating(Float.parseFloat(user.getRating()));
         } catch (Exception e) {
@@ -119,7 +151,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
                 @Override
                 public void onClick(View v) {
                     clickedPosition = position;
-                    disconnect(user.getConnectionId(), user.getId());
+                    showDisconnectDialog(user.getConnectionId(), user.getId());
                 }
             });
         } else {
@@ -135,41 +167,58 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         return view;
     }
 
+    private void showDisconnectDialog(final String connectionId, final String id) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.disconnect_confirmation_dialog);
+
+        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                disconnect(connectionId, id);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
 
     private void showAlert(final String userId) {
-        final String defaultMessage = context.getResources().getString(R.string.connection_request_msg);
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-        alertDialog.setTitle(context.getResources().getString(R.string.connection_request));
-        alertDialog.setMessage(context.getResources().getString(R.string.enter_msg));
-        final EditText input = new EditText(context);
-        input.setHint(defaultMessage);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(8, 8, 8, 8);
-        input.setLayoutParams(params);
-        alertDialog.setView(input);
-        input.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.custom_edittext));
-        alertDialog.setPositiveButton(context.getResources().getString(R.string.send),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        String message = input.getText().toString();
-                        if (message.trim().length() < 1)
-                            message = defaultMessage;
-                        sendConnectionRequest(message, userId);
-                    }
-                }
-        );
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.send_connection_request_dialog);
+        final EditText editText = (EditText) dialog.findViewById(R.id.editText);
+        final Button cancelButton = (Button) dialog.findViewById(R.id.cancelButton);
+        Button okButton = (Button) dialog.findViewById(R.id.okButton);
 
-        alertDialog.setNegativeButton(context.getResources().getString(R.string.cancel),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                }
-        );
-        alertDialog.setCancelable(false);
-        alertDialog.show();
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String message = editText.getText().toString();
+                if (message.trim().length() < 1)
+                    message = context.getResources().getString(R.string.connection_request_msg);
+                sendConnectionRequest(message, userId);
+                dialog.dismiss();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
     private void sendConnectionRequest(String message, String userId) {

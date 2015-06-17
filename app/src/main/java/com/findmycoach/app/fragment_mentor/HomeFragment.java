@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,8 +40,9 @@ public class HomeFragment extends Fragment implements Callback {
     MentorNotifications mentorNotifications;
     private String TAG = "FMC";
     private String tag;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private static int tab_to_show=0;
+    private static int tab_to_show = 0;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -56,15 +58,16 @@ public class HomeFragment extends Fragment implements Callback {
     public void onCreate(Bundle savedInstanceState) {
 
         try {
-            Log.e("SHEKHAR", tag+" before");
+            Log.e(TAG, tag + " before");
             tag = getArguments().getString("OpenTab");
-            Log.e("SHEKHAR", tag+" after");
-        }catch (Exception ignored){}
+            Log.e(TAG, tag + " after");
+        } catch (Exception ignored) {
+        }
 
         super.onCreate(savedInstanceState);
         Log.d("FMC", "Inside mentor home fragment");
         mentorNotifications = new MentorNotifications();
-        mentorNotificationTabsPagerAdapter = new MentorNotificationTabsPagerAdapter(getActivity().getSupportFragmentManager(), mentorNotifications);
+        mentorNotificationTabsPagerAdapter = new MentorNotificationTabsPagerAdapter(getActivity().getSupportFragmentManager(), mentorNotifications, getActivity());
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getActivity().getResources().getString(R.string.please_wait));
 
@@ -79,7 +82,8 @@ public class HomeFragment extends Fragment implements Callback {
         requestParams.add("user_group", StorageHelper.getUserDetails(getActivity(), "user_group"));
         Log.d(TAG, "Notification data for: " + " user_id: " + StorageHelper.getUserDetails(getActivity(), "user_id") + " user_group: " + StorageHelper.getUserGroup(getActivity(), "user_group"));
 
-        progressDialog.show();
+        if (mSwipeRefreshLayout != null && !mSwipeRefreshLayout.isRefreshing())
+            progressDialog.show();
         NetworkClient.getUserNotifications(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 19);
     }
 
@@ -101,6 +105,15 @@ public class HomeFragment extends Fragment implements Callback {
         pagerSlidingTabStrip.setViewPager(notifications_on_viewpager);
         if (tag != null && tag.equalsIgnoreCase("Schedule"))
             notifications_on_viewpager.setCurrentItem(1);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.purple);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getNotifications();
+            }
+        });
     }
 
     @Override
@@ -131,7 +144,8 @@ public class HomeFragment extends Fragment implements Callback {
                 if (status == 1) {
 
 
-                    ArrayList<ConnectionRequest> connectionRequests = new ArrayList<ConnectionRequest>(); pagerSlidingTabStrip.setViewPager(notifications_on_viewpager);
+                    ArrayList<ConnectionRequest> connectionRequests = new ArrayList<ConnectionRequest>();
+                    pagerSlidingTabStrip.setViewPager(notifications_on_viewpager);
                     ArrayList<ScheduleRequest> scheduleRequests = new ArrayList<ScheduleRequest>();
                     JSONArray jsonArray_notifications = jsonObject.getJSONArray("data");
                     for (int notification_no = 0; notification_no < jsonArray_notifications.length(); notification_no++) {
@@ -197,7 +211,7 @@ public class HomeFragment extends Fragment implements Callback {
                     mentorNotifications.setList_of_schedule_request(scheduleRequests);
                     Log.d(TAG, "update mentor notification");
 
-                    mentorNotificationTabsPagerAdapter = new MentorNotificationTabsPagerAdapter(getActivity().getSupportFragmentManager(), mentorNotifications);
+                    mentorNotificationTabsPagerAdapter = new MentorNotificationTabsPagerAdapter(getActivity().getSupportFragmentManager(), mentorNotifications, getActivity());
                     notifications_on_viewpager.setAdapter(mentorNotificationTabsPagerAdapter);
 
                     pagerSlidingTabStrip.setViewPager(notifications_on_viewpager);
@@ -214,11 +228,15 @@ public class HomeFragment extends Fragment implements Callback {
             }
         }
 
+        mSwipeRefreshLayout.setRefreshing(false);
+
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
+        if(mSwipeRefreshLayout != null)
+            mSwipeRefreshLayout.setRefreshing(false);
         Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,32 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <integer name="category">2</integer>
+    <integer name="sub_category">3</integer>
+
     <string-array name="coaching_type">
-        <item>Individual</item>
-        <item>Group</item>
-    </string-array>
-
-    <string-array name="year_of_experience">
-        <item>Select</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-    </string-array>
-
-    <string-array name="class_type">
-        <item>All</item>
         <item>Individual</item>
         <item>Group</item>
     </string-array>
@@ -482,6 +460,7 @@
     <string name="preferred_time">Preferred Time</string>
     <string name="search">Search</string>
     <string name="search_result">Search results</string>
+    <string name="mentors">Mentors</string>
     <string name="hint_enter_card_number">Card number</string>
     <string name="hint_name_on_card">Name on card</string>
     <string name="hint_date_of_expiry">Date of expiry</string>
@@ -491,6 +470,7 @@
     <string name="terms">Welcome to Chizzle. If you continue to use this app you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern ANI Technologies Private Limited relationship with you in relation to this website and the Service .The term Chizzle or us or we refers to the owner of the website whose registered office is ANI TECHNOLOGIES PRIVATE LIMITED.</string>
     <string name="dummy_contain_of_message">This is the dummy contain of message </string>
     <string name="enter_valid_email">Please enter valid email</string>
+    <string name="enter_valid_password">Please enter valid password</string>
     <string name="enter_valid_phone_no">Enter valid phone number</string>
     <string name="error">Error :</string>
     <string name="profile">Profile</string>
@@ -500,8 +480,8 @@
     <string name="calendar_preference">Calendar preferences</string>
     <string name="no_new_request">No new request for you.</string>
     <string name="not_connected">Not connected to anyone.</string>
-    <string name="yes">YES</string>
-    <string name="no">NO</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="gcm_notification">GCM notification</string>
     <string name="email_not_present_in_db">Email is not present in database.</string>
     <string name="email_not_registered">Email is not registered.</string>
@@ -612,7 +592,6 @@
     <string name="no_days_free_to_schedule">Please select other slot of mentor as this slot is not free now.</string>
 
 
-
     <!--  Minimum time difference between start time and stop time of a slot   i.e in hours-->
     <string name="slot_time_difference">Minimum slot duration should be 1 hour!</string>
     <string name="tutorial_address_not_found">Please provide the address for this tutorial!</string>
@@ -626,7 +605,7 @@
 
     <!-- Dialog message strings-->
     <string name="connecting">Connecting...</string>
-    <string name="sending">Sending...</string>
+    <string name="sending">Sending</string>
     <string name="please_wait">Please wait...</string>
     <string name="dob">Date of Birth</string>
     <string name="phone_no_must">Phone number is must!!!</string>
@@ -641,13 +620,14 @@
     <string name="logging_in">Logging in...</string>
     <string name="verifying">Verifying...</string>
     <string name="verify">Verify</string>
-    <string name="verify_phone">Verify phone</string>
-    <string name="sending_code">Sending code...</string>
+    <string name="verify_phone">Verify your mobile number</string>
+    <string name="sending_code">Sending code</string>
     <string name="already_slot_found">Sorry, there is already a slot between\n</string>
     <string name="and">\tand\t</string>
     <string name="from1">\tfrom\t</string>
     <string name="to2">\tto\t</string>
     <string name="for1">\tfor\t</string>
+    <string name="forrr">for</string>
     <string name="cannot_placed">\nSo this slot cannot be placed!</string>
     <string name="new_slot_with_vacation">Hi, you have placed a new slot with a vacation between \n</string>
     <string name="vacation_similar_to_slot_request">Sorry, there is a vacation which does not allow this class slot.\nVacation duration:\t</string>
@@ -672,11 +652,13 @@
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_chat_widget">Chat widget</string>
     <string name="title_activity_signup">SignupActivity</string>
-    <string name="title_edit_profile_menu">Edit profile</string>
+    <string name="title_edit_profile_menu">Update profile</string>
     <string name="title_validate_phone">Verify phone number</string>
     <string name="title_activity_user_list">Mentors</string>
     <string name="title_mentor_details">Mentor detail</string>
     <string name="title_student_details">Student detail</string>
+    <string name="new_connection">Connection request</string>
+    <string name="new_schedule">Schedule request</string>
     <string name="title_activity_areas_of_interest">AreasOfInterestActivity</string>
 
     <!-- Strings related to login -->
@@ -689,6 +671,7 @@
     <string name="prompt_password">Password</string>
     <string name="old_password">Old password:</string>
     <string name="new_password">New password:</string>
+    <string name="new_password_re">Re enter new password:</string>
     <string name="new_phone_no">Mobile number:</string>
     <string name="prompt_confirm_password">Confirm password</string>
     <string name="prompt_commit">Commit</string>
@@ -710,6 +693,11 @@
 
     <string name="prompt_address1">City state country</string>
     <string name="prompt_city">City</string>
+    <string name="enter_city">Enter city</string>
+    <string name="enter_address">Enter address</string>
+    <string name="enter_dob">Enter date of birth</string>
+    <string name="select_dob">Select date of birth</string>
+    <string name="enter_pin">Enter zip code</string>
     <string name="prompt_state">State</string>
     <string name="prompt_country">Country</string>
     <string name="prompt_pin">Pin Code</string>
@@ -719,7 +707,7 @@
     <string name="prompt_willing_to_travel">Available to travel trainee location</string>
     <string name="prompt_charges">Coaching fee</string>
     <string name="prompt_experience">Experience</string>
-    <string name="prompt_experience_in_years">Experience in year(s)</string>
+    <string name="prompt_experience_in_years">Experience in year</string>
     <string name="prompt_facebook">Facebook</string>
     <string name="prompt_google_plus">Google +</string>
     <string name="days">Days</string>
@@ -739,6 +727,7 @@
     <string name="class_stop_date">Stop date:</string>
     <string name="till">Until:</string>
     <string name="select">Select</string>
+    <string name="selected">selected</string>
     <string name="forever">Forever</string>
     <string name="how_long">How long?</string>
     <string name="date_picker_from">From</string>
@@ -775,6 +764,22 @@
 
     <!-- Prompting -->
 
+    <string-array name="pager_titles">
+        <item>Connections</item>
+        <item>Schedules</item>
+    </string-array>
+
+    <string-array name="decade_array">
+        <item>1941-1950</item>
+        <item>1951-1960</item>
+        <item>1961-1970</item>
+        <item>1971-1980</item>
+        <item>1981-1990</item>
+        <item>1991-2000</item>
+        <item>2001-2010</item>
+        <item>2011-Onwards</item>
+    </string-array>
+
     <!-- String s related to Actions -->
     <string name="action_sign_in">Login</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -787,10 +792,11 @@
     <string name="action_sign_up">Sign Up</string>
     <string name="action_save">Save</string>
     <string name="select_sub_category">Select category</string>
-    <string name="select_image">Select Image</string>
+    <string name="select_image">Choose</string>
+    <string name="update_image">Update profile picture</string>
     <string name="rotate">Rotate</string>
-    <string name="crop">Crop</string>
-    <string name="type_here">Type here to send</string>
+    <string name="crop">Crop &amp; Save</string>
+    <string name="type_here">Write your message</string>
     <string name="action_logout">Logout</string>
     <string name="action_accept">Accept</string>
     <string name="action_decline">Decline</string>
@@ -806,9 +812,11 @@
     <string name="schedule_vacation">Vacation schedule</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="back">Back</string>
     <string name="start_time">Select</string>
     <string name="stop_time">Select</string>
     <string name="submit_rating">Submit rating</string>
+    <string name="comments">Please provide comments</string>
     <string name="view_profile">View profile</string>
 
     <string name="beginner">Beginner</string>
@@ -826,7 +834,7 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_not_a_name">Enter valid name</string>
-    <string name="error_field_not_match">Password not matched</string>
+    <string name="error_field_not_match">Your new password(s) don’t match</string>
     <string name="error_phone_number_invalid">Invalid Phone Number</string>
     <string name="error_invalid_date">Date should less than current date</string>
     <string name="error_invalid_details">Invalid card number</string>
@@ -846,6 +854,7 @@
     <string name="mentor">Mentor</string>
     <string name="action_connect">Connect</string>
     <string name="action_disconnect">Disconnect</string>
+    <string name="alert_disconnect">Are you sure want to disconnect?</string>
     <string name="action_pending">Disconnect (Request already sent)</string>
     <string name="set_time">Set time</string>
     <string name="schedule_vacation_note">Out of class</string>
@@ -871,10 +880,12 @@
     <string name="accept_req">Accept</string>
     <string name="reject_req">Reject</string>
     <string name="event_desc">Event description</string>
-  <string name="month">Month</string>
+    <string name="month">Month</string>
     <string name="year">Year</string>
+    <string name="years">Years</string>
     <string name="calendar_by_loc">Calendar by location</string>
     <string name="loc">Location</string>
+    <string name="age_review_message">You seem to be too young to be a teacher, your case will be reviewed and our support team will call you back.</string>
     <string name="view_calendar_by">View schedule calendar by</string>
     <string name="mentor_response_for_schedule_request_message">Your reply to mentee!</string>
     <!-- Static Text -->
@@ -946,7 +957,7 @@
         <item>December</item>
     </string-array>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
 
 </resources>

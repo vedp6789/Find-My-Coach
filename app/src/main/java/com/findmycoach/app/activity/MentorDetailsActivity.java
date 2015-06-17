@@ -1,10 +1,8 @@
 package com.findmycoach.app.activity;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
@@ -18,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -44,10 +43,10 @@ import com.findmycoach.app.beans.mentor.Response;
 import com.findmycoach.app.fragment.CustomDatePickerFragment;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
-import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.StorageHelper;
+import com.findmycoach.app.views.ChizzleButton;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
@@ -68,11 +67,11 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private TextView profileAddress;
     private RatingBar profileRatting;
     private TextView profileCharges;
-    private TextView profileEmail;
+//    private TextView profileEmail;
     private TextView profileExperience;
     private TextView profileQualification;
     private TextView profileTravelAvailable;
-    private TextView profilePhone;
+//    private TextView profilePhone;
     private TextView profileDob;
     private LinearLayout areaOfCoaching;
     private Data userInfo = null;
@@ -125,7 +124,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         initialize();
         mentorDetailsActivity = this;
         Log.d(TAG, "connection status : " + connectionStatus);
-        applyActionbarProperties();
         populateFields();
 
         month_from_dialog = 0;
@@ -392,36 +390,27 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
     }
 
-
-    private void applyActionbarProperties() {
-//        ActionBar actionBar = getActionBar();
-//        if (actionBar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//            actionBar.setTitle(userInfo.getFirstName());
-//        }
-    }
-
     private void initialize() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         String jsonData = getIntent().getStringExtra("mentorDetails");
         connectionStatus = getIntent().getStringExtra("connection_status");
-        Log.d(TAG, "connection status : 2 " + connectionStatus);
-        if (connectionStatus == null)
+        if (connectionStatus == null || connectionStatus.trim().equals("null"))
             connectionStatus = "not connected";
         if (connectionStatus.equals("broken"))
             connectionStatus = "not connected";
+        Log.d(TAG, "connection status : 2 " + connectionStatus);
         Log.d(TAG, "json data :" + jsonData);
         Response mentorDetails = new Gson().fromJson(jsonData, Response.class);
         userInfo = mentorDetails.getData();
 
         String searchedKeyWord = getIntent().getStringExtra("searched_keyword");
-        if (searchedKeyWord != null && !searchedKeyWord.equals("-1")) {
-            searchedKeyWord = DataBase.singleton(this).getSubCategory(searchedKeyWord);
-            List<String> newSubCategory = new ArrayList<String>();
-            newSubCategory.add(searchedKeyWord);
-            userInfo.setSubCategoryName(newSubCategory);
-        }
+//        if (searchedKeyWord != null && !searchedKeyWord.equals("-1")) {
+//            searchedKeyWord = DataBase.singleton(this).getSubCategory(searchedKeyWord);
+//            List<String> newSubCategory = new ArrayList<String>();
+//            newSubCategory.add(searchedKeyWord);
+//            userInfo.setSubCategoryName(newSubCategory);
+//        }
 
         array_list_subCategory = (ArrayList<String>) userInfo.getSubCategoryName();
 
@@ -434,8 +423,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         profileCharges = (TextView) findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) findViewById(R.id.profile_travel_available);
         areaOfCoaching = (LinearLayout) findViewById(R.id.areas_of_coaching);
-        profilePhone = (TextView) findViewById(R.id.profile_phone);
-        profileEmail = (TextView) findViewById(R.id.profile_email);
+//        profilePhone = (TextView) findViewById(R.id.profile_phone);
+//        profileEmail = (TextView) findViewById(R.id.profile_email);
         profileDob = (TextView) findViewById(R.id.profile_dob);
 
         tv_currentMonth = (TextView) findViewById(R.id.tv_currentMonth);
@@ -452,15 +441,66 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(getResources().getString(R.string.title_mentor_details));
 
+        ImageView connectionButton = (ImageView) findViewById(R.id.menuItem);
+
+        if (connectionStatus.equals("not connected")) {
+            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.connect_small));
+            connectionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showAlert();
+                }
+            });
+        } else if (connectionStatus.equals("accepted")) {
+            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.disconnect_small));
+            connectionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDisconnectDialog(userInfo.getConnectionId(), userInfo.getId());
+                }
+            });
+        } else if (connectionStatus.equals("pending")) {
+            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.pending_small));
+            connectionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDisconnectDialog(userInfo.getConnectionId(), userInfo.getId());
+                }
+            });
+        }
+
+    }
+
+    private void showDisconnectDialog(final String connectionId, final String id) {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.disconnect_confirmation_dialog);
+
+        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                disconnect(connectionId, id);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
 
     private void populateFields() {
         profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
-        try {
-            profileEmail.setText(userInfo.getEmail());
-        } catch (Exception e) {
-        }
+//        try {
+//            profileEmail.setText(userInfo.getEmail());
+//        } catch (Exception e) {
+//        }
         String address = "";
         if (userInfo.getAddress() != null) {
             address = address + userInfo.getAddress() + ", ";
@@ -479,7 +519,13 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         } catch (Exception e) {
         }
         if (userInfo.getExperience() != null) {
-            profileExperience.setText(userInfo.getExperience() + " year(s)");
+            int ex = 0;
+            try{
+                ex = Integer.parseInt(userInfo.getExperience());
+            }catch (Exception e){
+                ex = 0;
+            }
+            profileExperience.setText(ex > 1 ? ex + " " + getResources().getString(R.string.years) : ex + " " + getResources().getString(R.string.year));
         }
         if (userInfo.getAccomplishments() != null) {
             profileQualification.setText(userInfo.getAccomplishments());
@@ -487,9 +533,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         profileAddress.setText(address);
         if (userInfo.getCharges() != null) {
             charges = (userInfo.getCharges().equals("0") ? userInfo.getCharges() + " per hour" : userInfo.getCharges() + " per hour");
-
             Log.d(TAG, "Charges amount : " + charges.split("per", 2)[0] + "charges unit : " + charges.split("per", 2)[1]);
-            profileCharges.setText("\u20B9 " + charges);
+            profileCharges.setText(charges);
         }
         try {
             profileRatting.setRating(Float.parseFloat(userInfo.getRating()));
@@ -512,19 +557,19 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
         List<String> areaOfInterests = userInfo.getSubCategoryName();
         if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).trim().equals("")) {
-            List<Button> buttons = new ArrayList<>();
+            List<com.findmycoach.app.views.ChizzleButton> buttons = new ArrayList<>();
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             for (String areaOfInterest : areaOfInterests) {
                 Button button = (Button) inflater.inflate(R.layout.button, null);
                 button.setText(areaOfInterest);
-                buttons.add(button);
+                buttons.add((ChizzleButton) button);
             }
             populateViews(areaOfCoaching, buttons, this);
         }
-        profilePhone.setText(userInfo.getPhonenumber());
+//        profilePhone.setText(userInfo.getPhonenumber());
     }
 
-    private void populateViews(LinearLayout linearLayout, List<Button> views, Context context) {
+    private void populateViews(LinearLayout linearLayout, List<com.findmycoach.app.views.ChizzleButton> views, Context context) {
 
         Display display = getWindowManager().getDefaultDisplay();
         linearLayout.removeAllViews();
@@ -545,7 +590,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             LL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
             view.measure(0, 0);
-            params = new LinearLayout.LayoutParams(view.getMeasuredWidth(), profileEmail.getHeight());
+            params = new LinearLayout.LayoutParams(view.getMeasuredWidth(), profileDob.getHeight());
             params.setMargins(2, 2, 2, 2);
 
             LL.addView(view, params);
@@ -555,7 +600,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 linearLayout.addView(newLL);
 
                 newLL = new LinearLayout(context);
-                newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, profileEmail.getHeight()));
+                newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, profileDob.getHeight()));
                 newLL.setOrientation(LinearLayout.HORIZONTAL);
                 newLL.setGravity(Gravity.CENTER_HORIZONTAL);
                 params = new LinearLayout.LayoutParams(LL.getMeasuredWidth(), LL.getMeasuredHeight());
@@ -633,39 +678,33 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     }
 
     private void showAlert() {
-        final String defaultMessage = getResources().getString(R.string.connection_request_msg);
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle(getResources().getString(R.string.connection_request));
-        alertDialog.setMessage(getResources().getString(R.string.enter_msg));
-        final EditText input = new EditText(this);
-        input.setHint(defaultMessage);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(8, 8, 8, 8);
-        input.setLayoutParams(params);
-        alertDialog.setView(input);
-        input.setBackgroundDrawable(getResources().getDrawable(R.drawable.custom_edittext));
-        alertDialog.setPositiveButton(getResources().getString(R.string.send),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        String message = input.getText().toString();
-                        if (message.trim().length() < 1)
-                            message = defaultMessage;
-                        sendConnectionRequest(message);
-                    }
-                }
-        );
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.send_connection_request_dialog);
+        final EditText editText = (EditText) dialog.findViewById(R.id.editText);
+        final Button cancelButton = (Button) dialog.findViewById(R.id.cancelButton);
+        Button okButton = (Button) dialog.findViewById(R.id.okButton);
 
-        alertDialog.setNegativeButton(getResources().getString(R.string.cancel),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                }
-        );
-        alertDialog.setCancelable(false);
-        alertDialog.show();
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String message = editText.getText().toString();
+                if (message.trim().length() < 1)
+                    message = getResources().getString(R.string.connection_request_msg);
+                sendConnectionRequest(message);
+                dialog.dismiss();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
     private void sendConnectionRequest(String message) {

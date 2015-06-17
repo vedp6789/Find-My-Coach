@@ -4,53 +4,56 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/header"
+        layout="@layout/header_back_name_menu" />
+
 
     <ImageView
         android:id="@+id/iv_user_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/user_icon" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/tv_connection_request_title_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="30dp"
-        android:textStyle="bold"
-        android:layout_toRightOf="@id/iv_user_icon" />
+        android:layout_alignTop="@+id/iv_user_icon"
+        android:layout_margin="@dimen/back_margin"
+        android:layout_toEndOf="@+id/iv_user_icon"
+        android:layout_toRightOf="@+id/iv_user_icon"
+        android:text="title"
+        android:textColor="@color/purple"
+        android:textSize="@dimen/profile_name"
+        android:textStyle="bold" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tv_connection_request_title_message"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp" />
+        android:layout_alignEnd="@+id/tv_message"
+        android:layout_alignRight="@+id/tv_message"
+        android:layout_below="@+id/tv_message"
+        android:text="date"
+        android:textColor="@color/purple_light"
+        android:textSize="@dimen/profile_details" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/tv_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/iv_user_icon"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp" />
-
-    <Button
-        android:id="@+id/b_profile"
-        android:layout_above="@+id/ll_actions"
-        android:text="@string/view_profile"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_message"
-        android:visibility="gone" />
+        android:layout_alignLeft="@+id/iv_user_icon"
+        android:layout_alignStart="@+id/iv_user_icon"
+        android:layout_below="@+id/iv_user_icon"
+        android:layout_margin="@dimen/back_margin"
+        android:text="msg"
+        android:textColor="@color/purple"
+        android:textSize="@dimen/profile_heading" />
 
     <LinearLayout
         android:id="@+id/ll_actions"
@@ -59,19 +62,27 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
-        <Button
+        <com.findmycoach.app.views.ChizzleButton
             android:id="@+id/b_accept"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/days_margin"
+            android:textSize="@dimen/button_text_size"
             android:layout_weight="1"
-            android:text="@string/action_accept" />
+            android:background="@drawable/custom_button_click_white_bg"
+            android:text="@string/action_accept"
+            android:textColor="@color/custom_button_text_color_click_white_bg" />
 
-        <Button
+        <com.findmycoach.app.views.ChizzleButton
             android:id="@+id/b_decline"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/action_decline" />
+            android:textSize="@dimen/button_text_size"
+            android:layout_margin="@dimen/days_margin"
+            android:background="@drawable/custom_button_click_white_bg"
+            android:text="@string/action_decline"
+            android:textColor="@color/custom_button_text_color_click_white_bg" />
     </LinearLayout>
 
 </RelativeLayout>

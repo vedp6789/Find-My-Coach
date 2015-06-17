@@ -1,115 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
 
     <LinearLayout
         android:id="@+id/ll_arrow_up"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        android:layout_height="wrap_content">
-    <ImageButton
-        android:id="@+id/ib_prev_month"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="30dp"
-        android:background="@android:drawable/arrow_up_float"/>
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
         <ImageButton
+            android:id="@+id/ib_prev_month"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/arrow_up" />
+
+        <ImageButton
             android:id="@+id/ib_prev_year"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="30dp"
             android:layout_weight="1"
-            android:background="@android:drawable/arrow_up_float"/>
+            android:background="@drawable/arrow_up" />
 
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/ll_month_year"
-        android:layout_below="@id/ll_arrow_up"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_arrow_up"
         android:layout_marginLeft="20dp"
-        android:weightSum="2"
         android:layout_marginRight="20dp"
-        android:layout_height="wrap_content">
-        <TextView
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/tv_month"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:gravity="center"
-            android:hint="@string/month"/>
-        <TextView
+            android:hint="@string/month"
+            android:textColor="@color/purple"
+            android:textColorHint="@color/purple_light"
+            android:textSize="@dimen/profile_details" />
+
+        <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/tv_selected_year"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_gravity="center_horizontal"
-            android:hint="@string/year"/>
+            android:hint="@string/year"
+            android:textColor="@color/purple"
+            android:textColorHint="@color/purple_light"
+            android:textSize="@dimen/profile_details" />
 
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/ll_arrow_down"
-        android:layout_below="@id/ll_month_year"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_month_year"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        android:weightSum="2"
-        android:layout_height="wrap_content">
+        android:weightSum="2">
+
         <ImageButton
             android:id="@+id/ib_next_month"
             android:layout_width="0dp"
+            android:layout_height="30dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="30dp"
-            android:layout_height="30dp"
             android:layout_weight="1"
-            android:background="@android:drawable/arrow_down_float"/>
+            android:background="@drawable/arrow_down" />
+
         <ImageButton
             android:id="@+id/ib_next_year"
             android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="30dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@android:drawable/arrow_down_float"/>
+            android:background="@drawable/arrow_down" />
 
     </LinearLayout>
 
 
-
-
     <LinearLayout
-        android:layout_marginTop="5dp"
-        android:layout_below="@id/ll_arrow_down"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/ll_arrow_down"
+        android:layout_marginTop="@dimen/back_margin"
         android:orientation="horizontal"
         android:weightSum="2">
-        <Button
+
+        <com.findmycoach.app.views.ChizzleButton
             android:id="@+id/b_ok"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/days_margin"
             android:layout_weight="1"
-            android:text="@string/ok"/>
-        <Button
+            android:textSize="@dimen/button_text_size"
+            android:background="@drawable/custom_button_click_white_bg"
+            android:text="@string/ok"
+            android:textColor="@color/custom_button_text_color_click_white_bg" />
+
+        <com.findmycoach.app.views.ChizzleButton
             android:id="@+id/b_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/days_margin"
             android:layout_weight="1"
-            android:text="@string/cancel"/>
+            android:background="@drawable/custom_button_click_white_bg"
+            android:text="@string/cancel"
+            android:textColor="@color/custom_button_text_color_click_white_bg"
+            android:textSize="@dimen/button_text_size"/>
 
     </LinearLayout>
 

@@ -9,13 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
 import com.findmycoach.app.R;
-import com.findmycoach.app.activity.AddNewSlotActivity;
 import com.findmycoach.app.activity.ScheduleYourVacation;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by praka_000 on 3/3/2015.
@@ -29,6 +32,7 @@ public class StopTimeForVaccationSchedule extends DialogFragment implements View
     private static final String selected_date = null;
 
     private static final String TAG = "FMC";
+    private final static int TIME_PICKER_INTERVAL = 15;
 
 
 
@@ -37,11 +41,20 @@ public class StopTimeForVaccationSchedule extends DialogFragment implements View
         switch (v.getId()) {
             case R.id.b_ok:
                 String hour = String.valueOf(timePicker.getCurrentHour());
-                String minute = String.valueOf(timePicker.getCurrentMinute());
 
+                int minute = timePicker.getCurrentMinute();
+                String min = "";
+                if (minute == 0)
+                    min = "00";
+                else if (minute == 1)
+                    min = "15";
+                else if (minute == 2)
+                    min = "30";
+                else if (minute == 3)
+                    min = "45";
 
                 dismiss();
-                scheduleYourVacation.setSelectedTillTime(hour,minute);
+                scheduleYourVacation.setSelectedTillTime(hour,min);
 
                 break;
             case R.id.b_cancel:
@@ -111,6 +124,25 @@ public class StopTimeForVaccationSchedule extends DialogFragment implements View
         Dialog dialog = getDialog();
         dialog.setTitle(getString(R.string.set_time));
         dialog.setCanceledOnTouchOutside(false);
+
+        try {
+            Class<?> classForid = Class.forName("com.android.internal.R$id");
+            Field field = classForid.getField("minute");
+
+            NumberPicker mMinuteSpinner = (NumberPicker) timePicker
+                    .findViewById(field.getInt(null));
+            mMinuteSpinner.setMinValue(0);
+            mMinuteSpinner.setMaxValue((60 / TIME_PICKER_INTERVAL) - 1);
+            List<String> displayedValues = new ArrayList<String>();
+            for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
+                displayedValues.add(String.format("%02d", i));
+            }
+            mMinuteSpinner.setDisplayedValues(displayedValues
+                    .toArray(new String[0]));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return view;
     }
 

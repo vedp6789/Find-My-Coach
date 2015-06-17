@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.edmodo.cropper.CropImageView;
@@ -82,6 +83,9 @@ public class ChooseImageActivity extends Activity {
         cropImageView.setFixedAspectRatio(true);
         cropImageView.setAspectRatio(DEFAULT_ASPECT_RATIO_VALUES, DEFAULT_ASPECT_RATIO_VALUES);
         rotateButton = (Button) findViewById(R.id.Button_rotate);
+
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(getResources().getString(R.string.update_image));
     }
 
     private void applyAction() {
@@ -105,6 +109,13 @@ public class ChooseImageActivity extends Activity {
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, REQUEST_CODE);
+            }
+        });
+
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

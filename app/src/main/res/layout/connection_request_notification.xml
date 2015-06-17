@@ -10,7 +10,7 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/tv_connection_request_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,13 +23,13 @@
         android:layout_marginRight="@dimen/textView_padding_margin"
         android:textSize="@dimen/profile_details" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/tv_how_old_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="@dimen/days_margin"
         android:gravity="center_vertical"
         android:maxWidth="@dimen/max_text_view_width"
         android:singleLine="true"

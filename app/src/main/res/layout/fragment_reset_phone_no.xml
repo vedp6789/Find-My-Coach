@@ -1,40 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
-<LinearLayout
-    android:id="@+id/ll_get_phone_no"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:orientation="horizontal"
-    android:weightSum="3">
-    <Spinner
-        android:id="@+id/sp_country_code"
-        android:layout_width="0dp"
-        android:layout_marginLeft="1dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"></Spinner>
-    <EditText
-        android:id="@+id/et_new_phone_no"
-        android:hint="@string/new_phone_no"
-        android:textSize="18sp"
+    android:orientation="vertical">
 
-        android:layout_marginRight="3dp"
-        android:layout_width="0dp"
-        android:layout_weight="2"
+    <LinearLayout
+        android:id="@+id/ll_get_phone_no"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        />
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <Spinner
+            android:id="@+id/sp_country_code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="1"></Spinner>
+
+        <com.findmycoach.app.views.ChizzleEditText
+            android:id="@+id/et_new_phone_no"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_marginRight="3dp"
+            android:layout_weight="2"
+            android:hint="@string/new_phone_no"
+            android:inputType="number"
+            android:textSize="18sp" />
     </LinearLayout>
 
 
-    <Button
+    <com.findmycoach.app.views.ChizzleButton
         android:id="@+id/b_commit"
-        android:layout_below="@+id/ll_get_phone_no"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/action_save"/>
+        android:layout_below="@+id/ll_get_phone_no"
+        android:text="@string/action_save"
+        android:textSize="@dimen/button_text_size" />
 
 </RelativeLayout>

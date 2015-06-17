@@ -28,7 +28,7 @@
                 android:layout_margin="@dimen/textView_padding_margin"
                 android:src="@drawable/user_icon" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/profile_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,17 +37,17 @@
                 android:textSize="@dimen/profile_name"
                 android:textStyle="bold" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextViewBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_marginTop="@dimen/days_margin"
                 android:text="@string/prompt_email_id"
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_heading"
                 android:textStyle="bold" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/profile_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -55,17 +55,17 @@
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_details" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextViewBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_marginTop="@dimen/days_margin"
                 android:text="@string/prompt_phone"
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_heading"
                 android:textStyle="bold" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/profile_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,17 +73,17 @@
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_details" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextViewBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_marginTop="@dimen/days_margin"
                 android:text="@string/prompt_date_of_birth"
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_heading"
                 android:textStyle="bold" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/profile_dob"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -91,18 +91,18 @@
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_details" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextViewBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_marginTop="@dimen/days_margin"
                 android:text="@string/prompt_address"
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_heading"
                 android:textStyle="bold" />
 
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/profile_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -112,17 +112,17 @@
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_details" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextViewBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_marginTop="@dimen/days_margin"
                 android:text="@string/prompt_training_location"
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_heading"
                 android:textStyle="bold" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/training_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -132,17 +132,17 @@
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_details" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextViewBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_marginTop="@dimen/days_margin"
                 android:text="@string/mentor_for"
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_heading"
                 android:textStyle="bold" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/mentor_for"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -154,17 +154,17 @@
                 android:textSize="@dimen/profile_details" />
 
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextViewBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_marginTop="@dimen/days_margin"
                 android:text="@string/prompt_coaching_type"
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_heading"
                 android:textStyle="bold" />
 
-            <TextView
+            <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/coaching_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

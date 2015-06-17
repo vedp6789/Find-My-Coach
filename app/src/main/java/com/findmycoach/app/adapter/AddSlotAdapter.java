@@ -116,7 +116,7 @@ public class AddSlotAdapter extends BaseAdapter {
             button.setTypeface(null, Typeface.BOLD);
             button.setText(days[position]);
 
-            button.setBackground(scheduleYourVacation.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+            button.setBackgroundDrawable(scheduleYourVacation.getResources().getDrawable(R.drawable.scheduled_event_arrow));
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -162,7 +162,7 @@ public class AddSlotAdapter extends BaseAdapter {
             button.setText(days[position]);
 
             if (selectedDays.contains(position))
-                button.setBackground(scheduleNewClass.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                button.setBackgroundDrawable(scheduleNewClass.getResources().getDrawable(R.drawable.scheduled_event_arrow));
 
         }
         return v;
@@ -170,14 +170,14 @@ public class AddSlotAdapter extends BaseAdapter {
 
     private void updateView(Button btn, boolean isChecked) {
         if (isChecked)
-            btn.setBackground(addNewSlotActivity.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+            btn.setBackgroundDrawable(addNewSlotActivity.getResources().getDrawable(R.drawable.scheduled_event_arrow));
         else
             btn.setBackgroundColor(addNewSlotActivity.getResources().getColor(R.color.white));
     }
 
     private void updateView(Button btn, boolean isChecked, String s) {
         if (isChecked) {
-            btn.setBackground(scheduleYourVacation.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+            btn.setBackgroundDrawable(scheduleYourVacation.getResources().getDrawable(R.drawable.scheduled_event_arrow));
             scheduleYourVacation.days_array.add(s);
         } else {
             btn.setBackgroundColor(scheduleYourVacation.getResources().getColor(R.color.white));

@@ -11,219 +11,234 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.findmycoach.app.activity.LoginActivity">
 
-    <LinearLayout
-        android:id="@+id/heading"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/margin_top"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/find_my_coach"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="@dimen/header" />
+            android:layout_height="match_parent">
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/heading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/margin_top"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:id="@+id/banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/find_my_coach"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/header"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
 
-    <LinearLayout
-        android:id="@+id/authentication_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/authentication_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_marginTop="@dimen/margin_top"
-            android:id="@+id/email_login_form"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/email_login_form"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_top"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/action_register"
+                    <com.findmycoach.app.views.ChizzleTextView
+                        android:id="@+id/action_register"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/list_view_image_height"
+                        android:layout_gravity="right"
+                        android:clickable="true"
+                        android:drawableLeft="@drawable/register_small"
+                        android:drawablePadding="@dimen/days_margin"
+                        android:gravity="center"
+                        android:padding="@dimen/days_margin"
+                        android:text="@string/action_register"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/profile_details" />
+
+                    <RadioGroup
+                        android:id="@+id/radio_group_user_login"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/back_margin"
+                        android:checkedButton="@+id/radio_button_mentor_login"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radio_button_mentor_login"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/custom_check_box"
+                            android:paddingLeft="@dimen/radio_button_padding"
+                            android:text="@string/mentor" />
+
+                        <RadioButton
+                            android:id="@+id/radio_button_mentee_login"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/custom_check_box"
+                            android:paddingLeft="@dimen/radio_button_padding"
+                            android:text="@string/mentee" />
+                    </RadioGroup>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/or"
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        android:weightSum="2">
+
+                        <com.facebook.widget.LoginButton xmlns:fb="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/facebook_login_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/login_button_height"
+                            android:layout_marginRight="@dimen/days_margin"
+                            android:layout_weight="1"
+                            android:textAllCaps="false"
+                            fb:login_text=""
+                            fb:logout_text="" />
+
+                        <ImageButton
+                            android:id="@+id/sign_in_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/login_button_height"
+                            android:layout_marginLeft="@dimen/days_margin"
+                            android:layout_weight="1"
+                            android:background="@drawable/google_plus"
+                            android:textAllCaps="false" />
+                    </LinearLayout>
+
+
+                    <com.findmycoach.app.views.ChizzleTextView
+                        android:id="@+id/or"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/back_margin"
+                        android:gravity="center_horizontal"
+                        android:text="@string/or"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                   <com.findmycoach.app.views.ChizzleEditText
+                        android:id="@+id/input_login_id"
+                        style="@style/EditTextCustomHolo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_email"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
+                        android:minHeight="@dimen/abc_action_bar_stacked_max_height"
+                        android:singleLine="true" />
+
+                   <com.findmycoach.app.views.ChizzleEditText
+                        android:id="@+id/input_login_password"
+                        style="@style/EditTextCustomHolo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_password"
+                        android:imeActionId="@+id/login"
+                        android:imeActionLabel="@string/action_sign_in_short"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:minHeight="@dimen/abc_action_bar_stacked_max_height"
+                        android:singleLine="true" />
+
+
+                    <com.findmycoach.app.views.ChizzleButton
+                        android:id="@+id/email_sign_in_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_button_height"
+                        android:layout_marginTop="@dimen/back_margin"
+                        android:background="@drawable/custom_button_click"
+                        android:text="@string/action_sign_in"
+                        android:textSize="@dimen/button_text_size"
+                        android:textAllCaps="false"
+                        android:textColor="@color/custom_button_text_color_click"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/login_progress"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/plus_sign_out_buttons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:weightSum="2">
+
+                    <com.findmycoach.app.views.ChizzleButton
+                        android:id="@+id/sign_out_button"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/plus_sign_out" />
+
+                    <com.findmycoach.app.views.ChizzleButton
+                        android:id="@+id/revoke_access_button"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/plus_disconnect" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/action_forgot_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_below="@+id/authentication_layout"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_top"
                 android:clickable="true"
-                android:drawableLeft="@drawable/register_small"
+                android:drawableLeft="@drawable/forget_password_small"
                 android:drawablePadding="6dp"
-                android:gravity="center"
-                android:padding="4dp"
-                android:text="@string/action_register"
+                android:gravity="center_horizontal"
+                android:text="@string/action_forgot_password"
+                android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
-
-            <RadioGroup
-                android:id="@+id/radio_group_user_login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:checkedButton="@+id/radio_button_mentor_login">
-
-                <RadioButton
-                    android:button="@drawable/custom_check_box"
-                    android:id="@+id/radio_button_mentor_login"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mentor"
-                    android:paddingLeft="@dimen/radio_button_padding"
-                    android:layout_weight="1" />
-
-                <RadioButton
-                    android:button="@drawable/custom_check_box"
-                    android:id="@+id/radio_button_mentee_login"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mentee"
-                    android:paddingLeft="@dimen/radio_button_padding"
-                    android:layout_weight="1" />
-            </RadioGroup>
-
-            <EditText
-                android:id="@+id/input_login_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_email"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:minHeight="@dimen/abc_action_bar_stacked_max_height"
-                style="@style/EditTextCustomHolo"
-                android:singleLine="true" />
-
-            <EditText
-                android:id="@+id/input_login_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_password"
-                style="@style/EditTextCustomHolo"
-                android:imeActionId="@+id/login"
-                android:imeActionLabel="@string/action_sign_in_short"
-                android:imeOptions="actionUnspecified"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:minHeight="@dimen/abc_action_bar_stacked_max_height"
-                android:singleLine="true" />
+                android:textSize="@dimen/profile_details" />
 
 
-            <Button
-                android:id="@+id/email_sign_in_button"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_button_height"
-                android:layout_marginTop="@dimen/back_margin"
-                android:background="@drawable/custom_button_click"
-                android:textColor="@color/custom_button_text_color_click"
-                android:text="@string/action_sign_in"
-                android:textAllCaps="false"
-                android:textStyle="bold" />
-        </LinearLayout>
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/or"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/email_login_form"
-            android:layout_marginTop="8dp"
-            android:gravity="center_horizontal"
-            android:text="@string/or"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/or"
-            android:layout_marginTop="8dp"
-            android:weightSum="2">
-
-            <com.facebook.widget.LoginButton xmlns:fb="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/facebook_login_button"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_button_height"
-                android:layout_marginRight="4dp"
-                android:layout_weight="1"
-                android:textAllCaps="false"
-                fb:login_text=""
-                fb:logout_text="" />
-
-            <ImageButton
-                android:id="@+id/sign_in_button"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/login_button_height"
-                android:layout_marginLeft="4dp"
-                android:background="@drawable/google_plus"
-                android:layout_weight="1"
-                android:textAllCaps="false" />
-        </LinearLayout>
-
-        <ProgressBar
-            android:id="@+id/login_progress"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-        <LinearLayout
-            android:id="@+id/plus_sign_out_buttons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:weightSum="2">
-
-            <Button
-                android:id="@+id/sign_out_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/plus_sign_out" />
-
-            <Button
-                android:id="@+id/revoke_access_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/plus_disconnect" />
-        </LinearLayout>
-    </LinearLayout>
-
-
-    <TextView
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:id="@+id/action_forgot_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:clickable="true"
-        android:drawableLeft="@drawable/forget_password_small"
-        android:drawablePadding="6dp"
-        android:gravity="center_horizontal"
-        android:text="@string/action_forgot_password"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:layout_below="@+id/authentication_layout"
-        android:layout_centerHorizontal="true" />
-
+    </ScrollView>
 </RelativeLayout>
 
 

@@ -29,7 +29,8 @@ import org.json.JSONObject;
  */
 public class MentorNotificationActions extends Activity implements Callback {
     private TextView tv_start_date, tv_stop_date, tv_start_time, tv_stop_time, tv_week_days, tv_subject, tv_class_type, tv_title_message, tv_date, tv_conn_req_message_from_mentee;
-    Button b_profile_view, b_accept, b_decline;
+    Button b_accept, b_decline;
+    ImageView b_profile_view;
     EditText et_mentor_reply;
     ImageView iv_user_icon;
     Bundle bundle;
@@ -44,6 +45,8 @@ public class MentorNotificationActions extends Activity implements Callback {
     private String TAG = "FMC";
     String action;
     String created_date, created_time;
+    private TextView title;
+    private final int PROFILE_DETAILS = 102;
 
 
     @Override
@@ -63,6 +66,9 @@ public class MentorNotificationActions extends Activity implements Callback {
                 tv_title_message.setText(first_name.trim() + " " + getResources().getString(R.string.connection_request_title));
                 start_date = connectionRequest.getStart_date();
                 start_time = connectionRequest.getStart_time();
+                title.setText(getResources().getString(R.string.new_connection));
+                b_profile_view.setImageDrawable(getResources().getDrawable(R.drawable.notifications_outlined));
+
 
                 Log.d("FMC", "start_date of connection request :  " + start_date);
                 String month = getResources().getStringArray(R.array.months)[Integer.parseInt(start_date.split("-")[1]) - 1];
@@ -90,7 +96,13 @@ public class MentorNotificationActions extends Activity implements Callback {
                 b_profile_view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        progressDialog.show();
+                        RequestParams requestParams = new RequestParams();
+                        requestParams.add("id", StorageHelper.getUserDetails(MentorNotificationActions.this, "user_id"));
+                        String authToken = StorageHelper.getUserDetails(MentorNotificationActions.this, "auth_token");
+                        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+                        requestParams.add("invitee_id", connectionRequest.getId());
+                        NetworkClient.getStudentDetails(MentorNotificationActions.this, requestParams, authToken, MentorNotificationActions.this, 25);
                     }
                 });
 
@@ -137,6 +149,8 @@ public class MentorNotificationActions extends Activity implements Callback {
                 week_days = scheduleRequest.getWeek_days();
                 created_date = scheduleRequest.getCreated_date();
                 created_time = scheduleRequest.getCreated_time();
+                title.setText(getResources().getString(R.string.new_schedule));
+                b_profile_view.setImageDrawable(getResources().getDrawable(R.drawable.notifications_outlined));
 
                 Log.d(TAG, "start time of class: " + start_time.toString());
                 Log.d(TAG, "stop_time of class: " + stop_time.toString());
@@ -207,8 +221,13 @@ public class MentorNotificationActions extends Activity implements Callback {
                 b_profile_view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        progressDialog.show();
                         RequestParams requestParams = new RequestParams();
-                        //requestParams.add();
+                        requestParams.add("id", StorageHelper.getUserDetails(MentorNotificationActions.this, "user_id"));
+                        String authToken = StorageHelper.getUserDetails(MentorNotificationActions.this, "auth_token");
+                        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+                        requestParams.add("invitee_id", scheduleRequest.getId());
+                        NetworkClient.getStudentDetails(MentorNotificationActions.this, requestParams, authToken, MentorNotificationActions.this, 25);
                     }
                 });
 
@@ -259,6 +278,13 @@ public class MentorNotificationActions extends Activity implements Callback {
                 break;
         }
 
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
     }
 
@@ -274,11 +300,10 @@ public class MentorNotificationActions extends Activity implements Callback {
         tv_class_type = (TextView) findViewById(R.id.tv_class_type_val);
         tv_title_message = (TextView) findViewById(R.id.tv_schedule_request_title_message);
         et_mentor_reply = (EditText) findViewById(R.id.et_mentor_response_message);
-
-        b_profile_view = (Button) findViewById(R.id.b_profile);
+        b_profile_view = (ImageView) findViewById(R.id.menuItem);
         b_accept = (Button) findViewById(R.id.b_accept);
         b_decline = (Button) findViewById(R.id.b_decline);
-
+        title = (TextView) findViewById(R.id.title);
 
     }
 
@@ -287,15 +312,27 @@ public class MentorNotificationActions extends Activity implements Callback {
         tv_title_message = (TextView) findViewById(R.id.tv_connection_request_title_message);
         tv_date = (TextView) findViewById(R.id.tv_date);
         tv_conn_req_message_from_mentee = (TextView) findViewById(R.id.tv_message);
-        b_profile_view = (Button) findViewById(R.id.b_profile);
+        b_profile_view = (ImageView) findViewById(R.id.menuItem);
         b_accept = (Button) findViewById(R.id.b_accept);
         b_decline = (Button) findViewById(R.id.b_decline);
+        title = (TextView) findViewById(R.id.title);
     }
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         //Toast.makeText(MentorNotificationActions.this,(String)object,Toast.LENGTH_SHORT).show();
+
+        if (calledApiValue == 25) {
+            progressDialog.dismiss();
+            Intent intent = new Intent(this, StudentDetailActivity.class);
+            intent.putExtra("coming_from", "ChatWidget");
+            intent.putExtra("connection_status", "pending");
+            intent.putExtra("student_detail", (String) object);
+            startActivityForResult(intent, PROFILE_DETAILS);
+            return;
+        }
+
         switch (mentor_notificaton_for) {
             case "connection_request":
                 try {

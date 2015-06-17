@@ -110,53 +110,16 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         msgToSend = (EditText) findViewById(R.id.msgToSendET);
         currentUserId = StorageHelper.getUserDetails(this, "user_id");
         findViewById(R.id.sendButton).setOnClickListener(this);
-        chatWidgetLv.setDivider(null);
         chatWidgetLv.setSelector(new ColorDrawable(0));
 
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(receiverName);
-        title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getProfile();
-            }
-        });
+        title.setOnClickListener(this);
 
-        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        findViewById(R.id.backButton).setOnClickListener(this);
 
-        ImageView attachmentView = (ImageView) findViewById(R.id.menuItem);
-        attachmentView.setImageDrawable(getResources().getDrawable(R.drawable.attach));
-        attachmentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Dialog dialog = new Dialog(ChatWidgetActivity.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                ListView listView = new ListView(ChatWidgetActivity.this);
-                dialog.setContentView(listView);
-                listView.setAdapter(new ArrayAdapter<String>(ChatWidgetActivity.this, R.layout.textview, new String[]{"Image", "Video"}));
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if (position == 0) {
-                            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                            photoPickerIntent.setType("image/*");
-                            startActivityForResult(photoPickerIntent, STORAGE_GALLERY_IMAGE_REQUEST_CODE);
-                        } else if (position == 1) {
-                            Intent videoPickerIntent = new Intent(Intent.ACTION_PICK);
-                            videoPickerIntent.setType("video/*");
-                            startActivityForResult(videoPickerIntent, STORAGE_GALLERY_VIDEO_REQUEST_CODE);
-                        }
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
-            }
-        });
+        ImageView attachmentView = (ImageView) findViewById(R.id.attachment);
+        attachmentView.setOnClickListener(this);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.connecting));
@@ -180,12 +143,17 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             else
                 senderList.add(0);
 
-            if (data.getMessage_type().equals("text"))
-                messageTypeList.add(0);
-            else if (data.getMessage_type().equals("image"))
-                messageTypeList.add(1);
-            else if (data.getMessage_type().equals("video"))
-                messageTypeList.add(2);
+            switch (data.getMessage_type()) {
+                case "text":
+                    messageTypeList.add(0);
+                    break;
+                case "image":
+                    messageTypeList.add(1);
+                    break;
+                case "video":
+                    messageTypeList.add(2);
+                    break;
+            }
 
         }
         chatWidgetAdapter = new ChatWidgetAdapter(this, messageList, senderList, messageTypeList);
@@ -284,9 +252,40 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.sendButton) {
+        int id = v.getId();
+        if (id == R.id.sendButton) {
             sendMsg();
+        } else if (id == R.id.title) {
+            getProfile();
+        } else if (id == R.id.attachment) {
+            showAttachmentDialog();
+        } else if (id == R.id.backButton) {
+            finish();
         }
+    }
+
+    private void showAttachmentDialog() {
+        final Dialog dialog = new Dialog(ChatWidgetActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.listview);
+        ListView listView = (ListView) dialog.findViewById(R.id.listView);
+        listView.setAdapter(new ArrayAdapter<>(ChatWidgetActivity.this, R.layout.textview, new String[]{"Image", "Video"}));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                    photoPickerIntent.setType("image/*");
+                    startActivityForResult(photoPickerIntent, STORAGE_GALLERY_IMAGE_REQUEST_CODE);
+                } else if (position == 1) {
+                    Intent videoPickerIntent = new Intent(Intent.ACTION_PICK);
+                    videoPickerIntent.setType("video/*");
+                    startActivityForResult(videoPickerIntent, STORAGE_GALLERY_VIDEO_REQUEST_CODE);
+                }
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     /**
@@ -345,24 +344,26 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             String msg = jsonMessage.getString("message");
             String messageType = jsonMessage.getString("message_type");
             /** Text message received */
-            if (messageType.equals("text")) {
-                chatWidgetAdapter.updateMessageList(msg, 1, 0);
-                chatWidgetAdapter.notifyDataSetChanged();
-                chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
-            }
+            switch (messageType) {
+                case "text":
+                    chatWidgetAdapter.updateMessageList(msg, 1, 0);
+                    chatWidgetAdapter.notifyDataSetChanged();
+                    chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+                    break;
 
-            /** Image message received */
-            else if (messageType.equals("image")) {
-                chatWidgetAdapter.updateMessageList(msg, 1, 1);
-                chatWidgetAdapter.notifyDataSetChanged();
-                chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
-            }
+                /** Image message received */
+                case "image":
+                    chatWidgetAdapter.updateMessageList(msg, 1, 1);
+                    chatWidgetAdapter.notifyDataSetChanged();
+                    chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+                    break;
 
-            /** Video message received */
-            else if (messageType.equals("video")) {
-                chatWidgetAdapter.updateMessageList(msg, 1, 2);
-                chatWidgetAdapter.notifyDataSetChanged();
-                chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+                /** Video message received */
+                case "video":
+                    chatWidgetAdapter.updateMessageList(msg, 1, 2);
+                    chatWidgetAdapter.notifyDataSetChanged();
+                    chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
+                    break;
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -451,6 +452,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             progressDialog.dismiss();
             Intent intent = new Intent(this, StudentDetailActivity.class);
             intent.putExtra("coming_from", "ChatWidget");
+            intent.putExtra("connection_status", "accepted");
             intent.putExtra("student_detail", (String) object);
             startActivityForResult(intent, PROFILE_DETAILS);
             isGettingProfile = false;

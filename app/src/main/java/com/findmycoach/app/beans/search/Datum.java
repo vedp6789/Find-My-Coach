@@ -37,6 +37,40 @@ public class Datum {
     @Expose
     private String distance;
 
+    @SerializedName("charges")
+    @Expose
+    private int chargesHour;
+    @SerializedName("charges_class")
+    @Expose
+    private int chargesClass;
+    @SerializedName("dates")
+    @Expose
+    private String availableDays;
+
+    public int getChargesHour() {
+        return chargesHour;
+    }
+
+    public void setChargesHour(int chargesHour) {
+        this.chargesHour = chargesHour;
+    }
+
+    public int getChargesClass() {
+        return chargesClass;
+    }
+
+    public void setChargesClass(int chargesClass) {
+        this.chargesClass = chargesClass;
+    }
+
+    public String getAvailableDays() {
+        return availableDays;
+    }
+
+    public void setAvailableDays(String availableDays) {
+        this.availableDays = availableDays;
+    }
+
     public String getDistance() {
         return distance;
     }
