@@ -510,6 +510,7 @@
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
     <string name="slot_type">Slot type:</string>
+
     <string name="max_students">Maximum students:</string>
     <string name="tutorial_location">Tutorial location:</string>
     <string name="fmc_service">FMC Service</string>
@@ -580,8 +581,8 @@
     <string name="class_is_available">Class is available</string>
     <string name="select_suggested_location"> Select one of the suggested locations</string>
     <string name="quantized_timing">Minute is selected as per your selected start time!</string>
-    <string name="single_student_can_schedule_class">Single student can schedule class for this slot.</string>
-    <string name="multiple_student_can_schedule_class">Multiple student can schedule class for this slot.</string>
+    <string name="single_student_can_schedule_class">Only an individual will be able to schedule class!</string>
+    <string name="multiple_student_can_schedule_class">Multiple students will be able to schedule class!</string>
     <string name="maximum_students">Please provide maximum students for this group.</string>
     <string name="end_date_required">Please provide completion date of this slot.</string>
     <string name="mentor_is_not_free">Mentor is not free on this day.</string>
@@ -648,6 +649,9 @@
     <string name="for1">\tfor\t</string>
     <string name="cannot_placed">\nSo this slot cannot be placed!</string>
     <string name="new_slot_with_vacation">Hi, you have placed a new slot with a vacation between \n</string>
+    <string name="vacation_similar_to_slot_request">Sorry, there is a vacation which does not allow this class slot.\nVacation duration:\t</string>
+    <string name="slot_summary">Slot summary</string>
+
 
 
     <!--Exception message-->
@@ -723,12 +727,15 @@
     <string name="from">From :</string>
     <string name="all">All</string>
     <string name="timing">Timing</string>
+    <string name="class_timing">Timing:</string>
     <string name="to">To:</string>
     <string name="to1">to</string>
     <string name="starting_from">Starting from:</string>
     <string name="from_date">From:</string>
     <string name="to_date">To:</string>
     <string name="start_date1">Start date</string>
+    <string name="class_start_date">Start date:</string>
+    <string name="class_stop_date">Stop date:</string>
     <string name="till">Until:</string>
     <string name="select">Select</string>
     <string name="forever">Forever</string>
@@ -843,6 +850,7 @@
     <string name="schedule_vacation_note">Out of class</string>
     <string name="classes_availability">Mentor\'s availability</string>
     <string name="subject">Subject</string>
+    <string name="class_subject">Subject:</string>
     <string name="coaching_subject">Subject:</string>
     <string name="days_of_week">Days of week</string>
     <string name="week_days">Week days:</string>

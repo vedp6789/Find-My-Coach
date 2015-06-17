@@ -1250,11 +1250,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 vacation.setStart_date(vacation_jsonObject.getString("start_date"));
                 vacation.setStop_date(vacation_jsonObject.getString("stop_date"));
                 vacation.setCause_of_the_vacation(vacation_jsonObject.getString("cause_of_the_vacation"));
-                JSONArray vacation_weekdays = vacation_jsonObject.getJSONArray("weekdays");
+                /*JSONArray vacation_weekdays = vacation_jsonObject.getJSONArray("weekdays");
                 String vacation_weekdays_array[] = new String[vacation_weekdays.length()];
                 for (int week_day = 0; week_day < vacation_weekdays.length(); week_day++) {
-                    vacation_weekdays_array[week_day] = vacation_weekdays.getString(week_day);   /* week_day is used to pass index */
-                }
+                    vacation_weekdays_array[week_day] = vacation_weekdays.getString(week_day);   *//* week_day is used to pass index *//*
+                }*/
                 vacation.setStart_time(vacation_jsonObject.getString("start_time"));
                 vacation.setStop_time(vacation_jsonObject.getString("stop_time"));
                 vacation.setVacation_made_at_network_success("true");

@@ -337,7 +337,6 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         // Current Month Days
         for (int i = 1; i <= daysInMonth; i++) {
 
-            Log.d(TAG,"printMonth currentDayOfMonth: "+getCurrentDayOfMonth()+"current Month: "+CURRENT_MONTH_OF_CALENDAR +"current_month passed : "+currentMonth+"");
             if (i == getCurrentDayOfMonth() && currentMonth == CURRENT_MONTH_OF_CALENDAR && yy == CURRENT_YEAR_OF_CALENDAR) {
                 list.add(String.valueOf(i) + "-TODAY" + "-" + getMonthAsString(currentMonth) + "-" + yy);
             } else {
@@ -365,7 +364,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.d(TAG,"inside getView CalendarGridAdapter method");
+
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context
@@ -380,9 +379,6 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         // ACCOUNT FOR SPACING
 
         String[] day_color = list.get(position).split("-");
-        for(int s=0; s < day_color.length ; s++){
-            Log.d(TAG,"getView "+day_color[s]);
-        }
         String theday = day_color[0];
         String themonth = day_color[2];
         String theyear = day_color[3];
