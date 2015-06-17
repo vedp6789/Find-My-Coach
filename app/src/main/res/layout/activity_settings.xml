@@ -13,7 +13,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/profile"
         android:padding="@dimen/textView_padding_margin"
-        android:textSize="@dimen/profile_heading"
+        android:textSize="@dimen/button_text_size"
         android:textColor="@color/purple"
         android:id="@+id/profileSettings" />
 
@@ -35,7 +35,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/change_password"
             android:padding="@dimen/textView_padding_margin"
-            android:textSize="@dimen/profile_heading"
+            android:textSize="@dimen/button_text_size"
             android:textColor="@color/purple"
             android:id="@+id/change_password" />
 
@@ -48,7 +48,7 @@
 
     <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="match_parent"
-        android:textSize="@dimen/profile_heading"
+        android:textSize="@dimen/button_text_size"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/change_phone"
@@ -74,6 +74,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/payment"
+            android:textSize="@dimen/button_text_size"
             android:padding="@dimen/textView_padding_margin"
             android:textColor="@color/purple"
             android:id="@+id/paymentMethods" />

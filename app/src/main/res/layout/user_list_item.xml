@@ -14,7 +14,7 @@
         android:src="@drawable/user_icon" />
 
 
-    <com.findmycoach.app.views.ChizzleTextView
+    <com.findmycoach.app.views.ChizzleTextViewBold
         android:id="@+id/mentor_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,10 +28,11 @@
         android:layout_toStartOf="@+id/chargesTV"
         android:maxLines="2"
         android:textColor="@color/purple"
-        android:textSize="@dimen/profile_name"
+        android:textSize="@dimen/profile_details"
         android:textStyle="bold" />
 
     <RatingBar
+        android:layout_marginBottom="@dimen/textView_padding_margin"
         android:id="@+id/mentor_rating"
         style="?android:attr/ratingBarStyleSmall"
         android:layout_width="wrap_content"
