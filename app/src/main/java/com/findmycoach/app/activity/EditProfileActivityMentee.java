@@ -451,6 +451,17 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             isValid = false;
         }
 
+        if (profileDOB.getText().toString().trim().equals("")) {
+            profileDOB.setError(getResources().getString(R.string.enter_dob));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    profileDOB.setError(null);
+                }
+            }, 3500);
+            isValid = false;
+        }
+
         if (pinCode.getText().toString().trim().equals("")) {
             pinCode.setError(getResources().getString(R.string.enter_pin));
             new Handler().postDelayed(new Runnable() {

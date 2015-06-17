@@ -37,7 +37,7 @@ public class DobPicker {
     public DobPicker(Context context, TextView textView, int currentYear) {
         this.context = context;
         this.textView = textView;
-        this.currentYear = currentYear;
+        this.currentYear = currentYear - 1;
         dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dob_dialog);
@@ -125,7 +125,8 @@ public class DobPicker {
     }
 
     public void setDob() {
-        textView.setText(selectedDay + "-" + selectedMonth.substring(0, 3) + "-" + selectedYear);
+        textView.setText(selectedDay + "-" +  selectedMonth.charAt(0) + selectedMonth.charAt(1)
+                + selectedMonth.charAt(2) + "-" + selectedYear);
         dialog.dismiss();
     }
 }
