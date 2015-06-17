@@ -36,13 +36,12 @@ public class SplashActivity extends Activity implements Callback {
         TextView textView = (TextView) findViewById(R.id.banner);
         textView.setTypeface(AppFonts.HelveticaNeueMedium);
 
-
         isStart = true;
-        getDataFromServer();
         TimeZone tz = TimeZone.getDefault();
         NetworkClient.timeZone = tz.getDisplayName(false, TimeZone.SHORT);
         NetworkClient.timeZone = NetworkClient.timeZone.replace("GMT", "");
         Log.e("TimeZone : ", NetworkClient.timeZone + " Timezone id :: " + tz.getID());
+        getDataFromServer();
 
 
     }
