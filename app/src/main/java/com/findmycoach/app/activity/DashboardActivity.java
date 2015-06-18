@@ -103,7 +103,6 @@ public class DashboardActivity extends FragmentActivity
     public ResideMenuItem itemSchedule;
     private ResideMenuItem itemSettings;
     private ResideMenuItem itemLogout;
-    public String userCurrentAddress;
     private HashMap<String, Integer> resideMenuItemIcons;
 
 

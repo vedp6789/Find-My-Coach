@@ -1,6 +1,5 @@
 package com.findmycoach.app.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
@@ -8,7 +7,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,23 +23,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.adapter.AddSlotAdapter;
 import com.findmycoach.app.beans.CalendarSchedule.MentorInfo;
 import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.beans.CalendarSchedule.SlotDurationDetailBean;
 import com.findmycoach.app.beans.CalendarSchedule.Vacation;
 import com.findmycoach.app.beans.CalendarSchedule.VacationCoincidingSlot;
-import com.findmycoach.app.beans.CalendarSchedule.VacationDurationDetailBean;
-import com.findmycoach.app.adapter.AddSlotAdapter;
+import com.findmycoach.app.beans.category.Category;
+import com.findmycoach.app.beans.category.Datum;
+import com.findmycoach.app.beans.category.DatumSub;
 import com.findmycoach.app.fragment_mentee.ChildDOB;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.StorageHelper;
+import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -132,9 +132,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         vacations_on_the_slot = new ArrayList<Vacation>();
         vacations_on_the_slot = slot.getVacations();
-        if(vacations_on_the_slot.size() > 0){
+        if (vacations_on_the_slot.size() > 0) {
             ib_info.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             ib_info.setVisibility(View.GONE);
         }
 
@@ -174,14 +174,14 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 } else {
                     et_location.setText(tutorial_location);
                 }
-            }else{
+            } else {
                 ll_location.setVisibility(View.GONE);
             }
         }
 
-        if(slot.getSlot_subject() != null){
+        if (slot.getSlot_subject() != null) {
             tv_subject.setVisibility(View.VISIBLE);
-            selected_subject =slot.getSlot_subject();
+            selected_subject = slot.getSlot_subject();
             tv_subject.setText(selected_subject);
             sp_subjects.setVisibility(View.GONE);
         }
@@ -209,12 +209,12 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             tv_subject.setText(selected_subject);
         }*/
 
-        String hr_24_start_time=String.format("%02d:%02d",slot_start_hour, slot_start_minute);
-        String hr_24_stop_time=String.format("%02d:%02d",slot_stop_hour, slot_stop_minute);
-        String hr_12_start= getTime(hr_24_start_time);
+        String hr_24_start_time = String.format("%02d:%02d", slot_start_hour, slot_start_minute);
+        String hr_24_stop_time = String.format("%02d:%02d", slot_stop_hour, slot_stop_minute);
+        String hr_12_start = getTime(hr_24_start_time);
         String hr_12_stop = getTime(hr_24_stop_time);
-        StringBuilder stringBuilder= new StringBuilder();
-        stringBuilder.append(hr_12_start+" to "+hr_12_stop);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(hr_12_start + " to " + hr_12_stop);
         String timing = String.format("%02d:%02d to %02d:%02d", slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute);
         tv_class_timing.setText(stringBuilder.toString());
 
@@ -535,7 +535,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         tv_number_of_classes = (TextView) findViewById(R.id.tv_number_of_classes);
         ll_vacation = (LinearLayout) findViewById(R.id.ll_vacations);
         tv_vacation = (TextView) findViewById(R.id.tv_vacations);
-ib_info = (ImageButton) findViewById(R.id.ib_info);
+        ib_info = (ImageButton) findViewById(R.id.ib_info);
         gridView = (ScrollableGridView) findViewById(R.id.calendar);
 
 
@@ -612,32 +612,31 @@ ib_info = (ImageButton) findViewById(R.id.ib_info);
 
 
         StringBuilder stringBuilder = new StringBuilder();
-        for(int vacation_no =0; vacation_no < vacations_on_the_slot.size() ; vacation_no++){
+        for (int vacation_no = 0; vacation_no < vacations_on_the_slot.size(); vacation_no++) {
             Vacation vacation = vacations_on_the_slot.get(vacation_no);
-            if(vacation_no == 0)
-            stringBuilder.append("Vacation "+ ++vacation_no+": "+
-                    String.format("%02d-%02d-%d - %02d-%02d-%d",
-                            Integer.parseInt(vacation.getStart_date().split("-")[0]),
-                            Integer.parseInt(vacation.getStart_date().split("-")[1]),
-                            Integer.parseInt(vacation.getStart_date().split("-")[2]),
-                            Integer.parseInt(vacation.getStop_date().split("-")[0]),
-                            Integer.parseInt(vacation.getStop_date().split("-")[1]),
-                            Integer.parseInt(vacation.getStop_date().split("-")[2])));
+            if (vacation_no == 0)
+                stringBuilder.append("Vacation " + ++vacation_no + ": " +
+                        String.format("%02d-%02d-%d - %02d-%02d-%d",
+                                Integer.parseInt(vacation.getStart_date().split("-")[0]),
+                                Integer.parseInt(vacation.getStart_date().split("-")[1]),
+                                Integer.parseInt(vacation.getStart_date().split("-")[2]),
+                                Integer.parseInt(vacation.getStop_date().split("-")[0]),
+                                Integer.parseInt(vacation.getStop_date().split("-")[1]),
+                                Integer.parseInt(vacation.getStop_date().split("-")[2])));
             else
-            stringBuilder.append("\nVacation "+ ++vacation_no+": "+
-                    String.format("%02d-%02d-%d - %02d-%02d-%d",
-                            Integer.parseInt(vacation.getStart_date().split("-")[0]),
-                            Integer.parseInt(vacation.getStart_date().split("-")[1]),
-                            Integer.parseInt(vacation.getStart_date().split("-")[2]),
-                            Integer.parseInt(vacation.getStop_date().split("-")[0]),
-                            Integer.parseInt(vacation.getStop_date().split("-")[1]),
-                            Integer.parseInt(vacation.getStop_date().split("-")[2])));
+                stringBuilder.append("\nVacation " + ++vacation_no + ": " +
+                        String.format("%02d-%02d-%d - %02d-%02d-%d",
+                                Integer.parseInt(vacation.getStart_date().split("-")[0]),
+                                Integer.parseInt(vacation.getStart_date().split("-")[1]),
+                                Integer.parseInt(vacation.getStart_date().split("-")[2]),
+                                Integer.parseInt(vacation.getStop_date().split("-")[0]),
+                                Integer.parseInt(vacation.getStop_date().split("-")[1]),
+                                Integer.parseInt(vacation.getStop_date().split("-")[2])));
 
         }
 
         final TextView contentView = new TextView(this);
         contentView.setText(stringBuilder.toString());
-
 
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -686,9 +685,9 @@ ib_info = (ImageButton) findViewById(R.id.ib_info);
         if (mentor_availability.equals("1") && slot_type.equalsIgnoreCase("individual")) {
             requestParams1.add("location", et_location.getText().toString());
         }
-        int sub_category_id = DataBase.singleton(ScheduleNewClass.this).
-                getSubCategoryId(selected_subject);
-        requestParams1.add("sub_category_id", String.valueOf(sub_category_id));
+
+        requestParams1.add("sub_category_id", getSubCategoryId());
+
         if (selected_mentor_for.equalsIgnoreCase("child")) {
             String date_of_birth_kid = tv_child_dob.getText().toString().split("-", 3)[2] + "-" +
                     tv_child_dob.getText().toString().split("-", 3)[1] + "-" +
@@ -697,6 +696,40 @@ ib_info = (ImageButton) findViewById(R.id.ib_info);
         }
         requestParams1.add("total_price", tv_total_charges.getText().toString());
         return requestParams1;
+    }
+
+    private String getSubCategoryId() {
+        String sub_category_id = "";
+        Category category = new Gson().fromJson(DataBase.singleton(this).getAll(), Category.class);
+        for (Datum d : category.getData()) {
+
+            if (!sub_category_id.equals(""))
+                break;
+
+            for (DatumSub datumSub : d.getSubCategories()) {
+                if (datumSub.getName().trim().equalsIgnoreCase(selected_subject.trim())) {
+                    sub_category_id = datumSub.getId();
+                    break;
+                }
+            }
+
+            if (!sub_category_id.equals("")) {
+                for (Datum datum : d.getCategories()) {
+
+                    if (!sub_category_id.equals(""))
+                        break;
+
+                    for (DatumSub datumSub : datum.getSubCategories()) {
+                        if (datumSub.getName().trim().equalsIgnoreCase(selected_subject.trim())) {
+                            sub_category_id = datumSub.getId();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        Log.e(TAG, sub_category_id + " : from get subCategoryId()");
+        return sub_category_id;
     }
 
 
