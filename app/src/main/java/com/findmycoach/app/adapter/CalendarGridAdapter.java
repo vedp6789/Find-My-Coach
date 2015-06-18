@@ -17,8 +17,6 @@ import com.findmycoach.app.activity.MentorDetailsActivity;
 import com.findmycoach.app.activity.SetScheduleActivity;
 import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
-import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
-import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
 import com.findmycoach.app.beans.CalendarSchedule.Event;
 import com.findmycoach.app.beans.CalendarSchedule.MentorInfo;
 import com.findmycoach.app.beans.CalendarSchedule.MonthYearInfo;
@@ -626,9 +624,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             * */
                             if (free_slots > 0) {
                                 if (day_color[1].equals("CURRENT")) {
-                                    gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
                                 } else {
-                                    gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
                                 }
                             } else {
                                 if (day_color[1].equals("CURRENT")) {
@@ -727,9 +725,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             * */
                                 if (free_slots > 0) {
                                     if (day_color[1].equals("CURRENT")) {
-                                        gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                        gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
                                     } else {
-                                        gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                        gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
                                     }
                                 } else {
                                     if (day_color[1].equals("CURRENT")) {
@@ -788,9 +786,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             * */
                         if (free_slots > 0) {
                             if (day_color[1].equals("CURRENT")) {
-                                gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
                             } else {
-                                gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
                             }
                         } else {
                             if (day_color[1].equals("CURRENT")) {

@@ -2,8 +2,6 @@ package com.findmycoach.app.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -22,12 +20,13 @@ import com.findmycoach.app.util.StorageHelper;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
- * Created by IgluLabs on 1/23/2015.
+ * Created by ShekharKG on 1/23/2015.
  */
 public class ChatWidgetAdapter extends ArrayAdapter<String> {
 
@@ -35,6 +34,8 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
     private Context context;
     // Getting all messages in a list
     private ArrayList<String> messageList;
+    // Getting all messages time stamp a list
+    private ArrayList<String> timeStampList;
     // For determining messages are received or sent (by mapping with messageList. 0=sent, 1=received)
     private ArrayList<Integer> senderList;
     // For determining message type i.e. text/image/video (0=text, 1=image, 2=video)
@@ -46,12 +47,15 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
 
     private ArrayList<Integer> mediaTempList;
 
-    public ChatWidgetAdapter(Context context, ArrayList<String> messageList, ArrayList<Integer> sender, ArrayList<Integer> messageType) {
+    public ChatWidgetAdapter(Context context, ArrayList<String> messageList,
+                             ArrayList<Integer> sender, ArrayList<Integer> messageType,
+                             ArrayList<String> timeStampList) {
         super(context, R.layout.signle_chat_cointainer_sent, messageList);
         this.context = context;
         this.messageList = messageList;
         this.senderList = sender;
         this.messageType = messageType;
+        this.timeStampList = timeStampList;
 
         /*Creating/Checking folder for media storage*/
         StorageHelper.createAppMediaFolders(context);
@@ -66,8 +70,8 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
         String[] images = imageFolder.list();
         String[] videos = videoFolder.list();
 
-        fileNames = new ArrayList<String>();
-        mediaTempList = new ArrayList<Integer>();
+        fileNames = new ArrayList<>();
+        mediaTempList = new ArrayList<>();
         for (String image : images)
             fileNames.add(image.trim());
         for (String video : videos)
@@ -76,25 +80,30 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
 
     @Override
     public View getView(int position, View rowView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         try {
             if (senderList.get(position) == 1 && messageType.get(position) == 0) {
                 rowView = inflater.inflate(R.layout.signle_chat_cointainer_received, parent, false);
                 showTextMsg(rowView, position);
             } else if (senderList.get(position) == 1 && messageType.get(position) == 1) {
-                rowView = inflater.inflate(R.layout.signle_chat_cointainer_received_image_video, parent, false);
+                rowView = inflater.inflate(R.layout.signle_chat_cointainer_received_image_video,
+                        parent, false);
                 showImageMsg(rowView, position);
             } else if (senderList.get(position) == 1 && messageType.get(position) == 2) {
-                rowView = inflater.inflate(R.layout.signle_chat_cointainer_received_image_video, parent, false);
+                rowView = inflater.inflate(R.layout.signle_chat_cointainer_received_image_video,
+                        parent, false);
                 showVideoMsg(rowView, position);
             } else if (senderList.get(position) == 0 && messageType.get(position) == 0) {
                 rowView = inflater.inflate(R.layout.signle_chat_cointainer_sent, parent, false);
                 showTextMsg(rowView, position);
             } else if (senderList.get(position) == 0 && messageType.get(position) == 1) {
-                rowView = inflater.inflate(R.layout.signle_chat_cointainer_sent_image_video, parent, false);
+                rowView = inflater.inflate(R.layout.signle_chat_cointainer_sent_image_video,
+                        parent, false);
                 showImageMsg(rowView, position);
             } else if (senderList.get(position) == 0 && messageType.get(position) == 2) {
-                rowView = inflater.inflate(R.layout.signle_chat_cointainer_sent_image_video, parent, false);
+                rowView = inflater.inflate(R.layout.signle_chat_cointainer_sent_image_video,
+                        parent, false);
                 showVideoMsg(rowView, position);
             }
         } catch (Exception e) {
@@ -106,7 +115,16 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
 
     private void showTextMsg(View v, int position) {
         final TextView msgTextView = (TextView) v.findViewById(R.id.messageTV);
+        final TextView timeStampTextView = (TextView) v.findViewById(R.id.timeStamp);
         msgTextView.setText(messageList.get(position));
+
+        Date date = new Date(Long.parseLong(timeStampList.get(position)));
+        DateFormat formatter = new SimpleDateFormat("HH:mm");
+        String[] times = formatter.format(date).split(":");
+        if (Integer.parseInt(times[0]) > 12)
+            timeStampTextView.setText(Integer.parseInt(times[0]) % 12 + ":" + times[1] + " pm");
+        else
+            timeStampTextView.setText(Integer.parseInt(times[0]) + ":" + times[1] + " am");
     }
 
     private void showImageMsg(View v, int position) {
@@ -116,13 +134,14 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
         final String imageName = fileName[fileName.length - 1].trim();
 
         if (fileNames.contains(imageName)) {
-            final File imageFile = new File(storagePathImage + "/" + fileNames.get(fileNames.indexOf(imageName)));
+            final File imageFile = new File(storagePathImage + "/" +
+                    fileNames.get(fileNames.indexOf(imageName)));
             if (imageFile.exists()) {
                 try {
                     Picasso.with(context).load(imageFile).into(imageView);
-//                    imageView.setImageBitmap(decodeFileImage(imageFile));
                 } catch (Exception e) {
-                    imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
+                    imageView.setImageDrawable(context.getResources()
+                            .getDrawable(R.drawable.ic_launcher));
                 }
 
                 imageView.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +149,8 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
                     public void onClick(View v) {
                         Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.parse("file://" + imageFile.getAbsolutePath()), "image/*");
+                        intent.setDataAndType(Uri.parse("file://" +
+                                imageFile.getAbsolutePath()), "image/*");
                         context.startActivity(intent);
                     }
                 });
@@ -143,61 +163,25 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
             if (imageFile.exists()) {
                 try {
                     Picasso.with(context).load(imageFile).into(imageView);
-//                    imageView.setImageBitmap(decodeFileImage(imageFile));
                     mediaTempList.add(position);
                 } catch (Exception e) {
-                    imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
+                    imageView.setImageDrawable(context.getResources()
+                            .getDrawable(R.drawable.ic_launcher));
                 }
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.parse("file://" + imageFile.getAbsolutePath()), "image/*");
+                        intent.setDataAndType(Uri.parse("file://" +
+                                imageFile.getAbsolutePath()), "image/*");
                         context.startActivity(intent);
                     }
                 });
             }
-            new ImageLoadTask(messageList.get(position), context, imageName, storagePathImage, fileNames, position, messageList).execute();
+            new ImageLoadTask(messageList.get(position), context, imageName,
+                    storagePathImage, fileNames, position, messageList).execute();
         }
-    }
-
-    private Bitmap decodeFileImage(File f) {
-        try {
-            //Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
-
-            //The new size we want to scale to
-            final int REQUIRED_SIZE = 50;
-
-            //Find the correct scale value. It should be the power of 2.
-            int scale = 1;
-            while (o.outWidth / scale / 2 >= REQUIRED_SIZE && o.outHeight / scale / 2 >= REQUIRED_SIZE)
-                scale *= 2;
-
-            //Decode with inSampleSi
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            Bitmap bitmap = null;
-            try {
-                bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-            } catch (OutOfMemoryError e) {
-                System.gc();
-                try {
-                    bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-                } catch (OutOfMemoryError ex) {
-                    ex.printStackTrace();
-                    System.gc();
-                    return null;
-                }
-            }
-            return bitmap;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     private void showVideoMsg(View v, int position) {
@@ -206,22 +190,27 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
         String[] fileName = messageList.get(position).split("/");
         String videoName = fileName[fileName.length - 1].trim();
         if (fileNames.contains(videoName)) {
-            final File videoFile = new File(storagePathVideo + "/" + fileNames.get(fileNames.indexOf(videoName)));
+            final File videoFile = new File(storagePathVideo + "/" +
+                    fileNames.get(fileNames.indexOf(videoName)));
             if (videoFile.exists()) {
                 try {
-                    imageView.setImageBitmap(ThumbnailUtils.createVideoThumbnail(videoFile.getAbsolutePath(), MediaStore.Images.Thumbnails.MINI_KIND));
+                    imageView.setImageBitmap(ThumbnailUtils
+                            .createVideoThumbnail(videoFile.getAbsolutePath(),
+                                    MediaStore.Images.Thumbnails.MINI_KIND));
 
                     imageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent();
                             intent.setAction(Intent.ACTION_VIEW);
-                            intent.setDataAndType(Uri.parse("file://" + videoFile.getAbsolutePath()), "video/*");
+                            intent.setDataAndType(Uri.parse("file://" +
+                                    videoFile.getAbsolutePath()), "video/*");
                             context.startActivity(intent);
                         }
                     });
                 } catch (Exception e) {
-                    imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
+                    imageView.setImageDrawable(context.getResources()
+                            .getDrawable(R.drawable.ic_launcher));
                 }
             }
 
@@ -232,36 +221,43 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
             progressBar.setVisibility(View.VISIBLE);
             if (videoFile.exists()) {
                 try {
-                    imageView.setImageBitmap(ThumbnailUtils.createVideoThumbnail(videoFile.getAbsolutePath(), MediaStore.Images.Thumbnails.MINI_KIND));
+                    imageView.setImageBitmap(ThumbnailUtils
+                            .createVideoThumbnail(videoFile.getAbsolutePath(),
+                                    MediaStore.Images.Thumbnails.MINI_KIND));
                     mediaTempList.add(position);
                     imageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent();
                             intent.setAction(Intent.ACTION_VIEW);
-                            intent.setDataAndType(Uri.parse("file://" + videoFile.getAbsolutePath()), "video/*");
+                            intent.setDataAndType(Uri.parse("file://" +
+                                    videoFile.getAbsolutePath()), "video/*");
                             context.startActivity(intent);
                         }
                     });
                 } catch (Exception e) {
-                    imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
+                    imageView.setImageDrawable(context.getResources()
+                            .getDrawable(R.drawable.ic_launcher));
                 }
             }
-            new ImageLoadTask(messageList.get(position), context, videoName, storagePathVideo, fileNames, position, messageList).execute();
+            new ImageLoadTask(messageList.get(position), context, videoName,
+                    storagePathVideo, fileNames, position, messageList).execute();
         }
 
     }
 
-    public void updateMessageList(String msg, int sender, int messageType) {
+    public void updateMessageList(String msg, int sender, int messageType, String timeStamp) {
         this.messageList.add(messageList.size(), msg);
         this.senderList.add(sender);
         this.messageType.add(messageType);
+        this.timeStampList.add(timeStamp);
     }
 
     public void downloadFile(String fileUrl, String type) {
         String[] fileName = fileUrl.split("/");
         String fName = fileName[fileName.length - 1].trim();
-        new ImageLoadTask(fileUrl, context, fName, type.equals("image") ? storagePathImage : storagePathVideo, fileNames, mediaTempList.get(0), messageList).execute();
+        new ImageLoadTask(fileUrl, context, fName, type.equals("image") ? storagePathImage :
+                storagePathVideo, fileNames, mediaTempList.get(0), messageList).execute();
         mediaTempList.remove(0);
     }
 }

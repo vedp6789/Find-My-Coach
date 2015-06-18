@@ -20,11 +20,21 @@
             android:id="@+id/messageTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
             android:layout_marginTop="@dimen/back_margin"
             android:src="@drawable/image_thumb"
             android:textColor="@color/white"
             android:textSize="@dimen/profile_details" />
+
+        <com.findmycoach.app.views.ChizzleTextView
+            android:id="@+id/timeStamp"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="@dimen/days_margin"
+            android:layout_height="wrap_content"
+            android:src="@drawable/image_thumb"
+            android:textColor="@color/purple"
+            android:textSize="@dimen/time_stamp"
+            android:layout_below="@+id/messageTV" />
     </RelativeLayout>
 
     <ImageView
