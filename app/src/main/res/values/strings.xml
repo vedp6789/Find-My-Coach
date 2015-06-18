@@ -469,7 +469,7 @@
     <string name="button_save_and_continue">Save and continue</string>
     <string name="terms">Welcome to Chizzle. If you continue to use this app you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern ANI Technologies Private Limited relationship with you in relation to this website and the Service .The term Chizzle or us or we refers to the owner of the website whose registered office is ANI TECHNOLOGIES PRIVATE LIMITED.</string>
     <string name="dummy_contain_of_message">This is the dummy contain of message </string>
-    <string name="enter_valid_email">Please enter valid email</string>
+    <string name="enter_valid_email">Please enter valid email ID</string>
     <string name="enter_valid_password">Please enter valid password</string>
     <string name="enter_valid_phone_no">Enter valid phone number</string>
     <string name="error">Error :</string>
@@ -835,6 +835,7 @@
     <string name="error_field_required">This field is required</string>
     <string name="error_not_a_name">Enter valid name</string>
     <string name="error_field_not_match">Your new password(s) don’t match</string>
+    <string name="error_password_not_match">Your password(s) don’t match</string>
     <string name="error_phone_number_invalid">Invalid Phone Number</string>
     <string name="error_invalid_date">Date should less than current date</string>
     <string name="error_invalid_details">Invalid card number</string>

@@ -243,7 +243,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_required));
             isCorrect = false;
         } else if (!password.equals(confirmPassword)) {
-            showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_field_not_match));
+            showErrorMessage(confirmPasswordInput, getResources().getString(R.string.error_password_not_match));
             isCorrect = false;
         }
 

@@ -275,7 +275,9 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
         pinCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
+                        || (actionId == EditorInfo.IME_ACTION_DONE
+                        || actionId == EditorInfo.IME_ACTION_NEXT)) {
                     try {
                         new AddressFromZip(EditProfileActivityMentor.this, profileAddress1).execute(pinCode.getText().toString());
                     } catch (Exception ignored) {

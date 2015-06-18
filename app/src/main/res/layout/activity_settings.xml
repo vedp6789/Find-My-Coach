@@ -13,7 +13,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/profile"
         android:padding="@dimen/textView_padding_margin"
-        android:textSize="@dimen/button_text_size"
+        android:textSize="@dimen/profile_name"
         android:textColor="@color/purple"
         android:id="@+id/profileSettings" />
 
@@ -35,7 +35,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/change_password"
             android:padding="@dimen/textView_padding_margin"
-            android:textSize="@dimen/button_text_size"
+            android:textSize="@dimen/profile_name"
             android:textColor="@color/purple"
             android:id="@+id/change_password" />
 
@@ -48,7 +48,7 @@
 
     <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="match_parent"
-        android:textSize="@dimen/button_text_size"
+        android:textSize="@dimen/profile_name"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/change_phone"
@@ -94,12 +94,13 @@
         android:orientation="vertical"
         android:id="@+id/ll_calendarPreferences">
 
-        <TextView
+        <com.findmycoach.app.views.ChizzleTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/calendar_preference"
             android:padding="@dimen/textView_padding_margin"
+            android:textSize="@dimen/profile_name"
             android:textColor="@color/purple"
             android:id="@+id/tv_calendar_preferences" />
 
