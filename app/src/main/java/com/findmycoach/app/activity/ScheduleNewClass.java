@@ -686,8 +686,7 @@ ib_info = (ImageButton) findViewById(R.id.ib_info);
         if (mentor_availability.equals("1") && slot_type.equalsIgnoreCase("individual")) {
             requestParams1.add("location", et_location.getText().toString());
         }
-        int sub_category_id = DataBase.singleton(ScheduleNewClass.this).
-                getSubCategoryId(selected_subject);
+        int sub_category_id = DataBase.singleton(ScheduleNewClass.this).getSubCategoryId(selected_subject);
         requestParams1.add("sub_category_id", String.valueOf(sub_category_id));
         if (selected_mentor_for.equalsIgnoreCase("child")) {
             String date_of_birth_kid = tv_child_dob.getText().toString().split("-", 3)[2] + "-" +
