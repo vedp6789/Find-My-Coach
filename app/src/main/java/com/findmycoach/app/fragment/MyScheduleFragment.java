@@ -69,7 +69,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     private Calendar _calendar;
     public static int month, year;
     private static final String dateTemplate = "MMMM yyyy";
-    protected static MyScheduleFragment myScheduleFragment;
+    public static MyScheduleFragment myScheduleFragment;
     private int days_in_current_month, days_in_prev_month, days_in_next_month;
     private static final String TAG = "FMC";
     ProgressDialog progressDialog;
@@ -93,6 +93,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     private int NEW_SLT = 0, VAC_SCH = 1, RESULT_OK = 500;
     protected static int month_from_dialog, year_from_dialog; /* this is getting initialized from CustomDatePicker fragment when user wants to jump on an specific date*/
     public boolean populate_calendar_from_adapter;   /* this is getting true when currentMonthArrayList or currentMonthNonCoincidingVacation having flag network communication false, Getting initialized from CalendarGridAdatpter */
+                                      /* populate calendar from adapter is also getting changed from SetScheduleActivity when deletion of slot or vacation occurs*/
     private String previous_month_start_date;/* this will get initialized when api is requested for three months (previous, current, coming)*/
     private String next_month_requested_date;
     private String prev_month_requested_date;
@@ -127,6 +128,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         year = _calendar.get(Calendar.YEAR);         /* current year */
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        myScheduleFragment=null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -338,7 +344,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
         class_type_from_pref = StorageHelper.getClassTypePreference(getActivity());
 
-        Log.d(TAG,"MyScheduleFragment: class_type preference value form shared preference: "+class_type_from_pref);
+        Log.d(TAG, "MyScheduleFragment: class_type preference value form shared preference: " + class_type_from_pref);
 
         if (month_from_dialog == 0 && year_from_dialog == 0) {
             if (populate_calendar_from_adapter) {
@@ -362,22 +368,20 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         requestParams.add("user_group", String.valueOf("3"));
         requestParams.add("mentor_id", StorageHelper.getUserDetails(getActivity(), "user_id"));
 
-        if(class_type_from_pref != -1){
-            switch (class_type_from_pref){
+        if (class_type_from_pref != -1) {
+            switch (class_type_from_pref) {
                 case 0:/* in case of 0 user selected All types of classes so it does needed to send to server*/
                     break;
                 case 1:
-                    requestParams.add("slot_type","Individual");
+                    requestParams.add("slot_type", "Individual");
                     break;
                 case 2:
-                    requestParams.add("slot_type","Group");
+                    requestParams.add("slot_type", "Group");
                     break;
             }
-        }
-        else{
+        } else {
             /* user does not selected class type preference*/
         }
-
 
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -426,7 +430,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
 
         previous_month_start_date = String.valueOf(stringBuilder);    /* this will be used to identify previous, current, coming month date (yyyy-mm-dd) */
-        Log.d(TAG,"MyScheduleFragment, mentor_id: "+"mentor_id : "+StorageHelper.getUserDetails(getActivity(), "user_id")+", start date :"+String.valueOf(stringBuilder)+", limit: "+String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
+        Log.d(TAG, "MyScheduleFragment, mentor_id: " + "mentor_id : " + StorageHelper.getUserDetails(getActivity(), "user_id") + ", start date :" + String.valueOf(stringBuilder) + ", limit: " + String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
 
         networkCall1(requestParams);  /* Now not needed to check calendar by location here*/
 
@@ -456,7 +460,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     public void networkCall1(RequestParams requestParams) {
         progressDialog.show();
-        Log.d(TAG,"MyScheudleFragment, auth_token "+StorageHelper.getUserDetails(getActivity(), "auth_token"));
+        Log.d(TAG, "MyScheudleFragment, auth_token " + StorageHelper.getUserDetails(getActivity(), "auth_token"));
         NetworkClient.getCalendarDetails(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 37); /* Network operation for getting details for three months */
         Log.d(TAG, "FMC auth token :" + StorageHelper.getUserDetails(getActivity(), "auth_token"));
     }
@@ -577,7 +581,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == NEW_SLT && resultCode == RESULT_OK) {
+
+
+
+
+        Log.d(TAG,"request_Code: "+requestCode+", result code: "+resultCode);
+        if (requestCode == NEW_SLT && resultCode == 500) {
             Log.d(TAG, "onActivityResult call ");
             getCalendarDetailsAPICall();
         }
@@ -627,8 +636,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         }
 
         stringBuilder.append(year_for_this);
-        stringBuilder.append("/" + month_for_this);
-        stringBuilder.append("/" + 1);
+        stringBuilder.append("-" + month_for_this);
+        stringBuilder.append("-" + 1);
 
 
         Calendar calendar = new GregorianCalendar(year_for_this, (month_for_this - 1), 1);
@@ -642,22 +651,21 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             prev_month_requested_date = String.valueOf(stringBuilder);
             requestParams.add("limit", String.valueOf(days_in_new_prev_month));
 
-            if(class_type_from_pref != -1){
-                switch (class_type_from_pref){
+            if (class_type_from_pref != -1) {
+                switch (class_type_from_pref) {
                     case 0:/* in case of 0 user selected All types of classes so it does needed to send to server*/
                         break;
                     case 1:
-                        requestParams.add("slot_type","Individual");
+                        requestParams.add("slot_type", "Individual");
                         break;
                     case 2:
-                        requestParams.add("slot_type","Group");
+                        requestParams.add("slot_type", "Group");
                         break;
                 }
-            }
-            else{
+            } else {
             /* user does not selected class type preference*/
             }
-  networkCall2(requestParams);
+            networkCall2(requestParams);
 
             /*if (cb_calendar_by_location_is_checked) {
                 if (calendar_by_location != null) {
@@ -732,8 +740,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         }
 
         stringBuilder.append(year_for_this);
-        stringBuilder.append("/" + month_for_this);
-        stringBuilder.append("/" + 1);
+        stringBuilder.append("-" + month_for_this);
+        stringBuilder.append("-" + 1);
 
 
         Calendar calendar = new GregorianCalendar(year_for_this, (month_for_this - 1), 1);
@@ -749,19 +757,18 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
             requestParams.add("limit", String.valueOf(days_in_new_next_month));
 
-            if(class_type_from_pref != -1){
-                switch (class_type_from_pref){
+            if (class_type_from_pref != -1) {
+                switch (class_type_from_pref) {
                     case 0:/* in case of 0 user selected All types of classes so it does needed to send to server*/
                         break;
                     case 1:
-                        requestParams.add("slot_type","Individual");
+                        requestParams.add("slot_type", "Individual");
                         break;
                     case 2:
-                        requestParams.add("slot_type","Group");
+                        requestParams.add("slot_type", "Group");
                         break;
                 }
-            }
-            else{
+            } else {
             /* user does not selected class type preference*/
             }
 
@@ -849,13 +856,13 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         progressDialog.dismiss();
         switch (calledApiValue) {
             case 37:
-                Log.d(TAG,"inside 37 failure");
+                Log.d(TAG, "inside 37 failure");
                 Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
                 updateArrayListForThreeMonths();
                 updateCalendarOnFailure();
                 break;
             case 38:
-                Log.d(TAG,"inside 38 failure");
+                Log.d(TAG, "inside 38 failure");
                 updateMonthAndYearOnNextMonthClick();
                 Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
                 updateArrayListsForNextMonth();
@@ -894,7 +901,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     }
 
     private void updateArrayListForThreeMonths() {
-        try{
+        try {
             Slot slot = new Slot();
             slot.setSlot_created_on_network_success("false");
             previousMonthArrayList.add(slot);
@@ -902,13 +909,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             comingMonthArrayList.add(slot);
 
         /* Making non-coinciding Arraylists updated with "false" network communication */
-            Vacation vacation =new Vacation();
+            Vacation vacation = new Vacation();
             vacation.setVacation_made_at_network_success("false");
             previousMonthNonCoincidingVacation.add(vacation);
             currentMonthNonCoincidingVacation.add(vacation);
             comingMonthNonCoincidingVacation.add(vacation);
-
-
 
 
             int previous_month = Integer.parseInt(previous_month_start_date.split("-")[1]);
@@ -938,16 +943,16 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 }
             }
 
-            previousMonthYearInfo=getMonthYearForThis(previous_month,previous_month_year,finalizeDaysInMonth(previous_month,previous_month_year));
-            currentMonthYearInfo=getMonthYearForThis(current_month,current_year,finalizeDaysInMonth(current_month,current_year));
-            comingMonthYearInfo=getMonthYearForThis(coming_month,coming_year,finalizeDaysInMonth(coming_month,coming_year));
-        }catch (Exception e){
+            previousMonthYearInfo = getMonthYearForThis(previous_month, previous_month_year, finalizeDaysInMonth(previous_month, previous_month_year));
+            currentMonthYearInfo = getMonthYearForThis(current_month, current_year, finalizeDaysInMonth(current_month, current_year));
+            comingMonthYearInfo = getMonthYearForThis(coming_month, coming_year, finalizeDaysInMonth(coming_month, coming_year));
+        } catch (Exception e) {
             e.printStackTrace();
         }
-}
+    }
 
     public void updateArrayListsForNextMonth() {
-        try{
+        try {
             previousMonthArrayList = currentMonthArrayList;
             currentMonthArrayList = comingMonthArrayList;
             comingMonthArrayList = null;
@@ -957,20 +962,20 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             comingMonthArrayList.add(slot);
 
 
-            previousMonthNonCoincidingVacation =currentMonthNonCoincidingVacation;
+            previousMonthNonCoincidingVacation = currentMonthNonCoincidingVacation;
             currentMonthNonCoincidingVacation = comingMonthNonCoincidingVacation;
             currentMonthNonCoincidingVacation = null;
             comingMonthNonCoincidingVacation = new ArrayList<Vacation>();
-            Vacation vacation=new Vacation();
+            Vacation vacation = new Vacation();
             vacation.setVacation_made_at_network_success("false");
             comingMonthNonCoincidingVacation.add(vacation);
 
 
-            previousMonthYearInfo= currentMonthYearInfo;
-            currentMonthYearInfo=comingMonthYearInfo;
-            comingMonthYearInfo=null;
-            comingMonthYearInfo= new ArrayList<MonthYearInfo>();
-            comingMonthYearInfo=getMonthYearForThis(Integer.parseInt(next_month_requested_date.split("-")[1]),Integer.parseInt(next_month_requested_date.split("-")[0]),finalizeDaysInMonth(Integer.parseInt(next_month_requested_date.split("-")[1]),Integer.parseInt(next_month_requested_date.split("-")[0])));
+            previousMonthYearInfo = currentMonthYearInfo;
+            currentMonthYearInfo = comingMonthYearInfo;
+            comingMonthYearInfo = null;
+            comingMonthYearInfo = new ArrayList<MonthYearInfo>();
+            comingMonthYearInfo = getMonthYearForThis(Integer.parseInt(next_month_requested_date.split("-")[1]), Integer.parseInt(next_month_requested_date.split("-")[0]), finalizeDaysInMonth(Integer.parseInt(next_month_requested_date.split("-")[1]), Integer.parseInt(next_month_requested_date.split("-")[0])));
 
 
             previousMonthMentorInfos = currentMonthMentorInfos;
@@ -978,17 +983,15 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             comingMonthMentorInfos = null;
             comingMonthMentorInfos = new ArrayList<MentorInfo>();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-
 
 
     }
 
     public void updateArrayListsForPreviousMonth() {
-        try{
+        try {
             comingMonthArrayList = currentMonthArrayList;
             currentMonthArrayList = previousMonthArrayList;
             previousMonthArrayList = null;
@@ -997,9 +1000,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             slot.setSlot_created_on_network_success("false");
             previousMonthArrayList.add(slot);
 
-            comingMonthNonCoincidingVacation =currentMonthNonCoincidingVacation;
-            currentMonthNonCoincidingVacation=previousMonthNonCoincidingVacation;
-            previousMonthNonCoincidingVacation =null;
+            comingMonthNonCoincidingVacation = currentMonthNonCoincidingVacation;
+            currentMonthNonCoincidingVacation = previousMonthNonCoincidingVacation;
+            previousMonthNonCoincidingVacation = null;
             previousMonthNonCoincidingVacation = new ArrayList<Vacation>();
             Vacation vacation = new Vacation();
             vacation.setVacation_made_at_network_success("false");
@@ -1009,14 +1012,14 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             currentMonthYearInfo = previousMonthYearInfo;
             previousMonthYearInfo = null;
             previousMonthYearInfo = new ArrayList<MonthYearInfo>();
-            previousMonthYearInfo = getMonthYearForThis(Integer.parseInt(prev_month_requested_date.split("-")[1]),Integer.parseInt(prev_month_requested_date.split("-")[0]),finalizeDaysInMonth(Integer.parseInt(prev_month_requested_date.split("-")[1]),Integer.parseInt(prev_month_requested_date.split("-")[0])));
+            previousMonthYearInfo = getMonthYearForThis(Integer.parseInt(prev_month_requested_date.split("-")[1]), Integer.parseInt(prev_month_requested_date.split("-")[0]), finalizeDaysInMonth(Integer.parseInt(prev_month_requested_date.split("-")[1]), Integer.parseInt(prev_month_requested_date.split("-")[0])));
 
 
             comingMonthMentorInfos = currentMonthMentorInfos;
             currentMonthMentorInfos = previousMonthMentorInfos;
             previousMonthMentorInfos = null;
             previousMonthMentorInfos = new ArrayList<MentorInfo>();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -1024,7 +1027,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
 
     private void updateCalendarOnFailure() {
-        Log.d(TAG,"updateCalendarOnFailure call ");
+        Log.d(TAG, "updateCalendarOnFailure call ");
 
         adapter1 = new CalendarGridAdapter(getActivity(), month, year, this);
         _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
@@ -1066,7 +1069,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             try {
 
                 JSONObject jsonObject = new JSONObject((String) object);
-                JSONObject jsonObject_data =jsonObject.getJSONObject("data");
+                JSONObject jsonObject_data = jsonObject.getJSONObject("data");
                 JSONArray jsonArray_mentor = jsonObject_data.getJSONArray("mentor");
                 JSONArray jsonArray_data = jsonObject_data.getJSONArray("slots");
                 JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");
@@ -1114,13 +1117,13 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 previousMonthYearInfo = getMonthYearForThis(previous_month, previous_month_year, finalizeDaysInMonth(previous_month, previous_month_year));
                 currentMonthYearInfo = getMonthYearForThis(current_month, current_year, finalizeDaysInMonth(current_month, current_year));
                 comingMonthYearInfo = getMonthYearForThis(coming_month, coming_year, finalizeDaysInMonth(coming_month, coming_year));
-                previousMonthMentorInfos =getMentorInfo(jsonArray_mentor);
-                currentMonthMentorInfos =getMentorInfo(jsonArray_mentor);
-                comingMonthMentorInfos =getMentorInfo(jsonArray_mentor);
+                previousMonthMentorInfos = getMentorInfo(jsonArray_mentor);
+                currentMonthMentorInfos = getMentorInfo(jsonArray_mentor);
+                comingMonthMentorInfos = getMentorInfo(jsonArray_mentor);
                 Log.d(TAG, "For mentor, previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
                 if (b_three_months_data) {
                     Log.d(TAG, "Three months data get changed");
-                   adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo,previousMonthMentorInfos,currentMonthMentorInfos,comingMonthMentorInfos);
+                    adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos);
                     calendarView.setAdapter(adapter1);
                     adapter1.notifyDataSetChanged();
                     if (month_from_dialog == 0 && year_from_dialog == 0) {
@@ -1128,7 +1131,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     }
 
                 } else {
-                    adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo,previousMonthMentorInfos,currentMonthMentorInfos,comingMonthMentorInfos);
+                    adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos);
                     calendarView.setAdapter(adapter1);
                     adapter1.notifyDataSetChanged();
                 }
@@ -1145,7 +1148,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             try {
 
                 JSONObject jsonObject = new JSONObject((String) object);
-                JSONObject jsonObject_data =jsonObject.getJSONObject("data");
+                JSONObject jsonObject_data = jsonObject.getJSONObject("data");
                 JSONArray jsonArray_mentor = jsonObject_data.getJSONArray("mentor");
                 JSONArray jsonArray_data = jsonObject_data.getJSONArray("slots");
                 JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");/* We are not using non coinciding vacations for mentee*/
@@ -1192,13 +1195,13 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 previousMonthYearInfo = getMonthYearForThis(previous_month, previous_month_year, finalizeDaysInMonth(previous_month, previous_month_year));
                 currentMonthYearInfo = getMonthYearForThis(current_month, current_year, finalizeDaysInMonth(current_month, current_year));
                 comingMonthYearInfo = getMonthYearForThis(coming_month, coming_year, finalizeDaysInMonth(coming_month, coming_year));
-                previousMonthMentorInfos =getMentorInfo(jsonArray_mentor);
-                currentMonthMentorInfos =getMentorInfo(jsonArray_mentor);
-                comingMonthMentorInfos =getMentorInfo(jsonArray_mentor);
+                previousMonthMentorInfos = getMentorInfo(jsonArray_mentor);
+                currentMonthMentorInfos = getMentorInfo(jsonArray_mentor);
+                comingMonthMentorInfos = getMentorInfo(jsonArray_mentor);
 
                 Log.d(TAG, " For mentee: previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
 
-                adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo,previousMonthMentorInfos,currentMonthMentorInfos,comingMonthMentorInfos);
+                adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos);
                 calendarView.setAdapter(adapter1);
                 adapter1.notifyDataSetChanged();
 
@@ -1212,11 +1215,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     }
 
     private ArrayList<MentorInfo> getMentorInfo(JSONArray jsonArray_mentor) {
-        ArrayList<MentorInfo>  mentorInfos = new ArrayList<MentorInfo>();
-        for(int array_index =0; array_index < jsonArray_mentor.length() ; array_index++){
+        ArrayList<MentorInfo> mentorInfos = new ArrayList<MentorInfo>();
+        for (int array_index = 0; array_index < jsonArray_mentor.length(); array_index++) {
             try {
                 JSONObject jsonObject = jsonArray_mentor.getJSONObject(array_index);
-                MentorInfo mentorInfo =new MentorInfo();
+                MentorInfo mentorInfo = new MentorInfo();
                 mentorInfo.setMentor_id(jsonObject.getString("mentor_id"));
                 mentorInfo.setFirst_name(jsonObject.getString("first_name"));
                 mentorInfo.setLast_name(jsonObject.getString("last_name"));
@@ -1294,14 +1297,14 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 for (int event_jsonArray_index = 0; event_jsonArray_index < event_jsonArray.length(); event_jsonArray_index++) {
                     Event event = new Event();
                     JSONObject event_jsonObject = event_jsonArray.getJSONObject(event_jsonArray_index);
-                    JSONArray event_mentees=event_jsonObject.getJSONArray("mentee");
-                    List<Mentee> mentees=new ArrayList<Mentee>();
-                    for(int mentee_index=0; mentee_index < event_mentees.length(); mentee_index++ ){
-                        Mentee mentee=new Mentee();
-                        JSONObject mentee_jsonObject=event_mentees.getJSONObject(mentee_index);
+                    JSONArray event_mentees = event_jsonObject.getJSONArray("mentee");
+                    List<Mentee> mentees = new ArrayList<Mentee>();
+                    for (int mentee_index = 0; mentee_index < event_mentees.length(); mentee_index++) {
+                        Mentee mentee = new Mentee();
+                        JSONObject mentee_jsonObject = event_mentees.getJSONObject(mentee_index);
                         JSONArray event_durations = mentee_jsonObject.getJSONArray("durations");
-                        List<EventDuration> eventDurations =new ArrayList<EventDuration>();
-                        for(int event_duration_no = 0 ; event_duration_no < event_durations.length(); event_duration_no++){
+                        List<EventDuration> eventDurations = new ArrayList<EventDuration>();
+                        for (int event_duration_no = 0; event_duration_no < event_durations.length(); event_duration_no++) {
                             JSONObject jsonObject_event_duration = event_durations.getJSONObject(event_duration_no);
                             EventDuration eventDuration = new EventDuration();
                             eventDuration.setStart_date(jsonObject_event_duration.getString("start_date"));
@@ -1446,16 +1449,16 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
         if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 2) {
             progressDialog.dismiss();
-            fetchNextMonthDataAndPopulateIt(object,2);
+            fetchNextMonthDataAndPopulateIt(object, 2);
 
         }
 
     }
 
-    private void fetchNextMonthDataAndPopulateIt(Object object,int user_group) {
+    private void fetchNextMonthDataAndPopulateIt(Object object, int user_group) {
         try {
             JSONObject jsonObject = new JSONObject((String) object);
-            JSONObject jsonObject_data =jsonObject.getJSONObject("data");
+            JSONObject jsonObject_data = jsonObject.getJSONObject("data");
             JSONArray jsonArray_mentor = jsonObject_data.getJSONArray("mentor");
             JSONArray jsonArray_data = jsonObject_data.getJSONArray("slots");
             JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");
@@ -1495,7 +1498,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             comingMonthMentorInfos = getMentorInfo(jsonArray_mentor);
             Log.d(TAG, "comingMonthArrayList size" + comingMonthArrayList.size());
 
-            adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo,previousMonthMentorInfos,currentMonthMentorInfos,comingMonthMentorInfos);
+            adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos);
             _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
             currentMonth.setText(DateFormat.format(dateTemplate,
                     _calendar.getTime()));
@@ -1518,7 +1521,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
         if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 2) {
             progressDialog.dismiss();
-            fetchPreviousMonthDataAndPopulateIt(object,2);
+            fetchPreviousMonthDataAndPopulateIt(object, 2);
 
         }
     }
@@ -1526,7 +1529,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     private void fetchPreviousMonthDataAndPopulateIt(Object object, int user_group) {
         try {
             JSONObject jsonObject = new JSONObject((String) object);
-            JSONObject jsonObject_data =jsonObject.getJSONObject("data");
+            JSONObject jsonObject_data = jsonObject.getJSONObject("data");
             JSONArray jsonArray_mentor = jsonObject_data.getJSONArray("mentor");
             JSONArray jsonArray_data = jsonObject_data.getJSONArray("slots");
             JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");
@@ -1558,14 +1561,14 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             previousMonthYearInfo = new ArrayList<MonthYearInfo>();
             previousMonthYearInfo = getMonthYearForThis(Integer.parseInt(prev_month_requested_date.split("-")[1]), Integer.parseInt(prev_month_requested_date.split("-")[0]), finalizeDaysInMonth(Integer.parseInt(prev_month_requested_date.split("-")[1]), Integer.parseInt(prev_month_requested_date.split("-")[0])));
 
-comingMonthMentorInfos = currentMonthMentorInfos;
+            comingMonthMentorInfos = currentMonthMentorInfos;
             currentMonthMentorInfos = previousMonthMentorInfos;
             previousMonthMentorInfos = null;
             previousMonthMentorInfos = new ArrayList<MentorInfo>();
             previousMonthMentorInfos = getMentorInfo(jsonArray_mentor);
 
 
-            adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo,previousMonthMentorInfos,currentMonthMentorInfos,comingMonthMentorInfos);
+            adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos);
             _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
             currentMonth.setText(DateFormat.format(dateTemplate,
                     _calendar.getTime()));

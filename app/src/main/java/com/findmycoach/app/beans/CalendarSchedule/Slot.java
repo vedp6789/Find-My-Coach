@@ -305,7 +305,7 @@ public class Slot implements Parcelable {
         String this_day_week_day = null;   /* this will have the day which is calendar current day according to grid view position*/
         switch (week_day_for_grid_day) {
             case 1:
-                this_day_week_day = "S";
+                this_day_week_day = "Su";
                 break;
             case 2:
                 this_day_week_day = "M";
@@ -323,7 +323,7 @@ public class Slot implements Parcelable {
                 this_day_week_day = "F";
                 break;
             case 7:
-                this_day_week_day = "Sa";
+                this_day_week_day = "S";
                 break;
         }
 

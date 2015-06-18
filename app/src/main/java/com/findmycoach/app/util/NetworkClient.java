@@ -1403,42 +1403,43 @@ public class NetworkClient {
             callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
             return;
         }
-        Header[] headers = {new BasicHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value)), new BasicHeader(context.getResources().getString(R.string.auth_key), authToken)};
+    // Header[] headers = {new BasicHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value)), new BasicHeader(context.getResources().getString(R.string.auth_key), authToken)};
 
-
-        /*client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        */client.delete(context, getAbsoluteURL("availableSlots", context), headers, requestParams, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try {
-                    Log.d(TAG, "Success : Status code : " + statusCode);
-                    String responseJson = new String(responseBody);
-                    Log.d(TAG, "Success : Response : " + responseJson);
-                    callback.successOperation(responseJson, statusCode, calledApiValue);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    onFailure(statusCode, headers, responseBody, null);
-                }
-            }
+        client.post(context,getAbsoluteURL("slotsDelete",context),requestParams,new AsyncHttpResponseHandler() {
+           @Override
+           public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+               try {
+                   Log.d(TAG, "Success : Status code : " + statusCode);
+                   String responseJson = new String(responseBody);
+                   Log.d(TAG, "Success : Response : " + responseJson);
+                   callback.successOperation(responseJson, statusCode, calledApiValue);
+               } catch (Exception e) {
+                   e.printStackTrace();
+                   onFailure(statusCode, headers, responseBody, null);
+               }
+           }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                try {
-                    Log.d(TAG, "Failure : Status code : " + statusCode);
-                    String responseJson = new String(responseBody);
-                    Log.d(TAG, "Failure : Response : " + responseJson);
-                    Response response = new Gson().fromJson(responseJson, Response.class);
-                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
-                } catch (Exception e) {
-                    try {
-                        Log.d(TAG, "Failure: Error:" + e.getMessage());
-                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                    } catch (Exception ignored) {
-                    }
-                }
-            }
-        });
+           @Override
+           public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+               try {
+                   Log.d(TAG, "Failure : Status code : " + statusCode);
+                   String responseJson = new String(responseBody);
+                   Log.d(TAG, "Failure : Response : " + responseJson);
+                   Response response = new Gson().fromJson(responseJson, Response.class);
+                   callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+               } catch (Exception e) {
+                   try {
+                       Log.d(TAG, "Failure: Error:" + e.getMessage());
+                       callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                   } catch (Exception ignored) {
+                   }
+               }
+           }
+       });
+
+
 
     }
 
@@ -1448,13 +1449,9 @@ public class NetworkClient {
             callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
             return;
         }
-        Header[] headers = {new BasicHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value)), new BasicHeader(context.getResources().getString(R.string.auth_key), authToken)};
-
-
-        /*client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        */
-        client.delete(context, getAbsoluteURL("exceptions", context), headers, requestParams, new AsyncHttpResponseHandler() {
+        client.post(context,getAbsoluteURL("exceptionsDelete",context),requestParams,new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {

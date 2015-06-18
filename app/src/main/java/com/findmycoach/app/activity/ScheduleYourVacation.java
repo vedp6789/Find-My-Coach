@@ -559,14 +559,14 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
     }
 
     private boolean validate() {
-        if (days_array.size() > 0) {
+
             if (time_from.equals("00:00") && time_to.equals("24:00")) {
                 start_hour = 0;
                 start_min = 0;
                 stop_hour = 24;
                 stop_min = 0;
 
-                return dateValidation();
+                return true;
 
 
             } else {
@@ -577,7 +577,7 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                     Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.stop_time_should_be_grater), Toast.LENGTH_LONG).show();
                     return false;
                 } else {
-                    return dateValidation();
+                    return true;
                 }
 
 
@@ -585,13 +585,14 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
 
            /* }*/
 
-        } else {
-            Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.select_at_least_one_day), Toast.LENGTH_SHORT).show();
-            return false;
-        }
+
     }
 
     boolean dateValidation() {
+
+
+
+
         if (tv_start_date.getText().length() > 0) {
             if (tv_till_date.getText().length() > 0) {
                 if (checkDaysAvailability(tv_start_date.getText().toString(), tv_till_date.getText().toString())) {

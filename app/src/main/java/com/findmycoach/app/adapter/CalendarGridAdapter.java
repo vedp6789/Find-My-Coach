@@ -626,9 +626,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             * */
                             if (free_slots > 0) {
                                 if (day_color[1].equals("CURRENT")) {
-                                    gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
                                 } else {
-                                    gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
                                 }
                             } else {
                                 if (day_color[1].equals("CURRENT")) {
@@ -727,9 +727,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             * */
                                 if (free_slots > 0) {
                                     if (day_color[1].equals("CURRENT")) {
-                                        gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                        gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
                                     } else {
-                                        gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                        gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
                                     }
                                 } else {
                                     if (day_color[1].equals("CURRENT")) {
@@ -778,6 +778,13 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                         }
 
                     } else {
+
+                        Log.d(TAG,"expecting bug");
+
+                        /*if(myScheduleFragment != null){
+
+                        }*/
+
                         /* Calendar days don't need to show any schedule as the current_month_data have no slot */
                         /* For MentorDetailsActivity there is no slot found */
                         int free_slots = -1;   /* it is for those slots where there are no slots for this day */
@@ -788,12 +795,14 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             * */
                         if (free_slots > 0) {
                             if (day_color[1].equals("CURRENT")) {
-                                gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
                             } else {
-                                gridcell.setBackground(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
                             }
                         } else {
                             if (day_color[1].equals("CURRENT")) {
+                                Log.d(TAG,"expecting bug1");
+
                                 gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
                             }
                         }
@@ -960,7 +969,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         String this_day_week_day = null;   /* this will have the day which is calendar current day according to grid view position*/
         switch (week_day) {
             case 1:
-                this_day_week_day = "S";
+                this_day_week_day = "Su";
                 break;
             case 2:
                 this_day_week_day = "M";
@@ -978,7 +987,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                 this_day_week_day = "F";
                 break;
             case 7:
-                this_day_week_day = "Sa";
+                this_day_week_day = "S";
                 break;
         }
 
@@ -1098,6 +1107,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                     }
 
                                 } else {
+
+
                                     context.startActivity(intent);
 
                                 }

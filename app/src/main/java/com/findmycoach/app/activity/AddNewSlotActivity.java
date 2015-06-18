@@ -541,14 +541,17 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
                                         } else {
                                             Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully), Toast.LENGTH_SHORT).show();
-                                            showSummaryAsAlert();
+                                            setResult(500);
+                                            finish();
+                                           // showSummaryAsAlert();
                                         }
                                     } else {
-                                        jsonObject_exception = jO_success_response.getJSONObject("coincidingExceptions");
                                         if (jA_coinciding_Slots.length() > 0) {
                                             Log.d(TAG, "failure of adding slot because coinciding slot array is bigger ");
                                             coincideOf(jA_coinciding_Slots, 0);
                                         } else {
+                                            jsonObject_exception = jO_success_response.getJSONObject("coincidingExceptions");
+
                                             Toast.makeText(AddNewSlotActivity.this, jO_success_response.getString("message"), Toast.LENGTH_LONG).show();
                                                 /* It is the case when there is vacation found which is not allowing any class, so in this case we can show message from server */
                                             coincideOf(null,2);  /* flag is 2 , means mentor request for new slot, is cannot be possible as there is one vacation schedule which is having start date earlier or equal to that of mentor new slot request start date and the stop date of new requested slot is coming equal or less than vacation stop date  */
@@ -610,8 +613,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         alertDialog.setPositiveButton(getResources().getString(R.string.ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
+                        Log.d(TAG,"on positive button");
                         setResult(500);
+
+                        dialog.cancel();
                         finish();
 
                     }
