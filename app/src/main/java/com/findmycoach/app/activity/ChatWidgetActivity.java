@@ -144,12 +144,14 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             messageList.add(data.getMessage());
 
             Date date = new Date(Long.parseLong(data.getUpdated_on()));
-            DateFormat formatter = new SimpleDateFormat("HH:mm");
-            String[] times = formatter.format(date).split(":");
+            DateFormat formatter = new SimpleDateFormat("dd-MM # HH:mm");
+            String[] times = formatter.format(date).split("#")[1].trim().split(":");
             if (Integer.parseInt(times[0]) > 12)
-                timeStampList.add(Integer.parseInt(times[0]) % 12 + ":" + times[1] + " pm");
+                timeStampList.add(formatter.format(date).split("#")[0] + "#"
+                        + Integer.parseInt(times[0]) % 12 + ":" + times[1] + " pm");
             else
-                timeStampList.add(Integer.parseInt(times[0]) + ":" + times[1] + " am");
+                timeStampList.add(formatter.format(date).split("#")[0] + "#"
+                        + Integer.parseInt(times[0]) + ":" + times[1] + " am");
 
 
             if (data.getSender_id().equals(receiverId))
@@ -452,12 +454,14 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
     private String getTimeStamp() {
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
-        DateFormat formatter = new SimpleDateFormat("HH:mm");
-        String[] times = formatter.format(date).split(":");
+        DateFormat formatter = new SimpleDateFormat("dd-MM # HH:mm");
+        String[] times = formatter.format(date).split("#")[1].trim().split(":");
         if (Integer.parseInt(times[0]) > 12)
-            return Integer.parseInt(times[0]) % 12 + ":" + times[1] + " pm";
+            return formatter.format(date).split("#")[0] + "#" +
+                    Integer.parseInt(times[0]) % 12 + ":" + times[1] + " pm";
         else
-            return Integer.parseInt(times[0]) + ":" + times[1] + " am";
+            return formatter.format(date).split("#")[0] + "#" +
+                    Integer.parseInt(times[0]) + ":" + times[1] + " am";
     }
 
     @Override

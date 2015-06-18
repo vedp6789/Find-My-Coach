@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -39,6 +40,7 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
     private ArrayList<Integer> messageType;
     // For mapping the downloaded files in storage with received or sent files
     public ArrayList<String> fileNames;
+    private String[] monthsArray;
 
     private String storagePathImage, storagePathVideo;
 
@@ -53,6 +55,7 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
         this.senderList = sender;
         this.messageType = messageType;
         this.timeStampList = timeStampList;
+        monthsArray = context.getResources().getStringArray(R.array.months);
 
         /*Creating/Checking folder for media storage*/
         StorageHelper.createAppMediaFolders(context);
@@ -79,28 +82,54 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
     public View getView(int position, View rowView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        boolean isNewDate = checkForNewDate(position);
         try {
             if (senderList.get(position) == 1 && messageType.get(position) == 0) {
-                rowView = inflater.inflate(R.layout.signle_chat_cointainer_received, parent, false);
+                if (isNewDate)
+                    rowView = getTimeStampView(inflater, position, parent,
+                            R.layout.signle_chat_cointainer_received);
+                else
+                    rowView = inflater.inflate(R.layout.signle_chat_cointainer_received,
+                            parent, false);
                 showTextMsg(rowView, position);
             } else if (senderList.get(position) == 1 && messageType.get(position) == 1) {
-                rowView = inflater.inflate(R.layout.signle_chat_cointainer_received_image_video,
-                        parent, false);
+                if (isNewDate)
+                    rowView = getTimeStampView(inflater, position, parent,
+                            R.layout.signle_chat_cointainer_received_image_video);
+                else
+                    rowView = inflater.inflate(R.layout.signle_chat_cointainer_received_image_video,
+                            parent, false);
                 showImageMsg(rowView, position);
             } else if (senderList.get(position) == 1 && messageType.get(position) == 2) {
-                rowView = inflater.inflate(R.layout.signle_chat_cointainer_received_image_video,
-                        parent, false);
+                if (isNewDate)
+                    rowView = getTimeStampView(inflater, position, parent,
+                            R.layout.signle_chat_cointainer_received_image_video);
+                else
+                    rowView = inflater.inflate(R.layout.signle_chat_cointainer_received_image_video,
+                            parent, false);
                 showVideoMsg(rowView, position);
             } else if (senderList.get(position) == 0 && messageType.get(position) == 0) {
-                rowView = inflater.inflate(R.layout.signle_chat_cointainer_sent, parent, false);
+                if (isNewDate)
+                    rowView = getTimeStampView(inflater, position, parent,
+                            R.layout.signle_chat_cointainer_sent);
+                else
+                    rowView = inflater.inflate(R.layout.signle_chat_cointainer_sent, parent, false);
                 showTextMsg(rowView, position);
             } else if (senderList.get(position) == 0 && messageType.get(position) == 1) {
-                rowView = inflater.inflate(R.layout.signle_chat_cointainer_sent_image_video,
-                        parent, false);
+                if (isNewDate)
+                    rowView = getTimeStampView(inflater, position, parent,
+                            R.layout.signle_chat_cointainer_sent_image_video);
+                else
+                    rowView = inflater.inflate(R.layout.signle_chat_cointainer_sent_image_video,
+                            parent, false);
                 showImageMsg(rowView, position);
             } else if (senderList.get(position) == 0 && messageType.get(position) == 2) {
-                rowView = inflater.inflate(R.layout.signle_chat_cointainer_sent_image_video,
-                        parent, false);
+                if (isNewDate)
+                    rowView = getTimeStampView(inflater, position, parent,
+                            R.layout.signle_chat_cointainer_sent_image_video);
+                else
+                    rowView = inflater.inflate(R.layout.signle_chat_cointainer_sent_image_video,
+                            parent, false);
                 showVideoMsg(rowView, position);
             }
         } catch (Exception e) {
@@ -110,11 +139,35 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
         return rowView;
     }
 
+    private View getTimeStampView(LayoutInflater inflater, int position,
+                                  ViewGroup parent, int layout) {
+        View dateStampRowView = inflater.inflate(R.layout.date_stamp_view, parent, false);
+        LinearLayout linearLayout = (LinearLayout) dateStampRowView.findViewById(R.id.linearLayout);
+        TextView dateStamp = (TextView) dateStampRowView.findViewById(R.id.dateStamp);
+        String date = timeStampList.get(position).split("#")[0].trim();
+        date = date.split("-")[0] + " " + monthsArray[Integer.parseInt(date.split("-")[1]) - 1];
+        dateStamp.setText("------------ " + date + " ------------");
+        View v = inflater.inflate(layout, parent, false);
+        linearLayout.addView(v);
+        return dateStampRowView;
+    }
+
+    private boolean checkForNewDate(int position) {
+        String datePrevious = null;
+        try {
+            datePrevious = timeStampList.get(position - 1).split("#")[0].trim();
+        } catch (Exception e) {
+            datePrevious = null;
+        }
+        String dateNow = timeStampList.get(position).split("#")[0].trim();
+        return datePrevious == null || !datePrevious.equalsIgnoreCase(dateNow);
+    }
+
     private void showTextMsg(View v, int position) {
         final TextView msgTextView = (TextView) v.findViewById(R.id.messageTV);
         final TextView timeStampTextView = (TextView) v.findViewById(R.id.timeStamp);
         msgTextView.setText(messageList.get(position));
-        timeStampTextView.setText(timeStampList.get(position));
+        timeStampTextView.setText(timeStampList.get(position).split("#")[1]);
     }
 
     private void showImageMsg(View v, int position) {
