@@ -20,10 +20,7 @@ import com.findmycoach.app.util.StorageHelper;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by ShekharKG on 1/23/2015.
@@ -117,14 +114,7 @@ public class ChatWidgetAdapter extends ArrayAdapter<String> {
         final TextView msgTextView = (TextView) v.findViewById(R.id.messageTV);
         final TextView timeStampTextView = (TextView) v.findViewById(R.id.timeStamp);
         msgTextView.setText(messageList.get(position));
-
-        Date date = new Date(Long.parseLong(timeStampList.get(position)));
-        DateFormat formatter = new SimpleDateFormat("HH:mm");
-        String[] times = formatter.format(date).split(":");
-        if (Integer.parseInt(times[0]) > 12)
-            timeStampTextView.setText(Integer.parseInt(times[0]) % 12 + ":" + times[1] + " pm");
-        else
-            timeStampTextView.setText(Integer.parseInt(times[0]) + ":" + times[1] + " am");
+        timeStampTextView.setText(timeStampList.get(position));
     }
 
     private void showImageMsg(View v, int position) {

@@ -41,8 +41,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -139,7 +142,15 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         for (int i = chats.size() - 1; i >= 0; i--) {
             Data data = chats.get(i);
             messageList.add(data.getMessage());
-            timeStampList.add(data.getUpdated_on());
+
+            Date date = new Date(Long.parseLong(data.getUpdated_on()));
+            DateFormat formatter = new SimpleDateFormat("HH:mm");
+            String[] times = formatter.format(date).split(":");
+            if (Integer.parseInt(times[0]) > 12)
+                timeStampList.add(Integer.parseInt(times[0]) % 12 + ":" + times[1] + " pm");
+            else
+                timeStampList.add(Integer.parseInt(times[0]) + ":" + times[1] + " am");
+
 
             if (data.getSender_id().equals(receiverId))
                 senderList.add(1);
@@ -231,11 +242,9 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
             chatWidgetAdapter.fileNames.add(filePath);
             if (type.equals("image"))
-                chatWidgetAdapter.updateMessageList(filePath, 0, 1,
-                        String.valueOf(Calendar.getInstance().getTimeInMillis()));
+                chatWidgetAdapter.updateMessageList(filePath, 0, 1, getTimeStamp());
             else
-                chatWidgetAdapter.updateMessageList(filePath, 0, 2,
-                        String.valueOf(Calendar.getInstance().getTimeInMillis()));
+                chatWidgetAdapter.updateMessageList(filePath, 0, 2, getTimeStamp());
             chatWidgetAdapter.notifyDataSetChanged();
             chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
 
@@ -321,8 +330,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
         /** Sending message to socket */
         msgToSend.setText("");
-        chatWidgetAdapter.updateMessageList(msg, 0, 0,
-                String.valueOf(Calendar.getInstance().getTimeInMillis()));
+        chatWidgetAdapter.updateMessageList(msg, 0, 0, getTimeStamp());
         chatWidgetAdapter.notifyDataSetChanged();
         chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
     }
@@ -354,24 +362,21 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             /** Text message received */
             switch (messageType) {
                 case "text":
-                    chatWidgetAdapter.updateMessageList(msg, 1, 0,
-                            String.valueOf(Calendar.getInstance().getTimeInMillis()));
+                    chatWidgetAdapter.updateMessageList(msg, 1, 0, getTimeStamp());
                     chatWidgetAdapter.notifyDataSetChanged();
                     chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
                     break;
 
                 /** Image message received */
                 case "image":
-                    chatWidgetAdapter.updateMessageList(msg, 1, 1,
-                            String.valueOf(Calendar.getInstance().getTimeInMillis()));
+                    chatWidgetAdapter.updateMessageList(msg, 1, 1, getTimeStamp());
                     chatWidgetAdapter.notifyDataSetChanged();
                     chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
                     break;
 
                 /** Video message received */
                 case "video":
-                    chatWidgetAdapter.updateMessageList(msg, 1, 2,
-                            String.valueOf(Calendar.getInstance().getTimeInMillis()));
+                    chatWidgetAdapter.updateMessageList(msg, 1, 2, getTimeStamp());
                     chatWidgetAdapter.notifyDataSetChanged();
                     chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
                     break;
@@ -443,6 +448,16 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             }
         };
         mWebSocketClient.connect();
+    }
+
+    private String getTimeStamp() {
+        Date date = new Date(Calendar.getInstance().getTimeInMillis());
+        DateFormat formatter = new SimpleDateFormat("HH:mm");
+        String[] times = formatter.format(date).split(":");
+        if (Integer.parseInt(times[0]) > 12)
+            return Integer.parseInt(times[0]) % 12 + ":" + times[1] + " pm";
+        else
+            return Integer.parseInt(times[0]) + ":" + times[1] + " am";
     }
 
     @Override
