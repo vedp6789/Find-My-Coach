@@ -17,8 +17,6 @@ import com.findmycoach.app.activity.MentorDetailsActivity;
 import com.findmycoach.app.activity.SetScheduleActivity;
 import com.findmycoach.app.beans.CalendarSchedule.Day;
 import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
-import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
-import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
 import com.findmycoach.app.beans.CalendarSchedule.Event;
 import com.findmycoach.app.beans.CalendarSchedule.MentorInfo;
 import com.findmycoach.app.beans.CalendarSchedule.MonthYearInfo;

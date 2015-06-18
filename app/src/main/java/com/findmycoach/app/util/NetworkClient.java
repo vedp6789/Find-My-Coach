@@ -832,6 +832,7 @@ public class NetworkClient {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Success: Response Code:" + statusCode);
                     Log.d(TAG, "Success: Response:" + responseJson);
+                    printLongLog(responseJson);
                     Chats chats = new Gson().fromJson(responseJson, Chats.class);
                     if (statusCode == 200) {
                         callback.successOperation(chats, statusCode, calledApiValue);
@@ -1937,5 +1938,15 @@ public class NetworkClient {
         });
     }
 
+
+    private static void printLongLog(String veryLongString){
+        int maxLogSize = 1000;
+        for(int i = 0; i <= veryLongString.length() / maxLogSize; i++) {
+            int start = i * maxLogSize;
+            int end = (i+1) * maxLogSize;
+            end = end > veryLongString.length() ? veryLongString.length() : end;
+            Log.v(TAG, veryLongString.substring(start, end));
+        }
+    }
 
 }

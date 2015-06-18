@@ -41,7 +41,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -134,9 +138,21 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         ArrayList<String> messageList = new ArrayList<String>();
         ArrayList<Integer> senderList = new ArrayList<Integer>();
         ArrayList<Integer> messageTypeList = new ArrayList<Integer>();
+        ArrayList<String> timeStampList = new ArrayList<String>();
         for (int i = chats.size() - 1; i >= 0; i--) {
             Data data = chats.get(i);
             messageList.add(data.getMessage());
+
+            Date date = new Date(Long.parseLong(data.getUpdated_on()));
+            DateFormat formatter = new SimpleDateFormat("dd-MM # HH:mm");
+            String[] times = formatter.format(date).split("#")[1].trim().split(":");
+            if (Integer.parseInt(times[0]) > 12)
+                timeStampList.add(formatter.format(date).split("#")[0] + "#"
+                        + Integer.parseInt(times[0]) % 12 + ":" + times[1] + " pm");
+            else
+                timeStampList.add(formatter.format(date).split("#")[0] + "#"
+                        + Integer.parseInt(times[0]) + ":" + times[1] + " am");
+
 
             if (data.getSender_id().equals(receiverId))
                 senderList.add(1);
@@ -156,7 +172,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             }
 
         }
-        chatWidgetAdapter = new ChatWidgetAdapter(this, messageList, senderList, messageTypeList);
+        chatWidgetAdapter = new ChatWidgetAdapter(this, messageList, senderList,
+                messageTypeList, timeStampList);
         chatWidgetLv.setAdapter(chatWidgetAdapter);
     }
 
@@ -227,9 +244,9 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
             chatWidgetAdapter.fileNames.add(filePath);
             if (type.equals("image"))
-                chatWidgetAdapter.updateMessageList(filePath, 0, 1);
+                chatWidgetAdapter.updateMessageList(filePath, 0, 1, getTimeStamp());
             else
-                chatWidgetAdapter.updateMessageList(filePath, 0, 2);
+                chatWidgetAdapter.updateMessageList(filePath, 0, 2, getTimeStamp());
             chatWidgetAdapter.notifyDataSetChanged();
             chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
 
@@ -269,7 +286,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.listview);
         ListView listView = (ListView) dialog.findViewById(R.id.listView);
-        listView.setAdapter(new ArrayAdapter<>(ChatWidgetActivity.this, R.layout.textview, new String[]{"Image", "Video"}));
+        listView.setAdapter(new ArrayAdapter<>(ChatWidgetActivity.this,
+                R.layout.textview, new String[]{"Image", "Video"}));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -314,7 +332,7 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
 
         /** Sending message to socket */
         msgToSend.setText("");
-        chatWidgetAdapter.updateMessageList(msg, 0, 0);
+        chatWidgetAdapter.updateMessageList(msg, 0, 0, getTimeStamp());
         chatWidgetAdapter.notifyDataSetChanged();
         chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
     }
@@ -346,21 +364,21 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             /** Text message received */
             switch (messageType) {
                 case "text":
-                    chatWidgetAdapter.updateMessageList(msg, 1, 0);
+                    chatWidgetAdapter.updateMessageList(msg, 1, 0, getTimeStamp());
                     chatWidgetAdapter.notifyDataSetChanged();
                     chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
                     break;
 
                 /** Image message received */
                 case "image":
-                    chatWidgetAdapter.updateMessageList(msg, 1, 1);
+                    chatWidgetAdapter.updateMessageList(msg, 1, 1, getTimeStamp());
                     chatWidgetAdapter.notifyDataSetChanged();
                     chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
                     break;
 
                 /** Video message received */
                 case "video":
-                    chatWidgetAdapter.updateMessageList(msg, 1, 2);
+                    chatWidgetAdapter.updateMessageList(msg, 1, 2, getTimeStamp());
                     chatWidgetAdapter.notifyDataSetChanged();
                     chatWidgetLv.setSelection(chatWidgetLv.getAdapter().getCount() - 1);
                     break;
@@ -401,7 +419,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             public void onOpen(ServerHandshake serverHandshake) {
                 Log.i(TAG, "Opened");
                 isSocketConnected = true;
-                mWebSocketClient.send(StorageHelper.getUserDetails(ChatWidgetActivity.this, "auth_token"));
+                mWebSocketClient.send(StorageHelper.getUserDetails(ChatWidgetActivity.this,
+                        "auth_token"));
                 progressDialog.dismiss();
             }
 
@@ -431,6 +450,18 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             }
         };
         mWebSocketClient.connect();
+    }
+
+    private String getTimeStamp() {
+        Date date = new Date(Calendar.getInstance().getTimeInMillis());
+        DateFormat formatter = new SimpleDateFormat("dd-MM # HH:mm");
+        String[] times = formatter.format(date).split("#")[1].trim().split(":");
+        if (Integer.parseInt(times[0]) > 12)
+            return formatter.format(date).split("#")[0] + "#" +
+                    Integer.parseInt(times[0]) % 12 + ":" + times[1] + " pm";
+        else
+            return formatter.format(date).split("#")[0] + "#" +
+                    Integer.parseInt(times[0]) + ":" + times[1] + " am";
     }
 
     @Override
@@ -465,7 +496,9 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             if (chats.getData() != null && chats.getData().size() > 0) {
                 populateData(chats.getData());
             } else {
-                chatWidgetAdapter = new ChatWidgetAdapter(this, new ArrayList<String>(), new ArrayList<Integer>(), new ArrayList<Integer>());
+                chatWidgetAdapter = new ChatWidgetAdapter(this, new ArrayList<String>(),
+                        new ArrayList<Integer>(), new ArrayList<Integer>(),
+                        new ArrayList<String>());
                 chatWidgetLv.setAdapter(chatWidgetAdapter);
             }
             connectWebSocket();
@@ -479,11 +512,13 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
             String attachmentPath = attachment.getData().getPath();
 
             /** Sending attachment url with type to chat socket */
-            String msgJson = getMsgInJson(attachment.getData().getFile_type().contains("image") ? "image" : "video", attachmentPath).toString();
+            String msgJson = getMsgInJson(attachment.getData().getFile_type().contains("image") ?
+                    "image" : "video", attachmentPath).toString();
             if (isSocketConnected) {
                 mWebSocketClient.send(msgJson);
                 Log.d(TAG, msgJson);
-                chatWidgetAdapter.downloadFile(attachmentPath, attachment.getData().getFile_type().contains("image") ? "image" : "video");
+                chatWidgetAdapter.downloadFile(attachmentPath, attachment.getData().getFile_type()
+                        .contains("image") ? "image" : "video");
             } else {
                 progressDialog.show();
                 connectWebSocket();

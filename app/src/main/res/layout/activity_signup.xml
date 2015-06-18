@@ -19,8 +19,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/backButton"
+            android:layout_height="wrap_content"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin">
 
@@ -112,7 +111,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_first_name"
-                        android:inputType="textCapSentences|textNoSuggestions"
+                        android:inputType="textCapSentences|textNoSuggestions|textCapWords"
                         android:minHeight="@dimen/abc_action_bar_stacked_max_height"
                         android:padding="4dp"
                         android:singleLine="true" />

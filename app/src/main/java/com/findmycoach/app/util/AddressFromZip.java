@@ -26,6 +26,7 @@ public class AddressFromZip extends AsyncTask<String, Void, List<Address>> {
     public AddressFromZip(Context context, EditText editText) {
         this.context = context;
         this.editText = editText;
+        Log.e("AddressFromZip", "Constructor");
     }
 
     @Override
@@ -34,6 +35,7 @@ public class AddressFromZip extends AsyncTask<String, Void, List<Address>> {
         final Geocoder geocoder = new Geocoder(context);
         try {
             zip = params[0];
+            Log.e("AddressFromZip", zip);
             return geocoder.getFromLocationName(zip, 1);
         } catch (IOException ignored) {
         }
