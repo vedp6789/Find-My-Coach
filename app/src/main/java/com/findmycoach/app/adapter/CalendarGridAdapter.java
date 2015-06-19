@@ -624,13 +624,15 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             * */
                             if (free_slots > 0) {
                                 if (day_color[1].equals("CURRENT")) {
-                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                    gridcell.setBackgroundColor(Color.RED);
                                 } else {
-                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                    gridcell.setBackgroundColor(Color.YELLOW);
                                 }
                             } else {
                                 if (day_color[1].equals("CURRENT")) {
-                                    gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
+                                    gridcell.setBackgroundColor(Color.LTGRAY);
+                                }else{
+                                    gridcell.setBackgroundColor(Color.CYAN);
                                 }
                             }
 
@@ -723,15 +725,19 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             /*
                             * if free_slot is having value greater than zero, it means this day has free slots and we have to populate calendar grid color
                             * */
+
+
                                 if (free_slots > 0) {
                                     if (day_color[1].equals("CURRENT")) {
-                                        gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                        gridcell.setBackgroundColor(Color.RED);
                                     } else {
-                                        gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                        gridcell.setBackgroundColor(Color.YELLOW);
                                     }
                                 } else {
                                     if (day_color[1].equals("CURRENT")) {
-                                        gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
+                                        gridcell.setBackgroundColor(Color.LTGRAY);
+                                    }else{
+                                        gridcell.setBackgroundColor(Color.CYAN);
                                     }
                                 }
 
@@ -776,28 +782,45 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                         }
 
                     } else {
+
+                        if(mentorDetailsActivity != null){
+
+                            Log.d(TAG,"expecting bug");
+
+                        /*if(myScheduleFragment != null){
+
+                        }*/
+
                         /* Calendar days don't need to show any schedule as the current_month_data have no slot */
                         /* For MentorDetailsActivity there is no slot found */
-                        int free_slots = -1;   /* it is for those slots where there are no slots for this day */
+                            int free_slots = -1;   /* it is for those slots where there are no slots for this day */
 
 
                             /*
                             * if free_slot is having value greater than zero, it means this day has free slots and we have to populate calendar grid color
                             * */
-                        if (free_slots > 0) {
-                            if (day_color[1].equals("CURRENT")) {
-                                gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+
+
+
+
+                            if (free_slots > 0) {
+                                if (day_color[1].equals("CURRENT")) {
+                                    gridcell.setBackgroundColor(Color.RED);
+                                } else {
+                                    gridcell.setBackgroundColor(Color.YELLOW);
+                                }
                             } else {
-                                gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                if (day_color[1].equals("CURRENT")) {
+                                    gridcell.setBackgroundColor(Color.LTGRAY);
+                                }else{
+                                    gridcell.setBackgroundColor(Color.CYAN);
+                                }
                             }
-                        } else {
-                            if (day_color[1].equals("CURRENT")) {
-                                gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
-                            }
+
+
+                            gridcell.setTag(R.id.TAG_FREE_SLOT, String.valueOf(free_slots));
                         }
 
-
-                        gridcell.setTag(R.id.TAG_FREE_SLOT, String.valueOf(free_slots));
 
                     }
 
@@ -958,7 +981,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         String this_day_week_day = null;   /* this will have the day which is calendar current day according to grid view position*/
         switch (week_day) {
             case 1:
-                this_day_week_day = "S";
+                this_day_week_day = "Su";
                 break;
             case 2:
                 this_day_week_day = "M";
@@ -976,7 +999,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                 this_day_week_day = "F";
                 break;
             case 7:
-                this_day_week_day = "Sa";
+                this_day_week_day = "S";
                 break;
         }
 
@@ -1096,6 +1119,8 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                     }
 
                                 } else {
+
+
                                     context.startActivity(intent);
 
                                 }

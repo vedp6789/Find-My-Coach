@@ -286,7 +286,9 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                                 String response = (String) object;
                                 try {
                                     JSONObject jsonObject = new JSONObject(response);
-                                    if (jsonObject.getString("message").equalsIgnoreCase("success")) {
+                                    int status = Integer.parseInt(jsonObject.getString("status"));
+
+                                    if (status == 1) {
                                         Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.vacation_scheduled_success), Toast.LENGTH_SHORT).show();
                                         if(MyScheduleFragment.myScheduleFragment != null){
                                             Log.d(TAG,"myschedulefragment instace is not null");
@@ -294,7 +296,7 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                                         }
                                         finish();
                                     } else {
-                                        if (jsonObject.getString("message").equalsIgnoreCase("failure")) {
+                                        if (status ==2 ) {
                                             JSONArray jsonArray_coinciding_exceptions = jsonObject.getJSONArray("coincidingExceptions");
                                             coincidingExceptionMessage(jsonArray_coinciding_exceptions);
                                         }
@@ -334,14 +336,14 @@ progressDialog.dismiss();
             JSONObject jO_coinciding_detail = null;
             try {
                 jO_coinciding_detail = jsonArray.getJSONObject(0);
-                JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
+                /*JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
                 if (jA_Week_days.length() > 0) {
 
                     for (int jA_Week_day = 0; jA_Week_day < jA_Week_days.length(); jA_Week_day++) {
                         tset_days.add(jA_Week_days.getString(jA_Week_day));
                     }
 
-                }
+                }*/
                 s_date = jO_coinciding_detail.getString("start_date");
                 st_date = jO_coinciding_detail.getString("stop_date");
                 s_time = jO_coinciding_detail.getString("start_time");
@@ -372,12 +374,12 @@ progressDialog.dismiss();
                 JSONObject jO_coinciding_detail1 = null;
                 try {
                     jO_coinciding_detail1 = jsonArray.getJSONObject(i);
-                    JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
+                    /*JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
                     if (jA_Week_days.length() > 0) {
                         for (int jA_Week_day = 0; jA_Week_day < jA_Week_days.length(); jA_Week_day++) {
                             tset_days.add(jA_Week_days.getString(jA_Week_day));
                         }
-                    }
+                    }*/
                     s_date = jO_coinciding_detail.getString("start_date");
                     st_date = jO_coinciding_detail.getString("stop_date");
                     s_time = jO_coinciding_detail.getString("start_time");
@@ -420,9 +422,11 @@ progressDialog.dismiss();
                 float start_time = tset_s_time.first();
                 float stop_time = tset_st_time.last();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                stringBuilder.append("Sorry, there is already a schedule between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + String.valueOf(start_time).replace(".", ":") + " to " + String.valueOf(stop_time).replace(".", ":") + "\nSo please do changes in your schedule!");
+                showCoincidingAlertMessage(stringBuilder.toString());
+                Log.d(TAG, "Message for coinciding vaccation schedule : " + stringBuilder.toString());
 
-
-                if (tset_days.size() > 0) {
+/*                if (tset_days.size() > 0) {
                     ArrayList<String> days_selected = new ArrayList<String>(tset_days.size());
                     days_selected.addAll(tset_days);
 
@@ -456,7 +460,7 @@ progressDialog.dismiss();
                     stringBuilder.append("Sorry, there is already a schedule between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + String.valueOf(start_time).replace(".", ":") + " to " + String.valueOf(stop_time).replace(".", ":") + " \n So please do changes in your schedule!");
                     showCoincidingAlertMessage(stringBuilder.toString());
                     Log.d(TAG, "Message for coinciding vaccation schedule : " + stringBuilder.toString());
-                }
+                }*/
 
             }
 
@@ -467,12 +471,12 @@ progressDialog.dismiss();
                 ArrayList<String> days = new ArrayList<String>();
 
                 JSONObject jO_coinciding_detail = jsonArray.getJSONObject(0);
-                JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
+                /*JSONArray jA_Week_days = jO_coinciding_detail.getJSONArray("week_days");
                 if (jA_Week_days.length() > 0) {
                     for (int jA_index = 0; jA_index < jA_Week_days.length(); jA_index++) {
                         days.add(jA_Week_days.getString(jA_index));
                     }
-                }
+                }*/
                 s_date = jO_coinciding_detail.getString("start_date");
                 st_date = jO_coinciding_detail.getString("stop_date");
                 s_time = jO_coinciding_detail.getString("start_time");
@@ -489,7 +493,11 @@ progressDialog.dismiss();
 
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
 
-                Log.d(TAG, "days : " + days);
+                stringBuilder.append("Sorry, there is already a schedule between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + st_time.substring(0, 5) + "\nSo please do changes in your schedule!");
+                Log.d(TAG, "Message for coinciding vaccation schedule : " + stringBuilder.toString());
+                showCoincidingAlertMessage(stringBuilder.toString());
+
+               /* Log.d(TAG, "days : " + days);
 
                 if (days != null) {
 
@@ -534,13 +542,13 @@ progressDialog.dismiss();
                     Log.d(TAG, "Message for coinciding vaccation schedule : " + stringBuilder.toString());
                     showCoincidingAlertMessage(stringBuilder.toString());
 
-                    /*stringBuilder.append("")
-                    showCoincidingAlertMessage();*/
+                    *//*stringBuilder.append("")
+                    showCoincidingAlertMessage();*//*
                 } else {
                     stringBuilder.append("Sorry, there is already a schedule between \n" + simpleDateFormat.format(start_date) + " & " + simpleDateFormat.format(stop_date) + " from " + s_time.substring(0, 5) + " to " + st_time.substring(0, 5) + " \n So please do changes in your schedule!");
                     Log.d(TAG, "Message for coinciding vaccation schedule : " + stringBuilder.toString());
                     showCoincidingAlertMessage(stringBuilder.toString());
-                }
+                }*/
 
 
             } catch (JSONException e) {
