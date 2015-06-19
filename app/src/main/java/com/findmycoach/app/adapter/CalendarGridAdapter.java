@@ -624,13 +624,15 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             * */
                             if (free_slots > 0) {
                                 if (day_color[1].equals("CURRENT")) {
-                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                    gridcell.setBackgroundColor(Color.RED);
                                 } else {
-                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                    gridcell.setBackgroundColor(Color.YELLOW);
                                 }
                             } else {
                                 if (day_color[1].equals("CURRENT")) {
-                                    gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
+                                    gridcell.setBackgroundColor(Color.LTGRAY);
+                                }else{
+                                    gridcell.setBackgroundColor(Color.CYAN);
                                 }
                             }
 
@@ -723,15 +725,19 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             /*
                             * if free_slot is having value greater than zero, it means this day has free slots and we have to populate calendar grid color
                             * */
+
+
                                 if (free_slots > 0) {
                                     if (day_color[1].equals("CURRENT")) {
-                                        gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                        gridcell.setBackgroundColor(Color.RED);
                                     } else {
-                                        gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                        gridcell.setBackgroundColor(Color.YELLOW);
                                     }
                                 } else {
                                     if (day_color[1].equals("CURRENT")) {
-                                        gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
+                                        gridcell.setBackgroundColor(Color.LTGRAY);
+                                    }else{
+                                        gridcell.setBackgroundColor(Color.CYAN);
                                     }
                                 }
 
@@ -793,17 +799,21 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             /*
                             * if free_slot is having value greater than zero, it means this day has free slots and we have to populate calendar grid color
                             * */
+
+
+
+
                             if (free_slots > 0) {
                                 if (day_color[1].equals("CURRENT")) {
-                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                    gridcell.setBackgroundColor(Color.RED);
                                 } else {
-                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                    gridcell.setBackgroundColor(Color.YELLOW);
                                 }
                             } else {
                                 if (day_color[1].equals("CURRENT")) {
-                                    Log.d(TAG,"expecting bug1");
-
-                                    gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
+                                    gridcell.setBackgroundColor(Color.LTGRAY);
+                                }else{
+                                    gridcell.setBackgroundColor(Color.CYAN);
                                 }
                             }
 
