@@ -105,49 +105,63 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_new_class);
 
-        bundle = getIntent().getBundleExtra("slot_bundle");
-        slot = (Slot) bundle.getSerializable("slot");
-        mentorInfo = (MentorInfo) bundle.getSerializable("mentor_info");
-        mentor_id = bundle.getString("mentor_id");
-        mentor_availability = bundle.getString("mentor_availability");
-        charges = bundle.getString("charges");
-        arrayList_subcategory = bundle.getStringArrayList("arrayList_sub_category");
 
-        slot_start_day = Integer.parseInt(slot.getSlot_start_date().split("-")[2]);
-        slot_start_month = Integer.parseInt(slot.getSlot_start_date().split("-")[1]);
-        slot_start_year = Integer.parseInt(slot.getSlot_start_date().split("-")[0]);
+        try{
+            bundle = getIntent().getBundleExtra("slot_bundle");
+            slot = (Slot) bundle.getParcelable("slot");
+            mentorInfo = (MentorInfo) bundle.getParcelable("mentor_info");
+            mentor_id = bundle.getString("mentor_id");
+            mentor_availability = bundle.getString("mentor_availability");
+            charges = bundle.getString("charges");
+            arrayList_subcategory = bundle.getStringArrayList("arrayList_sub_category");
 
-        slot_stop_day = Integer.parseInt(slot.getSlot_stop_date().split("-")[2]);
-        slot_stop_month = Integer.parseInt(slot.getSlot_stop_date().split("-")[1]);
-        slot_stop_year = Integer.parseInt(slot.getSlot_stop_date().split("-")[0]);
+            slot_start_day = Integer.parseInt(slot.getSlot_start_date().split("-")[2]);
+            slot_start_month = Integer.parseInt(slot.getSlot_start_date().split("-")[1]);
+            slot_start_year = Integer.parseInt(slot.getSlot_start_date().split("-")[0]);
 
-        slot_start_hour = Integer.parseInt(slot.getSlot_start_time().split(":")[0]);
-        slot_start_minute = Integer.parseInt(slot.getSlot_start_time().split(":")[1]);
+            slot_stop_day = Integer.parseInt(slot.getSlot_stop_date().split("-")[2]);
+            slot_stop_month = Integer.parseInt(slot.getSlot_stop_date().split("-")[1]);
+            slot_stop_year = Integer.parseInt(slot.getSlot_stop_date().split("-")[0]);
 
-        slot_stop_hour = Integer.parseInt(slot.getSlot_stop_time().split(":")[0]);
-        slot_stop_minute = Integer.parseInt(slot.getSlot_stop_time().split(":")[1]);
+            slot_start_hour = Integer.parseInt(slot.getSlot_start_time().split(":")[0]);
+            slot_start_minute = Integer.parseInt(slot.getSlot_start_time().split(":")[1]);
 
-        slot_type = slot.getSlot_type();
-        slot_on_week_days = slot.getSlot_week_days();
+            slot_stop_hour = Integer.parseInt(slot.getSlot_stop_time().split(":")[0]);
+            slot_stop_minute = Integer.parseInt(slot.getSlot_stop_time().split(":")[1]);
 
-        vacations_on_the_slot = new ArrayList<Vacation>();
-        vacations_on_the_slot = slot.getVacations();
-        if (vacations_on_the_slot.size() > 0) {
-            ib_info.setVisibility(View.VISIBLE);
-        } else {
-            ib_info.setVisibility(View.GONE);
+            slot_type = slot.getSlot_type();
+            slot_on_week_days = slot.getSlot_week_days();
+
+            for(int s=0; s <slot_on_week_days.length ; s++){
+                Log.d(TAG,"week_day: "+slot_on_week_days[s]);
+            }
+
+
+            vacations_on_the_slot = new ArrayList<Vacation>();
+            vacations_on_the_slot = slot.getVacations();
+
+
+            durationOfSuccessfulClassDayses = new ArrayList<DurationOfSuccessfulClassDays>();
+
+
+            progressDialog = new ProgressDialog(ScheduleNewClass.this);
+            progressDialog.setMessage(getResources().getString(R.string.please_wait));
+            applyActionbarProperties(mentorInfo.getFirst_name());
+            initialize();
+
+            if (vacations_on_the_slot.size() > 0) {
+                ib_info.setVisibility(View.VISIBLE);
+            } else {
+                ib_info.setVisibility(View.GONE);
+            }
+
+            finalizeDateTimeAndCharges();
+            populateFields();
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
-        durationOfSuccessfulClassDayses = new ArrayList<DurationOfSuccessfulClassDays>();
 
-
-        progressDialog = new ProgressDialog(ScheduleNewClass.this);
-        progressDialog.setMessage(getResources().getString(R.string.please_wait));
-        applyActionbarProperties(mentorInfo.getFirst_name());
-        initialize();
-
-        finalizeDateTimeAndCharges();
-        populateFields();
     }
 
     private void finalizeDateTimeAndCharges() {
@@ -238,12 +252,14 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 selectedDays.add(4);
             }
             if (day.equals("S")) {
-                selectedDays.add(0);
+                selectedDays.add(5);
             }
             if (day.equals("Su")) {
                 selectedDays.add(6);
             }
         }
+
+
 
         gridView.setAdapter(new AddSlotAdapter(getResources().getStringArray(R.array.week_days_mon), selectedDays, this));
 

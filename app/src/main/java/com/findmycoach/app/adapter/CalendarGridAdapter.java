@@ -72,9 +72,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
     private static ArrayList<MonthYearInfo> previousMonthYearInfo = null;
     private static ArrayList<MonthYearInfo> currentMonthYearInfo = null;
     private static ArrayList<MonthYearInfo> comingMonthYearInfo = null;
-    public ArrayList<MentorInfo> previousMonthMentorInfos = null;
-    public ArrayList<MentorInfo> currentMonthMentorInfos = null;
-    public ArrayList<MentorInfo> comingMonthMentorInfos = null;
+    public static ArrayList<MentorInfo> previousMonthMentorInfos = null;
+    public static ArrayList<MentorInfo> currentMonthMentorInfos = null;
+    public static ArrayList<MentorInfo> comingMonthMentorInfos = null;
 
     private static int day_schedule_index = 0;
     Day day = null;
@@ -139,6 +139,18 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         CalendarGridAdapter.currentMonthYearInfo = currentMonthYearInfo;
         CalendarGridAdapter.comingMonthYearInfo = comingMonthYearInfo;
 
+
+        CalendarGridAdapter.previousMonthMentorInfos=new ArrayList<MentorInfo>();
+        CalendarGridAdapter.currentMonthMentorInfos = new ArrayList<MentorInfo>();
+        CalendarGridAdapter.comingMonthMentorInfos=new ArrayList<MentorInfo>();
+        CalendarGridAdapter.previousMonthMentorInfos=previousMonthMentorInfos;
+        CalendarGridAdapter.currentMonthMentorInfos =currentMonthMentorInfos;
+        CalendarGridAdapter.comingMonthMentorInfos=comingMonthMentorInfos;
+
+
+
+
+
         month_for_which_calendar_get_populated = month;
         year_for_which_calendar_get_populated = year;
         allow_data_population_from_server_data = true;   /* This constructor get called when there is successful network communication so data from server helps in calendar population*/
@@ -194,6 +206,22 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         CalendarGridAdapter.previousMonthYearInfo = previousMonthYearInfo;
         CalendarGridAdapter.currentMonthYearInfo = currentMonthYearInfo;
         CalendarGridAdapter.comingMonthYearInfo = comingMonthYearInfo;
+
+
+
+
+        CalendarGridAdapter.previousMonthMentorInfos=new ArrayList<MentorInfo>();
+        CalendarGridAdapter.currentMonthMentorInfos = new ArrayList<MentorInfo>();
+        CalendarGridAdapter.comingMonthMentorInfos=new ArrayList<MentorInfo>();
+        CalendarGridAdapter.previousMonthMentorInfos=previousMonthMentorInfos;
+        CalendarGridAdapter.currentMonthMentorInfos =currentMonthMentorInfos;
+        CalendarGridAdapter.comingMonthMentorInfos=comingMonthMentorInfos;
+
+
+        Log.d(TAG,"Grid adapter: prev_month_mentor_infos: "+CalendarGridAdapter.previousMonthMentorInfos.size()+", current_mentor_infos"+CalendarGridAdapter.currentMonthMentorInfos.size()+", coming mentor_infos: "+CalendarGridAdapter.comingMonthMentorInfos.size());
+
+
+
 
 
         month_for_which_calendar_get_populated = month;
@@ -600,15 +628,19 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                         } else {   /* For Mentors Detail Activity*/
 
-                            Calendar calendar_this_day = Calendar.getInstance();
-                            calendar_this_day.set(Integer.parseInt(theyear), the_current_month, Integer.parseInt(theday));
-                            long this_day = calendar_this_day.getTimeInMillis();
-                            int week_day_for_this_day = calendar_this_day.get(Calendar.DAY_OF_WEEK);/* This will give week_day for this day, 1 to 7 for Sunday to Saturday */
 
                             int free_slots = 0;
 
                             Calendar rightNow = Calendar.getInstance();
                             long current_date_in_millis = rightNow.getTimeInMillis();
+
+
+
+                            Calendar calendar_this_day = Calendar.getInstance();
+                            calendar_this_day.set(Integer.parseInt(theyear), the_current_month, Integer.parseInt(theday));
+                            long this_day = calendar_this_day.getTimeInMillis();
+                            int week_day_for_this_day = calendar_this_day.get(Calendar.DAY_OF_WEEK);/* This will give week_day for this day, 1 to 7 for Sunday to Saturday */
+
 
                             if (current_date_in_millis > this_day) {
                                 free_slots = -2;    /* this is know that grid for the current view is behind right now date and time, so in this case calendar will not show any available free slot on this grid tap */
@@ -1056,6 +1088,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             intent.putExtra("previous_month_year_info", previousMonthYearInfo);
             intent.putExtra("current_month_year_info", currentMonthYearInfo);
             intent.putExtra("coming_month_year_info", comingMonthYearInfo);
+
+            Log.d(TAG,"Grid adapter on click : previous month mentor infos size: "+previousMonthMentorInfos.size()+"current month size: "+currentMonthMentorInfos.size()+"comin size"+comingMonthMentorInfos.size());
+
             intent.putExtra("prev_month_mentor", previousMonthMentorInfos);
             intent.putExtra("current_month_mentor", currentMonthMentorInfos);
             intent.putExtra("coming_month_mentor", comingMonthMentorInfos);

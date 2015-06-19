@@ -126,6 +126,10 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                 currentMonthMentorInfo = (ArrayList<MentorInfo>) getIntent.getSerializableExtra("current_month_mentor");
                 comingMonthMentorInfo = (ArrayList<MentorInfo>) getIntent.getSerializableExtra("coming_month_mentor");
 
+
+
+                Log.d(TAG,"prev_month_mentor_info size: "+previousMonthMentorInfo.size()+"current :"+currentMonthMentorInfo.size()+"coming :"+comingMonthMentorInfo.size());
+
                 progressDialog = new ProgressDialog(SetScheduleActivity.this);
                 progressDialog.setMessage(getResources().getString(R.string.please_wait));
 
@@ -853,10 +857,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             Slot slot = month.get(0);
             if (Boolean.parseBoolean(slot.isSlot_created_on_network_success())) {  /* If any slot is there then to check whether it is created on network success or not */
                 for (int day_of_month = 1; day_of_month <= days_in_month; day_of_month++) {
-                    Calendar calendar_new_day_of_week_view = Calendar.getInstance();
-                    calendar_new_day_of_week_view.set(newYear, newMonth - 1, day_of_month);
-                    long this_day_in_millis = calendar_new_day_of_week_view.getTimeInMillis();
-                    int this_day_week_day = calendar_new_day_of_week_view.get(Calendar.DAY_OF_WEEK);
 
 
                     for (int slot_no = 0; slot_no < month.size(); slot_no++) {
@@ -872,6 +872,13 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         Calendar cal_slot_stop_date = Calendar.getInstance();
                         cal_slot_stop_date.set(Integer.parseInt(slot_stop_date.split("-")[0]), Integer.parseInt(slot_stop_date.split("-")[1]) - 1, Integer.parseInt(slot_stop_date.split("-")[2]));
                         long cal_slot_stop_date_millis = cal_slot_stop_date.getTimeInMillis();
+
+                        Calendar calendar_new_day_of_week_view = Calendar.getInstance();
+                        calendar_new_day_of_week_view.set(newYear, newMonth - 1, day_of_month);
+                        long this_day_in_millis = calendar_new_day_of_week_view.getTimeInMillis();
+                        int this_day_week_day = calendar_new_day_of_week_view.get(Calendar.DAY_OF_WEEK);
+
+
 
                         if ((this_day_in_millis == cal_slot_start_date_millis) || (this_day_in_millis == cal_slot_stop_date_millis) || (this_day_in_millis > cal_slot_start_date_millis && this_day_in_millis < cal_slot_stop_date_millis)) {
                             if (thisDayMatchesWithArrayOfWeekDays(slot_week_days, this_day_week_day)) {
@@ -898,7 +905,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
                                             List<Vacation> vacations = new_Slot.getVacations();
 
-                                            if (isAnyVacationCoincide(vacations, this_day_in_millis, this_day_week_day)) {
+                                            if (isAnyVacationCoincide(vacations, newYear, newMonth, day_of_month)) {
                                                 /* Due to vacation, this slot cannot be treated as free for this day .*/
                                             } else {
                                                 /* Slot is free */
@@ -912,7 +919,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                         /* No class scheduled hence slot is free*/
                                         List<Vacation> vacations = new_Slot.getVacations();
 
-                                        if (isAnyVacationCoincide(vacations, this_day_in_millis, this_day_week_day)) {
+                                        if (isAnyVacationCoincide(vacations, newYear, newMonth, day_of_month)) {
                                                 /* Due to vacation, this slot cannot be treated as free for this day .*/
                                         } else {
                                                 /* Slot is free */
@@ -934,7 +941,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                             /* No active users so slot is free */
                                             List<Vacation> vacations = new_Slot.getVacations();
 
-                                            if (isAnyVacationCoincide(vacations, this_day_in_millis, this_day_week_day)) {
+                                            if (isAnyVacationCoincide(vacations, newYear, newMonth, day_of_month)) {
                                                 /* Due to vacation, this slot cannot be treated as free for this day .*/
                                             } else {
                                                 /* Slot is free */
@@ -947,7 +954,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                         /* No event found hence slot is free */
                                         List<Vacation> vacations = new_Slot.getVacations();
 
-                                        if (isAnyVacationCoincide(vacations, this_day_in_millis, this_day_week_day)) {
+                                        if (isAnyVacationCoincide(vacations, newYear, newMonth, day_of_month)) {
                                                 /* Due to vacation,this slot cannot be treated as free for this day .*/
                                         } else {
                                                 /* Slot is free */
@@ -992,7 +999,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         events.add(weekViewEvent);
     }
 
-    private boolean isAnyVacationCoincide(List<Vacation> vacations, long this_day_in_millis, int this_day_week_day) {
+    private boolean isAnyVacationCoincide(List<Vacation> vacations,int new_year, int new_month, int new_day) {
         boolean vacation_found = false;
 
         for (int vacation_no = 0; vacation_no < vacations.size(); vacation_no++) {
@@ -1008,7 +1015,15 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             cal_vac_stop_date.set(Integer.parseInt(vac_stop_date.split("-")[0]), Integer.parseInt(vac_stop_date.split("-")[1]) - 1, Integer.parseInt(vac_stop_date.split("-")[2]));
             long cal_vac_stop_date_millis = cal_vac_stop_date.getTimeInMillis();
 
-            if ((this_day_in_millis == cal_vac_start_date_millis) || (this_day_in_millis == cal_vac_stop_date_millis) || (this_day_in_millis > cal_vac_start_date_millis && this_day_in_millis < cal_vac_stop_date_millis)) {
+            Calendar calendar_new_day_of_week_view = Calendar.getInstance();
+            calendar_new_day_of_week_view.set(new_year, new_month - 1, new_day);
+            long this_day_in_millis1 = calendar_new_day_of_week_view.getTimeInMillis();
+
+
+
+
+
+            if ((this_day_in_millis1 == cal_vac_start_date_millis) || (this_day_in_millis1 == cal_vac_stop_date_millis) || (this_day_in_millis1 > cal_vac_start_date_millis && this_day_in_millis1 < cal_vac_stop_date_millis)) {
                 vacation_found = true;
                 break;
             }

@@ -976,6 +976,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             previousMonthMentorInfos =getMentorInfo(jsonArray_mentor);
             currentMonthMentorInfos =getMentorInfo(jsonArray_mentor);
             comingMonthMentorInfos =getMentorInfo(jsonArray_mentor);
+
+            Log.d(TAG,"previous month mentor info size: "+previousMonthMentorInfos.size()+", current : "+currentMonthMentorInfos.size()+", coming: "+comingMonthMentorInfos.size());
+
             Log.d(TAG, "Mentors slots info for mentee,  previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
             if (b_three_months_data) {   /*  program will come in this scope when user selects date from dialog i.e. user randomly selects a year and month */
                 Log.d(TAG, "Three months data get changed");
