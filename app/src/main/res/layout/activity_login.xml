@@ -5,13 +5,12 @@
     android:background="@drawable/bg"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.findmycoach.app.activity.LoginActivity">
 
     <ScrollView
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none">
@@ -74,12 +73,12 @@
                         android:layout_gravity="right"
                         android:clickable="true"
                         android:drawableLeft="@drawable/register_small"
-                        android:drawablePadding="@dimen/days_margin"
+                        android:drawablePadding="@dimen/calender_margin"
                         android:gravity="center"
                         android:padding="@dimen/days_margin"
                         android:text="@string/action_register"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/profile_details" />
+                        android:textColor="@color/custom_button_text_color_click_purple_light"
+                        android:textSize="@dimen/button_text_size" />
 
                     <RadioGroup
                         android:id="@+id/radio_group_user_login"
@@ -92,18 +91,22 @@
                         <RadioButton
                             android:id="@+id/radio_button_mentor_login"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="26dp"
                             android:layout_weight="1"
+                            android:textSize="@dimen/button_text_size"
                             android:button="@drawable/custom_check_box"
                             android:paddingLeft="@dimen/radio_button_padding"
+                            android:textColor="@color/custom_button_text_color_click_purple_light"
                             android:text="@string/mentor" />
 
                         <RadioButton
                             android:id="@+id/radio_button_mentee_login"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="26dp"
+                            android:textSize="@dimen/button_text_size"
                             android:layout_weight="1"
                             android:button="@drawable/custom_check_box"
+                            android:textColor="@color/custom_button_text_color_click_purple_light"
                             android:paddingLeft="@dimen/radio_button_padding"
                             android:text="@string/mentee" />
                     </RadioGroup>
@@ -144,7 +147,7 @@
                         android:gravity="center_horizontal"
                         android:text="@string/or"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="@dimen/button_text_size" />
 
                    <com.findmycoach.app.views.ChizzleEditText
                         android:id="@+id/input_login_id"
@@ -182,7 +185,8 @@
                         android:textSize="@dimen/button_text_size"
                         android:textAllCaps="false"
                         android:textColor="@color/custom_button_text_color_click"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_marginBottom="@dimen/activity_horizontal_margin"/>
                 </LinearLayout>
 
                 <ProgressBar
@@ -224,16 +228,15 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/authentication_layout"
                 android:layout_centerHorizontal="true"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/margin_top"
+                android:layout_marginTop="@dimen/category_button_padding"
                 android:clickable="true"
                 android:drawableLeft="@drawable/forget_password_small"
-                android:drawablePadding="6dp"
+                android:drawablePadding="@dimen/textView_padding_margin"
                 android:gravity="center_horizontal"
                 android:text="@string/action_forgot_password"
                 android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="@dimen/profile_details" />
+                android:textColor="@color/custom_button_text_color_click_purple_light"
+                android:textSize="@dimen/forget_password_text_size" />
 
 
         </RelativeLayout>
