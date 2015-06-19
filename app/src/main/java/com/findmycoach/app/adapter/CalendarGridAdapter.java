@@ -777,7 +777,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                     } else {
 
-                        Log.d(TAG,"expecting bug");
+                        if(mentorDetailsActivity != null){
+
+                            Log.d(TAG,"expecting bug");
 
                         /*if(myScheduleFragment != null){
 
@@ -785,28 +787,30 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                         /* Calendar days don't need to show any schedule as the current_month_data have no slot */
                         /* For MentorDetailsActivity there is no slot found */
-                        int free_slots = -1;   /* it is for those slots where there are no slots for this day */
+                            int free_slots = -1;   /* it is for those slots where there are no slots for this day */
 
 
                             /*
                             * if free_slot is having value greater than zero, it means this day has free slots and we have to populate calendar grid color
                             * */
-                        if (free_slots > 0) {
-                            if (day_color[1].equals("CURRENT")) {
-                                gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                            if (free_slots > 0) {
+                                if (day_color[1].equals("CURRENT")) {
+                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow_today));
+                                } else {
+                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
+                                }
                             } else {
-                                gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.scheduled_event_arrow));
-                            }
-                        } else {
-                            if (day_color[1].equals("CURRENT")) {
-                                Log.d(TAG,"expecting bug1");
+                                if (day_color[1].equals("CURRENT")) {
+                                    Log.d(TAG,"expecting bug1");
 
-                                gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
+                                    gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
+                                }
                             }
+
+
+                            gridcell.setTag(R.id.TAG_FREE_SLOT, String.valueOf(free_slots));
                         }
 
-
-                        gridcell.setTag(R.id.TAG_FREE_SLOT, String.valueOf(free_slots));
 
                     }
 

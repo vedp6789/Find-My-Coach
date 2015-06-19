@@ -288,6 +288,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         }
 
         for (int week_day_index = 0; week_day_index < week_days.length; week_day_index++) {
+            Log.d(TAG,"week day: "+week_days[week_day_index]+" this day: "+this_day_week_day);
             if (this_day_week_day != null && this_day_week_day.equalsIgnoreCase(week_days[week_day_index])) {
                 day_matches = true;
             }
@@ -508,6 +509,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         calendar_for_day_of_this_month.set(newYear, newMonth - 1, day_of_this_month);  /*creating each day instance, as loop iterates  */
                         long this_day_in_millis = calendar_for_day_of_this_month.getTimeInMillis();
                         int this_day_week_day = calendar_for_day_of_this_month.get(Calendar.DAY_OF_WEEK);
+                        Log.d(TAG,"day_of_this_month: "+day_of_this_month+", month :"+newMonth+", year: "+newYear+", week_Day: "+this_day_week_day);
 
 
                         for (int slot_number = 0; slot_number < coming_month.size(); slot_number++) {   /*Will match possible slot, event or coinciding vacation for the matching slot of this day. */
@@ -532,10 +534,15 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             calendar_slot_stop_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
                             long slot_stop_date_in_millis = calendar_slot_stop_date.getTimeInMillis();
 
+                            Log.d(TAG,"slot start_date: "+start_date+"slot stop date: "+new_slot.getSlot_stop_date()+", slot_start_time: "+slot_start_time+", slot_stop_time: "+slot_stop_time);
+                            Log.d(TAG,"slot_start_date_in_millis: "+slot_start_date_in_millis+", slot_stop_date_in_millis: "+slot_stop_date_in_millis+", this day in millis"+this_day_in_millis);
                             if ((this_day_in_millis == slot_start_date_in_millis) || (this_day_in_millis == slot_stop_date_in_millis) || (this_day_in_millis > slot_start_date_in_millis && this_day_in_millis < slot_stop_date_in_millis)) {
                                 /*this day is coming in between slot duration, now to check whether the week_day of this day is one of the slot week_days, which will prove this day is slot or not  */
 
+                                Log.d(TAG,"this day matches ");
                                 if (thisDayMatchesWithArrayOfWeekDays(slot_week_days, this_day_week_day)) {
+                                    Log.d(TAG,"slot day matches with this day");
+
                                     availabilityFlags.slot_found = true;  /* making slot_found flag true for this day */
                                     List<Event> eventList = new_slot.getEvents();
                                     List<Vacation> coincidingVacationList = new_slot.getVacations();

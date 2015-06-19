@@ -79,7 +79,7 @@ public class StorageHelper {
         return preferences.getString(key, null);
     }
 
-    public static String AddressInformation(Context context,String key){
+    public static String addressInformation(Context context,String key){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String  information= preferences.getString(key, null);
         return information;

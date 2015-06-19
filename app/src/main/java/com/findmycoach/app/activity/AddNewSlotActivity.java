@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.AddSlotAdapter;
+import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.fragment_mentor.StartDateDialogFragment;
 import com.findmycoach.app.fragment_mentor.StartTimeDialogFragment;
 import com.findmycoach.app.fragment_mentor.StopTimeDialogFragment;
@@ -127,10 +128,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         initialize();
 
         StringBuilder stringBuilder_address = new StringBuilder();
-        String local_Address = StorageHelper.AddressInformation(AddNewSlotActivity.this, "user_local_address");
-        String city = StorageHelper.AddressInformation(AddNewSlotActivity.this, "user_city_state");
-        String zip = StorageHelper.AddressInformation(AddNewSlotActivity.this, "user_zip_code");
-        if (local_Address != null) {
+        String local_Address = StorageHelper.addressInformation(AddNewSlotActivity.this, "user_local_address");
+        String city = StorageHelper.addressInformation(AddNewSlotActivity.this, "user_city_state");
+        String zip = StorageHelper.addressInformation(AddNewSlotActivity.this, "user_zip_code");
+        if (local_Address != null || (!local_Address.equals("") )) {
             stringBuilder_address.append(local_Address);
             if (city != null) {
                 stringBuilder_address.append(", " + city.trim().toString());
@@ -236,6 +237,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                     bundle.putString("hour", String.valueOf(start_hour));
                     bundle.putString("minute", String.valueOf(start_min));
                     StopTimeDialogFragment timeDialogFragment = new StopTimeDialogFragment();
+                    timeDialogFragment.setSetTime(AddNewSlotActivity.this);
                     timeDialogFragment.setArguments(bundle);
                     timeDialogFragment.show(fragmentManager, null);
                 } else {
@@ -541,9 +543,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
                                         } else {
                                             Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully), Toast.LENGTH_SHORT).show();
-                                            setResult(500);
-                                            finish();
-                                           // showSummaryAsAlert();
+
+                                           showSummaryAsAlert();
                                         }
                                     } else {
                                         if (jA_coinciding_Slots.length() > 0) {
@@ -614,10 +615,14 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Log.d(TAG,"on positive button");
-                        setResult(500);
-
-                        dialog.cancel();
+                     //   setResult(500);
+                        if(MyScheduleFragment.myScheduleFragment != null){
+                            MyScheduleFragment.myScheduleFragment.getCalendarDetailsAPICall();
+                        }
                         finish();
+
+                        //   dialog.cancel();
+                     //   finish();
 
                     }
                 }
@@ -1037,13 +1042,18 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             } else {
                 int start_time = ((start_hour * 60) + start_min) * 60;
                 int stop_time = ((stop_hour * 60) + stop_min) * 60;
+                int min_diff_in_seconds = 15 *60; /*15 min difference should be there */
+                int difference = stop_time - start_time;
 
                 int slot_time_value = 0;
-                if (start_time > stop_time) {
+                if ((start_time > stop_time) || (start_time == stop_time)) {
                     Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.stop_time_should_be_grater), Toast.LENGTH_LONG).show();
                     return false;
 
                 } else {
+
+
+
 
                     if (et_tutorial_location.getText().toString().trim().length() <= 0) {
                         Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.tutorial_address_not_found), Toast.LENGTH_SHORT).show();

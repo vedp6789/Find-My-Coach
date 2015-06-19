@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.AddNewSlotActivity;
+import com.findmycoach.app.util.SetTime;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -35,6 +36,11 @@ public class StopTimeDialogFragment extends DialogFragment implements View.OnCli
 
     private static final String TAG = "FMC";
 
+    private SetTime setTime;
+
+    public void setSetTime(SetTime setTime) {
+        this.setTime = setTime;
+    }
 
     @Override
     public void onClick(View v) {
@@ -54,7 +60,8 @@ public class StopTimeDialogFragment extends DialogFragment implements View.OnCli
                     min = "45";
 
                 dismiss();
-                addNewSlotActivity.setSelectedTillTime(hour, min);
+                if(setTime != null)
+                    setTime.setSelectedTillTime(hour, min);
                 break;
             case R.id.b_cancel:
                 dismiss();
@@ -140,6 +147,15 @@ public class StopTimeDialogFragment extends DialogFragment implements View.OnCli
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+
+        if(minute == 45){
+            timePicker.setCurrentHour(hour+1);
+            timePicker.setCurrentMinute(0);
+        }else{
+            timePicker.setCurrentHour(hour);
+            timePicker.setCurrentMinute(minute+15);
+        }
 
     }
 }

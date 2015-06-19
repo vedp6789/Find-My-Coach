@@ -52,8 +52,11 @@ import org.xml.sax.InputSource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -701,6 +704,48 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                 StorageHelper.storePreference(this, "user_full_name", name);
             } catch (Exception ignored) {
             }
+
+/* Saving mentor address in shared preference */
+
+                StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
+                StorageHelper.storePreference(this, "user_city_state",profileAddress1.getText().toString() );
+                StorageHelper.storePreference(this,"user_zip_code", pinCode.getText().toString());
+
+
+            Log.d(TAG,"local_add: "+StorageHelper.addressInformation(EditProfileActivityMentor.this,"user_local_address"));
+            Log.d(TAG,"city: "+StorageHelper.addressInformation(EditProfileActivityMentor.this,"user_city_state"));
+            Log.d(TAG,"local_add: "+StorageHelper.addressInformation(EditProfileActivityMentor.this,"user_zip_code"));
+
+
+
+
+            /* Saving area of coaching in sharedpreference */
+            if(areaOfCoaching.getText().toString().length() > 0){
+                Log.d(TAG,"area_of coaching: "+areaOfCoaching.getText().toString());
+                String area_of_coaching[] =areaOfCoaching.getText().toString().split(",");
+                Set<String> sub_category_stringSet = new HashSet<String>();
+                for(int i = 0 ; i < areaOfCoaching.length() ; i++){
+                    sub_category_stringSet.add(area_of_coaching[i].trim());
+                }
+                StorageHelper.storeListOfCoachingSubCategories(EditProfileActivityMentor.this,sub_category_stringSet);
+
+            }
+
+
+            Set<String> stringSet=new HashSet<String>();
+            Log.d(TAG,"string set size: "+stringSet.size());
+            if(stringSet != null){
+                stringSet=StorageHelper.getListOfCoachingSubCategories(EditProfileActivityMentor.this,"area_of_coaching_set");
+
+                Iterator<String> iterator = stringSet.iterator();
+                while(iterator.hasNext()){
+                    Log.d(TAG,"sub: "+iterator.next());
+                }
+
+            }else{
+                Log.d(TAG,"string set null");
+            }
+
 
 
             if (newUser != null && newUser.contains(userInfo.getId())) {
