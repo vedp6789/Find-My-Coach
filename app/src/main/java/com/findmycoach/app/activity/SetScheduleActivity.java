@@ -706,11 +706,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         if (coming_month_non_coinciding_vacations.size() > 0) {  /* There can be some non coinciding vacation  */
                             for (int vacation_no = 0; vacation_no < coming_month_non_coinciding_vacations.size(); vacation_no++) {
 
-                                Calendar calendar_for_day_of_this_month = Calendar.getInstance();   /* each day of this month will get initialized as loop executes. For each day, matching the possible events or vacation coming for the mentee */
-                                calendar_for_day_of_this_month.set(newYear, newMonth - 1, day_of_this_month);  /*creating each day instance, as loop iterates  */
-                                long this_day_in_millis = calendar_for_day_of_this_month.getTimeInMillis();
-                                int this_day_week_day = calendar_for_day_of_this_month.get(Calendar.DAY_OF_WEEK);
-                                Log.d(TAG,"day_of_this_month: "+day_of_this_month+", month :"+newMonth+", year: "+newYear+", week_Day: "+this_day_week_day);
 
 
 
@@ -730,6 +725,15 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                 Calendar calendar_vacation_stop_date = Calendar.getInstance();
                                 calendar_vacation_stop_date.set(Integer.parseInt(vacation_stop_date.split("-")[0]), Integer.parseInt(vacation_stop_date.split("-")[1]) - 1, Integer.parseInt(vacation_stop_date.split("-")[2]));
                                 long vac_stop_date_millis = calendar_vacation_stop_date.getTimeInMillis();
+
+
+                                Calendar calendar_for_day_of_this_month = Calendar.getInstance();   /* each day of this month will get initialized as loop executes. For each day, matching the possible events or vacation coming for the mentee */
+                                calendar_for_day_of_this_month.set(newYear, newMonth - 1, day_of_this_month);  /*creating each day instance, as loop iterates  */
+                                long this_day_in_millis = calendar_for_day_of_this_month.getTimeInMillis();
+                                int this_day_week_day = calendar_for_day_of_this_month.get(Calendar.DAY_OF_WEEK);
+                                Log.d(TAG,"day_of_this_month: "+day_of_this_month+", month :"+newMonth+", year: "+newYear+", week_Day: "+this_day_week_day);
+
+
 
 
                                 if ((this_day_in_millis == vac_start_date_millis) || (this_day_in_millis == vac_stop_date_millis) || (this_day_in_millis > vac_start_date_millis && this_day_in_millis < vac_stop_date_millis)) {
