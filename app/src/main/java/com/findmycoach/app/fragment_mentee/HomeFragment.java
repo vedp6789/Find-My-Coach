@@ -670,13 +670,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     }
 
     private void updateAutoSuggestion(Suggestion suggestion) {
-        ArrayList<String> list = new ArrayList<String>();
-        List<Prediction> suggestions = suggestion.getPredictions();
-        for (int index = 0; index < suggestions.size(); index++) {
-            list.add(suggestions.get(index).getDescription());
+        try{
+            ArrayList<String> list = new ArrayList<String>();
+            List<Prediction> suggestions = suggestion.getPredictions();
+            for (int index = 0; index < suggestions.size(); index++) {
+                list.add(suggestions.get(index).getDescription());
+            }
+            arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.textview, list);
+            locationInput.setAdapter(arrayAdapter);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.textview, list);
-        locationInput.setAdapter(arrayAdapter);
+
     }
 
     @Override

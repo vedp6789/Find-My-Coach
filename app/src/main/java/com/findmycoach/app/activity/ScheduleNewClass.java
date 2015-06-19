@@ -166,7 +166,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             ll_location.setVisibility(View.GONE);
         } else {
             if (mentor_availability != null && mentor_availability.equals("1")) {
-                String tutorial_location = StorageHelper.AddressInformation(ScheduleNewClass.this, "training_location");
+                String tutorial_location = StorageHelper.addressInformation(ScheduleNewClass.this, "training_location");
                 if (tutorial_location.trim().length() <= 0) {
                     if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
                         et_location.setText(DashboardActivity.dashboardActivity.userCurrentAddress);

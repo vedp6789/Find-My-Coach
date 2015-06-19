@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.AddSlotAdapter;
+import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.fragment_mentor.StartDateForVaccationSchedule;
 import com.findmycoach.app.fragment_mentor.StartTimeForVaccationSchedule;
 import com.findmycoach.app.fragment_mentor.StopDateForVacationSchedule;
@@ -287,6 +288,10 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                                     JSONObject jsonObject = new JSONObject(response);
                                     if (jsonObject.getString("message").equalsIgnoreCase("success")) {
                                         Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.vacation_scheduled_success), Toast.LENGTH_SHORT).show();
+                                        if(MyScheduleFragment.myScheduleFragment != null){
+                                            Log.d(TAG,"myschedulefragment instace is not null");
+                                            MyScheduleFragment.myScheduleFragment.getCalendarDetailsAPICall();
+                                        }
                                         finish();
                                     } else {
                                         if (jsonObject.getString("message").equalsIgnoreCase("failure")) {
@@ -305,8 +310,8 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                             @Override
                             public void failureOperation(Object object, int statusCode, int calledApiValue) {
 
-                                Toast.makeText(ScheduleYourVacation.this, (String) object, Toast.LENGTH_SHORT).show();
-
+                                   Toast.makeText(ScheduleYourVacation.this, (String) object, Toast.LENGTH_SHORT).show();
+progressDialog.dismiss();
                             }
                         }, 36);
 
@@ -559,25 +564,25 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
     }
 
     private boolean validate() {
-        if (days_array.size() > 0) {
+
             if (time_from.equals("00:00") && time_to.equals("24:00")) {
                 start_hour = 0;
                 start_min = 0;
                 stop_hour = 24;
                 stop_min = 0;
 
-                return dateValidation();
+                return true;
 
 
             } else {
                 int start_time = ((start_hour * 60) + start_min) * 60;
                 int stop_time = ((stop_hour * 60) + stop_min) * 60;
 
-                if (start_time > stop_time) {
+                if (start_time > stop_time || (start_time == stop_time)) {
                     Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.stop_time_should_be_grater), Toast.LENGTH_LONG).show();
                     return false;
                 } else {
-                    return dateValidation();
+                    return true;
                 }
 
 
@@ -585,13 +590,14 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
 
            /* }*/
 
-        } else {
-            Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.select_at_least_one_day), Toast.LENGTH_SHORT).show();
-            return false;
-        }
+
     }
 
     boolean dateValidation() {
+
+
+
+
         if (tv_start_date.getText().length() > 0) {
             if (tv_till_date.getText().length() > 0) {
                 if (checkDaysAvailability(tv_start_date.getText().toString(), tv_till_date.getText().toString())) {

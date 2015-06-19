@@ -129,6 +129,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                     @Override
                     public void onClick(View v) {
                         RequestParams requestParams = new RequestParams();
+                        Log.d("FMC",slot.getSlot_id());
                         requestParams.add("slot_id", slot.getSlot_id());
                         showAlertOnDelete(0, requestParams);
 
@@ -401,6 +402,9 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 if (status == 1) {
                     /*success*/
                     Toast.makeText(AboutWeekViewEvent.this, message, Toast.LENGTH_SHORT).show();
+
+                    setResult(6);
+                    finish();
                 } else {
                     if (status == 2) {
                         /* failure*/
@@ -425,6 +429,8 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 if (status == 1) {
                     /*success*/
                     Toast.makeText(AboutWeekViewEvent.this, message, Toast.LENGTH_SHORT).show();
+                    setResult(1);
+                    finish();
                 } else {
                     if (status == 2) {
                         /* failure*/
@@ -432,7 +438,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                     } else {
                         if (status == 3)
                             Toast.makeText(AboutWeekViewEvent.this, message, Toast.LENGTH_SHORT).show();
-                                    /* wrong vacation id*/
+                                    /* wrong slot id*/
                     }
                 }
             } catch (JSONException e) {
