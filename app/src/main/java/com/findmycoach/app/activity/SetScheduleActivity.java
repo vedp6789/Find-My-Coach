@@ -505,14 +505,14 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                 Slot slot = coming_month.get(0);
                 if (Boolean.parseBoolean(slot.isSlot_created_on_network_success())) {  /* Checking whether the slots came in this month are either on network success as when there is network failure i am adding one slot with flag for network communication as false */
                     for (int day_of_this_month = 1; day_of_this_month <= number_of_days_in_this_month; day_of_this_month++) { /* This for loop will iterate through first to last day of next month. For each day what possible class, event or vacation can be possible will bet populated*/
-                        Calendar calendar_for_day_of_this_month = Calendar.getInstance();   /* each day of this month will get initialized as loop executes. For each day, matching the possible events or vacation coming for the mentee */
-                        calendar_for_day_of_this_month.set(newYear, newMonth - 1, day_of_this_month);  /*creating each day instance, as loop iterates  */
-                        long this_day_in_millis = calendar_for_day_of_this_month.getTimeInMillis();
-                        int this_day_week_day = calendar_for_day_of_this_month.get(Calendar.DAY_OF_WEEK);
-                        Log.d(TAG,"day_of_this_month: "+day_of_this_month+", month :"+newMonth+", year: "+newYear+", week_Day: "+this_day_week_day);
 
 
+                        Log.d(TAG,"coming month size: "+coming_month.size());
                         for (int slot_number = 0; slot_number < coming_month.size(); slot_number++) {   /*Will match possible slot, event or coinciding vacation for the matching slot of this day. */
+
+
+
+
                             AvailabilityFlags availabilityFlags = new AvailabilityFlags();
                             Slot new_slot = coming_month.get(slot_number);
 
@@ -525,6 +525,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             String event_id = null;
                             String slot_type = new_slot.getSlot_type();
                             String slot_max_users = new_slot.getSlot_max_users();
+
                             Calendar calendar_slot_start_date = Calendar.getInstance();
                             calendar_slot_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
                             long slot_start_date_in_millis = calendar_slot_start_date.getTimeInMillis();
@@ -533,6 +534,14 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                             Calendar calendar_slot_stop_date = Calendar.getInstance();
                             calendar_slot_stop_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
                             long slot_stop_date_in_millis = calendar_slot_stop_date.getTimeInMillis();
+
+                            Calendar calendar_for_day_of_this_month = Calendar.getInstance();   /* each day of this month will get initialized as loop executes. For each day, matching the possible events or vacation coming for the mentee */
+                            calendar_for_day_of_this_month.set(newYear, newMonth - 1, day_of_this_month);  /*creating each day instance, as loop iterates  */
+                            long this_day_in_millis = calendar_for_day_of_this_month.getTimeInMillis();
+                            int this_day_week_day = calendar_for_day_of_this_month.get(Calendar.DAY_OF_WEEK);
+                            Log.d(TAG,"day_of_this_month: "+day_of_this_month+", month :"+newMonth+", year: "+newYear+", week_Day: "+this_day_week_day);
+
+
 
                             Log.d(TAG,"slot start_date: "+start_date+"slot stop date: "+new_slot.getSlot_stop_date()+", slot_start_time: "+slot_start_time+", slot_stop_time: "+slot_stop_time);
                             Log.d(TAG,"slot_start_date_in_millis: "+slot_start_date_in_millis+", slot_stop_date_in_millis: "+slot_stop_date_in_millis+", this day in millis"+this_day_in_millis);
@@ -560,8 +569,8 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                         for (int mentee_no = 0; mentee_no < mentees.size(); mentee_no++) {
                                             Mentee mentee = mentees.get(mentee_no);
                                             List<EventDuration> eventDurations = mentee.getEventDurations();
-                                            level_event_duration:
-                                            for (int event_duration_part = 0; event_duration_part < eventDurations.size(); event_duration_part++) {  /* One mentee can have event in one or many classes in subsection. Here subsection means, while placing a schedule with mentor if any vacation found during slot then there that event get discontinuity and leads to a subsection*/
+
+                                            level_event_duration:for (int event_duration_part = 0; event_duration_part < eventDurations.size(); event_duration_part++) {  /* One mentee can have event in one or many classes in subsection. Here subsection means, while placing a schedule with mentor if any vacation found during slot then there that event get discontinuity and leads to a subsection*/
                                                 EventDuration eventDuration = eventDurations.get(event_duration_part);
 
                                                 String eventDuration_start_date = eventDuration.getStart_date();
@@ -696,6 +705,15 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
                         if (coming_month_non_coinciding_vacations.size() > 0) {  /* There can be some non coinciding vacation  */
                             for (int vacation_no = 0; vacation_no < coming_month_non_coinciding_vacations.size(); vacation_no++) {
+
+                                Calendar calendar_for_day_of_this_month = Calendar.getInstance();   /* each day of this month will get initialized as loop executes. For each day, matching the possible events or vacation coming for the mentee */
+                                calendar_for_day_of_this_month.set(newYear, newMonth - 1, day_of_this_month);  /*creating each day instance, as loop iterates  */
+                                long this_day_in_millis = calendar_for_day_of_this_month.getTimeInMillis();
+                                int this_day_week_day = calendar_for_day_of_this_month.get(Calendar.DAY_OF_WEEK);
+                                Log.d(TAG,"day_of_this_month: "+day_of_this_month+", month :"+newMonth+", year: "+newYear+", week_Day: "+this_day_week_day);
+
+
+
                                 Vacation vacation = coming_month_non_coinciding_vacations.get(vacation_no);
                                 String vacation_start_date = vacation.getStart_date();
                                 String vacation_stop_date = vacation.getStop_date();
@@ -756,10 +774,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         for (int day_of_this_month = 1; day_of_this_month <= number_of_days_in_this_month; day_of_this_month++) {
                          /* This for loop will iterate through first to last day of next month. For each day what possible class, event or vacation can be possible will bet populated*/
 
-                            Calendar calendar_for_day_of_this_month = Calendar.getInstance();   /* each day of this month will get initialized as loop executes. For each day, matching the possible events or vacation coming for the mentee */
-                            calendar_for_day_of_this_month.set(newYear, newMonth - 1, day_of_this_month);  /*creating each day instance, as loop iterates  */
-                            long this_day_in_millis = calendar_for_day_of_this_month.getTimeInMillis();
-                            int this_day_week_day = calendar_for_day_of_this_month.get(Calendar.DAY_OF_WEEK);
+
 
                             for (int non_coinciding_vacation = 0; non_coinciding_vacation < coming_month_non_coinciding_vacations.size(); non_coinciding_vacation++) {
                                 Vacation vacation1 = coming_month_non_coinciding_vacations.get(non_coinciding_vacation);
@@ -777,6 +792,12 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                 Calendar calendar_vacation_stop_date = Calendar.getInstance();
                                 calendar_vacation_stop_date.set(Integer.parseInt(vacation_stop_date.split("-")[0]), Integer.parseInt(vacation_stop_date.split("-")[1]) - 1, Integer.parseInt(vacation_stop_date.split("-")[2]));
                                 long vac_stop_date_millis = calendar_vacation_stop_date.getTimeInMillis();
+
+
+                                Calendar calendar_for_day_of_this_month = Calendar.getInstance();   /* each day of this month will get initialized as loop executes. For each day, matching the possible events or vacation coming for the mentee */
+                                calendar_for_day_of_this_month.set(newYear, newMonth - 1, day_of_this_month);  /*creating each day instance, as loop iterates  */
+                                long this_day_in_millis = calendar_for_day_of_this_month.getTimeInMillis();
+                                int this_day_week_day = calendar_for_day_of_this_month.get(Calendar.DAY_OF_WEEK);
 
 
                                 if ((this_day_in_millis == vac_start_date_millis) || (this_day_in_millis == vac_stop_date_millis) || (this_day_in_millis > vac_start_date_millis && this_day_in_millis < vac_stop_date_millis)) {

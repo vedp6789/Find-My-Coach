@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.AddSlotAdapter;
+import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.fragment_mentor.StartDateForVaccationSchedule;
 import com.findmycoach.app.fragment_mentor.StartTimeForVaccationSchedule;
 import com.findmycoach.app.fragment_mentor.StopDateForVacationSchedule;
@@ -287,6 +288,10 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                                     JSONObject jsonObject = new JSONObject(response);
                                     if (jsonObject.getString("message").equalsIgnoreCase("success")) {
                                         Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.vacation_scheduled_success), Toast.LENGTH_SHORT).show();
+                                        if(MyScheduleFragment.myScheduleFragment != null){
+                                            Log.d(TAG,"myschedulefragment instace is not null");
+                                            MyScheduleFragment.myScheduleFragment.getCalendarDetailsAPICall();
+                                        }
                                         finish();
                                     } else {
                                         if (jsonObject.getString("message").equalsIgnoreCase("failure")) {
@@ -305,8 +310,8 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                             @Override
                             public void failureOperation(Object object, int statusCode, int calledApiValue) {
 
-                                Toast.makeText(ScheduleYourVacation.this, (String) object, Toast.LENGTH_SHORT).show();
-
+                                   Toast.makeText(ScheduleYourVacation.this, (String) object, Toast.LENGTH_SHORT).show();
+progressDialog.dismiss();
                             }
                         }, 36);
 
@@ -573,7 +578,7 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                 int start_time = ((start_hour * 60) + start_min) * 60;
                 int stop_time = ((stop_hour * 60) + stop_min) * 60;
 
-                if (start_time > stop_time) {
+                if (start_time > stop_time || (start_time == stop_time)) {
                     Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.stop_time_should_be_grater), Toast.LENGTH_LONG).show();
                     return false;
                 } else {

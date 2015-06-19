@@ -722,10 +722,11 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             /* Saving area of coaching in sharedpreference */
             if(areaOfCoaching.getText().toString().length() > 0){
                 Log.d(TAG,"area_of coaching: "+areaOfCoaching.getText().toString());
-                String area_of_coaching[] =areaOfCoaching.getText().toString().split(",");
+                String coaching_subject [] =areaOfCoaching.getText().toString().split(",");
+                Log.d(TAG,"coaching_subject size"+coaching_subject.length);
                 Set<String> sub_category_stringSet = new HashSet<String>();
-                for(int i = 0 ; i < areaOfCoaching.length() ; i++){
-                    sub_category_stringSet.add(area_of_coaching[i].trim());
+                for(int i = 0 ; i < coaching_subject.length ; i++){
+                    sub_category_stringSet.add(coaching_subject[i].trim());
                 }
                 StorageHelper.storeListOfCoachingSubCategories(EditProfileActivityMentor.this,sub_category_stringSet);
 
