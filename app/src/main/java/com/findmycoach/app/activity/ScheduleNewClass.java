@@ -42,6 +42,8 @@ import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -426,24 +428,46 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
             int total_amount = 0;
             int cost = Integer.parseInt(charges.split(" per ", 2)[0]);
-            String cost_basis = charges.split(" per ", 2)[0];
-            if (cost_basis.equalsIgnoreCase("hour")) {
-                class_days_after_reducing_vacation = slotDurationDetailBeans.size();
+            String cost_basis = charges.split(" per ", 2)[1];
+            Log.d(TAG,"cost: "+cost+"cost basis: "+cost_basis);
+
+            if (cost_basis.equalsIgnoreCase("hour")) {               /* assuming mentor cost per hour */
+
+                /* one day cost */
+
+                int start_time_in_seconds = ((slot_start_hour*60)*60)+(slot_start_minute*60);
+                int stop_time_in_seconds = ((slot_stop_hour*60)*60)+(slot_stop_minute*60);
+
+                double time_duration_in_day=stop_time_in_seconds-start_time_in_seconds;  /* One day class durations in seconds*/
+
+                int one_hour_seconds=60*60;
+
+                double one_day_amount = (time_duration_in_day/one_hour_seconds)*cost;
+                Log.d(TAG,"one day amount: "+one_day_amount);
+
+                double total_class_duration_amount=class_days_after_reducing_vacation *one_day_amount;
+
+                Log.d(TAG,"total_amount:"+total_class_duration_amount);
+
+
+                try {
+                    tv_total_charges.setText("\u20B9 " + String.valueOf(total_class_duration_amount));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+                /*class_days_after_reducing_vacation = slotDurationDetailBeans.size();
                 int no_of_hours_in_a_day = slot_stop_hour - slot_start_hour;
                 int no_of_total_hours = class_days_after_reducing_vacation * no_of_hours_in_a_day;
                 total_amount = no_of_total_hours * cost;
-
+*/
             } else {
              /*this will not allowed now as there is only cost_basis that is per hour*/
             }
 
 
-            Log.d(TAG, "Total amount :" + total_amount);
-            try {
-                tv_total_charges.setText("\u20B9 " + String.valueOf(total_amount));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
 
         } else {
             class_not_possible = true;
@@ -691,7 +715,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
     private RequestParams getRequestParamsRelatedToThisClass() {
         RequestParams requestParams1 = new RequestParams();
-        requestParams1.add("id", slot_id.toString());
+        requestParams1.add("id", slot.getSlot_id().toString());
         requestParams1.add("mentor_id", mentor_id);
         String student_id = StorageHelper.getUserDetails(ScheduleNewClass.this, "user_id");
         Log.d(TAG, "student_id what getting sent to server : " + student_id);
@@ -706,16 +730,22 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             jsonArray1.put(durationOfSuccessfulClassDays.getStart_date());
             jsonArray1.put(durationOfSuccessfulClassDays.getStop_date());
             jsonArray.put(jsonArray1);
+
+
+
         }
 
 
         String from_date = tv_from_date.getText().toString();
         requestParams1.add("dates", jsonArray.toString());
+        Log.d(TAG,"event duration dates string: "+jsonArray.toString());
+
+
         requestParams1.add("slot_type", slot_type);
         if (mentor_availability.equals("1") && slot_type.equalsIgnoreCase("individual")) {
             requestParams1.add("location", et_location.getText().toString());
         }
-
+        Log.d(TAG,"sub category id: "+getSubCategoryId());
         requestParams1.add("sub_category_id", getSubCategoryId());
 
         if (selected_mentor_for.equalsIgnoreCase("child")) {
@@ -730,13 +760,71 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
     private String getSubCategoryId() {
         String sub_category_id = "";
+        //Log.d(TAG,"json: "+DataBase.singleton(this).getAll());
+        try {
+            JSONObject jO_all=new JSONObject(DataBase.singleton(this).getAll());
+            JSONArray jsonArray_categories=jO_all.getJSONArray("categories");
+            for(int category=0; category < jsonArray_categories.length(); category++){
+                JSONObject jO_category=jsonArray_categories.getJSONObject(category);
+                if(jO_category.has("sub_categories")){
+                    JSONArray jA_subcategories=jO_category.getJSONArray("sub_categories");
+
+                    for(int sub_category=0; sub_category < jA_subcategories.length(); sub_category++){
+                        JSONObject jO_sub_category=jA_subcategories.getJSONObject(sub_category);
+                        String sub_cteg_name=jO_sub_category.getString("sub_category_name");
+                        if(sub_cteg_name.trim().equalsIgnoreCase(selected_subject.trim())){
+                            Log.d(TAG,"sub_category_name: "+sub_cteg_name+", selected_subject: "+selected_subject);
+                            sub_category_id = jO_sub_category.getString("id");
+                            Log.d(TAG,"id: "+sub_category_id);
+                            break;
+                        }
+                    }
+                }else{
+                    if(jO_category.has("categories")){
+                        JSONArray jA_category=jO_category.getJSONArray("categories");
+                        for(int cat=0; cat < jA_category.length(); cat++){
+                            JSONObject jO_catego=jA_category.getJSONObject(cat);
+                            JSONArray jA_sub_cat=jO_catego.getJSONArray("sub_categories");
+                            for(int sub_cat=0; sub_cat < jA_sub_cat.length() ; sub_cat++){
+                                JSONObject jsonObject=jA_sub_cat.getJSONObject(sub_cat);
+                                String category_name=jsonObject.getString("sub_category_name");
+                                if(category_name.trim().equalsIgnoreCase(selected_subject.trim())){
+                                    Log.d(TAG,"sub_category_name: "+category_name+", selected_subject: "+selected_subject);
+                                    sub_category_id = jsonObject.getString("id");
+                                    Log.d(TAG,"id: "+sub_category_id);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return sub_category_id;
+/*        Log.d(TAG,"djgkjklygh"+DataBase.singleton(this).getAll());
+
         Category category = new Gson().fromJson(DataBase.singleton(this).getAll(), Category.class);
         for (Datum d : category.getData()) {
+
+
+
+            Log.d(TAG,"subcategory id: "+sub_category_id);
 
             if (!sub_category_id.equals(""))
                 break;
 
+            Log.d(TAG,"subcategory id: "+sub_category_id);
+
+
             for (DatumSub datumSub : d.getSubCategories()) {
+                Log.d(TAG,"datum sub"+datumSub.getName().trim()+", selected subject"+selected_subject.trim());
+
                 if (datumSub.getName().trim().equalsIgnoreCase(selected_subject.trim())) {
                     sub_category_id = datumSub.getId();
                     break;
@@ -746,11 +834,21 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             if (!sub_category_id.equals("")) {
                 for (Datum datum : d.getCategories()) {
 
+                    Log.d(TAG,"sub_category_id: "+sub_category_id);
+
                     if (!sub_category_id.equals(""))
                         break;
 
+                    Log.d(TAG,"sub_category_id: "+sub_category_id);
+
+
                     for (DatumSub datumSub : datum.getSubCategories()) {
+
+
                         if (datumSub.getName().trim().equalsIgnoreCase(selected_subject.trim())) {
+
+                            Log.d(TAG,"datum sub"+datumSub.getName().trim()+", selected subject"+selected_subject.trim());
+
                             sub_category_id = datumSub.getId();
                             break;
                         }
@@ -759,7 +857,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             }
         }
         Log.e(TAG, sub_category_id + " : from get subCategoryId()");
-        return sub_category_id;
+        return sub_category_id;*/
     }
 
 
