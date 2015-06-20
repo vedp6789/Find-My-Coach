@@ -280,14 +280,17 @@ public class Slot implements Parcelable {
                 long vacation_start_date_in_millis = calendar_vacation_start_date.getTimeInMillis();
 
 
-                Calendar calendar_vacation_stop_date = Calendar.getInstance();
-                calendar_vacation_stop_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1])-1, Integer.parseInt(stop_date.split("-")[2]));
-                long vacation_stop_date_in_millis = calendar_vacation_stop_date.getTimeInMillis();
-
                 Calendar calendar=Calendar.getInstance();
                 calendar.set(year,month,day);
                 long calendar_time_in_millis=calendar.getTimeInMillis();
                 int week_day_for_grid_day = calendar.get(Calendar.DAY_OF_WEEK);
+
+
+
+                Calendar calendar_vacation_stop_date = Calendar.getInstance();
+                calendar_vacation_stop_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1])-1, Integer.parseInt(stop_date.split("-")[2]));
+                long vacation_stop_date_in_millis = calendar_vacation_stop_date.getTimeInMillis();
+
 
 
                 if ((calendar_time_in_millis == vacation_start_date_in_millis) ||
