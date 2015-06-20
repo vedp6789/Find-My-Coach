@@ -390,7 +390,7 @@ public class Slot implements Parcelable {
                 slotDurationDetailBean.setWeek_day(String.valueOf(calendar_schedule_start_date.get(Calendar.DAY_OF_WEEK)));
                 slotDurationDetailBeans.add(slotDurationDetailBean);
             }
-            calendar_schedule_start_date.add(Calendar.DAY_OF_MONTH, 1);
+            calendar_schedule_start_date.add(Calendar.DATE, 1);
 
 
 

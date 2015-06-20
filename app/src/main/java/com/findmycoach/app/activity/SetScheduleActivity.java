@@ -556,7 +556,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                 Log.d(TAG, "this day matches ");
                                 if (thisDayMatchesWithArrayOfWeekDays(slot_week_days, this_day_week_day)) {
                                     Log.d(TAG, "slot day matches with this day");
-
                                     availabilityFlags.slot_found = true;  /* making slot_found flag true for this day */
                                     List<Event> eventList = new_slot.getEvents();
                                     List<Vacation> coincidingVacationList = new_slot.getVacations();
@@ -822,8 +821,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                 long vac_stop_date_millis = calendar_vacation_stop_date.getTimeInMillis();
 
 
-
-
                                 if ((this_day_in_millis == vac_start_date_millis) || (this_day_in_millis == vac_stop_date_millis) || (this_day_in_millis > vac_start_date_millis && this_day_in_millis < vac_stop_date_millis)) {
                                          /* this prove non coinciding vacation on this day */
                                     Calendar startTime;
@@ -896,7 +893,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         Calendar cal_slot_stop_date = Calendar.getInstance();
                         cal_slot_stop_date.set(Integer.parseInt(slot_stop_date.split("-")[0]), Integer.parseInt(slot_stop_date.split("-")[1]) - 1, Integer.parseInt(slot_stop_date.split("-")[2]));
                         long cal_slot_stop_date_millis = cal_slot_stop_date.getTimeInMillis();
-
 
 
                         if ((this_day_in_millis == cal_slot_start_date_millis) || (this_day_in_millis == cal_slot_stop_date_millis) || (this_day_in_millis > cal_slot_start_date_millis && this_day_in_millis < cal_slot_stop_date_millis)) {
@@ -1016,7 +1012,21 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
 
         WeekViewEvent weekViewEvent;
-        weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id), getFreeSlotTitle(new_slot.getSlot_subject(), Integer.parseInt(new_slot.getSlot_start_date().split("-")[2]), Integer.parseInt(new_slot.getSlot_start_date().split("-")[1]), Integer.parseInt(new_slot.getSlot_start_date().split("-")[0]), Integer.parseInt(new_slot.getSlot_stop_date().split("-")[2]), Integer.parseInt(new_slot.getSlot_stop_date().split("-")[1]), Integer.parseInt(new_slot.getSlot_stop_date().split("-")[0]), Integer.parseInt(new_slot.getSlot_start_time().split(":")[0]), Integer.parseInt(new_slot.getSlot_start_time().split(":")[1]), Integer.parseInt(new_slot.getSlot_stop_time().split(":")[0]), Integer.parseInt(new_slot.getSlot_stop_time().split(":")[1]), new_slot.getSlot_type(), new_slot.getSlot_week_days()), startTime, endTime, new_slot, mentorInfo, mentor_id, mentor_availablity, 202, charges, arrayList_subcategory);
+        weekViewEvent = new WeekViewEvent(Integer.parseInt(slot_id),
+                getFreeSlotTitle(new_slot.getSlot_subject(),
+                        Integer.parseInt(new_slot.getSlot_start_date().split("-")[2]),
+                        Integer.parseInt(new_slot.getSlot_start_date().split("-")[1]),
+                        Integer.parseInt(new_slot.getSlot_start_date().split("-")[0]),
+                        Integer.parseInt(new_slot.getSlot_stop_date().split("-")[2]),
+                        Integer.parseInt(new_slot.getSlot_stop_date().split("-")[1]),
+                        Integer.parseInt(new_slot.getSlot_stop_date().split("-")[0]),
+                        Integer.parseInt(new_slot.getSlot_start_time().split(":")[0]),
+                        Integer.parseInt(new_slot.getSlot_start_time().split(":")[1]),
+                        Integer.parseInt(new_slot.getSlot_stop_time().split(":")[0]),
+                        Integer.parseInt(new_slot.getSlot_stop_time().split(":")[1]),
+                        new_slot.getSlot_type(), new_slot.getSlot_week_days()),
+                startTime, endTime, new_slot, mentorInfo, mentor_id, mentor_availablity,
+                202, charges, arrayList_subcategory);
         weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
         events.add(weekViewEvent);
     }
@@ -1042,8 +1052,9 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             long cal_vac_stop_date_millis = cal_vac_stop_date.getTimeInMillis();
 
 
-
-            if ((this_day_in_millis1 == cal_vac_start_date_millis) || (this_day_in_millis1 == cal_vac_stop_date_millis) || (this_day_in_millis1 > cal_vac_start_date_millis && this_day_in_millis1 < cal_vac_stop_date_millis)) {
+            if ((this_day_in_millis1 == cal_vac_start_date_millis) ||
+                    (this_day_in_millis1 == cal_vac_stop_date_millis) ||
+                    (this_day_in_millis1 > cal_vac_start_date_millis && this_day_in_millis1 < cal_vac_stop_date_millis)) {
                 vacation_found = true;
                 break;
             }

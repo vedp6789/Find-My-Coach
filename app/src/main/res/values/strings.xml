@@ -712,6 +712,7 @@
     <string name="prompt_google_plus">Google +</string>
     <string name="days">Days</string>
     <string name="class_days">days</string>
+    <string name="class_day">day</string>
     <string name="select_days">Select days</string>
     <string name="from">From :</string>
     <string name="all">All</string>
