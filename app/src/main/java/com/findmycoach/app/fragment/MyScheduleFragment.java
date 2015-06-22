@@ -89,7 +89,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     private int NEW_SLT = 0, VAC_SCH = 1, RESULT_OK = 500;
     protected static int month_from_dialog, year_from_dialog; /* this is getting initialized from CustomDatePicker fragment when user wants to jump on an specific date*/
     public boolean populate_calendar_from_adapter;   /* this is getting true when currentMonthArrayList or currentMonthNonCoincidingVacation having flag network communication false, Getting initialized from CalendarGridAdatpter */
-                                      /* populate calendar from adapter is also getting changed from SetScheduleActivity when deletion of slot or vacation occurs*/
+    /* populate calendar from adapter is also getting changed from SetScheduleActivity when deletion of slot or vacation occurs*/
     private String previous_month_start_date;/* this will get initialized when api is requested for three months (previous, current, coming)*/
     private String next_month_requested_date;
     private String prev_month_requested_date;
@@ -127,7 +127,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
-        myScheduleFragment=null;
+        myScheduleFragment = null;
     }
 
     @Override
@@ -579,9 +579,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 
-
-
-        Log.d(TAG,"request_Code: "+requestCode+", result code: "+resultCode);
+        Log.d(TAG, "request_Code: " + requestCode + ", result code: " + resultCode);
         if (requestCode == NEW_SLT && resultCode == 500) {
             Log.d(TAG, "onActivityResult call ");
             getCalendarDetailsAPICall();
@@ -1107,6 +1105,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 previousMonthArrayList = getSlotsForThis(slots, previous_month, previous_month_year, finalizeDaysInMonth(previous_month, previous_month_year));
                 currentMonthArrayList = getSlotsForThis(slots, current_month, current_year, finalizeDaysInMonth(current_month, current_year));
                 comingMonthArrayList = getSlotsForThis(slots, coming_month, coming_year, finalizeDaysInMonth(coming_month, coming_year));
+
+                Log.d(TAG, "pr_slots_size" + previousMonthArrayList.size());
+                Log.d(TAG, "cr_slots_size" + currentMonthArrayList.size());
+                Log.d(TAG, "co_slots_size" + comingMonthArrayList.size());
+
                 previousMonthNonCoincidingVacation = getVacationsForThis(vacations, previous_month, previous_month_year, finalizeDaysInMonth(previous_month, previous_month_year));
                 currentMonthNonCoincidingVacation = getVacationsForThis(vacations, current_month, current_year, finalizeDaysInMonth(current_month, current_year));
                 comingMonthNonCoincidingVacation = getVacationsForThis(vacations, coming_month, coming_year, finalizeDaysInMonth(coming_month, coming_year));
@@ -1334,9 +1337,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     String vacation_weekdays_array[] = new String[vacation_weekdays.length()];
                     for (int week_day = 0; week_day < vacation_weekdays.length(); week_day++) {
                         vacation_weekdays_array[week_day] = vacation_weekdays.getString(week_day);   *//* week_day is used to pass index *//*
-                    }*/
                     vacation.setStart_time(vacation_jsonObject.getString("start_time"));
                     vacation.setStop_time(vacation_jsonObject.getString("stop_time"));
+                    }*/
+
                     vacation.setVacation_made_at_network_success("true");
                     vacations.add(vacation);
                 }
@@ -1353,40 +1357,54 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     }
 
     private ArrayList<Slot> getSlotsForThis(List<Slot> slots, int month, int year, int days) {
+
+        Log.d(TAG, "slots_size:" + slots.size() + ", month: " + month + ", year: " + year + ", days: " + days);
         ArrayList<Slot> slotArrayList = new ArrayList<Slot>();
-
-        Calendar calendar_start_of_month = Calendar.getInstance();
-        calendar_start_of_month.set(year, month - 1, 1);
-        long month_start_date_in_millis = calendar_start_of_month.getTimeInMillis();
-
-        Calendar calendar_end_of_month = Calendar.getInstance();
-        calendar_end_of_month.set(year, month - 1, days);
-        long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
-
 
         for (int slot_no = 0; slot_no < slots.size(); slot_no++) {
             Slot slot = slots.get(slot_no);
             String start_date = slot.getSlot_start_date();
             String stop_date = slot.getSlot_stop_date();
 
+            Calendar calendar_start_of_month = Calendar.getInstance();
+            calendar_start_of_month.set(year, month - 1, 1);
+            long month_start_date_in_millis = calendar_start_of_month.getTimeInMillis();
+            Log.d(TAG, "start_of_month_millis: " + month_start_date_in_millis);
+
+
             Calendar calendar_slot_start_date = Calendar.getInstance();
             calendar_slot_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
             long slot_start_date_in_millis = calendar_slot_start_date.getTimeInMillis();
+            Log.d(TAG, "slot_start_of_month_millis: " + slot_start_date_in_millis);
+
+
             Calendar calendar_slot_end_date = Calendar.getInstance();
             calendar_slot_end_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
             long slot_stop_date_in_millis = calendar_slot_end_date.getTimeInMillis();
+            Log.d(TAG, "slot_stop_of_month_millis: " + slot_stop_date_in_millis);
+
+
+            Calendar calendar_end_of_month = Calendar.getInstance();
+            calendar_end_of_month.set(year, month - 1, days);
+            long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
+            Log.d(TAG, "stop_of_month_millis: " + month_end_date_in_millis);
 
 
             if ((slot_start_date_in_millis < month_start_date_in_millis && slot_stop_date_in_millis > month_end_date_in_millis) ||
                     (slot_start_date_in_millis < month_start_date_in_millis && slot_stop_date_in_millis > month_start_date_in_millis && slot_stop_date_in_millis < month_end_date_in_millis) ||
-                    (slot_start_date_in_millis > month_start_date_in_millis && slot_start_date_in_millis < month_end_date_in_millis && slot_stop_date_in_millis > month_end_date_in_millis) ||
+                    (slot_start_date_in_millis > month_start_date_in_millis && slot_start_date_in_millis < month_end_date_in_millis && (slot_stop_date_in_millis > month_end_date_in_millis || slot_stop_date_in_millis == month_end_date_in_millis)  ) ||
                     (slot_start_date_in_millis > month_start_date_in_millis && slot_start_date_in_millis < month_end_date_in_millis && slot_stop_date_in_millis > month_start_date_in_millis && slot_stop_date_in_millis < month_end_date_in_millis) ||
                     (slot_start_date_in_millis == month_start_date_in_millis && slot_stop_date_in_millis == month_end_date_in_millis)) {
 
                 slotArrayList.add(slot);
 
+            } else {
+                Log.d(TAG, "not matched");
             }
         }
+
+
+        Log.d(TAG, "slots arrayList for the month size:" + slotArrayList.size());
 
         return slotArrayList;
 
@@ -1396,31 +1414,34 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     private ArrayList<Vacation> getVacationsForThis(List<Vacation> vacations, int month, int year, int days) {
         ArrayList<Vacation> vacationArrayList = new ArrayList<Vacation>();
 
-        Calendar calendar_start_of_month = Calendar.getInstance();
-        calendar_start_of_month.set(year, month - 1, 1);
-        long month_start_date_in_millis = calendar_start_of_month.getTimeInMillis();
-
-        Calendar calendar_end_of_month = Calendar.getInstance();
-        calendar_end_of_month.set(year, month - 1, days);
-        long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
-
 
         for (int vacation_no = 0; vacation_no < vacations.size(); vacation_no++) {
             Vacation vacation = vacations.get(vacation_no);
             String start_date = vacation.getStart_date();
             String stop_date = vacation.getStop_date();
 
+            Calendar calendar_start_of_month = Calendar.getInstance();
+            calendar_start_of_month.set(year, month - 1, 1);
+            long month_start_date_in_millis = calendar_start_of_month.getTimeInMillis();
+
+
             Calendar calendar_vacation_start_date = Calendar.getInstance();
             calendar_vacation_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
             long vacation_start_date_in_millis = calendar_vacation_start_date.getTimeInMillis();
+
+
             Calendar calendar_vacation_end_date = Calendar.getInstance();
             calendar_vacation_end_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
             long vacation_stop_date_in_millis = calendar_vacation_end_date.getTimeInMillis();
 
 
+            Calendar calendar_end_of_month = Calendar.getInstance();
+            calendar_end_of_month.set(year, month - 1, days);
+            long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
+
             if ((vacation_start_date_in_millis < month_start_date_in_millis && vacation_stop_date_in_millis > month_end_date_in_millis) ||
                     (vacation_start_date_in_millis < month_start_date_in_millis && vacation_stop_date_in_millis > month_start_date_in_millis && vacation_stop_date_in_millis < month_end_date_in_millis) ||
-                    (vacation_start_date_in_millis > month_start_date_in_millis && vacation_start_date_in_millis < month_end_date_in_millis && vacation_stop_date_in_millis > month_end_date_in_millis) ||
+                    (vacation_start_date_in_millis > month_start_date_in_millis && vacation_start_date_in_millis < month_end_date_in_millis && (vacation_stop_date_in_millis > month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis) ) ||
                     (vacation_start_date_in_millis > month_start_date_in_millis && vacation_start_date_in_millis < month_end_date_in_millis && vacation_stop_date_in_millis > month_start_date_in_millis && vacation_stop_date_in_millis < month_end_date_in_millis) ||
                     (vacation_start_date_in_millis == month_start_date_in_millis && vacation_stop_date_in_millis == month_end_date_in_millis)) {
 

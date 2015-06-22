@@ -47,7 +47,8 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="right"
                         android:background="@android:color/transparent"
-                        android:gravity="center_vertical" />
+                        android:gravity="center_vertical"
+                        android:visibility="gone" />
 
                     <com.findmycoach.app.views.ChizzleTextView
                         android:id="@+id/tv_subject"
@@ -56,8 +57,14 @@
                         android:gravity="center"
                         android:textColor="@color/purple"
                         android:textSize="@dimen/profile_details" />
+                    <com.findmycoach.app.views.ChizzleTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/tv_class_timing"
+                        android:background="@color/purple_light" />
 
                     <LinearLayout
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="-20dp"
@@ -68,7 +75,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:layout_marginBottom="-1dp"
-                            android:src="@drawable/drop_down_arrow_purple_small" />
+                            android:src="@drawable/drop_down_arrow_purple_small"
+                            android:visibility="gone" />
 
                         <com.findmycoach.app.views.ChizzleTextView
                             android:layout_width="match_parent"
@@ -227,8 +235,6 @@
                 </LinearLayout>
 
 
-
-
                 <LinearLayout
                     android:id="@+id/toTime"
                     android:layout_width="match_parent"
@@ -286,10 +292,10 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_toRightOf="@+id/ll_total_class"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_toRightOf="@+id/ll_total_class"
                     android:focusable="true"
                     android:focusableInTouchMode="true">
 
@@ -310,7 +316,7 @@
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
                     android:layout_gravity="right"
-                    android:background="@android:drawable/ic_menu_info_details"/>
+                    android:background="@android:drawable/presence_online" />
 
 
             </RelativeLayout>
@@ -359,10 +365,6 @@
             </LinearLayout>
 
 
-
-
-
-
             <LinearLayout
                 android:id="@+id/ll_location"
                 android:layout_width="match_parent"
@@ -391,7 +393,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true">
 
-                   <com.findmycoach.app.views.ChizzleEditText
+                    <com.findmycoach.app.views.ChizzleEditText
                         android:id="@+id/et_location"
                         style="@style/EditTextCustomHoloPurple"
                         android:layout_width="match_parent"
@@ -607,14 +609,14 @@
                 android:id="@+id/b_proceed_to_payment"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_button_height"
+                android:layout_below="@+id/rg_payment_option"
+                android:layout_marginBottom="@dimen/back_margin"
                 android:layout_marginLeft="@dimen/back_margin"
                 android:layout_marginRight="@dimen/back_margin"
-                android:layout_marginBottom="@dimen/back_margin"
-                android:textSize="@dimen/button_text_size"
                 android:background="@drawable/custom_button_click_white_bg"
+                android:text="@string/post_schedule_request"
                 android:textColor="@color/custom_button_text_color_click_white_bg"
-                android:layout_below="@+id/rg_payment_option"
-                android:text="@string/post_schedule_request" />
+                android:textSize="@dimen/button_text_size" />
 
 
         </RelativeLayout>

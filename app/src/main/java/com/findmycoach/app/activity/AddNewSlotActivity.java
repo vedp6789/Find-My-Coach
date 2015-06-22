@@ -340,6 +340,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                         Log.d(TAG, "Going to create a new slot for you.");
                         RequestParams requestParams = new RequestParams();
                         requestParams.add("mentor_id", StorageHelper.getUserDetails(AddNewSlotActivity.this, "user_id"));
+                        Log.d(TAG,"mentor_id"+StorageHelper.getUserDetails(AddNewSlotActivity.this, "user_id"));
                         Log.d(TAG, "From date" + tv_start_date.getText().toString());
                         Log.d(TAG, "Till date" + tv_till_date.getText().toString());
 

@@ -209,7 +209,7 @@ public class Slot implements Parcelable {
     }
 
 
-    public boolean anyEventFound(long calendar_time_in_millis) {     /* checking whether any event found for this specific day or not */
+    public boolean anyEventFound(int year, int month, int day) {     /* checking whether any event found for this specific day or not */
         if (events.size() > 0) {
             boolean event_found = false;
             for (int event_index = 0; event_index < events.size(); event_index++) {
@@ -221,12 +221,15 @@ public class Slot implements Parcelable {
                     List<EventDuration> eventDurations =mentee.getEventDurations();  /* For each mentee, there event duration can be in broken chunk of durations. So we have to check whether the specific day of slot coming in between of one of the chunk with valid week-day or not. We have to find number of active classes between that chunk where this specific day lie and we have to match whether this day is similar to one of the active days or not  */
                     for(int event_duration_no=0; event_duration_no < eventDurations.size() ; event_duration_no++ ){
                         EventDuration eventDuration=eventDurations.get(event_duration_no);
+
                         String start_date =eventDuration.getStart_date();
                         Calendar calendar_start_date =Calendar.getInstance();
                         calendar_start_date.set(Integer.parseInt(start_date.split("-")[0]),Integer.parseInt(start_date.split("-")[1])-1,Integer.parseInt(start_date.split("-")[2]));
+
                         String stop_date =eventDuration.getStop_date();
                         Calendar calendar_stop_date =Calendar.getInstance();
                         calendar_stop_date.set(Integer.parseInt(stop_date.split("-")[0]),Integer.parseInt(stop_date.split("-")[1])-1,Integer.parseInt(stop_date.split("-")[2]));
+
 
                         ArrayList<SlotDurationDetailBean> activeClassDaysAndTheirWeekDay = calculateNoOfTotalClassDays(calendar_start_date,calendar_stop_date,slot_week_days);
                         for(int activeClassDay = 0; activeClassDay < activeClassDaysAndTheirWeekDay.size() ; activeClassDay++ ){
@@ -236,11 +239,16 @@ public class Slot implements Parcelable {
                             calendar_active_class_date.set(Integer.parseInt(active_class_date.split("-")[0]),Integer.parseInt(active_class_date.split("-")[1])-1,Integer.parseInt(active_class_date.split("-")[2]));
                             long active_class_in_millis =calendar_active_class_date.getTimeInMillis();
 
-                            if(active_class_in_millis == calendar_time_in_millis){
-                                /* The day of grid matches with one of mentee active class days */
+                            if((Integer.parseInt(active_class_date.split("-")[0])== year)  && (Integer.parseInt(active_class_date.split("-")[1])-1==month )&&(Integer.parseInt(active_class_date.split("-")[2]))==day){
                                 event_found = true;
                                 break level_mentee;
                             }
+/*
+                            if(active_class_in_millis == calendar_time_in_millis){
+                                *//* The day of grid matches with one of mentee active class days *//*
+                                event_found = true;
+                                break level_mentee;
+                            }*/
                         }
 
 
@@ -256,10 +264,9 @@ public class Slot implements Parcelable {
     }
 
 
-    public boolean anyVacationFound(Calendar grid_day) {     /* checking whether any vacation found for a specific day or not */
+    public boolean anyVacationFound(int year,int month,int day) {     /* checking whether any vacation found for a specific day or not */
 
-        long calendar_time_in_millis=grid_day.getTimeInMillis();
-        int week_day_for_grid_day = grid_day.get(Calendar.DAY_OF_WEEK);
+
         if (vacations.size() > 0) {
             boolean vacation_found = false;
             for (int vacation_index = 0; vacation_index < vacations.size(); vacation_index++) {
@@ -273,9 +280,17 @@ public class Slot implements Parcelable {
                 long vacation_start_date_in_millis = calendar_vacation_start_date.getTimeInMillis();
 
 
+                Calendar calendar=Calendar.getInstance();
+                calendar.set(year,month,day);
+                long calendar_time_in_millis=calendar.getTimeInMillis();
+                int week_day_for_grid_day = calendar.get(Calendar.DAY_OF_WEEK);
+
+
+
                 Calendar calendar_vacation_stop_date = Calendar.getInstance();
                 calendar_vacation_stop_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1])-1, Integer.parseInt(stop_date.split("-")[2]));
                 long vacation_stop_date_in_millis = calendar_vacation_stop_date.getTimeInMillis();
+
 
 
                 if ((calendar_time_in_millis == vacation_start_date_in_millis) ||
@@ -375,7 +390,7 @@ public class Slot implements Parcelable {
                 slotDurationDetailBean.setWeek_day(String.valueOf(calendar_schedule_start_date.get(Calendar.DAY_OF_WEEK)));
                 slotDurationDetailBeans.add(slotDurationDetailBean);
             }
-            calendar_schedule_start_date.add(Calendar.DAY_OF_MONTH, 1);
+            calendar_schedule_start_date.add(Calendar.DATE, 1);
 
 
 

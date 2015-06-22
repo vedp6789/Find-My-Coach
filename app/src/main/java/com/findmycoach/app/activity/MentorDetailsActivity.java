@@ -27,10 +27,6 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.CalendarGridAdapter;
-import com.findmycoach.app.beans.CalendarSchedule.Day;
-import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
-import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
-import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
 import com.findmycoach.app.beans.CalendarSchedule.Event;
 import com.findmycoach.app.beans.CalendarSchedule.EventDuration;
 import com.findmycoach.app.beans.CalendarSchedule.Mentee;
@@ -976,6 +972,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             previousMonthMentorInfos =getMentorInfo(jsonArray_mentor);
             currentMonthMentorInfos =getMentorInfo(jsonArray_mentor);
             comingMonthMentorInfos =getMentorInfo(jsonArray_mentor);
+
+            Log.d(TAG,"previous month mentor info size: "+previousMonthMentorInfos.size()+", current : "+currentMonthMentorInfos.size()+", coming: "+comingMonthMentorInfos.size());
+
             Log.d(TAG, "Mentors slots info for mentee,  previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
             if (b_three_months_data) {   /*  program will come in this scope when user selects date from dialog i.e. user randomly selects a year and month */
                 Log.d(TAG, "Three months data get changed");
@@ -1046,13 +1045,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private ArrayList<Vacation> getVacationsForThis(List<Vacation> vacations, int month, int year, int days) {
         ArrayList<Vacation> vacationArrayList = new ArrayList<Vacation>();
 
-        Calendar calendar_start_of_month = Calendar.getInstance();
-        calendar_start_of_month.set(year, month - 1, 1);
-        long month_start_date_in_millis = calendar_start_of_month.getTimeInMillis();
 
-        Calendar calendar_end_of_month = Calendar.getInstance();
-        calendar_end_of_month.set(year, month - 1, days);
-        long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
 
 
         for (int vacation_no = 0; vacation_no < vacations.size(); vacation_no++) {
@@ -1060,17 +1053,26 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             String start_date = vacation.getStart_date();
             String stop_date = vacation.getStop_date();
 
+            Calendar calendar_start_of_month = Calendar.getInstance();
+            calendar_start_of_month.set(year, month - 1, 1);
+            long month_start_date_in_millis = calendar_start_of_month.getTimeInMillis();
+
             Calendar calendar_vacation_start_date = Calendar.getInstance();
             calendar_vacation_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
             long vacation_start_date_in_millis = calendar_vacation_start_date.getTimeInMillis();
+
+
             Calendar calendar_vacation_end_date = Calendar.getInstance();
             calendar_vacation_end_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
             long vacation_stop_date_in_millis = calendar_vacation_end_date.getTimeInMillis();
 
+            Calendar calendar_end_of_month = Calendar.getInstance();
+            calendar_end_of_month.set(year, month - 1, days);
+            long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
 
             if ((vacation_start_date_in_millis < month_start_date_in_millis && vacation_stop_date_in_millis > month_end_date_in_millis) ||
                     (vacation_start_date_in_millis < month_start_date_in_millis && vacation_stop_date_in_millis > month_start_date_in_millis && vacation_stop_date_in_millis < month_end_date_in_millis) ||
-                    (vacation_start_date_in_millis > month_start_date_in_millis && vacation_start_date_in_millis < month_end_date_in_millis && vacation_stop_date_in_millis > month_end_date_in_millis) ||
+                    (vacation_start_date_in_millis > month_start_date_in_millis && vacation_start_date_in_millis < month_end_date_in_millis && (vacation_stop_date_in_millis > month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
                     (vacation_start_date_in_millis > month_start_date_in_millis && vacation_start_date_in_millis < month_end_date_in_millis && vacation_stop_date_in_millis > month_start_date_in_millis && vacation_stop_date_in_millis < month_end_date_in_millis) ||
                     (vacation_start_date_in_millis == month_start_date_in_millis && vacation_stop_date_in_millis == month_end_date_in_millis)) {
 
@@ -1098,13 +1100,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private ArrayList<Slot> getSlotsForThis(List<Slot> slots, int month, int year, int days) {
         ArrayList<Slot> slotArrayList = new ArrayList<Slot>();
 
-        Calendar calendar_start_of_month = Calendar.getInstance();
-        calendar_start_of_month.set(year, month - 1, 1);
-        long month_start_date_in_millis = calendar_start_of_month.getTimeInMillis();
 
-        Calendar calendar_end_of_month = Calendar.getInstance();
-        calendar_end_of_month.set(year, month - 1, days);
-        long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
 
 
         for (int slot_no = 0; slot_no < slots.size(); slot_no++) {
@@ -1112,17 +1108,30 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             String start_date = slot.getSlot_start_date();
             String stop_date = slot.getSlot_stop_date();
 
+            Calendar calendar_start_of_month = Calendar.getInstance();
+            calendar_start_of_month.set(year, month - 1, 1);
+            long month_start_date_in_millis = calendar_start_of_month.getTimeInMillis();
+
+
+
             Calendar calendar_slot_start_date = Calendar.getInstance();
             calendar_slot_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
             long slot_start_date_in_millis = calendar_slot_start_date.getTimeInMillis();
+
+
             Calendar calendar_slot_end_date = Calendar.getInstance();
             calendar_slot_end_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
             long slot_stop_date_in_millis = calendar_slot_end_date.getTimeInMillis();
 
 
+            Calendar calendar_end_of_month = Calendar.getInstance();
+            calendar_end_of_month.set(year, month - 1, days);
+            long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
+
+
             if ((slot_start_date_in_millis < month_start_date_in_millis && slot_stop_date_in_millis > month_end_date_in_millis) ||
                     (slot_start_date_in_millis < month_start_date_in_millis && slot_stop_date_in_millis > month_start_date_in_millis && slot_stop_date_in_millis < month_end_date_in_millis) ||
-                    (slot_start_date_in_millis > month_start_date_in_millis && slot_start_date_in_millis < month_end_date_in_millis && slot_stop_date_in_millis > month_end_date_in_millis) ||
+                    (slot_start_date_in_millis > month_start_date_in_millis && slot_start_date_in_millis < month_end_date_in_millis && (slot_stop_date_in_millis > month_end_date_in_millis || slot_stop_date_in_millis == month_end_date_in_millis)) ||
                     (slot_start_date_in_millis > month_start_date_in_millis && slot_start_date_in_millis < month_end_date_in_millis && slot_stop_date_in_millis > month_start_date_in_millis && slot_stop_date_in_millis < month_end_date_in_millis) ||
                     (slot_start_date_in_millis == month_start_date_in_millis && slot_stop_date_in_millis == month_end_date_in_millis)) {
 
@@ -1222,17 +1231,19 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                     vacation.setStart_date(vacation_jsonObject.getString("start_date"));
                     vacation.setStop_date(vacation_jsonObject.getString("stop_date"));
                     vacation.setCause_of_the_vacation(vacation_jsonObject.getString("cause_of_the_vacation"));
-                    JSONArray vacation_weekdays = vacation_jsonObject.getJSONArray("weekdays");
+                   /* JSONArray vacation_weekdays = vacation_jsonObject.getJSONArray("weekdays");
                     String vacation_weekdays_array[] = new String[vacation_weekdays.length()];
                     for (int week_day = 0; week_day < vacation_weekdays.length(); week_day++) {
-                        vacation_weekdays_array[week_day] = vacation_weekdays.getString(week_day);   /* week_day is used to pass index */
-                    }
-                    vacation.setStart_time(vacation_jsonObject.getString("start_time"));
+                        vacation_weekdays_array[week_day] = vacation_weekdays.getString(week_day);   *//* week_day is used to pass index *//*
+                        vacation.setStart_time(vacation_jsonObject.getString("start_time"));
                     vacation.setStop_time(vacation_jsonObject.getString("stop_time"));
+                    }*/
+
                     vacations.add(vacation);
                 }
                 slot.setVacations(vacations);
                 slot.setSlot_created_on_network_success("true");
+                slot.setSlot_subject(slot_jsonObject.getString("subject"));
 
                 slots.add(slot);
             } catch (Exception e) {
