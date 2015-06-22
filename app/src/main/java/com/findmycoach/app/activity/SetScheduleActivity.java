@@ -688,7 +688,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                                 endTime.add(Calendar.HOUR_OF_DAY, Integer.parseInt(slot_stop_time.split(":", 3)[0]) - Integer.parseInt(slot_start_time.split(":", 3)[0]));
                                                 endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                                                 WeekViewEvent weekViewEvent;
-                                                weekViewEvent = new WeekViewEvent(Long.parseLong(slot_id), getVacationTitle(startTime, Integer.parseInt(slot_stop_time.split(":", 3)[0]), Integer.parseInt(slot_stop_time.split(":", 3)[1])), startTime, endTime, coinciding_vacation_of_this_day_for_this_slot, new_slot, 123);  /* For making a coinciding vacation information on week view. I am showing vacation for slot_duration time i.e. if any vacation coming for just some fraction of time of slot time, in this case also i am showing vacation for full slot time  */
+                                                weekViewEvent = new WeekViewEvent(Long.parseLong(slot_id), getVacationTitleForCoincidingVacation(startTime, Integer.parseInt(slot_stop_time.split(":", 3)[0]), Integer.parseInt(slot_stop_time.split(":", 3)[1])), startTime, endTime, coinciding_vacation_of_this_day_for_this_slot, new_slot, 123);  /* For making a coinciding vacation information on week view. I am showing vacation for slot_duration time i.e. if any vacation coming for just some fraction of time of slot time, in this case also i am showing vacation for full slot time  */
                                                 weekViewEvent.setColor(getResources().getColor(R.color.event_color_03));
                                                 events.add(weekViewEvent);
                                             } else {
@@ -1137,7 +1137,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     private String getEventTitle(Calendar time, int stop_hour, int stop_min) {
 
-        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
+        return String.format("Scheduled event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
 
 
     }
@@ -1152,10 +1152,17 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     }
 
-
+    /* Non coinciding vacation */
     private String getVacationTitle(Calendar time, int stop_hour, int stop_min) {
 
         return String.format("Vacation time: %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
+
+    }
+
+    /* Non coinciding vacation */
+    private String getVacationTitleForCoincidingVacation(Calendar time, int stop_hour, int stop_min) {
+
+        return String.format("Vacation on slot time: %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
 
     }
 
