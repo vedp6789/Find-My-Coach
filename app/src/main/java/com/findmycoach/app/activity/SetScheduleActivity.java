@@ -13,7 +13,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.findmycoach.app.R;
+
+import com.findmycoach.app.adapter.CalendarGridAdapter;
 import com.findmycoach.app.beans.CalendarSchedule.Event;
 import com.findmycoach.app.beans.CalendarSchedule.EventDuration;
 import com.findmycoach.app.beans.CalendarSchedule.Mentee;
@@ -24,9 +25,12 @@ import com.findmycoach.app.beans.CalendarSchedule.SlotDurationDetailBean;
 import com.findmycoach.app.beans.CalendarSchedule.Vacation;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
-import com.findmycoach.app.util.WeekViewEvent;
 import com.findmycoach.app.views.WeekView;
+import com.findmycoach.app.util.WeekViewEvent;
+import com.findmycoach.app.R;
+import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
 import java.util.Calendar;
