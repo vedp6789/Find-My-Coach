@@ -202,29 +202,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             tv_subject.setText(selected_subject);
             sp_subjects.setVisibility(View.GONE);
         }
-/*        if (arrayList_subcategory.size() > 1) {
-            sp_subjects.setVisibility(View.VISIBLE);
-            ArrayAdapter arrayAdapter_sub_category = new ArrayAdapter(this, R.layout.textview, arrayList_subcategory);
-            arrayAdapter_sub_category.setDropDownViewResource(R.layout.textview);
-            sp_subjects.setAdapter(arrayAdapter_sub_category);
-            sp_subjects.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    selected_subject = (String) parent.getItemAtPosition(position);
 
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-
-        } else {
-            tv_subject.setVisibility(View.VISIBLE);
-            selected_subject = arrayList_subcategory.get(0);
-            tv_subject.setText(selected_subject);
-        }*/
 
         String hr_24_start_time = String.format("%02d:%02d", slot_start_hour, slot_start_minute);
         String hr_24_stop_time = String.format("%02d:%02d", slot_stop_hour, slot_stop_minute);
@@ -261,7 +239,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 selectedDays.add(6);
             }
         }
-
 
 
         gridView.setAdapter(new AddSlotAdapter(getResources().getStringArray(R.array.week_days_mon), selectedDays, this));
@@ -316,17 +293,22 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         Calendar calendar_schedule_start_date = Calendar.getInstance();    /* Possible start date of this class */
         calendar_schedule_start_date.set(class_schedule_start_year, class_schedule_start_month - 1, class_schedule_start_day);
         long start_date_of_this_class_millis = calendar_schedule_start_date.getTimeInMillis();
-        Log.d(TAG,"schedule start date in millis "+start_date_of_this_class_millis);
+        Log.d(TAG,"schedule start date and millis: "+class_schedule_start_year+"/"+class_schedule_start_month+"/"+class_schedule_start_day+" millis:"+start_date_of_this_class_millis);
+
+
+
 
         Calendar calendar_stop_date_of_schedule = Calendar.getInstance();
         calendar_stop_date_of_schedule.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
         long stop_date_of_this_class_in_millis = calendar_stop_date_of_schedule.getTimeInMillis();
-        Log.d(TAG,"schedule stop date in millis "+stop_date_of_this_class_in_millis);
-
+        Log.d(TAG,"schedule stop date and millis: "+slot_stop_year+"/"+slot_stop_month+"/"+slot_stop_day+" millis: "+stop_date_of_this_class_in_millis);
 
 
         Calendar calendar_temp_start_date = Calendar.getInstance();
         calendar_temp_start_date = (Calendar) calendar_schedule_start_date.clone();
+        Log.d(TAG,"schedule start temp clone date and millis: "+calendar_temp_start_date.get(Calendar.YEAR)+"/"+calendar_temp_start_date.get(Calendar.MONTH)+"/"+calendar_temp_start_date.get(Calendar.DAY_OF_MONTH)+" millis: "+start_date_of_this_class_millis);
+
+        Log.d(TAG,"schedule start date "+calendar_schedule_start_date.get(Calendar.YEAR)+"/"+ calendar_schedule_start_date.get(Calendar.MONTH) + 1+"/"+ calendar_schedule_start_date.get(Calendar.DAY_OF_MONTH));
 
         int no_of_possible_classes_without_considering_vacation = new Slot().calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_stop_date_of_schedule, slot_on_week_days).size();
         Log.d(TAG,"no of class without considering vacation: "+no_of_possible_classes_without_considering_vacation);
@@ -339,6 +321,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 for (int vacation_no = 0; vacation_no < vacations_on_the_slot.size(); vacation_no++) {
 
                     if (calendar_temp_start_date.getTimeInMillis() <= stop_date_of_this_class_in_millis) {
+
                         Vacation vacation = vacations_on_the_slot.get(vacation_no);
                         String start_date = vacation.getStart_date();
                         String stop_date = vacation.getStop_date();
@@ -398,13 +381,19 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             } else {
                 /* No vacation found */
 
+                Calendar calendar_schedule_start_date2 = Calendar.getInstance();    /* Possible start date of this class */
+                calendar_schedule_start_date2.set(class_schedule_start_year, class_schedule_start_month - 1, class_schedule_start_day);
+                long start_date_of_this_class_millis2 = calendar_schedule_start_date2.getTimeInMillis();
+
 
                 if (no_of_possible_classes_without_considering_vacation > 0) {
                     class_days_after_reducing_vacation += no_of_possible_classes_without_considering_vacation;   /* In case of no vacations found on one slot */
-                    Log.d(TAG,"class days after checking vacation: "+class_days_after_reducing_vacation);
+                    Log.d(TAG,"class days after checking vacation when no vacation found : "+class_days_after_reducing_vacation);
                     DurationOfSuccessfulClassDays durationOfSuccessfulClassDays = new DurationOfSuccessfulClassDays();
-                    String temp_start_date = String.format("%d-%02d-%02d", calendar_schedule_start_date.get(Calendar.YEAR), calendar_schedule_start_date.get(Calendar.MONTH) + 1, calendar_schedule_start_date.get(Calendar.DAY_OF_MONTH));
+                    String temp_start_date = String.format("%d-%02d-%02d", calendar_schedule_start_date2.get(Calendar.YEAR), calendar_schedule_start_date2.get(Calendar.MONTH) + 1, calendar_schedule_start_date2.get(Calendar.DAY_OF_MONTH));
+                    Log.d(TAG,"start date: "+ temp_start_date);
                     String temp_stop_date = String.format("%d-%02d-%02d", calendar_stop_date_of_schedule.get(Calendar.YEAR), calendar_stop_date_of_schedule.get(Calendar.MONTH) + 1, calendar_stop_date_of_schedule.get(Calendar.DAY_OF_MONTH));
+                    Log.d(TAG,"stop date: "+ temp_stop_date);
                     durationOfSuccessfulClassDays.setStart_date(temp_start_date);
                     durationOfSuccessfulClassDays.setStop_date(temp_stop_date);
                     durationOfSuccessfulClassDayses.add(durationOfSuccessfulClassDays);
