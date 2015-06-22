@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,15 +85,12 @@ public class StopTimeDialogFragment extends DialogFragment implements View.OnCli
             minute = c.get(Calendar.MINUTE);
         }
 
-/*
 
-        timePicker.setCurrentHour(hour);
-        timePicker.setCurrentMinute(minute);
-
-*/
+        Log.d(TAG,"hour:1 "+hour+"minute: "+minute);
 
 
-    }
+
+}
 
     @Override
     public void onResume() {
@@ -147,15 +145,41 @@ public class StopTimeDialogFragment extends DialogFragment implements View.OnCli
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.d(TAG,"hour4: "+hour+"minute4: "+minute);
+
+        Log.d(TAG,"Minute"+minute);
+
+        int updated_min=minute+15;
+
+        Log.d(TAG,"updated min in the second case: "+updated_min);
 
 
         if(minute == 45){
+            Log.d(TAG,"Minute: 45");
             timePicker.setCurrentHour(hour+1);
             timePicker.setCurrentMinute(0);
         }else{
-            timePicker.setCurrentHour(hour);
-            timePicker.setCurrentMinute(minute+15);
+
+
+            switch (minute){
+                case 0:
+                    timePicker.setCurrentHour(hour);
+                    timePicker.setCurrentMinute(1);
+                    break;
+                case 15:
+                    timePicker.setCurrentHour(hour);
+                    timePicker.setCurrentMinute(2);
+                    break;
+                case 30:
+                    timePicker.setCurrentHour(hour);
+                    timePicker.setCurrentMinute(3);
+                    break;
+            }
+
+
+
         }
+
 
     }
 }
