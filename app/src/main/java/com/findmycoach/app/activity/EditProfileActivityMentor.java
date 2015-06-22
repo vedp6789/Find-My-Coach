@@ -754,7 +754,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.remove(getResources().getString(R.string.new_user));
                 editor.apply();
-                DashboardActivity.dashboardActivity.container.setVisibility(View.VISIBLE);
+                DashboardActivity.dashboardActivity.mainLayout.setVisibility(View.VISIBLE);
                 DashboardActivity.dashboardActivity.showTermsAndConditions();
                 startActivity(new Intent(this, AddNewSlotActivity.class));
             }

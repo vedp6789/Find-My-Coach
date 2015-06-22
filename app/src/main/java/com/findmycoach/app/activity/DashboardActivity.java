@@ -85,7 +85,7 @@ public class DashboardActivity extends FragmentActivity
     public ImageView menuDrawer;
     public ImageView backButton;
     public TextView titleTV;
-    public RelativeLayout container;
+    public RelativeLayout container, mainLayout;
 
     GoogleCloudMessaging gcm;
     Context context;
@@ -157,8 +157,9 @@ public class DashboardActivity extends FragmentActivity
         }
 
         container = (RelativeLayout) findViewById(R.id.container);
+        mainLayout = (RelativeLayout) findViewById(R.id.drawer_layout);
         if (!isProfileOpen)
-            container.setVisibility(View.VISIBLE);
+            mainLayout.setVisibility(View.VISIBLE);
 
         context = getApplicationContext();
         REG_ID_SAVED_TO_SERVER = getResources().getString(R.string.reg_id_saved_to_server);
@@ -365,7 +366,7 @@ public class DashboardActivity extends FragmentActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.d(TAG,"onActivityResult dashboard");
+        Log.d(TAG, "onActivityResult dashboard");
     }
 
     @Override

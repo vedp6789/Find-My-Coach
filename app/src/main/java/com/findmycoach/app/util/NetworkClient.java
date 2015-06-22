@@ -682,8 +682,9 @@ public class NetworkClient {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Success: Response:" + responseJson);
                     Log.d(TAG, "Success: Response Code:" + statusCode);
-                    if (statusCode == 200)
+                    if (statusCode == 200) {
                         callback.successOperation("Success", statusCode, calledApiValue);
+                    }
                     else {
                         try {
                             Response response = new Gson().fromJson(responseJson, Response.class);
@@ -1136,7 +1137,7 @@ public class NetworkClient {
                             String responseJson = new String(responseBody);
                             Log.d(TAG, "Success : Response : " + responseJson);
                             JSONObject jsonObject = new JSONObject(new String(responseBody));
-                            callback.successOperation(jsonObject.get("data"), statusCode, calledApiValue);
+                            callback.successOperation(jsonObject.get("message"), statusCode, calledApiValue);
                         } catch (Exception e) {
                             e.printStackTrace();
                             onFailure(statusCode, headers, responseBody, null);
