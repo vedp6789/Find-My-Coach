@@ -1210,13 +1210,20 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                         }
 
                         mentee.setEventDurations(eventDurations);
-                        mentee.setFirst_name(mentee_jsonObject.getString("first_name"));
-                        mentee.setLast_name(mentee_jsonObject.getString("last_name"));
+                        if(StorageHelper.getUserGroup(MentorDetailsActivity.this,"user_group").equals("2")){
+                            /* first name and last name is not coming , We have full in shared preference from PaymentDetailsActivity */
+                            mentee.setFirst_name("");
+                            mentee.setLast_name("");
+                        }else{
+                            mentee.setFirst_name(mentee_jsonObject.getString("first_name"));
+                            mentee.setLast_name(mentee_jsonObject.getString("last_name"));
+                        }
                         mentees.add(mentee);
                     }
                     event.setEvent_id(event_jsonObject.getString("event_id"));
                     event.setSub_category_name(event_jsonObject.getString("sub_category"));
                     event.setEvent_total_mentee(event_jsonObject.getString("active_members"));
+
                     event.setMentees(mentees);
                     events.add(event);
 

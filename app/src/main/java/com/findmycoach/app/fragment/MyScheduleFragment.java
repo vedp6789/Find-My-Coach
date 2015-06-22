@@ -242,10 +242,15 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         }
 
         requestParams.add("start_date", String.valueOf(stringBuilder));
+        Log.d(TAG,"start date: "+String.valueOf(stringBuilder));
+
+
 
         previous_month_start_date = String.valueOf(stringBuilder);    /* this will be used to identify previous, current, coming month date (yyyy-mm-dd) */
 
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
+        Log.d(TAG,"limit: "+String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
+
         networkCallForMentee(requestParams);
     }
 
@@ -1150,7 +1155,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 JSONObject jsonObject_data = jsonObject.getJSONObject("data");
                 JSONArray jsonArray_mentor = jsonObject_data.getJSONArray("mentor");
                 JSONArray jsonArray_data = jsonObject_data.getJSONArray("slots");
-                JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");/* We are not using non coinciding vacations for mentee*/
+                /*JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");*//* We are not using non coinciding vacations for mentee*/
 
                 List<Slot> slots = new ArrayList<Slot>();
                 List<Vacation> vacations = new ArrayList<Vacation>();  /* list of non coinciding vacations*/
@@ -1312,8 +1317,15 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                         }
 
                         mentee.setEventDurations(eventDurations);
-                        mentee.setFirst_name(mentee_jsonObject.getString("first_name"));
-                        mentee.setLast_name(mentee_jsonObject.getString("last_name"));
+
+                        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")){
+                            /* first name and last name is not coming , We have full in shared preference from PaymentDetailsActivity */
+                            mentee.setFirst_name("");
+                            mentee.setLast_name("");
+                        }else{
+                            mentee.setFirst_name(mentee_jsonObject.getString("first_name"));
+                            mentee.setLast_name(mentee_jsonObject.getString("last_name"));
+                        }
                         mentees.add(mentee);
                     }
                     event.setEvent_id(event_jsonObject.getString("event_id"));
@@ -1478,7 +1490,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             JSONObject jsonObject_data = jsonObject.getJSONObject("data");
             JSONArray jsonArray_mentor = jsonObject_data.getJSONArray("mentor");
             JSONArray jsonArray_data = jsonObject_data.getJSONArray("slots");
-            JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");
+
+
 
 
             List<Slot> slots = new ArrayList<Slot>();
@@ -1486,7 +1499,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
 
             parseSlots(slots, jsonArray_data, user_group);
-            parseVacation(vacations, jsonArray_vacation_non_coinciding);
+            if(user_group == 3){
+                JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");
+                parseVacation(vacations, jsonArray_vacation_non_coinciding);
+
+            }
 
             previousMonthArrayList = currentMonthArrayList;
             currentMonthArrayList = comingMonthArrayList;
@@ -1549,7 +1566,6 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             JSONObject jsonObject_data = jsonObject.getJSONObject("data");
             JSONArray jsonArray_mentor = jsonObject_data.getJSONArray("mentor");
             JSONArray jsonArray_data = jsonObject_data.getJSONArray("slots");
-            JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");
 
 
             List<Slot> slots = new ArrayList<Slot>();
@@ -1557,7 +1573,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
 
             parseSlots(slots, jsonArray_data, user_group);
-            parseVacation(vacations, jsonArray_vacation_non_coinciding);
+
+            if(user_group == 3){
+                JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");
+                parseVacation(vacations, jsonArray_vacation_non_coinciding);
+
+            }
 
 
             comingMonthArrayList = currentMonthArrayList;

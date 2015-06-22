@@ -605,15 +605,23 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                     if (availabilityFlags.event_found) {
                                         if (availabilityFlags.vacation_found) {
                                             /* both event and vacation found */
-                                            gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event_vacation));
+                                            gridcell.setBackgroundColor(Color.RED);
+                                            gridcell.setTextColor(Color.BLACK);
+                                           // gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event_vacation));
                                         } else {
                                             /* only event found*/
-                                            gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
+                                            gridcell.setBackgroundColor(Color.YELLOW);
+                                            gridcell.setTextColor(Color.BLUE);
+
+                                            //gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
                                         }
                                     } else {
                                         if (availabilityFlags.vacation_found) {
                                             /* only vacation found*/
-                                            gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.vacation));
+                                            gridcell.setBackgroundColor(Color.CYAN);
+                                            gridcell.setTextColor(Color.WHITE);
+
+                                            //gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.vacation));
                                         }
                                     }
 
@@ -991,6 +999,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             long slot_start_millis = calendar_slot_start_date.getTimeInMillis();
 
 
+
             Calendar calendar = Calendar.getInstance();
             calendar.set(year, month, day);
             long this_day = calendar.getTimeInMillis();
@@ -1007,14 +1016,19 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                         /* Now checking whether the_day is having week day similar to one of the slot week days, if found then we have to consider this slot for this day otherwise not*/
                 if (thisDayMatchesWithWeekDaysArray(slot_week_days, week_day_for_this_day)) {
                     availabilityFlags.slot_found = true;
+                    Log.d(TAG,"slot_found for "+year+"-"+month+"-"+day);
                                             /* Now to check whether in this slot any event is coming for this day and now we do not need to check week day of this day as if event is there so evnets are of same slot and we already checked week_day for the slot*/
                     if (new_slot.anyEventFound(year, month, day)) {
+                        Log.d(TAG,"event_found for "+year+"-"+month+"-"+day);
+
                         availabilityFlags.event_found = true;
                     }
 
                                             /* Now to check whether any coinciding vacation found or not */
                     if (new_slot.anyVacationFound(year, month, day)) {
                         availabilityFlags.vacation_found = true;
+                        Log.d(TAG,"vacation_found for "+year+"-"+month+"-"+day);
+
                     }
                 }
 

@@ -297,8 +297,19 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                                         finish();
                                     } else {
                                         if (status ==2 ) {
-                                            JSONArray jsonArray_coinciding_exceptions = jsonObject.getJSONArray("coincidingExceptions");
-                                            coincidingExceptionMessage(jsonArray_coinciding_exceptions);
+
+                                            JSONArray jsonArray_coinciding_array = jsonObject.getJSONArray("coincideArray");
+                                            if(jsonArray_coinciding_array.length() > 0){
+                                                Toast.makeText(ScheduleYourVacation.this,jsonObject.getString("message"),Toast.LENGTH_LONG).show();
+
+                                            }else{
+                                                JSONArray jsonArray_coinciding_exceptions = jsonObject.getJSONArray("coincidingExceptions");
+                                                if(jsonArray_coinciding_exceptions.length() > 0){
+                                                    coincidingExceptionMessage(jsonArray_coinciding_exceptions);
+                                                }else{
+                                                    finish();
+                                                }
+                                            }
                                         }
                                     }
                                 } catch (JSONException e) {

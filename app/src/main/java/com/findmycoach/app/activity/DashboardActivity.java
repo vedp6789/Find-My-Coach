@@ -365,71 +365,75 @@ public class DashboardActivity extends FragmentActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.d(TAG,"onActivityResult dashboard");
+        Log.d(TAG, "onActivityResult dashboard");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
-            HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
-            HomeFragment.homeFragmentMentee = null;
-            map.setOnMyLocationChangeListener(null);
-            map = null;
-        }
-
-        Log.e(TAG, user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification);
-
-        if (fragment_to_launch_from_notification == 0) {
-            if (!checkPlayServices()) {
-                Toast.makeText(DashboardActivity.this, getResources().getString(R.string.google_play_services_not_supported), Toast.LENGTH_LONG).show();
-                Log.i(TAG, "No valid Google Play Services APK found.");
+        try {
+            if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
+                HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
+                HomeFragment.homeFragmentMentee = null;
+                map.setOnMyLocationChangeListener(null);
+                map = null;
             }
-        } else {
 
-            user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
-            if (user_group == group_push_notification) {
 
-                ResideMenuItem item = null;
+            Log.e(TAG, user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification);
 
-                switch (fragment_to_launch_from_notification) {
-                    case 1:
-                        Log.e(TAG, user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 1");
-                        itemHome.setTag(itemHome.getId(), "Connection");
-                        item = itemHome;
-                        break;
-                    case 4:
-                        Log.e(TAG, user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 4");
-                        itemHome.setTag(itemHome.getId(), "Schedule");
-                        item = itemHome;
-                        break;
-                    case 2:
-                    case 3:
-                    case 5:
-                    case 6:
-                        Log.e(TAG, user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 2,3,5,6");
-                        item = itemNotification;
-                        break;
-                    case 7:
-                    case 8:
-                    case 9:
-                        item = itemConnection;
-                        break;
-                }
-                fragment_to_launch_from_notification = 0;
-
-                if (resideMenu == null) {
-                    setUpMenu(item);
-                    Log.e(TAG, "reside null");
-                } else if (item != null) {
-//                    item.callOnClick();
-                    updateUI(item);
-                    Log.e(TAG, "reside menu item not null");
+            if (fragment_to_launch_from_notification == 0) {
+                if (!checkPlayServices()) {
+                    Toast.makeText(DashboardActivity.this, getResources().getString(R.string.google_play_services_not_supported), Toast.LENGTH_LONG).show();
+                    Log.i(TAG, "No valid Google Play Services APK found.");
                 }
             } else {
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.switch_login), Toast.LENGTH_SHORT).show();
+
+                user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
+                if (user_group == group_push_notification) {
+
+                    ResideMenuItem item = null;
+
+                    switch (fragment_to_launch_from_notification) {
+                        case 1:
+                            Log.e(TAG, user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 1");
+                            itemHome.setTag(itemHome.getId(), "Connection");
+                            item = itemHome;
+                            break;
+                        case 4:
+                            Log.e(TAG, user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 4");
+                            itemHome.setTag(itemHome.getId(), "Schedule");
+                            item = itemHome;
+                            break;
+                        case 2:
+                        case 3:
+                        case 5:
+                        case 6:
+                            Log.e(TAG, user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification + "==> 2,3,5,6");
+                            item = itemNotification;
+                            break;
+                        case 7:
+                        case 8:
+                        case 9:
+                            item = itemConnection;
+                            break;
+                    }
+                    fragment_to_launch_from_notification = 0;
+
+                    if (resideMenu == null) {
+                        setUpMenu(item);
+                        Log.e(TAG, "reside null");
+                    } else if (item != null) {
+//                    item.callOnClick();
+                        updateUI(item);
+                        Log.e(TAG, "reside menu item not null");
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.switch_login), Toast.LENGTH_SHORT).show();
+                }
             }
+        } catch (Exception ignored) {
         }
     }
 

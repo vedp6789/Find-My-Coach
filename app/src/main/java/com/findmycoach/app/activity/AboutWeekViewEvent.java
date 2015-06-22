@@ -141,8 +141,8 @@ public class AboutWeekViewEvent extends Activity implements Callback {
 
                 tv_vacation_start_date.setText(String.format("%02d-%02d-%d",
                         Integer.parseInt(non_coinciding_vacation.getStart_date().split("-")[2]),
-                        Integer.parseInt(non_coinciding_vacation.getStop_date().split("-")[1]),
-                        Integer.parseInt(non_coinciding_vacation.getStop_date().split("-")[0])));
+                        Integer.parseInt(non_coinciding_vacation.getStart_date().split("-")[1]),
+                        Integer.parseInt(non_coinciding_vacation.getStart_date().split("-")[0])));
                 tv_vacation_stop_date.setText(String.format("%02d-%02d-%d",
                         Integer.parseInt(non_coinciding_vacation.getStop_date().split("-")[2]),
                         Integer.parseInt(non_coinciding_vacation.getStop_date().split("-")[1]),

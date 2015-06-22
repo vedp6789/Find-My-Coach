@@ -3,6 +3,7 @@ package com.findmycoach.app.beans.CalendarSchedule;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -223,10 +224,12 @@ public class Slot implements Parcelable {
                         EventDuration eventDuration=eventDurations.get(event_duration_no);
 
                         String start_date =eventDuration.getStart_date();
+                        Log.d(TAG,"start date: "+start_date);
                         Calendar calendar_start_date =Calendar.getInstance();
                         calendar_start_date.set(Integer.parseInt(start_date.split("-")[0]),Integer.parseInt(start_date.split("-")[1])-1,Integer.parseInt(start_date.split("-")[2]));
 
                         String stop_date =eventDuration.getStop_date();
+                        Log.d(TAG,"stop date: "+stop_date);
                         Calendar calendar_stop_date =Calendar.getInstance();
                         calendar_stop_date.set(Integer.parseInt(stop_date.split("-")[0]),Integer.parseInt(stop_date.split("-")[1])-1,Integer.parseInt(stop_date.split("-")[2]));
 
@@ -235,11 +238,14 @@ public class Slot implements Parcelable {
                         for(int activeClassDay = 0; activeClassDay < activeClassDaysAndTheirWeekDay.size() ; activeClassDay++ ){
                             SlotDurationDetailBean slotDurationDetailBean = activeClassDaysAndTheirWeekDay.get(activeClassDay);
                             String active_class_date = slotDurationDetailBean.getDate();
+
                             Calendar calendar_active_class_date=Calendar.getInstance();
-                            calendar_active_class_date.set(Integer.parseInt(active_class_date.split("-")[0]),Integer.parseInt(active_class_date.split("-")[1])-1,Integer.parseInt(active_class_date.split("-")[2]));
+                            calendar_active_class_date.set(Integer.parseInt(active_class_date.split("-")[0]),Integer.parseInt(active_class_date.split("-")[1]),Integer.parseInt(active_class_date.split("-")[2]));
                             long active_class_in_millis =calendar_active_class_date.getTimeInMillis();
 
-                            if((Integer.parseInt(active_class_date.split("-")[0])== year)  && (Integer.parseInt(active_class_date.split("-")[1])-1==month )&&(Integer.parseInt(active_class_date.split("-")[2]))==day){
+                            Log.d(TAG,"active class date: "+active_class_date.split("-")[0]+"-"+(Integer.parseInt(active_class_date.split("-")[1]))+"-"+active_class_date.split("-")[2]+" , this day date: "+ year+"-"+month+"-"+day);
+
+                            if((Integer.parseInt(active_class_date.split("-")[0])== year)  && (Integer.parseInt(active_class_date.split("-")[1])==month )&&(Integer.parseInt(active_class_date.split("-")[2]))==day){
                                 event_found = true;
                                 break level_mentee;
                             }
@@ -390,7 +396,7 @@ public class Slot implements Parcelable {
                 slotDurationDetailBean.setWeek_day(String.valueOf(calendar_schedule_start_date.get(Calendar.DAY_OF_WEEK)));
                 slotDurationDetailBeans.add(slotDurationDetailBean);
             }
-            calendar_schedule_start_date.add(Calendar.DATE, 1);
+            calendar_schedule_start_date.add(Calendar.DATE , 1);
 
 
 
