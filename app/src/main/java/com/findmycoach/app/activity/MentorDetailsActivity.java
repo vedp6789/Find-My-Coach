@@ -440,7 +440,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         ImageView connectionButton = (ImageView) findViewById(R.id.menuItem);
 
         if (connectionStatus.equals("not connected")) {
-            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.connect_small));
+            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.connect_white));
             connectionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -448,7 +448,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 }
             });
         } else if (connectionStatus.equals("accepted")) {
-            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.disconnect_small));
+            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.disconnect_white));
             connectionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -456,7 +456,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 }
             });
         } else if (connectionStatus.equals("pending")) {
-            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.pending_small));
+            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.pending_white));
             connectionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -19,6 +19,7 @@
     <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="match_parent"
         android:layout_height="@dimen/underline"
+        android:layout_marginBottom="@dimen/radio_button_padding"
         android:background="@color/white" />
 
 
@@ -28,7 +29,7 @@
         android:layout_marginTop="@dimen/back_margin"
         android:orientation="horizontal">
 
-       <com.findmycoach.app.views.ChizzleEditText
+        <com.findmycoach.app.views.ChizzleEditText
             android:id="@+id/emailEditText"
             style="@style/EditTextCustomHolo"
             android:layout_width="match_parent"
@@ -37,12 +38,14 @@
             android:hint="@string/prompt_email_id"
             android:inputType="textEmailAddress"
             android:padding="@dimen/days_margin"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textCursorDrawable="@drawable/cursor_white" />
     </LinearLayout>
 
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/radio_button_padding"
         android:layout_height="@dimen/login_button_height">
 
         <com.findmycoach.app.views.ChizzleButton
@@ -62,11 +65,10 @@
 
         <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/textView2"
-            android:layout_width="1dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_margin="@dimen/days_margin"
             android:background="@drawable/custom_button_click"
             android:textColor="@color/custom_button_text_color_click" />
 

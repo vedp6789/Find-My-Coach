@@ -684,7 +684,7 @@
     <string name="please_add_area_of_interest">Please add area of interest.</string>
     <string name="please_add_area_of_coaching">Please add area of coaching.</string>
     <string name="prompt_coaching_type">Coaching type</string>
-    <string name="prompt_training_location">Training location</string>
+    <string name="prompt_training_location">Preferred trainer location</string>
     <string name="prompt_male">Male</string>
     <string name="prompt_female">Female</string>
     <string name="prompt_phone">Mobile number</string>

@@ -99,6 +99,7 @@
                     android:hint="@string/prompt_first_name"
                     android:inputType="textCapSentences|textNoSuggestions|textCapWords"
                     android:singleLine="true"
+                    android:textCursorDrawable="@drawable/cursor_purple"
                     android:textSize="@dimen/profile_details" />
 
                 <LinearLayout
@@ -133,6 +134,7 @@
                     android:hint="@string/prompt_last_name"
                     android:inputType="textCapSentences|textNoSuggestions|textCapWords"
                     android:singleLine="true"
+                    android:textCursorDrawable="@drawable/cursor_purple"
                     android:textSize="@dimen/profile_details" />
 
                 <com.findmycoach.app.views.ChizzleTextView
@@ -265,6 +267,7 @@
                     android:inputType="textAutoComplete"
                     android:textColor="@color/purple"
                     android:textColorHint="@color/purple_light"
+                    android:textCursorDrawable="@drawable/cursor_purple"
                     android:textSize="@dimen/profile_details" />
 
 
@@ -301,6 +304,7 @@
                     android:inputType="textAutoComplete"
                     android:textColor="@color/purple"
                     android:textColorHint="@color/purple_light"
+                    android:textCursorDrawable="@drawable/cursor_purple"
                     android:textSize="@dimen/profile_details" />
 
                 <LinearLayout
@@ -336,6 +340,7 @@
                     android:hint="@string/prompt_pin"
                     android:inputType="textPostalAddress"
                     android:singleLine="true"
+                    android:textCursorDrawable="@drawable/cursor_purple"
                     android:textSize="@dimen/profile_details" />
 
 
@@ -364,10 +369,10 @@
                 </LinearLayout>
 
                 <HorizontalScrollView
+                    android:id="@+id/horizontalScrollView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fillViewport="true"
-                    android:id="@+id/horizontalScrollView"
                     android:scrollbars="none">
 
                     <com.findmycoach.app.views.ChizzleTextView
@@ -421,6 +426,7 @@
                     android:hint="@string/prompt_accomplishment"
                     android:inputType="text"
                     android:singleLine="true"
+                    android:textCursorDrawable="@drawable/cursor_purple"
                     android:textSize="@dimen/profile_details" />
 
                 <RelativeLayout
@@ -483,6 +489,7 @@
                         android:hint="@string/prompt_charges"
                         android:inputType="number"
                         android:singleLine="true"
+                        android:textCursorDrawable="@drawable/cursor_purple"
                         android:textSize="@dimen/profile_details" />
 
                     <Spinner

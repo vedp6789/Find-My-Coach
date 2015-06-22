@@ -129,7 +129,7 @@ public class StudentDetailActivity extends Activity implements Callback {
             studentDetails.setConnectionStatus("not connected");
 
         if (studentDetails.getConnectionStatus().equals("accepted")) {
-            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.disconnect_small));
+            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.disconnect_white));
             connectionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -137,7 +137,7 @@ public class StudentDetailActivity extends Activity implements Callback {
                 }
             });
         } else if (studentDetails.getConnectionStatus().equals("pending")) {
-            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.pending_small));
+            connectionButton.setImageDrawable(getResources().getDrawable(R.drawable.pending_white));
             connectionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

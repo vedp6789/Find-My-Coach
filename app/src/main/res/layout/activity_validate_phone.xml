@@ -2,73 +2,74 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/bg">
+    android:paddingTop="@dimen/activity_vertical_margin">
 
     <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/header"
-        android:layout_marginTop="@dimen/margin_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top"
         android:gravity="center_horizontal"
         android:text="@string/verify_phone"
-        android:textStyle="bold"
         android:textColor="@color/white"
-        android:textSize="@dimen/header" />
+        android:textSize="@dimen/header"
+        android:textStyle="bold" />
 
 
-   <com.findmycoach.app.views.ChizzleEditText
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:layout_below="@+id/header"
+    <com.findmycoach.app.views.ChizzleEditText
+        android:id="@+id/verificationCodeET"
+        style="@style/EditTextCustomHolo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/verificationCodeET"
+        android:layout_below="@+id/header"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:hint="@string/hint_enter_code"
-        style="@style/EditTextCustomHolo"
-        android:inputType="number" />
+        android:inputType="number"
+        android:textCursorDrawable="@drawable/cursor_white" />
 
     <com.findmycoach.app.views.ChizzleButton
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/login_button_height"
-        android:text="@string/verify"
-        android:textSize="@dimen/button_text_size"
         android:id="@+id/btnVerify"
-        android:background="@drawable/custom_button_click"
-        android:textColor="@color/custom_button_text_color_click"
-        android:layout_below="@+id/verificationCodeET"
-        android:layout_centerHorizontal="true" />
-
-    <com.findmycoach.app.views.ChizzleButton
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_button_height"
-        android:text="@string/resend_code"
-        android:textSize="@dimen/button_text_size"
+        android:layout_below="@+id/verificationCodeET"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:background="@drawable/custom_button_click"
+        android:text="@string/verify"
         android:textColor="@color/custom_button_text_color_click"
+        android:textSize="@dimen/button_text_size" />
+
+    <com.findmycoach.app.views.ChizzleButton
         android:id="@+id/btnResend"
-        android:layout_below="@+id/btnVerify" />
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_button_height"
+        android:layout_below="@+id/btnVerify"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@drawable/custom_button_click"
+        android:text="@string/resend_code"
+        android:textColor="@color/custom_button_text_color_click"
+        android:textSize="@dimen/button_text_size" />
 
 
     <com.findmycoach.app.views.ChizzleTextView
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:id="@+id/action_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/btnResend"
+        android:layout_centerInParent="true"
         android:layout_gravity="center"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:clickable="true"
-        android:drawableLeft="@drawable/skip_small"
+        android:drawableLeft="@drawable/back_circular"
         android:drawablePadding="@dimen/days_margin"
         android:gravity="center"
         android:padding="@dimen/days_margin"
-        android:layout_centerInParent="true"
-        android:layout_below="@+id/btnResend"
         android:text="@string/back"
         android:textColor="@color/white"
-        android:textSize="@dimen/profile_details" />
+        android:textSize="@dimen/forget_password_text_size" />
 
 </RelativeLayout>
