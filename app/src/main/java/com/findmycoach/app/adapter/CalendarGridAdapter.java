@@ -414,7 +414,6 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
         gridcell.setText(theday);
         gridcell.setTag(theday + "-" + themonth + "-" + theyear);  /*   Tag for each day of the calendar grid   */
 
-
         if (day_color[1].equals("TRAIL") || day_color[1].equals("LEAD")) {
             gridcell.setTextColor(context.getResources().getColor(R.color.purple_light));
         }
@@ -423,8 +422,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             allow_schedule_population = true;
         }
         if (day_color[1].equals("TODAY")) {
-            gridcell.setTextColor(context.getResources().getColor(R.color.white));
-            gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple));
+            gridcell.setTextColor(context.getResources().getColor(R.color.purple));
             allow_schedule_population = true;
         }
         day_schedule_index = Integer.parseInt(theday) - 1;
@@ -554,26 +552,26 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                     if (availabilityFlags.event_found) {
                                         if (availabilityFlags.vacation_found) {
                                             /* event and vacation both are there */
-                                            gridcell.setBackgroundColor(Color.RED);
+                                            gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event_vacation));
 
 
                                         } else {
                                             /*only event found*/
-                                            gridcell.setBackgroundColor(Color.CYAN);
+                                            gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
                                         }
                                     } else {
                                         if (availabilityFlags.vacation_found) {
                                             /* only vacation found */
-                                            gridcell.setBackgroundColor(Color.BLUE);
+                                            gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.vacation));
                                         } else {
                                             /* neither event found nor vacation, only slot is there */
-                                            gridcell.setBackgroundColor(Color.LTGRAY);
+                                            gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
                                         }
                                     }
                                 } else {
                                     if (availabilityFlags.vacation_found) {
                                         /* no slot found on this day there is only vacation */
-                                        gridcell.setBackgroundColor(Color.YELLOW);
+                                        gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.vacation));
                                     }
                                 }
 
@@ -607,15 +605,15 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                     if (availabilityFlags.event_found) {
                                         if (availabilityFlags.vacation_found) {
                                             /* both event and vacation found */
-                                            gridcell.setBackgroundColor(Color.YELLOW);
+                                            gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event_vacation));
                                         } else {
                                             /* only event found*/
-                                            gridcell.setBackgroundColor(Color.LTGRAY);
+                                            gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
                                         }
                                     } else {
                                         if (availabilityFlags.vacation_found) {
                                             /* only vacation found*/
-                                            gridcell.setBackgroundColor(Color.BLUE);
+                                            gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.vacation));
                                         }
                                     }
 
@@ -655,13 +653,13 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             * */
                             if (free_slots > 0) {
                                 if (day_color[1].equals("CURRENT")) {
-                                    gridcell.setBackgroundColor(Color.RED);
+                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
                                 } else {
-                                    gridcell.setBackgroundColor(Color.YELLOW);
+                                    gridcell.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
                                 }
                             } else {
                                 if (day_color[1].equals("CURRENT")) {
-                                    gridcell.setBackgroundColor(Color.LTGRAY);
+                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
                                 } else {
                                     gridcell.setBackgroundColor(Color.CYAN);
                                 }
@@ -745,7 +743,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                                     if (availabilityFlags.vacation_found) {
                                           /* only vacation found */
-                                        gridcell.setBackgroundColor(Color.YELLOW);
+                                        gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.vacation));
                                     }
 
 
@@ -762,13 +760,13 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                                 if (free_slots > 0) {
                                     if (day_color[1].equals("CURRENT")) {
-                                        gridcell.setBackgroundColor(Color.RED);
+                                        gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
                                     } else {
-                                        gridcell.setBackgroundColor(Color.YELLOW);
+                                        gridcell.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
                                     }
                                 } else {
                                     if (day_color[1].equals("CURRENT")) {
-                                        gridcell.setBackgroundColor(Color.LTGRAY);
+                                        gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
                                     } else {
                                         gridcell.setBackgroundColor(Color.CYAN);
                                     }
@@ -836,13 +834,13 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                             if (free_slots > 0) {
                                 if (day_color[1].equals("CURRENT")) {
-                                    gridcell.setBackgroundColor(Color.RED);
+                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
                                 } else {
-                                    gridcell.setBackgroundColor(Color.YELLOW);
+                                    gridcell.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
                                 }
                             } else {
                                 if (day_color[1].equals("CURRENT")) {
-                                    gridcell.setBackgroundColor(Color.LTGRAY);
+                                    gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
                                 } else {
                                     gridcell.setBackgroundColor(Color.CYAN);
                                 }
