@@ -1392,7 +1392,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
             if ((slot_start_date_in_millis < month_start_date_in_millis && slot_stop_date_in_millis > month_end_date_in_millis) ||
                     (slot_start_date_in_millis < month_start_date_in_millis && slot_stop_date_in_millis > month_start_date_in_millis && slot_stop_date_in_millis < month_end_date_in_millis) ||
-                    (slot_start_date_in_millis > month_start_date_in_millis && slot_start_date_in_millis < month_end_date_in_millis && (slot_stop_date_in_millis > month_end_date_in_millis || slot_stop_date_in_millis == month_end_date_in_millis)  ) ||
+                    (slot_start_date_in_millis > month_start_date_in_millis && slot_start_date_in_millis < month_end_date_in_millis && (slot_stop_date_in_millis > month_end_date_in_millis || slot_stop_date_in_millis == month_end_date_in_millis)) ||
                     (slot_start_date_in_millis > month_start_date_in_millis && slot_start_date_in_millis < month_end_date_in_millis && slot_stop_date_in_millis > month_start_date_in_millis && slot_stop_date_in_millis < month_end_date_in_millis) ||
                     (slot_start_date_in_millis == month_start_date_in_millis && slot_stop_date_in_millis == month_end_date_in_millis)) {
 
