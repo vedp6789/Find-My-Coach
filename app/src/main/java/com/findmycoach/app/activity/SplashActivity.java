@@ -39,7 +39,6 @@ public class SplashActivity extends Activity implements Callback {
         Log.e("TimeZone : ", NetworkClient.timeZone + " Timezone id :: " + tz.getID());
         getDataFromServer();
 
-
     }
 
     /**
