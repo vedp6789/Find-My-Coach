@@ -131,7 +131,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         String local_Address = StorageHelper.addressInformation(AddNewSlotActivity.this, "user_local_address");
         String city = StorageHelper.addressInformation(AddNewSlotActivity.this, "user_city_state");
         String zip = StorageHelper.addressInformation(AddNewSlotActivity.this, "user_zip_code");
-        if (local_Address != null || (!local_Address.equals("") )) {
+        if (local_Address != null && (!local_Address.equals("") )) {
             stringBuilder_address.append(local_Address);
             if (city != null) {
                 stringBuilder_address.append(", " + city.trim().toString());
