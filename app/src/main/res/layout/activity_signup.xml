@@ -40,8 +40,7 @@
                     android:gravity="center_horizontal"
                     android:text="@string/action_register"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/header"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/header" />
 
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/action_login"
@@ -50,12 +49,12 @@
                     android:layout_gravity="right"
                     android:clickable="true"
                     android:drawableLeft="@drawable/login"
-                    android:drawablePadding="@dimen/days_margin"
+                    android:drawablePadding="@dimen/calender_margin"
                     android:gravity="center"
                     android:padding="@dimen/days_margin"
                     android:text="@string/action_sign_in"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/profile_details" />
+                    android:textColor="@color/custom_button_text_color_click_purple_light"
+                    android:textSize="@dimen/button_text_size" />
 
             </LinearLayout>
 
@@ -91,7 +90,7 @@
                             android:button="@drawable/custom_check_box"
                             android:paddingLeft="@dimen/radio_button_padding"
                             android:text="@string/mentor"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/custom_button_text_color_click_purple_light" />
 
                         <RadioButton
                             android:id="@+id/radio_button_mentee_signup"
@@ -101,7 +100,7 @@
                             android:button="@drawable/custom_check_box"
                             android:paddingLeft="@dimen/radio_button_padding"
                             android:text="@string/mentee"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/custom_button_text_color_click_purple_light" />
 
                     </RadioGroup>
 
@@ -204,8 +203,7 @@
                     android:text="@string/action_sign_up"
                     android:textSize="@dimen/button_text_size"
                     android:textAllCaps="false"
-                    android:textColor="@color/custom_button_text_color_click"
-                    android:textStyle="bold" />
+                    android:textColor="@color/custom_button_text_color_click" />
             </LinearLayout>
 
         </RelativeLayout>

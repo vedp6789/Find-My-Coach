@@ -27,10 +27,6 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.CalendarGridAdapter;
-import com.findmycoach.app.beans.CalendarSchedule.Day;
-import com.findmycoach.app.beans.CalendarSchedule.DayEvent;
-import com.findmycoach.app.beans.CalendarSchedule.DaySlot;
-import com.findmycoach.app.beans.CalendarSchedule.DayVacation;
 import com.findmycoach.app.beans.CalendarSchedule.Event;
 import com.findmycoach.app.beans.CalendarSchedule.EventDuration;
 import com.findmycoach.app.beans.CalendarSchedule.Mentee;

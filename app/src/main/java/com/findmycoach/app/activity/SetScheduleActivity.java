@@ -1149,9 +1149,9 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     private String getMenteeEventTitle(Calendar time, int stop_hour, int stop_min, String sub_category_name) {
         if (sub_category_name != null) {
-            return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "Subject: " + sub_category_name;
+            return String.format("Vacation time: %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "Subject: " + sub_category_name;
         } else {
-            return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
+            return String.format("Vacation time: %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
         }
 
     }
@@ -1159,13 +1159,13 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     private String getVacationTitle(Calendar time, int stop_hour, int stop_min) {
 
-        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
+        return String.format("Vacation time: %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
 
     }
 
 
     private String getMenteeVacationTitle(Calendar time, int stop_hour, int stop_min) {
-        return String.format("Event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
+        return String.format("Vacation time: %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
 
     }
 
@@ -1222,13 +1222,20 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                 }
             }
         }
-        return String.format("Active Slot: %02d-%02d-%d to %02d-%02d-%d \nTiming: %02d:%02d to %02d:%02d \n",
+
+
+        return String.format("Active Slot: %02d-%02d-%d to %02d-%02d-%d ",
+                Integer.parseInt(slot_start_date.split("-", 3)[2]), Integer.parseInt(slot_start_date.split("-", 3)[1]), Integer.parseInt(slot_start_date.split("-", 3)[0]),
+                Integer.parseInt(slot_stop_date.split("-", 3)[2]), Integer.parseInt(slot_stop_date.split("-", 3)[1]), Integer.parseInt(slot_stop_date.split("-", 3)[0]));
+
+
+        /*return String.format("Active Slot: %02d-%02d-%d to %02d-%02d-%d \nTiming: %02d:%02d to %02d:%02d \n",
                 Integer.parseInt(slot_start_date.split("-", 3)[2]), Integer.parseInt(slot_start_date.split("-", 3)[1]), Integer.parseInt(slot_start_date.split("-", 3)[0]),
                 Integer.parseInt(slot_stop_date.split("-", 3)[2]), Integer.parseInt(slot_stop_date.split("-", 3)[1]), Integer.parseInt(slot_stop_date.split("-", 3)[0]),
                 Integer.parseInt(slot_start_time.split(":", 3)[0]), Integer.parseInt(slot_start_time.split(":", 3)[1]),
                 Integer.parseInt(slot_stop_time.split(":", 3)[0]), Integer.parseInt(slot_stop_time.split(":", 3)[1])) +
                 "Slot type: " + slot_type + " (" + slot_max_users + ")" + "\n" + "Week-days: " + stringBuilder.toString();
-
+*/
     }
 
 
@@ -1285,8 +1292,12 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             }
 
         }
+        return String.format("Free slot: %02d-%02d-%d to %02d-%02d-%d", slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year);
 
+
+/* commented as this much data is not coming sometimes clearly on week view event .
         return String.format("Free slot: %02d-%02d-%d to %02d-%02d-%d \nTiming: %02d:%02d to %02d:%02d \n", slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year, slot_start_hour, slot_start_min, slot_stop_hour, slot_stop_min) + "Slot type: " + slot_type + ", Subject: " + slot_subject + "\n" + "Week-days: " + stringBuilder.toString();
+*/
     }
 
     @Override

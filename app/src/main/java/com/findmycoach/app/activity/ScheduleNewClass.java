@@ -42,14 +42,11 @@ import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -108,7 +105,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         setContentView(R.layout.activity_schedule_new_class);
 
 
-        try{
+        try {
             bundle = getIntent().getBundleExtra("slot_bundle");
             slot = (Slot) bundle.getParcelable("slot");
             mentorInfo = (MentorInfo) bundle.getParcelable("mentor_info");
@@ -135,10 +132,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             slot_on_week_days = slot.getSlot_week_days();
 
 
-
             vacations_on_the_slot = new ArrayList<Vacation>();
             vacations_on_the_slot = slot.getVacations();
-            Log.d(TAG,"vacations for this slot: "+slot.getVacations().size());
+            Log.d(TAG, "vacations for this slot: " + slot.getVacations().size());
 
 
             durationOfSuccessfulClassDayses = new ArrayList<DurationOfSuccessfulClassDays>();
@@ -157,7 +153,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
             finalizeDateTimeAndCharges();
             populateFields();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -194,7 +190,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         }
 
 
-        Log.d(TAG,"subject: "+slot.getSlot_subject());
+        Log.d(TAG, "subject: " + slot.getSlot_subject());
 
         if (slot.getSlot_subject() != null) {
             tv_subject.setVisibility(View.VISIBLE);
@@ -294,6 +290,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         calendar_schedule_start_date.set(class_schedule_start_year, class_schedule_start_month - 1, class_schedule_start_day);
         long start_date_of_this_class_millis = calendar_schedule_start_date.getTimeInMillis();
         Log.d(TAG,"schedule start date and millis: "+class_schedule_start_year+"/"+class_schedule_start_month+"/"+class_schedule_start_day+" millis:"+start_date_of_this_class_millis);
+        Log.d(TAG, "schedule start date in millis " + start_date_of_this_class_millis);
 
 
 
@@ -301,6 +298,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         Calendar calendar_stop_date_of_schedule = Calendar.getInstance();
         calendar_stop_date_of_schedule.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
         long stop_date_of_this_class_in_millis = calendar_stop_date_of_schedule.getTimeInMillis();
+        Log.d(TAG, "schedule stop date in millis " + stop_date_of_this_class_in_millis);
         Log.d(TAG,"schedule stop date and millis: "+slot_stop_year+"/"+slot_stop_month+"/"+slot_stop_day+" millis: "+stop_date_of_this_class_in_millis);
 
 
@@ -311,12 +309,12 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         Log.d(TAG,"schedule start date "+calendar_schedule_start_date.get(Calendar.YEAR)+"/"+ calendar_schedule_start_date.get(Calendar.MONTH) + 1+"/"+ calendar_schedule_start_date.get(Calendar.DAY_OF_MONTH));
 
         int no_of_possible_classes_without_considering_vacation = new Slot().calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_stop_date_of_schedule, slot_on_week_days).size();
-        Log.d(TAG,"no of class without considering vacation: "+no_of_possible_classes_without_considering_vacation);
+        Log.d(TAG, "no of class without considering vacation: " + no_of_possible_classes_without_considering_vacation);
 
         if (no_of_possible_classes_without_considering_vacation > 0) {
 
             if (vacations_on_the_slot.size() > 0) {
-                Log.d(TAG,"parsing slots from vacations");
+                Log.d(TAG, "parsing slots from vacations");
 
                 for (int vacation_no = 0; vacation_no < vacations_on_the_slot.size(); vacation_no++) {
 
@@ -389,6 +387,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 if (no_of_possible_classes_without_considering_vacation > 0) {
                     class_days_after_reducing_vacation += no_of_possible_classes_without_considering_vacation;   /* In case of no vacations found on one slot */
                     Log.d(TAG,"class days after checking vacation when no vacation found : "+class_days_after_reducing_vacation);
+                    Log.d(TAG, "class days after checking vacation: " + class_days_after_reducing_vacation);
                     DurationOfSuccessfulClassDays durationOfSuccessfulClassDays = new DurationOfSuccessfulClassDays();
                     String temp_start_date = String.format("%d-%02d-%02d", calendar_schedule_start_date2.get(Calendar.YEAR), calendar_schedule_start_date2.get(Calendar.MONTH) + 1, calendar_schedule_start_date2.get(Calendar.DAY_OF_MONTH));
                     Log.d(TAG,"start date: "+ temp_start_date);
@@ -402,15 +401,15 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         } else {
             /* No class can be possible to schedule */
-            Toast.makeText(ScheduleNewClass.this,getResources().getString(R.string.no_class_possible),Toast.LENGTH_SHORT).show();
+            Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.no_class_possible), Toast.LENGTH_SHORT).show();
 
         }
 
 
         if (class_days_after_reducing_vacation > 0) {
-            if(class_days_after_reducing_vacation > 1){
+            if (class_days_after_reducing_vacation > 1) {
                 tv_number_of_classes.setText("" + class_days_after_reducing_vacation + "\t" + getResources().getString(R.string.class_days));
-            }else{
+            } else {
                 tv_number_of_classes.setText("" + class_days_after_reducing_vacation + "\t" + getResources().getString(R.string.class_day));
             }
 
@@ -418,25 +417,25 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             int total_amount = 0;
             int cost = Integer.parseInt(charges.split(" per ", 2)[0]);
             String cost_basis = charges.split(" per ", 2)[1];
-            Log.d(TAG,"cost: "+cost+"cost basis: "+cost_basis);
+            Log.d(TAG, "cost: " + cost + "cost basis: " + cost_basis);
 
             if (cost_basis.equalsIgnoreCase("hour")) {               /* assuming mentor cost per hour */
 
                 /* one day cost */
 
-                int start_time_in_seconds = ((slot_start_hour*60)*60)+(slot_start_minute*60);
-                int stop_time_in_seconds = ((slot_stop_hour*60)*60)+(slot_stop_minute*60);
+                int start_time_in_seconds = ((slot_start_hour * 60) * 60) + (slot_start_minute * 60);
+                int stop_time_in_seconds = ((slot_stop_hour * 60) * 60) + (slot_stop_minute * 60);
 
-                double time_duration_in_day=stop_time_in_seconds-start_time_in_seconds;  /* One day class durations in seconds*/
+                double time_duration_in_day = stop_time_in_seconds - start_time_in_seconds;  /* One day class durations in seconds*/
 
-                int one_hour_seconds=60*60;
+                int one_hour_seconds = 60 * 60;
 
-                double one_day_amount = (time_duration_in_day/one_hour_seconds)*cost;
-                Log.d(TAG,"one day amount: "+one_day_amount);
+                double one_day_amount = (time_duration_in_day / one_hour_seconds) * cost;
+                Log.d(TAG, "one day amount: " + one_day_amount);
 
-                double total_class_duration_amount=class_days_after_reducing_vacation *one_day_amount;
+                double total_class_duration_amount = class_days_after_reducing_vacation * one_day_amount;
 
-                Log.d(TAG,"total_amount:"+total_class_duration_amount);
+                Log.d(TAG, "total_amount:" + total_class_duration_amount);
 
 
                 try {
@@ -454,8 +453,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             } else {
              /*this will not allowed now as there is only cost_basis that is per hour*/
             }
-
-
 
 
         } else {
@@ -721,20 +718,19 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             jsonArray.put(jsonArray1);
 
 
-
         }
 
 
         String from_date = tv_from_date.getText().toString();
         requestParams1.add("dates", jsonArray.toString());
-        Log.d(TAG,"event duration dates string: "+jsonArray.toString());
+        Log.d(TAG, "event duration dates string: " + jsonArray.toString());
 
 
         requestParams1.add("slot_type", slot_type);
         if (mentor_availability.equals("1") && slot_type.equalsIgnoreCase("individual")) {
             requestParams1.add("location", et_location.getText().toString());
         }
-        Log.d(TAG,"sub category id: "+getSubCategoryId());
+        Log.d(TAG, "sub category id: " + getSubCategoryId());
         requestParams1.add("sub_category_id", getSubCategoryId());
 
         if (selected_mentor_for.equalsIgnoreCase("child")) {
@@ -749,104 +745,31 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
     private String getSubCategoryId() {
         String sub_category_id = "";
-        //Log.d(TAG,"json: "+DataBase.singleton(this).getAll());
-        try {
-            JSONObject jO_all=new JSONObject(DataBase.singleton(this).getAll());
-            JSONArray jsonArray_categories=jO_all.getJSONArray("categories");
-            for(int category=0; category < jsonArray_categories.length(); category++){
-                JSONObject jO_category=jsonArray_categories.getJSONObject(category);
-                if(jO_category.has("sub_categories")){
-                    JSONArray jA_subcategories=jO_category.getJSONArray("sub_categories");
-
-                    for(int sub_category=0; sub_category < jA_subcategories.length(); sub_category++){
-                        JSONObject jO_sub_category=jA_subcategories.getJSONObject(sub_category);
-                        String sub_cteg_name=jO_sub_category.getString("sub_category_name");
-                        if(sub_cteg_name.trim().equalsIgnoreCase(selected_subject.trim())){
-                            Log.d(TAG,"sub_category_name: "+sub_cteg_name+", selected_subject: "+selected_subject);
-                            sub_category_id = jO_sub_category.getString("id");
-                            Log.d(TAG,"id: "+sub_category_id);
-                            break;
-                        }
-                    }
-                }else{
-                    if(jO_category.has("categories")){
-                        JSONArray jA_category=jO_category.getJSONArray("categories");
-                        for(int cat=0; cat < jA_category.length(); cat++){
-                            JSONObject jO_catego=jA_category.getJSONObject(cat);
-                            JSONArray jA_sub_cat=jO_catego.getJSONArray("sub_categories");
-                            for(int sub_cat=0; sub_cat < jA_sub_cat.length() ; sub_cat++){
-                                JSONObject jsonObject=jA_sub_cat.getJSONObject(sub_cat);
-                                String category_name=jsonObject.getString("sub_category_name");
-                                if(category_name.trim().equalsIgnoreCase(selected_subject.trim())){
-                                    Log.d(TAG,"sub_category_name: "+category_name+", selected_subject: "+selected_subject);
-                                    sub_category_id = jsonObject.getString("id");
-                                    Log.d(TAG,"id: "+sub_category_id);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-
-
-            }
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return sub_category_id;
-/*        Log.d(TAG,"djgkjklygh"+DataBase.singleton(this).getAll());
-
         Category category = new Gson().fromJson(DataBase.singleton(this).getAll(), Category.class);
+        parentForLoop:
         for (Datum d : category.getData()) {
 
-
-
-            Log.d(TAG,"subcategory id: "+sub_category_id);
-
-            if (!sub_category_id.equals(""))
-                break;
-
-            Log.d(TAG,"subcategory id: "+sub_category_id);
-
-
             for (DatumSub datumSub : d.getSubCategories()) {
-                Log.d(TAG,"datum sub"+datumSub.getName().trim()+", selected subject"+selected_subject.trim());
-
                 if (datumSub.getName().trim().equalsIgnoreCase(selected_subject.trim())) {
                     sub_category_id = datumSub.getId();
-                    break;
+                    break parentForLoop;
                 }
             }
 
-            if (!sub_category_id.equals("")) {
-                for (Datum datum : d.getCategories()) {
+            for (Datum datum : d.getCategories()) {
+                if (!sub_category_id.equals(""))
+                    break parentForLoop;
 
-                    Log.d(TAG,"sub_category_id: "+sub_category_id);
-
-                    if (!sub_category_id.equals(""))
-                        break;
-
-                    Log.d(TAG,"sub_category_id: "+sub_category_id);
-
-
-                    for (DatumSub datumSub : datum.getSubCategories()) {
-
-
-                        if (datumSub.getName().trim().equalsIgnoreCase(selected_subject.trim())) {
-
-                            Log.d(TAG,"datum sub"+datumSub.getName().trim()+", selected subject"+selected_subject.trim());
-
-                            sub_category_id = datumSub.getId();
-                            break;
-                        }
+                for (DatumSub datumSub : datum.getSubCategories()) {
+                    if (datumSub.getName().trim().equalsIgnoreCase(selected_subject.trim())) {
+                        sub_category_id = datumSub.getId();
+                        break parentForLoop;
                     }
                 }
             }
         }
         Log.e(TAG, sub_category_id + " : from get subCategoryId()");
-        return sub_category_id;*/
+        return sub_category_id;
     }
 
 

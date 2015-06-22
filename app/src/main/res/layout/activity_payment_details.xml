@@ -173,9 +173,10 @@
                 android:textSize="@dimen/button_text_size"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:background="@null"
+                android:drawablePadding="@dimen/textView_padding_margin"
                 android:drawableLeft="@drawable/skip_small"
                 android:text="@string/button_skip"
-                android:textColor="@color/white"
+                android:textColor="@color/custom_button_text_color_click_purple_light"
                 android:textStyle="bold" />
 
         </LinearLayout>
