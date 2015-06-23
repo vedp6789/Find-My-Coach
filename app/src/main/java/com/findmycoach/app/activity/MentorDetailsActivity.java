@@ -1070,10 +1070,10 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             calendar_end_of_month.set(year, month - 1, days);
             long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
 
-            if ((vacation_start_date_in_millis < month_start_date_in_millis && vacation_stop_date_in_millis > month_end_date_in_millis) ||
-                    (vacation_start_date_in_millis < month_start_date_in_millis && vacation_stop_date_in_millis > month_start_date_in_millis && vacation_stop_date_in_millis < month_end_date_in_millis) ||
-                    (vacation_start_date_in_millis > month_start_date_in_millis && vacation_start_date_in_millis < month_end_date_in_millis && (vacation_stop_date_in_millis > month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
-                    (vacation_start_date_in_millis > month_start_date_in_millis && vacation_start_date_in_millis < month_end_date_in_millis && vacation_stop_date_in_millis > month_start_date_in_millis && vacation_stop_date_in_millis < month_end_date_in_millis) ||
+            if (((vacation_start_date_in_millis < month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis > month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
+                    ((vacation_start_date_in_millis < month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis > month_start_date_in_millis || vacation_stop_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis < month_end_date_in_millis ||vacation_stop_date_in_millis == month_end_date_in_millis)) ||
+                    ((vacation_start_date_in_millis > month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_start_date_in_millis < month_end_date_in_millis || vacation_start_date_in_millis < month_end_date_in_millis) && (vacation_stop_date_in_millis > month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
+                    ((vacation_start_date_in_millis > month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_start_date_in_millis < month_end_date_in_millis || vacation_start_date_in_millis == month_end_date_in_millis) && (vacation_stop_date_in_millis > month_start_date_in_millis  || vacation_stop_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis < month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
                     (vacation_start_date_in_millis == month_start_date_in_millis && vacation_stop_date_in_millis == month_end_date_in_millis)) {
 
                 vacationArrayList.add(vacation);
@@ -1129,7 +1129,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
 
 
-            if ((slot_start_date_in_millis < month_start_date_in_millis && slot_stop_date_in_millis > month_end_date_in_millis) ||
+            /*if ((slot_start_date_in_millis < month_start_date_in_millis && slot_stop_date_in_millis > month_end_date_in_millis) ||
                     (slot_start_date_in_millis < month_start_date_in_millis && slot_stop_date_in_millis > month_start_date_in_millis && slot_stop_date_in_millis < month_end_date_in_millis) ||
                     (slot_start_date_in_millis > month_start_date_in_millis && slot_start_date_in_millis < month_end_date_in_millis && (slot_stop_date_in_millis > month_end_date_in_millis || slot_stop_date_in_millis == month_end_date_in_millis)) ||
                     (slot_start_date_in_millis > month_start_date_in_millis && slot_start_date_in_millis < month_end_date_in_millis && slot_stop_date_in_millis > month_start_date_in_millis && slot_stop_date_in_millis < month_end_date_in_millis) ||
@@ -1137,6 +1137,18 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
                 slotArrayList.add(slot);
 
+            }*/
+
+            if (((slot_start_date_in_millis < month_start_date_in_millis || slot_start_date_in_millis == month_start_date_in_millis) && (slot_stop_date_in_millis > month_end_date_in_millis || slot_stop_date_in_millis == month_end_date_in_millis)) ||
+                    ((slot_start_date_in_millis < month_start_date_in_millis || slot_start_date_in_millis == month_start_date_in_millis) && (slot_stop_date_in_millis > month_start_date_in_millis || slot_stop_date_in_millis == month_start_date_in_millis) && (slot_stop_date_in_millis < month_end_date_in_millis || slot_stop_date_in_millis == month_end_date_in_millis)) ||
+                    ((slot_start_date_in_millis > month_start_date_in_millis || slot_start_date_in_millis == month_start_date_in_millis) && (slot_start_date_in_millis < month_end_date_in_millis || slot_start_date_in_millis == month_end_date_in_millis) && (slot_stop_date_in_millis > month_end_date_in_millis || slot_stop_date_in_millis == month_end_date_in_millis)) ||
+                    ((slot_start_date_in_millis > month_start_date_in_millis || slot_start_date_in_millis == month_start_date_in_millis) && (slot_start_date_in_millis < month_end_date_in_millis || slot_start_date_in_millis == month_end_date_in_millis) && (slot_stop_date_in_millis > month_start_date_in_millis || slot_stop_date_in_millis == month_start_date_in_millis) && (slot_stop_date_in_millis < month_end_date_in_millis || slot_stop_date_in_millis == month_end_date_in_millis)) ||
+                    (slot_start_date_in_millis == month_start_date_in_millis && slot_stop_date_in_millis == month_end_date_in_millis)) {
+
+                slotArrayList.add(slot);
+
+            } else {
+                Log.d(TAG, "not matched");
             }
         }
 

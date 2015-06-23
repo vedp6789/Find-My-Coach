@@ -1402,7 +1402,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             Log.d(TAG, "stop_of_month_millis: " + month_end_date_in_millis);
 
 
-            if ((slot_start_date_in_millis < month_start_date_in_millis && slot_stop_date_in_millis > month_end_date_in_millis) ||
+            /*if (((slot_start_date_in_millis < month_start_date_in_millis) && slot_stop_date_in_millis > month_end_date_in_millis) ||
                     (slot_start_date_in_millis < month_start_date_in_millis && slot_stop_date_in_millis > month_start_date_in_millis && slot_stop_date_in_millis < month_end_date_in_millis) ||
                     (slot_start_date_in_millis > month_start_date_in_millis && slot_start_date_in_millis < month_end_date_in_millis && (slot_stop_date_in_millis > month_end_date_in_millis || slot_stop_date_in_millis == month_end_date_in_millis)) ||
                     (slot_start_date_in_millis > month_start_date_in_millis && slot_start_date_in_millis < month_end_date_in_millis && slot_stop_date_in_millis > month_start_date_in_millis && slot_stop_date_in_millis < month_end_date_in_millis) ||
@@ -1412,7 +1412,21 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
             } else {
                 Log.d(TAG, "not matched");
+            }*/
+
+
+            if (((slot_start_date_in_millis < month_start_date_in_millis || slot_start_date_in_millis == month_start_date_in_millis) && (slot_stop_date_in_millis > month_end_date_in_millis || slot_stop_date_in_millis == month_end_date_in_millis)) ||
+                    ((slot_start_date_in_millis < month_start_date_in_millis || slot_start_date_in_millis == month_start_date_in_millis) && (slot_stop_date_in_millis > month_start_date_in_millis || slot_stop_date_in_millis == month_start_date_in_millis) && (slot_stop_date_in_millis < month_end_date_in_millis || slot_stop_date_in_millis == month_end_date_in_millis)) ||
+                    ((slot_start_date_in_millis > month_start_date_in_millis || slot_start_date_in_millis == month_start_date_in_millis) && (slot_start_date_in_millis < month_end_date_in_millis || slot_start_date_in_millis == month_end_date_in_millis) && (slot_stop_date_in_millis > month_end_date_in_millis || slot_stop_date_in_millis == month_end_date_in_millis)) ||
+                    ((slot_start_date_in_millis > month_start_date_in_millis || slot_start_date_in_millis == month_start_date_in_millis) && (slot_start_date_in_millis < month_end_date_in_millis || slot_start_date_in_millis == month_end_date_in_millis) && (slot_stop_date_in_millis > month_start_date_in_millis || slot_stop_date_in_millis == month_start_date_in_millis) && (slot_stop_date_in_millis < month_end_date_in_millis || slot_stop_date_in_millis == month_end_date_in_millis)) ||
+                    (slot_start_date_in_millis == month_start_date_in_millis && slot_stop_date_in_millis == month_end_date_in_millis)) {
+
+                slotArrayList.add(slot);
+
+            } else {
+                Log.d(TAG, "not matched");
             }
+
         }
 
 
@@ -1451,7 +1465,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             calendar_end_of_month.set(year, month - 1, days);
             long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
 
-            if ((vacation_start_date_in_millis < month_start_date_in_millis && vacation_stop_date_in_millis > month_end_date_in_millis) ||
+           /* if ((vacation_start_date_in_millis < month_start_date_in_millis && vacation_stop_date_in_millis > month_end_date_in_millis) ||
                     (vacation_start_date_in_millis < month_start_date_in_millis && vacation_stop_date_in_millis > month_start_date_in_millis && vacation_stop_date_in_millis < month_end_date_in_millis) ||
                     (vacation_start_date_in_millis > month_start_date_in_millis && vacation_start_date_in_millis < month_end_date_in_millis && (vacation_stop_date_in_millis > month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis) ) ||
                     (vacation_start_date_in_millis > month_start_date_in_millis && vacation_start_date_in_millis < month_end_date_in_millis && vacation_stop_date_in_millis > month_start_date_in_millis && vacation_stop_date_in_millis < month_end_date_in_millis) ||
@@ -1459,7 +1473,19 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
                 vacationArrayList.add(vacation);
 
+            }*/
+
+
+            if (((vacation_start_date_in_millis < month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis > month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
+                    ((vacation_start_date_in_millis < month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis > month_start_date_in_millis || vacation_stop_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis < month_end_date_in_millis ||vacation_stop_date_in_millis == month_end_date_in_millis)) ||
+                    ((vacation_start_date_in_millis > month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_start_date_in_millis < month_end_date_in_millis || vacation_start_date_in_millis < month_end_date_in_millis) && (vacation_stop_date_in_millis > month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
+                    ((vacation_start_date_in_millis > month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_start_date_in_millis < month_end_date_in_millis || vacation_start_date_in_millis == month_end_date_in_millis) && (vacation_stop_date_in_millis > month_start_date_in_millis  || vacation_stop_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis < month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
+                    (vacation_start_date_in_millis == month_start_date_in_millis && vacation_stop_date_in_millis == month_end_date_in_millis)) {
+
+                vacationArrayList.add(vacation);
+
             }
+
         }
 
         return vacationArrayList;
