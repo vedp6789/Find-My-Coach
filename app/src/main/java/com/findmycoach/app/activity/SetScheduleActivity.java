@@ -130,7 +130,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
                 Log.d(TAG, "prev_month: " + prev_month.size() + ", current_month: " + current_month.size() + ", coming_month: " + coming_month.size());
                 //day_schedule = (ArrayList<Day>) getIntent.getSerializableExtra("day_bean");
-                Toast.makeText(this, "" + day + "/" + (month + 1) + "/" + year, Toast.LENGTH_LONG).show();
+                /*Toast.makeText(this, "" + day + "/" + (month + 1) + "/" + year, Toast.LENGTH_LONG).show();*/
 
             }
             StorageHelper.storePreference(SetScheduleActivity.this, "day", String.valueOf(day));
@@ -521,9 +521,9 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                 Slot slot = coming_month.get(0);
                 if (Boolean.parseBoolean(slot.isSlot_created_on_network_success())) {  /* Checking whether the slots came in this month are either on network success as when there is network failure i am adding one slot with flag for network communication as false */
 
-                    ArrayList<String> coinciding_vacation_vacation_id_for_this_day= new ArrayList<String>();
-                    for (int day_of_this_month = 1; day_of_this_month <= number_of_days_in_this_month; day_of_this_month++) { /* This for loop will iterate through first to last day of next month. For each day what possible class, event or vacation can be possible will bet populated*/
 
+                    for (int day_of_this_month = 1; day_of_this_month <= number_of_days_in_this_month; day_of_this_month++) { /* This for loop will iterate through first to last day of next month. For each day what possible class, event or vacation can be possible will bet populated*/
+                        ArrayList<String> coinciding_vacation_vacation_id_for_this_day= new ArrayList<String>();
 
                         Log.d(TAG, "coming month size: " + coming_month.size());
                         for (int slot_number = 0; slot_number < coming_month.size(); slot_number++) {   /*Will match possible slot, event or coinciding vacation for the matching slot of this day. */

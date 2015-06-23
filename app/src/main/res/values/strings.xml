@@ -522,6 +522,7 @@
     <!-- end of unique strings block-->
 
     <!-- Toast message strings-->
+    <string name="current_month_view_message">You are viewing current month of the calendar!</string>
     <string name="attach_image_clicked">Attach image is clicked</string>
     <string name="attach_video_clicked">Attach video is clicked</string>
     <string name="too_big_image">Image is too big, Please choose smaller one</string>
