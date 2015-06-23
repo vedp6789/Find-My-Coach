@@ -1599,6 +1599,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             comingMonthMentorInfos = getMentorInfo(jsonArray_mentor);
             Log.d(TAG, "comingMonthArrayList size" + comingMonthArrayList.size());
 
+
+
+            Log.d(TAG,"prev month arrayList size"+previousMonthArrayList.size()+", current month arrayList size: "+currentMonthArrayList.size()+", coming month arrayList size "+comingMonthArrayList.size());
+
             adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos);
             _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
             currentMonth.setText(DateFormat.format(dateTemplate,

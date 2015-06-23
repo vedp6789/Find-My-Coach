@@ -86,14 +86,15 @@ public class WeekView extends View {
     private int mFirstDayOfWeek = Calendar.MONDAY;
     private int mTextSize = 12;
     private int mHeaderColumnPadding = 10;
-    private int mHeaderColumnTextColor = Color.BLACK;
+    private int mHeaderColumnTextColor = Color.BLUE;
     private int mNumberOfVisibleDays = 3;
     private int mHeaderRowPadding = 10;
     private int mHeaderRowBackgroundColor = Color.WHITE;
     private int mDayBackgroundColor = Color.rgb(245,245,245);
     private int mHourSeparatorColor = Color.rgb(230, 230, 230);
     //private int mTodayBackgroundColor = Color.rgb(239, 247, 254);
-    private int mTodayBackgroundColor = Color.rgb(120, 120, 120);
+    //private int mTodayBackgroundColor = Color.rgb(120, 120, 120);
+    private int mTodayBackgroundColor = Color.rgb(249, 249, 32);
     private int mHourSeparatorHeight = 2;
     private int mTodayHeaderTextColor = Color.rgb(39, 137, 228);
     private int mEventTextSize = 12;
@@ -332,7 +333,8 @@ public class WeekView extends View {
         // Prepare day background color paint.
         mDayBackgroundPaint = new Paint();
        // mDayBackgroundPaint.setColor(mDayBackgroundColor);
-        mDayBackgroundPaint.setColor(Color.rgb(120, 120, 120));
+       // mDayBackgroundPaint.setColor(Color.rgb(120, 120, 120));
+        mDayBackgroundPaint.setColor(Color.rgb(255, 255, 255));
 
 
         // Prepare hour separator color paint.
@@ -344,7 +346,7 @@ public class WeekView extends View {
         // Prepare today background color paint.
         mTodayBackgroundPaint = new Paint();
         //mTodayBackgroundPaint.setColor(mTodayBackgroundColor);
-        mTodayBackgroundPaint.setColor(Color.rgb(120, 120, 120));
+        mTodayBackgroundPaint.setColor(Color.rgb(255, 255, 255));  /* This is populating whole week view for a day which got clicked as day grid from calendar */
 
         // Prepare today header text color paint.
         mTodayHeaderTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);

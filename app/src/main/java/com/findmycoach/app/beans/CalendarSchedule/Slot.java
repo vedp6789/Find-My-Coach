@@ -247,7 +247,7 @@ public class Slot implements Parcelable {
 
                             if((Integer.parseInt(active_class_date.split("-")[0])== year)  && (Integer.parseInt(active_class_date.split("-")[1])==month )&&(Integer.parseInt(active_class_date.split("-")[2]))==day){
                                 event_found = true;
-                                break level_mentee;
+
                             }
 /*
                             if(active_class_in_millis == calendar_time_in_millis){
