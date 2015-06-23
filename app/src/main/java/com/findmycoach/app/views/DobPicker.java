@@ -8,6 +8,7 @@ import android.view.Window;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.DobAdapter;
@@ -29,15 +30,13 @@ public class DobPicker {
     private GridView gridView;
     private TextView title;
     private ImageView backButton;
-    private int currentYear;
-    private List<String> months;
+    private List<String> months, decades;
 
     public String selectedDecade, selectedYear, selectedMonth, selectedDay;
 
-    public DobPicker(Context context, TextView textView, int currentYear) {
+    public DobPicker(Context context, TextView textView, int startYear, int endYear) {
         this.context = context;
         this.textView = textView;
-        this.currentYear = currentYear - 1;
         dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dob_dialog);
@@ -46,16 +45,51 @@ public class DobPicker {
         backButton = (ImageView) dialog.findViewById(R.id.backButton);
         months = new ArrayList<>();
         Collections.addAll(months, context.getResources().getStringArray(R.array.months));
+
+        if (startYear > endYear) {
+            Toast.makeText(context, "Start year can not be greater than end year", Toast.LENGTH_LONG).show();
+            return;
+        }
+        decades = new ArrayList<>();
+        Log.e("Decades", startYear + " <== Start year : End year ==> " + endYear);
+
+        if (startYear % 10 != 0) {
+            int tempStart = startYear;
+            startYear = startYear + ((10 - startYear % 10));
+            if (startYear > endYear)
+                decades.add(tempStart + "-" + endYear);
+            else
+                decades.add(tempStart + "-" + startYear);
+        }
+
+        int temp = -1;
+
+        if (endYear % 10 != 0) {
+            temp = endYear;
+            endYear = endYear - endYear % 10;
+        }
+        while (startYear + 9 <= endYear) {
+            decades.add(++startYear + "-" + (startYear += 9));
+        }
+
+        if (temp > -1) {
+            if (startYear + 1 == temp)
+                decades.add(String.valueOf(temp));
+            else
+                decades.add(++startYear + "-" + temp);
+        }
+
+        for (String s : decades)
+            Log.e("Decades", s);
+
         showDecades();
     }
 
     private void showDecades() {
         backButton.setVisibility(View.INVISIBLE);
         title.setText(context.getString(R.string.prompt_date_of_birth));
-        final List<String> list = new ArrayList<>();
-        Collections.addAll(list, context.getResources().getStringArray(R.array.decade_array));
         gridView.setNumColumns(3);
-        gridView.setAdapter(new DobAdapter(1, context, list, this));
+        gridView.setAdapter(new DobAdapter(1, context, decades, this));
         dialog.show();
     }
 
@@ -63,9 +97,11 @@ public class DobPicker {
         Log.e("Decade", selectedDecade);
         String[] slittedDecade = selectedDecade.split("-");
         int startYear = Integer.parseInt(slittedDecade[0]);
-        int lastYear = startYear + 9;
-        if (lastYear > currentYear) {
-            lastYear = currentYear;
+        int lastYear = startYear;
+        try{
+            lastYear = Integer.parseInt(slittedDecade[1]);
+        }catch (Exception e){
+            lastYear = startYear;
         }
 
         backButton.setVisibility(View.VISIBLE);
@@ -125,7 +161,7 @@ public class DobPicker {
     }
 
     public void setDob() {
-        textView.setText(selectedDay + "-" +  selectedMonth.charAt(0) + selectedMonth.charAt(1)
+        textView.setText(selectedDay + "-" + selectedMonth.charAt(0) + selectedMonth.charAt(1)
                 + selectedMonth.charAt(2) + "-" + selectedYear);
         dialog.dismiss();
     }
