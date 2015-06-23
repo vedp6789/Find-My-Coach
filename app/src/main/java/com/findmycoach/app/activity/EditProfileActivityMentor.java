@@ -285,6 +285,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                         new AddressFromZip(EditProfileActivityMentor.this, profileAddress1).execute(pinCode.getText().toString());
                     } catch (Exception ignored) {
                     }
+                    openAreaOfCoachingActivity();
                 }
                 return false;
             }
@@ -403,17 +404,21 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         areaOfCoaching.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String interests = areaOfCoaching.getText().toString();
-                Log.d("FMC", "Area of Interests:" + interests);
-                Intent intent = new Intent(getApplicationContext(), AreasOfInterestActivity.class);
-                if (!interests.trim().equals(""))
-                    intent.putExtra("interests", interests);
-                startActivityForResult(intent, 500);
+                openAreaOfCoachingActivity();
             }
         });
 
         if (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
             getAddress();
+    }
+
+    private void openAreaOfCoachingActivity() {
+        String interests = areaOfCoaching.getText().toString();
+        Log.d("FMC", "Area of Interests:" + interests);
+        Intent intent = new Intent(getApplicationContext(), AreasOfInterestActivity.class);
+        if (!interests.trim().equals(""))
+            intent.putExtra("interests", interests);
+        startActivityForResult(intent, 500);
     }
 
     private void getAddress() {
