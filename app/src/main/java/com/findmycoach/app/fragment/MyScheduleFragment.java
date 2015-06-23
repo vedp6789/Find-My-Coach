@@ -53,7 +53,7 @@ import java.util.Locale;
 
 public class MyScheduleFragment extends Fragment implements View.OnClickListener, Callback {
 
-    private TextView currentMonth,tv_today;
+    private TextView currentMonth, tv_today;
     private Button add_slot, add_vacation;
     public TextView tv_location_for_calendar;
     public LinearLayout ll_location_for_calendar;
@@ -148,7 +148,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     /* Initializing views for Mentee login */
     private void initializeMenteeView(View view) {
-        tv_today= (TextView) view.findViewById(R.id.tv_today);
+        tv_today = (TextView) view.findViewById(R.id.tv_today);
         tv_today.setOnClickListener(this);
 
         prevMonth = (ImageView) view.findViewById(R.id.prevMonth);
@@ -244,14 +244,13 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         }
 
         requestParams.add("start_date", String.valueOf(stringBuilder));
-        Log.d(TAG,"start date: "+String.valueOf(stringBuilder));
-
+        Log.d(TAG, "start date: " + String.valueOf(stringBuilder));
 
 
         previous_month_start_date = String.valueOf(stringBuilder);    /* this will be used to identify previous, current, coming month date (yyyy-mm-dd) */
 
         requestParams.add("limit", String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
-        Log.d(TAG,"limit: "+String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
+        Log.d(TAG, "limit: " + String.valueOf(days_in_prev_month + days_in_current_month + days_in_next_month));
 
         networkCallForMentee(requestParams);
     }
@@ -268,8 +267,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
     /* Initializing schedule for Mentor */
     public void initialize(final View view) {
-        tv_today= (TextView) view.findViewById(R.id.tv_today);
-tv_today.setOnClickListener(this);
+        tv_today = (TextView) view.findViewById(R.id.tv_today);
+        tv_today.setOnClickListener(this);
 
         tv_location_for_calendar = (TextView) view.findViewById(R.id.tv_location_for_calendar);
         tv_location_for_calendar.setOnClickListener(this);
@@ -485,46 +484,6 @@ tv_today.setOnClickListener(this);
     @Override
     public void onClick(View v) {
 
-        tv_today.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                 Calendar calendar_right_now =Calendar.getInstance();
-                 int right_now_month =calendar_right_now.get(Calendar.MONTH)+1;
-                 int right_now_year =calendar_right_now.get(Calendar.YEAR);
-
-                 Log.d(TAG,"right_now_month"+right_now_month+" month: "+month);
-                Log.d(TAG,"right_now_year"+right_now_year+" year "+year);
-
-                 if((right_now_month) == month && right_now_year == year){
-                     Toast.makeText(getActivity(),getResources().getString(R.string.current_month_view_message),Toast.LENGTH_SHORT).show();
-                 }else{
-                     populate_calendar_from_adapter = true;
-                     month = right_now_month;
-                     year = right_now_year;
-                     String user_group = StorageHelper.getUserGroup(getActivity(), "user_group");
-
-                     if (user_group.equals("3")) {
-                         getCalendarDetailsAPICall();
-
-                     } else {
-                         if (user_group.equals("2")) {
-                                   /*mentee three months data will get called from here */
-                             getCalendarDetailsForMentee();
-                         }
-                     }
-
-                     Toast.makeText(getActivity(),"You are alrcalendar related to current month!",Toast.LENGTH_SHORT).show();
-
-                 }
-
-
-
-
-
-            }
-        });
-
-
         /* Add New Slot option for mentor*/
         if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 3) {
             if (v == add_slot) {
@@ -593,7 +552,37 @@ tv_today.setOnClickListener(this);
 
         }
 
+        if (v == tv_today) {
+            Calendar calendar_right_now = Calendar.getInstance();
+            int right_now_month = calendar_right_now.get(Calendar.MONTH) + 1;
+            int right_now_year = calendar_right_now.get(Calendar.YEAR);
 
+            Log.d(TAG, "right_now_month" + right_now_month + " month: " + month);
+            Log.d(TAG, "right_now_year" + right_now_year + " year " + year);
+
+            if ((right_now_month) == month && right_now_year == year) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.current_month_view_message), Toast.LENGTH_SHORT).show();
+            } else {
+                populate_calendar_from_adapter = true;
+                month = right_now_month;
+                year = right_now_year;
+                String user_group = StorageHelper.getUserGroup(getActivity(), "user_group");
+
+                if (user_group.equals("3")) {
+                    getCalendarDetailsAPICall();
+
+                } else {
+                    if (user_group.equals("2")) {
+                                   /*mentee three months data will get called from here */
+                        getCalendarDetailsForMentee();
+                    }
+                }
+
+                Toast.makeText(getActivity(), "You are alrcalendar related to current month!", Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
 
 
     }
@@ -1366,11 +1355,11 @@ tv_today.setOnClickListener(this);
 
                         mentee.setEventDurations(eventDurations);
 
-                        if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")){
+                        if (StorageHelper.getUserGroup(getActivity(), "user_group").equals("2")) {
                             /* first name and last name is not coming , We have full in shared preference from PaymentDetailsActivity */
                             mentee.setFirst_name("");
                             mentee.setLast_name("");
-                        }else{
+                        } else {
                             mentee.setFirst_name(mentee_jsonObject.getString("first_name"));
                             mentee.setLast_name(mentee_jsonObject.getString("last_name"));
                         }
@@ -1497,25 +1486,25 @@ tv_today.setOnClickListener(this);
             Calendar calendar_start_of_month = Calendar.getInstance();
             calendar_start_of_month.set(year, month - 1, 1);
             long month_start_date_in_millis = calendar_start_of_month.getTimeInMillis();
-            Log.d(TAG,"month start millies: "+month_start_date_in_millis);
+            Log.d(TAG, "month start millies: " + month_start_date_in_millis);
 
 
             Calendar calendar_vacation_start_date = Calendar.getInstance();
             calendar_vacation_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
             long vacation_start_date_in_millis = calendar_vacation_start_date.getTimeInMillis();
-            Log.d(TAG,"vacation month start millies: "+vacation_start_date_in_millis);
+            Log.d(TAG, "vacation month start millies: " + vacation_start_date_in_millis);
 
 
             Calendar calendar_vacation_end_date = Calendar.getInstance();
             calendar_vacation_end_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
             long vacation_stop_date_in_millis = calendar_vacation_end_date.getTimeInMillis();
-            Log.d(TAG,"vacation month stop millies: "+vacation_stop_date_in_millis);
+            Log.d(TAG, "vacation month stop millies: " + vacation_stop_date_in_millis);
 
 
             Calendar calendar_end_of_month = Calendar.getInstance();
             calendar_end_of_month.set(year, month - 1, days);
             long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
-            Log.d(TAG,"month stop millies: "+month_end_date_in_millis);
+            Log.d(TAG, "month stop millies: " + month_end_date_in_millis);
 
            /* if ((vacation_start_date_in_millis < month_start_date_in_millis && vacation_stop_date_in_millis > month_end_date_in_millis) ||
                     (vacation_start_date_in_millis < month_start_date_in_millis && vacation_stop_date_in_millis > month_start_date_in_millis && vacation_stop_date_in_millis < month_end_date_in_millis) ||
@@ -1529,15 +1518,15 @@ tv_today.setOnClickListener(this);
 
 
             if (((vacation_start_date_in_millis < month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis > month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
-                    ((vacation_start_date_in_millis < month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis > month_start_date_in_millis || vacation_stop_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis < month_end_date_in_millis ||vacation_stop_date_in_millis == month_end_date_in_millis)) ||
+                    ((vacation_start_date_in_millis < month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis > month_start_date_in_millis || vacation_stop_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis < month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
                     ((vacation_start_date_in_millis > month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_start_date_in_millis < month_end_date_in_millis || vacation_start_date_in_millis == month_end_date_in_millis) && (vacation_stop_date_in_millis > month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
-                    ((vacation_start_date_in_millis > month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_start_date_in_millis < month_end_date_in_millis || vacation_start_date_in_millis == month_end_date_in_millis) && (vacation_stop_date_in_millis > month_start_date_in_millis  || vacation_stop_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis < month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
+                    ((vacation_start_date_in_millis > month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_start_date_in_millis < month_end_date_in_millis || vacation_start_date_in_millis == month_end_date_in_millis) && (vacation_stop_date_in_millis > month_start_date_in_millis || vacation_stop_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis < month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
                     (vacation_start_date_in_millis == month_start_date_in_millis && vacation_stop_date_in_millis == month_end_date_in_millis)) {
 
                 vacationArrayList.add(vacation);
 
-            }else{
-                Log.d(TAG,"vacation match unsuccessful");
+            } else {
+                Log.d(TAG, "vacation match unsuccessful");
             }
 
         }
@@ -1572,14 +1561,12 @@ tv_today.setOnClickListener(this);
             JSONArray jsonArray_data = jsonObject_data.getJSONArray("slots");
 
 
-
-
             List<Slot> slots = new ArrayList<Slot>();
             List<Vacation> vacations = new ArrayList<Vacation>();  /* list of non coinciding vacations*/
 
 
             parseSlots(slots, jsonArray_data, user_group);
-            if(user_group == 3){
+            if (user_group == 3) {
                 JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");
                 parseVacation(vacations, jsonArray_vacation_non_coinciding);
 
@@ -1654,7 +1641,7 @@ tv_today.setOnClickListener(this);
 
             parseSlots(slots, jsonArray_data, user_group);
 
-            if(user_group == 3){
+            if (user_group == 3) {
                 JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");
                 parseVacation(vacations, jsonArray_vacation_non_coinciding);
 

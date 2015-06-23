@@ -135,7 +135,9 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         profileDOB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DobPicker(EditProfileActivityMentee.this, profileDOB, Calendar.getInstance().get(Calendar.YEAR));
+                new DobPicker(EditProfileActivityMentee.this, profileDOB,
+                        getResources().getInteger(R.integer.starting_year),
+                        Calendar.getInstance().get(Calendar.YEAR) - 10);
             }
         });
 

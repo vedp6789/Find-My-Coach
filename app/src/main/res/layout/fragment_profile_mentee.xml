@@ -29,9 +29,9 @@
                 android:src="@drawable/user_icon" />
 
             <com.findmycoach.app.views.ChizzleTextView
-                android:layout_gravity="center"
+                android:gravity="center"
                 android:id="@+id/profile_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/purple"
                 android:textStyle="bold"

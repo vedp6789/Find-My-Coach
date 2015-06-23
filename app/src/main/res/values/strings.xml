@@ -771,16 +771,7 @@
         <item>Schedules</item>
     </string-array>
 
-    <string-array name="decade_array">
-        <item>1941-1950</item>
-        <item>1951-1960</item>
-        <item>1961-1970</item>
-        <item>1971-1980</item>
-        <item>1981-1990</item>
-        <item>1991-2000</item>
-        <item>2001-2010</item>
-        <item>2011-Onwards</item>
-    </string-array>
+    <integer name="starting_year">1941</integer>
 
     <!-- String s related to Actions -->
     <string name="action_sign_in">Login</string>

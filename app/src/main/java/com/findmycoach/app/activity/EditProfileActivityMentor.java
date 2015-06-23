@@ -150,7 +150,9 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         profileDOB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DobPicker(EditProfileActivityMentor.this, profileDOB, Calendar.getInstance().get(Calendar.YEAR));
+                new DobPicker(EditProfileActivityMentor.this, profileDOB,
+                        getResources().getInteger(R.integer.starting_year),
+                        Calendar.getInstance().get(Calendar.YEAR) - 15);
             }
         });
 
@@ -561,12 +563,6 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         }
 
         if (isValid) {
-            int experienceInYears = 0;
-            try {
-                experienceInYears = Integer.parseInt(experienceInput.getSelectedItemPosition() + "");
-            } catch (Exception e) {
-                experienceInYears = 0;
-            }
             int dobYear = 0;
             try {
                 dobYear = Integer.parseInt(profileDOB.getText().toString().split("-")[2]);
@@ -574,7 +570,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                 dobYear = 0;
             }
 
-            if (dobYear > 0 && experienceInYears > 0 && (Calendar.getInstance().get(Calendar.YEAR) - (dobYear + experienceInYears) < 16))
+            if (dobYear > 0 && (Calendar.getInstance().get(Calendar.YEAR) - (dobYear) < 19))
                 Toast.makeText(this, getResources().getString(R.string.age_review_message), Toast.LENGTH_LONG).show();
         }
 
