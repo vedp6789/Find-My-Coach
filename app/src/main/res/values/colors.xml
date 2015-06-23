@@ -8,6 +8,7 @@
     <color name="today_highlight_color">#0033b5e5</color>
 
     <color name="white">#ffffff</color>
+    <color name="grey_light">#F2F2F2</color>
     <color name="purple">#23214C</color>
     <color name="purple_dark_light">#827191</color>
     <color name="purple_light">#B8B3C9</color>
