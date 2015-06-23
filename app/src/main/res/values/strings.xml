@@ -802,6 +802,9 @@
     <string name="post_schedule_request">Post schedule request</string>
     <string name="schedule">Schedule</string>
     <string name="scheduled_event">Scheduled event</string>
+    <string name="free_slots">Free slots</string>
+    <string name="vacation_event">Event with vacation</string>
+    <string name="vacation">Vacation</string>
     <string name="schedule_class">Schedule a class</string>
     <string name="schedule_vacation">Vacation schedule</string>
     <string name="ok">OK</string>
