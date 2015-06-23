@@ -301,6 +301,7 @@ public class WeekView extends View {
         mToday.set(Calendar.MINUTE, 0);
         mToday.set(Calendar.SECOND, 0);
 
+
         // Scrolling initialization.
         mGestureDetector = new GestureDetectorCompat(mContext, mGestureListener);
         mScroller = new OverScroller(mContext);
@@ -359,6 +360,7 @@ public class WeekView extends View {
         mEventBackgroundPaint = new Paint();
         //mEventBackgroundPaint.setColor(Color.rgb(174, 208, 238));
         mEventBackgroundPaint.setColor(Color.rgb(120, 120, 120));
+
 
 
         // Prepare header column background color.
