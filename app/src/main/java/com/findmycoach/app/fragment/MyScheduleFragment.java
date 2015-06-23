@@ -185,7 +185,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         if (month_from_dialog == 0 && year_from_dialog == 0) {
             if (populate_calendar_from_adapter) {
                 populate_calendar_from_adapter = false;
-
+                currentMonth.setText(getResources().getStringArray(R.array.months)[month - 1] + " " + year);
             } else {
                 startPointForCalendar();
             }
@@ -354,7 +354,7 @@ tv_today.setOnClickListener(this);
         if (month_from_dialog == 0 && year_from_dialog == 0) {
             if (populate_calendar_from_adapter) {
                 populate_calendar_from_adapter = false;
-
+                currentMonth.setText(getResources().getStringArray(R.array.months)[month - 1] + " " + year);
             } else {
                 startPointForCalendar();
             }
