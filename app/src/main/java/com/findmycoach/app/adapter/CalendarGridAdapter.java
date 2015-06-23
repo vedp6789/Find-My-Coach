@@ -39,7 +39,6 @@ import java.util.List;
 public class CalendarGridAdapter extends BaseAdapter implements View.OnClickListener {
 
     private final Context context;
-
     private List<String> list;
     private static final int DAY_OFFSET = 1;
     private String[] weekdays;
