@@ -500,14 +500,23 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
             }
             if (v == currentMonth) {
-                FragmentManager fragmentManager = getFragmentManager();
-                CustomDatePickerFragment customDatePickerFragment = new CustomDatePickerFragment();
+
+                DatePickerFragment datePickerDialog = new DatePickerFragment();
+                datePickerDialog.textView = currentMonth;
                 Bundle bundle = new Bundle();
                 bundle.putString("for", "MyScheduleFragment");
-                customDatePickerFragment.setArguments(bundle);
-                customDatePickerFragment.show(fragmentManager, null);
+                datePickerDialog.setArguments(bundle);
+                datePickerDialog.show(getActivity().getFragmentManager(), "monthPicker");
                 month_from_dialog = 0;
                 year_from_dialog = 0;
+
+
+//                FragmentManager fragmentManager = getFragmentManager();
+//                CustomDatePickerFragment customDatePickerFragment = new CustomDatePickerFragment();
+//                Bundle bundle = new Bundle();
+//                bundle.putString("for", "MyScheduleFragment");
+//                customDatePickerFragment.setArguments(bundle);
+//                customDatePickerFragment.show(fragmentManager, null);
                 /*DatePickerDialog datePickerDialog=createDialogWithoutDateField();
                 datePickerDialog.show();
 */
@@ -520,16 +529,24 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         }
         if (Integer.parseInt(StorageHelper.getUserGroup(getActivity(), "user_group")) == 2) {
             if (v == currentMonth) {
-                Log.d(TAG, "currentMonth clicked");
-                FragmentManager fragmentManager = getFragmentManager();
-                CustomDatePickerFragment customDatePickerFragment = new CustomDatePickerFragment();
+
+                DatePickerFragment datePickerDialog = new DatePickerFragment();
+                datePickerDialog.textView = currentMonth;
                 Bundle bundle = new Bundle();
                 bundle.putString("for", "MyScheduleFragment");
-                customDatePickerFragment.setArguments(bundle);
-
-                customDatePickerFragment.show(fragmentManager, null);
+                datePickerDialog.setArguments(bundle);
+                datePickerDialog.show(getActivity().getFragmentManager(), "monthPicker");
                 month_from_dialog = 0;
                 year_from_dialog = 0;
+
+//                Log.d(TAG, "currentMonth clicked");
+//                FragmentManager fragmentManager = getFragmentManager();
+//                CustomDatePickerFragment customDatePickerFragment = new CustomDatePickerFragment();
+//                Bundle bundle = new Bundle();
+//                bundle.putString("for", "MyScheduleFragment");
+//                customDatePickerFragment.setArguments(bundle);
+//
+//                customDatePickerFragment.show(fragmentManager, null);
             }
         }
 
