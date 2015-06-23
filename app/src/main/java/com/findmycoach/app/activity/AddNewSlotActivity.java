@@ -218,7 +218,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     }
 
     private void allListeners() {
-        tv_start_time.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.fromTime).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
@@ -227,7 +227,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             }
         });
 
-        tv_stop_time.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.toTime).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (tv_start_time.getText().length() > 0) {
@@ -246,7 +246,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             }
         });
 
-        tv_start_date.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.fromDate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "On click");
@@ -258,7 +258,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             }
         });
 
-        tv_till_date.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.toDate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (tv_start_date.getText().length() > 0) {

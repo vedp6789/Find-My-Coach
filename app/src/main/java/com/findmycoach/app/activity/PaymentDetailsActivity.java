@@ -52,13 +52,6 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
         findViewById(R.id.buttonSave).setOnClickListener(this);
         inputCardExpiry.setOnClickListener(this);
 
-        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
         try{
             inputCardName.setText(StorageHelper.getUserDetails(this, "user_full_name"));
         }catch (Exception e){

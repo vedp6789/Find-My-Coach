@@ -478,8 +478,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         for (final Button b : daysButton) {
             b.setTag(b.getId(), 0);
 
-            b.setBackgroundColor(getActivity().getResources().getColor(R.color.white));
-            b.setTextColor(getActivity().getResources().getColor(R.color.purple));
+            b.setBackgroundDrawable(getActivity().getResources()
+                    .getDrawable(R.drawable.custom_rounded_corner_purple_light));
+            b.setTextColor(getActivity().getResources().getColor(R.color.white));
 
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -488,13 +489,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                     if (tag == 0) {
                         b.setTag(b.getId(), 1);
                         b.setBackgroundDrawable(getActivity().getResources()
-                                .getDrawable(R.drawable.custom_rounded_corner_purple_light));
-                        b.setTextColor(getActivity().getResources().getColor(R.color.white));
+                                .getDrawable(R.drawable.custom_rounded_corner_white));
+                        b.setTextColor(getActivity().getResources().getColor(R.color.purple));
                     } else {
                         b.setTag(b.getId(), 0);
                         b.setBackgroundDrawable(getActivity().getResources()
-                                .getDrawable(R.drawable.custom_rounded_corner_white));
-                        b.setTextColor(getActivity().getResources().getColor(R.color.purple));
+                                .getDrawable(R.drawable.custom_rounded_corner_purple_light));
+                        b.setTextColor(getActivity().getResources().getColor(R.color.white));
                     }
 
                 }

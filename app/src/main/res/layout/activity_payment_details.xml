@@ -5,16 +5,8 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/backButton"
-        android:layout_width="@dimen/action_bar_height"
-        android:layout_height="@dimen/action_bar_height"
-        android:layout_gravity="start"
-        android:layout_marginTop="@dimen/back_margin"
-        android:padding="@dimen/textView_padding_margin"
-        android:src="@drawable/back" />
-
     <ScrollView
+        android:paddingTop="@dimen/activity_vertical_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -46,22 +38,24 @@
                     android:id="@+id/textView5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
                     android:layout_gravity="center_vertical"
+                    android:layout_toLeftOf="@+id/scanCard"
+                    android:layout_toStartOf="@+id/scanCard"
                     android:text="@string/enter_credit_debit_card"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/profile_details"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+                    android:textSize="@dimen/button_text_size" />
 
                 <ImageView
                     android:id="@+id/scanCard"
                     android:layout_width="@dimen/connection_button"
                     android:layout_height="@dimen/connection_button"
-                    android:src="@drawable/camera"
-                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
+                    android:layout_alignParentTop="true"
+                    android:src="@drawable/camera" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -83,7 +77,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginRight="@dimen/textView_padding_margin" />
 
-               <com.findmycoach.app.views.ChizzleEditText
+                <com.findmycoach.app.views.ChizzleEditText
                     android:id="@+id/editTextCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -96,7 +90,8 @@
                     android:hint="@string/hint_enter_card_number"
                     android:inputType="number"
                     android:textColor="@color/white"
-                    android:textColorHint="@color/purple_light" />
+                    android:textColorHint="@color/purple_light"
+                    android:textCursorDrawable="@drawable/cursor_white" />
 
             </RelativeLayout>
 
@@ -110,7 +105,7 @@
                 android:weightSum="2">
 
 
-               <com.findmycoach.app.views.ChizzleEditText
+                <com.findmycoach.app.views.ChizzleEditText
                     android:id="@+id/editTextDate"
                     style="@style/EditTextCustomHolo"
                     android:layout_width="0dp"
@@ -123,9 +118,10 @@
                     android:gravity="center_horizontal"
                     android:hint="@string/hint_date_of_expiry"
                     android:inputType="datetime"
+                    android:textCursorDrawable="@drawable/cursor_white"
                     android:textIsSelectable="false" />
 
-               <com.findmycoach.app.views.ChizzleEditText
+                <com.findmycoach.app.views.ChizzleEditText
                     android:id="@+id/editTextCVV"
                     style="@style/EditTextCustomHolo"
                     android:layout_width="0dp"
@@ -136,10 +132,11 @@
                     android:ems="10"
                     android:gravity="center_horizontal"
                     android:hint="@string/hint_enter_cvv"
-                    android:inputType="datetime" />
+                    android:inputType="datetime"
+                    android:textCursorDrawable="@drawable/cursor_white" />
             </LinearLayout>
 
-           <com.findmycoach.app.views.ChizzleEditText
+            <com.findmycoach.app.views.ChizzleEditText
                 android:id="@+id/editTextName"
                 style="@style/EditTextCustomHolo"
                 android:layout_width="match_parent"
@@ -150,12 +147,12 @@
                 android:ems="10"
                 android:gravity="center_horizontal"
                 android:hint="@string/hint_name_on_card"
-                android:inputType="textCapSentences" />
+                android:inputType="textCapSentences"
+                android:textCursorDrawable="@drawable/cursor_white" />
 
 
             <com.findmycoach.app.views.ChizzleButton
                 android:id="@+id/buttonSave"
-                android:textSize="@dimen/button_text_size"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -163,20 +160,21 @@
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:background="@drawable/custom_button_click"
                 android:text="@string/button_save_and_continue"
-                android:textColor="@color/custom_button_text_color_click" />
+                android:textColor="@color/custom_button_text_color_click"
+                android:textSize="@dimen/button_text_size" />
 
 
             <com.findmycoach.app.views.ChizzleButton
                 android:id="@+id/buttonSkip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/button_text_size"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:background="@null"
-                android:drawablePadding="@dimen/textView_padding_margin"
                 android:drawableLeft="@drawable/skip_small"
+                android:drawablePadding="@dimen/textView_padding_margin"
                 android:text="@string/button_skip"
                 android:textColor="@color/custom_button_text_color_click_purple_light"
+                android:textSize="@dimen/button_text_size"
                 android:textStyle="bold" />
 
         </LinearLayout>

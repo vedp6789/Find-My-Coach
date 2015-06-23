@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/payment"
-            android:textSize="@dimen/button_text_size"
+            android:textSize="@dimen/profile_name"
             android:padding="@dimen/textView_padding_margin"
             android:textColor="@color/purple"
             android:id="@+id/paymentMethods" />
