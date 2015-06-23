@@ -14,8 +14,8 @@ public class Mentee implements Parcelable{
        eventDurations = new ArrayList<EventDuration>();
     }
     private List<EventDuration>  eventDurations;
-    private String first_name;
-    private String last_name;
+    private String first_name;   /* Not getting in case of user_group 2*/
+    private String last_name; /* Not getting in case of user_group 3*/
 
 
     public List<EventDuration> getEventDurations() {
