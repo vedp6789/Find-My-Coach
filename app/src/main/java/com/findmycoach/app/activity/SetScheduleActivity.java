@@ -11,6 +11,8 @@ import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
@@ -71,6 +73,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     private int slot_result_code = 1;
     private int vacation_req_code = 3;
     private int vacation_res_code = 6;
+    private TextView titleTextView;
 
 
     @Override
@@ -139,6 +142,15 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
 
             setContentView(R.layout.activity_set_schedule);
+
+            findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+            titleTextView = (TextView) findViewById(R.id.title);
 
             mWeekView = (WeekView) findViewById(R.id.weekView);
 
@@ -319,7 +331,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         if (coming_month.size() > 0) {
             Slot slot = coming_month.get(0);
             if (Boolean.parseBoolean(slot.isSlot_created_on_network_success())) {  /* Checking whether the slots came in this month are either on network success as when there is network failure i am adding one slot with flag for network communication as false */
-                Log.d(TAG,"network success data for mentee schedule");
+                Log.d(TAG, "network success data for mentee schedule");
                 for (int day_of_this_month = 1; day_of_this_month <= number_of_days_in_this_month; day_of_this_month++) {
 
 
@@ -400,7 +412,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                             calendar_for_this_date.set(Integer.parseInt(date.split("-")[0]), Integer.parseInt(date.split("-")[1]) - 1, Integer.parseInt(date.split("-")[2]));
                                             long this_date_in_millis = calendar_for_this_date.getTimeInMillis();
 
-                                            if((Integer.parseInt(date.split("-")[0])==newYear)||(Integer.parseInt(date.split("-")[1]) == newMonth) ||(Integer.parseInt(date.split("-")[2])==day_of_this_month )){
+                                            if ((Integer.parseInt(date.split("-")[0]) == newYear) || (Integer.parseInt(date.split("-")[1]) == newMonth) || (Integer.parseInt(date.split("-")[2]) == day_of_this_month)) {
                                                 menteeFoundOnThisDate.add(mentee);
                                                 break level_event_duration;
                                             }
@@ -435,7 +447,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                             calendar_for_day_of_this_month2.set(newYear, newMonth - 1, day_of_this_month);
                                             long this_day_in_millis2 = calendar_for_day_of_this_month2.getTimeInMillis();
                                             int this_day_week_day2 = calendar_for_day_of_this_month2.get(Calendar.DAY_OF_WEEK);
-
 
 
                                             String coin_vac_stop_date = vacation.getStop_date();
@@ -475,7 +486,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                     endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                                     WeekViewEvent weekViewEvent;
                                     weekViewEvent = new WeekViewEvent(Long.parseLong(event_id), getMenteeEventTitle(startTime, Integer.parseInt(slot_stop_time.split(":", 3)[0]), Integer.parseInt(slot_stop_time.split(":", 3)[1]), sub_category_name), startTime, endTime, new_slot, mentorInfo, menteeFoundOnThisDate, 103);
-                                    weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
+                                    weekViewEvent.setColor(getResources().getColor(R.color.category_selected));
                                     events.add(weekViewEvent);
                                 } else {
                                     if (availabilityFlags.vacation_found) {
@@ -493,7 +504,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                         endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                                         WeekViewEvent weekViewEvent;
                                         weekViewEvent = new WeekViewEvent(Long.parseLong(slot_id), getMenteeVacationTitle(startTime, Integer.parseInt(slot_stop_time.split(":", 3)[0]), Integer.parseInt(slot_stop_time.split(":", 3)[1])), startTime, endTime, new_slot, mentorInfo, 105, coinciding_vacation_of_this_day_for_this_slot);
-                                        weekViewEvent.setColor(getResources().getColor(R.color.event_color_03));
+                                        weekViewEvent.setColor(getResources().getColor(R.color.purple_light));
                                         events.add(weekViewEvent);
 
                                     }
@@ -523,7 +534,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
 
                     for (int day_of_this_month = 1; day_of_this_month <= number_of_days_in_this_month; day_of_this_month++) { /* This for loop will iterate through first to last day of next month. For each day what possible class, event or vacation can be possible will bet populated*/
-                        ArrayList<String> coinciding_vacation_vacation_id_for_this_day= new ArrayList<String>();
+                        ArrayList<String> coinciding_vacation_vacation_id_for_this_day = new ArrayList<String>();
 
                         Log.d(TAG, "coming month size: " + coming_month.size());
                         for (int slot_number = 0; slot_number < coming_month.size(); slot_number++) {   /*Will match possible slot, event or coinciding vacation for the matching slot of this day. */
@@ -607,7 +618,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                                     calendar_for_this_date.set(Integer.parseInt(date.split("-")[0]), Integer.parseInt(date.split("-")[1]) - 1, Integer.parseInt(date.split("-")[2]));
                                                     long this_date_in_millis = calendar_for_this_date.getTimeInMillis();
 
-                                                    if ((Integer.parseInt(date.split("-")[0]) == newYear) && ((Integer.parseInt(date.split("-")[1]) ) == (newMonth - 1)) && (Integer.parseInt(date.split("-")[2]) == day_of_this_month)) {
+                                                    if ((Integer.parseInt(date.split("-")[0]) == newYear) && ((Integer.parseInt(date.split("-")[1])) == (newMonth - 1)) && (Integer.parseInt(date.split("-")[2]) == day_of_this_month)) {
                                                         menteeFoundOnThisDate.add(mentee);
                                                         break level_event_duration;
                                                     }
@@ -687,7 +698,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                             endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                                             WeekViewEvent weekViewEvent;
                                             weekViewEvent = new WeekViewEvent(Long.parseLong(event_id), getEventTitle(startTime, Integer.parseInt(slot_stop_time.split(":", 3)[0]), Integer.parseInt(slot_stop_time.split(":", 3)[1])), startTime, endTime, menteeFoundOnThisDate, slot_type, new_slot, 12345);  /* For making a scheduled class information on week view */
-                                            weekViewEvent.setColor(getResources().getColor(R.color.event_color_02));
+                                            weekViewEvent.setColor(getResources().getColor(R.color.category_selected));
                                             events.add(weekViewEvent);
 
                                         } else {
@@ -706,7 +717,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                                 endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                                                 WeekViewEvent weekViewEvent;
                                                 weekViewEvent = new WeekViewEvent(Long.parseLong(slot_id), getVacationTitleForCoincidingVacation(startTime, Integer.parseInt(slot_stop_time.split(":", 3)[0]), Integer.parseInt(slot_stop_time.split(":", 3)[1])), startTime, endTime, coinciding_vacation_of_this_day_for_this_slot, new_slot, 123);  /* For making a coinciding vacation information on week view. I am showing vacation for slot_duration time i.e. if any vacation coming for just some fraction of time of slot time, in this case also i am showing vacation for full slot time  */
-                                                weekViewEvent.setColor(getResources().getColor(R.color.event_color_03));
+                                                weekViewEvent.setColor(getResources().getColor(R.color.purple_light));
                                                 events.add(weekViewEvent);
                                             } else {
                                                 /* neither any vacation nor any class scheduled till now */
@@ -723,7 +734,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                                 endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                                                 WeekViewEvent weekViewEvent;
                                                 weekViewEvent = new WeekViewEvent(Long.parseLong(slot_id), getSlotTitle(start_date, stop_date, slot_start_time, slot_stop_time, slot_type, slot_week_days, slot_max_users), startTime, endTime, new_slot, 432);  /* For making a free slot information on week view */
-                                                weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
+                                                weekViewEvent.setColor(getResources().getColor(R.color.grey_light));
                                                 events.add(weekViewEvent);
                                             }
                                         }
@@ -737,7 +748,8 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         }
 
                         if (coming_month_non_coinciding_vacations.size() > 0) {  /* There can be some non coinciding vacation  */
-                            list_of_vacation_iterator: for (int vacation_no = 0; vacation_no < coming_month_non_coinciding_vacations.size(); vacation_no++) {
+                            list_of_vacation_iterator:
+                            for (int vacation_no = 0; vacation_no < coming_month_non_coinciding_vacations.size(); vacation_no++) {
 
 
                                 Vacation vacation = coming_month_non_coinciding_vacations.get(vacation_no);
@@ -749,10 +761,10 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                 String vacation_id = vacation.getVacation_id();  /* Only using this in non coinciding vacation*/
 
 
-                                for(int count=0; count < coinciding_vacation_vacation_id_for_this_day.size() ; count++){
+                                for (int count = 0; count < coinciding_vacation_vacation_id_for_this_day.size(); count++) {
                                 /* Checking for the coinciding vacation id among this list of vacation.
                                 If any coinciding vacation id matches among any of the non coinciding vacation id then we do not need to populate again */
-                                    if(coinciding_vacation_vacation_id_for_this_day.get(count).equals(vacation_id)){
+                                    if (coinciding_vacation_vacation_id_for_this_day.get(count).equals(vacation_id)) {
                                         continue list_of_vacation_iterator;
                                     }
                                 }
@@ -790,7 +802,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                     endTime.set(Calendar.MINUTE, Integer.parseInt(vacation_stop_time.split(":", 3)[1]));
                                     WeekViewEvent weekViewEvent;
                                     weekViewEvent = new WeekViewEvent(Long.parseLong(vacation_id), getVacationTitle(startTime, Integer.parseInt(vacation_stop_time.split(":", 3)[0]), Integer.parseInt(vacation_stop_time.split(":", 3)[1])), startTime, endTime, vacation, 21);  /* For making a non coinciding vacation over weekview */
-                                    weekViewEvent.setColor(getResources().getColor(R.color.event_color_01));
+                                    weekViewEvent.setColor(getResources().getColor(R.color.purple));
                                     events.add(weekViewEvent);
                                 }
 
@@ -858,7 +870,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                     endTime.set(Calendar.MINUTE, Integer.parseInt(vacation_stop_time.split(":", 3)[1]));
                                     WeekViewEvent weekViewEvent;
                                     weekViewEvent = new WeekViewEvent(Long.parseLong(vacation_id), getVacationTitle(startTime, Integer.parseInt(vacation_stop_time.split(":", 3)[0]), Integer.parseInt(vacation_stop_time.split(":", 3)[1])), startTime, endTime, vacation, 21);  /* For making a non coinciding vacation over weekview */
-                                    weekViewEvent.setColor(getResources().getColor(R.color.event_color_01));
+                                    weekViewEvent.setColor(getResources().getColor(R.color.purple));
                                     events.add(weekViewEvent);
                                 }
 
@@ -1049,7 +1061,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         new_slot.getSlot_type(), new_slot.getSlot_week_days()),
                 startTime, endTime, new_slot, mentorInfo, mentor_id, mentor_availablity,
                 202, charges, arrayList_subcategory);
-        weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
+        weekViewEvent.setColor(getResources().getColor(R.color.grey_light));
         events.add(weekViewEvent);
     }
 

@@ -1,26 +1,151 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyActivity"
-    android:background="#fff">
+    android:background="#fff"
+    tools:context=".MyActivity">
+
+    <include
+        android:id="@+id/header"
+        layout="@layout/header_back_name_menu" />
 
     <com.findmycoach.app.views.WeekView
         android:id="@+id/weekView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/footer"
+        android:layout_below="@+id/header"
+        app:columnGap="8dp"
+        app:dayBackgroundColor="#05000000"
         app:eventTextColor="@android:color/white"
-        app:textSize="12sp"
-        app:hourHeight="60dp"
+        app:headerColumnBackground="#ffffffff"
         app:headerColumnPadding="8dp"
         app:headerColumnTextColor="#8f000000"
-        app:headerRowPadding="12dp"
-        app:columnGap="8dp"
-        app:noOfVisibleDays="1"
         app:headerRowBackgroundColor="#ffefefef"
-        app:dayBackgroundColor="#05000000"
-        app:todayBackgroundColor="#1848adff"
-        app:headerColumnBackground="#ffffffff"/>
+        app:headerRowPadding="12dp"
+        app:hourHeight="60dp"
+        app:noOfVisibleDays="1"
+        app:textSize="12sp"
+        app:todayBackgroundColor="#1848adff" />
+
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="@dimen/indicator"
+                    android:layout_height="@dimen/indicator"
+                    android:layout_marginLeft="@dimen/calender_margin"
+                    android:layout_marginRight="@dimen/calender_margin"
+                    android:background="@color/grey_light"
+                    android:gravity="center" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/connection_button"
+                    android:gravity="center"
+                    android:text="@string/free_slots"
+                    android:textColor="@color/grey_light" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="@dimen/indicator"
+                    android:layout_height="@dimen/indicator"
+                    android:layout_marginLeft="@dimen/calender_margin"
+                    android:layout_marginRight="@dimen/calender_margin"
+                    android:background="@color/category_selected"
+                    android:gravity="center" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/connection_button"
+                    android:gravity="center"
+                    android:text="@string/schedule"
+                    android:textColor="@color/category_selected" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="@dimen/indicator"
+                    android:layout_height="@dimen/indicator"
+                    android:layout_marginLeft="@dimen/calender_margin"
+                    android:layout_marginRight="@dimen/calender_margin"
+                    android:background="@color/purple_light"
+                    android:gravity="center" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/connection_button"
+                    android:gravity="center"
+                    android:text="@string/vacation_event"
+                    android:textColor="@color/purple_light" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="@dimen/indicator"
+                    android:layout_height="@dimen/indicator"
+                    android:layout_marginLeft="@dimen/calender_margin"
+                    android:layout_marginRight="@dimen/calender_margin"
+                    android:background="@color/purple"
+                    android:gravity="center" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/connection_button"
+                    android:gravity="center"
+                    android:text="@string/vacation"
+                    android:textColor="@color/purple" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>
