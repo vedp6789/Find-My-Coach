@@ -45,9 +45,10 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.loopj.android.http.RequestParams;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -69,7 +70,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private Dialog progressDialog;
     private int user_group;
     private TextView countryCodeTV;
-    private String[] country_code;
+    private ArrayList<String> country_code;
     private int retryFbLogin;
 
     /**
@@ -729,14 +730,20 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         countryDialog.setCanceledOnTouchOutside(true);
         countryDialog.setContentView(R.layout.dialog_country_code);
         ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
-        listView.setAdapter(new CountryCodeAdapter(getResources()
-                .getStringArray(R.array.country_names),
-                getResources().getStringArray(R.array.country_codes_only), LoginActivity.this));
+        ArrayList<String> a = new ArrayList<>();
+        Collections.addAll(a, getResources()
+                .getStringArray(R.array.country_names));
+        final ArrayList<String> b = new ArrayList<>();
+        Collections.addAll(b, getResources().getStringArray(R.array.country_codes_only));
+        final CountryCodeAdapter countryCodeAdapter = new CountryCodeAdapter(a, b,
+                this, (EditText) countryDialog.findViewById(R.id.searchBox));
+        listView.setAdapter(countryCodeAdapter);
         countryDialog.show();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                countryCodeTV.setText(country_code[position].split(",")[0]);
+                countryCodeTV.setText(countryCodeAdapter.countryNameAndCode
+                        .get(position).getCountryCode().replace("(", "").replace(")", ""));
                 countryDialog.dismiss();
             }
         });
@@ -750,9 +757,10 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         String CountryZipCode = "Select";
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         CountryID = manager.getSimCountryIso().toUpperCase();
-        country_code = this.getResources().getStringArray(R.array.country_codes);
-        for (int i = 1; i < country_code.length; i++) {
-            String[] g = country_code[i].split(",");
+        country_code = new ArrayList<>();
+        Collections.addAll(country_code, this.getResources().getStringArray(R.array.country_codes));
+        for (int i = 1; i < country_code.size(); i++) {
+            String[] g = country_code.get(i).split(",");
             if (g[1].trim().equals(CountryID.trim())) {
                 CountryZipCode = g[0];
                 break;
@@ -814,31 +822,35 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             saveUser(response.getAuthToken(), response.getData().getId());
         }
 
-        /** Saving address, city and zip of user */
-        if(response.getData().getAddress() != null){
-            StorageHelper.storePreference(this,"user_local_address", (String) response.getData().getAddress());
-            if(response.getData().getCity() != null){
-                StorageHelper.storePreference(this,"user_city_state", (String) response.getData().getCity());
-            }
+        try {
+            /** Saving address, city and zip of user */
+            if (response.getData() != null && response.getData().getAddress() != null) {
+                StorageHelper.storePreference(this, "user_local_address", (String) response.getData().getAddress());
+                if (response.getData().getCity() != null) {
+                    StorageHelper.storePreference(this, "user_city_state", (String) response.getData().getCity());
+                }
 
-            if(response.getData().getZip() != null){
-                StorageHelper.storePreference(this,"user_zip_code", (String) response.getData().getZip());
+                if (response.getData().getZip() != null) {
+                    StorageHelper.storePreference(this, "user_zip_code", (String) response.getData().getZip());
+                }
             }
+        } catch (Exception ignored) {
 
         }
         /* Saving training location for mentee type user */
-        if(StorageHelper.getUserGroup(LoginActivity.this,"user_group").equals("2") && response.getData().isTrainingLocation() != null){
-           StorageHelper.storePreference(this,"training_location",(String) response.getData().isTrainingLocation());
+        if (StorageHelper.getUserGroup(LoginActivity.this, "user_group").equals("2") && response.getData().isTrainingLocation() != null) {
+            StorageHelper.storePreference(this, "training_location", (String) response.getData().isTrainingLocation());
         }
 
-/*Saving mentor's area of coaching i.e. subcategories to sharedpreference in string set*/
-        if(StorageHelper.getUserGroup(LoginActivity.this,"user_group").equals("3")){
-            List<String> sub_category_list =  response.getData().getSubCategoryName();
-            Set<String> sub_category_stringSet = new HashSet<String>();
-            for(int i = 0 ; i < sub_category_list.size() ; i++){
-                  sub_category_stringSet.add(sub_category_list.get(i));
-            }
-            StorageHelper.storeListOfCoachingSubCategories(LoginActivity.this,sub_category_stringSet);
+        try {
+    /*Saving mentor's area of coaching i.e. subcategories to sharedpreference in string set*/
+            if (StorageHelper.getUserGroup(LoginActivity.this, "user_group").equals("3")) {
+                List<String> sub_category_list = response.getData().getSubCategoryName();
+                Set<String> sub_category_stringSet = new HashSet<String>();
+                for (int i = 0; i < sub_category_list.size(); i++) {
+                    sub_category_stringSet.add(sub_category_list.get(i));
+                }
+                StorageHelper.storeListOfCoachingSubCategories(LoginActivity.this, sub_category_stringSet);
 
 
             /*try{
@@ -852,11 +864,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 e.printStackTrace();
             }
 */
-      }
-
-
-
-
+            }
+        } catch (Exception ignored) {
+        }
 
 
         /**phone number not present*/

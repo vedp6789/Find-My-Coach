@@ -28,6 +28,9 @@ import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 /**
  * Created by ved on 18/3/15.
  */
@@ -35,7 +38,7 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
 
     private TextView countryCodeTV;
     private EditText phoneEditText;
-    private String[] country_code;
+    private ArrayList<String> country_code;
     private ProgressDialog progressDialog;
     private final String TAG = "FMC";
 
@@ -106,7 +109,8 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setCanceledOnTouchOutside(true);
 
-        country_code = this.getResources().getStringArray(R.array.country_codes);
+        country_code = new ArrayList<>();
+        Collections.addAll(country_code, this.getResources().getStringArray(R.array.country_codes));
 
         countryCodeTV = (TextView) view.findViewById(R.id.countryCodeTV);
         countryCodeTV.setText(getCountryZipCode());
@@ -126,8 +130,8 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
         String CountryZipCode = "Select";
         TelephonyManager manager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
         CountryID = manager.getSimCountryIso().toUpperCase();
-        for (int i = 1; i < country_code.length; i++) {
-            String[] g = country_code[i].split(",");
+        for (int i = 1; i < country_code.size(); i++) {
+            String[] g = country_code.get(i).split(",");
             if (g[1].trim().equals(CountryID.trim())) {
                 CountryZipCode = g[0];
                 break;
@@ -146,14 +150,20 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
         countryDialog.setCanceledOnTouchOutside(true);
         countryDialog.setContentView(R.layout.dialog_country_code);
         ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
-        listView.setAdapter(new CountryCodeAdapter(getResources()
-                .getStringArray(R.array.country_names),
-                getResources().getStringArray(R.array.country_codes_only), getActivity()));
+        ArrayList<String> a = new ArrayList<>();
+        Collections.addAll(a, getResources()
+                .getStringArray(R.array.country_names));
+        final ArrayList<String> b = new ArrayList<>();
+        Collections.addAll(b, getResources().getStringArray(R.array.country_codes_only));
+        final CountryCodeAdapter countryCodeAdapter = new CountryCodeAdapter(a, b,
+                getActivity(), (EditText) countryDialog.findViewById(R.id.searchBox));
+        listView.setAdapter(countryCodeAdapter);
         countryDialog.show();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                countryCodeTV.setText(country_code[position].split(",")[0]);
+                countryCodeTV.setText(countryCodeAdapter.countryNameAndCode
+                        .get(position).getCountryCode().replace("(", "").replace(")", ""));
                 countryDialog.dismiss();
             }
         });

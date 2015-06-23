@@ -27,6 +27,8 @@ import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,7 +45,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     private RadioButton radioButton_mentee_signup, radioButton_mentor_signup;
     private int user_group = 3;
     private TextView countryCodeTV;
-    private String[] country_code;
+    private ArrayList<String> country_code;
     private String email, phoneNumber;
     private ScrollView scrollView;
 
@@ -60,7 +62,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
      * Getting references of views
      */
     private void initialize() {
-        country_code = this.getResources().getStringArray(R.array.country_codes);
+        country_code = new ArrayList<>();
+        Collections.addAll(country_code, this.getResources().getStringArray(R.array.country_codes));
         radioButton_mentee_signup = (RadioButton) findViewById(R.id.radio_button_mentee_signup);
         radioButton_mentor_signup = (RadioButton) findViewById(R.id.radio_button_mentor_signup);
         firstNameInput = (EditText) findViewById(R.id.input_first_name);
@@ -116,15 +119,21 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         countryDialog.setTitle(getResources().getString(R.string.select_country_code));
         countryDialog.setContentView(R.layout.dialog_country_code);
         ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
-        listView.setAdapter(new CountryCodeAdapter(getResources()
-                .getStringArray(R.array.country_names),
-                getResources().getStringArray(R.array.country_codes_only), this));
+        ArrayList<String> a = new ArrayList<>();
+        Collections.addAll(a, getResources()
+                .getStringArray(R.array.country_names));
+        final ArrayList<String> b = new ArrayList<>();
+        Collections.addAll(b, getResources().getStringArray(R.array.country_codes_only));
+        final CountryCodeAdapter countryCodeAdapter = new CountryCodeAdapter(a, b,
+                this, (EditText) countryDialog.findViewById(R.id.searchBox));
+        listView.setAdapter(countryCodeAdapter);
         countryDialog.show();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 countryCodeTV.setError(null);
-                countryCodeTV.setText(country_code[position].split(",")[0]);
+                countryCodeTV.setText(countryCodeAdapter.countryNameAndCode
+                        .get(position).getCountryCode().replace("(", "").replace(")", ""));
                 countryDialog.dismiss();
             }
         });
@@ -330,8 +339,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         String CountryZipCode = "";
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         CountryID = manager.getSimCountryIso().toUpperCase();
-        for (int i = 1; i < country_code.length; i++) {
-            String[] g = country_code[i].split(",");
+        for (int i = 1; i < country_code.size(); i++) {
+            String[] g = country_code.get(i).split(",");
             if (g[1].trim().equals(CountryID.trim())) {
                 CountryZipCode = g[0];
                 break;

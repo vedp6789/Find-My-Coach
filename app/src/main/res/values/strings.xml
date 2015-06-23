@@ -798,6 +798,7 @@
     <string name="rotate">Rotate</string>
     <string name="crop">Crop &amp; Save</string>
     <string name="type_here">Write your message</string>
+    <string name="type_here_to_search">Type to search</string>
     <string name="action_logout">Logout</string>
     <string name="action_accept">Accept</string>
     <string name="action_decline">Decline</string>
