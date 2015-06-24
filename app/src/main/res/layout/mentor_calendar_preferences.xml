@@ -1,67 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/ll_view_calendar_by"
-        android:layout_marginTop="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
+        android:layout_marginTop="25dp">
+
+        <com.findmycoach.app.views.ChizzleTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_calendar_by"/>
-        </LinearLayout>
+            android:gravity="center_horizontal"
+            android:text="@string/view_calendar_by"
+            android:textColor="@color/purple"
+            android:textSize="@dimen/header"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
         android:id="@+id/ll_slot_type"
-        android:layout_below="@+id/ll_view_calendar_by"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_view_calendar_by"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:weightSum="2">
-        <TextView
+
+        <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/tv_class_type"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:textColor="@color/purple_light"
             android:gravity="center"
-            android:text="@string/class_type"/>
-        <Spinner
-            android:id="@+id/sp_class_type"
-            android:layout_weight="1"
+            android:text="@string/class_type"
+            android:textSize="@dimen/profile_details" />
+
+
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"></Spinner>
+            android:layout_height="wrap_content"
+            android:layout_weight="1.6"
+            android:orientation="vertical">
+
+            <Spinner
+                android:id="@+id/sp_class_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-10dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginBottom="-1dp"
+                    android:src="@drawable/drop_down_arrow_purple_small" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentLeft="true"
+                    android:background="@color/purple_light" />
+
+            </LinearLayout>
         </LinearLayout>
+
+    </LinearLayout>
 
 
     <LinearLayout
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
         android:id="@+id/ll_location"
-        android:layout_below="@+id/ll_slot_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_slot_type"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        android:weightSum="3"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:weightSum="3">
+
         <TextView
             android:id="@+id/tv_location"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/location"/>
+            android:text="@string/location" />
 
         <AutoCompleteTextView
-            android:layout_weight="2"
             android:id="@+id/auto_tv_location"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:gravity="center"
             android:hint="@string/loc"
             android:inputType="textAutoComplete"
@@ -70,13 +110,15 @@
     </LinearLayout>
 
 
-    <Button
-        android:layout_alignParentBottom="true"
+    <com.findmycoach.app.views.ChizzleButton
         android:id="@+id/b_save"
-        android:text="@string/action_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/back_margin"
+        android:background="@drawable/custom_button_click_white_bg"
+        android:text="@string/action_save"
+        android:textColor="@color/custom_button_text_color_click_white_bg" />
 
 
 </RelativeLayout>
