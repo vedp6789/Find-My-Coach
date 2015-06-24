@@ -468,6 +468,7 @@ public class WeekViewEvent {
 
     public void setColor(int color) {
         this.mColor = color;
+
     }
 
     public long getId() {

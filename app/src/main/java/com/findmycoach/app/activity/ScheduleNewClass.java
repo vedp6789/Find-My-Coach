@@ -146,7 +146,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             initialize();
 
             if (vacations_on_the_slot.size() > 0) {
-                ib_info.setVisibility(View.VISIBLE);
+                ib_info.setVisibility(View.VISIBLE);     /* ib_info is an option, from which mentee can knew about vacation coming on the slot. */
             } else {
                 ib_info.setVisibility(View.GONE);
             }
@@ -289,32 +289,44 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         Calendar calendar_schedule_start_date = Calendar.getInstance();    /* Possible start date of this class */
         calendar_schedule_start_date.set(class_schedule_start_year, class_schedule_start_month - 1, class_schedule_start_day);
         long start_date_of_this_class_millis = calendar_schedule_start_date.getTimeInMillis();
-        Log.d(TAG,"schedule start date and millis: "+class_schedule_start_year+"/"+class_schedule_start_month+"/"+class_schedule_start_day+" millis:"+start_date_of_this_class_millis);
+        Log.d(TAG, "schedule start date and millis: " + class_schedule_start_year + "/" + class_schedule_start_month + "/" + class_schedule_start_day + " millis:" + start_date_of_this_class_millis);
         Log.d(TAG, "schedule start date in millis " + start_date_of_this_class_millis);
-
-
 
 
         Calendar calendar_stop_date_of_schedule = Calendar.getInstance();
         calendar_stop_date_of_schedule.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
         long stop_date_of_this_class_in_millis = calendar_stop_date_of_schedule.getTimeInMillis();
         Log.d(TAG, "schedule stop date in millis " + stop_date_of_this_class_in_millis);
-        Log.d(TAG,"schedule stop date and millis: "+slot_stop_year+"/"+slot_stop_month+"/"+slot_stop_day+" millis: "+stop_date_of_this_class_in_millis);
+        Log.d(TAG, "schedule stop date and millis: " + slot_stop_year + "/" + slot_stop_month + "/" + slot_stop_day + " millis: " + stop_date_of_this_class_in_millis);
+
 
 
         Calendar calendar_temp_start_date = Calendar.getInstance();
         calendar_temp_start_date = (Calendar) calendar_schedule_start_date.clone();
-        Log.d(TAG,"schedule start temp clone date and millis: "+calendar_temp_start_date.get(Calendar.YEAR)+"/"+calendar_temp_start_date.get(Calendar.MONTH)+"/"+calendar_temp_start_date.get(Calendar.DAY_OF_MONTH)+" millis: "+start_date_of_this_class_millis);
+        Log.d(TAG, "schedule start temp clone date and millis: " + calendar_temp_start_date.get(Calendar.YEAR) + "/" + calendar_temp_start_date.get(Calendar.MONTH) + "/" + calendar_temp_start_date.get(Calendar.DAY_OF_MONTH) + " millis: " + start_date_of_this_class_millis);
 
-        Log.d(TAG,"schedule start date "+calendar_schedule_start_date.get(Calendar.YEAR)+"/"+ calendar_schedule_start_date.get(Calendar.MONTH) + 1+"/"+ calendar_schedule_start_date.get(Calendar.DAY_OF_MONTH));
+        Log.d(TAG, "schedule start date " + calendar_schedule_start_date.get(Calendar.YEAR) + "/" + calendar_schedule_start_date.get(Calendar.MONTH) + 1 + "/" + calendar_schedule_start_date.get(Calendar.DAY_OF_MONTH));
 
-        int no_of_possible_classes_without_considering_vacation = new Slot().calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_stop_date_of_schedule, slot_on_week_days).size();
+
+
+
+/*********************************************** Below two instances are just used to count no of possible class within class start and class end**************************************************************/
+        Calendar calendar_schedule_start_date2 = Calendar.getInstance();    /* Possible start date of this class */
+        calendar_schedule_start_date2 = (Calendar) calendar_schedule_start_date.clone();
+
+
+
+        Calendar calendar_stop_date_of_schedule2 = Calendar.getInstance();
+        calendar_stop_date_of_schedule2= (Calendar) calendar_stop_date_of_schedule.clone();
+/*************************************************************************************************************************************************************************************************************/
+
+int no_of_possible_classes_without_considering_vacation = new Slot().calculateNoOfTotalClassDays(calendar_schedule_start_date2, calendar_stop_date_of_schedule2, slot_on_week_days).size();
         Log.d(TAG, "no of class without considering vacation: " + no_of_possible_classes_without_considering_vacation);
 
         if (no_of_possible_classes_without_considering_vacation > 0) {
 
             if (vacations_on_the_slot.size() > 0) {
-                Log.d(TAG, "parsing slots from vacations");
+                Log.d(TAG, "parsing slots from vacations size: "+vacations_on_the_slot.size());
 
                 for (int vacation_no = 0; vacation_no < vacations_on_the_slot.size(); vacation_no++) {
 
@@ -338,8 +350,11 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                             calendar_temp_stop_date = (Calendar) calendar_vacation_start.clone();
                             calendar_temp_stop_date.add(Calendar.DATE, -1);
 
+                            Calendar calendar_temp_start_date2 = Calendar.getInstance();   /* This instance of temp start date will check whether any valid no of day coming between start and stop after parsing vacation */
+                            calendar_temp_start_date2 = (Calendar) calendar_temp_start_date.clone();
 
-                            int days = new Slot().calculateNoOfTotalClassDays(calendar_schedule_start_date, calendar_temp_stop_date, slot_on_week_days).size();
+
+                            int days = new Slot().calculateNoOfTotalClassDays(calendar_temp_start_date2, calendar_temp_stop_date, slot_on_week_days).size();
                             if (days > 0) {
                                 class_days_after_reducing_vacation += days;
                                 DurationOfSuccessfulClassDays durationOfSuccessfulClassDays = new DurationOfSuccessfulClassDays();
@@ -363,7 +378,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 }
                 /* after the completion of for loop it means all vacation are traversed, and after this if calendar_temp_start_date is behind stop date of calendar_stop_date_schedule then we have to check for this period of time for possible classes*/
                 if (calendar_temp_start_date.getTimeInMillis() < stop_date_of_this_class_in_millis) {
-                    int days = new Slot().calculateNoOfTotalClassDays(calendar_temp_start_date, calendar_stop_date_of_schedule, slot_on_week_days).size();
+
+                    Calendar calendar_temp_start_date3= (Calendar) calendar_temp_start_date.clone();
+                    int days = new Slot().calculateNoOfTotalClassDays(calendar_temp_start_date3, calendar_stop_date_of_schedule, slot_on_week_days).size();
                     if (days > 0) {
                         class_days_after_reducing_vacation += days;
                         DurationOfSuccessfulClassDays durationOfSuccessfulClassDays = new DurationOfSuccessfulClassDays();
@@ -379,20 +396,20 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             } else {
                 /* No vacation found */
 
-                Calendar calendar_schedule_start_date2 = Calendar.getInstance();    /* Possible start date of this class */
-                calendar_schedule_start_date2.set(class_schedule_start_year, class_schedule_start_month - 1, class_schedule_start_day);
-                long start_date_of_this_class_millis2 = calendar_schedule_start_date2.getTimeInMillis();
+                Calendar calendar_schedule_start_date3 = Calendar.getInstance();    /* Possible start date of this class */
+                calendar_schedule_start_date3.set(class_schedule_start_year, class_schedule_start_month - 1, class_schedule_start_day);
+                long start_date_of_this_class_millis3 = calendar_schedule_start_date3.getTimeInMillis();
 
 
                 if (no_of_possible_classes_without_considering_vacation > 0) {
                     class_days_after_reducing_vacation += no_of_possible_classes_without_considering_vacation;   /* In case of no vacations found on one slot */
-                    Log.d(TAG,"class days after checking vacation when no vacation found : "+class_days_after_reducing_vacation);
+                    Log.d(TAG, "class days after checking vacation when no vacation found : " + class_days_after_reducing_vacation);
                     Log.d(TAG, "class days after checking vacation: " + class_days_after_reducing_vacation);
                     DurationOfSuccessfulClassDays durationOfSuccessfulClassDays = new DurationOfSuccessfulClassDays();
-                    String temp_start_date = String.format("%d-%02d-%02d", calendar_schedule_start_date2.get(Calendar.YEAR), calendar_schedule_start_date2.get(Calendar.MONTH) + 1, calendar_schedule_start_date2.get(Calendar.DAY_OF_MONTH));
-                    Log.d(TAG,"start date: "+ temp_start_date);
+                    String temp_start_date = String.format("%d-%02d-%02d", calendar_schedule_start_date3.get(Calendar.YEAR), calendar_schedule_start_date3.get(Calendar.MONTH) + 1, calendar_schedule_start_date3.get(Calendar.DAY_OF_MONTH));
+                    Log.d(TAG, "start date: " + temp_start_date);
                     String temp_stop_date = String.format("%d-%02d-%02d", calendar_stop_date_of_schedule.get(Calendar.YEAR), calendar_stop_date_of_schedule.get(Calendar.MONTH) + 1, calendar_stop_date_of_schedule.get(Calendar.DAY_OF_MONTH));
-                    Log.d(TAG,"stop date: "+ temp_stop_date);
+                    Log.d(TAG, "stop date: " + temp_stop_date);
                     durationOfSuccessfulClassDays.setStart_date(temp_start_date);
                     durationOfSuccessfulClassDays.setStop_date(temp_stop_date);
                     durationOfSuccessfulClassDayses.add(durationOfSuccessfulClassDays);
@@ -403,6 +420,13 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             /* No class can be possible to schedule */
             Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.no_class_possible), Toast.LENGTH_SHORT).show();
 
+        }
+
+
+
+        for(int i =0 ; i < durationOfSuccessfulClassDayses.size(); i++){
+            DurationOfSuccessfulClassDays durationOfSuccessfulClassDays=durationOfSuccessfulClassDayses.get(i);
+            Log.d(TAG," Class start_date: "+durationOfSuccessfulClassDays.getStart_date()+" Class stop date: "+ durationOfSuccessfulClassDays.getStop_date());
         }
 
 
@@ -655,24 +679,25 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         StringBuilder stringBuilder = new StringBuilder();
         for (int vacation_no = 0; vacation_no < vacations_on_the_slot.size(); vacation_no++) {
             Vacation vacation = vacations_on_the_slot.get(vacation_no);
+            int number= vacation_no+1;
             if (vacation_no == 0)
-                stringBuilder.append("Vacation " + ++vacation_no + ": " +
+                stringBuilder.append("Vacation " +number  + ": " +
                         String.format("%02d-%02d-%d - %02d-%02d-%d",
-                                Integer.parseInt(vacation.getStart_date().split("-")[0]),
-                                Integer.parseInt(vacation.getStart_date().split("-")[1]),
                                 Integer.parseInt(vacation.getStart_date().split("-")[2]),
-                                Integer.parseInt(vacation.getStop_date().split("-")[0]),
+                                Integer.parseInt(vacation.getStart_date().split("-")[1]),
+                                Integer.parseInt(vacation.getStart_date().split("-")[0]),
+                                Integer.parseInt(vacation.getStop_date().split("-")[2]),
                                 Integer.parseInt(vacation.getStop_date().split("-")[1]),
-                                Integer.parseInt(vacation.getStop_date().split("-")[2])));
+                                Integer.parseInt(vacation.getStop_date().split("-")[0])));
             else
-                stringBuilder.append("\nVacation " + ++vacation_no + ": " +
+                stringBuilder.append("\nVacation " + number + ": " +
                         String.format("%02d-%02d-%d - %02d-%02d-%d",
-                                Integer.parseInt(vacation.getStart_date().split("-")[0]),
-                                Integer.parseInt(vacation.getStart_date().split("-")[1]),
                                 Integer.parseInt(vacation.getStart_date().split("-")[2]),
-                                Integer.parseInt(vacation.getStop_date().split("-")[0]),
+                                Integer.parseInt(vacation.getStart_date().split("-")[1]),
+                                Integer.parseInt(vacation.getStart_date().split("-")[0]),
+                                Integer.parseInt(vacation.getStop_date().split("-")[2]),
                                 Integer.parseInt(vacation.getStop_date().split("-")[1]),
-                                Integer.parseInt(vacation.getStop_date().split("-")[2])));
+                                Integer.parseInt(vacation.getStop_date().split("-")[0])));
 
         }
 
