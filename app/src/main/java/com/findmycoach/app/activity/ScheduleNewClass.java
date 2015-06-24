@@ -708,7 +708,7 @@ int no_of_possible_classes_without_considering_vacation = new Slot().calculateNo
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(8, 8, 8, 8);
+        params.setMargins(25, 25, 25, 25);
         scrollView.addView(contentView);
         scrollView.setLayoutParams(params);
         alertDialog.setView(scrollView);

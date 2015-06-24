@@ -45,9 +45,11 @@ public class AboutWeekViewEvent extends Activity implements Callback {
             tv_vacation_stop_time, tv_name, tv_subject, tv_slot_subject_val;
     ListView lv_list_of_mentees, lv_list_of_coinciding_vacations, lv_list_class_durations;
     Button b_delete;
-    LinearLayout ll_class_slot_details, ll_list_of_mentees, ll_list_of_coincidingVacations,
+    LinearLayout ll_list_of_mentees, ll_list_of_coincidingVacations,
             ll_non_coincidingLinearLayout,
             ll_mentee_class_schedule, ll_coinciding_vacations;
+
+    private ScrollView ll_class_slot_details;
 
     ArrayList<Mentee> menteeFoundOnTheDate;
     Slot slot;
@@ -288,7 +290,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
         tv_vacation_stop_time = (TextView) findViewById(R.id.tv_vacation_end_time_val);
         b_delete = (Button) findViewById(R.id.b_delete_slot);
 
-        ll_class_slot_details = (LinearLayout) findViewById(R.id.ll_class_slot_details);
+        ll_class_slot_details = (ScrollView) findViewById(R.id.ll_class_slot_details);
         ll_list_of_mentees = (LinearLayout) findViewById(R.id.ll_list_of_mentees);
         ll_list_of_coincidingVacations = (LinearLayout) findViewById(R.id.ll_list_of_coincidingVacations);
         ll_non_coincidingLinearLayout = (LinearLayout) findViewById(R.id.ll_non_coinciding_vacation);

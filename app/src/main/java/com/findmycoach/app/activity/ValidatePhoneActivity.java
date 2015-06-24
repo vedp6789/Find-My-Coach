@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,12 +21,16 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.findmycoach.app.R;
+import com.findmycoach.app.adapter.CountryCodeAdapter;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by prem on 6/2/15.
@@ -39,7 +42,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     private Dialog progressDialog;
     private int user_group;
     private TextView countryCodeTV, msg;
-    private String[] country_code, country_name;
+    private ArrayList<String> country_code;
 
     public static ValidatePhoneActivity validatePhoneActivity;
 
@@ -192,16 +195,17 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         }
 
         /** Opens Dashboard activity*/
-        finish();
         startActivity(new Intent(this, DashboardActivity.class));
+        finish();
+        Log.e(TAG, "DashBoard");
 
         /** If newly registered user is mentee then open PaymentDetail Activity for getting card details */
         if (user_group == 2) {
+            Log.e(TAG, "User group");
             Log.d(TAG,"user_group and payment initiate :"+user_group);
             Log.d(TAG,"Launched from : "+from);
-            if(from != null && from.equals("ChangePhoneNoFragment")){
-                finish();
-            }else{
+            if (from == null || !from.equals("ChangePhoneNoFragment")) {
+                Log.e(TAG, "DashBoard if");
                 startActivity(new Intent(this, PaymentDetailsActivity.class));
             }
 
@@ -333,13 +337,21 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         countryDialog.setCanceledOnTouchOutside(true);
         countryDialog.setContentView(R.layout.dialog_country_code);
         ListView listView = (ListView) countryDialog.findViewById(R.id.countryCodeListView);
-        listView.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, country_name));
+        ArrayList<String> a = new ArrayList<>();
+        Collections.addAll(a, getResources()
+                .getStringArray(R.array.country_names));
+        final ArrayList<String> b = new ArrayList<>();
+        Collections.addAll(b, getResources().getStringArray(R.array.country_codes_only));
+        final CountryCodeAdapter countryCodeAdapter = new CountryCodeAdapter(a, b,
+                this, (EditText) countryDialog.findViewById(R.id.searchBox));
+        listView.setAdapter(countryCodeAdapter);
         countryDialog.show();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 countryCodeTV.setError(null);
-                countryCodeTV.setText(country_code[position].split(",")[0]);
+                countryCodeTV.setText(countryCodeAdapter.countryNameAndCode
+                        .get(position).getCountryCode().replace("(", "").replace(")", ""));
                 countryDialog.dismiss();
             }
         });
@@ -353,10 +365,10 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         String CountryZipCode = getResources().getString(R.string.select);
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         CountryID = manager.getSimCountryIso().toUpperCase();
-        country_code = this.getResources().getStringArray(R.array.country_codes);
-        country_name = this.getResources().getStringArray(R.array.country_names);
-        for (int i = 1; i < country_code.length; i++) {
-            String[] g = country_code[i].split(",");
+        country_code = new ArrayList<>();
+        Collections.addAll(country_code, this.getResources().getStringArray(R.array.country_codes));
+        for (int i = 1; i < country_code.size(); i++) {
+            String[] g = country_code.get(i).split(",");
             if (g[1].trim().equals(CountryID.trim())) {
                 CountryZipCode = g[0];
                 break;
