@@ -896,7 +896,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
 
     /**
-     * This will populate week_view for free slot representation in mentee's calendar
+     * This will populate week_view for free slot representation in mentee's Mentor's availability calendar
      */
 
     private void poplateWeekView(ArrayList<Slot> month, int days_in_month, ArrayList<MentorInfo> month_mentor_info, List<WeekViewEvent> events, int newYear, int newMonth) {

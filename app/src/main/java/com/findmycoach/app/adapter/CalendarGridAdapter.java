@@ -1163,7 +1163,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                     } else {
                         if (mentorDetailsActivity != null) {
                             Log.d(TAG, "connection status on mentor details activity calendar grid click " + connection_status);
-                            if (connection_status.equalsIgnoreCase("pending") || connection_status.equalsIgnoreCase("not connected")) {
+                            if (connection_status.equalsIgnoreCase("pending") || connection_status.equalsIgnoreCase("not connected") || connection_status.equalsIgnoreCase("rejected")) {
                                 Toast.makeText(context, context.getResources().getString(R.string.you_are_not_connected), Toast.LENGTH_SHORT).show();
                             } else {
                                 if (no_of_free_slots <= 0) {

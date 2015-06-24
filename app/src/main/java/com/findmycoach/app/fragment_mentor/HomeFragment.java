@@ -170,7 +170,7 @@ public class HomeFragment extends Fragment implements Callback {
                             connectionRequest.setLast_name(jsonObject_notification.getString("last_name"));
                             connectionRequest.setStart_date(jsonObject_notification.getString("created_date"));
                             connectionRequest.setStart_time(jsonObject_notification.getString("created_time"));
-                            connectionRequest.setSubject(jsonObject_notification.getString("subject"));
+                            /*connectionRequest.setSubject(jsonObject_notification.getString("subject"));*/
                             connectionRequest.setStatus(jsonObject_notification.getString("status"));
 
                             connectionRequests.add(connectionRequest);
