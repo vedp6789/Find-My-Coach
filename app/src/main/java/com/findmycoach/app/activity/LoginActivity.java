@@ -837,9 +837,13 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         } catch (Exception ignored) {
 
         }
-        /* Saving training location for mentee type user */
-        if (StorageHelper.getUserGroup(LoginActivity.this, "user_group").equals("2") && response.getData().isTrainingLocation() != null) {
-            StorageHelper.storePreference(this, "training_location", (String) response.getData().isTrainingLocation());
+
+        try {
+             /* Saving training location for mentee type user */
+            if (StorageHelper.getUserGroup(LoginActivity.this, "user_group").equals("2") && response.getData().isTrainingLocation() != null) {
+                StorageHelper.storePreference(this, "training_location", (String) response.getData().isTrainingLocation());
+            }
+        } catch (Exception ignored) {
         }
 
         try {

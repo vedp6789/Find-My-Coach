@@ -576,6 +576,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         ll_vacation = (LinearLayout) findViewById(R.id.ll_vacations);
         tv_vacation = (TextView) findViewById(R.id.tv_vacations);
         ib_info = (ImageButton) findViewById(R.id.ib_info);
+        ib_info.setOnClickListener(this);
         gridView = (ScrollableGridView) findViewById(R.id.calendar);
 
 
@@ -682,7 +683,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(8, 8, 8, 8);
+        params.setMargins(25, 25, 25, 25);
         scrollView.addView(contentView);
         scrollView.setLayoutParams(params);
         alertDialog.setView(scrollView);

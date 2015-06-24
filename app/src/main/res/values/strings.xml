@@ -491,7 +491,7 @@
     <string name="end_date">End date</string>
     <string name="slot_type">Slot type:</string>
 
-    <string name="max_students">Maximum students:</string>
+    <string name="max_students">Maximum students</string>
     <string name="tutorial_location">Tutorial location:</string>
     <string name="fmc_service">FMC Service</string>
     <string name="fmc_service_description">FMC running in service to allow push notification.</string>
@@ -719,7 +719,7 @@
     <string name="all">All</string>
     <string name="timing">Timing</string>
     <string name="class_timing">Timing:</string>
-    <string name="to">To:</string>
+    <string name="to">To :</string>
     <string name="to1">to</string>
     <string name="starting_from">Starting from:</string>
     <string name="from_date">From:</string>
@@ -758,6 +758,7 @@
     <string name="data_already_exist">Data already exist</string>
     <string name="mentor_name">Mentor\'s name:</string>
     <string name="mentee_name">Mentee\'s name:</string>
+    <string name="name">Name :</string>
     <string name="sub">Subject:</string>
     <string name="event_time">Time:</string>
     <string name="mentee_add">Mentee\'s address:</string>

@@ -154,7 +154,6 @@
         </LinearLayout>
 
 
-
         <LinearLayout
             android:id="@+id/ll_week_days"
             android:layout_width="match_parent"
@@ -174,6 +173,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/ll_slot_type"
             android:layout_width="match_parent"
@@ -218,23 +218,23 @@
     </LinearLayout>
 
 
-
     <LinearLayout
         android:id="@+id/ll_mentee_class_schedule"
-        android:layout_below="@id/ll_mentor_class_details"
-        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/ll_mentor_class_details"
+        android:layout_margin="5dp"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/your_class_schedule"/>
+            android:text="@string/your_class_schedule" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#000000"/>
+            android:background="#000000" />
 
         <LinearLayout
             android:id="@+id/ll_class_subject"
@@ -259,24 +259,23 @@
         <ListView
             android:id="@+id/lv_class_durations"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
-        </LinearLayout>
+    </LinearLayout>
 
 
     <LinearLayout
         android:id="@+id/ll_coinciding_vacations"
-        android:layout_below="@id/ll_mentee_class_schedule"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/ll_mentee_class_schedule"
         android:orientation="vertical">
+
         <ListView
             android:id="@+id/lv_coinciding_vacations"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 
 </RelativeLayout>
