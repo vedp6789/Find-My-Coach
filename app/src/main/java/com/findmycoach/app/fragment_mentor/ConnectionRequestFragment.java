@@ -102,6 +102,7 @@ public class ConnectionRequestFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("FMC", "in ConnectionRequestFragment onActivityResultFragment");
         if (requestCode == 12345 && resultCode == getActivity().RESULT_OK && selectedPosition != -1) {
             arrayList_of_connection_request.get(selectedPosition).setStatus("read");
             adapter = new ConnectionRequestRecyclerViewAdapter(getActivity(), arrayList_of_connection_request);

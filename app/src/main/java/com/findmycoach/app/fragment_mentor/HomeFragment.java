@@ -41,6 +41,7 @@ public class HomeFragment extends Fragment implements Callback {
     private String TAG = "FMC";
     private String tag;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    boolean after_action;
 
     private static int tab_to_show = 0;
 
@@ -61,6 +62,7 @@ public class HomeFragment extends Fragment implements Callback {
             Log.e(TAG, tag + " before");
             tag = getArguments().getString("OpenTab");
             Log.e(TAG, tag + " after");
+            after_action =false;
         } catch (Exception ignored) {
         }
 
@@ -82,9 +84,14 @@ public class HomeFragment extends Fragment implements Callback {
         requestParams.add("user_group", StorageHelper.getUserDetails(getActivity(), "user_group"));
         Log.d(TAG, "Notification data for: " + " user_id: " + StorageHelper.getUserDetails(getActivity(), "user_id") + " user_group: " + StorageHelper.getUserGroup(getActivity(), "user_group"));
 
+
         if (mSwipeRefreshLayout != null && !mSwipeRefreshLayout.isRefreshing())
             progressDialog.show();
         NetworkClient.getUserNotifications(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 19);
+
+
+
+
     }
 
 
@@ -103,8 +110,14 @@ public class HomeFragment extends Fragment implements Callback {
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.mentor_notification_tab);
         pagerSlidingTabStrip.setShouldExpand(true);
         pagerSlidingTabStrip.setViewPager(notifications_on_viewpager);
-        if (tag != null && tag.equalsIgnoreCase("Schedule"))
-            notifications_on_viewpager.setCurrentItem(1);
+        if (tag != null && tag.equalsIgnoreCase("Schedule")){
+            if(!after_action){
+                notifications_on_viewpager.setCurrentItem(1);
+
+            }else{
+
+            }
+        }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.purple);
