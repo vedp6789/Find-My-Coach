@@ -99,6 +99,13 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             getAddress();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (DashboardActivity.dashboardActivity == null)
+            startActivity(new Intent(this, DashboardActivity.class));
+    }
+
     private void initialize() {
         coachingTypeOptions = getResources().getStringArray(R.array.coaching_type);
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
@@ -612,23 +619,21 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             }
 
             /* Saving address, city and zip */
-            if(profileAddress.getText().toString() != null){
-                StorageHelper.storePreference(this,"user_local_address", profileAddress.getText().toString());
-                if(profileAddress1.getText().toString() != null){
-                    StorageHelper.storePreference(this,"user_city_state_country_info", profileAddress1.getText().toString());
+            if (profileAddress.getText().toString() != null) {
+                StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
+                if (profileAddress1.getText().toString() != null) {
+                    StorageHelper.storePreference(this, "user_city_state_country_info", profileAddress1.getText().toString());
                 }
 
-                if(response.getData().getZip() != null){
-                    StorageHelper.storePreference(this,"user_zip_code", pinCode.getText().toString());
+                if (response.getData().getZip() != null) {
+                    StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
                 }
             }
 
 
-            if(trainingLocation.getText().toString() != null){
-                StorageHelper.storePreference(this,"training_location", trainingLocation.getText().toString());
+            if (trainingLocation.getText().toString() != null) {
+                StorageHelper.storePreference(this, "training_location", trainingLocation.getText().toString());
             }
-
-
 
 
         }

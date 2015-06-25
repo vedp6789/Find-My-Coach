@@ -52,9 +52,9 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
         findViewById(R.id.buttonSave).setOnClickListener(this);
         inputCardExpiry.setOnClickListener(this);
 
-        try{
+        try {
             inputCardName.setText(StorageHelper.getUserDetails(this, "user_full_name"));
-        }catch (Exception e){
+        } catch (Exception e) {
             inputCardName.setText("");
         }
 
@@ -71,7 +71,7 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
         int id = item.getItemId();
         if (id == android.R.id.home) {
             finish();
-        }else if(id == R.id.action_scan_card){
+        } else if (id == R.id.action_scan_card) {
             Intent scanIntent = new Intent(this, CardIOActivity.class);
 
             // customize these values to suit your needs.
@@ -88,14 +88,21 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (DashboardActivity.dashboardActivity == null)
+            startActivity(new Intent(this, DashboardActivity.class));
+    }
+
+    @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch (id){
+        switch (id) {
             case R.id.buttonSkip:
                 finish();
                 break;
             case R.id.buttonSave:
-                if(validateData(inputCardNumber.getText().toString(), inputCardName.getText().toString(),
+                if (validateData(inputCardNumber.getText().toString(), inputCardName.getText().toString(),
                         inputCardExpiry.getText().toString(), inputCardCVV.getText().toString())) {
                     Toast.makeText(this, getResources().getString(R.string.cards_detail_will_saved), Toast.LENGTH_LONG).show();
                     finish();
@@ -119,7 +126,7 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
         if (cardNumber.equals("")) {
             showErrorMessage(inputCardNumber, getResources().getString(R.string.error_field_required));
             return false;
-        }else if (cardNumber.length() < 15) {
+        } else if (cardNumber.length() < 15) {
             showErrorMessage(inputCardNumber, getResources().getString(R.string.error_invalid_details));
             return false;
         }
@@ -127,8 +134,8 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
         if (cardName.equals("")) {
             showErrorMessage(inputCardName, getResources().getString(R.string.error_field_required));
             return false;
-        }else{
-            for (int i = 0; i < cardName.length()-1; i++) {
+        } else {
+            for (int i = 0; i < cardName.length() - 1; i++) {
                 if (!Character.isLetter(cardName.charAt(i))) {
                     showErrorMessage(inputCardName, getResources().getString(R.string.error_not_a_name));
                     return false;
@@ -146,7 +153,7 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
             return false;
         }
 
-            return true;
+        return true;
     }
 
     private void showErrorMessage(final TextView view, String string) {
@@ -192,8 +199,7 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
                 inputCardExpiry.setText(DatePickerFragment.getMonth(scanResult.expiryMonth) + " - " + scanResult.expiryYear);
                 inputCardCVV.setText(scanResult.cvv);
 
-            }
-            else {
+            } else {
                 resultDisplayStr = "Scan was canceled.";
             }
             Log.d(TAG, resultDisplayStr);
@@ -204,7 +210,7 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
     public void successOperation(Object object, int statusCode, int calledApiValue) {
 //        progressDialog.dismiss();
         // Get details of last transaction done
-        if(calledApiValue == 48){
+        if (calledApiValue == 48) {
             //TODO with the transaction details received with status
         }
     }
@@ -213,7 +219,7 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
 //        progressDialog.dismiss();
         // Get details of last transaction done
-        if(calledApiValue == 48){
+        if (calledApiValue == 48) {
             //TODO with the transaction details received with status
         }
     }
