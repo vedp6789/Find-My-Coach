@@ -16,6 +16,8 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.beans.UserNotifications.ConnectionRequest;
 import com.findmycoach.app.beans.UserNotifications.Durations;
 import com.findmycoach.app.beans.UserNotifications.ScheduleRequest;
+import com.findmycoach.app.fragment_mentor.ConnectionRequestFragment;
+import com.findmycoach.app.fragment_mentor.ScheduleRequestFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -146,19 +148,19 @@ public class MentorNotificationActions extends Activity implements Callback {
                 initialize_for_schedule_request();
                 first_name = scheduleRequest.getFirst_name();
                 tv_title_message.setText(first_name.trim() + " " + getResources().getString(R.string.schedule_request_title));
-                List<Durations> durationsList=scheduleRequest.getDurations_list();
-                for(int i =0 ; i< durationsList.size(); i++){
-                    if(durationsList.size() > 1){
-                        if(i == (durationsList.size()-1)){
-                            stop_date =durationsList.get(i).getStop_date();
-                        }else {
-                            if(i == 0){
-                                start_date= durationsList.get(i).getStart_date();
+                List<Durations> durationsList = scheduleRequest.getDurations_list();
+                for (int i = 0; i < durationsList.size(); i++) {
+                    if (durationsList.size() > 1) {
+                        if (i == (durationsList.size() - 1)) {
+                            stop_date = durationsList.get(i).getStop_date();
+                        } else {
+                            if (i == 0) {
+                                start_date = durationsList.get(i).getStart_date();
                             }
                         }
-                    }else{
-                        if(durationsList.size() > 0){
-                            start_date =durationsList.get(0).getStart_date();
+                    } else {
+                        if (durationsList.size() > 0) {
+                            start_date = durationsList.get(0).getStart_date();
                             stop_date = durationsList.get(0).getStop_date();
                         }
                     }
@@ -363,11 +365,39 @@ public class MentorNotificationActions extends Activity implements Callback {
                     if (status == 1) {
                         if (action.equals("accept")) {
                             Toast.makeText(MentorNotificationActions.this, first_name.trim() + " " + getResources().getString(R.string.is_in_connection), Toast.LENGTH_SHORT).show();
+
+                            if (ConnectionRequestFragment.connectionRequestFragment != null) {
+                                Log.d(TAG, "Connection request fragmen found not null");
+
+                                ConnectionRequestFragment.connectionRequestFragment.refresh();
+                                finish();
+
+                            } else {
+                                Log.d(TAG, "Connection request fragmen found  null");
+/*
+                                setResult(RESULT_OK);
+                                finish();*/
+
+                            }
                         } else {
                             Toast.makeText(MentorNotificationActions.this, first_name.trim() + getResources().getString(R.string.request_declined), Toast.LENGTH_SHORT).show();
+                            if (ConnectionRequestFragment.connectionRequestFragment != null) {
+                                Log.d(TAG, "Connection request fragmen found not null");
+
+                                ConnectionRequestFragment.connectionRequestFragment.refresh();
+                                finish();
+
+                            } else {
+                                Log.d(TAG, "Conneciton request fragmen found  null");
+/*
+                                setResult(RESULT_OK);
+                                finish();*/
+
+                            }
+
                         }
-                        setResult(RESULT_OK, new Intent());
-                        finish();
+/*                        setResult(RESULT_OK, new Intent());
+                        finish();*/
                     } else {
                         Toast.makeText(MentorNotificationActions.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
 
@@ -380,18 +410,33 @@ public class MentorNotificationActions extends Activity implements Callback {
                 try {
                     JSONObject jsonObject = new JSONObject((String) object);
                     String status = jsonObject.getString("status");
-                    if (Integer.parseInt(status) == 1)  /* already responded when user accepts*/
+                    if (Integer.parseInt(status) == 1) {  /* already responded when user accepts*/
                         Toast.makeText(MentorNotificationActions.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
+                        finish();
 
-                    if (Integer.parseInt(status) == 2)  /* success*/
+                    }
+                    if (Integer.parseInt(status) == 2) {  /* success*/
                         Toast.makeText(MentorNotificationActions.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "schedule request accepted .");
+                        if (ScheduleRequestFragment.scheduleRequestFragment != null) {
+                            Log.d(TAG, "schedule request fragmen found not null");
 
-                    if (Integer.parseInt(status) == 3)   /* max users crossed when user accepts */
+                            ScheduleRequestFragment.scheduleRequestFragment.refresh();
+                            finish();
+
+                        } else {
+                            Log.d(TAG, "schedule request fragmen found  null");
+
+                            setResult(RESULT_OK);
+                            finish();
+
+                        }
+
+                    }
+                    if (Integer.parseInt(status) == 3) {   /* max users crossed when user accepts */
                         Toast.makeText(MentorNotificationActions.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-
-                    setResult(RESULT_OK);
-
-                    finish();
+                    }
 
 
                 } catch (JSONException e) {

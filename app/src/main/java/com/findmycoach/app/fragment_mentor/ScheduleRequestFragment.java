@@ -16,6 +16,7 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.activity.MentorNotificationActions;
 import com.findmycoach.app.adapter.ScheduleRequestRecyclerViewAdapter;
 import com.findmycoach.app.beans.UserNotifications.ScheduleRequest;
+import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.util.DividerItemDecoration;
 import com.findmycoach.app.util.RecyclerItemClickListener;
 
@@ -31,9 +32,11 @@ public class ScheduleRequestFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private int REQUEST_CODE=82;
     private int recycler_view_position=-4;
+    public static ScheduleRequestFragment scheduleRequestFragment;
 
     public ScheduleRequestFragment() {
         Log.d("FMC", "default ScheduleRequestFragment");
+
     }
 
     public static ScheduleRequestFragment newInstance(ArrayList<ScheduleRequest> arrayList_list_of_schedule_request) {
@@ -50,10 +53,17 @@ public class ScheduleRequestFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        scheduleRequestFragment =this;
         arrayList_schedule_requests = new ArrayList<ScheduleRequest>();
         if (getArguments() != null) {
             arrayList_schedule_requests = getArguments().getParcelableArrayList("schedule_requests");
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        scheduleRequestFragment = null;
     }
 
     @Override
@@ -85,8 +95,10 @@ public class ScheduleRequestFragment extends Fragment {
                             bundle.putParcelable("schedule_req_data", scheduleRequest);
                             intent.putExtra("for", "schedule_request");
                             intent.putExtra("schedule_req_bundle", bundle);
-                            if (status.equals("unread"))
+                            if (status.equals("unread")){
                                 startActivityForResult(intent,REQUEST_CODE);
+
+                            }
 
 
 
@@ -100,10 +112,24 @@ public class ScheduleRequestFragment extends Fragment {
 
     }
 
+    public void refresh(){
+        Log.d("FMC", "in ScheduleRequestFragment refresh ");
+        if(HomeFragment.homeFragment != null){
+            Log.d("FMC", "homefragment instance not null");
+
+            HomeFragment.homeFragment.after_action=true;
+            HomeFragment.homeFragment.move_to_TAB=1;
+            HomeFragment.homeFragment.getNotifications();
+
+        }else{
+            Log.d("FMC", "homefragment instance null");
+
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("FMC", "in ScheduleRequestFragment onActivityResultFragment");
-
+        Log.d("FMC", "in ScheduleRequestFragment onActivityResultFragment, Request code: "+requestCode+", REQ code: "+REQUEST_CODE+" result code: "+resultCode+" RES code: "+getActivity().RESULT_OK);
 
         if(requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK){
             Log.d("FMC", "in ScheduleRequestFragment onActivityResultFragment");
