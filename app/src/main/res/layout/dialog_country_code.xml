@@ -10,18 +10,18 @@
     <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/calender_header_margin_arrow"
         android:gravity="center"
         android:text="@string/select_country_code"
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_name"
-        android:layout_margin="@dimen/calender_header_margin_arrow"
         android:textStyle="bold" />
 
     <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="match_parent"
         android:layout_height="@dimen/underline"
-        android:background="@color/purple"
-        android:layout_marginBottom="@dimen/days_margin"/>
+        android:layout_marginBottom="@dimen/days_margin"
+        android:background="@color/purple" />
 
     <com.findmycoach.app.views.ChizzleEditText
         android:id="@+id/searchBox"
@@ -31,9 +31,14 @@
         android:layout_margin="@dimen/calender_header_margin_arrow"
         android:hint="@string/type_here_to_search"
         android:padding="@dimen/days_margin"
-        android:textSize="@dimen/profile_details"
         android:singleLine="true"
-        android:textCursorDrawable="@drawable/cursor_white" />
+        android:textCursorDrawable="@drawable/cursor_white"
+        android:textSize="@dimen/profile_details" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/underline"
+        android:background="@color/purple" />
 
     <ListView
         android:id="@+id/countryCodeListView"

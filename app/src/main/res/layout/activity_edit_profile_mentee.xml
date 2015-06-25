@@ -39,13 +39,15 @@
                         android:layout_height="@dimen/user_image_height_width"
                         android:src="@drawable/user_icon" />
 
-                    <ImageView
-                        android:layout_width="@dimen/indicator"
+                    <com.findmycoach.app.views.ChizzleTextView
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/indicator"
-                        android:layout_gravity="right|bottom"
+                        android:layout_gravity="center_horizontal|bottom"
                         android:background="@color/purple"
-                        android:padding="@dimen/days_margin"
-                        android:src="@drawable/edit_profile_small" />
+                        android:textColor="@color/white"
+                        android:text="@string/add_photo"
+                        android:textSize="@dimen/profile_add_photo"
+                        android:padding="@dimen/days_margin" />
 
                 </FrameLayout>
 
@@ -69,32 +71,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/back_margin"
-                    android:orientation="horizontal">
-
-                    <com.findmycoach.app.views.ChizzleTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/prompt_first_name"
-                        android:textColor="@color/purple_light"
-                        android:textSize="@dimen/profile_heading"
-                        android:textStyle="bold" />
-
-                    <com.findmycoach.app.views.ChizzleTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" *"
-                        android:textColor="@color/purple"
-                        android:textSize="@dimen/profile_heading"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
                 <com.findmycoach.app.views.ChizzleEditText
                     android:id="@+id/input_first_name"
+                    android:layout_marginTop="@dimen/back_margin"
                     style="@style/EditTextCustomHoloPurple"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -104,38 +83,15 @@
                     android:singleLine="true"
                     android:textSize="@dimen/profile_details" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/back_margin"
-                    android:orientation="horizontal">
-
-                    <com.findmycoach.app.views.ChizzleTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/prompt_last_name"
-                        android:textColor="@color/purple_light"
-                        android:textSize="@dimen/profile_heading"
-                        android:textStyle="bold" />
-
-                    <com.findmycoach.app.views.ChizzleTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" *"
-                        android:textColor="@color/purple"
-                        android:textSize="@dimen/profile_heading"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
                 <com.findmycoach.app.views.ChizzleEditText
                     android:id="@+id/input_last_name"
                     style="@style/EditTextCustomHoloPurple"
                     android:layout_width="match_parent"
                     android:textCursorDrawable="@drawable/cursor_purple"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapSentences|textNoSuggestions"
+                    android:inputType="textCapSentences|textNoSuggestions|textCapWords"
                     android:hint="@string/prompt_last_name"
+                    android:layout_marginTop="@dimen/back_margin"
                     android:singleLine="true"
                     android:textSize="@dimen/profile_details" />
 

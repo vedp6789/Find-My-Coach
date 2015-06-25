@@ -41,7 +41,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     private EditText confirmPasswordInput;
     private EditText emailInput;
     private EditText phoneNumberInput;
-    private Dialog progressDialog;
+    public Dialog progressDialog;
     private RadioButton radioButton_mentee_signup, radioButton_mentor_signup;
     private int user_group = 3;
     private TextView countryCodeTV;
@@ -74,6 +74,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         phoneNumberInput = (EditText) findViewById(R.id.input_phone);
         countryCodeTV = (TextView) findViewById(R.id.countryCodeTV);
         scrollView = (ScrollView) findViewById(R.id.scrollView);
+        findViewById(R.id.facebook_login_button).setOnClickListener(this);
+        findViewById(R.id.sign_in_button).setOnClickListener(this);
         String code = getCountryZipCode();
         countryCodeTV.setText(code.equals("") ? getResources().getString(R.string.select) : code);
         countryCodeTV.setOnClickListener(this);
@@ -95,6 +97,10 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
                 return false;
             }
         });
+
+        user_group = getIntent().getIntExtra("user_group", 3);
+        if(user_group == 2)
+            radioButton_mentee_signup.setChecked(true);
     }
 
     @Override
@@ -104,8 +110,17 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             registerUser();
         } else if (id == R.id.countryCodeTV) {
             showCountryCodeDialog();
-        } else if(id == R.id.action_login)
+        } else if (id == R.id.action_login)
             finish();
+        else if (id == R.id.facebook_login_button && LoginActivity.loginActivity != null) {
+            progressDialog.show();
+            LoginActivity.loginActivity.actionFacebook.callOnClick();
+            finish();
+        } else if (id == R.id.sign_in_button && LoginActivity.loginActivity != null) {
+            progressDialog.show();
+            LoginActivity.loginActivity.mSignInButton.callOnClick();
+            finish();
+        }
     }
 
     /**
@@ -207,7 +222,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
                 }
             }
         }
-        if(isCorrect)
+        if (isCorrect)
             firstNameInput.setError(null);
 
         if (lastName.equals("")) {
@@ -221,7 +236,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
                 }
             }
         }
-        if(isCorrect)
+        if (isCorrect)
             lastNameInput.setError(null);
 
         if (phone.equals("")) {
@@ -231,21 +246,21 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_phone_number_invalid));
             isCorrect = false;
         }
-        if(isCorrect)
+        if (isCorrect)
             phoneNumberInput.setError(null);
 
         if (!isEmailValid(email)) {
             showErrorMessage(emailInput, getResources().getString(R.string.enter_valid_email));
             isCorrect = false;
         }
-        if(isCorrect)
+        if (isCorrect)
             emailInput.setError(null);
 
         if (password.equals("") || password.length() < 5) {
             showErrorMessage(passwordInput, getResources().getString(R.string.error_password_size));
             isCorrect = false;
         }
-        if(isCorrect)
+        if (isCorrect)
             passwordInput.setError(null);
 
         if (confirmPassword.equals("")) {
@@ -256,7 +271,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             isCorrect = false;
         }
 
-        if(isCorrect)
+        if (isCorrect)
             confirmPasswordInput.setError(null);
 
         if (countryCode.trim().equalsIgnoreCase("Select") && isCorrect) {
@@ -296,25 +311,26 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
 
-        try{
+        try {
             String name = firstNameInput.getText().toString() + " " + lastNameInput.getText().toString();
-            StorageHelper.storePreference(this,"user_full_name", name);
-        }catch (Exception ignored){}
+            StorageHelper.storePreference(this, "user_full_name", name);
+        } catch (Exception ignored) {
+        }
 
-        try{
+        try {
             Response response = (Response) object;
             Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
             StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getData().getId());
             Log.e("SignUp", StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user)) + "");
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         saveUserEmail(email);
         saveUserPhoneNumber(phoneNumber);
         StorageHelper.storePreference(this, "user_group", String.valueOf(user_group));
-        Intent intent=new Intent(SignUpActivity.this,ValidatePhoneActivity.class);
-        intent.putExtra("from","SignUpActivity");
+        Intent intent = new Intent(SignUpActivity.this, ValidatePhoneActivity.class);
+        intent.putExtra("from", "SignUpActivity");
         startActivity(intent);
 
         finish();
