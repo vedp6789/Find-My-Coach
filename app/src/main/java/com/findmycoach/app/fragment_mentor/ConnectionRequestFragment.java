@@ -30,6 +30,7 @@ public class ConnectionRequestFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private int selectedPosition = -1;
+    public static ConnectionRequestFragment connectionRequestFragment;
 
     public ConnectionRequestFragment() {
         Log.d("FMC", "default ConnectionRequestFragment");
@@ -50,12 +51,19 @@ public class ConnectionRequestFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        connectionRequestFragment = this;
         arrayList_of_connection_request = new ArrayList<ConnectionRequest>();
         Log.d("FMC", "arraylist of connection request size : " + arrayList_of_connection_request.size());
         if (getArguments() != null) {
             arrayList_of_connection_request = getArguments().getParcelableArrayList("connection_requests");
 
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        connectionRequestFragment =null;
     }
 
     @Override
@@ -97,6 +105,22 @@ public class ConnectionRequestFragment extends Fragment {
 
 
         return view;
+    }
+
+
+    public void refresh(){
+        Log.d("FMC", "in ConnectionRequestFragment refresh ");
+        if(HomeFragment.homeFragment != null){
+            Log.d("FMC", "homefragment instance not null");
+
+            HomeFragment.homeFragment.after_action=true;
+            HomeFragment.homeFragment.move_to_TAB=0;
+            HomeFragment.homeFragment.getNotifications();
+
+        }else{
+            Log.d("FMC", "homefragment instance null");
+
+        }
     }
 
     @Override
