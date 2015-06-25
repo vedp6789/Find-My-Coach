@@ -216,6 +216,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
      */
     private void callSignUpActivity() {
         Intent signUpIntent = new Intent(this, SignUpActivity.class);
+        signUpIntent.putExtra("user_group", user_group);
         startActivity(signUpIntent);
     }
 

@@ -97,6 +97,10 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
                 return false;
             }
         });
+
+        user_group = getIntent().getIntExtra("user_group", 3);
+        if(user_group == 2)
+            radioButton_mentee_signup.setChecked(true);
     }
 
     @Override
