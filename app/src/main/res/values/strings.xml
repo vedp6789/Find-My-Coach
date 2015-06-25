@@ -484,6 +484,7 @@
     <string name="no">No</string>
     <string name="gcm_notification">GCM notification</string>
     <string name="email_not_present_in_db">Email is not present in database.</string>
+    <string name="add_photo">Add photo</string>
     <string name="email_not_registered">Email is not registered.</string>
     <string name="problem_in_connection_server">Problem connecting to server.</string>
     <string name="problem_in_url">Not updated by mentor yet.</string>
