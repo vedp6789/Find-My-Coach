@@ -296,7 +296,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         }
 
         try {
-            mentorFor.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, new String[]{"Self", "Kid"}));
+            mentorFor.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.mentor_for)));
         } catch (Exception ignored) {
         }
         try {

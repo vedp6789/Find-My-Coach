@@ -29,6 +29,7 @@
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:hint="@string/hint_enter_code"
         android:inputType="number"
+        android:maxLength="6"
         android:textCursorDrawable="@drawable/cursor_white" />
 
     <com.findmycoach.app.views.ChizzleButton
