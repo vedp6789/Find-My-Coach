@@ -105,6 +105,13 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             getAddress();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (DashboardActivity.dashboardActivity == null)
+            startActivity(new Intent(this, DashboardActivity.class));
+    }
+
     private void initialize() {
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
         profileGender = (Spinner) findViewById(R.id.input_gender);

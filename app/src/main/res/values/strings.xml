@@ -9,6 +9,11 @@
         <item>Group</item>
     </string-array>
 
+    <string-array name="mentor_for">
+        <item>Self</item>
+        <item>Child</item>
+    </string-array>
+
     <!-- Countries -->
 
     <string-array name="countries">
@@ -518,8 +523,6 @@
     <string name="mentor_details">Mentor\'s information</string>
 
 
-
-
     <!-- end of unique strings block-->
 
     <!-- Toast message strings-->
@@ -635,7 +638,6 @@
     <string name="new_slot_with_vacation">Hi, you have placed a new slot with a vacation between \n</string>
     <string name="vacation_similar_to_slot_request">Sorry, there is a vacation which does not allow this class slot.\nVacation duration:\t</string>
     <string name="slot_summary">Slot summary</string>
-
 
 
     <!--Exception message-->

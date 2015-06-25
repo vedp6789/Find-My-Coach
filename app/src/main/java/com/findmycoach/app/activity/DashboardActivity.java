@@ -198,6 +198,12 @@ public class DashboardActivity extends FragmentActivity
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dashboardActivity = null;
+    }
+
     /**
      * Gets the current registration ID for application on GCM service.
      * <p/>

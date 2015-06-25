@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -278,7 +279,9 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         phoneEditText.setText(lastPhoneNumber);
 
         /** Ok button clicked */
-        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
+        Button okButton = (Button) dialog.findViewById(R.id.okButton);
+        okButton.setText(getResources().getString(R.string.send));
+        okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String phnNum = phoneEditText.getText().toString();
@@ -306,7 +309,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                     else {
                         StorageHelper.storePreference(ValidatePhoneActivity.this, "phone_number", phnNum);
                         requestParams.add("phone_number", countryCodeTV.getText().toString().trim() + "-" + phnNum);
-                        Log.e("Validate phone dialog","phone_number : " +  countryCodeTV.getText().toString().trim() + "-" + phnNum);
+                        Log.e("Validate phone dialog", "phone_number : " + countryCodeTV.getText().toString().trim() + "-" + phnNum);
                         Log.d(TAG, countryCodeTV.getText().toString().trim() + phnNum);
                         progressDialog.show();
                         NetworkClient.updatePhoneForSocialMedia(ValidatePhoneActivity.this, requestParams, ValidatePhoneActivity.this, 26);
