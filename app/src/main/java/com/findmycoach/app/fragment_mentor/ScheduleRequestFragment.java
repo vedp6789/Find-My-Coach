@@ -102,11 +102,13 @@ public class ScheduleRequestFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("FMC", "in ScheduleRequestFragment onActivityResultFragment");
+
         if(requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK && recycler_view_position != -4){
             arrayList_schedule_requests.get(recycler_view_position).setStatus("read");
             adapter = new ScheduleRequestRecyclerViewAdapter(getActivity(), arrayList_schedule_requests);
             recyclerView.setAdapter(adapter);
-            //adapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
         }
     }
 
