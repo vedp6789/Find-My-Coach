@@ -44,6 +44,7 @@
 
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/action_login"
+                    android:layout_marginTop="@dimen/back_margin"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/list_view_image_height"
                     android:layout_gravity="right"
@@ -103,6 +104,41 @@
                             android:textColor="@color/custom_button_text_color_click_purple_light" />
 
                     </RadioGroup>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/back_margin"
+                        android:weightSum="2">
+
+                        <ImageButton
+                            android:id="@+id/facebook_login_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/login_button_height"
+                            android:layout_marginRight="@dimen/days_margin"
+                            android:layout_weight="1"
+                            android:background="@drawable/facebook" />
+
+                        <ImageButton
+                            android:id="@+id/sign_in_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/login_button_height"
+                            android:layout_marginLeft="@dimen/days_margin"
+                            android:layout_weight="1"
+                            android:background="@drawable/google_plus"
+                            android:textAllCaps="false" />
+                    </LinearLayout>
+
+
+                    <com.findmycoach.app.views.ChizzleTextView
+                        android:id="@+id/or"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/back_margin"
+                        android:gravity="center_horizontal"
+                        android:text="@string/or"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/button_text_size" />
 
                     <com.findmycoach.app.views.ChizzleEditText
                         android:id="@+id/input_first_name"

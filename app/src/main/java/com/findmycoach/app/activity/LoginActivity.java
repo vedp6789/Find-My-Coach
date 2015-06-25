@@ -72,6 +72,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private TextView countryCodeTV;
     private ArrayList<String> country_code;
     private int retryFbLogin;
+    public LoginButton actionFacebook;
+    public ImageButton mSignInButton;
 
     /**
      * Related to G+
@@ -131,6 +133,11 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        loginActivity = null;
+    }
 
     /**
      * This method get references of all views
@@ -138,7 +145,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private void initialize(Bundle savedInstanceState) {
 
         /** G+ related */
-        ImageButton mSignInButton = (ImageButton) findViewById(R.id.sign_in_button);
+        mSignInButton = (ImageButton) findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(this);
         if (savedInstanceState != null) {
             mSignInProgress = savedInstanceState.getInt(SAVED_PROGRESS, STATE_DEFAULT);
@@ -147,7 +154,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
 
         /** FB related */
-        LoginButton actionFacebook = (LoginButton) findViewById(R.id.facebook_login_button);
+        actionFacebook = (LoginButton) findViewById(R.id.facebook_login_button);
         actionFacebook.setReadPermissions(Arrays.asList("user_location", "user_birthday", "email"));
         actionFacebook.setBackgroundResource(R.drawable.facebook);
 
