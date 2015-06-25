@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.UserNotifications.ConnectionRequest;
+import com.findmycoach.app.beans.UserNotifications.Durations;
 import com.findmycoach.app.beans.UserNotifications.ScheduleRequest;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
@@ -23,6 +24,9 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ved on 15/5/15.
@@ -142,8 +146,26 @@ public class MentorNotificationActions extends Activity implements Callback {
                 initialize_for_schedule_request();
                 first_name = scheduleRequest.getFirst_name();
                 tv_title_message.setText(first_name.trim() + " " + getResources().getString(R.string.schedule_request_title));
-                start_date = scheduleRequest.getStart_date();
-                stop_date = scheduleRequest.getStop_date();
+                List<Durations> durationsList=scheduleRequest.getDurations_list();
+                for(int i =0 ; i< durationsList.size(); i++){
+                    if(durationsList.size() > 1){
+                        if(i == (durationsList.size()-1)){
+                            stop_date =durationsList.get(i).getStop_date();
+                        }else {
+                            if(i == 0){
+                                start_date= durationsList.get(i).getStart_date();
+                            }
+                        }
+                    }else{
+                        if(durationsList.size() > 0){
+                            start_date =durationsList.get(0).getStart_date();
+                            stop_date = durationsList.get(0).getStop_date();
+                        }
+                    }
+                }
+/*                start_date = scheduleRequest.getStart_date();
+                stop_date = scheduleRequest.getStop_date();*/
+
                 start_time = scheduleRequest.getStart_time();
                 stop_time = scheduleRequest.getStop_time();
                 week_days = scheduleRequest.getWeek_days();

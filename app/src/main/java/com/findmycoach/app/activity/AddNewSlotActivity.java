@@ -1266,7 +1266,16 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
 
                     }
-                    Toast.makeText(AddNewSlotActivity.this, stringBuilder.toString() + " " + getResources().getString(R.string.out_of_duration), Toast.LENGTH_LONG).show();
+                    String [] days_not_coming= stringBuilder.toString().split(",");
+                    if(days_not_coming.length > 0){
+                        if(days_not_coming.length > 1){
+                            Toast.makeText(AddNewSlotActivity.this, stringBuilder.toString() + " " + getResources().getString(R.string.are_out_of_duration), Toast.LENGTH_LONG).show();
+
+                        }else{
+                            Toast.makeText(AddNewSlotActivity.this, stringBuilder.toString() + " " + getResources().getString(R.string.is_out_of_duration), Toast.LENGTH_LONG).show();
+
+                        }
+                    }
                     return false;
                 } else
                     return true;

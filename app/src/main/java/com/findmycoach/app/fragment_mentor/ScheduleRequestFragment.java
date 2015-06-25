@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.MentorNotificationActions;
@@ -104,12 +105,31 @@ public class ScheduleRequestFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("FMC", "in ScheduleRequestFragment onActivityResultFragment");
 
-        if(requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK && recycler_view_position != -4){
+
+        if(requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK){
+            Log.d("FMC", "in ScheduleRequestFragment onActivityResultFragment");
+            if(HomeFragment.homeFragment != null){
+                Log.d("FMC", "homefragment instance not null");
+
+                HomeFragment.homeFragment.after_action=true;
+                HomeFragment.homeFragment.move_to_TAB=1;
+                HomeFragment.homeFragment.getNotifications();
+
+            }else{
+                Log.d("FMC", "homefragment instance null");
+
+            }
+        }
+
+
+
+
+        /*if(requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK && recycler_view_position != -4){
             arrayList_schedule_requests.get(recycler_view_position).setStatus("read");
             adapter = new ScheduleRequestRecyclerViewAdapter(getActivity(), arrayList_schedule_requests);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-        }
+        }*/
     }
 
     @Override

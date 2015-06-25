@@ -790,7 +790,7 @@ progressDialog.dismiss();
 
 
                     }
-                    Toast.makeText(ScheduleYourVacation.this, stringBuilder.toString() + " " + getResources().getString(R.string.out_of_duration), Toast.LENGTH_LONG).show();
+                    Toast.makeText(ScheduleYourVacation.this, stringBuilder.toString() + " " + getResources().getString(R.string.are_out_of_duration), Toast.LENGTH_LONG).show();
                     return false;
                 } else
                     return true;

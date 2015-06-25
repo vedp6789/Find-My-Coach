@@ -3,8 +3,6 @@ package com.findmycoach.app.beans.UserNotifications;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.findmycoach.app.adapter.ListOfClassDuration;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,13 +19,13 @@ public class ScheduleRequest implements Parcelable {
     private String last_name;
     private String start_date;
     private String status; /* read or unread*/
-    private List<Duration>  durations_list;
+    private List<Durations>  durations_list;
 
-    public List<Duration> getDurations_list() {
+    public List<Durations> getDurations_list() {
         return durations_list;
     }
 
-    public void setDurations_list(List<Duration> durations_list) {
+    public void setDurations_list(List<Durations> durations_list) {
         this.durations_list = durations_list;
     }
 
@@ -178,11 +176,11 @@ public class ScheduleRequest implements Parcelable {
 
 
     public ScheduleRequest() {
-        durations_list =new ArrayList<Duration>();
+        durations_list =new ArrayList<Durations>();
     }
 
     public ScheduleRequest(Parcel parcel) {
-
+        this();
         this.id = parcel.readString();
         this.image_url=parcel.readString();
         this.student_id=parcel.readString();
@@ -200,6 +198,7 @@ public class ScheduleRequest implements Parcelable {
         this.status= parcel.readString();
         this.created_date=parcel.readString();
         this.created_time=parcel.readString();
+        parcel.readTypedList(this.durations_list, Durations.CREATOR);
 
     }
 
@@ -238,27 +237,9 @@ public class ScheduleRequest implements Parcelable {
         dest.writeString(this.status);
         dest.writeString(this.created_date);
         dest.writeString(this.created_time);
+        dest.writeTypedList(this.durations_list);
     }
 
-    class Duration{
-        private String start_date;
-        private String stop_date;
 
-        public String getStart_date() {
-            return start_date;
-        }
-
-        public void setStart_date(String start_date) {
-            this.start_date = start_date;
-        }
-
-        public String getStop_date() {
-            return stop_date;
-        }
-
-        public void setStop_date(String stop_date) {
-            this.stop_date = stop_date;
-        }
-    }
 
 }

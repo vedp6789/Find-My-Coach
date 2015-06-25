@@ -558,7 +558,8 @@
     <string name="duration_please">Select the duration for this schedule.</string>
     <string name="cards_detail_will_saved">Card details will be saved</string>
     <string name="with">with </string>
-    <string name="out_of_duration"> are not coming in the selected duration!</string>
+    <string name="are_out_of_duration"> are not coming in the selected duration!</string>
+    <string name="is_out_of_duration"> is not coming in the selected duration!</string>
     <string name="stop_time_should_be_grater">Completion time should be greater than start time !</string>
     <string name="class_is_available">Class is available</string>
     <string name="select_suggested_location"> Select one of the suggested locations</string>
