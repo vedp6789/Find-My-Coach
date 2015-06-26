@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
-import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -462,12 +461,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 /** If email is null or invalid */
                 if (email.equals("") || !isValid) {
                     emailET.setError(getResources().getString(R.string.enter_valid_email));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            emailET.setError(null);
-                        }
-                    }, 3500);
                 }
 
                 /** email is correct */
@@ -704,23 +697,12 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 /** If phone number is null */
                 if (phnNum.equals("") || phnNum.length() < 8) {
                     phoneEditText.setError(getResources().getString(R.string.enter_valid_phone_no));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            phoneEditText.setError(null);
-                        }
-                    }, 3500);
+
                 }
 
                 /** if country code is not update automatically or not selected */
                 else if (countryCodeTV.getText().toString().trim().equals("Select")) {
                     countryCodeTV.setError(getResources().getString(R.string.select_country_code));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            countryCodeTV.setError(null);
-                        }
-                    }, 3500);
                 }
 
                 /** Phone number is provided with country code, updating user's phone number in server */
