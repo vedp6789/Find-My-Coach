@@ -83,7 +83,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
     private String city = null;
     private static final String TAG = "FMC";
     private String newUser;
-    private boolean isGetAddress;
+    private boolean isGettingAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +93,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         initialize();
         applyAction();
         populateUserData();
-        isGetAddress = false;
+        isGettingAddress = false;
 
         if (newUser != null)
             getAddress();
@@ -212,7 +212,6 @@ public class EditProfileActivityMentee extends Activity implements Callback {
                         Log.i(TAG, "address line " + i + " : " + address.getAddressLine(i));
                     }
                     Log.i(TAG, "address locality " + address.getLocality() + "latitude : " + address.getLatitude() + "longitude : " + address.getLongitude());
-
 
                     double latitude = address.getLatitude();
                     double longitude = address.getLongitude();
@@ -407,10 +406,10 @@ public class EditProfileActivityMentee extends Activity implements Callback {
     }
 
     private void getAddress() {
-        if (isGetAddress)
+        if (isGettingAddress)
             return;
         try {
-            isGetAddress = true;
+            isGettingAddress = true;
             final GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
             GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
@@ -421,16 +420,16 @@ public class EditProfileActivityMentee extends Activity implements Callback {
 
                         if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
-                            updateAddress();
-                            populateUserData();
+                            if (updateAddress())
+                                populateUserData();
                         }
 
                         DashboardActivity.dashboardActivity.latitude = location.getLatitude();
                         DashboardActivity.dashboardActivity.longitude = location.getLongitude();
                     } else if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
                         map.setOnMyLocationChangeListener(null);
-                        updateAddress();
-                        populateUserData();
+                        if (updateAddress())
+                            populateUserData();
                     }
                 }
             };
@@ -440,7 +439,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         }
     }
 
-    public void updateAddress() {
+    public boolean updateAddress() {
         if (userInfo != null && (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))) {
             try {
                 userInfo.setAddress(NetworkManager.localityName);
@@ -457,10 +456,19 @@ public class EditProfileActivityMentee extends Activity implements Callback {
 
         if (userInfo != null && (userInfo.getZip() == null || userInfo.getZip().toString().trim().equals("") || userInfo.getZip().toString().trim().equals("0"))) {
             try {
-                userInfo.setZip(NetworkManager.postalCodeName);
+                if (NetworkManager.postalCodeName != null && !NetworkManager.postalCodeName.trim().equals(""))
+                    userInfo.setZip(NetworkManager.postalCodeName);
+                else {
+                    String address = DashboardActivity.dashboardActivity.userCurrentAddress.trim();
+                    if (!address.equals("")) {
+                        String[] temp = address.split(" ");
+                        userInfo.setZip(temp[temp.length - 1]);
+                    }
+                }
             } catch (Exception ignored) {
             }
         }
+        return true;
     }
 
     private void getAutoSuggestions(String input) {
@@ -554,6 +562,10 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
             requestParams.add("id", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
             requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+            if (isGettingAddress && NetworkManager.countryName != null && !NetworkManager.countryName.equals("")) {
+                requestParams.add("country", NetworkManager.countryName);
+                Log.e(TAG, "Country : " + NetworkManager.countryName);
+            }
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
             progressDialog.dismiss();

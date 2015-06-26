@@ -89,7 +89,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     private String city = null;
     private String TAG = "FMC";
     private String newUser;
-    private boolean isGettingAddress;
+    private boolean isGettingAddress, isDobForReview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +100,9 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         applyAction();
         populateUserData();
         isGettingAddress = false;
+        isDobForReview = false;
 
-        if (newUser != null)
+        if (newUser != null || userInfo.getAddress().toString().trim().equals(""))
             getAddress();
     }
 
@@ -129,10 +130,10 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         experienceInput = (Spinner) findViewById(R.id.input_experience);
 
         String[] yearOfExperience = new String[51];
-        for(int i = 0; i<yearOfExperience.length; i ++){
+        for (int i = 0; i < yearOfExperience.length; i++) {
             yearOfExperience[i] = String.valueOf(i);
         }
-        experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview,yearOfExperience));
+        experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, yearOfExperience));
         isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
         updateAction = (Button) findViewById(R.id.button_update);
         chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
@@ -220,75 +221,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         profileAddress1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                city = arrayAdapter.getItem(position).toString();
-
-                Geocoder geocoder = new Geocoder(EditProfileActivityMentor.this, Locale.getDefault());
-                try {
-                    ArrayList<Address> addresses = (ArrayList<Address>) geocoder.getFromLocationName(city.toString(), 1);
-                    Address address = addresses.get(0);
-                    Log.i(TAG, "address according to Geo coder : " + "\n postal code : " + address.getPostalCode() + "\n country name : " + address.getCountryName() + "\n address line 0 : " + address.getAddressLine(0) + "\n address line 1 : " + address.getAddressLine(1));
-                    for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-                        Log.i(TAG, "address line " + i + " : " + address.getAddressLine(i));
-                    }
-                    Log.i(TAG, "address locality " + address.getLocality() + "latitude : " + address.getLatitude() + "longitude : " + address.getLongitude());
-
-
-                    double latitude = address.getLatitude();
-                    double longitude = address.getLongitude();
-
-                    final ArrayList<Double> doubles = new ArrayList<Double>();
-                    doubles.add(latitude);
-                    doubles.add(longitude);
-
-
-                    new AsyncTask<ArrayList, Void, String>() {
-
-                        @Override
-                        protected String doInBackground(ArrayList... params) {
-                            ArrayList<Double> doubles1 = params[0];
-                            XPath xpath = XPathFactory.newInstance().newXPath();
-                            String expression = "//GeocodeResponse/result/address_component[type=\"postal_code\"]/long_name/text()";
-                            Log.d(TAG, "lat in async " + doubles1.get(0));
-                            Log.d(TAG, "long in async " + doubles1.get(1));
-
-                            InputSource inputSource = new InputSource("https://maps.googleapis.com/maps/api/geocode/xml?latlng=" + doubles1.get(0) + "," + doubles1.get(1) + "&sensor=true");
-                            String zipcode = null;
-                            try {
-                                zipcode = (String) xpath.evaluate(expression, inputSource, XPathConstants.STRING);
-                            } catch (XPathExpressionException e) {
-                                e.printStackTrace();
-                            }
-
-
-                            Log.i(TAG, "zip code 1 : " + zipcode);
-
-
-                            return zipcode;
-                        }
-
-
-                        @Override
-                        protected void onPostExecute(String s) {
-                            super.onPostExecute(s);
-                            if (s != null) {
-                                try {
-                                    pinCode.setText(s);
-                                } catch (Exception ignored) {
-                                }
-                            } else {
-                                try {
-                                    pinCode.setText("");
-                                } catch (Exception ignored) {
-                                }
-                            }
-
-
-                        }
-                    }.execute(doubles);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                getPostalFromCity(arrayAdapter.getItem(position));
             }
         });
 
@@ -352,6 +285,79 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             }
         });
 
+
+    }
+
+    private void getPostalFromCity(String cityName) {
+        city = cityName;
+
+        Geocoder geocoder = new Geocoder(EditProfileActivityMentor.this, Locale.getDefault());
+        try {
+            ArrayList<Address> addresses = (ArrayList<Address>) geocoder.getFromLocationName(city, 1);
+            Address address = addresses.get(0);
+            Log.i(TAG, "address according to Geo coder : " + "\n postal code : " + address.getPostalCode() + "\n country name : " + address.getCountryName() + "\n address line 0 : " + address.getAddressLine(0) + "\n address line 1 : " + address.getAddressLine(1));
+            for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                Log.i(TAG, "address line " + i + " : " + address.getAddressLine(i));
+            }
+            Log.i(TAG, "address locality " + address.getLocality() + "latitude : " + address.getLatitude() + "longitude : " + address.getLongitude());
+
+
+            double latitude = address.getLatitude();
+            double longitude = address.getLongitude();
+
+            final ArrayList<Double> doubles = new ArrayList<Double>();
+            doubles.add(latitude);
+            doubles.add(longitude);
+
+
+            new AsyncTask<ArrayList, Void, String>() {
+
+                @Override
+                protected String doInBackground(ArrayList... params) {
+                    ArrayList<Double> doubles1 = params[0];
+                    XPath xpath = XPathFactory.newInstance().newXPath();
+                    String expression = "//GeocodeResponse/result/address_component[type=\"postal_code\"]/long_name/text()";
+                    Log.d(TAG, "lat in async " + doubles1.get(0));
+                    Log.d(TAG, "long in async " + doubles1.get(1));
+
+                    InputSource inputSource = new InputSource("https://maps.googleapis.com/maps/api/geocode/xml?latlng=" + doubles1.get(0) + "," + doubles1.get(1) + "&sensor=true");
+                    String zipcode = null;
+                    try {
+                        zipcode = (String) xpath.evaluate(expression, inputSource, XPathConstants.STRING);
+                    } catch (XPathExpressionException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    Log.i(TAG, "zip code 1 : " + zipcode);
+
+
+                    return zipcode;
+                }
+
+
+                @Override
+                protected void onPostExecute(String s) {
+                    super.onPostExecute(s);
+                    if (s != null) {
+                        try {
+                            pinCode.setText(s);
+                        } catch (Exception ignored) {
+                        }
+                    } else {
+                        try {
+                            pinCode.setText("");
+                        } catch (Exception ignored) {
+                        }
+                    }
+
+
+                }
+            }.execute(doubles);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -479,16 +485,16 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
                         if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
-                            updateAddress();
-                            populateUserData();
+                            if (updateAddress())
+                                populateUserData();
                         }
 
                         DashboardActivity.dashboardActivity.latitude = location.getLatitude();
                         DashboardActivity.dashboardActivity.longitude = location.getLongitude();
                     } else if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
                         map.setOnMyLocationChangeListener(null);
-                        updateAddress();
-                        populateUserData();
+                        if (updateAddress())
+                            populateUserData();
                     }
                 }
             };
@@ -498,7 +504,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         }
     }
 
-    public void updateAddress() {
+    public boolean updateAddress() {
         if (userInfo != null && (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))) {
             try {
                 userInfo.setAddress(NetworkManager.localityName);
@@ -515,10 +521,19 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
         if (userInfo != null && (userInfo.getZip() == null || userInfo.getZip().toString().trim().equals("") || userInfo.getZip().toString().trim().equals("0"))) {
             try {
-                userInfo.setZip(NetworkManager.postalCodeName);
+                if (NetworkManager.postalCodeName != null && !NetworkManager.postalCodeName.trim().equals(""))
+                    userInfo.setZip(NetworkManager.postalCodeName);
+                else {
+                    String address = DashboardActivity.dashboardActivity.userCurrentAddress.trim();
+                    if (!address.equals("")) {
+                        String[] temp = address.split(" ");
+                        userInfo.setZip(temp[temp.length - 1]);
+                    }
+                }
             } catch (Exception ignored) {
             }
         }
+        return true;
     }
 
 
@@ -579,6 +594,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             isValid = false;
         }
 
+
         if (isValid) {
             int dobYear = 0;
             try {
@@ -587,8 +603,21 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                 dobYear = 0;
             }
 
-            if (dobYear > 0 && (Calendar.getInstance().get(Calendar.YEAR) - (dobYear) < 19))
+            if (dobYear > 0 && (Calendar.getInstance().get(Calendar.YEAR) - (dobYear) < 19)) {
+                isValid = false;
                 Toast.makeText(this, getResources().getString(R.string.age_review_message), Toast.LENGTH_LONG).show();
+                isDobForReview = true;
+            }
+
+            int yearsOfExperience = experienceInput.getSelectedItemPosition();
+            int age = Calendar.getInstance().get(Calendar.YEAR) - dobYear;
+            int minExperience = getResources().getInteger(R.integer.mentor_min_age_experience_difference);
+
+            Log.e(TAG, yearsOfExperience + " : " + age + " : " + minExperience);
+            if(dobYear > 0 && age - yearsOfExperience < minExperience){
+                Toast.makeText(this, getResources().getString(R.string.age_experience_message),Toast.LENGTH_LONG).show();
+                isValid = false;
+            }
         }
 
         return isValid;
@@ -642,6 +671,10 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+            if (isGettingAddress && NetworkManager.countryName != null && !NetworkManager.countryName.equals("")) {
+                requestParams.add("country", NetworkManager.countryName);
+                Log.e(TAG, "Country : " + NetworkManager.countryName);
+            }
 
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
@@ -719,46 +752,45 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
 /* Saving mentor address in shared preference */
 
-                StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
-                StorageHelper.storePreference(this, "user_city_state",profileAddress1.getText().toString() );
-                StorageHelper.storePreference(this,"user_zip_code", pinCode.getText().toString());
+            StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
+            StorageHelper.storePreference(this, "user_city_state", profileAddress1.getText().toString());
+            StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
 
 
-            Log.d(TAG,"local_add: "+StorageHelper.addressInformation(EditProfileActivityMentor.this,"user_local_address"));
-            Log.d(TAG,"city: "+StorageHelper.addressInformation(EditProfileActivityMentor.this,"user_city_state"));
-            Log.d(TAG,"local_add: "+StorageHelper.addressInformation(EditProfileActivityMentor.this,"user_zip_code"));
+            Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentor.this, "user_local_address"));
+            Log.d(TAG, "city: " + StorageHelper.addressInformation(EditProfileActivityMentor.this, "user_city_state"));
+            Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentor.this, "user_zip_code"));
 
 
 
 
             /* Saving area of coaching in sharedpreference */
-            if(areaOfCoaching.getText().toString().length() > 0){
-                Log.d(TAG,"area_of coaching: "+areaOfCoaching.getText().toString());
-                String coaching_subject [] =areaOfCoaching.getText().toString().split(",");
-                Log.d(TAG,"coaching_subject size"+coaching_subject.length);
+            if (areaOfCoaching.getText().toString().length() > 0) {
+                Log.d(TAG, "area_of coaching: " + areaOfCoaching.getText().toString());
+                String coaching_subject[] = areaOfCoaching.getText().toString().split(",");
+                Log.d(TAG, "coaching_subject size" + coaching_subject.length);
                 Set<String> sub_category_stringSet = new HashSet<String>();
-                for(int i = 0 ; i < coaching_subject.length ; i++){
+                for (int i = 0; i < coaching_subject.length; i++) {
                     sub_category_stringSet.add(coaching_subject[i].trim());
                 }
-                StorageHelper.storeListOfCoachingSubCategories(EditProfileActivityMentor.this,sub_category_stringSet);
+                StorageHelper.storeListOfCoachingSubCategories(EditProfileActivityMentor.this, sub_category_stringSet);
 
             }
 
 
-            Set<String> stringSet=new HashSet<String>();
-            Log.d(TAG,"string set size: "+stringSet.size());
-            if(stringSet != null){
-                stringSet=StorageHelper.getListOfCoachingSubCategories(EditProfileActivityMentor.this,"area_of_coaching_set");
+            Set<String> stringSet = new HashSet<String>();
+            Log.d(TAG, "string set size: " + stringSet.size());
+            if (stringSet != null) {
+                stringSet = StorageHelper.getListOfCoachingSubCategories(EditProfileActivityMentor.this, "area_of_coaching_set");
 
                 Iterator<String> iterator = stringSet.iterator();
-                while(iterator.hasNext()){
-                    Log.d(TAG,"sub: "+iterator.next());
+                while (iterator.hasNext()) {
+                    Log.d(TAG, "sub: " + iterator.next());
                 }
 
-            }else{
-                Log.d(TAG,"string set null");
+            } else {
+                Log.d(TAG, "string set null");
             }
-
 
 
             if (newUser != null && newUser.contains(userInfo.getId())) {
@@ -768,7 +800,8 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                 editor.apply();
                 DashboardActivity.dashboardActivity.mainLayout.setVisibility(View.VISIBLE);
                 DashboardActivity.dashboardActivity.showTermsAndConditions();
-                startActivity(new Intent(this, AddNewSlotActivity.class));
+                if (!isDobForReview)
+                    startActivity(new Intent(this, AddNewSlotActivity.class));
             }
             finish();
         }

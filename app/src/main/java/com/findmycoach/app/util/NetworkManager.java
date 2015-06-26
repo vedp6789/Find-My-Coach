@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
@@ -41,6 +42,7 @@ public class NetworkManager {
             List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
             if (addresses != null) {
                 strAdd = updateVariables(addresses);
+                Log.e("GPS Location Pickup", updateVariables(addresses));
             } else {
                 return "";
             }
@@ -57,22 +59,28 @@ public class NetworkManager {
         StringBuilder strReturnedAddress = new StringBuilder("");
 
         for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
-            strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+            if (returnedAddress.getAddressLine(i) != null && !returnedAddress.getAddressLine(i).equals("null") && !returnedAddress.getAddressLine(i).trim().equals(""))
+                strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
         }
         strAdd = strReturnedAddress.toString();
         try {
-            postalCodeName = returnedAddress.getPostalCode();
+            if (returnedAddress.getPostalCode() != null && !returnedAddress.getPostalCode().equals("null") && !returnedAddress.getPostalCode().trim().equals(""))
+                postalCodeName = returnedAddress.getPostalCode();
         } catch (Exception e) {
             postalCodeName = "";
         }
         try {
             if (returnedAddress.getMaxAddressLineIndex() == 2) {
-                localityName = returnedAddress.getAddressLine(0);
+                if (returnedAddress.getAddressLine(0) != null && !returnedAddress.getAddressLine(0).equals("null") && !returnedAddress.getAddressLine(0).trim().equals(""))
+                    localityName = returnedAddress.getAddressLine(0);
+                Log.e("GPS Location Pickup", "Locality : " + localityName);
                 if (postalCodeName == null || !postalCodeName.equals("")) {
                     getZip(returnedAddress.getAddressLine(1).trim());
                 }
             } else if (returnedAddress.getMaxAddressLineIndex() == 3 || returnedAddress.getMaxAddressLineIndex() > 3) {
-                localityName = returnedAddress.getAddressLine(0) + ", " + returnedAddress.getAddressLine(1);
+                if (returnedAddress.getAddressLine(0) != null && !returnedAddress.getAddressLine(0).equals("null") && !returnedAddress.getAddressLine(0).trim().equals(""))
+                    localityName = returnedAddress.getAddressLine(0) + ", " + returnedAddress.getAddressLine(1);
+                Log.e("GPS Location Pickup", "Locality : " + localityName);
                 if (postalCodeName == null || !postalCodeName.equals("")) {
                     getZip(returnedAddress.getAddressLine(returnedAddress.getMaxAddressLineIndex() - 1).trim());
                 }
@@ -85,16 +93,19 @@ public class NetworkManager {
 
         try {
             cityName = returnedAddress.getLocality();
+            Log.e("GPS Location Pickup", "City : " + cityName);
         } catch (Exception e) {
             cityName = "";
         }
         try {
             stateName = returnedAddress.getAdminArea();
+            Log.e("GPS Location Pickup", "State : " + stateName);
         } catch (Exception e) {
             stateName = "";
         }
         try {
             countryName = returnedAddress.getCountryName();
+            Log.e("GPS Location Pickup", "Country : " + countryName);
         } catch (Exception e) {
             countryName = "";
         }
@@ -104,8 +115,8 @@ public class NetworkManager {
     public static void getZip(String returnedAddress) {
         try {
             String[] temp = returnedAddress.split(" ");
-            int code = Integer.parseInt(temp[temp.length - 1]);
-            postalCodeName = code + "";
+            postalCodeName = temp[temp.length - 1];
+            Log.e("GPS Location Pickup", "Zip : " + postalCodeName);
         } catch (Exception e) {
             postalCodeName = "";
         }
