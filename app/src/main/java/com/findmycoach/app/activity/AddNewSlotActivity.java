@@ -9,7 +9,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -53,7 +56,7 @@ import java.util.TreeSet;
  * Created by praka_000 on 2/12/2015.
  */
 public class AddNewSlotActivity extends Activity implements SetDate, SetTime, TimePickerDialog.OnTimeSetListener {
-
+    ScrollView scrollView;
     Spinner sp_slot_type, sp_coaching_subjects;
     EditText et_maximum_students, et_tutorial_location;
     LinearLayout ll_slot_maximum_students, ll_coaching_subjects, ll_single_subject;
@@ -1353,8 +1356,28 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
 
     }
 
+    /**
+     * Clear error from edit text when focused or on touch
+     */
+    View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus)
+                ((TextView) v).setError(null);
+        }
+    };
+
+    View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            ((TextView) v).setError(null);
+            return false;
+        }
+    };
+
 
     void initialize() {
+        scrollView = (ScrollView) findViewById(R.id.scroll_add_new_slot);
         tv_start_date = (TextView) findViewById(R.id.tv_slot_start_date);
         tv_till_date = (TextView) findViewById(R.id.tv_slot_till_date);
         tv_start_time = (TextView) findViewById(R.id.tv_slot_start_time);
@@ -1368,6 +1391,16 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         ll_single_subject = (LinearLayout) findViewById(R.id.ll_single_subject);
         et_maximum_students = (EditText) findViewById(R.id.et_maximum_students);
         et_tutorial_location = (EditText) findViewById(R.id.et_tutorial_location);
+        et_tutorial_location.setOnTouchListener(onTouchListener);
+        et_tutorial_location.setOnFocusChangeListener(onFocusChangeListener);
+        et_tutorial_location.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    scrollView.fullScroll(View.FOCUS_DOWN);
+                }
+                return false;
+            }
+        });
         b_create_slot = (Button) findViewById(R.id.b_create_slot);
         ScrollableGridView gridView = (ScrollableGridView) findViewById(R.id.calendar);
         gridView.setAdapter(new AddSlotAdapter(this, getResources().getStringArray(R.array.week_days_mon)));

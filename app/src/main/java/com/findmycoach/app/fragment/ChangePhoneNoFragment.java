@@ -28,6 +28,9 @@ import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -173,13 +176,28 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         String message= (String) object;
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-        if(message.equalsIgnoreCase("Successfully changed , please validate phone number to continue")){
-            Intent intent=new Intent(getActivity(),ValidatePhoneActivity.class);
-            intent.putExtra("from","ChangePhoneNoFragment");
-            startActivity(intent);
+        /*Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();*/
+        try {
+            JSONObject jsonObject = new JSONObject(message);
+            String status = jsonObject.getString("status");
+            if(status.equals("1")){
+                Intent intent=new Intent(getActivity(),ValidatePhoneActivity.class);
+                intent.putExtra("from","ChangePhoneNoFragment");
+                startActivity(intent);
+            }else{
+                if(status.equals("2")){
+                    Toast.makeText(getActivity(),jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         dismiss();
+/*
+        if(message.equalsIgnoreCase("Successfully changed , please validate phone number to continue")){
+
+        }
+        dismiss();*/
     }
 
     @Override

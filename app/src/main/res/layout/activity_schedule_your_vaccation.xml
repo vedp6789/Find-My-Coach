@@ -232,6 +232,7 @@
         android:hint="@string/schedule_vacation_note"
        android:textCursorDrawable="@drawable/cursor_purple"
         android:maxLength="150"
+       android:nextFocusDown="@+id/b_schedule_vacation"
         android:textSize="@dimen/profile_name" />
 
 
