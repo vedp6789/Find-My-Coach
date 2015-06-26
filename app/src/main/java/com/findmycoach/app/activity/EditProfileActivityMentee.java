@@ -10,12 +10,12 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -136,7 +136,39 @@ public class EditProfileActivityMentee extends Activity implements Callback {
 
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(getResources().getString(R.string.title_edit_profile_menu));
+
+        profileFirstName.setOnFocusChangeListener(onFocusChangeListener);
+        profileFirstName.setOnTouchListener(onTouchListener);
+        profileLastName.setOnFocusChangeListener(onFocusChangeListener);
+        profileLastName.setOnTouchListener(onTouchListener);
+        profileDOB.setOnFocusChangeListener(onFocusChangeListener);
+        profileDOB.setOnTouchListener(onTouchListener);
+        profileAddress.setOnFocusChangeListener(onFocusChangeListener);
+        profileAddress.setOnTouchListener(onTouchListener);
+        profileAddress1.setOnFocusChangeListener(onFocusChangeListener);
+        profileAddress1.setOnTouchListener(onTouchListener);
+        pinCode.setOnFocusChangeListener(onFocusChangeListener);
+        pinCode.setOnTouchListener(onTouchListener);
     }
+
+    /**
+     * Clear error from edit text when focused or on touch
+     */
+    View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus)
+                ((TextView) v).setError(null);
+        }
+    };
+
+    View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            ((TextView) v).setError(null);
+            return false;
+        }
+    };
 
     private void applyAction() {
         profileDOB.setOnClickListener(new View.OnClickListener() {
@@ -444,45 +476,21 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         boolean isValid = true;
         if (profileAddress1.getText().toString().trim().equals("")) {
             profileAddress1.setError(getResources().getString(R.string.enter_city));
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    profileAddress1.setError(null);
-                }
-            }, 3500);
             isValid = false;
         }
 
         if (profileAddress.getText().toString().trim().equals("")) {
             profileAddress.setError(getResources().getString(R.string.enter_address));
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    profileAddress.setError(null);
-                }
-            }, 3500);
             isValid = false;
         }
 
         if (profileDOB.getText().toString().trim().equals("")) {
             profileDOB.setError(getResources().getString(R.string.enter_dob));
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    profileDOB.setError(null);
-                }
-            }, 3500);
             isValid = false;
         }
 
         if (pinCode.getText().toString().trim().equals("")) {
             pinCode.setError(getResources().getString(R.string.enter_pin));
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    pinCode.setError(null);
-                }
-            }, 3500);
             isValid = false;
         }
 
@@ -520,12 +528,6 @@ public class EditProfileActivityMentee extends Activity implements Callback {
 
     private void showErrorMessage(final TextView view, String string) {
         view.setError(string);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                view.setError(null);
-            }
-        }, 3500);
     }
 
     private void callUpdateService() {
