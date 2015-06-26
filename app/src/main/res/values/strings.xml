@@ -720,6 +720,7 @@
     <string name="prompt_passion">Passion</string>
     <string name="prompt_profession">Profession</string>
     <string name="prompt_accomplishment">Qualification</string>
+    <string name="enter_accomplishment">Enter qualification</string>
     <string name="prompt_willing_to_travel">Available to travel trainee location</string>
     <string name="prompt_charges">Coaching fee</string>
     <string name="prompt_experience">Experience</string>
@@ -898,6 +899,7 @@
     <string name="calendar_by_loc">Calendar by location</string>
     <string name="loc">Location</string>
     <string name="age_review_message">You seem to be too young to be a teacher, your case will be reviewed and our support team will call you back.</string>
+    <string name="age_experience_message">Your age or years of experience seems to be invalid.</string>
     <string name="view_calendar_by">View schedule calendar by</string>
     <string name="mentor_response_for_schedule_request_message">Your reply to mentee!</string>
     <!-- Static Text -->

@@ -94,6 +94,7 @@ public class StorageHelper {
         editor.remove("user_local_address");
         editor.remove("user_city_state");
         editor.remove("user_zip_code");
+        editor.remove("terms");
 
         if(StorageHelper.getUserGroup(context,"user_group").equals("2"))
             editor.remove("training_location");

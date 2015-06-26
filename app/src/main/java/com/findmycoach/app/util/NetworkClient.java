@@ -560,10 +560,17 @@ public class NetworkClient {
                     if (!(context instanceof DashboardActivity)) {
                         for (Prediction p : suggestion.getPredictions()) {
                             String[] tempArray = p.getDescription().split(",");
-                            if (tempArray.length > 3) {
-                                String desc = tempArray[tempArray.length - 3] + ", " + tempArray[tempArray.length - 2] + ", " + tempArray[tempArray.length - 1];
-                                p.setDescription(desc);
+                            if (tempArray.length > 2) {
+                                p.setDescription(tempArray[tempArray.length - 3]);
+                                p.setCountry(tempArray[tempArray.length - 1]);
+                                p.setState(tempArray[tempArray.length - 2]);
+                            }else {
+                               suggestion.getPredictions().remove(p);
                             }
+                        }
+
+                        for (Prediction p : suggestion.getPredictions()) {
+
                         }
                     }
                     callback.successOperation(suggestion, statusCode, calledApiValue);

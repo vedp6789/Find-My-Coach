@@ -27,7 +27,8 @@ public class SplashActivity extends Activity implements Callback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AppFonts.HelveticaNeue = Typeface.createFromAsset(getAssets(), "HelveticaNeue.dfont");
+//        AppFonts.HelveticaNeue = Typeface.createFromAsset(getAssets(), "HelveticaNeue.dfont");
+        AppFonts.HelveticaNeue = Typeface.createFromAsset(getAssets(), "HelveticaNeue-Medium.otf");
         AppFonts.HelveticaNeueMedium = Typeface.createFromAsset(getAssets(), "HelveticaNeue-Medium.otf");
 
         setContentView(R.layout.activity_splash);
