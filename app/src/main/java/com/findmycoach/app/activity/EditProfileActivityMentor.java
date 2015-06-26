@@ -159,7 +159,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             public void onClick(View v) {
                 new DobPicker(EditProfileActivityMentor.this, profileDOB,
                         getResources().getInteger(R.integer.starting_year),
-                        Calendar.getInstance().get(Calendar.YEAR) - 15);
+                        Calendar.getInstance().get(Calendar.YEAR) - getResources().getInteger(R.integer.mentor_min_age));
             }
         });
 

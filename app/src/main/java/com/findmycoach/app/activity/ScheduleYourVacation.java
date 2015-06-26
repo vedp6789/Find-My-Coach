@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,15 +12,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.AddSlotAdapter;
 import com.findmycoach.app.fragment.MyScheduleFragment;
+import com.findmycoach.app.fragment.TimePickerFragment;
 import com.findmycoach.app.fragment_mentor.StartDateForVaccationSchedule;
-import com.findmycoach.app.fragment_mentor.StartTimeForVaccationSchedule;
 import com.findmycoach.app.fragment_mentor.StopDateForVacationSchedule;
-import com.findmycoach.app.fragment_mentor.StopTimeForVaccationSchedule;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.ScrollableGridView;
@@ -43,7 +44,7 @@ import java.util.TreeSet;
 /**
  * Created by praka_000 on 3/3/2015.
  */
-public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
+public class ScheduleYourVacation extends Activity implements SetDate, SetTime, TimePickerDialog.OnTimeSetListener {
 
     public static TextView tv_start_date, tv_till_date, tv_start_time, tv_stop_time;
     public boolean boo_mon_checked, boo_tue_checked,
@@ -71,6 +72,7 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
 
     private static final String TAG = "FMC";
     private static String FOREVER;
+    private boolean isFromTimeSet;
 
     private Date newDate;
 
@@ -120,9 +122,18 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
         findViewById(R.id.fromTime).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getFragmentManager();
-                StartTimeForVaccationSchedule startTimeForVaccationSchedule = new StartTimeForVaccationSchedule();
-                startTimeForVaccationSchedule.show(fragmentManager, null);
+                isFromTimeSet = true;
+                Calendar c = Calendar.getInstance();
+                int hour = c.get(Calendar.HOUR_OF_DAY);
+                int min = getSettingMinute(c.get(Calendar.MINUTE));
+                if (min == 0)
+                    hour++;
+                TimePickerFragment timePicker = new TimePickerFragment(ScheduleYourVacation.this,
+                        ScheduleYourVacation.this, hour, min, false);
+                timePicker.show();
+//                FragmentManager fragmentManager = getFragmentManager();
+//                StartTimeForVaccationSchedule startTimeForVaccationSchedule = new StartTimeForVaccationSchedule();
+//                startTimeForVaccationSchedule.show(fragmentManager, null);
             }
         });
 
@@ -130,9 +141,19 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
             @Override
             public void onClick(View v) {
                 if (tv_start_time.getText().length() > 0) {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    StopTimeForVaccationSchedule stopTimeForVaccationSchedule = new StopTimeForVaccationSchedule();
-                    stopTimeForVaccationSchedule.show(fragmentManager, null);
+                    isFromTimeSet = false;
+                    Calendar c = Calendar.getInstance();
+                    int hour = start_hour;
+                    int min = getSettingMinute(start_min + 15);
+                    if (min == 0)
+                        hour++;
+                    TimePickerFragment timePicker = new TimePickerFragment(ScheduleYourVacation.this,
+                            ScheduleYourVacation.this, hour, min, false);
+                    timePicker.isMinTimeEnabled = true;
+                    timePicker.show();
+//                    FragmentManager fragmentManager = getFragmentManager();
+//                    StopTimeForVaccationSchedule stopTimeForVaccationSchedule = new StopTimeForVaccationSchedule();
+//                    stopTimeForVaccationSchedule.show(fragmentManager, null);
                 } else {
                     Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.start_time_first), Toast.LENGTH_SHORT).show();
                 }
@@ -290,23 +311,23 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
 
                                     if (status == 1) {
                                         Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.vacation_scheduled_success), Toast.LENGTH_SHORT).show();
-                                        if(MyScheduleFragment.myScheduleFragment != null){
-                                            Log.d(TAG,"myschedulefragment instace is not null");
+                                        if (MyScheduleFragment.myScheduleFragment != null) {
+                                            Log.d(TAG, "myschedulefragment instace is not null");
                                             MyScheduleFragment.myScheduleFragment.getCalendarDetailsAPICall();
                                         }
                                         finish();
                                     } else {
-                                        if (status ==2 ) {
+                                        if (status == 2) {
 
                                             JSONArray jsonArray_coinciding_array = jsonObject.getJSONArray("coincideArray");
-                                            if(jsonArray_coinciding_array.length() > 0){
-                                                Toast.makeText(ScheduleYourVacation.this,jsonObject.getString("message"),Toast.LENGTH_LONG).show();
+                                            if (jsonArray_coinciding_array.length() > 0) {
+                                                Toast.makeText(ScheduleYourVacation.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
 
-                                            }else{
+                                            } else {
                                                 JSONArray jsonArray_coinciding_exceptions = jsonObject.getJSONArray("coincidingExceptions");
-                                                if(jsonArray_coinciding_exceptions.length() > 0){
+                                                if (jsonArray_coinciding_exceptions.length() > 0) {
                                                     coincidingExceptionMessage(jsonArray_coinciding_exceptions);
-                                                }else{
+                                                } else {
                                                     finish();
                                                 }
                                             }
@@ -323,8 +344,8 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime {
                             @Override
                             public void failureOperation(Object object, int statusCode, int calledApiValue) {
 
-                                   Toast.makeText(ScheduleYourVacation.this, (String) object, Toast.LENGTH_SHORT).show();
-progressDialog.dismiss();
+                                Toast.makeText(ScheduleYourVacation.this, (String) object, Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
                             }
                         }, 36);
 
@@ -333,6 +354,16 @@ progressDialog.dismiss();
             }
         });
 
+    }
+
+    private int getSettingMinute(int i) {
+        if (i < 16)
+            return 1;
+        else if (i < 31)
+            return 2;
+        else if (i < 46)
+            return 3;
+        return 0;
     }
 
     void coincidingExceptionMessage(JSONArray jsonArray) {
@@ -584,28 +615,28 @@ progressDialog.dismiss();
 
     private boolean validate() {
 
-            if (time_from.equals("00:00") && time_to.equals("24:00")) {
-                start_hour = 0;
-                start_min = 0;
-                stop_hour = 24;
-                stop_min = 0;
+        if (time_from.equals("00:00 AM") && time_to.equals("23:59 PM")) {
+            start_hour = 0;
+            start_min = 0;
+            stop_hour = 24;
+            stop_min = 0;
 
-                return true;
+            return true;
 
 
+        } else {
+            int start_time = ((start_hour * 60) + start_min) * 60;
+            int stop_time = ((stop_hour * 60) + stop_min) * 60;
+
+            if (start_time > stop_time || (start_time == stop_time)) {
+                Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.stop_time_should_be_grater), Toast.LENGTH_LONG).show();
+                return false;
             } else {
-                int start_time = ((start_hour * 60) + start_min) * 60;
-                int stop_time = ((stop_hour * 60) + stop_min) * 60;
-
-                if (start_time > stop_time || (start_time == stop_time)) {
-                    Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.stop_time_should_be_grater), Toast.LENGTH_LONG).show();
-                    return false;
-                } else {
-                    return true;
-                }
-
-
+                return true;
             }
+
+
+        }
 
            /* }*/
 
@@ -613,8 +644,6 @@ progressDialog.dismiss();
     }
 
     boolean dateValidation() {
-
-
 
 
         if (tv_start_date.getText().length() > 0) {
@@ -842,11 +871,11 @@ progressDialog.dismiss();
         tv_start_date = (TextView) findViewById(R.id.tv_slot_start_date);
         tv_till_date = (TextView) findViewById(R.id.tv_slot_till_date);
         tv_start_time = (TextView) findViewById(R.id.tv_slot_start_time);
-        tv_start_time.setText("00:00");
+        tv_start_time.setText("00:00 AM");
         start_hour = 0;
         start_min = 0;
         tv_stop_time = (TextView) findViewById(R.id.tv_slot_stop_time);
-        tv_stop_time.setText("24:00");
+        tv_stop_time.setText("23:59 PM");
         stop_hour = 24;
         stop_min = 0;
 
@@ -991,6 +1020,75 @@ progressDialog.dismiss();
             hourOfDay = 12;
 
         tv_stop_time.setText(" " + (hourOfDay < 10 ? ("0" + hourOfDay) : hourOfDay) + ":" + stop_min + (stop_hour > 11 ? " PM" : " AM"));
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        if (isFromTimeSet) {
+            displayTime(tv_start_time, hourOfDay, minute);
+            start_hour = hourOfDay;
+            start_min = getMinute(minute);
+
+            isFromTimeSet = false;
+            int hour = start_hour;
+            int min = getSettingMinute(start_min + 15);
+            if (min == 0)
+                hour++;
+            onTimeSet(null, hour, min);
+        } else {
+            displayTime(tv_stop_time, hourOfDay, minute);
+            stop_hour = hourOfDay;
+            stop_min = getMinute(minute);
+        }
+
+    }
+
+    private int getMinute(int minute) {
+        switch (minute) {
+            case 0:
+                return 0;
+            case 1:
+                return 15;
+            case 2:
+                return 30;
+            case 3:
+                return 45;
+            default:
+                return 0;
+        }
+    }
+
+    private void displayTime(TextView textView, int hourOfDay, int minute) {
+        switch (minute) {
+            case 0:
+                textView.setText(getTime(hourOfDay + ":" + 00));
+                break;
+            case 1:
+                textView.setText(getTime(hourOfDay + ":" + 15));
+                break;
+            case 2:
+                textView.setText(getTime(hourOfDay + ":" + 30));
+                break;
+            case 3:
+                textView.setText(getTime(hourOfDay + ":" + 45));
+                break;
+        }
+
+    }
+
+    private String getTime(String hr_24_format_time) {
+        String time = null;
+        try {
+            SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat _12HourSDF = new SimpleDateFormat("hh:mm a");
+            Date _24HourDt = _24HourSDF.parse(hr_24_format_time);
+            time = _12HourSDF.format(_24HourDt);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return time;
+
     }
 
 }

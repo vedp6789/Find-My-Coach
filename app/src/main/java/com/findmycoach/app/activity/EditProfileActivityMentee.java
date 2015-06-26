@@ -144,7 +144,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             public void onClick(View v) {
                 new DobPicker(EditProfileActivityMentee.this, profileDOB,
                         getResources().getInteger(R.integer.starting_year),
-                        Calendar.getInstance().get(Calendar.YEAR) - 10);
+                        Calendar.getInstance().get(Calendar.YEAR) - getResources().getInteger(R.integer.mentee_min_age));
             }
         });
 
@@ -297,13 +297,15 @@ public class EditProfileActivityMentee extends Activity implements Callback {
 
     public void populateUserData() {
 
+        String[] mentorForArray = getResources().getStringArray(R.array.mentor_for);
+
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
             ImageLoader imgLoader = new ImageLoader(profilePicture);
             imgLoader.execute((String) userInfo.getPhotograph());
         }
 
         try {
-            mentorFor.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.mentor_for)));
+            mentorFor.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, mentorForArray));
         } catch (Exception ignored) {
         }
         try {
@@ -339,7 +341,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         } catch (Exception ignored) {
         }
         try {
-            if (userInfo.getMentorFor().equalsIgnoreCase("kid"))
+            if (userInfo.getMentorFor().equalsIgnoreCase(mentorForArray[1]))
                 mentorFor.setSelection(1);
         } catch (Exception ignored) {
         }

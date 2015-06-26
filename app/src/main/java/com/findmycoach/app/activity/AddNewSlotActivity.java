@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Html;
@@ -17,14 +18,14 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.AddSlotAdapter;
 import com.findmycoach.app.fragment.MyScheduleFragment;
+import com.findmycoach.app.fragment.TimePickerFragment;
 import com.findmycoach.app.fragment_mentor.StartDateDialogFragment;
-import com.findmycoach.app.fragment_mentor.StartTimeDialogFragment;
-import com.findmycoach.app.fragment_mentor.StopTimeDialogFragment;
 import com.findmycoach.app.fragment_mentor.TillDateDialogFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
@@ -51,7 +52,7 @@ import java.util.TreeSet;
 /**
  * Created by praka_000 on 2/12/2015.
  */
-public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
+public class AddNewSlotActivity extends Activity implements SetDate, SetTime, TimePickerDialog.OnTimeSetListener {
 
     Spinner sp_slot_type, sp_coaching_subjects;
     EditText et_maximum_students, et_tutorial_location;
@@ -92,6 +93,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
     String class_slot_type;    /* Individual or Group  */
     String class_location;
     JSONObject jsonObject_exception;
+    private boolean isFromTimeSet;
 
 
     private static final String TAG = "FMC";
@@ -131,7 +133,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         String local_Address = StorageHelper.addressInformation(AddNewSlotActivity.this, "user_local_address");
         String city = StorageHelper.addressInformation(AddNewSlotActivity.this, "user_city_state");
         String zip = StorageHelper.addressInformation(AddNewSlotActivity.this, "user_zip_code");
-        if (local_Address != null && (!local_Address.equals("") )) {
+        if (local_Address != null && (!local_Address.equals(""))) {
             stringBuilder_address.append(local_Address);
             if (city != null) {
                 stringBuilder_address.append(", " + city.trim().toString());
@@ -221,9 +223,22 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         findViewById(R.id.fromTime).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getFragmentManager();
-                StartTimeDialogFragment timeDialogFragment = new StartTimeDialogFragment();
-                timeDialogFragment.show(fragmentManager, null);
+
+                isFromTimeSet = true;
+
+                Calendar c = Calendar.getInstance();
+                int hour = c.get(Calendar.HOUR_OF_DAY);
+                int min = getSettingMinute(c.get(Calendar.MINUTE));
+                if (min == 0)
+                    hour++;
+                TimePickerFragment timePicker = new TimePickerFragment(AddNewSlotActivity.this,
+                        AddNewSlotActivity.this, hour, min, false);
+                timePicker.show();
+//                FragmentManager fragmentManager = getFragmentManager();
+//                StartTimeDialogFragment timeDialogFragment = new StartTimeDialogFragment();
+//                timeDialogFragment.show(fragmentManager, null);
+
+
             }
         });
 
@@ -231,15 +246,25 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             @Override
             public void onClick(View v) {
                 if (tv_start_time.getText().length() > 0) {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("from", "AddNewSlotActivity");
-                    bundle.putString("hour", String.valueOf(start_hour));
-                    bundle.putString("minute", String.valueOf(start_min));
-                    StopTimeDialogFragment timeDialogFragment = new StopTimeDialogFragment();
-                    timeDialogFragment.setSetTime(AddNewSlotActivity.this);
-                    timeDialogFragment.setArguments(bundle);
-                    timeDialogFragment.show(fragmentManager, null);
+                    isFromTimeSet = false;
+                    int hour = start_hour;
+                    int min = getSettingMinute(start_min + 15);
+                    if (min == 0)
+                        hour++;
+                    TimePickerFragment timePicker = new TimePickerFragment(AddNewSlotActivity.this,
+                            AddNewSlotActivity.this, hour, min, false);
+                    timePicker.isMinTimeEnabled = true;
+                    timePicker.show();
+
+//                    FragmentManager fragmentManager = getFragmentManager();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("from", "AddNewSlotActivity");
+//                    bundle.putString("hour", String.valueOf(start_hour));
+//                    bundle.putString("minute", String.valueOf(start_min));
+//                    StopTimeDialogFragment timeDialogFragment = new StopTimeDialogFragment();
+//                    timeDialogFragment.setSetTime(AddNewSlotActivity.this);
+//                    timeDialogFragment.setArguments(bundle);
+//                    timeDialogFragment.show(fragmentManager, null);
                 } else {
                     Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.start_time_first), Toast.LENGTH_SHORT).show();
                 }
@@ -340,7 +365,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                         Log.d(TAG, "Going to create a new slot for you.");
                         RequestParams requestParams = new RequestParams();
                         requestParams.add("mentor_id", StorageHelper.getUserDetails(AddNewSlotActivity.this, "user_id"));
-                        Log.d(TAG,"mentor_id"+StorageHelper.getUserDetails(AddNewSlotActivity.this, "user_id"));
+                        Log.d(TAG, "mentor_id" + StorageHelper.getUserDetails(AddNewSlotActivity.this, "user_id"));
                         Log.d(TAG, "From date" + tv_start_date.getText().toString());
                         Log.d(TAG, "Till date" + tv_till_date.getText().toString());
 
@@ -545,7 +570,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                                         } else {
                                             Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully), Toast.LENGTH_SHORT).show();
 
-                                           showSummaryAsAlert();
+                                            showSummaryAsAlert();
                                         }
                                     } else {
                                         if (jA_coinciding_Slots.length() > 0) {
@@ -556,7 +581,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
                                             Toast.makeText(AddNewSlotActivity.this, jO_success_response.getString("message"), Toast.LENGTH_LONG).show();
                                                 /* It is the case when there is vacation found which is not allowing any class, so in this case we can show message from server */
-                                            coincideOf(null,2);  /* flag is 2 , means mentor request for new slot, is cannot be possible as there is one vacation schedule which is having start date earlier or equal to that of mentor new slot request start date and the stop date of new requested slot is coming equal or less than vacation stop date  */
+                                            coincideOf(null, 2);  /* flag is 2 , means mentor request for new slot, is cannot be possible as there is one vacation schedule which is having start date earlier or equal to that of mentor new slot request start date and the stop date of new requested slot is coming equal or less than vacation stop date  */
                                         }
                                     }
                                 } catch (JSONException e) {
@@ -576,6 +601,16 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 }
             }
         });
+    }
+
+    private int getSettingMinute(int i) {
+        if (i < 16)
+            return 1;
+        else if (i < 31)
+            return 2;
+        else if (i < 46)
+            return 3;
+        return 0;
     }
 
     private void showSummaryAsAlert() {
@@ -615,15 +650,15 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         alertDialog.setPositiveButton(getResources().getString(R.string.ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.d(TAG,"on positive button");
-                     //   setResult(500);
-                        if(MyScheduleFragment.myScheduleFragment != null){
+                        Log.d(TAG, "on positive button");
+                        //   setResult(500);
+                        if (MyScheduleFragment.myScheduleFragment != null) {
                             MyScheduleFragment.myScheduleFragment.getCalendarDetailsAPICall();
                         }
                         finish();
 
                         //   dialog.cancel();
-                     //   finish();
+                        //   finish();
 
                     }
                 }
@@ -802,7 +837,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
 
         } else {
-            if (jsonArray!= null && jsonArray.length() > 0) {
+            if (jsonArray != null && jsonArray.length() > 0) {
                 try {
                     String s_date, st_date, s_time, st_time;
                     ArrayList<String> days = new ArrayList<String>();
@@ -897,14 +932,14 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                             showCoincidingAlertMessage(stringBuilder.toString(), flag);
                             Log.d(TAG, "Message for coinciding slot schedule : " + stringBuilder.toString());
                         } else {
-                            if(flag == 1){
+                            if (flag == 1) {
                                 stringBuilder.append(getResources().getString(R.string.new_slot_with_vacation) + simpleDateFormat.format(start_date) + getResources().getString(R.string.and) + simpleDateFormat.format(stop_date) + getResources().getString(R.string.from1) + s_time.substring(0, 5) + getResources().getString(R.string.to2) + st_time.substring(0, 5));
                                 showCoincidingAlertMessage(stringBuilder.toString(), flag);
                                 Log.d(TAG, "Message for coinciding exception while add new slot : " + stringBuilder.toString());
 
-                            }else{
+                            } else {
                                 /* when flag is 2*/
-                                stringBuilder.append(getResources().getString(R.string.vacation_similar_to_slot_request) + simpleDateFormat.format(start_date) + "\t"+getResources().getString(R.string.to1) +"\t"+ simpleDateFormat.format(stop_date) + getResources().getString(R.string.from1) + s_time.substring(0, 5) + getResources().getString(R.string.to2) + st_time.substring(0, 5));
+                                stringBuilder.append(getResources().getString(R.string.vacation_similar_to_slot_request) + simpleDateFormat.format(start_date) + "\t" + getResources().getString(R.string.to1) + "\t" + simpleDateFormat.format(stop_date) + getResources().getString(R.string.from1) + s_time.substring(0, 5) + getResources().getString(R.string.to2) + st_time.substring(0, 5));
                                 showCoincidingAlertMessage(stringBuilder.toString(), flag);
                                 Log.d(TAG, "Message for coinciding exception while add new slot : " + stringBuilder.toString());
 
@@ -917,8 +952,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }else {
-                String ss_date=null, sst_date=null, ss_time=null, sst_time=null;
+            } else {
+                String ss_date = null, sst_date = null, ss_time = null, sst_time = null;
                 ArrayList<String> days = new ArrayList<String>();
 
 
@@ -944,7 +979,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
 
 
-                stringBuilder.append(getResources().getString(R.string.vacation_similar_to_slot_request) + simpleDateFormat.format(start_date) + "\t"+getResources().getString(R.string.to1) +"\t"+ simpleDateFormat.format(stop_date) + getResources().getString(R.string.from1) + ss_time.substring(0, 5) + getResources().getString(R.string.to2) + sst_time.substring(0, 5));
+                stringBuilder.append(getResources().getString(R.string.vacation_similar_to_slot_request) + simpleDateFormat.format(start_date) + "\t" + getResources().getString(R.string.to1) + "\t" + simpleDateFormat.format(stop_date) + getResources().getString(R.string.from1) + ss_time.substring(0, 5) + getResources().getString(R.string.to2) + sst_time.substring(0, 5));
                 showCoincidingAlertMessage(stringBuilder.toString(), flag);
                 Log.d(TAG, "Message for coinciding exception while add new slot : " + stringBuilder.toString());
 
@@ -982,14 +1017,14 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         } else {
-            if(flag == 1){
+            if (flag == 1) {
                 new AlertDialog.Builder(this)
                         .setTitle("Vacation schedule found")
                         .setMessage(message)
                         .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 showSummaryAsAlert();
-                                Log.d(TAG,"show summary as alert");
+                                Log.d(TAG, "show summary as alert");
                                 dialog.dismiss();
 
                                 /*setResult(500);
@@ -999,7 +1034,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-            }else{
+            } else {
                 /* flag = 2*/
                 new AlertDialog.Builder(this)
                         .setTitle("Vacation schedule found")
@@ -1045,7 +1080,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
             } else {
                 int start_time = ((start_hour * 60) + start_min) * 60;
                 int stop_time = ((stop_hour * 60) + stop_min) * 60;
-                int min_diff_in_seconds = 15 *60; /*15 min difference should be there */
+                int min_diff_in_seconds = 15 * 60; /*15 min difference should be there */
                 int difference = stop_time - start_time;
 
                 int slot_time_value = 0;
@@ -1054,8 +1089,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
                     return false;
 
                 } else {
-
-
 
 
                     if (et_tutorial_location.getText().toString().trim().length() <= 0) {
@@ -1266,12 +1299,12 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
 
 
                     }
-                    String [] days_not_coming= stringBuilder.toString().split(",");
-                    if(days_not_coming.length > 0){
-                        if(days_not_coming.length > 1){
+                    String[] days_not_coming = stringBuilder.toString().split(",");
+                    if (days_not_coming.length > 0) {
+                        if (days_not_coming.length > 1) {
                             Toast.makeText(AddNewSlotActivity.this, stringBuilder.toString() + " " + getResources().getString(R.string.are_out_of_duration), Toast.LENGTH_LONG).show();
 
-                        }else{
+                        } else {
                             Toast.makeText(AddNewSlotActivity.this, stringBuilder.toString() + " " + getResources().getString(R.string.is_out_of_duration), Toast.LENGTH_LONG).show();
 
                         }
@@ -1481,4 +1514,61 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime {
         time_to = hour + ":" + minute;
         tv_stop_time.setText(" " + (hourOfDay < 10 ? ("0" + hourOfDay) : hourOfDay) + ":" + stop_min + (stop_hour > 11 ? " PM" : " AM"));
     }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        if (isFromTimeSet) {
+            displayTime(tv_start_time, hourOfDay, minute);
+            start_hour = hourOfDay;
+            start_min = getMinute(minute);
+
+            isFromTimeSet = false;
+            int hour = start_hour;
+            int min = getSettingMinute(start_min + 15);
+            if (min == 0)
+                hour++;
+            onTimeSet(null, hour, min);
+
+        } else {
+            displayTime(tv_stop_time, hourOfDay, minute);
+            stop_hour = hourOfDay;
+            stop_min = getMinute(minute);
+        }
+
+    }
+
+    private int getMinute(int minute) {
+        switch (minute) {
+            case 0:
+                return 0;
+            case 1:
+                return 15;
+            case 2:
+                return 30;
+            case 3:
+                return 45;
+            default:
+                return 0;
+        }
+    }
+
+    private void displayTime(TextView textView, int hourOfDay, int minute) {
+        switch (minute) {
+            case 0:
+                textView.setText(getTime(hourOfDay + ":" + 00));
+                break;
+            case 1:
+                textView.setText(getTime(hourOfDay + ":" + 15));
+                break;
+            case 2:
+                textView.setText(getTime(hourOfDay + ":" + 30));
+                break;
+            case 3:
+                textView.setText(getTime(hourOfDay + ":" + 45));
+                break;
+        }
+
+    }
+
+
 }
