@@ -33,8 +33,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.datatype.Duration;
-
 
 public class HomeFragment extends Fragment implements Callback {
     private ViewPager notifications_on_viewpager;
@@ -70,11 +68,9 @@ public class HomeFragment extends Fragment implements Callback {
             Log.e(TAG, tag + " before");
             tag = getArguments().getString("OpenTab");
             Log.e(TAG, tag + " after");
-            after_action =false;
+            after_action = false;
         } catch (Exception ignored) {
         }
-
-
 
 
         Log.d("FMC", "Inside mentor home fragment");
@@ -107,8 +103,6 @@ public class HomeFragment extends Fragment implements Callback {
         NetworkClient.getUserNotifications(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 19);
 
 
-
-
     }
 
 
@@ -128,7 +122,7 @@ public class HomeFragment extends Fragment implements Callback {
         pagerSlidingTabStrip.setShouldExpand(true);
         pagerSlidingTabStrip.setViewPager(notifications_on_viewpager);
 
-        if (tag != null && tag.equalsIgnoreCase("Schedule")){
+        if (tag != null && tag.equalsIgnoreCase("Schedule")) {
             notifications_on_viewpager.setCurrentItem(1);
 
         }
@@ -137,6 +131,7 @@ public class HomeFragment extends Fragment implements Callback {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                move_to_TAB = notifications_on_viewpager.getCurrentItem();
                 getNotifications();
             }
         });
@@ -229,9 +224,9 @@ public class HomeFragment extends Fragment implements Callback {
                                 scheduleRequest.setCreated_time(jsonObject_notification.getString("created_time"));
 
                                 List<Durations> durationses = new ArrayList<Durations>();
-                                for(int duration=0; duration < jsonObject_notification.getJSONArray("durations").length() ; duration++){
-                                    JSONObject jsonObject1=jsonObject_notification.getJSONArray("durations").getJSONObject(duration);
-                                    Durations durations=new Durations();
+                                for (int duration = 0; duration < jsonObject_notification.getJSONArray("durations").length(); duration++) {
+                                    JSONObject jsonObject1 = jsonObject_notification.getJSONArray("durations").getJSONObject(duration);
+                                    Durations durations = new Durations();
                                     durations.setStart_date(jsonObject1.getString("start_date"));
                                     durations.setStop_date(jsonObject1.getString("stop_date"));
                                     durationses.add(durations);
@@ -254,18 +249,18 @@ public class HomeFragment extends Fragment implements Callback {
 
                     pagerSlidingTabStrip.setViewPager(notifications_on_viewpager);
 
-                    if (tag != null && tag.equalsIgnoreCase("Schedule")){
+                    if (tag != null && tag.equalsIgnoreCase("Schedule")) {
                         notifications_on_viewpager.setCurrentItem(1);
 
-                    }else {
+                    } else {
 
-                        if(after_action){
-                            Log.d(TAG,"after action move To TAB: "+move_to_TAB);
+                        if (after_action) {
+                            Log.d(TAG, "after action move To TAB: " + move_to_TAB);
                             after_action = false;
                             notifications_on_viewpager.setCurrentItem(move_to_TAB);
-                        }else {
-                            Log.d(TAG,"without action");
-                            notifications_on_viewpager.setCurrentItem(0);
+                        } else {
+                            Log.d(TAG, "without action");
+                            notifications_on_viewpager.setCurrentItem(move_to_TAB);
                         }
                     }
 
@@ -286,7 +281,7 @@ public class HomeFragment extends Fragment implements Callback {
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        if(mSwipeRefreshLayout != null)
+        if (mSwipeRefreshLayout != null)
             mSwipeRefreshLayout.setRefreshing(false);
         Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
     }

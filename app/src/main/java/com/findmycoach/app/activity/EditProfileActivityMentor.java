@@ -372,7 +372,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
         try {
             int index = Integer.parseInt(userInfo.getExperience());
-            if (index > 16)
+            if (index > 51)
                 index = 0;
             experienceInput.setSelection(index);
         } catch (Exception e) {

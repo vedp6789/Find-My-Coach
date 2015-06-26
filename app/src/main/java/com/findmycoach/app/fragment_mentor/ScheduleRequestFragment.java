@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.MentorNotificationActions;
