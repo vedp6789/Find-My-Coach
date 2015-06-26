@@ -278,6 +278,7 @@ public class MentorNotificationActions extends Activity implements Callback {
                 });
 
                 b_decline.setOnClickListener(new View.OnClickListener() {
+
                     @Override
                     public void onClick(View v) {
                         RequestParams requestParams = new RequestParams();
@@ -412,7 +413,7 @@ public class MentorNotificationActions extends Activity implements Callback {
                     String status = jsonObject.getString("status");
                     if (Integer.parseInt(status) == 1) {  /* already responded when user accepts*/
                         Toast.makeText(MentorNotificationActions.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                        setResult(RESULT_OK);
+                        //setResult(RESULT_OK);
                         finish();
 
                     }
@@ -420,14 +421,10 @@ public class MentorNotificationActions extends Activity implements Callback {
                         Toast.makeText(MentorNotificationActions.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "schedule request accepted .");
                         if (ScheduleRequestFragment.scheduleRequestFragment != null) {
-                            Log.d(TAG, "schedule request fragmen found not null");
-
                             ScheduleRequestFragment.scheduleRequestFragment.refresh();
                             finish();
 
                         } else {
-                            Log.d(TAG, "schedule request fragmen found  null");
-
                             setResult(RESULT_OK);
                             finish();
 
@@ -436,6 +433,7 @@ public class MentorNotificationActions extends Activity implements Callback {
                     }
                     if (Integer.parseInt(status) == 3) {   /* max users crossed when user accepts */
                         Toast.makeText(MentorNotificationActions.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        finish();
                     }
 
 
