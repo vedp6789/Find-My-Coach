@@ -1,10 +1,8 @@
 package com.findmycoach.app.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -21,9 +19,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +37,7 @@ import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
+import com.findmycoach.app.util.TermsAndCondition;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -186,9 +183,6 @@ public class DashboardActivity extends FragmentActivity
                     registerInBackground();
                 }
 
-                if ((StorageHelper.getUserDetails(this, "terms") == null || !StorageHelper.getUserDetails(this, "terms").equals("yes")) && !isProfileOpen) {
-                    showTermsAndConditions();
-                }
             } else {
                 Toast.makeText(DashboardActivity.this, getResources().getString(R.string.google_play_services_not_supported), Toast.LENGTH_LONG).show();
                 Log.i(TAG, "No valid Google Play Services APK found.");
@@ -383,6 +377,12 @@ public class DashboardActivity extends FragmentActivity
     protected void onResume() {
         super.onResume();
 
+        String tNc = StorageHelper.getUserDetails(this, "terms");
+        if ((tNc == null || !tNc.equals("yes")) && !isProfileOpen) {
+            TermsAndCondition termsAndCondition = new TermsAndCondition();
+            termsAndCondition.showTermsAndConditions(this);
+        }
+
         try {
             if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
                 HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
@@ -469,39 +469,9 @@ public class DashboardActivity extends FragmentActivity
     }
 
 
-    public void showTermsAndConditions() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle(getResources().getString(R.string.t_and_c));
-        ScrollView scrollView = new ScrollView(this);
-        final TextView contentView = new TextView(this);
-        contentView.setText(getResources().getString(R.string.terms));
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(18, 18, 18, 18);
-        scrollView.addView(contentView);
-        scrollView.setLayoutParams(params);
-        alertDialog.setView(scrollView);
-        alertDialog.setCancelable(false);
-        alertDialog.setPositiveButton("Accept",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        updateTermsAndConditionsStatus();
-                    }
-                }
-        );
-        alertDialog.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                        logout();
-                    }
-                }
-        );
-        alertDialog.show();
-    }
 
-    private void logout() {
+
+    public void logout() {
         String loginWith = StorageHelper.getUserDetails(this, "login_with");
         if (loginWith == null || loginWith.equals("G+")) {
             LoginActivity.doLogout = true;
@@ -527,10 +497,6 @@ public class DashboardActivity extends FragmentActivity
         editor.remove(PROPERTY_APP_VERSION);
         editor.apply();
         Log.d(TAG, "After Logout selection and removal of GCM data: \nGCM Registration id: " + prefs.getString(PROPERTY_REG_ID, "") + "APP Version saved: " + prefs.getInt(PROPERTY_APP_VERSION, -1));
-    }
-
-    private void updateTermsAndConditionsStatus() {
-        StorageHelper.storePreference(this, "terms", "yes");
     }
 
     private void initialize() {

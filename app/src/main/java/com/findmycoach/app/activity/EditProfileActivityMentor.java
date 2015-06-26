@@ -41,6 +41,7 @@ import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
+import com.findmycoach.app.util.TermsAndCondition;
 import com.findmycoach.app.views.DobPicker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -104,6 +105,19 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
         if (newUser != null || userInfo.getAddress().toString().trim().equals(""))
             getAddress();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String tNc = StorageHelper.getUserDetails(this, "terms");
+        if (tNc == null || !tNc.equals("yes")) {
+            Log.e(TAG, "TnC");
+            TermsAndCondition termsAndCondition = new TermsAndCondition();
+            termsAndCondition.showTermsAndConditions(this);
+        }
     }
 
     @Override
@@ -796,7 +810,6 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                 editor.remove(getResources().getString(R.string.new_user));
                 editor.apply();
                 DashboardActivity.dashboardActivity.mainLayout.setVisibility(View.VISIBLE);
-                DashboardActivity.dashboardActivity.showTermsAndConditions();
                 if (!isDobForReview)
                     startActivity(new Intent(this, AddNewSlotActivity.class));
             }

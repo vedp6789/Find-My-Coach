@@ -1529,10 +1529,13 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
                 hour++;
             onTimeSet(null, hour, min);
 
+            time_from = hourOfDay + ":" + minute;
+
         } else {
             displayTime(tv_stop_time, hourOfDay, minute);
             stop_hour = hourOfDay;
             stop_min = getMinute(minute);
+            time_to =  hourOfDay + ":" + minute;
         }
 
     }
