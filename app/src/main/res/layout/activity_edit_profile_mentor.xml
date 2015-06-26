@@ -382,7 +382,7 @@
                     style="@style/EditTextCustomHoloPurple"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_accomplishment"
+                    android:hint="@string/enter_accomplishment"
                     android:inputType="text"
                     android:singleLine="true"
                     android:textCursorDrawable="@drawable/cursor_purple"

@@ -138,6 +138,8 @@ public class DashboardActivity extends FragmentActivity
                 requestParams.add("user_group", user_group + "");
                 NetworkClient.getProfile(this, requestParams, authToken, this, 4);
                 isProfileOpen = true;
+                if(!NetworkManager.isNetworkConnected(this))
+                    logout();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -329,7 +331,9 @@ public class DashboardActivity extends FragmentActivity
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-            sendRegistrationIdToBackend();
+            try{
+                sendRegistrationIdToBackend();
+            }catch (Exception ignored){}
         }
 
         private void sendRegistrationIdToBackend() {

@@ -709,6 +709,7 @@
     <string name="prompt_passion">Passion</string>
     <string name="prompt_profession">Profession</string>
     <string name="prompt_accomplishment">Qualification</string>
+    <string name="enter_accomplishment">Enter qualification</string>
     <string name="prompt_willing_to_travel">Available to travel trainee location</string>
     <string name="prompt_charges">Coaching fee</string>
     <string name="prompt_experience">Experience</string>
