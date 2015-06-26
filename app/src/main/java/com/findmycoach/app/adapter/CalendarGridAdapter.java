@@ -421,6 +421,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
             allow_schedule_population = true;
         }
         if (day_color[1].equals("TODAY")) {
+            gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple_light));
             gridcell.setTextColor(context.getResources().getColor(R.color.purple));
             allow_schedule_population = true;
         }

@@ -1183,9 +1183,9 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     private String getMenteeEventTitle(Calendar time, int stop_hour, int stop_min, String sub_category_name) {
         if (sub_category_name != null) {
-            return String.format("Vacation time: %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "Subject: " + sub_category_name;
+            return String.format("Class time: %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "Subject: " + sub_category_name;
         } else {
-            return String.format("Vacation time: %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
+            return String.format("Class time: %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
         }
 
     }

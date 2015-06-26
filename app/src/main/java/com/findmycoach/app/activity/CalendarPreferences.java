@@ -35,6 +35,7 @@ public class CalendarPreferences extends Activity implements Callback {
     private String last_location_selected = null;
     ArrayAdapter<String> arrayAdapter;
     int class_type_index;
+    int class_type_from_pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class CalendarPreferences extends Activity implements Callback {
         setContentView(R.layout.mentor_calendar_preferences);
         initialize();
 
-        ArrayAdapter arrayAdapter1_slot_types = new ArrayAdapter(this, R.layout.textview, getResources().getStringArray(R.array.coaching_type));
+        ArrayAdapter arrayAdapter1_slot_types = new ArrayAdapter(this, R.layout.textview, getResources().getStringArray(R.array.class_type));
         arrayAdapter1_slot_types.setDropDownViewResource(R.layout.textview);
         sp_class_type.setAdapter(arrayAdapter1_slot_types);
         sp_class_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -56,6 +57,12 @@ public class CalendarPreferences extends Activity implements Callback {
 
             }
         });
+
+        class_type_from_pref = StorageHelper.getClassTypePreference(CalendarPreferences.this);
+        if(class_type_from_pref != -1){
+            sp_class_type.setSelection(class_type_from_pref);
+        }
+
 
         listeners();
 

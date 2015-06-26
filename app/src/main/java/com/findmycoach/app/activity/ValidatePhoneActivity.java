@@ -48,7 +48,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     public static ValidatePhoneActivity validatePhoneActivity;
 
     private static final String TAG = "FMC";
-    private String from=null;
+    private String from = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
 
         validatePhoneActivity = this;
 
-        from=getIntent().getStringExtra("from");
+        from = getIntent().getStringExtra("from");
         /** Getting user group of user, logout and close if user group not present **/
         try {
             user_group = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
@@ -80,12 +80,13 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         validatePhoneActivity = null;
     }
 
-    public void getOtpFromMsg(String OTP){
-        if(OTP.length() == 6 && verificationCode != null){
+    public void getOtpFromMsg(String OTP) {
+        if (OTP.length() == 6 && verificationCode != null) {
             verificationCode.setText(OTP);
-            try{
+            try {
                 sendVerificationCode();
-            }catch (Exception ignored){}
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -185,13 +186,12 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
 
         /** Entered OTP is verified successful */
         else if (calledApiValue == 27) {
-            if(response.getData() == null){
-                Toast toast =  Toast.makeText(ValidatePhoneActivity.this, response.getMessage(), Toast.LENGTH_LONG);
+            if (response.getData() == null) {
+                Toast toast = Toast.makeText(ValidatePhoneActivity.this, response.getMessage(), Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
                 return;
-            }
-            else if (response.getAuthToken() != null && !response.getAuthToken().equals(""))
+            } else if (response.getAuthToken() != null && !response.getAuthToken().equals(""))
                 saveUser(response.getAuthToken(), response.getData().getId());
         }
 
@@ -203,14 +203,12 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         /** If newly registered user is mentee then open PaymentDetail Activity for getting card details */
         if (user_group == 2) {
             Log.e(TAG, "User group");
-            Log.d(TAG,"user_group and payment initiate :"+user_group);
-            Log.d(TAG,"Launched from : "+from);
+            Log.d(TAG, "user_group and payment initiate :" + user_group);
+            Log.d(TAG, "Launched from : " + from);
             if (from == null || !from.equals("ChangePhoneNoFragment")) {
                 Log.e(TAG, "DashBoard if");
                 startActivity(new Intent(this, PaymentDetailsActivity.class));
             }
-
-
         }
     }
 
