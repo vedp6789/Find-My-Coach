@@ -43,10 +43,10 @@
                         android:layout_height="@dimen/indicator"
                         android:layout_gravity="center_horizontal|bottom"
                         android:background="@color/purple"
-                        android:textColor="@color/white"
+                        android:padding="@dimen/days_margin"
                         android:text="@string/add_photo"
-                        android:textSize="@dimen/profile_add_photo"
-                        android:padding="@dimen/days_margin" />
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/profile_add_photo" />
 
                 </FrameLayout>
 
@@ -84,10 +84,10 @@
 
                 <com.findmycoach.app.views.ChizzleEditText
                     android:id="@+id/input_last_name"
-                    android:layout_marginTop="@dimen/back_margin"
                     style="@style/EditTextCustomHoloPurple"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/back_margin"
                     android:hint="@string/prompt_last_name"
                     android:inputType="textCapSentences|textNoSuggestions|textCapWords"
                     android:singleLine="true"
@@ -161,6 +161,7 @@
                     android:id="@+id/input_date_of_birth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/calender_margin"
                     android:layout_marginTop="@dimen/textView_padding_margin"
                     android:onClick="setDate"
                     android:textColor="@color/purple"
@@ -335,6 +336,7 @@
                         android:id="@+id/input_areas_of_coaching"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/calender_margin"
                         android:layout_marginTop="@dimen/textView_padding_margin"
                         android:hint="Click Here"
                         android:inputType="number"
