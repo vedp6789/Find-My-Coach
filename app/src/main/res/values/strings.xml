@@ -9,6 +9,13 @@
         <item>Group</item>
     </string-array>
 
+    <string-array name="class_type">
+        <item>All</item>
+        <item>Individual</item>
+        <item>Group</item>
+    </string-array>
+
+
     <string-array name="mentor_for">
         <item>Self</item>
         <item>Child</item>

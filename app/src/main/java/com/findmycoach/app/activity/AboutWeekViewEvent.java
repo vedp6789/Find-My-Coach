@@ -56,11 +56,6 @@ public class AboutWeekViewEvent extends Activity implements Callback {
     ArrayList<Vacation> coinciding_vacations;
     Vacation non_coinciding_vacation;
     MentorInfo mentorInfo;
-    Bundle bundle;
-    private String for_which_event = null;
-    ProgressDialog progressDialog;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,6 +217,11 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 break;
         }
     }
+    Bundle bundle;
+    private String for_which_event = null;
+
+
+    ProgressDialog progressDialog;
 
     private void init2() {
         tv_name = (TextView) findViewById(R.id.tv_name_val);
