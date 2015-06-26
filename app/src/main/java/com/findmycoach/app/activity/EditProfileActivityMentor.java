@@ -603,12 +603,6 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                 dobYear = 0;
             }
 
-            if (dobYear > 0 && (Calendar.getInstance().get(Calendar.YEAR) - (dobYear) < 19)) {
-                isValid = false;
-                Toast.makeText(this, getResources().getString(R.string.age_review_message), Toast.LENGTH_LONG).show();
-                isDobForReview = true;
-            }
-
             int yearsOfExperience = experienceInput.getSelectedItemPosition();
             int age = Calendar.getInstance().get(Calendar.YEAR) - dobYear;
             int minExperience = getResources().getInteger(R.integer.mentor_min_age_experience_difference);
@@ -617,6 +611,9 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             if(dobYear > 0 && age - yearsOfExperience < minExperience){
                 Toast.makeText(this, getResources().getString(R.string.age_experience_message),Toast.LENGTH_LONG).show();
                 isValid = false;
+            }else if (dobYear > 0 && (Calendar.getInstance().get(Calendar.YEAR) - (dobYear) < 19)) {
+                Toast.makeText(this, getResources().getString(R.string.age_review_message), Toast.LENGTH_LONG).show();
+                isDobForReview = true;
             }
         }
 
