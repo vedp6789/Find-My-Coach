@@ -74,8 +74,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private int retryFbLogin;
     public LoginButton actionFacebook;
     public ImageButton mSignInButton;
-    private
-    boolean isOpened;
 
     /**
      * Related to G+
@@ -394,11 +392,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 session.closeAndClearTokenInformation();
             }
         }
-//        else {
-//            session = new Session(this);
-//            Session.setActiveSession(session);
-//            session.closeAndClearTokenInformation();
-//        }
     }
 
     /**
@@ -873,19 +866,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                     sub_category_stringSet.add(sub_category_list.get(i));
                 }
                 StorageHelper.storeListOfCoachingSubCategories(LoginActivity.this, sub_category_stringSet);
-
-
-            /*try{
-                Log.d(TAG,"set size: "+sub_category_stringSet.size());
-                Iterator<String> stringIterator=sub_category_stringSet.iterator();
-                while(stringIterator.hasNext()){
-                    Log.d(TAG,"set test"+stringIterator.next());
-
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-*/
             }
         } catch (Exception ignored) {
         }
@@ -969,10 +949,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             mGoogleApiClient.disconnect();
             mGoogleApiClient.connect();
         }
-
-        /** Restarting the LoginActivity */
-//        finish();
-//        startActivity(new Intent(LoginActivity.this, LoginActivity.class));
     }
 
 }
