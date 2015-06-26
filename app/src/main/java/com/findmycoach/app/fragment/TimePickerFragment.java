@@ -12,14 +12,27 @@ import java.util.List;
 /**
  * Created by prem on 9/3/15.
  */
-public class TimePickerFragment extends TimePickerDialog  {
+public class TimePickerFragment extends TimePickerDialog implements TimePicker.OnTimeChangedListener {
 
     private final static int TIME_PICKER_INTERVAL = 15;
+    public boolean isMinTimeEnabled;
+    private int minHour, minMinute;
 
     public TimePickerFragment(Context context, OnTimeSetListener callBack, int hourOfDay, int minute, boolean is24HourView) {
         super(context, callBack, hourOfDay, minute, is24HourView);
+        isMinTimeEnabled = false;
+        this.minHour = hourOfDay;
+        this.minMinute = minute;
     }
 
+    @Override
+    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+        if(isMinTimeEnabled){
+            if (hourOfDay < minHour || (hourOfDay == minHour && minute < minMinute)){
+                updateTime(minHour, minMinute);
+            }
+        }
+    }
 
     @Override
     public void onAttachedToWindow() {

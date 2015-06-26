@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
@@ -101,7 +102,42 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         user_group = getIntent().getIntExtra("user_group", 3);
         if(user_group == 2)
             radioButton_mentee_signup.setChecked(true);
+
+        firstNameInput.setOnTouchListener(onTouchListener);
+        lastNameInput.setOnTouchListener(onTouchListener);
+        countryCodeTV.setOnTouchListener(onTouchListener);
+        phoneNumberInput.setOnTouchListener(onTouchListener);
+        emailInput.setOnTouchListener(onTouchListener);
+        passwordInput.setOnTouchListener(onTouchListener);
+        confirmPasswordInput.setOnTouchListener(onTouchListener);
+
+        firstNameInput.setOnFocusChangeListener(onFocusChangeListener);
+        lastNameInput.setOnFocusChangeListener(onFocusChangeListener);
+        countryCodeTV.setOnFocusChangeListener(onFocusChangeListener);
+        phoneNumberInput.setOnFocusChangeListener(onFocusChangeListener);
+        emailInput.setOnFocusChangeListener(onFocusChangeListener);
+        passwordInput.setOnFocusChangeListener(onFocusChangeListener);
+        confirmPasswordInput.setOnFocusChangeListener(onFocusChangeListener);
     }
+
+    /**
+     * Clear error from edit text when focused or on touch
+     */
+    View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus)
+                ((TextView) v).setError(null);
+        }
+    };
+
+    View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            ((TextView) v).setError(null);
+            return false;
+        }
+    };
 
     @Override
     public void onClick(View v) {

@@ -443,8 +443,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         fragmentView.findViewById(R.id.fromTime).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                int hour = c.get(Calendar.HOUR_OF_DAY);
+                int min = getSettingMinute(c.get(Calendar.MINUTE));
+                if (min == 0)
+                    hour++;
+
                 TimePickerFragment timePicker = new TimePickerFragment(getActivity(),
-                        HomeFragment.this, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),
+                        HomeFragment.this, hour,min ,
                         false);
                 textView = fromTimingInput;
                 timePicker.show();
@@ -454,14 +460,34 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         fragmentView.findViewById(R.id.toTime).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int hour = c.get(Calendar.HOUR_OF_DAY);
+
+                int hour = Integer.parseInt(fromTimingInput.getText().toString().split(" ")[1]
+                        .split(":")[0]);
+                if(fromTimingInput.getText().toString().contains("PM"))
+                    hour = hour + 12;
+                int min = getSettingMinute((Integer.parseInt(fromTimingInput.getText().toString()
+                        .split(" ")[1].split(":")[0])) + 14);
+                if (min == 0)
+                    hour++;
+
                 TimePickerFragment timePicker = new TimePickerFragment(getActivity(),
-                        HomeFragment.this, ++hour, c.get(Calendar.MINUTE), false);
+                        HomeFragment.this, hour, min, false);
                 textView = toTimingInput;
+                timePicker.isMinTimeEnabled = true;
                 timePicker.show();
             }
         });
 
+    }
+
+    private int getSettingMinute(int i) {
+        if (i < 16)
+            return 1;
+        else if (i < 31)
+            return 2;
+        else if (i < 46)
+            return 3;
+        return 0;
     }
 
     private void getSelectedButtons() {
@@ -722,6 +748,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             textView.setText(" " + (hour < 10 ? ("0" + hour) : hour) + ":" + min
                     + (hourOfDay > 11 ? " PM" : " AM"));
             textView.setTag(textView.getId(), hourOfDay + ":" + min);
+
+            if(textView == fromTimingInput){
+                int hour1 = Integer.parseInt(fromTimingInput.getText().toString().split(" ")[1]
+                        .split(":")[0]);
+                if(fromTimingInput.getText().toString().contains("PM"))
+                    hour1 = hour1 + 12;
+                int min1 = getSettingMinute((Integer.parseInt(fromTimingInput.getText().toString()
+                        .split(" ")[1].split(":")[0])) + 14);
+                if (min1 == 0)
+                    hour1++;
+
+                textView = toTimingInput;
+                onTimeSet(null, hour1, min1);
+            }
+
             textView = null;
         }
     }

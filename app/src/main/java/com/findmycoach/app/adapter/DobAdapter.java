@@ -47,8 +47,13 @@ public class DobAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = layoutInflater.inflate(R.layout.button_dob, null);
+        View v = convertView;
+
+        if (v == null) {
+            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            v = layoutInflater.inflate(R.layout.button_dob, null);
+        }
+
         final Button button = (Button) v.findViewById(R.id.button);
         button.setTextSize(11f);
         button.setTypeface(null, Typeface.BOLD);

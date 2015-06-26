@@ -9,10 +9,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
-import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -74,6 +74,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private int retryFbLogin;
     public LoginButton actionFacebook;
     public ImageButton mSignInButton;
+    private
+    boolean isOpened;
 
     /**
      * Related to G+
@@ -184,7 +186,31 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 return false;
             }
         });
+
+        inputUserName.setOnTouchListener(onTouchListener);
+        inputPassword.setOnTouchListener(onTouchListener);
+        inputUserName.setOnFocusChangeListener(onFocusChangeListener);
+        inputPassword.setOnFocusChangeListener(onFocusChangeListener);
     }
+
+    /**
+     * Clear error from edit text when focused or on touch
+     */
+    View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus)
+                ((TextView) v).setError(null);
+        }
+    };
+
+    View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            ((TextView) v).setError(null);
+            return false;
+        }
+    };
 
     @Override
     public void onClick(View v) {
@@ -233,6 +259,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
      * Called when user clicks the generic login button
      */
     private void logIn() {
+
         String userId = inputUserName.getText().toString();              /** Getting user's email id */
         String userPassword = inputPassword.getText().toString();        /** Getting entered password */
         boolean isFormValid = validateLoginForm(userId, userPassword);
@@ -288,12 +315,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
      */
     private void showErrorMessage(final EditText editText, String errorMessage) {
         editText.setError(errorMessage);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                editText.setError(null);
-            }
-        }, 3500);
     }
 
 
@@ -420,6 +441,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.email_id_dialog);
         final EditText emailET = (EditText) dialog.findViewById(R.id.emailEditText);
+        emailET.setOnTouchListener(onTouchListener);
+        emailET.setOnFocusChangeListener(onFocusChangeListener);
 
         /** Ok button clicked */
         dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
@@ -438,12 +461,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 /** If email is null or invalid */
                 if (email.equals("") || !isValid) {
                     emailET.setError(getResources().getString(R.string.enter_valid_email));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            emailET.setError(null);
-                        }
-                    }, 3500);
                 }
 
                 /** email is correct */
@@ -663,9 +680,13 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.phone_number_dialog);
         countryCodeTV = (TextView) dialog.findViewById(R.id.countryCodeTV);
+        countryCodeTV.setOnTouchListener(onTouchListener);
+        countryCodeTV.setOnFocusChangeListener(onFocusChangeListener);
         countryCodeTV.setText(getCountryZipCode());
         countryCodeTV.setOnClickListener(this);
         final EditText phoneEditText = (EditText) dialog.findViewById(R.id.phoneEditText);
+        phoneEditText.setOnTouchListener(onTouchListener);
+        phoneEditText.setOnFocusChangeListener(onFocusChangeListener);
 
         /** Ok button clicked */
         dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
@@ -676,23 +697,12 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 /** If phone number is null */
                 if (phnNum.equals("") || phnNum.length() < 8) {
                     phoneEditText.setError(getResources().getString(R.string.enter_valid_phone_no));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            phoneEditText.setError(null);
-                        }
-                    }, 3500);
+
                 }
 
                 /** if country code is not update automatically or not selected */
                 else if (countryCodeTV.getText().toString().trim().equals("Select")) {
                     countryCodeTV.setError(getResources().getString(R.string.select_country_code));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            countryCodeTV.setError(null);
-                        }
-                    }, 3500);
                 }
 
                 /** Phone number is provided with country code, updating user's phone number in server */

@@ -35,4 +35,9 @@
     <!-- Splash screen duration -->
     <integer name="splash_screen_hold_duration">3000</integer>
 
+    <!--Minimum year for DOB dialog-->
+    <integer name="starting_year">1941</integer>
+    <integer name="mentee_min_age">10</integer>
+    <integer name="mentor_min_age">16</integer>
+
 </resources>
