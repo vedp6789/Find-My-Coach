@@ -164,7 +164,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
 
         /*
-        * IN CASE OF GROUP SLOT_TYPE THERE IS NO NEED TO TAKE ADDRESS FROM USERS AS IT IS ASSUMED THAT GROUP CLASS WILL BE SCHEDULED AT MENTOR'S ADDRESS
+        * IN CASE OF GROUP SLOT_TYPE, THERE IS NO NEED TO TAKE ADDRESS FROM USERS AS IT IS ASSUMED THAT GROUP CLASS WILL BE SCHEDULED AT MENTOR'S ADDRESS
         *
         *
         *
@@ -242,7 +242,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         Log.d(TAG, "mentor availability : " + bundle.getString("mentor_availability"));
 
-        /* Here i'm checking whether the current date is ahead of class start time or not , If ahead then this mentee's class schedule will start from the current date */
+
         Calendar cal = Calendar.getInstance();
         cal.set(slot_start_year, slot_start_month - 1, slot_start_day);
         long slot_start_date = cal.getTimeInMillis();
@@ -300,7 +300,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         Log.d(TAG, "schedule stop date and millis: " + slot_stop_year + "/" + slot_stop_month + "/" + slot_stop_day + " millis: " + stop_date_of_this_class_in_millis);
 
 
-
         Calendar calendar_temp_start_date = Calendar.getInstance();
         calendar_temp_start_date = (Calendar) calendar_schedule_start_date.clone();
         Log.d(TAG, "schedule start temp clone date and millis: " + calendar_temp_start_date.get(Calendar.YEAR) + "/" + calendar_temp_start_date.get(Calendar.MONTH) + "/" + calendar_temp_start_date.get(Calendar.DAY_OF_MONTH) + " millis: " + start_date_of_this_class_millis);
@@ -308,25 +307,22 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         Log.d(TAG, "schedule start date " + calendar_schedule_start_date.get(Calendar.YEAR) + "/" + calendar_schedule_start_date.get(Calendar.MONTH) + 1 + "/" + calendar_schedule_start_date.get(Calendar.DAY_OF_MONTH));
 
 
-
-
 /*********************************************** Below two instances are just used to count no of possible class within class start and class end**************************************************************/
         Calendar calendar_schedule_start_date2 = Calendar.getInstance();    /* Possible start date of this class */
         calendar_schedule_start_date2 = (Calendar) calendar_schedule_start_date.clone();
 
 
-
         Calendar calendar_stop_date_of_schedule2 = Calendar.getInstance();
-        calendar_stop_date_of_schedule2= (Calendar) calendar_stop_date_of_schedule.clone();
+        calendar_stop_date_of_schedule2 = (Calendar) calendar_stop_date_of_schedule.clone();
 /*************************************************************************************************************************************************************************************************************/
 
-int no_of_possible_classes_without_considering_vacation = new Slot().calculateNoOfTotalClassDays(calendar_schedule_start_date2, calendar_stop_date_of_schedule2, slot_on_week_days).size();
+        int no_of_possible_classes_without_considering_vacation = new Slot().calculateNoOfTotalClassDays(calendar_schedule_start_date2, calendar_stop_date_of_schedule2, slot_on_week_days).size();
         Log.d(TAG, "no of class without considering vacation: " + no_of_possible_classes_without_considering_vacation);
 
         if (no_of_possible_classes_without_considering_vacation > 0) {
 
             if (vacations_on_the_slot.size() > 0) {
-                Log.d(TAG, "parsing slots from vacations size: "+vacations_on_the_slot.size());
+                Log.d(TAG, "parsing slots from vacations size: " + vacations_on_the_slot.size());
 
                 for (int vacation_no = 0; vacation_no < vacations_on_the_slot.size(); vacation_no++) {
 
@@ -379,7 +375,7 @@ int no_of_possible_classes_without_considering_vacation = new Slot().calculateNo
                 /* after the completion of for loop it means all vacation are traversed, and after this if calendar_temp_start_date is behind stop date of calendar_stop_date_schedule then we have to check for this period of time for possible classes*/
                 if (calendar_temp_start_date.getTimeInMillis() < stop_date_of_this_class_in_millis) {
 
-                    Calendar calendar_temp_start_date3= (Calendar) calendar_temp_start_date.clone();
+                    Calendar calendar_temp_start_date3 = (Calendar) calendar_temp_start_date.clone();
                     int days = new Slot().calculateNoOfTotalClassDays(calendar_temp_start_date3, calendar_stop_date_of_schedule, slot_on_week_days).size();
                     if (days > 0) {
                         class_days_after_reducing_vacation += days;
@@ -423,10 +419,9 @@ int no_of_possible_classes_without_considering_vacation = new Slot().calculateNo
         }
 
 
-
-        for(int i =0 ; i < durationOfSuccessfulClassDayses.size(); i++){
-            DurationOfSuccessfulClassDays durationOfSuccessfulClassDays=durationOfSuccessfulClassDayses.get(i);
-            Log.d(TAG," Class start_date: "+durationOfSuccessfulClassDays.getStart_date()+" Class stop date: "+ durationOfSuccessfulClassDays.getStop_date());
+        for (int i = 0; i < durationOfSuccessfulClassDayses.size(); i++) {
+            DurationOfSuccessfulClassDays durationOfSuccessfulClassDays = durationOfSuccessfulClassDayses.get(i);
+            Log.d(TAG, " Class start_date: " + durationOfSuccessfulClassDays.getStart_date() + " Class stop date: " + durationOfSuccessfulClassDays.getStop_date());
         }
 
 
@@ -679,9 +674,9 @@ int no_of_possible_classes_without_considering_vacation = new Slot().calculateNo
         StringBuilder stringBuilder = new StringBuilder();
         for (int vacation_no = 0; vacation_no < vacations_on_the_slot.size(); vacation_no++) {
             Vacation vacation = vacations_on_the_slot.get(vacation_no);
-            int number= vacation_no+1;
+            int number = vacation_no + 1;
             if (vacation_no == 0)
-                stringBuilder.append("Vacation " +number  + ": " +
+                stringBuilder.append("Vacation " + number + ": " +
                         String.format("%02d-%02d-%d - %02d-%02d-%d",
                                 Integer.parseInt(vacation.getStart_date().split("-")[2]),
                                 Integer.parseInt(vacation.getStart_date().split("-")[1]),

@@ -606,6 +606,7 @@
     <string name="start_date_and_end_date_please">Please fill start date and end date of this vacation.</string>
     <string name="start_date_please">Please fill start date of this vacation.</string>
     <string name="end_date_please">Please fill end date of this vacation.</string>
+    <string name="class_not_possible">Not possible to schedule as slot expires today!</string>
 
 
 

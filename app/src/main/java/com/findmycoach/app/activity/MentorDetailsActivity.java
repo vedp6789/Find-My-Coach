@@ -37,6 +37,7 @@ import com.findmycoach.app.beans.CalendarSchedule.Vacation;
 import com.findmycoach.app.beans.mentor.Data;
 import com.findmycoach.app.beans.mentor.Response;
 import com.findmycoach.app.fragment.CustomDatePickerFragment;
+import com.findmycoach.app.fragment.DatePickerFragment;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
@@ -110,6 +111,11 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private String prev_month_requested_date;
     private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mentorDetailsActivity = null;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +152,18 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         tv_currentMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+                DatePickerFragment datePickerDialog = new DatePickerFragment();
+                datePickerDialog.textView =tv_currentMonth;
+                Bundle bundle = new Bundle();
+                bundle.putString("for", "MentorDetailsActivity");
+                datePickerDialog.setArguments(bundle);
+                datePickerDialog.show(getFragmentManager(), "monthPicker");
+                month_from_dialog = 0;
+                year_from_dialog = 0;
+
+
+
+/*                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
                 CustomDatePickerFragment customDatePickerFragment = new CustomDatePickerFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("for", "MentorDetailsActivity");
@@ -154,7 +171,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
                 customDatePickerFragment.show(fragmentManager, null);
                 month_from_dialog = 0;
-                year_from_dialog = 0;
+                year_from_dialog = 0;*/
             }
         });
 

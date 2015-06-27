@@ -117,6 +117,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         populate_calendar_from_adapter = false;
     }
 
+
+
     /* Get Calendar current instance*/
     void startPointForCalendar() {
         _calendar = Calendar.getInstance(Locale.getDefault());
@@ -192,6 +194,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         } else {
             month = month_from_dialog;  /* CustomDatePicketFragment is assigning value to month_from_dailog and year_from_dialog*/
             year = year_from_dialog;
+            month_from_dialog = 0;
+            year_from_dialog = 0;
             currentMonth.setText(getResources().getStringArray(R.array.months)[month - 1] + " " + year);
         }
 
@@ -360,6 +364,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         } else {
             month = month_from_dialog;
             year = year_from_dialog;
+            month_from_dialog = 0;
+            year_from_dialog =0;
             currentMonth.setText(getResources().getStringArray(R.array.months)[month - 1] + " " + year);
         }
 
@@ -594,7 +600,6 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     }
                 }
 
-                Toast.makeText(getActivity(), "You are alrcalendar related to current month!", Toast.LENGTH_SHORT).show();
 
             }
 

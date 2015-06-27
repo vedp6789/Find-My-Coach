@@ -11,7 +11,9 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.MentorDetailsActivity;
 import com.findmycoach.app.activity.PaymentDetailsActivity;
+import com.findmycoach.app.util.StorageHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,13 +68,34 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
                 else
                     PaymentDetailsActivity.inputCardExpiry.setText((month + 1) + " - " + year);
             } else {
-                MyScheduleFragment.month_from_dialog = month + 1;
-                MyScheduleFragment.year_from_dialog = year;
-                if (mon != null)
-                    textView.setText(mon + " " + year);
-                else
-                    textView.setText((month + 1) + " " + year);
-                MyScheduleFragment.myScheduleFragment.getCalendarDetailsForMentee();
+                if(for_which_activity.equals("MyScheduleFragment")){
+                    MyScheduleFragment.month_from_dialog = month + 1;
+                    MyScheduleFragment.year_from_dialog = year;
+                    if (mon != null)
+                        textView.setText(mon + " " + year);
+                    else
+                        textView.setText((month + 1) + " " + year);
+                    if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")) {
+                        MyScheduleFragment.myScheduleFragment.getCalendarDetailsForMentee();
+                    }
+                    else {
+                        MyScheduleFragment.myScheduleFragment.getCalendarDetailsAPICall();
+                    }
+                }else{
+                    if(for_which_activity.equals("MentorDetailsActivity")){
+                        MentorDetailsActivity.month_from_dialog = month + 1;
+                        MentorDetailsActivity.year_from_dialog = year;
+                        if (mon != null)
+                            textView.setText(mon + " " + year);
+                        else
+                            textView.setText((month + 1) + " " + year);
+                    }
+                    if(MentorDetailsActivity.mentorDetailsActivity != null){
+                        MentorDetailsActivity.mentorDetailsActivity.getCalendarDetailsAPICall();
+
+                    }
+                }
+
             }
         } catch (Exception ignored) {
         }
