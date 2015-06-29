@@ -635,6 +635,13 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             progressDialog.dismiss();
             ProfileResponse response = (ProfileResponse) object;
             userInfo = response.getData();
+
+            String currencyCode = StorageHelper.getCurrency(this);
+            if (currencyCode == null || currencyCode.equals("")) {
+                StorageHelper.setCurrency(this, userInfo.getCurrencyCode());
+                Log.d(TAG, "Currency code : " + currencyCode);
+            }
+
             Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
             Intent intent = new Intent();
             intent.putExtra("user_info", new Gson().toJson(userInfo));

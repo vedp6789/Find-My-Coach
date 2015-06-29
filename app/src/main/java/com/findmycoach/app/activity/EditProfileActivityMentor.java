@@ -758,6 +758,12 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             userInfo = response.getData();
             Log.d(TAG, "success response message : in EditProfileActivity : " + response.getMessage());
 
+            String currencyCode = StorageHelper.getCurrency(this);
+            if (currencyCode == null || currencyCode.equals("")) {
+                StorageHelper.setCurrency(this, userInfo.getCurrencyCode());
+                Log.d(TAG, "Currency code : " + currencyCode);
+            }
+
             Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
             Intent intent = new Intent();
             intent.putExtra("user_info", new Gson().toJson(userInfo));
