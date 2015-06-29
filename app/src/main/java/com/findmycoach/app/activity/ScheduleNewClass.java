@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -458,7 +459,11 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
 
                 try {
-                    tv_total_charges.setText("\u20B9 " + String.valueOf(total_class_duration_amount));
+                    String currency = StorageHelper.getCurrency(this);
+                    if (currency.equals(""))
+                        tv_total_charges.setText(String.valueOf(total_class_duration_amount));
+                    else
+                        tv_total_charges.setText(Html.fromHtml(currency + " " + String.valueOf(total_class_duration_amount)));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

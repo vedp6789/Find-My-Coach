@@ -16,14 +16,12 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
-import com.findmycoach.app.adapter.AddSlotAdapter;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.fragment.TimePickerFragment;
 import com.findmycoach.app.fragment_mentor.StartDateForVaccationSchedule;
 import com.findmycoach.app.fragment_mentor.StopDateForVacationSchedule;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
-import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.SetDate;
 import com.findmycoach.app.util.SetTime;
 import com.findmycoach.app.util.StorageHelper;
@@ -925,8 +923,8 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
             }
         });
 
-        ScrollableGridView gridView = (ScrollableGridView) findViewById(R.id.calendar);
-        gridView.setAdapter(new AddSlotAdapter(getResources().getStringArray(R.array.week_days_mon), this));
+//        ScrollableGridView gridView = (ScrollableGridView) findViewById(R.id.calendar);
+//        gridView.setAdapter(new AddSlotAdapter(getResources().getStringArray(R.array.week_days_mon), this));
 
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(getResources().getString(R.string.schedule_vacation));

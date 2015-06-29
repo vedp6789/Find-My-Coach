@@ -112,7 +112,11 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
 
         try {
             int charges = user.getChargesClass();
-            chargesTV.setText(charges == 0 ? user.getChargesHour() + "/hr" : charges + "/cl");
+            String currency = StorageHelper.getCurrency(context);
+            if (currency.equals(""))
+                chargesTV.setText(charges == 0 ? user.getChargesHour() + "/hr" : charges + "/cl");
+            else
+                chargesTV.setText(Html.fromHtml(currency + " " + (charges == 0 ? user.getChargesHour() + "/hr" : charges + "/cl")));
         } catch (Exception ignored) {
         }
 

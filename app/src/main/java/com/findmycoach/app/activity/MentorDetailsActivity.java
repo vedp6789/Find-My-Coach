@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.Html;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Display;
@@ -36,7 +37,6 @@ import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.beans.CalendarSchedule.Vacation;
 import com.findmycoach.app.beans.mentor.Data;
 import com.findmycoach.app.beans.mentor.Response;
-import com.findmycoach.app.fragment.CustomDatePickerFragment;
 import com.findmycoach.app.fragment.DatePickerFragment;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
@@ -547,8 +547,13 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         if (userInfo.getCharges() != null) {
             charges = (userInfo.getCharges().equals("0") ? userInfo.getCharges() + " per hour" : userInfo.getCharges() + " per hour");
             Log.d(TAG, "Charges amount : " + charges.split("per", 2)[0] + "charges unit : " + charges.split("per", 2)[1]);
-            profileCharges.setText(charges);
+            String currency = StorageHelper.getCurrency(this);
+            if (currency.equals(""))
+                profileCharges.setText(charges);
+            else
+                profileCharges.setText(Html.fromHtml(currency + " " + charges));
         }
+
         try {
             profileRatting.setRating(Float.parseFloat(userInfo.getRating()));
         } catch (Exception e) {
