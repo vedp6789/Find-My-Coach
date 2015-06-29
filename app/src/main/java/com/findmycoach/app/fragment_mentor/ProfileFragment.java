@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -182,15 +183,19 @@ public class ProfileFragment extends Fragment implements Callback {
         }
         if (userInfo.getExperience() != null) {
             int ex = 0;
-            try{
+            try {
                 ex = Integer.parseInt(userInfo.getExperience());
-            }catch (Exception e){
+            } catch (Exception e) {
                 ex = 0;
             }
             profileExperience.setText(ex > 1 ? ex + " " + getResources().getString(R.string.years) : ex + " " + getResources().getString(R.string.year));
         }
         if (userInfo.getCharges() != null) {
-            profileCharges.setText((userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
+            String currency = StorageHelper.getCurrency(getActivity());
+            if (currency.equals(""))
+                profileCharges.setText((userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
+            else
+                profileCharges.setText(Html.fromHtml(currency + " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr")));
 
         }
 
@@ -207,11 +212,11 @@ public class ProfileFragment extends Fragment implements Callback {
             populateViews(areaOfCoaching, buttons, getActivity());
         }
 
-       try{
-           profileRatting.setRating(Float.parseFloat(userInfo.getRating()));
-       }catch (Exception e){
-           profileRatting.setRating(0f);
-       }
+        try {
+            profileRatting.setRating(Float.parseFloat(userInfo.getRating()));
+        } catch (Exception e) {
+            profileRatting.setRating(0f);
+        }
         LayerDrawable stars = (LayerDrawable) profileRatting.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(getActivity().getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(1).setColorFilter(getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);

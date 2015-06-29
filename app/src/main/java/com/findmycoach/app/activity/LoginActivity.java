@@ -834,6 +834,16 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
 
         try {
+            String currencyCode = StorageHelper.getCurrency(this);
+            if (currencyCode == null || currencyCode.trim().equals("")) {
+                StorageHelper.setCurrency(this, response.getData().getCurrencyCode());
+                Log.d(TAG, "Currency code : " + currencyCode);
+                Log.e(TAG, "Currency code : " + response.getData().getCurrencyCode());
+            }
+        } catch (Exception ignored) {
+        }
+
+        try {
             /** Saving address, city and zip of user */
             if (response.getData() != null && response.getData().getAddress() != null) {
                 StorageHelper.storePreference(this, "user_local_address", (String) response.getData().getAddress());

@@ -91,6 +91,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     private String TAG = "FMC";
     private String newUser;
     private boolean isGettingAddress, isDobForReview;
+    private List<Prediction> predictions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,6 +237,12 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 getPostalFromCity(arrayAdapter.getItem(position));
+                try {
+                    NetworkManager.countryName = predictions.get(position).getCountry();
+                    isGettingAddress = true;
+                } catch (Exception e) {
+                    NetworkManager.countryName = "";
+                }
             }
         });
 
@@ -622,10 +629,10 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             int minExperience = getResources().getInteger(R.integer.mentor_min_age_experience_difference);
 
             Log.e(TAG, yearsOfExperience + " : " + age + " : " + minExperience);
-            if(dobYear > 0 && age - yearsOfExperience < minExperience){
-                Toast.makeText(this, getResources().getString(R.string.age_experience_message),Toast.LENGTH_LONG).show();
+            if (dobYear > 0 && age - yearsOfExperience < minExperience) {
+                Toast.makeText(this, getResources().getString(R.string.age_experience_message), Toast.LENGTH_LONG).show();
                 isValid = false;
-            }else if (dobYear > 0 && (Calendar.getInstance().get(Calendar.YEAR) - (dobYear) < 19)) {
+            } else if (dobYear > 0 && (Calendar.getInstance().get(Calendar.YEAR) - (dobYear) < 19)) {
                 Toast.makeText(this, getResources().getString(R.string.age_review_message), Toast.LENGTH_LONG).show();
                 isDobForReview = true;
             }
@@ -683,7 +690,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
             if (isGettingAddress && NetworkManager.countryName != null && !NetworkManager.countryName.equals("")) {
-                requestParams.add("country", NetworkManager.countryName);
+                requestParams.add("country", NetworkManager.countryName.trim());
                 Log.e(TAG, "Country : " + NetworkManager.countryName);
             }
 
@@ -732,9 +739,9 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
     private void updateAutoSuggestion(Suggestion suggestion) {
         ArrayList<String> list = new ArrayList<String>();
-        List<Prediction> suggestions = suggestion.getPredictions();
-        for (int index = 0; index < suggestions.size(); index++) {
-            list.add(suggestions.get(index).getDescription());
+        predictions = suggestion.getPredictions();
+        for (int index = 0; index < predictions.size(); index++) {
+            list.add(predictions.get(index).getDescription());
         }
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.textview, list);
         profileAddress1.setAdapter(arrayAdapter);
@@ -751,6 +758,12 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             userInfo = response.getData();
             Log.d(TAG, "success response message : in EditProfileActivity : " + response.getMessage());
 
+            String currencyCode = StorageHelper.getCurrency(this);
+            if (currencyCode == null || currencyCode.trim().equals("")) {
+                StorageHelper.setCurrency(this, userInfo.getCurrencyCode());
+                Log.d(TAG, "Currency code : " + currencyCode);
+            }
+
             Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
             Intent intent = new Intent();
             intent.putExtra("user_info", new Gson().toJson(userInfo));
@@ -765,6 +778,8 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
             StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
             StorageHelper.storePreference(this, "user_city_state", profileAddress1.getText().toString());
+            if (isGettingAddress && NetworkManager.countryName != null && !NetworkManager.countryName.equals(""))
+                StorageHelper.storePreference(this, "user_country", NetworkManager.countryName);
             StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
 
 

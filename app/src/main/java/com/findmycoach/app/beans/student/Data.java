@@ -63,6 +63,18 @@ public class Data {
     @SerializedName("connection_status")
     @Expose
     private String connectionStatus;
+    @SerializedName("unicode")
+    @Expose
+    private String currencyCode;
+
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
+    }
+
 
     public String getAvailabilityYn() {
         return availabilityYn;

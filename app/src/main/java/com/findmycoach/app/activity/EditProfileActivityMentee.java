@@ -85,6 +85,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
     private static final String TAG = "FMC";
     private String newUser;
     private boolean isGettingAddress;
+    private List<Prediction> predictions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,6 +218,12 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 city = arrayAdapter.getItem(position).toString();
+                try {
+                    NetworkManager.countryName = predictions.get(position).getCountry();
+                    isGettingAddress = true;
+                } catch (Exception e) {
+                    NetworkManager.countryName = "";
+                }
                 Geocoder geocoder = new Geocoder(EditProfileActivityMentee.this, Locale.getDefault());
                 try {
                     ArrayList<Address> addresses = (ArrayList<Address>) geocoder.getFromLocationName(city.toString(), 1);
@@ -576,9 +583,9 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
             requestParams.add("id", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
             requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+            Log.e(TAG, "Country : " + NetworkManager.countryName);
             if (isGettingAddress && NetworkManager.countryName != null && !NetworkManager.countryName.equals("")) {
-                requestParams.add("country", NetworkManager.countryName);
-                Log.e(TAG, "Country : " + NetworkManager.countryName);
+                requestParams.add("country", NetworkManager.countryName.trim());
             }
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
@@ -611,9 +618,9 @@ public class EditProfileActivityMentee extends Activity implements Callback {
 
     private void updateAutoSuggestion(Suggestion suggestion) {
         ArrayList<String> list = new ArrayList<String>();
-        List<Prediction> suggestions = suggestion.getPredictions();
-        for (int index = 0; index < suggestions.size(); index++) {
-            list.add(suggestions.get(index).getDescription());
+        predictions = suggestion.getPredictions();
+        for (int index = 0; index < predictions.size(); index++) {
+            list.add(predictions.get(index).getDescription());
         }
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.textview, list);
         profileAddress1.setAdapter(arrayAdapter);
@@ -628,6 +635,13 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             progressDialog.dismiss();
             ProfileResponse response = (ProfileResponse) object;
             userInfo = response.getData();
+
+            String currencyCode = StorageHelper.getCurrency(this);
+            if (currencyCode == null || currencyCode.trim().equals("")) {
+                StorageHelper.setCurrency(this, userInfo.getCurrencyCode());
+                Log.d(TAG, "Currency code : " + currencyCode);
+            }
+
             Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
             Intent intent = new Intent();
             intent.putExtra("user_info", new Gson().toJson(userInfo));
