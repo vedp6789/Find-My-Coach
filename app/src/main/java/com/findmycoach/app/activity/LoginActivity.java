@@ -835,9 +835,10 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         try {
             String currencyCode = StorageHelper.getCurrency(this);
-            if (currencyCode == null || currencyCode.equals("")) {
+            if (currencyCode == null || currencyCode.trim().equals("")) {
                 StorageHelper.setCurrency(this, response.getData().getCurrencyCode());
                 Log.d(TAG, "Currency code : " + currencyCode);
+                Log.e(TAG, "Currency code : " + response.getData().getCurrencyCode());
             }
         } catch (Exception ignored) {
         }

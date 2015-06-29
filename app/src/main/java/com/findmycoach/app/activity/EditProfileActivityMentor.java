@@ -690,7 +690,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
             if (isGettingAddress && NetworkManager.countryName != null && !NetworkManager.countryName.equals("")) {
-                requestParams.add("country", NetworkManager.countryName);
+                requestParams.add("country", NetworkManager.countryName.trim());
                 Log.e(TAG, "Country : " + NetworkManager.countryName);
             }
 
@@ -759,7 +759,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             Log.d(TAG, "success response message : in EditProfileActivity : " + response.getMessage());
 
             String currencyCode = StorageHelper.getCurrency(this);
-            if (currencyCode == null || currencyCode.equals("")) {
+            if (currencyCode == null || currencyCode.trim().equals("")) {
                 StorageHelper.setCurrency(this, userInfo.getCurrencyCode());
                 Log.d(TAG, "Currency code : " + currencyCode);
             }

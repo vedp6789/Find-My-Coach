@@ -583,9 +583,9 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
             requestParams.add("id", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
             requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+            Log.e(TAG, "Country : " + NetworkManager.countryName);
             if (isGettingAddress && NetworkManager.countryName != null && !NetworkManager.countryName.equals("")) {
-                requestParams.add("country", NetworkManager.countryName);
-                Log.e(TAG, "Country : " + NetworkManager.countryName);
+                requestParams.add("country", NetworkManager.countryName.trim());
             }
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
@@ -637,7 +637,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             userInfo = response.getData();
 
             String currencyCode = StorageHelper.getCurrency(this);
-            if (currencyCode == null || currencyCode.equals("")) {
+            if (currencyCode == null || currencyCode.trim().equals("")) {
                 StorageHelper.setCurrency(this, userInfo.getCurrencyCode());
                 Log.d(TAG, "Currency code : " + currencyCode);
             }

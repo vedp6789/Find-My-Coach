@@ -27,7 +27,6 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -104,10 +103,10 @@ public class MentorNotificationActions extends Activity implements Callback {
                     public void onClick(View v) {
                         progressDialog.show();
                         RequestParams requestParams = new RequestParams();
-                        requestParams.add("id", StorageHelper.getUserDetails(MentorNotificationActions.this, "user_id"));
+//                        requestParams.add("id", StorageHelper.getUserDetails(MentorNotificationActions.this, "user_id"));
                         String authToken = StorageHelper.getUserDetails(MentorNotificationActions.this, "auth_token");
                         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
-                        requestParams.add("invitee_id", connectionRequest.getId());
+                        requestParams.add("id", connectionRequest.getStudent_id());
                         NetworkClient.getStudentDetails(MentorNotificationActions.this, requestParams, authToken, MentorNotificationActions.this, 25);
                     }
                 });
@@ -247,10 +246,10 @@ public class MentorNotificationActions extends Activity implements Callback {
                     public void onClick(View v) {
                         progressDialog.show();
                         RequestParams requestParams = new RequestParams();
-                        requestParams.add("id", StorageHelper.getUserDetails(MentorNotificationActions.this, "user_id"));
+//                        requestParams.add("id", StorageHelper.getUserDetails(MentorNotificationActions.this, "user_id"));
                         String authToken = StorageHelper.getUserDetails(MentorNotificationActions.this, "auth_token");
                         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
-                        requestParams.add("invitee_id", scheduleRequest.getId());
+                        requestParams.add("id", scheduleRequest.getStudent_id());
                         NetworkClient.getStudentDetails(MentorNotificationActions.this, requestParams, authToken, MentorNotificationActions.this, 25);
                     }
                 });

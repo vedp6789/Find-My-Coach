@@ -666,7 +666,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                 if (day_color[1].equals("CURRENT")) {
                                     gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.a07));
                                 } else {
-                                    gridcell.setBackgroundColor(Color.CYAN);
+                                    gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple_light));
                                 }
                             }
 
@@ -773,7 +773,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                     if (day_color[1].equals("CURRENT")) {
                                         gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.a07));
                                     } else {
-                                        gridcell.setBackgroundColor(Color.CYAN);
+                                        gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple_light));
                                     }
                                 }
 
@@ -847,7 +847,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                 if (day_color[1].equals("CURRENT")) {
                                     gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.a07));
                                 } else {
-                                    gridcell.setBackgroundColor(Color.CYAN);
+                                    gridcell.setBackgroundColor(context.getResources().getColor(R.color.purple_light));
                                 }
                             }
 
