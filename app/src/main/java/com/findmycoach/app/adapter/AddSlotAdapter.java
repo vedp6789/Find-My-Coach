@@ -2,11 +2,13 @@ package com.findmycoach.app.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.AddNewSlotActivity;
@@ -77,18 +79,22 @@ public class AddSlotAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     switch (position) {
                         case 0:
+                            Log.d("FMC","Mon clicked !");
                             addNewSlotActivity.boo_mon_checked = !addNewSlotActivity.boo_mon_checked;
                             updateView(button, addNewSlotActivity.boo_mon_checked);
                             break;
                         case 1:
+                            Log.d("FMC","Tue clicked !");
                             addNewSlotActivity.boo_tue_checked = !addNewSlotActivity.boo_tue_checked;
                             updateView(button, addNewSlotActivity.boo_tue_checked);
                             break;
                         case 2:
+                            Log.d("FMC","Wed clicked !");
                             addNewSlotActivity.boo_wed_checked = !addNewSlotActivity.boo_wed_checked;
                             updateView(button, addNewSlotActivity.boo_wed_checked);
                             break;
                         case 3:
+                            Log.d("FMC","Thur clicked !");
                             addNewSlotActivity.boo_thurs_checked = !addNewSlotActivity.boo_thurs_checked;
                             updateView(button, addNewSlotActivity.boo_thurs_checked);
                             break;
