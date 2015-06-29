@@ -117,7 +117,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         time_to = getResources().getString(R.string.select);
         date_to = getResources().getString(R.string.end_date);
 
-
         from_day = 0;
         from_month = 0;
         from_year = 0;
@@ -148,6 +147,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         } else {
             String user_current_address = DashboardActivity.dashboardActivity.userCurrentAddress;
             if (!user_current_address.equals("")) {
+
 
             } else {
                 et_tutorial_location.setText(user_current_address);
@@ -210,7 +210,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         /* Current date */
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyy");
         String current_date = simpleDateFormat.format(new Date());
-
         date_from = current_date.substring(0, 2) + "-" + current_date.substring(2, 4) + "-" + current_date.substring(4, 8);
         from_day = Integer.parseInt(current_date.substring(0, 2));
         from_month = Integer.parseInt(current_date.substring(2, 4));
@@ -223,23 +222,79 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
     }
 
     private void allListeners() {
+
+
+        findViewById(R.id.fromDate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "On click");
+                FragmentManager fragmentManager = getFragmentManager();
+                StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
+                dateDialogFragment.addNewSlotActivity = AddNewSlotActivity.this;
+                dateDialogFragment.show(fragmentManager, null);
+            }
+        });
+
+        findViewById(R.id.toDate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (tv_start_date.getText().length() > 0) {
+                    FragmentManager fragmentManager = getFragmentManager();
+                    TillDateDialogFragment dateDialogFragment = new TillDateDialogFragment();
+                    dateDialogFragment.addNewSlotActivity = AddNewSlotActivity.this;
+                    dateDialogFragment.show(fragmentManager, null);
+                } else {
+                    Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.from_date_first), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         findViewById(R.id.fromTime).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(tv_till_date.getText().toString().contains("-")){
 
-                isFromTimeSet = true;
+                    Calendar calendar_start_date = Calendar.getInstance();
+                    calendar_start_date.set(Integer.parseInt(tv_start_date.getText().toString().split("-")[2]),
+                            Integer.parseInt(tv_start_date.getText().toString().split("-")[1])-1,
+                            Integer.parseInt(tv_start_date.getText().toString().split("-")[0]));
+                    long start_date_millis = calendar_start_date.getTimeInMillis();
 
-                Calendar c = Calendar.getInstance();
-                int hour = c.get(Calendar.HOUR_OF_DAY);
-                int min = getSettingMinute(c.get(Calendar.MINUTE));
-                if (min == 0)
-                    hour++;
-                TimePickerFragment timePicker = new TimePickerFragment(AddNewSlotActivity.this,
-                        AddNewSlotActivity.this, hour, min, false);
-                timePicker.show();
-//                FragmentManager fragmentManager = getFragmentManager();
-//                StartTimeDialogFragment timeDialogFragment = new StartTimeDialogFragment();
-//                timeDialogFragment.show(fragmentManager, null);
+                    Calendar calendar_stop_date = Calendar.getInstance();
+                    calendar_stop_date.set(Integer.parseInt(tv_till_date.getText().toString().split("-")[2]),
+                            Integer.parseInt(tv_till_date.getText().toString().split("-")[1])-1,
+                            Integer.parseInt(tv_till_date.getText().toString().split("-")[0]));
+                    long end_date_millis = calendar_stop_date.getTimeInMillis();
+
+
+                    isFromTimeSet = true;
+                    Calendar c = Calendar.getInstance();
+                    int hour = c.get(Calendar.HOUR_OF_DAY);
+                    int minute = c.get(Calendar.MINUTE);
+                    int min = getSettingMinute(minute);
+                    if (min == 0)
+                        hour++;
+
+                    if(end_date_millis <= start_date_millis){
+                        // This is possible if user selected start date and end date as same date.
+                        // In this case we have to fix the start time as minimum of current time and if current time is greater 23:45 then on this date mentor cannot be able to take any class as.
+                        if((hour ))
+
+
+                    }else{
+
+                    }
+
+
+
+
+                    TimePickerFragment timePicker = new TimePickerFragment(AddNewSlotActivity.this,
+                            AddNewSlotActivity.this, hour, min, false);
+                    timePicker.show();
+                }else{
+                    Toast.makeText(AddNewSlotActivity.this,getResources().getString(R.string.end_date_required),Toast.LENGTH_SHORT).show();
+                }
+
 
 
             }
@@ -258,46 +313,9 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
                             AddNewSlotActivity.this, hour, min, false);
                     timePicker.isMinTimeEnabled = true;
                     timePicker.show();
-
-//                    FragmentManager fragmentManager = getFragmentManager();
-//                    Bundle bundle = new Bundle();
-//                    bundle.putString("from", "AddNewSlotActivity");
-//                    bundle.putString("hour", String.valueOf(start_hour));
-//                    bundle.putString("minute", String.valueOf(start_min));
-//                    StopTimeDialogFragment timeDialogFragment = new StopTimeDialogFragment();
-//                    timeDialogFragment.setSetTime(AddNewSlotActivity.this);
-//                    timeDialogFragment.setArguments(bundle);
-//                    timeDialogFragment.show(fragmentManager, null);
                 } else {
                     Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.start_time_first), Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
-
-        findViewById(R.id.fromDate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "On click");
-                FragmentManager fragmentManager = getFragmentManager();
-                StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
-                dateDialogFragment.addNewSlotActivity = AddNewSlotActivity.this;
-                dateDialogFragment.show(fragmentManager, null);
-
-            }
-        });
-
-        findViewById(R.id.toDate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (tv_start_date.getText().length() > 0) {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    TillDateDialogFragment dateDialogFragment = new TillDateDialogFragment();
-                    dateDialogFragment.addNewSlotActivity = AddNewSlotActivity.this;
-                    dateDialogFragment.show(fragmentManager, null);
-                } else {
-                    Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.from_date_first), Toast.LENGTH_SHORT).show();
-                }
-
             }
         });
 
@@ -1568,7 +1586,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
             displayTime(tv_stop_time, hourOfDay, minute);
             stop_hour = hourOfDay;
             stop_min = getMinute(minute);
-            time_to =  hourOfDay + ":" + minute;
+            time_to = hourOfDay + ":" + minute;
         }
 
     }

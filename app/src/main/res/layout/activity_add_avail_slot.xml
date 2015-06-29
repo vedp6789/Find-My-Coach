@@ -19,45 +19,95 @@
             android:layout_height="wrap_content">
 
             <com.findmycoach.app.views.ChizzleTextView
-                android:id="@+id/tv_days"
+                android:id="@+id/chooseDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/back_margin"
                 android:gravity="center"
-                android:text="@string/select_days"
+                android:text="@string/choose_date"
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_name" />
 
-            <com.findmycoach.app.views.ChizzleTextView
-                android:id="@+id/upperLine"
+            <LinearLayout
+                android:id="@+id/date"
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_below="@+id/tv_days"
-                android:background="@color/purple_light" />
+                android:layout_height="@dimen/days_button_height"
+                android:layout_below="@+id/chooseDate"
+                android:layout_marginLeft="@dimen/days_margin"
+                android:layout_marginRight="@dimen/days_margin"
+                android:orientation="horizontal"
+                android:weightSum="4">
 
-            <com.findmycoach.app.util.ScrollableGridView
-                android:id="@+id/calendar"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/upperLine"
-                android:background="@color/purple_light"
-                android:horizontalSpacing="0.5dp"
-                android:numColumns="7"
-                android:verticalSpacing="0.5dp" />
+                <LinearLayout
+                    android:id="@+id/fromDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/custom_button_click_white_bg"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/textView_padding_margin">
+
+                    <com.findmycoach.app.views.ChizzleTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/textView_padding_margin"
+                        android:text="@string/from"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <com.findmycoach.app.views.ChizzleTextView
+                        android:id="@+id/tv_slot_start_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/start_date"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/toDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/custom_button_click_white_bg"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/textView_padding_margin">
+
+                    <com.findmycoach.app.views.ChizzleTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/textView_padding_margin"
+                        android:text="@string/to"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <com.findmycoach.app.views.ChizzleTextView
+                        android:id="@+id/tv_slot_till_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/end_date"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
 
 
-            <com.findmycoach.app.views.ChizzleTextView
-                android:id="@+id/lowerLine"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_below="@+id/calendar"
-                android:background="@color/purple_light" />
+                </LinearLayout>
+            </LinearLayout>
+
 
             <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/chooseTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/lowerLine"
+                android:layout_below="@+id/date"
                 android:layout_margin="@dimen/back_margin"
                 android:gravity="center"
                 android:text="@string/choose_time"
@@ -142,96 +192,52 @@
                 </LinearLayout>
             </LinearLayout>
 
+
+
+
             <com.findmycoach.app.views.ChizzleTextView
-                android:id="@+id/chooseDate"
+                android:id="@+id/tv_days"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/time"
                 android:layout_margin="@dimen/back_margin"
+                android:layout_below="@+id/time"
                 android:gravity="center"
-                android:text="@string/choose_date"
+                android:text="@string/select_days"
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_name" />
 
-            <LinearLayout
-                android:id="@+id/date"
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/upperLine"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/days_button_height"
-                android:layout_below="@+id/chooseDate"
-                android:layout_marginLeft="@dimen/days_margin"
-                android:layout_marginRight="@dimen/days_margin"
-                android:orientation="horizontal"
-                android:weightSum="4">
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/tv_days"
+                android:background="@color/purple_light" />
 
-                <LinearLayout
-                    android:id="@+id/fromDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginRight="2dp"
-                    android:layout_weight="2"
-                    android:background="@drawable/custom_button_click_white_bg"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/textView_padding_margin">
-
-                    <com.findmycoach.app.views.ChizzleTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/textView_padding_margin"
-                        android:text="@string/from"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <com.findmycoach.app.views.ChizzleTextView
-                        android:id="@+id/tv_slot_start_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/start_date"
-                        android:singleLine="true"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/toDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="8dp"
-                    android:layout_weight="2"
-                    android:background="@drawable/custom_button_click_white_bg"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/textView_padding_margin">
-
-                    <com.findmycoach.app.views.ChizzleTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/textView_padding_margin"
-                        android:text="@string/to"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <com.findmycoach.app.views.ChizzleTextView
-                        android:id="@+id/tv_slot_till_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/end_date"
-                        android:singleLine="true"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
+            <com.findmycoach.app.util.ScrollableGridView
+                android:id="@+id/calendar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/upperLine"
+                android:background="@color/purple_light"
+                android:horizontalSpacing="0.5dp"
+                android:numColumns="7"
+                android:verticalSpacing="0.5dp" />
 
 
-                </LinearLayout>
-            </LinearLayout>
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/lowerLine"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/calendar"
+                android:background="@color/purple_light" />
+
+
 
             <LinearLayout
                 android:id="@+id/ll_subject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/date"
+                android:layout_below="@+id/lowerLine"
                 android:layout_margin="@dimen/back_margin"
                 android:orientation="horizontal">
 
