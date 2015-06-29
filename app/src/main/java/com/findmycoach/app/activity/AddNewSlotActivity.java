@@ -254,21 +254,21 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
 
                     Calendar calendar_right_now = Calendar.getInstance();
                     long current_date_millis = calendar_right_now.getTimeInMillis();
-                    Log.d(TAG,"current date millis: "+current_date_millis);
+                    Log.d(TAG, "current date millis: " + current_date_millis);
 
                     Calendar calendar_start_date = Calendar.getInstance();
                     calendar_start_date.set(Integer.parseInt(tv_start_date.getText().toString().split("-")[2]),
                             Integer.parseInt(tv_start_date.getText().toString().split("-")[1]) - 1,
                             Integer.parseInt(tv_start_date.getText().toString().split("-")[0]));
                     long start_date_millis = calendar_start_date.getTimeInMillis();
-                    Log.d(TAG,"start date millis: "+start_date_millis);
+                    Log.d(TAG, "start date millis: " + start_date_millis);
 
                     Calendar calendar_stop_date = Calendar.getInstance();
                     calendar_stop_date.set(Integer.parseInt(tv_till_date.getText().toString().split("-")[2]),
                             Integer.parseInt(tv_till_date.getText().toString().split("-")[1]) - 1,
                             Integer.parseInt(tv_till_date.getText().toString().split("-")[0]));
                     long end_date_millis = calendar_stop_date.getTimeInMillis();
-                    Log.d(TAG,"stop date millis: "+end_date_millis);
+                    Log.d(TAG, "stop date millis: " + end_date_millis);
 
                     isFromTimeSet = true;
                     Calendar c = Calendar.getInstance();
@@ -296,7 +296,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
                             }
 
 
-                        }else{
+                        } else {
                             TimePickerFragment timePicker = new TimePickerFragment(AddNewSlotActivity.this,
                                     AddNewSlotActivity.this, hour, min, false);
                             timePicker.show();
@@ -332,9 +332,9 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
             @Override
             public void onClick(View v) {
                 if (tv_start_time.getText().length() > 0) {
-                    Log.d(TAG,"start_hour"+start_hour+"start_min: "+start_min);
+                    Log.d(TAG, "start_hour" + start_hour + "start_min: " + start_min);
                     if (start_hour == 23 && start_min == 45) {
-                        Log.d(TAG,"start_hour"+start_hour+"start_min: "+start_min);
+                        Log.d(TAG, "start_hour" + start_hour + "start_min: " + start_min);
                         Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.end_time_cannot_be_grater_the_24), Toast.LENGTH_SHORT).show();
                     } else {
                         isFromTimeSet = false;
@@ -1130,10 +1130,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
                             Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_end_time), Toast.LENGTH_SHORT).show();
                             return false;
                         }
-
-
                     }
-
                 }
                 return false;
             } else {
@@ -1516,6 +1513,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         AddNewSlotActivity.tv_till_date.setText("");
         tv_start_time.setText("");
         tv_stop_time.setText("");
+        time_from=getResources().getString(R.string.select);
+        time_to=getResources().getString(R.string.select);
     }
 
 
@@ -1545,20 +1544,22 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         Log.d(TAG, "till date:" + stringBuilder.toString());
         AddNewSlotActivity.tv_till_date.setText(stringBuilder.toString());
         tv_start_time.setText("");
-        tv_stop_time.setText("");
+
+        time_from=getResources().getString(R.string.select);
+        time_to=getResources().getString(R.string.select);
 
         Calendar cal_slot_start_date = Calendar.getInstance();
-        cal_slot_start_date.set(Integer.parseInt(AddNewSlotActivity.tv_start_date.getText().toString().split("-")[2]),Integer.parseInt(AddNewSlotActivity.tv_start_date.getText().toString().split("-")[1])-1,Integer.parseInt(AddNewSlotActivity.tv_start_date.getText().toString().split("-")[0]));
+        cal_slot_start_date.set(Integer.parseInt(AddNewSlotActivity.tv_start_date.getText().toString().split("-")[2]), Integer.parseInt(AddNewSlotActivity.tv_start_date.getText().toString().split("-")[1]) - 1, Integer.parseInt(AddNewSlotActivity.tv_start_date.getText().toString().split("-")[0]));
 
         Calendar cal_slot_stop_date = Calendar.getInstance();
-        cal_slot_stop_date.set(Integer.parseInt(AddNewSlotActivity.tv_till_date.getText().toString().split("-")[2]),Integer.parseInt(AddNewSlotActivity.tv_till_date.getText().toString().split("-")[1])-1,Integer.parseInt(AddNewSlotActivity.tv_till_date.getText().toString().split("-")[0]));
+        cal_slot_stop_date.set(Integer.parseInt(AddNewSlotActivity.tv_till_date.getText().toString().split("-")[2]), Integer.parseInt(AddNewSlotActivity.tv_till_date.getText().toString().split("-")[1]) - 1, Integer.parseInt(AddNewSlotActivity.tv_till_date.getText().toString().split("-")[0]));
 
-        ArrayList<Integer> arrayList_weekDays=weekDaysFoundBetweenTwoDates(cal_slot_start_date,cal_slot_stop_date);
-        if(arrayList_weekDays.size() > 0){
-            if(arrayList_weekDays.size() < 8){
-                 int week_days_size = arrayList_weekDays.size();
+        ArrayList<Integer> arrayList_weekDays = weekDaysFoundBetweenTwoDates(cal_slot_start_date, cal_slot_stop_date);
+        if (arrayList_weekDays.size() > 0) {
+            if (arrayList_weekDays.size() < 8) {
+                int week_days_size = arrayList_weekDays.size();
 
-            }else{
+            } else {
 
             }
         }
@@ -1686,16 +1687,15 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
     }
 
 
-    public ArrayList<Integer> weekDaysFoundBetweenTwoDates(Calendar start_date, Calendar stop_date){
+    public ArrayList<Integer> weekDaysFoundBetweenTwoDates(Calendar start_date, Calendar stop_date) {
         ArrayList<Integer> arrayList_WeekDays = new ArrayList<Integer>();
-        do{
+        do {
             arrayList_WeekDays.add(start_date.get(Calendar.DAY_OF_WEEK));
-            start_date.add(Calendar.DATE,1);
+            start_date.add(Calendar.DATE, 1);
 
-        }while(start_date.getTimeInMillis() <= stop_date.getTimeInMillis());
+        } while (start_date.getTimeInMillis() <= stop_date.getTimeInMillis());
         return arrayList_WeekDays;
     }
-
 
 
 }
