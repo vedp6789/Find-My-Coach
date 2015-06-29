@@ -85,6 +85,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
     private static final String TAG = "FMC";
     private String newUser;
     private boolean isGettingAddress;
+    private List<Prediction> predictions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,6 +218,12 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 city = arrayAdapter.getItem(position).toString();
+                try {
+                    NetworkManager.countryName = predictions.get(position).getCountry();
+                    isGettingAddress = true;
+                } catch (Exception e) {
+                    NetworkManager.countryName = "";
+                }
                 Geocoder geocoder = new Geocoder(EditProfileActivityMentee.this, Locale.getDefault());
                 try {
                     ArrayList<Address> addresses = (ArrayList<Address>) geocoder.getFromLocationName(city.toString(), 1);
@@ -611,9 +618,9 @@ public class EditProfileActivityMentee extends Activity implements Callback {
 
     private void updateAutoSuggestion(Suggestion suggestion) {
         ArrayList<String> list = new ArrayList<String>();
-        List<Prediction> suggestions = suggestion.getPredictions();
-        for (int index = 0; index < suggestions.size(); index++) {
-            list.add(suggestions.get(index).getDescription());
+        predictions = suggestion.getPredictions();
+        for (int index = 0; index < predictions.size(); index++) {
+            list.add(predictions.get(index).getDescription());
         }
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.textview, list);
         profileAddress1.setAdapter(arrayAdapter);

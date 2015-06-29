@@ -68,6 +68,17 @@ public class Data {
     @SerializedName("new_user")
     @Expose
     private boolean newUser;
+    @SerializedName("unicode")
+    @Expose
+    private String currencyCode;
+
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
+    }
 
     @SerializedName("training_location")
     @Expose
