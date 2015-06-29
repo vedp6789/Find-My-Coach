@@ -122,13 +122,13 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         from_month = 0;
         from_year = 0;
 
-        boo_mon_checked = true;
-        boo_tue_checked = true;
-        boo_wed_checked = true;
-        boo_thurs_checked = true;
-        boo_fri_checked = true;
-        boo_sat_checked = true;
-        boo_sun_checked = true;
+        boo_mon_checked = false;
+        boo_tue_checked = false;
+        boo_wed_checked = false;
+        boo_thurs_checked = false;
+        boo_fri_checked = false;
+        boo_sat_checked = false;
+        boo_sun_checked = false;
 
         initialize();
 

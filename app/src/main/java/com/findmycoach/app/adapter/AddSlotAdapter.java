@@ -112,6 +112,7 @@ public class AddSlotAdapter extends BaseAdapter {
                     updateView(button, addNewSlotActivity.boo_mon_checked);
                 } else if (!arrayList_weekDay.contains(2)) {
                     button.setTextColor(color);
+                    addNewSlotActivity.boo_mon_checked = false;
                 }
                 break;
             case 1:
@@ -127,6 +128,7 @@ public class AddSlotAdapter extends BaseAdapter {
                     updateView(button, addNewSlotActivity.boo_tue_checked);
                 } else if (!arrayList_weekDay.contains(3)) {
                     button.setTextColor(color);
+                    addNewSlotActivity.boo_tue_checked = false;
                 }
                 break;
             case 2:
@@ -142,6 +144,7 @@ public class AddSlotAdapter extends BaseAdapter {
                     updateView(button, addNewSlotActivity.boo_wed_checked);
                 } else if (!arrayList_weekDay.contains(4)) {
                     button.setTextColor(color);
+                    addNewSlotActivity.boo_wed_checked = false;
                 }
                 break;
             case 3:
@@ -157,6 +160,7 @@ public class AddSlotAdapter extends BaseAdapter {
                     updateView(button, addNewSlotActivity.boo_thurs_checked);
                 } else if (!arrayList_weekDay.contains(5)) {
                     button.setTextColor(color);
+                    addNewSlotActivity.boo_thurs_checked = false;
                 }
                 break;
             case 4:
@@ -172,6 +176,7 @@ public class AddSlotAdapter extends BaseAdapter {
                     updateView(button, addNewSlotActivity.boo_fri_checked);
                 } else if (!arrayList_weekDay.contains(6)) {
                     button.setTextColor(color);
+                    addNewSlotActivity.boo_fri_checked = false;
                 }
                 break;
             case 5:
@@ -187,6 +192,7 @@ public class AddSlotAdapter extends BaseAdapter {
                     updateView(button, addNewSlotActivity.boo_sat_checked);
                 } else if (!arrayList_weekDay.contains(7)) {
                     button.setTextColor(color);
+                    addNewSlotActivity.boo_sat_checked = false;
                 }
                 break;
             case 6:
@@ -202,6 +208,7 @@ public class AddSlotAdapter extends BaseAdapter {
                     updateView(button, addNewSlotActivity.boo_sun_checked);
                 } else if (!arrayList_weekDay.contains(1)) {
                     button.setTextColor(color);
+                    addNewSlotActivity.boo_sun_checked = false;
                 }
                 break;
         }
