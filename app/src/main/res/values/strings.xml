@@ -603,6 +603,11 @@
     <string name="schedule_rejected"> schedule get rejected</string>
     <string name="no_class_possible">There is no free classes now.</string>
     <string name="no_days_free_to_schedule">Please select other slot of mentor as this slot is not free now.</string>
+    <string name="start_date_and_end_date_please">Please fill start date and end date of this vacation.</string>
+    <string name="start_date_please">Please fill start date of this vacation.</string>
+    <string name="end_date_please">Please fill end date of this vacation.</string>
+    <string name="class_not_possible">Not possible to schedule as slot expires today!</string>
+
 
 
     <!--  Minimum time difference between start time and stop time of a slot   i.e in hours-->

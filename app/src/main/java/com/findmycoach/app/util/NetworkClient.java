@@ -1602,7 +1602,7 @@ public class NetworkClient {
                     Log.d(TAG, "Success : Response : " + responseJson);
                     JSONObject jsonObject = new JSONObject(new String(responseBody));
                     if (statusCode == 200)
-                        callback.successOperation(jsonObject.getString("message"), statusCode, calledApiValue);
+                        callback.successOperation(jsonObject.toString(), statusCode, calledApiValue);
                     else
                         callback.failureOperation(jsonObject.getString("message"), statusCode, calledApiValue);
                 } catch (Exception e) {

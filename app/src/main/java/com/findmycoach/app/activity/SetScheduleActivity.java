@@ -1347,17 +1347,70 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         if (this_activity_for.equals("MentorDetailsActivity")) {
             switch (event_type) {
                 case 202:
-                    Intent intent = new Intent(SetScheduleActivity.this, ScheduleNewClass.class);
-                    Bundle bundle = new Bundle();     /// startTime, endTime, new_slot,mentorInfo, mentor_id, mentor_availablity, 202, charges, arrayList_subcategory
-                    bundle.putParcelable("slot", event.getSlot());
-                    bundle.putParcelable("mentor_info", event.getMentorInfo());
-                    Log.i(TAG, "mentor_info_mentor_id_going to be sent to Schedule new class: " + event.getMentorInfo().getMentor_id() + " mentor_id came from list of mentors when mentee searched: " + event.getMentor_id());
-                    bundle.putString("mentor_id", event.getMentor_id());
-                    bundle.putString("mentor_availability", event.getMentor_availablity()); // Mentor availability can be "0" or "1" , 0 means not available
-                    bundle.putString("charges", event.getCharges());
-                    bundle.putStringArrayList("arrayList_sub_category", event.getArrayList_sub_category());
-                    intent.putExtra("slot_bundle", bundle);
-                    startActivity(intent);
+
+                    /* Checking whether this slot is possible to get scheduled after evaluating slot start time and current time of the day.*/
+
+                    Slot slot = event.getSlot();
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(Integer.parseInt(slot.getSlot_start_date().split("-")[0]), Integer.parseInt(slot.getSlot_start_date().split("-")[1]) - 1, Integer.parseInt(slot.getSlot_start_date().split("-")[2]));
+                    long slot_start_date = cal.getTimeInMillis();
+
+
+                    Calendar rightNow = Calendar.getInstance();
+                    long rightNow_in_millis = rightNow.getTimeInMillis();
+                    int current_hour = rightNow.get(Calendar.HOUR_OF_DAY);
+                    int current_minute = rightNow.get(Calendar.MINUTE);
+
+                    Log.d(TAG, "right now in millis: " + rightNow_in_millis + " slot_start_date in millis: " + slot_start_date);
+                    String from_date;
+                    if (rightNow_in_millis >= slot_start_date) {
+
+                    /* Mentee is looking to schedule when class slot is already behind the current date i.e. he is looking to join class in mid of class schedule  */
+
+
+                        if (current_hour > Integer.parseInt(slot.getSlot_start_time().split(":")[0])) {
+                    /* increasing schedule start date by one day i.e. slot_start_date is before current date and current time is also greater than slot_start_time*/
+                            from_date = String.format("%02d-%02d-%d", rightNow.get(Calendar.DAY_OF_MONTH) + 1, (rightNow.get(Calendar.MONTH) + 1), rightNow.get(Calendar.YEAR));
+                        } else {
+
+                    /* if current hour is behing slot start hour or it is equal to it , then start day of class schedule will be from this current date */
+                            from_date = String.format("%02d-%02d-%d", rightNow.get(Calendar.DAY_OF_MONTH), (rightNow.get(Calendar.MONTH) + 1), rightNow.get(Calendar.YEAR));
+
+                        }
+                    } else {
+                        from_date = String.format("%02d-%02d-%d", Integer.parseInt(slot.getSlot_start_date().split("-")[2]), Integer.parseInt(slot.getSlot_start_date().split("-")[1]), Integer.parseInt(slot.getSlot_start_date().split("-")[0]));
+
+                    }
+
+                    /* Now to check whether a class is possible from start date (from_date variable) and slot stop date after time evaluation and possible start date for this slot */
+                    Calendar cal_from_date = Calendar.getInstance();
+                    cal_from_date.set(Integer.parseInt(from_date.split("-")[2]),Integer.parseInt(from_date.split("-")[1])-1,Integer.parseInt(from_date.split("-")[0]));
+                    long cal_from_date_millis= cal_from_date.getTimeInMillis();
+                    Log.d(TAG,"from date on click : "+from_date.toString()+" cal date "+Integer.parseInt(from_date.split("-")[2])+"-"+(Integer.parseInt(from_date.split("-")[1])-1)+"-"+Integer.parseInt(from_date.split("-")[0])+" cal in millies"+cal_from_date_millis);
+
+
+                    Calendar cal_to_date = Calendar.getInstance();
+                    cal_to_date.set(Integer.parseInt(slot.getSlot_stop_date().split("-")[0]), Integer.parseInt(slot.getSlot_stop_date().split("-")[1])-1, Integer.parseInt(slot.getSlot_stop_date().split("-")[2]));
+                    long cal_to_date_millis= cal_to_date.getTimeInMillis();
+                    Log.d(TAG,"to date on click : "+" cal date "+Integer.parseInt(slot.getSlot_stop_date().split("-")[0])+"-"+(Integer.parseInt(slot.getSlot_stop_date().split("-")[1])-1)+"-"+Integer.parseInt(slot.getSlot_stop_date().split("-")[2])+" cal to in millies"+cal_to_date_millis);
+
+                    if((cal_to_date_millis > cal_from_date_millis) || (cal_to_date_millis == cal_from_date_millis)){
+                        Intent intent = new Intent(SetScheduleActivity.this, ScheduleNewClass.class);
+                        Bundle bundle = new Bundle();     /// startTime, endTime, new_slot,mentorInfo, mentor_id, mentor_availablity, 202, charges, arrayList_subcategory
+                        bundle.putParcelable("slot", event.getSlot());
+                        bundle.putParcelable("mentor_info", event.getMentorInfo());
+                        Log.i(TAG, "mentor_info_mentor_id_going to be sent to Schedule new class: " + event.getMentorInfo().getMentor_id() + " mentor_id came from list of mentors when mentee searched: " + event.getMentor_id());
+                        bundle.putString("mentor_id", event.getMentor_id());
+                        bundle.putString("mentor_availability", event.getMentor_availablity()); // Mentor availability can be "0" or "1" , 0 means not available
+                        bundle.putString("charges", event.getCharges());
+                        bundle.putStringArrayList("arrayList_sub_category", event.getArrayList_sub_category());
+                        intent.putExtra("slot_bundle", bundle);
+                        startActivity(intent);
+                    }else{
+                        /* class is not possible as time crossed */
+                        Toast.makeText(SetScheduleActivity.this,getResources().getString(R.string.class_not_possible),Toast.LENGTH_SHORT).show();
+                    }
                     break;
             }
         } else {

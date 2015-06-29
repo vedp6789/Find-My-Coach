@@ -621,7 +621,11 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
             stop_hour = 24;
             stop_min = 0;
 
-            return true;
+            if(check_for_days_selected()){
+                return true;
+            }else {
+                return false;
+            }
 
 
         } else {
@@ -632,7 +636,12 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
                 Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.stop_time_should_be_grater), Toast.LENGTH_LONG).show();
                 return false;
             } else {
-                return true;
+                if(check_for_days_selected()){
+                    return true;
+                }else {
+                    return false;
+                }
+
             }
 
 
@@ -640,6 +649,32 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
 
            /* }*/
 
+
+    }
+
+    private boolean check_for_days_selected() {
+        if(tv_start_date.getText().toString().trim().length() > 0){
+            if(tv_till_date.getText().toString().trim().length() > 0){
+                /* both days are available */
+
+
+                return true;
+
+
+            }else{
+                Toast.makeText(ScheduleYourVacation.this,getResources().getString(R.string.end_date_please),Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }else{
+            if(tv_till_date.getText().toString().trim().length() > 0){
+                /* till date is there */
+                Toast.makeText(ScheduleYourVacation.this,getResources().getString(R.string.start_date_please),Toast.LENGTH_SHORT).show();
+                return false;
+            }else{
+                Toast.makeText(ScheduleYourVacation.this,getResources().getString(R.string.start_date_and_end_date_please),Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
 
     }
 
