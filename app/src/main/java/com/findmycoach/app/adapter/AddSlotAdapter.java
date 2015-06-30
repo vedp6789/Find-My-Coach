@@ -97,6 +97,18 @@ public class AddSlotAdapter extends BaseAdapter {
         return v;
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        addNewSlotActivity.boo_mon_checked = true;
+        addNewSlotActivity.boo_tue_checked = true;
+        addNewSlotActivity.boo_wed_checked = true;
+        addNewSlotActivity.boo_thurs_checked = true;
+        addNewSlotActivity.boo_fri_checked = true;
+        addNewSlotActivity.boo_sat_checked = true;
+        addNewSlotActivity.boo_sun_checked = true;
+    }
+
     private void enableAllDaysForSelection(final Button button, int position) {
         switch (position) {
             case 0:

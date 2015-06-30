@@ -56,6 +56,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
     ArrayList<Vacation> coinciding_vacations;
     Vacation non_coinciding_vacation;
     MentorInfo mentorInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -216,6 +217,15 @@ public class AboutWeekViewEvent extends Activity implements Callback {
 
                 break;
         }
+
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(getResources().getString(R.string.class_info));
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
     Bundle bundle;
     private String for_which_event = null;
