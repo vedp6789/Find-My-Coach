@@ -120,7 +120,86 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
         findViewById(R.id.fromTime).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isFromTimeSet = true;
+                if (tv_till_date.getText().toString().contains("-")) {
+
+                    Calendar calendar_right_now = Calendar.getInstance();
+                    long current_date_millis = calendar_right_now.getTimeInMillis();
+                    Log.d(TAG, "current date millis: " + current_date_millis);
+
+                    Calendar calendar_start_date = Calendar.getInstance();
+                    calendar_start_date.set(Integer.parseInt(tv_start_date.getText().toString().split("-")[2]),
+                            Integer.parseInt(tv_start_date.getText().toString().split("-")[1]) - 1,
+                            Integer.parseInt(tv_start_date.getText().toString().split("-")[0]));
+                    long start_date_millis = calendar_start_date.getTimeInMillis();
+                    Log.d(TAG, "start date millis: " + start_date_millis);
+
+                    Calendar calendar_stop_date = Calendar.getInstance();
+                    calendar_stop_date.set(Integer.parseInt(tv_till_date.getText().toString().split("-")[2]),
+                            Integer.parseInt(tv_till_date.getText().toString().split("-")[1]) - 1,
+                            Integer.parseInt(tv_till_date.getText().toString().split("-")[0]));
+                    long end_date_millis = calendar_stop_date.getTimeInMillis();
+                    Log.d(TAG, "stop date millis: " + end_date_millis);
+
+                    isFromTimeSet = true;
+                    Calendar c = Calendar.getInstance();
+                    int hour = c.get(Calendar.HOUR_OF_DAY);
+                    int minute = c.get(Calendar.MINUTE);
+                    int min = getSettingMinute(minute);
+                    if (min == 0)
+                        hour++;
+
+                    if ((current_date_millis > start_date_millis) || (start_date_millis == current_date_millis)) {
+                        /* Slot is getting created from the current day of the calendar*/
+
+                        if ((end_date_millis < start_date_millis) || (end_date_millis == start_date_millis)) {
+                            // This is possible if user selected start date and end date as same date.
+                            // In this case we have to fix the start time as minimum of current time and if current time is greater 23:45 then on this date mentor cannot be able to take any class as.
+                            /*if ((hour == 23) && (minute > 45)) {
+                            *//* This is the case when user cannot create slot for the selected date duration*//*
+                                Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.slot_cannot_be_possible), Toast.LENGTH_SHORT).show();
+
+                            } else {*/
+                                TimePickerFragment timePicker = new TimePickerFragment(ScheduleYourVacation.this,
+                                        ScheduleYourVacation.this, hour, min, false);
+                                timePicker.isMinTimeEnabled = true;
+                                timePicker.show();
+                          /*  }*/
+
+
+                        } else {
+                            TimePickerFragment timePicker = new TimePickerFragment(ScheduleYourVacation.this,
+                                    ScheduleYourVacation.this, hour, min, false);
+                            timePicker.show();
+                        }
+                    } else {
+                        if ((end_date_millis < start_date_millis) || (end_date_millis == start_date_millis)) {
+                            /*if ((hour == 23) && (minute > 45)) {
+                            *//* This is the case when user cannot create slot for the selected date duration*//*
+                                Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.slot_cannot_be_possible), Toast.LENGTH_SHORT).show();
+
+                            } else {*/
+                                TimePickerFragment timePicker = new TimePickerFragment(ScheduleYourVacation.this,
+                                        ScheduleYourVacation.this, hour, min, false);
+                                timePicker.show();
+                          /*  }*/
+                        } else {
+                            TimePickerFragment timePicker = new TimePickerFragment(ScheduleYourVacation.this,
+                                    ScheduleYourVacation.this, hour, min, false);
+                            timePicker.show();
+                        }
+
+                    }
+
+                } else {
+                    Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.end_date_required), Toast.LENGTH_SHORT).show();
+                }
+
+
+
+
+
+
+                /*isFromTimeSet = true;
                 Calendar c = Calendar.getInstance();
                 int hour = c.get(Calendar.HOUR_OF_DAY);
                 int min = getSettingMinute(c.get(Calendar.MINUTE));
@@ -128,10 +207,7 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
                     hour++;
                 TimePickerFragment timePicker = new TimePickerFragment(ScheduleYourVacation.this,
                         ScheduleYourVacation.this, hour, min, false);
-                timePicker.show();
-//                FragmentManager fragmentManager = getFragmentManager();
-//                StartTimeForVaccationSchedule startTimeForVaccationSchedule = new StartTimeForVaccationSchedule();
-//                startTimeForVaccationSchedule.show(fragmentManager, null);
+                timePicker.show();*/
             }
         });
 
@@ -149,9 +225,7 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
                             ScheduleYourVacation.this, hour, min, false);
                     timePicker.isMinTimeEnabled = true;
                     timePicker.show();
-//                    FragmentManager fragmentManager = getFragmentManager();
-//                    StopTimeForVaccationSchedule stopTimeForVaccationSchedule = new StopTimeForVaccationSchedule();
-//                    stopTimeForVaccationSchedule.show(fragmentManager, null);
+
                 } else {
                     Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.start_time_first), Toast.LENGTH_SHORT).show();
                 }
@@ -166,13 +240,6 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
                 StartDateForVaccationSchedule startDateForVaccationSchedule = new StartDateForVaccationSchedule();
                 startDateForVaccationSchedule.show(fragmentManager, null);
 
-                /*if (tv_start_date.getText().length() > 0) {
-
-                } else {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
-                    dateDialogFragment.show(fragmentManager, null);
-                }*/
 
             }
         });
@@ -619,28 +686,44 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
             stop_hour = 24;
             stop_min = 0;
 
-            if(check_for_days_selected()){
+            if (check_for_days_selected()) {
                 return true;
-            }else {
+            } else {
                 return false;
             }
 
 
         } else {
-            int start_time = ((start_hour * 60) + start_min) * 60;
-            int stop_time = ((stop_hour * 60) + stop_min) * 60;
-
-            if (start_time > stop_time || (start_time == stop_time)) {
-                Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.stop_time_should_be_grater), Toast.LENGTH_LONG).show();
-                return false;
-            } else {
-                if(check_for_days_selected()){
-                    return true;
-                }else {
+            if((start_hour==0 && start_min ==0) || (stop_hour == 0 && stop_min == 0)){
+                if((start_hour==0 && start_min ==0) && (stop_hour == 0 && stop_min == 0)){
+                    Toast.makeText(ScheduleYourVacation.this,getResources().getString(R.string.select_time),Toast.LENGTH_SHORT).show();
                     return false;
+                }else{
+                    if((start_hour==0 && start_min ==0)){
+                        Toast.makeText(ScheduleYourVacation.this,getResources().getString(R.string.select_start_time_vacation),Toast.LENGTH_SHORT).show();
+                        return false;
+                    }else {
+                        Toast.makeText(ScheduleYourVacation.this,getResources().getString(R.string.select_stop_time_vacation),Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
                 }
+            }else{
+                int start_time = ((start_hour * 60) + start_min) * 60;
+                int stop_time = ((stop_hour * 60) + stop_min) * 60;
 
+                if (start_time > stop_time || (start_time == stop_time)) {
+                    Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.stop_time_should_be_grater), Toast.LENGTH_LONG).show();
+                    return false;
+                } else {
+                    if (check_for_days_selected()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+
+                }
             }
+
 
 
         }
@@ -651,25 +734,25 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
     }
 
     private boolean check_for_days_selected() {
-        if(tv_start_date.getText().toString().trim().length() > 0){
-            if(tv_till_date.getText().toString().trim().length() > 0){
+        if (tv_start_date.getText().toString().trim().length() > 0) {
+            if (tv_till_date.getText().toString().trim().length() > 0) {
                 /* both days are available */
 
 
                 return true;
 
 
-            }else{
-                Toast.makeText(ScheduleYourVacation.this,getResources().getString(R.string.end_date_please),Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.end_date_please), Toast.LENGTH_SHORT).show();
                 return false;
             }
-        }else{
-            if(tv_till_date.getText().toString().trim().length() > 0){
+        } else {
+            if (tv_till_date.getText().toString().trim().length() > 0) {
                 /* till date is there */
-                Toast.makeText(ScheduleYourVacation.this,getResources().getString(R.string.start_date_please),Toast.LENGTH_SHORT).show();
+                Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.start_date_please), Toast.LENGTH_SHORT).show();
                 return false;
-            }else{
-                Toast.makeText(ScheduleYourVacation.this,getResources().getString(R.string.start_date_and_end_date_please),Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.start_date_and_end_date_please), Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
@@ -923,9 +1006,6 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
             }
         });
 
-//        ScrollableGridView gridView = (ScrollableGridView) findViewById(R.id.calendar);
-//        gridView.setAdapter(new AddSlotAdapter(getResources().getStringArray(R.array.week_days_mon), this));
-
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(getResources().getString(R.string.schedule_vacation));
     }
@@ -997,6 +1077,34 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
         stringBuilder.append("-" + year);
         Log.d(TAG, "till date:" + stringBuilder.toString());
         ScheduleYourVacation.tv_till_date.setText(stringBuilder.toString());
+
+
+        Calendar rightNowCalendar= Calendar.getInstance();
+        long right_now_millis= rightNowCalendar.getTimeInMillis();
+
+        Calendar cal_start_date =Calendar.getInstance();
+        cal_start_date.set(Integer.parseInt(tv_start_date.getText().toString().split("-")[2]),Integer.parseInt(tv_start_date.getText().toString().split("-")[1])-1,Integer.parseInt(tv_start_date.getText().toString().split("-")[0]));
+        long start_millis=cal_start_date.getTimeInMillis();
+
+        Calendar cal_stop_date =Calendar.getInstance();
+        cal_stop_date.set(Integer.parseInt(tv_till_date.getText().toString().split("-")[2]),Integer.parseInt(tv_till_date.getText().toString().split("-")[1])-1,Integer.parseInt(tv_till_date.getText().toString().split("-")[0]));
+        long stop_millis=cal_stop_date.getTimeInMillis();
+
+
+        if(start_millis <= right_now_millis){
+           if(stop_millis <= start_millis){
+               tv_start_time.setText("");
+               tv_stop_time.setText("");
+               start_hour=0;
+               start_min=0;
+               stop_hour=0;
+               stop_min=0;
+           }
+        }
+
+
+
+
 
 
     }
