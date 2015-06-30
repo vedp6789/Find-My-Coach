@@ -1155,12 +1155,12 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
                             Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.select_slot_in_multiple_of_hour), Toast.LENGTH_SHORT).show();
                             return false;
                         } else {
-                            if (tv_start_date.getText().length() > 0) {
+                            if (tv_start_date.getText().toString().contains("-")) {
                                 String till_date_val = tv_till_date.getText().toString();
                                 String s = getResources().getString(R.string.forever);
                                 Log.d(TAG, " till date value : " + till_date_val + " forever string from resource : " + s);
-                                if (till_date_val.trim().length() > 0) {
-                                    if (checkDaysAvailability(tv_start_date.getText().toString(), tv_till_date.getText().toString())) {
+                                if (till_date_val.contains("-")) {
+
                                         Log.d(TAG, "checkDaysAvailability return true");
                                         if (slot_type == 1) {
                                             if (et_maximum_students.getText().toString().trim().length() > 0) {
@@ -1172,10 +1172,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
                                         } else {
                                             return true;
                                         }
-                                    } else {
-                                        Log.d(TAG, "checkDaysAvailability return false");
-                                        return false;
-                                    }
+
                                 } else {
                                     Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.end_date_required), Toast.LENGTH_SHORT).show();
                                     return false;

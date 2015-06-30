@@ -50,6 +50,18 @@ public class AddSlotAdapter extends BaseAdapter {
         this.arrayList_weekDay = arrayList_weekDay;
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        addNewSlotActivity.boo_mon_checked = true;
+        addNewSlotActivity.boo_tue_checked = true;
+        addNewSlotActivity.boo_wed_checked = true;
+        addNewSlotActivity.boo_thurs_checked = true;
+        addNewSlotActivity.boo_fri_checked = true;
+        addNewSlotActivity.boo_sat_checked = true;
+        addNewSlotActivity.boo_sun_checked = true;
+
+    }
 
     @Override
     public int getCount() {
@@ -109,7 +121,6 @@ public class AddSlotAdapter extends BaseAdapter {
                             updateView(button, addNewSlotActivity.boo_mon_checked);
                         }
                     });
-                    addNewSlotActivity.boo_mon_checked=true;
                     updateView(button, addNewSlotActivity.boo_mon_checked);
                 } else if (!arrayList_weekDay.contains(2)) {
                     button.setTextColor(color);
@@ -127,7 +138,6 @@ public class AddSlotAdapter extends BaseAdapter {
                             updateView(button, addNewSlotActivity.boo_tue_checked);
                         }
                     });
-                    addNewSlotActivity.boo_tue_checked = true;
                     updateView(button, addNewSlotActivity.boo_tue_checked);
                 } else if (!arrayList_weekDay.contains(3)) {
                     button.setTextColor(color);
@@ -144,7 +154,6 @@ public class AddSlotAdapter extends BaseAdapter {
                             updateView(button, addNewSlotActivity.boo_wed_checked);
                         }
                     });
-                    addNewSlotActivity.boo_wed_checked=true;
                     updateView(button, addNewSlotActivity.boo_wed_checked);
                 } else if (!arrayList_weekDay.contains(4)) {
                     button.setTextColor(color);
@@ -161,7 +170,6 @@ public class AddSlotAdapter extends BaseAdapter {
                             updateView(button, addNewSlotActivity.boo_thurs_checked);
                         }
                     });
-                    addNewSlotActivity.boo_thurs_checked=true;
                     updateView(button, addNewSlotActivity.boo_thurs_checked);
                 } else if (!arrayList_weekDay.contains(5)) {
                     button.setTextColor(color);
@@ -178,7 +186,6 @@ public class AddSlotAdapter extends BaseAdapter {
                             updateView(button, addNewSlotActivity.boo_fri_checked);
                         }
                     });
-                    addNewSlotActivity.boo_fri_checked=true;
                     updateView(button, addNewSlotActivity.boo_fri_checked);
                 } else if (!arrayList_weekDay.contains(6)) {
                     button.setTextColor(color);
@@ -195,7 +202,6 @@ public class AddSlotAdapter extends BaseAdapter {
                             updateView(button, addNewSlotActivity.boo_sat_checked);
                         }
                     });
-                    addNewSlotActivity.boo_sat_checked=true;
                     updateView(button, addNewSlotActivity.boo_sat_checked);
                 } else if (!arrayList_weekDay.contains(7)) {
                     button.setTextColor(color);
@@ -212,7 +218,6 @@ public class AddSlotAdapter extends BaseAdapter {
                             updateView(button, addNewSlotActivity.boo_sun_checked);
                         }
                     });
-                    addNewSlotActivity.boo_sun_checked=true;
                     updateView(button, addNewSlotActivity.boo_sun_checked);
                 } else if (!arrayList_weekDay.contains(1)) {
                     button.setTextColor(color);
