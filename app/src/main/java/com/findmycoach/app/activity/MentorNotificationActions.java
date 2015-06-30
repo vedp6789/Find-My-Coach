@@ -362,42 +362,29 @@ public class MentorNotificationActions extends Activity implements Callback {
                 try {
                     JSONObject jsonObject = new JSONObject((String) object);
                     int status = Integer.parseInt(jsonObject.getString("status"));  /* 1 for success and 2 for failure*/
+                    String message = jsonObject.getString("message");
                     if (status == 1) {
                         if (action.equals("accept")) {
-                            Toast.makeText(MentorNotificationActions.this, first_name.trim() + " " + getResources().getString(R.string.is_in_connection), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MentorNotificationActions.this, message, Toast.LENGTH_SHORT).show();
 
                             if (ConnectionRequestFragment.connectionRequestFragment != null) {
                                 Log.d(TAG, "Connection request fragmen found not null");
 
                                 ConnectionRequestFragment.connectionRequestFragment.refresh();
                                 finish();
-
-                            } else {
-                                Log.d(TAG, "Connection request fragmen found  null");
-/*
-                                setResult(RESULT_OK);
-                                finish();*/
 
                             }
                         } else {
-                            Toast.makeText(MentorNotificationActions.this, first_name.trim() + getResources().getString(R.string.request_declined), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MentorNotificationActions.this, message, Toast.LENGTH_SHORT).show();
                             if (ConnectionRequestFragment.connectionRequestFragment != null) {
                                 Log.d(TAG, "Connection request fragmen found not null");
 
                                 ConnectionRequestFragment.connectionRequestFragment.refresh();
                                 finish();
-
-                            } else {
-                                Log.d(TAG, "Conneciton request fragmen found  null");
-/*
-                                setResult(RESULT_OK);
-                                finish();*/
 
                             }
 
                         }
-/*                        setResult(RESULT_OK, new Intent());
-                        finish();*/
                     } else {
                         Toast.makeText(MentorNotificationActions.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
 

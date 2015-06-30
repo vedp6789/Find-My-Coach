@@ -8,13 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.AddNewSlotActivity;
 import com.findmycoach.app.activity.ScheduleNewClass;
-import com.findmycoach.app.activity.ScheduleYourVacation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,24 +23,31 @@ public class AddSlotAdapter extends BaseAdapter {
 
     private String[] days;
     private AddNewSlotActivity addNewSlotActivity;
-    private ScheduleYourVacation scheduleYourVacation;
     private ScheduleNewClass scheduleNewClass;
     private List<Integer> selectedDays;
+    private boolean isNotAllDayAvailableForSelection;
+    private ArrayList<Integer> arrayList_weekDay;
+    private int color;
 
     public AddSlotAdapter(AddNewSlotActivity addNewSlotActivity, String[] days) {
         this.days = days;
         this.addNewSlotActivity = addNewSlotActivity;
-    }
-
-    public AddSlotAdapter(String[] days, ScheduleYourVacation scheduleYourVacation) {
-        this.days = days;
-        this.scheduleYourVacation = scheduleYourVacation;
+        color = addNewSlotActivity.getResources().getColor(R.color.purple_light);
+        isNotAllDayAvailableForSelection = false;
     }
 
     public AddSlotAdapter(String[] days, List<Integer> selectedDays, ScheduleNewClass scheduleNewClass) {
         this.days = days;
         this.selectedDays = selectedDays;
         this.scheduleNewClass = scheduleNewClass;
+    }
+
+    public void setNotAllDayAvailableForSelection(boolean isAllDayAvailableForSelection) {
+        this.isNotAllDayAvailableForSelection = isAllDayAvailableForSelection;
+    }
+
+    public void setArrayList_weekDay(ArrayList<Integer> arrayList_weekDay) {
+        this.arrayList_weekDay = arrayList_weekDay;
     }
 
 
@@ -73,91 +79,8 @@ public class AddSlotAdapter extends BaseAdapter {
             button.setTextSize(11f);
             button.setTypeface(null, Typeface.BOLD);
             button.setText(days[position]);
+            enableAllDaysForSelection(button, position);
 
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    switch (position) {
-                        case 0:
-                            Log.d("FMC","Mon clicked !");
-                            addNewSlotActivity.boo_mon_checked = !addNewSlotActivity.boo_mon_checked;
-                            updateView(button, addNewSlotActivity.boo_mon_checked);
-                            break;
-                        case 1:
-                            Log.d("FMC","Tue clicked !");
-                            addNewSlotActivity.boo_tue_checked = !addNewSlotActivity.boo_tue_checked;
-                            updateView(button, addNewSlotActivity.boo_tue_checked);
-                            break;
-                        case 2:
-                            Log.d("FMC","Wed clicked !");
-                            addNewSlotActivity.boo_wed_checked = !addNewSlotActivity.boo_wed_checked;
-                            updateView(button, addNewSlotActivity.boo_wed_checked);
-                            break;
-                        case 3:
-                            Log.d("FMC","Thur clicked !");
-                            addNewSlotActivity.boo_thurs_checked = !addNewSlotActivity.boo_thurs_checked;
-                            updateView(button, addNewSlotActivity.boo_thurs_checked);
-                            break;
-                        case 4:
-                            addNewSlotActivity.boo_fri_checked = !addNewSlotActivity.boo_fri_checked;
-                            updateView(button, addNewSlotActivity.boo_fri_checked);
-                            break;
-                        case 5:
-                            addNewSlotActivity.boo_sat_checked = !addNewSlotActivity.boo_sat_checked;
-                            updateView(button, addNewSlotActivity.boo_sat_checked);
-                            break;
-                        case 6:
-                            addNewSlotActivity.boo_sun_checked = !addNewSlotActivity.boo_sun_checked;
-                            updateView(button, addNewSlotActivity.boo_sun_checked);
-                            break;
-                    }
-                }
-            });
-        } else if (scheduleYourVacation != null) {
-
-            LayoutInflater layoutInflater = (LayoutInflater) scheduleYourVacation.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = layoutInflater.inflate(R.layout.screen_gridcell, null);
-            final Button button = (Button) v.findViewById(R.id.calendar_day_gridcell);
-            button.setTextSize(11f);
-            button.setTypeface(null, Typeface.BOLD);
-            button.setText(days[position]);
-
-            button.setBackgroundDrawable(scheduleYourVacation.getResources().getDrawable(R.drawable.scheduled_event_arrow));
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    switch (position) {
-                        case 0:
-                            scheduleYourVacation.boo_mon_checked = !scheduleYourVacation.boo_mon_checked;
-                            updateView(button, scheduleYourVacation.boo_mon_checked, "M");
-                            break;
-                        case 1:
-                            scheduleYourVacation.boo_tue_checked = !scheduleYourVacation.boo_tue_checked;
-                            updateView(button, scheduleYourVacation.boo_tue_checked, "T");
-                            break;
-                        case 2:
-                            scheduleYourVacation.boo_wed_checked = !scheduleYourVacation.boo_wed_checked;
-                            updateView(button, scheduleYourVacation.boo_wed_checked, "W");
-                            break;
-                        case 3:
-                            scheduleYourVacation.boo_thurs_checked = !scheduleYourVacation.boo_thurs_checked;
-                            updateView(button, scheduleYourVacation.boo_thurs_checked, "Th");
-                            break;
-                        case 4:
-                            scheduleYourVacation.boo_fri_checked = !scheduleYourVacation.boo_fri_checked;
-                            updateView(button, scheduleYourVacation.boo_fri_checked, "F");
-                            break;
-                        case 5:
-                            scheduleYourVacation.boo_sat_checked = !scheduleYourVacation.boo_sat_checked;
-                            updateView(button, scheduleYourVacation.boo_sat_checked, "S");
-                            break;
-                        case 6:
-                            scheduleYourVacation.boo_sun_checked = !scheduleYourVacation.boo_sun_checked;
-                            updateView(button, scheduleYourVacation.boo_sun_checked, "Su");
-                            break;
-                    }
-                }
-            });
         } else if (scheduleNewClass != null) {
 
             LayoutInflater layoutInflater = (LayoutInflater) scheduleNewClass.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -174,6 +97,131 @@ public class AddSlotAdapter extends BaseAdapter {
         return v;
     }
 
+    private void enableAllDaysForSelection(final Button button, int position) {
+        switch (position) {
+            case 0:
+                if (!isNotAllDayAvailableForSelection || arrayList_weekDay.contains(2)) {
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d("FMC", "Mon clicked !");
+                            addNewSlotActivity.boo_mon_checked = !addNewSlotActivity.boo_mon_checked;
+                            updateView(button, addNewSlotActivity.boo_mon_checked);
+                        }
+                    });
+                    addNewSlotActivity.boo_mon_checked=true;
+                    updateView(button, addNewSlotActivity.boo_mon_checked);
+                } else if (!arrayList_weekDay.contains(2)) {
+                    button.setTextColor(color);
+                    addNewSlotActivity.boo_mon_checked = false;
+
+                }
+                break;
+            case 1:
+                if (!isNotAllDayAvailableForSelection || arrayList_weekDay.contains(3)) {
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d("FMC", "Tue clicked !");
+                            addNewSlotActivity.boo_tue_checked = !addNewSlotActivity.boo_tue_checked;
+                            updateView(button, addNewSlotActivity.boo_tue_checked);
+                        }
+                    });
+                    addNewSlotActivity.boo_tue_checked = true;
+                    updateView(button, addNewSlotActivity.boo_tue_checked);
+                } else if (!arrayList_weekDay.contains(3)) {
+                    button.setTextColor(color);
+                    addNewSlotActivity.boo_tue_checked = false;
+                }
+                break;
+            case 2:
+                if (!isNotAllDayAvailableForSelection || arrayList_weekDay.contains(4)) {
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d("FMC", "Wed clicked !");
+                            addNewSlotActivity.boo_wed_checked = !addNewSlotActivity.boo_wed_checked;
+                            updateView(button, addNewSlotActivity.boo_wed_checked);
+                        }
+                    });
+                    addNewSlotActivity.boo_wed_checked=true;
+                    updateView(button, addNewSlotActivity.boo_wed_checked);
+                } else if (!arrayList_weekDay.contains(4)) {
+                    button.setTextColor(color);
+                    addNewSlotActivity.boo_wed_checked = false;
+                }
+                break;
+            case 3:
+                if (!isNotAllDayAvailableForSelection || arrayList_weekDay.contains(5)) {
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d("FMC", "Thur clicked !");
+                            addNewSlotActivity.boo_thurs_checked = !addNewSlotActivity.boo_thurs_checked;
+                            updateView(button, addNewSlotActivity.boo_thurs_checked);
+                        }
+                    });
+                    addNewSlotActivity.boo_thurs_checked=true;
+                    updateView(button, addNewSlotActivity.boo_thurs_checked);
+                } else if (!arrayList_weekDay.contains(5)) {
+                    button.setTextColor(color);
+                    addNewSlotActivity.boo_thurs_checked = false;
+                }
+                break;
+            case 4:
+                if (!isNotAllDayAvailableForSelection || arrayList_weekDay.contains(6)) {
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d("FMC", "Fri clicked !");
+                            addNewSlotActivity.boo_fri_checked = !addNewSlotActivity.boo_fri_checked;
+                            updateView(button, addNewSlotActivity.boo_fri_checked);
+                        }
+                    });
+                    addNewSlotActivity.boo_fri_checked=true;
+                    updateView(button, addNewSlotActivity.boo_fri_checked);
+                } else if (!arrayList_weekDay.contains(6)) {
+                    button.setTextColor(color);
+                    addNewSlotActivity.boo_fri_checked = false;
+                }
+                break;
+            case 5:
+                if (!isNotAllDayAvailableForSelection || arrayList_weekDay.contains(7)) {
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d("FMC", "Sat clicked !");
+                            addNewSlotActivity.boo_sat_checked = !addNewSlotActivity.boo_sat_checked;
+                            updateView(button, addNewSlotActivity.boo_sat_checked);
+                        }
+                    });
+                    addNewSlotActivity.boo_sat_checked=true;
+                    updateView(button, addNewSlotActivity.boo_sat_checked);
+                } else if (!arrayList_weekDay.contains(7)) {
+                    button.setTextColor(color);
+                    addNewSlotActivity.boo_sat_checked = false;
+                }
+                break;
+            case 6:
+                if (!isNotAllDayAvailableForSelection || arrayList_weekDay.contains(1)) {
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d("FMC", "Sun clicked !");
+                            addNewSlotActivity.boo_sun_checked = !addNewSlotActivity.boo_sun_checked;
+                            updateView(button, addNewSlotActivity.boo_sun_checked);
+                        }
+                    });
+                    addNewSlotActivity.boo_sun_checked=true;
+                    updateView(button, addNewSlotActivity.boo_sun_checked);
+                } else if (!arrayList_weekDay.contains(1)) {
+                    button.setTextColor(color);
+                    addNewSlotActivity.boo_sun_checked = false;
+                }
+                break;
+        }
+    }
+
     private void updateView(Button btn, boolean isChecked) {
         if (isChecked)
             btn.setBackgroundDrawable(addNewSlotActivity.getResources().getDrawable(R.drawable.scheduled_event_arrow));
@@ -181,13 +229,4 @@ public class AddSlotAdapter extends BaseAdapter {
             btn.setBackgroundColor(addNewSlotActivity.getResources().getColor(R.color.white));
     }
 
-    private void updateView(Button btn, boolean isChecked, String s) {
-        if (isChecked) {
-            btn.setBackgroundDrawable(scheduleYourVacation.getResources().getDrawable(R.drawable.scheduled_event_arrow));
-            scheduleYourVacation.days_array.add(s);
-        } else {
-            btn.setBackgroundColor(scheduleYourVacation.getResources().getColor(R.color.white));
-            scheduleYourVacation.days_array.remove(s);
-        }
-    }
 }

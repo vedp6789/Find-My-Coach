@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.AddSlotAdapter;
-import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.fragment.TimePickerFragment;
 import com.findmycoach.app.fragment_mentor.StartDateDialogFragment;
@@ -98,6 +97,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
     String class_location;
     JSONObject jsonObject_exception;
     private boolean isFromTimeSet;
+    private AddSlotAdapter addSlotAdapter;
 
 
     private static final String TAG = "FMC";
@@ -1456,12 +1456,9 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         });
         b_create_slot = (Button) findViewById(R.id.b_create_slot);
         ScrollableGridView gridView = (ScrollableGridView) findViewById(R.id.calendar);
-        gridView.setAdapter(new AddSlotAdapter(this, getResources().getStringArray(R.array.week_days_mon)));
-
-
-
+        addSlotAdapter = new AddSlotAdapter(this, getResources().getStringArray(R.array.week_days_mon));
+        gridView.setAdapter(addSlotAdapter);
    /*     gridView.setSelection(6);*/
-
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1544,6 +1541,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         Log.d(TAG, "till date:" + stringBuilder.toString());
         AddNewSlotActivity.tv_till_date.setText(stringBuilder.toString());
         tv_start_time.setText("");
+        tv_stop_time.setText("");
 
         time_from=getResources().getString(R.string.select);
         time_to=getResources().getString(R.string.select);
@@ -1556,11 +1554,13 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
 
         ArrayList<Integer> arrayList_weekDays = weekDaysFoundBetweenTwoDates(cal_slot_start_date, cal_slot_stop_date);
         if (arrayList_weekDays.size() > 0) {
-            if (arrayList_weekDays.size() < 8) {
-                int week_days_size = arrayList_weekDays.size();
-
+            for (Integer i : arrayList_weekDays)
+                Log.e("FMC", i + "");
+            if (arrayList_weekDays.size() < 7) {
+                addSlotAdapter.setNotAllDayAvailableForSelection(true);
+                addSlotAdapter.setArrayList_weekDay(arrayList_weekDays);
             } else {
-
+                addSlotAdapter.setNotAllDayAvailableForSelection(false);
             }
         }
     }
