@@ -125,6 +125,7 @@ public class AddSlotAdapter extends BaseAdapter {
                 } else if (!arrayList_weekDay.contains(2)) {
                     button.setTextColor(color);
                     addNewSlotActivity.boo_mon_checked = false;
+
                 }
                 break;
             case 1:
