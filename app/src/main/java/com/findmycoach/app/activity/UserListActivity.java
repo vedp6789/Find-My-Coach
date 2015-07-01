@@ -86,10 +86,11 @@ public class UserListActivity extends Activity implements Callback {
         String authToken = StorageHelper.getUserDetails(this, "auth_token");
         String user_group = StorageHelper.getUserGroup(UserListActivity.this, "user_group");
         if (user_group != null) {
-            requestParams.add("user_group", StorageHelper.getUserGroup(UserListActivity.this,"user_group"));
+            requestParams.add("user_group", StorageHelper.getUserGroup(UserListActivity.this, "user_group"));
             /*
             requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
-            */NetworkClient.getMentorDetails(this, requestParams, authToken, this, 24);
+            */
+            NetworkClient.getMentorDetails(this, requestParams, authToken, this, 24);
         } else {
             Toast.makeText(UserListActivity.this, getResources().getString(R.string.check_network_connection), Toast.LENGTH_SHORT).show();
         }
@@ -102,6 +103,7 @@ public class UserListActivity extends Activity implements Callback {
         String json = getIntent().getStringExtra("list");
         searchFor = getIntent().getStringExtra("search_for");
         Log.d(TAG, "Intent String:" + json);
+        Log.e(TAG, json);
         SearchResponse searchResponse = new Gson().fromJson(json, SearchResponse.class);
         users = searchResponse.getData();
         Log.d(TAG, "Users:" + users);
@@ -141,7 +143,10 @@ public class UserListActivity extends Activity implements Callback {
         if (calledApiValue == 24) {
             Intent intent = new Intent(getApplicationContext(), MentorDetailsActivity.class);
             intent.putExtra("mentorDetails", (String) object);
-            intent.putExtra("searched_keyword", getIntent().getStringExtra("searched_keyword"));
+            try {
+                intent.putExtra("searched_keyword", getIntent().getStringExtra("searched_keyword"));
+            } catch (Exception ignored) {
+            }
             intent.putExtra("connection_status", connection_status_for_Selected_mentor);
             datum = null;
             startActivityForResult(intent, NEED_TO_REFRESH);

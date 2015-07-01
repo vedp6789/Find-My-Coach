@@ -2,7 +2,7 @@ package com.findmycoach.app.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentManager;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -30,8 +31,6 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.AddSlotAdapter;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.fragment.TimePickerFragment;
-import com.findmycoach.app.fragment_mentor.StartDateDialogFragment;
-import com.findmycoach.app.fragment_mentor.TillDateDialogFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.ScrollableGridView;
@@ -98,7 +97,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
     String class_slot_type;    /* Individual or Group  */
     String class_location;
     JSONObject jsonObject_exception;
-    private boolean isFromTimeSet;
+    private boolean isFromTimeSet, isFromDateSet;
     private AddSlotAdapter addSlotAdapter;
 
 
@@ -109,12 +108,23 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
 
     ProgressDialog progressDialog;
 
+    DatePickerDialog.OnDateSetListener myDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            if (isFromDateSet)
+                setSelectedStartDate(day, month + 1, year);
+            else
+                setSelectedTillDate(day, month + 1, year, false);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_avail_slot);
 
         allow_slot_type_message = false;
+        isFromDateSet = false;
 
         time_from = getResources().getString(R.string.select);
         time_to = getResources().getString(R.string.select);
@@ -240,11 +250,15 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         findViewById(R.id.fromDate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "On click");
-                FragmentManager fragmentManager = getFragmentManager();
-                StartDateDialogFragment dateDialogFragment = new StartDateDialogFragment();
-                dateDialogFragment.addNewSlotActivity = AddNewSlotActivity.this;
-                dateDialogFragment.show(fragmentManager, null);
+                final Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog dpd = new DatePickerDialog(AddNewSlotActivity.this,
+                        myDateSetListener, year, month, day);
+                isFromDateSet = true;
+                dpd.getDatePicker().setMinDate(c.getTimeInMillis());
+                dpd.show();
             }
         });
 
@@ -252,10 +266,13 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
             @Override
             public void onClick(View v) {
                 if (tv_start_date.getText().length() > 0) {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    TillDateDialogFragment dateDialogFragment = new TillDateDialogFragment();
-                    dateDialogFragment.addNewSlotActivity = AddNewSlotActivity.this;
-                    dateDialogFragment.show(fragmentManager, null);
+                    DatePickerDialog dpd = new DatePickerDialog(AddNewSlotActivity.this,
+                            myDateSetListener, AddNewSlotActivity.from_day + 1, AddNewSlotActivity.from_month, AddNewSlotActivity.from_year);
+                    isFromDateSet = false;
+                    Calendar c = Calendar.getInstance();
+                    c.set(AddNewSlotActivity.from_year, AddNewSlotActivity.from_month - 1, AddNewSlotActivity.from_day);
+                    dpd.getDatePicker().setMinDate(c.getTimeInMillis());
+                    dpd.show();
                 } else {
                     Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.from_date_first), Toast.LENGTH_SHORT).show();
                 }
@@ -371,6 +388,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
                 }
             }
         });
+
 
         final String[] slot_types = {getResources().getString(R.string.individual), getResources().getString(R.string.group)};
         ArrayAdapter arrayAdapter1_slot_types = new ArrayAdapter(this, R.layout.textview, slot_types);

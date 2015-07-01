@@ -5,10 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
@@ -47,18 +44,9 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
-import org.xml.sax.InputSource;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
-
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 public class EditProfileActivityMentee extends Activity implements Callback {
 
@@ -97,7 +85,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         populateUserData();
         isGettingAddress = false;
 
-        if (newUser != null)
+        if (newUser != null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
             getAddress();
 
     }
@@ -217,79 +205,13 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         profileAddress1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                city = arrayAdapter.getItem(position).toString();
+                city = arrayAdapter.getItem(position);
+//                getPostalFromCity(city);
                 try {
                     NetworkManager.countryName = predictions.get(position).getCountry();
                     isGettingAddress = true;
                 } catch (Exception e) {
                     NetworkManager.countryName = "";
-                }
-                Geocoder geocoder = new Geocoder(EditProfileActivityMentee.this, Locale.getDefault());
-                try {
-                    ArrayList<Address> addresses = (ArrayList<Address>) geocoder.getFromLocationName(city.toString(), 1);
-                    Address address = addresses.get(0);
-                    Log.i(TAG, "address according to Geo coder : " + "\n postal code : " + address.getPostalCode() + "\n country name : " + address.getCountryName() + "\n address line 0 : " + address.getAddressLine(0) + "\n address line 1 : " + address.getAddressLine(1));
-                    for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-                        Log.i(TAG, "address line " + i + " : " + address.getAddressLine(i));
-                    }
-                    Log.i(TAG, "address locality " + address.getLocality() + "latitude : " + address.getLatitude() + "longitude : " + address.getLongitude());
-
-                    double latitude = address.getLatitude();
-                    double longitude = address.getLongitude();
-
-                    final ArrayList<Double> doubles = new ArrayList<Double>();
-                    doubles.add(latitude);
-                    doubles.add(longitude);
-
-
-                    new AsyncTask<ArrayList, Void, String>() {
-
-                        @Override
-                        protected String doInBackground(ArrayList... params) {
-                            ArrayList<Double> doubles1 = params[0];
-                            XPath xpath = XPathFactory.newInstance().newXPath();
-                            String expression = "//GeocodeResponse/result/address_component[type=\"postal_code\"]/long_name/text()";
-                            Log.d(TAG, "lat in async " + doubles1.get(0));
-                            Log.d(TAG, "long in async " + doubles1.get(1));
-
-                            InputSource inputSource = new InputSource("https://maps.googleapis.com/maps/api/geocode/xml?latlng=" + doubles1.get(0) + "," + doubles1.get(1) + "&sensor=true");
-                            String zipcode = null;
-                            try {
-                                zipcode = (String) xpath.evaluate(expression, inputSource, XPathConstants.STRING);
-                            } catch (XPathExpressionException e) {
-                                e.printStackTrace();
-                            }
-
-
-                            Log.i(TAG, "zip code 1 : " + zipcode);
-
-
-                            return zipcode;
-                        }
-
-
-                        @Override
-                        protected void onPostExecute(String s) {
-                            super.onPostExecute(s);
-                            if (s != null) {
-                                try {
-                                    pinCode.setText(s);
-                                } catch (Exception ignored) {
-                                }
-                            } else {
-                                try {
-                                    pinCode.setText("");
-                                } catch (Exception ignored) {
-                                }
-                            }
-
-
-                        }
-                    }.execute(doubles);
-
-
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
         });
@@ -319,7 +241,8 @@ public class EditProfileActivityMentee extends Activity implements Callback {
                         || (actionId == EditorInfo.IME_ACTION_DONE)
                         || actionId == EditorInfo.IME_ACTION_NEXT) {
                     try {
-                        new AddressFromZip(EditProfileActivityMentee.this, profileAddress1).execute(pinCode.getText().toString());
+                        new AddressFromZip(EditProfileActivityMentee.this, profileAddress1, profileAddress, true).execute(pinCode.getText().toString());
+                        isGettingAddress = true;
                     } catch (Exception ignored) {
                     }
                 }
@@ -346,6 +269,76 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         });
 
     }
+
+//    private void getPostalFromCity(String city) {
+//        Geocoder geocoder = new Geocoder(EditProfileActivityMentee.this, Locale.getDefault());
+//        try {
+//            ArrayList<Address> addresses = (ArrayList<Address>) geocoder.getFromLocationName(city.toString(), 1);
+//            Address address = addresses.get(0);
+//            Log.i(TAG, "address according to Geo coder : " + "\n postal code : " + address.getPostalCode() + "\n country name : " + address.getCountryName() + "\n address line 0 : " + address.getAddressLine(0) + "\n address line 1 : " + address.getAddressLine(1));
+//            for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+//                Log.i(TAG, "address line " + i + " : " + address.getAddressLine(i));
+//            }
+//            Log.i(TAG, "address locality " + address.getLocality() + "latitude : " + address.getLatitude() + "longitude : " + address.getLongitude());
+//
+//            double latitude = address.getLatitude();
+//            double longitude = address.getLongitude();
+//
+//            final ArrayList<Double> doubles = new ArrayList<Double>();
+//            doubles.add(latitude);
+//            doubles.add(longitude);
+//
+//
+//            new AsyncTask<ArrayList, Void, String>() {
+//
+//                @Override
+//                protected String doInBackground(ArrayList... params) {
+//                    ArrayList<Double> doubles1 = params[0];
+//                    XPath xpath = XPathFactory.newInstance().newXPath();
+//                    String expression = "//GeocodeResponse/result/address_component[type=\"postal_code\"]/long_name/text()";
+//                    Log.d(TAG, "lat in async " + doubles1.get(0));
+//                    Log.d(TAG, "long in async " + doubles1.get(1));
+//
+//                    InputSource inputSource = new InputSource("https://maps.googleapis.com/maps/api/geocode/xml?latlng=" + doubles1.get(0) + "," + doubles1.get(1) + "&sensor=true");
+//                    String zipcode = null;
+//                    try {
+//                        zipcode = (String) xpath.evaluate(expression, inputSource, XPathConstants.STRING);
+//                    } catch (XPathExpressionException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//
+//                    Log.i(TAG, "zip code 1 : " + zipcode);
+//
+//
+//                    return zipcode;
+//                }
+//
+//
+//                @Override
+//                protected void onPostExecute(String s) {
+//                    super.onPostExecute(s);
+//                    if (s != null) {
+//                        try {
+//                            pinCode.setText(s);
+//                        } catch (Exception ignored) {
+//                        }
+//                    } else {
+//                        try {
+//                            pinCode.setText("");
+//                        } catch (Exception ignored) {
+//                        }
+//                    }
+//
+//
+//                }
+//            }.execute(doubles);
+//
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public void populateUserData() {
 
@@ -635,6 +628,16 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             progressDialog.dismiss();
             ProfileResponse response = (ProfileResponse) object;
             userInfo = response.getData();
+
+            StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
+            StorageHelper.storePreference(this, "user_city_state", profileAddress1.getText().toString());
+            if (isGettingAddress && NetworkManager.countryName != null && !NetworkManager.countryName.equals(""))
+                StorageHelper.storePreference(this, "user_country", NetworkManager.countryName);
+            StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
+
+            Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentee.this, "user_local_address"));
+            Log.d(TAG, "city: " + StorageHelper.addressInformation(EditProfileActivityMentee.this, "user_city_state"));
+            Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentee.this, "user_zip_code"));
 
             String currencyCode = StorageHelper.getCurrency(this);
             if (currencyCode == null || currencyCode.trim().equals("")) {

@@ -2,7 +2,7 @@ package com.findmycoach.app.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentManager;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -18,8 +19,6 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.fragment.TimePickerFragment;
-import com.findmycoach.app.fragment_mentor.StartDateForVaccationSchedule;
-import com.findmycoach.app.fragment_mentor.StopDateForVacationSchedule;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.SetDate;
@@ -70,13 +69,25 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
 
     private static final String TAG = "FMC";
     private static String FOREVER;
-    private boolean isFromTimeSet;
+    private boolean isFromTimeSet, isFromDateSet;
 
     private Date newDate;
 
     public ArrayList<String> days_array = null;
 
     ProgressDialog progressDialog;
+
+
+    DatePickerDialog.OnDateSetListener myDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            if (isFromDateSet)
+                setSelectedStartDate(day, month + 1, year);
+            else
+                setSelectedTillDate(day, month + 1, year, false);
+        }
+    };
+
 
 
     @Override
@@ -91,6 +102,8 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
         from_year = 0;
 
         days_array = new ArrayList<String>();
+
+        isFromDateSet = false;
 
         boo_mon_checked = true;
         boo_tue_checked = true;
@@ -235,11 +248,15 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
         findViewById(R.id.fromDate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "On click");
-                FragmentManager fragmentManager = getFragmentManager();
-                StartDateForVaccationSchedule startDateForVaccationSchedule = new StartDateForVaccationSchedule();
-                startDateForVaccationSchedule.show(fragmentManager, null);
-
+                final Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog dpd = new DatePickerDialog(ScheduleYourVacation.this,
+                        myDateSetListener, year, month, day);
+                isFromDateSet = true;
+                dpd.getDatePicker().setMinDate(c.getTimeInMillis());
+                dpd.show();
 
             }
         });
@@ -248,9 +265,13 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
             @Override
             public void onClick(View v) {
                 if (tv_start_date.getText().length() > 0) {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    StopDateForVacationSchedule stopDateForVacationSchedule = new StopDateForVacationSchedule();
-                    stopDateForVacationSchedule.show(fragmentManager, null);
+                    DatePickerDialog dpd = new DatePickerDialog(ScheduleYourVacation.this,
+                            myDateSetListener, ScheduleYourVacation.from_day + 1, ScheduleYourVacation.from_month, ScheduleYourVacation.from_year);
+                    isFromDateSet = false;
+                    Calendar c = Calendar.getInstance();
+                    c.set(ScheduleYourVacation.from_year, ScheduleYourVacation.from_month - 1, ScheduleYourVacation.from_day);
+                    dpd.getDatePicker().setMinDate(c.getTimeInMillis());
+                    dpd.show();
                 } else {
                     Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.from_date_first), Toast.LENGTH_SHORT).show();
                 }

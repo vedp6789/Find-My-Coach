@@ -12,7 +12,6 @@ import com.findmycoach.app.beans.chats.Chats;
 import com.findmycoach.app.beans.requests.ConnectionRequestsResponse;
 import com.findmycoach.app.beans.search.SearchResponse;
 import com.findmycoach.app.beans.student.ProfileResponse;
-import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
@@ -557,22 +556,18 @@ public class NetworkClient {
                     Log.d(TAG, "Success: Response:" + responseJson);
                     Log.d(TAG, "Success: Response Code:" + statusCode);
                     Suggestion suggestion = new Gson().fromJson(responseJson, Suggestion.class);
-                    if (!(context instanceof DashboardActivity)) {
-                        for (Prediction p : suggestion.getPredictions()) {
-                            String[] tempArray = p.getDescription().split(",");
-                            if (tempArray.length > 2) {
-                                p.setDescription(tempArray[tempArray.length - 3]);
-                                p.setCountry(tempArray[tempArray.length - 1]);
-                                p.setState(tempArray[tempArray.length - 2]);
-                            }else {
-                               suggestion.getPredictions().remove(p);
-                            }
-                        }
-
-                        for (Prediction p : suggestion.getPredictions()) {
-
-                        }
-                    }
+//                    if (!(context instanceof DashboardActivity)) {
+//                        for (Prediction p : suggestion.getPredictions()) {
+//                            String[] tempArray = p.getDescription().split(",");
+//                            if (tempArray.length > 2) {
+//                                p.setDescription(tempArray[tempArray.length - 3]);
+//                                p.setCountry(tempArray[tempArray.length - 1]);
+//                                p.setState(tempArray[tempArray.length - 2]);
+//                            }else {
+//                               suggestion.getPredictions().remove(p);
+//                            }
+//                        }
+//                    }
                     callback.successOperation(suggestion, statusCode, calledApiValue);
                 } catch (Exception e) {
                     e.printStackTrace();
