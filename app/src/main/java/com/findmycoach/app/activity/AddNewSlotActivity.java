@@ -242,6 +242,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
                 DatePickerDialog dpd = new DatePickerDialog(AddNewSlotActivity.this,
                         myDateSetListener, year, month, day);
                 isFromDateSet = true;
+                dpd.getDatePicker().setMinDate(c.getTimeInMillis());
                 dpd.show();
             }
         });

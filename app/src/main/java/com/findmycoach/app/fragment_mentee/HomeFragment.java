@@ -42,7 +42,6 @@ import com.findmycoach.app.beans.category.DatumSub;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.fragment.TimePickerFragment;
-import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
@@ -370,13 +369,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 String input = locationInput.getText().toString();
                 if (input.length() >= 2) {
                     getAutoSuggestions(input);
-                    if (input.length() > 4 && input.length() < 8) {
-                        try {
-                            int zipCode = Integer.parseInt(input);
-                            new AddressFromZip(getActivity(), locationInput).execute(zipCode + "");
-                        } catch (Exception e) {
-                        }
-                    }
+//                    if (input.length() > 4 && input.length() < 8) {
+//                        try {
+//                            new AddressFromZip(getActivity(), locationInput,null, true).execute(input);
+//                        } catch (Exception e) {
+//                        }
+//                    }
                 }
             }
         });

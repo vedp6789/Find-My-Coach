@@ -29,7 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/calender_header_margin_arrow"
         android:hint="@string/connection_request_msg"
-        android:padding="@dimen/days_margin" />
+        android:padding="@dimen/days_margin"
+        android:textCursorDrawable="@drawable/cursor_white" />
 
 
     <RelativeLayout

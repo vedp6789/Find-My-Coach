@@ -319,7 +319,8 @@ public class EditProfileActivityMentee extends Activity implements Callback {
                         || (actionId == EditorInfo.IME_ACTION_DONE)
                         || actionId == EditorInfo.IME_ACTION_NEXT) {
                     try {
-                        new AddressFromZip(EditProfileActivityMentee.this, profileAddress1).execute(pinCode.getText().toString());
+                        new AddressFromZip(EditProfileActivityMentee.this, profileAddress1, profileAddress, true).execute(pinCode.getText().toString());
+                        isGettingAddress = true;
                     } catch (Exception ignored) {
                     }
                 }

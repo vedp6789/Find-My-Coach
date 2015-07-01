@@ -41,4 +41,7 @@
     <integer name="mentor_min_age">16</integer>
     <integer name="mentor_min_age_experience_difference">12</integer>
 
+    <!--Google api for getting address from zip-->
+    <string name="google_api_lat_lng_from_zip">http://maps.googleapis.com/maps/api/geocode/json?</string>
+
 </resources>
