@@ -369,8 +369,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         intent.putExtra("from", "SignUpActivity");
         startActivity(intent);
 
-        finish();
         LoginActivity.loginActivity.finish();
+        finish();
         StorageHelper.storePreference(this, "login_with", "Login");
     }
 

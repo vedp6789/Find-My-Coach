@@ -85,7 +85,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         populateUserData();
         isGettingAddress = false;
 
-        if (newUser != null)
+        if (newUser != null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
             getAddress();
 
     }

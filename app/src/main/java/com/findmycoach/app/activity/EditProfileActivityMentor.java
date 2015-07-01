@@ -92,7 +92,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         isGettingAddress = false;
         isDobForReview = false;
 
-        if (newUser != null || userInfo.getAddress().toString().trim().equals(""))
+        if (newUser != null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
             getAddress();
 
     }

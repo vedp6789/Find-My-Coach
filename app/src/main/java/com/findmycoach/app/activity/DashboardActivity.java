@@ -115,6 +115,9 @@ public class DashboardActivity extends FragmentActivity
 
         new GetLocation().execute();
 
+        if(LoginActivity.loginActivity != null)
+            LoginActivity.loginActivity.finish();
+
         dashboardActivity = this;
         fragmentManager = getSupportFragmentManager();
         isProfileOpen = false;
