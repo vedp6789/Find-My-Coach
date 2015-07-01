@@ -140,12 +140,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="@dimen/textView_padding_margin"
+                        android:singleLine="true"
                         android:text="@string/from"
                         android:textColor="@color/white"
-                        android:singleLine="true"
                         android:textSize="16sp"
-                        android:textStyle="bold"
-                        />
+                        android:textStyle="bold" />
 
                     <com.findmycoach.app.views.ChizzleTextView
                         android:id="@+id/tv_slot_start_time"
@@ -193,14 +192,12 @@
             </LinearLayout>
 
 
-
-
             <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/tv_days"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/back_margin"
                 android:layout_below="@+id/time"
+                android:layout_margin="@dimen/back_margin"
                 android:gravity="center"
                 android:text="@string/select_days"
                 android:textColor="@color/purple"
@@ -230,7 +227,6 @@
                 android:layout_height="0.5dp"
                 android:layout_below="@+id/calendar"
                 android:background="@color/purple_light" />
-
 
 
             <LinearLayout
@@ -396,8 +392,8 @@
                         android:layout_height="@dimen/login_button_height"
                         android:gravity="center_vertical"
                         android:inputType="number"
-                        android:singleLine="true"
                         android:nextFocusDown="@+id/et_tutorial_location"
+                        android:singleLine="true"
                         android:textCursorDrawable="@drawable/cursor_purple"
                         android:textSize="@dimen/profile_details" />
 
@@ -440,9 +436,7 @@
                         android:textCursorDrawable="@drawable/cursor_purple"
                         android:textSize="@dimen/profile_details"
                         android:inputType="textMultiLine"
-                        android:scrollHorizontally="false"
-                        android:imeOptions="actionDone"
-                        />
+                        android:imeOptions="actionDone"/>
 
                 </LinearLayout>
             </LinearLayout>

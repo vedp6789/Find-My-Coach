@@ -57,7 +57,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
     private LinearLayout ll_child_dob, ll_location, ll_vacation;
     public static TextView tv_child_dob;
-    private static TextView tv_from_date, tv_to_date, tv_class_timing, tv_subject, tv_total_charges;
+    private static TextView tv_from_date, tv_to_date, tv_class_timing, tv_subject, tv_total_charges, tv_class_of_type;
     Spinner sp_subjects, sp_mentor_for;
     EditText et_location;
     RadioButton rb_pay_now, rb_pay_personally;
@@ -97,7 +97,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private int class_days_after_reducing_vacation = 0; /* No of days which will be possible for class i.e. if vacation found then these are coming from reducing vacations */
     List<DurationOfSuccessfulClassDays> durationOfSuccessfulClassDayses = new ArrayList<DurationOfSuccessfulClassDays>();
     private boolean class_not_possible;
-    private ImageButton ib_info;
+    private ImageButton ib_info, ib_mentor_availability_info;
 
 
     @Override
@@ -131,7 +131,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
             slot_type = slot.getSlot_type();
             slot_on_week_days = slot.getSlot_week_days();
-
 
             vacations_on_the_slot = new ArrayList<Vacation>();
             vacations_on_the_slot = slot.getVacations();
@@ -172,6 +171,16 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         * */
 
         Log.d(TAG, "slot_type : " + slot_type);
+
+        String slot_type = slot.getSlot_type();
+        if (slot_type.equalsIgnoreCase("group")) {
+            tv_class_of_type.setText(getResources().getString(R.string.group));
+        } else {
+            if (slot_type.equalsIgnoreCase("individual")) {
+                tv_class_of_type.setText(getResources().getString(R.string.individual));
+            }
+        }
+
 
         if (slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
             ll_location.setVisibility(View.GONE);
@@ -592,9 +601,11 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         tv_child_dob = (TextView) findViewById(R.id.tv_child_dob);
         tv_child_dob.setOnClickListener(this);
         tv_total_charges = (TextView) findViewById(R.id.tv_total_charge);
+        tv_class_of_type = (TextView) findViewById(R.id.tv_class_of_type);
+        ib_mentor_availability_info = (ImageButton) findViewById(R.id.ib_mentor_availability_info);
+        ib_mentor_availability_info.setOnClickListener(this);
         ll_child_dob = (LinearLayout) findViewById(R.id.ll_child_dob);
         ll_location = (LinearLayout) findViewById(R.id.ll_location);
-        ll_location.setVisibility(View.GONE);
         sp_mentor_for = (Spinner) findViewById(R.id.sp_mentor_for);
         tv_number_of_classes = (TextView) findViewById(R.id.tv_number_of_classes);
         ll_vacation = (LinearLayout) findViewById(R.id.ll_vacations);

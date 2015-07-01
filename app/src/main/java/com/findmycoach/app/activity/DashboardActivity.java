@@ -67,6 +67,8 @@ public class DashboardActivity extends FragmentActivity
     private FragmentManager fragmentManager;
     String regid;
     boolean regid_saved_to_server = false;
+    boolean onNewIntentCalled = false;
+    int fragment_to_open; /* will get value from onNewIntent method */
     /**
      * This is the project number we got
      * from the API Console,
@@ -89,7 +91,7 @@ public class DashboardActivity extends FragmentActivity
 
     int fragment_to_launch_from_notification = 0;  ///  On a tap over Push notification, then it will be used to identify which operation to perform
     int group_push_notification = 0;      /// it will identify push notification for which type of user.
-
+    int user_group_from_push=0;
     /**
      * Related to reside menu
      */
@@ -167,6 +169,7 @@ public class DashboardActivity extends FragmentActivity
         StorageHelper.createAppMediaFolders(this);
 
         fragment_to_launch_from_notification = getIntent().getIntExtra("fragment", 0);
+        Log.d(TAG,"on create "+fragment_to_launch_from_notification);
         group_push_notification = getIntent().getIntExtra("group", 0);
 
         if (fragment_to_launch_from_notification == 0) {
@@ -374,8 +377,22 @@ public class DashboardActivity extends FragmentActivity
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        onNewIntentCalled = true;
+        fragment_to_open =intent.getIntExtra("fragment",-2);
+        user_group_from_push=intent.getIntExtra("group",-4);
+        Log.d(TAG,"intent for fragment key in onNewIntent: "+intent.getIntExtra("fragment",-2));
+        Log.d(TAG,"intent extra from getIntent for fragment key in onNewIntent: "+getIntent().getIntExtra("fragment",-3));
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+
+        Log.d(TAG,"Dashboard Activity on Resume");
 
         String tNc = StorageHelper.getUserDetails(this, "terms");
         if ((tNc == null || !tNc.equals("yes")) && !isProfileOpen) {
@@ -390,9 +407,14 @@ public class DashboardActivity extends FragmentActivity
                 map.setOnMyLocationChangeListener(null);
                 map = null;
             }
+            if(onNewIntentCalled){
+                onNewIntentCalled = false;
+                fragment_to_launch_from_notification = fragment_to_open;
+                group_push_notification=user_group_from_push;
+            }
 
 
-            Log.e(TAG, user_group + " : " + group_push_notification + " : " + fragment_to_launch_from_notification);
+
 
             if (fragment_to_launch_from_notification == 0) {
                 if (!checkPlayServices()) {
@@ -405,6 +427,9 @@ public class DashboardActivity extends FragmentActivity
                 if (user_group == group_push_notification) {
 
                     ResideMenuItem item = null;
+
+
+                    Log.d(TAG,"fragment to launch from notification: "+fragment_to_launch_from_notification);
 
                     switch (fragment_to_launch_from_notification) {
                         case 1:

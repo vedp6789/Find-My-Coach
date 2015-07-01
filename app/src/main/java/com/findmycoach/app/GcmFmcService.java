@@ -37,9 +37,9 @@ public class GcmFmcService extends IntentService {
 
     int opcode = 0;
     String user_group = null;
-    JSONObject jsonObject=null;
-    JSONObject jsonObject1=null;
-    JSONObject jsonObject2=null;
+    JSONObject jsonObject = null;
+    JSONObject jsonObject1 = null;
+    JSONObject jsonObject2 = null;
     String contentTitle = null;
     String message = null;
     String f_name = null;
@@ -61,7 +61,7 @@ public class GcmFmcService extends IntentService {
             Bundle extras = intent.getExtras();
             GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
             String messageType = gcm.getMessageType(intent);
-            Log.d(TAG,"String getting from gcm cloud: "+messageType);
+            Log.d(TAG, "String getting from gcm cloud: " + messageType);
             if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
 
                 if (GoogleCloudMessaging.
@@ -81,7 +81,7 @@ public class GcmFmcService extends IntentService {
             }
             // Release the wake lock provided by the WakefulBroadcastReceiver.
             GcmBroadcastReceiver.completeWakefulIntent(intent);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -90,33 +90,34 @@ public class GcmFmcService extends IntentService {
     private void sendNotification(String push_message) {
 
         String userToken = StorageHelper.getUserDetails(this, "auth_token");
-        Log.d(TAG,"push message: "+push_message.toString());
+        Log.d(TAG, "push message: " + push_message.toString());
 
         //String phnVerified = StorageHelper.getUserDetails(this, "phone_verified");  // commented as it is not working from server side
 
 
         if (userToken != null /*&& phnVerified != null*/) {
-            contentIntent=null;
+            contentIntent = null;
             try {
                 jsonObject = new JSONObject(push_message);
                 opcode = jsonObject.getInt("opcode");
+                Log.d(TAG, "opcode getting received: " + opcode);
                 user_group = jsonObject.getString("user_group");
                 jsonObject1 = new JSONObject(jsonObject.getString("data"));
-                Log.d(TAG,"json object data"+ jsonObject1.toString());
+                Log.d(TAG, "json object data" + jsonObject1.toString());
 
-                jsonObject2= new JSONObject(jsonObject1.getString("user"));
-                Log.d(TAG,"User Object"+jsonObject2.toString());
-                f_name=jsonObject2.getString("first_name");
+                jsonObject2 = new JSONObject(jsonObject1.getString("user"));
+                Log.d(TAG, "User Object" + jsonObject2.toString());
+                f_name = jsonObject2.getString("first_name");
 
 
-                if (Integer.parseInt(user_group) == 3 && StorageHelper.getUserGroup(getApplicationContext(),"user_group").equals(user_group)) {
+                if (Integer.parseInt(user_group) == 3 && StorageHelper.getUserGroup(getApplicationContext(), "user_group").equals(user_group)) {
                     if (opcode == 1) {
-                        Log.d(TAG,"Inside opcode match for opcode 1");
+                        Log.d(TAG, "Inside opcode match for opcode 1");
                         contentTitle = "Find My Coach";
-                        message="Hi, connection request from "+f_name;
-                        Intent intent=new Intent(this,DashboardActivity.class);
-                        intent.putExtra("fragment",1);
-                        intent.putExtra("group",3);
+                        message = "Hi, connection request from " + f_name;
+                        Intent intent = new Intent(this, DashboardActivity.class);
+                        intent.putExtra("fragment", 1);
+                        intent.putExtra("group", 3);
                         intent.setAction("" + Math.random());
 
 
@@ -126,16 +127,16 @@ public class GcmFmcService extends IntentService {
                     }
                     if (opcode == 4) {
                         contentTitle = "Find My Coach";
-                        message="Hi, you have a new class schedule from "+f_name;
-                        Intent intent=new Intent(this,DashboardActivity.class);
-                        intent.putExtra("fragment",4);
-                        String slot_type=jsonObject1.getString("slot_type");
-                        String event_id=jsonObject1.getString("event_id");
-                        String student_id=jsonObject1.getString("student_id");
-                        intent.putExtra("slot_type",slot_type);
-                        intent.putExtra("event_id",event_id);
-                        intent.putExtra("student_id",student_id);
-                        intent.putExtra("group",3);
+                        message = "Hi, you have a new class schedule request from " + f_name;
+                        Intent intent = new Intent(this, DashboardActivity.class);
+                        intent.putExtra("fragment", 4);
+                        String slot_type = jsonObject1.getString("slot_type");
+                        String event_id = jsonObject1.getString("event_id");
+                        String student_id = jsonObject1.getString("student_id");
+                        intent.putExtra("slot_type", slot_type);
+                        intent.putExtra("event_id", event_id);
+                        intent.putExtra("student_id", student_id);
+                        intent.putExtra("group", 3);
                         intent.setAction("" + Math.random());
 
 
@@ -145,24 +146,24 @@ public class GcmFmcService extends IntentService {
                     }
                     if (opcode == 7) {
                         contentTitle = "Find My Coach";
-                        message = "Hi, "+f_name+ " has sent a text message.";
-                        Intent intent=new Intent(this,DashboardActivity.class);
-                        intent.putExtra("fragment",7);
-                        intent.putExtra("group",3);
+                        message = "Hi, " + f_name + " has sent a text message.";
+                        Intent intent = new Intent(this, DashboardActivity.class);
+                        intent.putExtra("fragment", 7);
+                        intent.putExtra("group", 3);
                         intent.setAction("" + Math.random());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                        contentIntent = PendingIntent.getActivity(this, 0,
-                                intent, 0);
+                        contentIntent = PendingIntent.getActivity(this,0, intent, 0);
                         createNotification(NOTIFICATION_ID_TEXT_CHAT_MENTOR);
                     }
                     if (opcode == 8) {
                         contentTitle = "Find My Coach";
-                        message = "Hi, "+f_name+" has sent an image message.";
-                        Intent intent=new Intent(this,DashboardActivity.class);
-                        intent.putExtra("fragment",8);
-                        intent.putExtra("group",3);
+                        message = "Hi, " + f_name + " has sent an image message.";
+                        Intent intent = new Intent(this, DashboardActivity.class);
+                        intent.putExtra("fragment", 8);
+                        intent.putExtra("group", 3);
                         intent.setAction("" + Math.random());
-
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                         contentIntent = PendingIntent.getActivity(this, 0,
                                 intent, 0);
@@ -171,11 +172,12 @@ public class GcmFmcService extends IntentService {
                     }
                     if (opcode == 9) {
                         contentTitle = "Find My Coach";
-                        message = "Hi, "+f_name+ " has sent a video message." ;
-                        Intent intent=new Intent(this,DashboardActivity.class);
-                        intent.putExtra("fragment",9);
-                        intent.putExtra("group",3);
+                        message = "Hi, " + f_name + " has sent a video message.";
+                        Intent intent = new Intent(this, DashboardActivity.class);
+                        intent.putExtra("fragment", 9);
+                        intent.putExtra("group", 3);
                         intent.setAction("" + Math.random());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                         contentIntent = PendingIntent.getActivity(this, 0,
                                 intent, 0);
@@ -184,14 +186,15 @@ public class GcmFmcService extends IntentService {
                     }
                 }
 
-                if(Integer.parseInt(user_group) == 2 && StorageHelper.getUserGroup(getApplicationContext(),"user_group").equals(user_group)){
+                if (Integer.parseInt(user_group) == 2 && StorageHelper.getUserGroup(getApplicationContext(), "user_group").equals(user_group)) {
                     if (opcode == 2) {
                         contentTitle = "Find My Coach";
                         message = "Hi, your connection request is accepted by " + f_name;
-                        Intent intent = new Intent(this, DashboardActivity.class);
+                        Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
                         intent.putExtra("fragment", 2);
-                        intent.putExtra("group",2);
+                        intent.putExtra("group", 2);
                         intent.setAction("" + Math.random());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                         contentIntent = PendingIntent.getActivity(this, 0,
                                 intent, 0);
@@ -200,10 +203,11 @@ public class GcmFmcService extends IntentService {
                     if (opcode == 3) {
                         contentTitle = "Find My Coach";
                         message = "Hi, your connection request is rejected by " + f_name;
-                        Intent intent = new Intent(this, DashboardActivity.class);
+                        Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
                         intent.putExtra("fragment", 3);
-                        intent.putExtra("group",2);
+                        intent.putExtra("group", 2);
                         intent.setAction("" + Math.random());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                         contentIntent = PendingIntent.getActivity(this, 0,
                                 intent, 0);
@@ -212,10 +216,11 @@ public class GcmFmcService extends IntentService {
                     if (opcode == 5) {
                         contentTitle = "Find My Coach";
                         message = "Hi, your schedule get confirmed by " + f_name;
-                        Intent intent = new Intent(this, DashboardActivity.class);
+                        Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
                         intent.putExtra("fragment", 5);
-                        intent.putExtra("group",2);
+                        intent.putExtra("group", 2);
                         intent.setAction("" + Math.random());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                         contentIntent = PendingIntent.getActivity(this, 0,
                                 intent, 0);
@@ -224,37 +229,40 @@ public class GcmFmcService extends IntentService {
                     if (opcode == 6) {
                         contentTitle = "Find My Coach";
                         message = "Sorry, your schedule get rejected by " + f_name;
-                        Intent intent = new Intent(this, DashboardActivity.class);
+                        Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
                         intent.putExtra("fragment", 6);
-                        intent.putExtra("group",2);
+                        intent.putExtra("group", 2);
                         intent.setAction("" + Math.random());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                         contentIntent = PendingIntent.getActivity(this, 0,
                                 intent, 0);
                         createNotification(NOTIFICATION_ID_SCHEDULE_REJECTED);
                     }
                     if (opcode == 7) {
+                        Log.d(TAG, "opcode 7 for mentee");
                         contentTitle = "Find My Coach";
                         message = "Hi, " + f_name + " has sent a text message.";
-                        Intent intent = new Intent(this, DashboardActivity.class);
+                        Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
                         intent.putExtra("fragment", 7);
-                        intent.putExtra("group",2);
+                        intent.putExtra("group", 2);
                         intent.setAction("" + Math.random());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-                        contentIntent = PendingIntent.getActivity(this, 0,
-                                intent, 0);
+                        //contentIntent = PendingIntent.getActivity(this,0,intent, 0);
                         createNotification(NOTIFICATION_ID_TEXT_CHAT_MENTEE);
                     }
                     if (opcode == 8) {
                         contentTitle = "Find My Coach";
                         message = "Hi, " + f_name + " has sent an image message.";
-                        Intent intent = new Intent(this, DashboardActivity.class);
+                        Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
                         intent.putExtra("fragment", 8);
-                        intent.putExtra("group",2);
+                        intent.putExtra("group", 2);
                         intent.setAction("" + Math.random());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                        contentIntent = PendingIntent.getActivity(this, 0,
-                                intent, 0);
+                        contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
                         createNotification(NOTIFICATION_ID_IMAGE_CHAT_MENTEE);
                     }
                     if (opcode == 9) {
@@ -262,8 +270,9 @@ public class GcmFmcService extends IntentService {
                         message = "Hi, " + f_name + " has sent a video message.";
                         Intent intent = new Intent(this, DashboardActivity.class);
                         intent.putExtra("fragment", 9);
-                        intent.putExtra("group",2);
+                        intent.putExtra("group", 2);
                         intent.setAction("" + Math.random());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                         contentIntent = PendingIntent.getActivity(this, 0,
                                 intent, 0);
@@ -278,33 +287,38 @@ public class GcmFmcService extends IntentService {
             }
 
 
-
-        }else{
-            Log.d(TAG,"Inside GcmFmcService of Mentor app, User in not login, notification not allowed for pop up");
+        } else {
+            Log.d(TAG, "Inside GcmFmcService of Mentor app, User in not login, notification not allowed for pop up");
         }
 
 
     }
 
-    void createNotification(int notification_id){
-        try{
-            mNotificationManager = (NotificationManager)
-                    this.getSystemService(Context.NOTIFICATION_SERVICE);
+    void createNotification(int notification_id) {
+        try {
+            mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (contentIntent != null) {
+                Log.d(TAG, "contentIntent not found null ");
+
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(this)
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setContentTitle(contentTitle)
+                                .setStyle(new NotificationCompat.BigTextStyle()
+                                        .bigText(message))
+                                .setAutoCancel(true)
+                                .setContentText(message);
 
 
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(this)
-                            .setSmallIcon(R.drawable.ic_launcher)
-                            .setContentTitle(contentTitle)
-                            .setStyle(new NotificationCompat.BigTextStyle()
-                                    .bigText(message))
-                            .setAutoCancel(true)
-                            .setContentText(message);
+                mBuilder.setContentIntent(contentIntent);
+                mNotificationManager.notify(notification_id, mBuilder.build());
+            } else {
+                Log.d(TAG, "contentIntent found null ");
+            }
 
 
-            mBuilder.setContentIntent(contentIntent);
-            mNotificationManager.notify(notification_id, mBuilder.build());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
