@@ -104,7 +104,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private String charges;
     public boolean populate_calendar_from_adapter;
 
-    private static final String TAG = "FMC";
+    private static final String TAG = "MentorDetailsActivity";
     private ArrayList<String> array_list_subCategory = null;
     private String previous_month_start_date;/* this will get initialized when api is requested for three months (previous, current, coming)*/
     private String next_month_requested_date;
@@ -584,6 +584,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             }
             populateViews(areaOfCoaching, buttons, this);
         }
+
 //        profilePhone.setText(userInfo.getPhonenumber());
     }
 

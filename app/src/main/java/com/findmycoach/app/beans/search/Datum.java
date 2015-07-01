@@ -39,27 +39,27 @@ public class Datum {
 
     @SerializedName("charges")
     @Expose
-    private int chargesHour;
+    private String chargesHour;
     @SerializedName("charges_class")
     @Expose
-    private int chargesClass;
+    private String chargesClass;
     @SerializedName("dates")
     @Expose
     private String availableDays;
 
-    public int getChargesHour() {
+    public String getChargesHour() {
         return chargesHour;
     }
 
-    public void setChargesHour(int chargesHour) {
+    public void setChargesHour(String chargesHour) {
         this.chargesHour = chargesHour;
     }
 
-    public int getChargesClass() {
+    public String getChargesClass() {
         return chargesClass;
     }
 
-    public void setChargesClass(int chargesClass) {
+    public void setChargesClass(String chargesClass) {
         this.chargesClass = chargesClass;
     }
 
