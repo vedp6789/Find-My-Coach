@@ -568,7 +568,11 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             requestParams.add("city", profileAddress1.getText().toString());
             requestParams.add("zip", pinCode.getText().toString());
             requestParams.add("mentor_for", mentorFor.getSelectedItem().toString());
-            requestParams.add("training_location", trainingLocation.getText().toString());
+            String trainLoc = trainingLocation.getText().toString().trim();
+            requestParams.add("training_location", trainLoc.length() < 2
+                    ? profileAddress.getText().toString() + ", "
+                    + profileAddress1.getText().toString() + ", "
+                    + pinCode.getText().toString() : trainLoc);
             requestParams.add("coaching_type", coachingType.getSelectedItem().toString());
             if (!imageInBinary.equals(""))
                 requestParams.add("photograph", imageInBinary);
