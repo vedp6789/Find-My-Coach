@@ -96,8 +96,10 @@ public class StorageHelper {
 //        editor.remove("terms");
         editor.remove("currency_code");
 
-        if (StorageHelper.getUserGroup(context, "user_group").equals("2"))
+        if (StorageHelper.getUserGroup(context, "user_group").equals("2")){
             editor.remove("training_location");
+
+        }
 
         if (StorageHelper.getUserGroup(context, "user_group").equals("3")) {
             editor.remove("area_of_coaching_set");
