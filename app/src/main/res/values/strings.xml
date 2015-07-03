@@ -505,7 +505,7 @@
     <string name="slot_type">Slot type:</string>
 
     <string name="max_students">Maximum students</string>
-    <string name="tutorial_location">Tutorial location:</string>
+    <string name="tutorial_location">Tutorial location</string>
     <string name="fmc_service">FMC Service</string>
     <string name="fmc_service_description">FMC running in service to allow push notification.</string>
     <string name="class_schedule">Class schedule</string>
@@ -517,8 +517,9 @@
     <string name="self">Self</string>
     <string name="select_card">Select a card</string>
     <string name="child">Child</string>
-    <string name="child_dob">Child Dob:</string>
+    <string name="child_dob">Child Dob</string>
     <string name="total_charges">Total charges:</string>
+    <string name="class_of_type">Class type</string>
     <string name="individual">Individual</string>
     <string name="group">Group</string>
     <string name="start_time_of_class">Start time</string>
@@ -528,6 +529,7 @@
     <string name="yesterday">Yesterday</string>
     <string name="class_info">Class slot details</string>
     <string name="mentor_details">Mentor\'s information</string>
+    <string name="tutorial_preference_by_mentee">You will attend this class at the mentor\'s location.</string>
 
 
     <!-- end of unique strings block-->
@@ -564,6 +566,7 @@
     <string name="is"> is </string>
     <string name="will_be_submitted"> will be submitted.</string>
     <string name="your_address_please">Your address please!</string>
+    <string name="address_missing">Please provide your complete address!</string>
     <string name="atleast_a_week_day">Select at least one week-day.</string>
     <string name="duration_please">Select the duration for this schedule.</string>
     <string name="cards_detail_will_saved">Card details will be saved</string>
@@ -612,6 +615,9 @@
     <string name="select_time">Please provide time</string>
     <string name="select_start_time_vacation">Please provide start time</string>
     <string name="select_stop_time_vacation">Please provide end time</string>
+    <string name="mentor_availability_message">Mentor can be available to your location!</string>
+    <string name="mentor_non_availability_message">Mentor cannot be available to your location!</string>
+
 
 
 

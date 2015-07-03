@@ -868,7 +868,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         }
 
         try {
-    /*Saving mentor's area of coaching i.e. subcategories to sharedpreference in string set*/
+        /*Saving mentor's area of coaching i.e. subcategories to sharedpreference in string set*/
             if (StorageHelper.getUserGroup(LoginActivity.this, "user_group").equals("3")) {
                 List<String> sub_category_list = response.getData().getSubCategoryName();
                 Set<String> sub_category_stringSet = new HashSet<String>();
