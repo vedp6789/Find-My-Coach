@@ -193,14 +193,14 @@
             android:screenOrientation="portrait" />
 
         <!-- Activities and service responsible for gathering customer consent and for future payments  -->
-        <!--<service-->
-        <!--android:name="com.paypal.android.sdk.payments.PayPalService"-->
-        <!--android:exported="false" />-->
+        <service
+        android:name="com.paypal.android.sdk.payments.PayPalService"
+        android:exported="false" />
 
-        <!--<activity android:name="com.paypal.android.sdk.payments.LoginActivity" />-->
-        <!--<activity android:name="com.paypal.android.sdk.payments.PayPalFuturePaymentActivity" />-->
-        <!--<activity android:name="com.paypal.android.sdk.payments.FuturePaymentConsentActivity" />-->
-        <!--<activity android:name="com.paypal.android.sdk.payments.FuturePaymentInfoActivity" />-->
+        <activity android:name="com.paypal.android.sdk.payments.LoginActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.PayPalFuturePaymentActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.FuturePaymentConsentActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.FuturePaymentInfoActivity" />
 
         <!-- Activities responsible for gathering card info  -->
         <activity
