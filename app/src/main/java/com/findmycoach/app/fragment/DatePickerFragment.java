@@ -35,7 +35,8 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current date as the default date in the picker
 
-        for_which_activity = getArguments().getString("for");
+        if (getArguments() != null)
+            for_which_activity = getArguments().getString("for");
 
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
@@ -68,21 +69,20 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
                 else
                     PaymentDetailsActivity.inputCardExpiry.setText((month + 1) + " - " + year);
             } else {
-                if(for_which_activity.equals("MyScheduleFragment")){
+                if (for_which_activity != null && for_which_activity.equals("MyScheduleFragment")) {
                     MyScheduleFragment.month_from_dialog = month + 1;
                     MyScheduleFragment.year_from_dialog = year;
                     if (mon != null)
                         textView.setText(mon + " " + year);
                     else
                         textView.setText((month + 1) + " " + year);
-                    if(StorageHelper.getUserGroup(getActivity(),"user_group").equals("2")) {
+                    if (StorageHelper.getUserGroup(getActivity(), "user_group").equals("2")) {
                         MyScheduleFragment.myScheduleFragment.getCalendarDetailsForMentee();
-                    }
-                    else {
+                    } else {
                         MyScheduleFragment.myScheduleFragment.getCalendarDetailsAPICall();
                     }
-                }else{
-                    if(for_which_activity.equals("MentorDetailsActivity")){
+                } else {
+                    if (for_which_activity != null && for_which_activity.equals("MentorDetailsActivity")) {
                         MentorDetailsActivity.month_from_dialog = month + 1;
                         MentorDetailsActivity.year_from_dialog = year;
                         if (mon != null)
@@ -90,7 +90,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
                         else
                             textView.setText((month + 1) + " " + year);
                     }
-                    if(MentorDetailsActivity.mentorDetailsActivity != null){
+                    if (MentorDetailsActivity.mentorDetailsActivity != null) {
                         MentorDetailsActivity.mentorDetailsActivity.getCalendarDetailsAPICall();
 
                     }
