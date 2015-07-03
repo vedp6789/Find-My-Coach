@@ -24,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
 import android.view.View;
 import android.widget.OverScroller;
+import android.widget.ScrollView;
 import android.widget.Scroller;
 
 import com.findmycoach.app.R;
@@ -43,7 +44,7 @@ import java.util.List;
  * Created by Raquib-ul-Alam Kanak on 7/21/2014.
  * Website: http://alamkanak.me
  */
-public class WeekView extends View {
+public class WeekView extends ScrollView {
 
     @Deprecated
     public static final int LENGTH_SHORT = 1;
