@@ -118,7 +118,6 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     }
 
 
-
     /* Get Calendar current instance*/
     void startPointForCalendar() {
         _calendar = Calendar.getInstance(Locale.getDefault());
@@ -365,7 +364,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             month = month_from_dialog;
             year = year_from_dialog;
             month_from_dialog = 0;
-            year_from_dialog =0;
+            year_from_dialog = 0;
             currentMonth.setText(getResources().getStringArray(R.array.months)[month - 1] + " " + year);
         }
 
@@ -923,7 +922,6 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 updateMonthAndYearOnNextMonthClick();
                 Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
                 updateArrayListsForNextMonth();
-
                 updateCalendarOnFailure();
                 break;
             case 39:
@@ -1169,9 +1167,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 currentMonthArrayList = getSlotsForThis(slots, current_month, current_year, finalizeDaysInMonth(current_month, current_year));
                 comingMonthArrayList = getSlotsForThis(slots, coming_month, coming_year, finalizeDaysInMonth(coming_month, coming_year));
 
-                Log.d(TAG, "pr_slots_size" + previousMonthArrayList.size());
-                Log.d(TAG, "cr_slots_size" + currentMonthArrayList.size());
-                Log.d(TAG, "co_slots_size" + comingMonthArrayList.size());
+                // Log.d(TAG, "pr_slots_size" + previousMonthArrayList.size());
+                //  Log.d(TAG, "cr_slots_size" + currentMonthArrayList.size());
+                // Log.d(TAG, "co_slots_size" + comingMonthArrayList.size());
 
                 previousMonthNonCoincidingVacation = getVacationsForThis(vacations, previous_month, previous_month_year, finalizeDaysInMonth(previous_month, previous_month_year));
                 currentMonthNonCoincidingVacation = getVacationsForThis(vacations, current_month, current_year, finalizeDaysInMonth(current_month, current_year));
@@ -1182,9 +1180,9 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 previousMonthMentorInfos = getMentorInfo(jsonArray_mentor);
                 currentMonthMentorInfos = getMentorInfo(jsonArray_mentor);
                 comingMonthMentorInfos = getMentorInfo(jsonArray_mentor);
-                Log.d(TAG, "For mentor, previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
+                //   Log.d(TAG, "For mentor, previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
                 if (b_three_months_data) {
-                    Log.d(TAG, "Three months data get changed");
+                    //      Log.d(TAG, "Three months data get changed");
                     adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos);
                     calendarView.setAdapter(adapter1);
                     adapter1.notifyDataSetChanged();
@@ -1261,7 +1259,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 currentMonthMentorInfos = getMentorInfo(jsonArray_mentor);
                 comingMonthMentorInfos = getMentorInfo(jsonArray_mentor);
 
-                Log.d(TAG, " For mentee: previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
+                //      Log.d(TAG, " For mentee: previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
 
                 adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos);
                 calendarView.setAdapter(adapter1);
@@ -1417,6 +1415,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 slot.setVacations(vacations);
                 slot.setSlot_created_on_network_success("true");
                 slot.setSlot_subject(slot_jsonObject.getString("subject"));
+                slot.setTutorial_location(slot_jsonObject.getString("tutorial_location"));
                 slots.add(slot);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1439,25 +1438,25 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             Calendar calendar_start_of_month = Calendar.getInstance();
             calendar_start_of_month.set(year, month - 1, 1);
             long month_start_date_in_millis = calendar_start_of_month.getTimeInMillis();
-            Log.d(TAG, "start_of_month_millis: " + month_start_date_in_millis);
+            //  Log.d(TAG, "start_of_month_millis: " + month_start_date_in_millis);
 
 
             Calendar calendar_slot_start_date = Calendar.getInstance();
             calendar_slot_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
             long slot_start_date_in_millis = calendar_slot_start_date.getTimeInMillis();
-            Log.d(TAG, "slot_start_of_month_millis: " + slot_start_date_in_millis);
+            //   Log.d(TAG, "slot_start_of_month_millis: " + slot_start_date_in_millis);
 
 
             Calendar calendar_slot_end_date = Calendar.getInstance();
             calendar_slot_end_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
             long slot_stop_date_in_millis = calendar_slot_end_date.getTimeInMillis();
-            Log.d(TAG, "slot_stop_of_month_millis: " + slot_stop_date_in_millis);
+            //  Log.d(TAG, "slot_stop_of_month_millis: " + slot_stop_date_in_millis);
 
 
             Calendar calendar_end_of_month = Calendar.getInstance();
             calendar_end_of_month.set(year, month - 1, days);
             long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
-            Log.d(TAG, "stop_of_month_millis: " + month_end_date_in_millis);
+            //   Log.d(TAG, "stop_of_month_millis: " + month_end_date_in_millis);
 
 
             /*if (((slot_start_date_in_millis < month_start_date_in_millis) && slot_stop_date_in_millis > month_end_date_in_millis) ||
@@ -1482,13 +1481,13 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 slotArrayList.add(slot);
 
             } else {
-                Log.d(TAG, "not matched");
+                //     Log.d(TAG, "not matched");
             }
 
         }
 
 
-        Log.d(TAG, "slots arrayList for the month size:" + slotArrayList.size());
+        //     Log.d(TAG, "slots arrayList for the month size:" + slotArrayList.size());
 
         return slotArrayList;
 
@@ -1507,25 +1506,25 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             Calendar calendar_start_of_month = Calendar.getInstance();
             calendar_start_of_month.set(year, month - 1, 1);
             long month_start_date_in_millis = calendar_start_of_month.getTimeInMillis();
-            Log.d(TAG, "month start millies: " + month_start_date_in_millis);
+            //    Log.d(TAG, "month start millies: " + month_start_date_in_millis);
 
 
             Calendar calendar_vacation_start_date = Calendar.getInstance();
             calendar_vacation_start_date.set(Integer.parseInt(start_date.split("-")[0]), Integer.parseInt(start_date.split("-")[1]) - 1, Integer.parseInt(start_date.split("-")[2]));
             long vacation_start_date_in_millis = calendar_vacation_start_date.getTimeInMillis();
-            Log.d(TAG, "vacation month start millies: " + vacation_start_date_in_millis);
+            //    Log.d(TAG, "vacation month start millies: " + vacation_start_date_in_millis);
 
 
             Calendar calendar_vacation_end_date = Calendar.getInstance();
             calendar_vacation_end_date.set(Integer.parseInt(stop_date.split("-")[0]), Integer.parseInt(stop_date.split("-")[1]) - 1, Integer.parseInt(stop_date.split("-")[2]));
             long vacation_stop_date_in_millis = calendar_vacation_end_date.getTimeInMillis();
-            Log.d(TAG, "vacation month stop millies: " + vacation_stop_date_in_millis);
+            //   Log.d(TAG, "vacation month stop millies: " + vacation_stop_date_in_millis);
 
 
             Calendar calendar_end_of_month = Calendar.getInstance();
             calendar_end_of_month.set(year, month - 1, days);
             long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
-            Log.d(TAG, "month stop millies: " + month_end_date_in_millis);
+            //   Log.d(TAG, "month stop millies: " + month_end_date_in_millis);
 
            /* if ((vacation_start_date_in_millis < month_start_date_in_millis && vacation_stop_date_in_millis > month_end_date_in_millis) ||
                     (vacation_start_date_in_millis < month_start_date_in_millis && vacation_stop_date_in_millis > month_start_date_in_millis && vacation_stop_date_in_millis < month_end_date_in_millis) ||
@@ -1547,7 +1546,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 vacationArrayList.add(vacation);
 
             } else {
-                Log.d(TAG, "vacation match unsuccessful");
+                //     Log.d(TAG, "vacation match unsuccessful");
             }
 
         }
@@ -1618,10 +1617,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
             comingMonthMentorInfos = null;
             comingMonthMentorInfos = new ArrayList<MentorInfo>();
             comingMonthMentorInfos = getMentorInfo(jsonArray_mentor);
-            Log.d(TAG, "comingMonthArrayList size" + comingMonthArrayList.size());
+            //   Log.d(TAG, "comingMonthArrayList size" + comingMonthArrayList.size());
 
 
-            Log.d(TAG, "prev month arrayList size" + previousMonthArrayList.size() + ", current month arrayList size: " + currentMonthArrayList.size() + ", coming month arrayList size " + comingMonthArrayList.size());
+            //    Log.d(TAG, "prev month arrayList size" + previousMonthArrayList.size() + ", current month arrayList size: " + currentMonthArrayList.size() + ", coming month arrayList size " + comingMonthArrayList.size());
 
             adapter1 = new CalendarGridAdapter(getActivity().getApplicationContext(), month, year, myScheduleFragment, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos);
             _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));

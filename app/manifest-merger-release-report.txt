@@ -396,6 +396,28 @@ ADDED from AndroidManifest.xml:191:9
 		ADDED from AndroidManifest.xml:193:13
 	android:name
 		ADDED from AndroidManifest.xml:192:13
+service#com.paypal.android.sdk.payments.PayPalService
+ADDED from AndroidManifest.xml:196:9
+	android:exported
+		ADDED from AndroidManifest.xml:198:9
+	android:name
+		ADDED from AndroidManifest.xml:197:9
+activity#com.paypal.android.sdk.payments.LoginActivity
+ADDED from AndroidManifest.xml:200:9
+	android:name
+		ADDED from AndroidManifest.xml:200:19
+activity#com.paypal.android.sdk.payments.PayPalFuturePaymentActivity
+ADDED from AndroidManifest.xml:201:9
+	android:name
+		ADDED from AndroidManifest.xml:201:19
+activity#com.paypal.android.sdk.payments.FuturePaymentConsentActivity
+ADDED from AndroidManifest.xml:202:9
+	android:name
+		ADDED from AndroidManifest.xml:202:19
+activity#com.paypal.android.sdk.payments.FuturePaymentInfoActivity
+ADDED from AndroidManifest.xml:203:9
+	android:name
+		ADDED from AndroidManifest.xml:203:19
 activity#io.card.payment.CardIOActivity
 ADDED from AndroidManifest.xml:206:9
 MERGED from io.card:android-sdk:5.0.0:22:9

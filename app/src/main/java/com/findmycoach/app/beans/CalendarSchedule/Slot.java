@@ -34,6 +34,15 @@ public class Slot implements Parcelable {
     public List<Vacation> vacations;
     public String slot_created_on_network_success;
     public String slot_subject;
+    public String tutorial_location;
+
+    public String getTutorial_location() {
+        return tutorial_location;
+    }
+
+    public void setTutorial_location(String tutorial_location) {
+        this.tutorial_location = tutorial_location;
+    }
 
     public String getSlot_subject() {
         return slot_subject;
@@ -161,6 +170,7 @@ public class Slot implements Parcelable {
         dest.writeTypedList(this.vacations);
         dest.writeString(this.slot_created_on_network_success);
         dest.writeString(this.slot_subject);
+        dest.writeString(this.tutorial_location);
     }
 
 
@@ -182,6 +192,7 @@ public class Slot implements Parcelable {
         source.readTypedList(this.vacations, Vacation.CREATOR);
         this.slot_created_on_network_success = source.readString();
         this.slot_subject =source.readString();
+        this.tutorial_location=source.readString();
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -205,8 +216,7 @@ public class Slot implements Parcelable {
 
     public List<ClassBean> getAvailablClasses(Date startDate, Date stopDate) {
         List<ClassBean> classes = new ArrayList<ClassBean>();
-
-        return classes;
+    return classes;
     }
 
 
@@ -224,12 +234,12 @@ public class Slot implements Parcelable {
                         EventDuration eventDuration=eventDurations.get(event_duration_no);
 
                         String start_date =eventDuration.getStart_date();
-                        Log.d(TAG,"start date: "+start_date);
+                        //Log.d(TAG,"start date: "+start_date);
                         Calendar calendar_start_date =Calendar.getInstance();
                         calendar_start_date.set(Integer.parseInt(start_date.split("-")[0]),Integer.parseInt(start_date.split("-")[1])-1,Integer.parseInt(start_date.split("-")[2]));
 
                         String stop_date =eventDuration.getStop_date();
-                        Log.d(TAG,"stop date: "+stop_date);
+                       // Log.d(TAG,"stop date: "+stop_date);
                         Calendar calendar_stop_date =Calendar.getInstance();
                         calendar_stop_date.set(Integer.parseInt(stop_date.split("-")[0]),Integer.parseInt(stop_date.split("-")[1])-1,Integer.parseInt(stop_date.split("-")[2]));
 
@@ -243,7 +253,7 @@ public class Slot implements Parcelable {
                             calendar_active_class_date.set(Integer.parseInt(active_class_date.split("-")[0]),Integer.parseInt(active_class_date.split("-")[1]),Integer.parseInt(active_class_date.split("-")[2]));
                             long active_class_in_millis =calendar_active_class_date.getTimeInMillis();
 
-                            Log.d(TAG,"active class date: "+active_class_date.split("-")[0]+"-"+(Integer.parseInt(active_class_date.split("-")[1]))+"-"+active_class_date.split("-")[2]+" , this day date: "+ year+"-"+month+"-"+day);
+                           // Log.d(TAG,"active class date: "+active_class_date.split("-")[0]+"-"+(Integer.parseInt(active_class_date.split("-")[1]))+"-"+active_class_date.split("-")[2]+" , this day date: "+ year+"-"+month+"-"+day);
 
                             if((Integer.parseInt(active_class_date.split("-")[0])== year)  && (Integer.parseInt(active_class_date.split("-")[1])==month )&&(Integer.parseInt(active_class_date.split("-")[2]))==day){
                                 event_found = true;
@@ -391,7 +401,7 @@ public class Slot implements Parcelable {
             if (selectedDays.contains(calendar_schedule_start_date.get(Calendar.DAY_OF_WEEK))) {
                 ++workDays;
                 SlotDurationDetailBean slotDurationDetailBean = new SlotDurationDetailBean();
-                Log.d(TAG, "year: " + calendar_schedule_start_date.get(Calendar.YEAR) + "month: " + calendar_schedule_start_date.get(Calendar.MONTH) + "day_of_month: " + calendar_schedule_start_date.get(Calendar.DAY_OF_MONTH) + "date: " + calendar_schedule_start_date.get(Calendar.DATE));
+                // Log.d(TAG, "year: " + calendar_schedule_start_date.get(Calendar.YEAR) + "month: " + calendar_schedule_start_date.get(Calendar.MONTH) + "day_of_month: " + calendar_schedule_start_date.get(Calendar.DAY_OF_MONTH) + "date: " + calendar_schedule_start_date.get(Calendar.DATE));
                 slotDurationDetailBean.setDate(calendar_schedule_start_date.get(Calendar.YEAR) + "-" + calendar_schedule_start_date.get(Calendar.MONTH) + "-" + calendar_schedule_start_date.get(Calendar.DAY_OF_MONTH));
                 slotDurationDetailBean.setWeek_day(String.valueOf(calendar_schedule_start_date.get(Calendar.DAY_OF_WEEK)));
                 slotDurationDetailBeans.add(slotDurationDetailBean);

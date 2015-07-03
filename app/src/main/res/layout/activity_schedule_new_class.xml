@@ -494,7 +494,7 @@
                             style="@style/EditTextCustomHoloPurple"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:gravity="center"
+                            android:gravity="start"
                             android:textColor="@color/purple"
                             android:textCursorDrawable="@drawable/cursor_purple"
                             android:textSize="@dimen/profile_details"

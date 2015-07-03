@@ -4,11 +4,12 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,6 +19,11 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.fragment.DatePickerFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.StorageHelper;
+import com.loopj.android.http.RequestParams;
+import com.paypal.android.sdk.payments.PayPalAuthorization;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalFuturePaymentActivity;
+import com.paypal.android.sdk.payments.PayPalService;
 
 import io.card.payment.CardIOActivity;
 import io.card.payment.CreditCard;
@@ -30,8 +36,24 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
     private EditText inputCardNumber, inputCardName, inputCardCVV;
     public static EditText inputCardExpiry;
     private final int MY_SCAN_REQUEST_CODE = 10001;
+    private final int REQUEST_CODE_FUTURE_PAYMENT = 11111;
     private final String TAG = "FMC";
+    private boolean isConsentPresent;
     private ProgressDialog progressDialog;
+
+    private static PayPalConfiguration config = new PayPalConfiguration()
+
+            // Start with mock environment.  When ready, switch to sandbox (ENVIRONMENT_SANDBOX)
+            // or live (ENVIRONMENT_PRODUCTION)
+            .environment(PayPalConfiguration.ENVIRONMENT_PRODUCTION)
+
+            .clientId("Aaqjb3uZDZz7GZHul2SAi52eXjbjKmnD9m1TijI8Y-UjeEZBmJ-7cat1KAEW8feE6o4TV82nMhl-kkaG")
+
+                    // Minimally, you will need to set three merchant information properties.
+                    // These should be the same values that you provided to PayPal when you registered your app.
+            .merchantName("Chizzle")
+            .merchantPrivacyPolicyUri(Uri.parse("https://www.example.com/privacy"))
+            .merchantUserAgreementUri(Uri.parse("https://www.example.com/legal"));
 
 
     @Override
@@ -39,9 +61,43 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_details);
         initialize();
+
+        Intent intent = new Intent(this, PayPalService.class);
+        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+        startService(intent);
+    }
+
+    public void onFuturePaymentPressed() {
+        Intent intent = new Intent(this, PayPalFuturePaymentActivity.class);
+
+        // send the same configuration for restart resiliency
+        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+
+        startActivityForResult(intent, REQUEST_CODE_FUTURE_PAYMENT);
+    }
+
+    public void onFuturePaymentPurchasePressed() {
+        // Get the Client Metadata ID from the PayPal SDK
+        String metadataId = PayPalConfiguration.getClientMetadataId(this);
+        String amount = "11111";
+        String mentorId = "xxx";
+        Log.d(TAG, "User's MetaData ID : " + metadataId);
+        Toast.makeText(this, "MetaData : " + metadataId, Toast.LENGTH_LONG).show();
+
+//        progressDialog.show();
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("id", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
+        requestParams.add("mentor_id", mentorId);
+        requestParams.add("user_group", String.valueOf(DashboardActivity.dashboardActivity.user_group));
+        requestParams.add("meta_data", metadataId);
+        requestParams.add("amount", amount);
+//        NetworkClient.payMentor(this, requestParams, this, 48);
     }
 
     private void initialize() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        isConsentPresent = preferences.getBoolean(getResources().getString(R.string.customer_consent), false);
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         inputCardNumber = (EditText) findViewById(R.id.editTextCard);
@@ -58,37 +114,13 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
             inputCardName.setText("");
         }
 
+        findViewById(R.id.scanCard).setOnClickListener(this);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_payment, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-        } else if (id == R.id.action_scan_card) {
-            Intent scanIntent = new Intent(this, CardIOActivity.class);
-
-            // customize these values to suit your needs.
-            scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, true); // default: false
-            scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, true); // default: false
-            scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, false); // default: false
-            scanIntent.putExtra(CardIOActivity.EXTRA_SUPPRESS_MANUAL_ENTRY, true);
-
-            // MY_SCAN_REQUEST_CODE is arbitrary and is only used within this activity.
-            startActivityForResult(scanIntent, MY_SCAN_REQUEST_CODE);
-
-        }
-        return true;
-    }
 
     @Override
     protected void onDestroy() {
+        stopService(new Intent(this, PayPalService.class));
         super.onDestroy();
         if (DashboardActivity.dashboardActivity == null)
             startActivity(new Intent(this, DashboardActivity.class));
@@ -110,6 +142,19 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
                 break;
             case R.id.editTextDate:
                 showDateTimeDialog();
+                break;
+            case R.id.scanCard:
+                Intent scanIntent = new Intent(PaymentDetailsActivity.this, CardIOActivity.class);
+
+                Log.e(TAG, "Scan Clicked");
+                // customize these values to suit your needs.
+                scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, true); // default: false
+                scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, true); // default: false
+                scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, false); // default: false
+                scanIntent.putExtra(CardIOActivity.EXTRA_SUPPRESS_MANUAL_ENTRY, true);
+
+                // MY_SCAN_REQUEST_CODE is arbitrary and is only used within this activity.
+                startActivityForResult(scanIntent, MY_SCAN_REQUEST_CODE);
                 break;
         }
     }
@@ -172,45 +217,81 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
 
         // Received card info from card.io
         if (requestCode == MY_SCAN_REQUEST_CODE && resultCode == RESULT_OK) {
-            String resultDisplayStr;
-            if (data != null && data.hasExtra(CardIOActivity.EXTRA_SCAN_RESULT)) {
-                CreditCard scanResult = data.getParcelableExtra(CardIOActivity.EXTRA_SCAN_RESULT);
+            try {
+                String resultDisplayStr;
+                if (data != null && data.hasExtra(CardIOActivity.EXTRA_SCAN_RESULT)) {
+                    CreditCard scanResult = data.getParcelableExtra(CardIOActivity.EXTRA_SCAN_RESULT);
 
-                // Never log a raw card number. Avoid displaying it, but if necessary use getFormattedCardNumber()
-                resultDisplayStr = "Card Number: " + scanResult.getRedactedCardNumber() + "\n";
+                    // Never log a raw card number. Avoid displaying it, but if necessary use getFormattedCardNumber()
+                    resultDisplayStr = "Card Number: " + scanResult.getRedactedCardNumber() + "\n";
 
-                // Do something with the raw number, e.g.:
-                // myService.setCardNumber( scanResult.cardNumber );
+                    // Do something with the raw number, e.g.:
+                    // myService.setCardNumber( scanResult.cardNumber );
 
-                if (scanResult.isExpiryValid()) {
-                    resultDisplayStr += "Expiration Date: " + scanResult.expiryMonth + "/" + scanResult.expiryYear + "\n";
+                    if (scanResult.isExpiryValid()) {
+                        resultDisplayStr += "Expiration Date: " + scanResult.expiryMonth + "/" + scanResult.expiryYear + "\n";
+                    }
+
+                    if (scanResult.cvv != null) {
+                        // Never log or display a CVV
+                        resultDisplayStr += "CVV has " + scanResult.cvv.length() + " digits.\n";
+                    }
+
+                    if (scanResult.postalCode != null) {
+                        resultDisplayStr += "Postal Code: " + scanResult.postalCode + "\n";
+                    }
+
+                    inputCardNumber.setText(scanResult.getRedactedCardNumber());
+                    inputCardExpiry.setText(DatePickerFragment.getMonth(scanResult.expiryMonth) + " - " + scanResult.expiryYear);
+                    inputCardCVV.setText(scanResult.cvv);
+
+                } else {
+                    resultDisplayStr = "Scan was canceled.";
                 }
-
-                if (scanResult.cvv != null) {
-                    // Never log or display a CVV
-                    resultDisplayStr += "CVV has " + scanResult.cvv.length() + " digits.\n";
-                }
-
-                if (scanResult.postalCode != null) {
-                    resultDisplayStr += "Postal Code: " + scanResult.postalCode + "\n";
-                }
-
-                inputCardNumber.setText(scanResult.getRedactedCardNumber());
-                inputCardExpiry.setText(DatePickerFragment.getMonth(scanResult.expiryMonth) + " - " + scanResult.expiryYear);
-                inputCardCVV.setText(scanResult.cvv);
-
-            } else {
-                resultDisplayStr = "Scan was canceled.";
+                Log.d(TAG, resultDisplayStr);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            Log.d(TAG, resultDisplayStr);
+        }
+
+        // Received customer consent from PayPal
+        else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_FUTURE_PAYMENT) {
+            PayPalAuthorization auth = data
+                    .getParcelableExtra(PayPalFuturePaymentActivity.EXTRA_RESULT_AUTHORIZATION);
+            if (auth != null) {
+                String authorization_code = auth.getAuthorizationCode();
+                Log.d(TAG, authorization_code);
+                Toast.makeText(this, authorization_code, Toast.LENGTH_LONG).show();
+
+                PreferenceManager.getDefaultSharedPreferences(this).edit()
+                        .putBoolean(getResources().getString(R.string.customer_consent), true).apply();
+                isConsentPresent = true;
+
+                //TODO update menu to pay using paypal
+
+//                progressDialog.show();
+                RequestParams requestParams = new RequestParams();
+                requestParams.add("id", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
+                requestParams.add("email", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_email)));
+                requestParams.add("user_group", String.valueOf(DashboardActivity.dashboardActivity.user_group));
+                requestParams.add("paypal_consent", authorization_code);
+//                NetworkClient.getCardDetails(this, requestParams, this, 47);
+            }
         }
     }
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
 //        progressDialog.dismiss();
+
+        // Get details of user's saved card and PayPal account
+        if (calledApiValue == 47) {
+            isConsentPresent = true;
+            //TODO update menu to pay using paypal
+        }
+
         // Get details of last transaction done
-        if (calledApiValue == 48) {
+        else if (calledApiValue == 48) {
             //TODO with the transaction details received with status
         }
     }
@@ -218,6 +299,12 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
 //        progressDialog.dismiss();
+        // Get details of user's saved card and PayPal account
+        if (calledApiValue == 47) {
+            isConsentPresent = true;
+            //TODO update menu to add paypal
+        }
+
         // Get details of last transaction done
         if (calledApiValue == 48) {
             //TODO with the transaction details received with status

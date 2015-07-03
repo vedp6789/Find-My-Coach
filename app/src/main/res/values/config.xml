@@ -44,4 +44,6 @@
     <!--Google api for getting address from zip-->
     <string name="google_api_lat_lng_from_zip">http://maps.googleapis.com/maps/api/geocode/json?</string>
 
+    <string name="customer_consent">customer_consent</string>
+
 </resources>

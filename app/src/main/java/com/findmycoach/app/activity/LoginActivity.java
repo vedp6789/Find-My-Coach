@@ -847,12 +847,16 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             /** Saving address, city and zip of user */
             if (response.getData() != null && response.getData().getAddress() != null) {
                 StorageHelper.storePreference(this, "user_local_address", (String) response.getData().getAddress());
+                Log.d(TAG, "address get saved: " + StorageHelper.addressInformation(LoginActivity.this, "user_local_address"));
                 if (response.getData().getCity() != null) {
                     StorageHelper.storePreference(this, "user_city_state", (String) response.getData().getCity());
+                    Log.d(TAG, "city get saved: " + StorageHelper.addressInformation(LoginActivity.this, "user_city_state"));
                 }
-
                 if (response.getData().getZip() != null) {
+
                     StorageHelper.storePreference(this, "user_zip_code", (String) response.getData().getZip());
+                    Log.d(TAG,"pin code get saved: "+StorageHelper.addressInformation(LoginActivity.this, "user_zip_code"));
+
                 }
             }
         } catch (Exception ignored) {

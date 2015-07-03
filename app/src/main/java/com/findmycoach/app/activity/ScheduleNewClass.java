@@ -7,10 +7,15 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -36,10 +41,14 @@ import com.findmycoach.app.beans.CalendarSchedule.VacationCoincidingSlot;
 import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.category.Datum;
 import com.findmycoach.app.beans.category.DatumSub;
+import com.findmycoach.app.beans.suggestion.Prediction;
+import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.fragment_mentee.ChildDOB;
+import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
+import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
@@ -104,14 +113,15 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private boolean class_not_possible;
     private ImageButton ib_info, ib_mentor_availability_info;
     private String tutorial_location;
-
+    private String city_selected_by_mentee = null;
+    ArrayAdapter<String> arrayAdapter;
+    private boolean isGettingAddress;
+    private List<Prediction> predictions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_new_class);
-
-
         try {
             bundle = getIntent().getBundleExtra("slot_bundle");
             slot = (Slot) bundle.getParcelable("slot");
@@ -159,6 +169,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
             finalizeDateTimeAndCharges();
             populateFields();
+            isGettingAddress = false;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -190,8 +202,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         if (slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
             /** Till now if slot is of group type, i am assuming that location will be as per defined by mentor*/
-//            tutorial_location = slot.getSlotLocationForMentor();
-            tutorial_location = "xyz";
+            tutorial_location = slot.getTutorial_location();
 
             tv_tutorial_location.setText(tutorial_location);
 
@@ -199,13 +210,11 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             if (mentor_availability != null && mentor_availability.equals("1")) {
                 ll_class_location_preference.setVisibility(View.VISIBLE);
                 cb_location_preference.setChecked(true);
-//                tutorial_location = slot.getSlotLocationForMentor();
-                tutorial_location ="xyz";
+                tutorial_location = slot.getTutorial_location();
                 tv_tutorial_location.setText(tutorial_location);
             } else {
                 if (mentor_availability != null) {
-//                    tutorial_location = slot.getSlotLocationForMentor();
-                    tutorial_location = "xyz";
+                    tutorial_location = slot.getTutorial_location();
                     tv_tutorial_location.setText(tutorial_location);
                 } else {
                     Log.d(TAG, "mentor_availability null found");
@@ -218,21 +227,27 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
-                    tutorial_location="";
+                    tutorial_location = "";
                     ll_tutorial_location.setVisibility(View.GONE);
                     tv_asterisk_location.setVisibility(View.VISIBLE);
                     et_tutorial_location.setVisibility(View.VISIBLE);
                     ll_city.setVisibility(View.VISIBLE);
                     ll_pin_code.setVisibility(View.VISIBLE);
+
+                    Log.d(TAG, "address get saved: " + StorageHelper.addressInformation(ScheduleNewClass.this, "user_local_address"));
+                    Log.d(TAG, "city get saved: " + StorageHelper.addressInformation(ScheduleNewClass.this, "user_city_state"));
+                    Log.d(TAG, "pin code get saved: " + StorageHelper.addressInformation(ScheduleNewClass.this, "user_pin_code"));
+
+
                     if (StorageHelper.addressInformation(ScheduleNewClass.this, "user_local_address") != null) {
                         et_tutorial_location.setText(StorageHelper.addressInformation(ScheduleNewClass.this, "user_local_address"));
                         city.setText(StorageHelper.addressInformation(ScheduleNewClass.this, "user_city_state"));
                         et_pin_code.setText(StorageHelper.addressInformation(ScheduleNewClass.this, "user_zip_code"));
 
-                        StringBuilder stringBuilder_tutorial_location=new StringBuilder();
+                        StringBuilder stringBuilder_tutorial_location = new StringBuilder();
                         stringBuilder_tutorial_location.append(et_tutorial_location.getText().toString().trim());
-                        stringBuilder_tutorial_location.append(", "+city.getText().toString().trim());
-                        stringBuilder_tutorial_location.append(", "+et_pin_code.getText().toString().trim());
+                        stringBuilder_tutorial_location.append(", " + city.getText().toString().trim());
+                        stringBuilder_tutorial_location.append(", " + et_pin_code.getText().toString().trim());
 
                         tutorial_location = stringBuilder_tutorial_location.toString();
 
@@ -243,21 +258,91 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
 
                 } else {
-                    tutorial_location="";
+                    tutorial_location = "";
                     ll_tutorial_location.setVisibility(View.VISIBLE);
                     tv_asterisk_location.setVisibility(View.GONE);
                     et_tutorial_location.setVisibility(View.GONE);
                     ll_city.setVisibility(View.GONE);
                     ll_pin_code.setVisibility(View.GONE);
 
-//                    tutorial_location = slot.getSlotLocationForMentor();
-                    tutorial_location = "xyz";
+                    tutorial_location = slot.getTutorial_location();
                     tv_tutorial_location.setText(tutorial_location);
 
                 }
 
             }
         });
+
+
+        city.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                city_selected_by_mentee = null;
+                String input = city.getText().toString();
+                if (input.length() >= 2) {
+                    getAutoSuggestions(input);
+                }
+            }
+        });
+
+        city.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                city_selected_by_mentee = arrayAdapter.getItem(position);
+//                getPostalFromCity(city);
+                try {
+                    NetworkManager.countryName = predictions.get(position).getCountry();
+                    isGettingAddress = true;
+                } catch (Exception e) {
+                    NetworkManager.countryName = "";
+                }
+            }
+        });
+
+
+        et_pin_code.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
+                        || (actionId == EditorInfo.IME_ACTION_DONE)
+                        || actionId == EditorInfo.IME_ACTION_NEXT) {
+                    try {
+                        new AddressFromZip(ScheduleNewClass.this, city, et_tutorial_location, true).execute(et_pin_code.getText().toString());
+                        isGettingAddress = true;
+                    } catch (Exception ignored) {
+                    }
+                }
+                return false;
+            }
+        });
+
+
+        et_tutorial_location.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    city.setFocusable(true);
+                }
+                return false;
+            }
+        });
+
+        city.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    et_pin_code.setFocusable(true);
+                }
+                return false;
+            }
+        });
+
+
 
 
 /*
@@ -575,6 +660,15 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     }
 
 
+    private void getAutoSuggestions(String input) {
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("input", input);
+        requestParams.add("key", getResources().getString(R.string.google_location_api_key));
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+        NetworkClient.autoComplete(getApplicationContext(), requestParams, this, 32);
+    }
+
+
     private String getTime(String hr_24_format_time) {
         String time = null;
         try {
@@ -673,6 +767,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         ll_city = (LinearLayout) findViewById(R.id.ll_city);
         ll_pin_code = (LinearLayout) findViewById(R.id.ll_pin_code);
         city = (AutoCompleteTextView) findViewById(R.id.city_selection);
+        city.setOnFocusChangeListener(onFocusChangeListener);
+        city.setOnTouchListener(onTouchListener);
+
         tv_asterisk_location = (TextView) findViewById(R.id.tv_asterisk_location);
         tv_tutorial_location = (TextView) findViewById(R.id.tv_tutorial_location);
         et_tutorial_location = (EditText) findViewById(R.id.et_tutorial_location);
@@ -719,6 +816,26 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     }
 
 
+    /**
+     * Clear error from edit text when focused or on touch
+     */
+    View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus)
+                ((TextView) v).setError(null);
+        }
+    };
+
+    View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            ((TextView) v).setError(null);
+            return false;
+        }
+    };
+
+
     private void showAlertMessageOnPayPersonally() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle(getResources().getString(R.string.payment_note_title));
@@ -737,7 +854,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
-
+                        b_payment.setEnabled(false);
                         progressDialog.show();
                         NetworkClient.postScheduleRequest(ScheduleNewClass.this,
                                 getRequestParamsRelatedToThisClass(), ScheduleNewClass.this, 46);
@@ -848,8 +965,8 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
 
         requestParams1.add("slot_type", slot_type);
-        requestParams1.add("location",tutorial_location);
-        Log.d(TAG,"location for this class save as : "+tutorial_location);
+        requestParams1.add("location", tutorial_location);
+        Log.d(TAG, "location for this class save as : " + tutorial_location);
 
         /*
         if (mentor_availability.equals("1") && slot_type.equalsIgnoreCase("individual")) {
@@ -928,7 +1045,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                         }
                     }
                     if (rb_pay_personally.isChecked()) {
+
                         if (validate()) {
+
                             showAlertMessageOnPayPersonally();
                         }
                     }
@@ -947,10 +1066,10 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 break;
 
             case R.id.ib_mentor_availability_info:
-                if(mentor_availability.equals("1")){
-                    Toast.makeText(ScheduleNewClass.this,getResources().getString(R.string.mentor_availability_message),Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(ScheduleNewClass.this,getResources().getString(R.string.mentor_non_availability_message),Toast.LENGTH_SHORT).show();
+                if (mentor_availability.equals("1")) {
+                    Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.mentor_availability_message), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ScheduleNewClass.this, getResources().getString(R.string.mentor_non_availability_message), Toast.LENGTH_SHORT).show();
                 }
                 break;
 
@@ -961,12 +1080,12 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
         if (mentor_availability.equals("1")) {
             if (!slot_type.equalsIgnoreCase(getResources().getString(R.string.group))) {
-                if(!cb_location_preference.isChecked()){
+                if (!cb_location_preference.isChecked()) {
                     if (tutorial_location.trim().length() <= 0) {
                         Toast.makeText(this, getResources().getString(R.string.address_missing), Toast.LENGTH_SHORT).show();
                         showErrorMessage(et_tutorial_location, getResources().getString(R.string.your_address_please));
-                        showErrorMessage(city,getResources().getString(R.string.choose_suggested_city));
-                        showErrorMessage(et_pin_code,getResources().getString(R.string.enter_pin));
+                        showErrorMessage(city, getResources().getString(R.string.choose_suggested_city));
+                        showErrorMessage(et_pin_code, getResources().getString(R.string.enter_pin));
                         return false;
 
                     }
@@ -1000,23 +1119,42 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         }, 3500);
     }
 
+    private void updateAutoSuggestion(Suggestion suggestion) {
+        ArrayList<String> list = new ArrayList<String>();
+        predictions = suggestion.getPredictions();
+        for (int index = 0; index < predictions.size(); index++) {
+            list.add(predictions.get(index).getDescription());
+        }
+        arrayAdapter = new ArrayAdapter<String>(this, R.layout.textview, list);
+        city.setAdapter(arrayAdapter);
+    }
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        progressDialog.dismiss();
-        Toast.makeText(ScheduleNewClass.this, (String) object, Toast.LENGTH_SHORT).show();
-        if(MentorDetailsActivity.mentorDetailsActivity != null){
-            MentorDetailsActivity.mentorDetailsActivity.getCalendarDetailsAPICall();
+        if (object instanceof Suggestion) {
+            Suggestion suggestion = (Suggestion) object;
+            updateAutoSuggestion(suggestion);
+        } else {
+            if (calledApiValue == 46) {
+                progressDialog.dismiss();
+                b_payment.setEnabled(true);
+                Toast.makeText(ScheduleNewClass.this, (String) object, Toast.LENGTH_SHORT).show();
+                if (MentorDetailsActivity.mentorDetailsActivity != null) {
+                    MentorDetailsActivity.mentorDetailsActivity.getCalendarDetailsAPICall();
+                }
+                finish();
+            }
+
         }
-        finish();
-
-
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        Toast.makeText(ScheduleNewClass.this, (String) object, Toast.LENGTH_SHORT).show();
+        if (calledApiValue == 46) {
+            b_payment.setEnabled(true);
+            Toast.makeText(ScheduleNewClass.this, (String) object, Toast.LENGTH_SHORT).show();
+        }
 
     }
 
