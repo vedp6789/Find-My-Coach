@@ -1140,7 +1140,10 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 b_payment.setEnabled(true);
                 Toast.makeText(ScheduleNewClass.this, (String) object, Toast.LENGTH_SHORT).show();
                 if (MentorDetailsActivity.mentorDetailsActivity != null) {
+                    Log.d(TAG,"mentor details activity found not null");
                     MentorDetailsActivity.mentorDetailsActivity.getCalendarDetailsAPICall();
+                }else{
+                    Log.d(TAG,"mentor details activity found null");
                 }
                 finish();
             }
