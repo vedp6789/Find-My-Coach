@@ -170,7 +170,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         et_tutorial_location.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode == 66){
+                if (keyCode == 66) {
                     InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
@@ -632,13 +632,14 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
 
                         String auth_token = StorageHelper.getUserDetails(AddNewSlotActivity.this, "auth_token");
                         progressDialog.show();
+                        b_create_slot.setEnabled(false);
                         NetworkClient.createNewSlot(AddNewSlotActivity.this, requestParams, auth_token, new Callback() {
 
                             @Override
                             public void successOperation(Object object, int statusCode, int calledApiValue) {
                                 //Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully), Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
-
+                                b_create_slot.setEnabled(true);
                                 String success_response = (String) object;
                                 Log.d(TAG, "success response for add new slot activity :" + success_response);
                                 JSONObject jO_success_response = null;
@@ -685,7 +686,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
                             @Override
                             public void failureOperation(Object object, int statusCode, int calledApiValue) {
                                 progressDialog.dismiss();
-
+                                b_create_slot.setEnabled(false);
                                 Toast.makeText(AddNewSlotActivity.this, (String) object, Toast.LENGTH_SHORT).show();
                             }
                         }, 35);

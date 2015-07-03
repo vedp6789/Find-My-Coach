@@ -186,7 +186,7 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
                 startActivity(intent);
             }else{
                 if(status.equals("2")){
-                    Toast.makeText(getActivity(),jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),jsonObject.getString("message"),Toast.LENGTH_LONG).show();
                 }
             }
         } catch (JSONException e) {

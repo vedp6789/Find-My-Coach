@@ -106,7 +106,7 @@ public class GcmFmcService extends IntentService {
                 user_group = jsonObject.getString("user_group");
                 jsonObject1 = new JSONObject(jsonObject.getString("data"));
                 Log.d(TAG, "json object data" + jsonObject1.toString());
-                message = jsonObject.getString("message");
+                message = jsonObject1.getString("message");
                 jsonObject2 = new JSONObject(jsonObject1.getString("user"));
                 jsonObject_receiver = jsonObject1.getJSONObject("receiver");
                 receiver_id = jsonObject_receiver.getString("id");

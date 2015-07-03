@@ -1286,6 +1286,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 slot.setVacations(vacations);
                 slot.setSlot_created_on_network_success("true");
                 slot.setSlot_subject(slot_jsonObject.getString("subject"));
+                slot.setTutorial_location(slot_jsonObject.getString("tutorial_location"));
 
                 slots.add(slot);
             } catch (Exception e) {

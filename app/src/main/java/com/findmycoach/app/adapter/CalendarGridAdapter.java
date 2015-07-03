@@ -681,15 +681,15 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                             long this_day = calendar_this_day.getTimeInMillis();
                             int week_day_for_this_day = calendar_this_day.get(Calendar.DAY_OF_WEEK);/* This will give week_day for this day, 1 to 7 for Sunday to Saturday */
 
-                            Log.d(TAG, "date: " + theday + "/" + the_current_month + "/" + theyear);
+                         //   Log.d(TAG, "date: " + theday + "/" + the_current_month + "/" + theyear);
                             if (current_date_in_millis > this_day) {
-                                Log.d(TAG, "this day already past");
+                           //     Log.d(TAG, "this day already past");
 
                                 free_slots = -2;    /* this is know that grid for the current view is behind right now date and time, so in this case calendar will not show any available free slot on this grid tap */
                             } else {
 
                                 free_slots = finalizeFreeSlotsForThisDay(Integer.parseInt(theyear), the_current_month, Integer.parseInt(theday));
-                                Log.d(TAG, "free slots found: " + free_slots);
+                             //   Log.d(TAG, "free slots found: " + free_slots);
                             }
 
 
@@ -1058,10 +1058,10 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                         /* Now checking whether the_day is having week day similar to one of the slot week days, if found then we have to consider this slot for this day otherwise not*/
                 if (thisDayMatchesWithWeekDaysArray(slot_week_days, week_day_for_this_day)) {
                     availabilityFlags.slot_found = true;
-                    Log.d(TAG,"slot_found for "+year+"-"+month+"-"+day);
+                    //Log.d(TAG,"slot_found for "+year+"-"+month+"-"+day);
                                             /* Now to check whether in this slot any event is coming for this day and now we do not need to check week day of this day as if event is there so evnets are of same slot and we already checked week_day for the slot*/
                     if (new_slot.anyEventFound(year, month, day)) {
-                        Log.d(TAG,"event_found for "+year+"-"+month+"-"+day);
+                      //  Log.d(TAG,"event_found for "+year+"-"+month+"-"+day);
 
                         availabilityFlags.event_found = true;
                     }
@@ -1069,7 +1069,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                             /* Now to check whether any coinciding vacation found or not */
                     if (new_slot.anyVacationFound(year, month, day)) {
                         availabilityFlags.vacation_found = true;
-                        Log.d(TAG,"vacation_found for "+year+"-"+month+"-"+day);
+                        //Log.d(TAG,"vacation_found for "+year+"-"+month+"-"+day);
 
                     }
                 }
