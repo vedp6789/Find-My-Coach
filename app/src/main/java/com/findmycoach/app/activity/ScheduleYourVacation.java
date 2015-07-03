@@ -701,11 +701,11 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
 
     private boolean validate() {
 
-        if (time_from.equals("00:00 AM") && time_to.equals("23:59 PM")) {
+        if (start_hour==0 && start_min==0 && stop_hour == 23 && stop_min == 59) {
             start_hour = 0;
             start_min = 0;
-            stop_hour = 24;
-            stop_min = 0;
+            stop_hour = 23;
+            stop_min = 59;
 
             if (check_for_days_selected()) {
                 return true;
@@ -1012,9 +1012,9 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
         start_hour = 0;
         start_min = 0;
         tv_stop_time = (TextView) findViewById(R.id.tv_slot_stop_time);
-        tv_stop_time.setText("23:59 PM");
-        stop_hour = 24;
-        stop_min = 0;
+        tv_stop_time.setText("12:59 PM");
+        stop_hour = 23;
+        stop_min = 59;
 
         et_note_vaccation = (EditText) findViewById(R.id.et_vacation_note);
 

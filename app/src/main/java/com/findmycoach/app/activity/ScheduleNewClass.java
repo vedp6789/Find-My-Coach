@@ -61,6 +61,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by praka_000 on 3/4/2015.
@@ -1140,7 +1141,15 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 b_payment.setEnabled(true);
                 Toast.makeText(ScheduleNewClass.this, (String) object, Toast.LENGTH_SHORT).show();
                 if (MentorDetailsActivity.mentorDetailsActivity != null) {
+                    Log.d(TAG,"mentor details activity found not null ");
+                    if(SetScheduleActivity.setScheduleActivity != null){
+                        Log.d(TAG,"Set schedule activity found not null ");
+                        SetScheduleActivity.setScheduleActivity.finish();
+                    }
+
                     MentorDetailsActivity.mentorDetailsActivity.getCalendarDetailsAPICall();
+                }else{
+                    Log.d(TAG,"mentor details activity found null ");
                 }
                 finish();
             }
@@ -1154,6 +1163,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         if (calledApiValue == 46) {
             b_payment.setEnabled(true);
             Toast.makeText(ScheduleNewClass.this, (String) object, Toast.LENGTH_SHORT).show();
+
         }
 
     }
