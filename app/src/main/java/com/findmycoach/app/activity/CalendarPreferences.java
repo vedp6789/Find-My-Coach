@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
+import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -117,6 +118,9 @@ public class CalendarPreferences extends Activity implements Callback {
             public void onClick(View v) {
                 /* adding selected value as preference for calendar view */
                 StorageHelper.storeClassTypePreference(CalendarPreferences.this, class_type_index);
+                if(MyScheduleFragment.myScheduleFragment != null){
+                    MyScheduleFragment.myScheduleFragment.getCalendarDetailsAPICall();
+                }
                 finish();
             }
         });

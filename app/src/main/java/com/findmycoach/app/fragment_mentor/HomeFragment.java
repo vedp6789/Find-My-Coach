@@ -63,7 +63,7 @@ public class HomeFragment extends Fragment implements Callback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        homeFragment = this;
         try {
             Log.e(TAG, tag + " before");
             tag = getArguments().getString("OpenTab");
