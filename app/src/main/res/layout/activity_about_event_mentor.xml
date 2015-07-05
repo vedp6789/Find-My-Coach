@@ -322,19 +322,18 @@
 
             </LinearLayout>
 
+            <com.findmycoach.app.views.ChizzleButton
+                android:id="@+id/b_delete_slot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/back_margin"
+                android:background="@drawable/custom_button_click_white_bg"
+                android:textColor="@color/custom_button_text_color_click_white_bg" />
+
 
         </LinearLayout>
 
     </ScrollView>
 
-
-    <com.findmycoach.app.views.ChizzleButton
-        android:id="@+id/b_delete_slot"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/back_margin"
-        android:background="@drawable/custom_button_click_white_bg"
-        android:textColor="@color/custom_button_text_color_click_white_bg" />
 
 </RelativeLayout>

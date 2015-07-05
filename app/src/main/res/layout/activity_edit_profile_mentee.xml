@@ -16,7 +16,9 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/header"
         android:layout_marginBottom="@dimen/back_margin"
-        android:padding="@dimen/back_margin">
+        android:paddingLeft="@dimen/back_margin"
+        android:paddingRight="@dimen/back_margin"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,7 +29,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="4">
+                android:weightSum="4"
+                android:layout_marginTop="16dp">
 
                 <FrameLayout
                     android:layout_width="@dimen/user_image_height_width"

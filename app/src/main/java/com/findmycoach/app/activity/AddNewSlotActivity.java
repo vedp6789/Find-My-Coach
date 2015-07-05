@@ -37,6 +37,7 @@ import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.SetDate;
 import com.findmycoach.app.util.SetTime;
 import com.findmycoach.app.util.StorageHelper;
+import com.findmycoach.app.util.SummaryDialog;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
@@ -713,64 +714,9 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
     }
 
     private void showSummaryAsAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle(getResources().getString(R.string.slot_summary));
-        ScrollView scrollView = new ScrollView(this);
-        final TextView contentView = new TextView(this);
-        Log.d(TAG, "class end time" + class_stop_time);
-        if (slot_type == 0) {
+        SummaryDialog dialog=new SummaryDialog(this,class_subject,class_start_date,class_stop_date,class_start_time+ " to "+class_stop_time,selected_days_of_this_slot.toString(),class_slot_type,class_location);
+        dialog.showPopUp();
 
-            contentView.setText(Html.fromHtml("<b>" + getResources().getString(R.string.subject) + ":" + "&nbsp;</b>" + class_subject +
-                    "<br>" + "<b>" + getResources().getString(R.string.class_start_date) + "&nbsp;</b>" + class_start_date +
-                    "<br>" + "<b>" + getResources().getString(R.string.class_stop_date) + "&nbsp;</b>" + class_stop_date +
-                    "<br>" + "<b>" + getResources().getString(R.string.class_timing) + "&nbsp;</b>" + class_start_time + "&nbsp;" + getResources().getString(R.string.to1) + "&nbsp;" + class_stop_time +
-                    "<br>" + "<b>" + getResources().getString(R.string.week_days) + "&nbsp;</b>" + selected_days_of_this_slot.toString() +
-                    "<br>" + "<b>" + getResources().getString(R.string.slot_type) + "&nbsp;</b>" + class_slot_type +
-                    "<br>" + "<b>" + getResources().getString(R.string.location) + ":" + "&nbsp;</b>" + class_location));
-
-        } else {
-            contentView.setText(Html.fromHtml("<b>" + getResources().getString(R.string.subject) + "&nbsp;</b>" + class_subject +
-                    "<br>" + "<b>" + getResources().getString(R.string.class_start_date) + "&nbsp;</b>" + class_start_date +
-                    "<br>" + "<b>" + getResources().getString(R.string.class_stop_date) + "&nbsp;</b>" + class_stop_date +
-                    "<br>" + "<b>" + getResources().getString(R.string.class_timing) + "&nbsp;</b>" + class_start_time + "&nbsp;" + getResources().getString(R.string.to1) + "&nbsp;" + class_stop_time +
-                    "<br>" + "<b>" + getResources().getString(R.string.week_days) + "&nbsp;</b>" + selected_days_of_this_slot.toString() +
-                    "<br>" + "<b>" + getResources().getString(R.string.slot_type) + "&nbsp;</b>" + class_slot_type +
-                    "<br>" + "<b>" + getResources().getString(R.string.max_students) + "&nbsp;</b>" + class_max_users +
-                    "<br>" + "<b>" + getResources().getString(R.string.location) + ":" + "&nbsp;</b>" + class_location));
-        }
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(8, 8, 8, 8);
-        scrollView.addView(contentView);
-        scrollView.setLayoutParams(params);
-        alertDialog.setView(scrollView);
-        alertDialog.setCancelable(false);
-        alertDialog.setPositiveButton(getResources().getString(R.string.ok),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(TAG, "on positive button");
-                        //   setResult(500);
-                        if (MyScheduleFragment.myScheduleFragment != null) {
-                            MyScheduleFragment.myScheduleFragment.getCalendarDetailsAPICall();
-                        }
-                        finish();
-
-                        //   dialog.cancel();
-                        //   finish();
-
-                    }
-                }
-        );
-        /*alertDialog.setNegativeButton(getResources().getString(R.string.cancel),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-
-                    }
-                }
-        );*/
-        alertDialog.show();
     }
 
     /* This method generates message when either slots coincide or there is coinciding exceptions like vaccation*/

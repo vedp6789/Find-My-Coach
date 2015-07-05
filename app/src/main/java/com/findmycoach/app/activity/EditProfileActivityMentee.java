@@ -508,17 +508,20 @@ public class EditProfileActivityMentee extends Activity implements Callback {
 
         if (profileDOB.getText().toString().trim().equals("")) {
             profileDOB.setError(getResources().getString(R.string.enter_dob));
+            profileDOB.requestFocus();
             isValid = false;
         }
 
         if (pinCode.getText().toString().trim().equals("")) {
             pinCode.setError(getResources().getString(R.string.enter_pin));
+
             isValid = false;
         }
 
         String firstName = profileFirstName.getText().toString().trim().replaceAll(" ", "");
         if (firstName.equals("")) {
             showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
+            profileFirstName.requestFocus();
             isValid = false;
         } else {
             for (int i = 0; i < firstName.length(); i++) {
@@ -532,6 +535,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         String lastName = profileLastName.getText().toString().trim().replaceAll(" ", "");
         if (lastName.equals("")) {
             showErrorMessage(profileLastName, getResources().getString(R.string.error_field_required));
+            profileLastName.requestFocus();
             isValid = false;
         } else {
             for (int i = 0; i < lastName.length(); i++) {
