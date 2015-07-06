@@ -886,7 +886,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
 
         /**phone number not present*/
-        if (statusCode == 206) {
+        if (statusCode == 206 || response.getStatus() == 2) {
             RequestParams requestParams = new RequestParams();
             requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
             try {
@@ -898,6 +898,10 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 } catch (Exception ex) {
                 }
             }
+
+            if(response.getStatus() == 2)
+                Toast.makeText(this, response.getMessage(),Toast.LENGTH_LONG).show();
+
             getPhoneNumber(requestParams);
             return;
         }

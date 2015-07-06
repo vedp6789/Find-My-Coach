@@ -113,7 +113,7 @@ public class AddressFromZip extends AsyncTask<String, Void, String> {
                     }
 
                     try {
-                        NetworkManager.cityName = address_components.getJSONObject(address_components.length() - 4).getString("long_name");
+                        NetworkManager.cityName = address_components.getJSONObject(3).getString("long_name");
                     } catch (Exception e) {
                         NetworkManager.cityName = "";
                     }
