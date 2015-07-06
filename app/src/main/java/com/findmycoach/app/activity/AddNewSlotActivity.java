@@ -670,24 +670,30 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
 
 
                                         if (jA_coinciding_Exceptions.length() > 0) {
-                                            coincideOf(jA_coinciding_Exceptions, 1);
-
+//                                            coincideOf(jA_coinciding_Exceptions, 1);     commented as vacation information is not needed to display
+                                            Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully), Toast.LENGTH_SHORT).show();
+                                            showSummaryAsAlert();
                                         } else {
                                             Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.created_new_slot_successfully), Toast.LENGTH_SHORT).show();
-
                                             showSummaryAsAlert();
                                         }
                                     } else {
                                         if (jA_coinciding_Slots.length() > 0) {
                                             Log.d(TAG, "failure of adding slot because coinciding slot array is bigger ");
+                                            Toast.makeText(AddNewSlotActivity.this, jO_success_response.getString("message"), Toast.LENGTH_LONG).show();
+/*   commented as showing only server message and not showing coinciding slot duration
                                             coincideOf(jA_coinciding_Slots, 0);
+*/
                                         } else {
                                             jsonObject_exception = jO_success_response.getJSONObject("coincidingExceptions");
 
                                             Toast.makeText(AddNewSlotActivity.this, jO_success_response.getString("message"), Toast.LENGTH_LONG).show();
-                                                /* It is the case when there is vacation found which is not allowing any class, so in this case we can show message from server */
-                                            coincideOf(null, 2);  /* flag is 2 , means mentor request for new slot, is cannot be possible as there is one vacation schedule which is having start date earlier or equal to that of mentor new slot request start date and the stop date of new requested slot is coming equal or less than vacation stop date  */
+
+                                            //   commented as we are not showing duration of vacation which is not allowing any class    /* It is the case when there is vacation found which is not allowing any class, so in this case we can show message from server */
+                                            //   """""""""""                                                                               coincideOf(null, 2);  /* flag is 2 , means mentor request for new slot, is cannot be possible as there is one vacation schedule which is having start date earlier or equal to that of mentor new slot request start date and the stop date of new requested slot is coming equal or less than vacation stop date  */
+
                                         }
+
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -698,7 +704,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
                             @Override
                             public void failureOperation(Object object, int statusCode, int calledApiValue) {
                                 progressDialog.dismiss();
-                                b_create_slot.setEnabled(false);
+                                b_create_slot.setEnabled(true);
                                 Toast.makeText(AddNewSlotActivity.this, (String) object, Toast.LENGTH_SHORT).show();
                             }
                         }, 35);

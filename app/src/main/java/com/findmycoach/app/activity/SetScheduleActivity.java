@@ -74,12 +74,20 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     private int vacation_req_code = 3;
     private int vacation_res_code = 6;
     private TextView titleTextView;
+    public static SetScheduleActivity setScheduleActivity;
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        setScheduleActivity=null;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
+            setScheduleActivity=this;
+
             Intent getIntent = getIntent();
             if (getIntent != null) {
                 Log.d(TAG, "inside SetScheduleActivity onCreate");

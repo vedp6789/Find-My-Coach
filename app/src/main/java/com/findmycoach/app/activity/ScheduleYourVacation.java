@@ -404,7 +404,7 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
                                     int status = Integer.parseInt(jsonObject.getString("status"));
 
                                     if (status == 1) {
-                                        Toast.makeText(ScheduleYourVacation.this, getResources().getString(R.string.vacation_scheduled_success), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ScheduleYourVacation.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                                         if (MyScheduleFragment.myScheduleFragment != null) {
                                             Log.d(TAG, "myschedulefragment instace is not null");
                                             MyScheduleFragment.myScheduleFragment.getCalendarDetailsAPICall();
@@ -420,7 +420,8 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
                                             } else {
                                                 JSONArray jsonArray_coinciding_exceptions = jsonObject.getJSONArray("coincidingExceptions");
                                                 if (jsonArray_coinciding_exceptions.length() > 0) {
-                                                    coincidingExceptionMessage(jsonArray_coinciding_exceptions);
+                                                    Toast.makeText(ScheduleYourVacation.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+//                                                    coincidingExceptionMessage(jsonArray_coinciding_exceptions);    Commented as now we are not showing the duration of coincide in detail.
                                                 } else {
                                                     finish();
                                                 }
@@ -709,11 +710,11 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
 
     private boolean validate() {
 
-        if (time_from.equals("00:00 AM") && time_to.equals("23:59 PM")) {
+        if (start_hour==0 && start_min==0 && stop_hour == 23 && stop_min == 59) {
             start_hour = 0;
             start_min = 0;
-            stop_hour = 24;
-            stop_min = 0;
+            stop_hour = 23;
+            stop_min = 59;
 
             if (check_for_days_selected()) {
                 return true;
@@ -1020,9 +1021,9 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
         start_hour = 0;
         start_min = 0;
         tv_stop_time = (TextView) findViewById(R.id.tv_slot_stop_time);
-        tv_stop_time.setText("23:59 PM");
-        stop_hour = 24;
-        stop_min = 0;
+        tv_stop_time.setText("12:59 PM");
+        stop_hour = 23;
+        stop_min = 59;
 
         et_note_vaccation = (EditText) findViewById(R.id.et_vacation_note);
 
