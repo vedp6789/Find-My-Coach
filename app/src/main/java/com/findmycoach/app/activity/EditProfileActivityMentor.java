@@ -8,8 +8,6 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -201,24 +199,24 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             }
         });
 
-        profileAddress1.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                city = null; /* making city null because if user do changes in city and does not select city from suggested city then this city string should be null which is used to validate the city */
-                String input = profileAddress1.getText().toString();
-                if (input.length() >= 2) {
-                    getAutoSuggestions(input);
-                }
-            }
-        });
+//        profileAddress1.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                city = null; /* making city null because if user do changes in city and does not select city from suggested city then this city string should be null which is used to validate the city */
+//                String input = profileAddress1.getText().toString();
+//                if (input.length() >= 2) {
+//                    getAutoSuggestions(input);
+//                }
+//            }
+//        });
 
 
         profileAddress1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
