@@ -143,4 +143,11 @@ public class StorageHelper {
         preferences.edit().putString("currency_code", currencyCode).apply();
     }
 
+    public static String  getUserAddress(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return  preferences.getString("user_local_address","")+" "+preferences.getString("user_city_state","")
+                +" "+preferences.getString("user_country","")+" "+ preferences.getString("user_zip_code","");
+
+    }
+
 }

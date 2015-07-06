@@ -108,7 +108,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         super.onActivityCreated(savedInstanceState);
 
         initialize(fragmentView);
-        updateLocationUI();
+     //   updateLocationUI();
         applyActions();
 
         DataBase dataBase = DataBase.singleton(getActivity());
@@ -125,17 +125,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
         homeFragmentMentee = this;
 
-        if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
-            updateLocationFromAsync(DashboardActivity.dashboardActivity.userCurrentAddress);
-        }
+//        if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
+//            updateLocationFromAsync(DashboardActivity.dashboardActivity.userCurrentAddress);
+//        }
 
         NetworkManager.getNetworkAndGpsStatus(getActivity());
     }
 
-    public void updateLocationFromAsync(String loc) {
-        location = loc.trim();
-        updateLocationUI();
-    }
 
 
     private void setTabForCategory(Category categoryResponse) {
@@ -535,8 +531,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         changeLocation = (Button) view.findViewById(R.id.change_location);
         changeLocation.setOnClickListener(this);
         searchButton.setOnClickListener(this);
-        currentLocationText.setText(location);
-        locationInput.setText(location);
+        currentLocationText.setText(StorageHelper.getUserAddress(getActivity()));
+        locationInput.setText(StorageHelper.getUserAddress(getActivity()));
         locationLayout = (RelativeLayout) view.findViewById(R.id.current_location_layout);
         locationLayout = (RelativeLayout) view.findViewById(R.id.current_location_layout);
         timeBarrierLayout = (LinearLayout) view.findViewById(R.id.time_barrier_layout);
@@ -625,15 +621,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         if (timeBarrier) {
             String fromTiming = (String) fromTimingInput.getTag(fromTimingInput.getId());
             String toTiming = (String) toTimingInput.getTag(toTimingInput.getId());
-            try {
-                JSONObject timings = new JSONObject();
-                timings.put("from", fromTiming);
-                timings.put("to", toTiming);
-                requestParams.add("timings", timings.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
+                requestParams.add("timing_from", fromTiming);
+                requestParams.add("timing_to", toTiming);
             String week = "";
 
             String[] daysArray = new String[]{"Su", "M", "T", "W", "Th", "F", "S"};

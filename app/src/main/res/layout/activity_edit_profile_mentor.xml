@@ -48,9 +48,10 @@
                         android:layout_gravity="center_horizontal|bottom"
                         android:background="@color/purple"
                         android:padding="@dimen/days_margin"
-                        android:text="@string/add_photo"
+                        android:text="Change photo"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/profile_add_photo" />
+                        android:textSize="@dimen/profile_add_photo"
+                        android:id="@+id/addPhotoMentor" />
 
                 </FrameLayout>
 

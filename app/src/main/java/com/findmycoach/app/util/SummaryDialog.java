@@ -9,6 +9,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.AddNewSlotActivity;
+import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.views.ChizzleTextView;
 
 import java.util.ArrayList;
@@ -39,7 +41,6 @@ public class SummaryDialog {
         dialog = new Dialog(context, R.style.DialogCustomTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.summary_dialog_layout);
-       /* dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);*/
         subjectTextView=(ChizzleTextView)dialog.findViewById(R.id.subjectValue);
         startDateTextView=(ChizzleTextView)dialog.findViewById(R.id.startDateValue);
         stopDateTextView=(ChizzleTextView)dialog.findViewById(R.id.stopDateValue);
@@ -58,7 +59,11 @@ public class SummaryDialog {
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (MyScheduleFragment.myScheduleFragment != null) {
+                    MyScheduleFragment.myScheduleFragment.getCalendarDetailsAPICall();
+                }
                 dialog.dismiss();
+                ((AddNewSlotActivity)context).finish();
             }
         });
 

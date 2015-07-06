@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -162,6 +164,13 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         nextMonth = (ImageView) view.findViewById(R.id.nextMonth);
         nextMonth.setOnClickListener(this);
 
+        RelativeLayout customLayout=(RelativeLayout)view.findViewById(R.id.customLayout);
+        customLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
         calendarView = (ScrollableGridView) view.findViewById(R.id.calendar);
 
         getCalendarDetailsForMentee();
@@ -284,6 +293,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
         add_vacation = (Button) view.findViewById(R.id.tv_add_vacation);
         add_vacation.setOnClickListener(this);
+
+
+
+        add_slot.setVisibility(View.GONE);
+        add_vacation.setVisibility(View.GONE);
 
         prevMonth = (ImageView) view.findViewById(R.id.prevMonth);
         prevMonth.setOnClickListener(this);
@@ -874,6 +888,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
+        if(DashboardActivity.dashboardActivity.user_group == 3 ) {
+            add_slot.setVisibility(View.VISIBLE);
+            add_vacation.setVisibility(View.VISIBLE);
+        }
         switch (calledApiValue) {
             case 37:
                 Log.d(TAG, " API 37 success");
@@ -910,6 +928,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         Log.d(TAG, "API " + calledApiValue + " failure");
         progressDialog.dismiss();
+
+        if(DashboardActivity.dashboardActivity.user_group == 3 ) {
+            add_slot.setVisibility(View.VISIBLE);
+            add_vacation.setVisibility(View.VISIBLE);
+        }
         switch (calledApiValue) {
             case 37:
                 Log.d(TAG, "inside 37 failure");

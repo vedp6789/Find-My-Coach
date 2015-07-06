@@ -241,6 +241,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         tv_start_date.setText(date_from);
         date_to = getResources().getString(R.string.end_date);
 
+
+
         allListeners();
 
     }
@@ -277,6 +279,15 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
                 } else {
                     Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.from_date_first), Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+
+        findViewById(R.id.infoIconNewSlot).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getBaseContext(),"Please select time slots within a day",Toast.LENGTH_SHORT).show();
+
             }
         });
 
