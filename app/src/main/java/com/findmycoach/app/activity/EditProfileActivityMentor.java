@@ -39,6 +39,7 @@ import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.util.TermsAndCondition;
+import com.findmycoach.app.views.ChizzleTextView;
 import com.findmycoach.app.views.DobPicker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -80,6 +81,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     private String newUser;
     private boolean isGettingAddress, isDobForReview;
     private List<Prediction> predictions;
+    private ChizzleTextView addPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +138,8 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         for (int i = 0; i < yearOfExperience.length; i++) {
             yearOfExperience[i] = String.valueOf(i);
         }
+
+        addPhoto=(ChizzleTextView)findViewById(R.id.addPhotoMentor);
         experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, yearOfExperience));
         isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
         updateAction = (Button) findViewById(R.id.button_update);
@@ -701,6 +705,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             Bitmap userPic = (Bitmap) data.getParcelableExtra("image");
             profilePicture.setImageBitmap(userPic);
+            addPhoto.setVisibility(View.GONE);
             try {
                 imageInBinary = BinaryForImage.getBinaryStringFromBitmap(userPic);
             } catch (Exception e) {

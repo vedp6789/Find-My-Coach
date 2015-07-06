@@ -888,9 +888,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        add_slot.setVisibility(View.VISIBLE);
-        add_vacation.setVisibility(View.VISIBLE);
-
+        if(DashboardActivity.dashboardActivity.user_group == 3 ) {
+            add_slot.setVisibility(View.VISIBLE);
+            add_vacation.setVisibility(View.VISIBLE);
+        }
         switch (calledApiValue) {
             case 37:
                 Log.d(TAG, " API 37 success");
@@ -927,9 +928,11 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         Log.d(TAG, "API " + calledApiValue + " failure");
         progressDialog.dismiss();
-        add_slot.setVisibility(View.VISIBLE);
-        add_vacation.setVisibility(View.VISIBLE);
 
+        if(DashboardActivity.dashboardActivity.user_group == 3 ) {
+            add_slot.setVisibility(View.VISIBLE);
+            add_vacation.setVisibility(View.VISIBLE);
+        }
         switch (calledApiValue) {
             case 37:
                 Log.d(TAG, "inside 37 failure");

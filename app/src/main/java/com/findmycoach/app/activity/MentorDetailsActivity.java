@@ -591,20 +591,20 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private void populateViews(LinearLayout linearLayout, List<com.findmycoach.app.views.ChizzleButton> views, Context context) {
 
         Display display = getWindowManager().getDefaultDisplay();
-        linearLayout.removeAllViews();
+        linearLayout.invalidate();
         int maxWidth = display.getWidth() - 40;
 
-        LinearLayout.LayoutParams params;
+        LinearLayout.LayoutParams params=null;
         LinearLayout newLL = new LinearLayout(context);
-        newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        newLL.setOrientation(LinearLayout.HORIZONTAL);
+        newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        newLL.setOrientation(LinearLayout.VERTICAL);
         newLL.setGravity(Gravity.CENTER_HORIZONTAL);
 
         int widthSoFar = 0;
 
         for (Button view : views) {
             LinearLayout LL = new LinearLayout(context);
-            LL.setOrientation(LinearLayout.HORIZONTAL);
+            LL.setOrientation(LinearLayout.VERTICAL);
             LL.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
             LL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
@@ -617,10 +617,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             widthSoFar += view.getMeasuredWidth();
             if (widthSoFar >= maxWidth) {
                 linearLayout.addView(newLL);
-
                 newLL = new LinearLayout(context);
-                newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, profileDob.getHeight()));
-                newLL.setOrientation(LinearLayout.HORIZONTAL);
+                newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, profileDob.getHeight()));
+                newLL.setOrientation(LinearLayout.VERTICAL);
                 newLL.setGravity(Gravity.CENTER_HORIZONTAL);
                 params = new LinearLayout.LayoutParams(LL.getMeasuredWidth(), LL.getMeasuredHeight());
                 newLL.addView(LL, params);
@@ -630,6 +629,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             }
         }
         linearLayout.addView(newLL);
+
     }
 
     @Override
@@ -924,7 +924,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
         tv_currentMonth.setText(DateFormat.format(dateTemplate,
                 _calendar.getTime()));
-
         calendarView.setAdapter(adapter1);
         adapter1.notifyDataSetChanged();
         progressDialog.dismiss();

@@ -38,6 +38,7 @@ import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.util.TermsAndCondition;
+import com.findmycoach.app.views.ChizzleTextView;
 import com.findmycoach.app.views.DobPicker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -74,7 +75,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
     private String newUser;
     private boolean isGettingAddress;
     private List<Prediction> predictions;
-
+    private ChizzleTextView addText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,6 +128,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         updateAction = (Button) findViewById(R.id.button_update);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
+        addText=(ChizzleTextView)findViewById(R.id.addPhotoMentee);
 
         profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
 
@@ -601,6 +603,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             Bitmap userPic = (Bitmap) data.getParcelableExtra("image");
             profilePicture.setImageBitmap(userPic);
+            addText.setVisibility(View.GONE);
             try {
                 imageInBinary = BinaryForImage.getBinaryStringFromBitmap(userPic);
             } catch (Exception e) {

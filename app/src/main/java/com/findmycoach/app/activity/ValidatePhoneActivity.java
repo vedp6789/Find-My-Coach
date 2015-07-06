@@ -53,7 +53,6 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         validatePhoneActivity = this;
 
         from = getIntent().getStringExtra("from");
@@ -66,6 +65,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
             return;
         }
         setContentView(R.layout.activity_validate_phone);
+        Toast.makeText(this,"An Otp has been sent to your registered number",Toast.LENGTH_SHORT).show();
         initView();
     }
 
