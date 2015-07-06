@@ -9,6 +9,7 @@ import com.findmycoach.app.beans.attachment.Attachment;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.chats.Chats;
+import com.findmycoach.app.beans.mentor.Currency;
 import com.findmycoach.app.beans.requests.ConnectionRequestsResponse;
 import com.findmycoach.app.beans.search.SearchResponse;
 import com.findmycoach.app.beans.student.ProfileResponse;
@@ -81,6 +82,7 @@ import org.json.JSONObject;
     *       eventFinalize                   49
     *       exceptions                      50   // deleteVacation
     *       availableSlots                  51 // deleteClassSlot
+    *       currencySymbol                  52
     * */
 
 
@@ -1932,6 +1934,41 @@ public class NetworkClient {
                 } catch (Exception e) {
                     try {
                         Log.d(TAG, "Failure: Error:" + e.getMessage() + "\ncalled_api+" + calledApiValue);
+                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        });
+    }
+    public static void getCurrencySymbol(final Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
+        if (!NetworkManager.isNetworkConnected(context)) {
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.get(context, getAbsoluteURL("currencySymbol", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    String responseJson = new String(responseBody);
+                    Currency response = new Gson().fromJson(responseJson, Currency.class);
+                    callback.successOperation(response, statusCode, calledApiValue);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseBody, null);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    String responseJson = new String(responseBody);
+                    Currency response = new Gson().fromJson(responseJson, Currency.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    try {
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
                     } catch (Exception ignored) {
                     }

@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
+import com.findmycoach.app.beans.mentor.Currency;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
@@ -80,6 +82,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     private boolean isGettingAddress, isDobForReview;
     private List<Prediction> predictions;
     private ChizzleTextView addPhoto;
+    private ChizzleTextView currencySymbol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +131,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         pinCode = (EditText) findViewById(R.id.input_pin);
         chargeInput = (EditText) findViewById(R.id.input_charges);
+        currencySymbol=(ChizzleTextView)findViewById(R.id.currencySymbol);
         chargeInput.setSelectAllOnFocus(true);
         accomplishment = (EditText) findViewById(R.id.input_accomplishment);
         experienceInput = (Spinner) findViewById(R.id.input_experience);
@@ -469,6 +473,12 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             }
         });
 
+        if(userInfo.getCountry()!=null) {
+            String authToken = StorageHelper.getUserDetails(this, "auth_token");
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("country", String.valueOf(userInfo.getCountry()));
+            NetworkClient.getCurrencySymbol(this, requestParams, authToken, EditProfileActivityMentor.this, 52);
+        }
         if (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
             getAddress();
     }
@@ -745,7 +755,12 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        if (object instanceof Suggestion) {
+
+        if(calledApiValue==52){
+            Currency currency = (Currency)object;
+            currencySymbol.setText(Html.fromHtml(currency.getCurrencySymbol()));
+        }
+         else if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
         } else {
@@ -760,7 +775,6 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                 Log.d(TAG, "Currency code : " + currencyCode);
             }
 
-            Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
             Intent intent = new Intent();
             intent.putExtra("user_info", new Gson().toJson(userInfo));
             setResult(Activity.RESULT_OK, intent);
@@ -832,8 +846,6 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         String message = (String) object;
         progressDialog.dismiss();
-        if (!message.equals("false"))
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-        Log.d(TAG, "success response message : in EditProfileActivity : " + message);
+         Log.d(TAG, "success response message : in EditProfileActivity : " + message);
     }
 }
