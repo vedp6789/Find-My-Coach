@@ -621,15 +621,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         if (timeBarrier) {
             String fromTiming = (String) fromTimingInput.getTag(fromTimingInput.getId());
             String toTiming = (String) toTimingInput.getTag(toTimingInput.getId());
-            try {
-                JSONObject timings = new JSONObject();
-                timings.put("from", fromTiming);
-                timings.put("to", toTiming);
-                requestParams.add("timings", timings.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
+                requestParams.add("timing_from", fromTiming);
+                requestParams.add("timing_to", toTiming);
             String week = "";
 
             String[] daysArray = new String[]{"Su", "M", "T", "W", "Th", "F", "S"};
