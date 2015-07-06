@@ -130,6 +130,14 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
         date_to = getResources().getString(R.string.how_long);
 
 
+        findViewById(R.id.infoIconSchedule).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getBaseContext(),"Please select time slots within a day",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         findViewById(R.id.fromTime).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

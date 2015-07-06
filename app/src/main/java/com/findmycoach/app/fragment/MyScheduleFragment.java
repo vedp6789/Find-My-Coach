@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -162,6 +164,13 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         nextMonth = (ImageView) view.findViewById(R.id.nextMonth);
         nextMonth.setOnClickListener(this);
 
+        RelativeLayout customLayout=(RelativeLayout)view.findViewById(R.id.customLayout);
+        customLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
         calendarView = (ScrollableGridView) view.findViewById(R.id.calendar);
 
         getCalendarDetailsForMentee();
