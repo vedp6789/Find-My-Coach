@@ -266,7 +266,7 @@ public class HomeFragment extends Fragment implements Callback {
 
 
                 } else {
-                    Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+          //          Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                 }
 
             } catch (JSONException e) {
