@@ -530,6 +530,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         if (userInfo != null && (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))) {
             try {
                 userInfo.setAddress(NetworkManager.localityName);
+                String s= NetworkManager.countryName;
             } catch (Exception ignored) {
             }
         }
@@ -539,6 +540,10 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                 userInfo.setCity(NetworkManager.cityName);
             } catch (Exception ignored) {
             }
+        }
+
+        if(userInfo != null && (userInfo.getCountry() == null || userInfo.getCountry().toString().trim().equals(""))) {
+            userInfo.setCountry(NetworkManager.countryCode);
         }
 
         if (userInfo != null && (userInfo.getZip() == null || userInfo.getZip().toString().trim().equals("") || userInfo.getZip().toString().trim().equals("0"))) {

@@ -28,6 +28,7 @@ public class NetworkManager {
     public static String stateName = "";
     public static String countryName = "";
     public static String postalCodeName = "";
+    public static String countryCode="";
 
     public static boolean isNetworkConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -108,6 +109,12 @@ public class NetworkManager {
             Log.e("GPS Location Pickup", "Country : " + countryName);
         } catch (Exception e) {
             countryName = "";
+        }
+        try {
+            countryCode = returnedAddress.getCountryCode();
+            Log.e("GPS Location Pickup", "State : " + countryCode);
+        } catch (Exception e) {
+            countryCode = "";
         }
         return strAdd;
     }
