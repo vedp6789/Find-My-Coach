@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ import com.findmycoach.app.beans.CalendarSchedule.MentorInfo;
 import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.beans.CalendarSchedule.Vacation;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.ListViewInsideScrollViewHelper;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
@@ -56,6 +59,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
     ArrayList<Vacation> coinciding_vacations;
     Vacation non_coinciding_vacation;
     MentorInfo mentorInfo;
+    int mentee_found;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,19 +74,19 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 bundle = getIntent().getBundleExtra("scheduled_class_mentor_bundle");
                 menteeFoundOnTheDate = bundle.getParcelableArrayList("mentees");
                 slot = bundle.getParcelable("slot");
-
+                mentee_found = menteeFoundOnTheDate.size();
                 init1();
                 populateSlotInfo(slot);
-
 
                 ll_list_of_coincidingVacations.setVisibility(View.GONE);
                 ll_non_coincidingLinearLayout.setVisibility(View.GONE);
                 b_delete.setVisibility(View.GONE);
 
 
-                MenteeList menteeList = new MenteeList(AboutWeekViewEvent.this,
-                        menteeFoundOnTheDate);
+                MenteeList menteeList = new MenteeList(AboutWeekViewEvent.this,menteeFoundOnTheDate);
                 lv_list_of_mentees.setAdapter(menteeList);
+                ListViewInsideScrollViewHelper.getListViewSize(lv_list_of_mentees);
+
 
                 break;
             case "coinciding_vacation_mentor":
@@ -90,7 +94,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 bundle = getIntent().getBundleExtra("coinciding_vacation_bundle");
                 coinciding_vacations = bundle.getParcelableArrayList("coinciding_vacations");
                 slot = bundle.getParcelable("slot");
-
+                mentee_found = -5;// in case of coinciding vacation for slot day
                 init1();
                 populateSlotInfo(slot);
 
@@ -102,6 +106,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 MenteeList menteeList1 = new MenteeList(coinciding_vacations,
                         AboutWeekViewEvent.this);
                 lv_list_of_coinciding_vacations.setAdapter(menteeList1);
+                ListViewInsideScrollViewHelper.getListViewSize(lv_list_of_coinciding_vacations);
 
                 break;
             case "slot_not_scheduled":
@@ -111,7 +116,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 init1();
                 populateSlotInfo(slot);
                 b_delete.setText(getResources().getString(R.string.delete));
-
+                mentee_found =0;
                 ll_list_of_mentees.setVisibility(View.GONE);
                 ll_non_coincidingLinearLayout.setVisibility(View.GONE);
                 ll_list_of_coincidingVacations.setVisibility(View.GONE);
@@ -119,7 +124,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                     @Override
                     public void onClick(View v) {
                         RequestParams requestParams = new RequestParams();
-                        Log.d("FMC",slot.getSlot_id());
+                        Log.d("FMC", slot.getSlot_id());
                         requestParams.add("slot_id", slot.getSlot_id());
                         showAlertOnDelete(0, requestParams);
 
@@ -162,7 +167,6 @@ public class AboutWeekViewEvent extends Activity implements Callback {
 */
 
 
-
                 b_delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -172,8 +176,6 @@ public class AboutWeekViewEvent extends Activity implements Callback {
 
                     }
                 });
-
-
                 break;
             case "scheduled_class_mentee":
                 setContentView(R.layout.activity_about_event_mentee);
@@ -181,10 +183,8 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 menteeFoundOnTheDate = bundle.getParcelableArrayList("mentees");
                 slot = bundle.getParcelable("slot");
                 mentorInfo = bundle.getParcelable("mentor_info");
-
                 init2();
-
-
+                ll_coinciding_vacations.setVisibility(View.GONE);
                 tv_name.setText(mentorInfo.getFirst_name() + "\t" + mentorInfo.getLast_name().
                         trim());
                 populateSlotInfo(slot);
@@ -194,8 +194,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 ListOfClassDuration listOfClassDuration =
                         new ListOfClassDuration(AboutWeekViewEvent.this, menteeFoundOnTheDate);
                 lv_list_class_durations.setAdapter(listOfClassDuration);
-                ll_coinciding_vacations.setVisibility(View.GONE);
-
+                ListViewInsideScrollViewHelper.getListViewSize(lv_list_class_durations);
                 break;
             case "coinciding_vacation_mentee":
                 setContentView(R.layout.activity_about_event_mentee);
@@ -203,18 +202,15 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 coinciding_vacations = bundle.getParcelableArrayList("coinciding_vacations");
                 slot = bundle.getParcelable("slot");
                 mentorInfo = bundle.getParcelable("mentor_info");
-
                 init2();
+                ll_mentee_class_schedule.setVisibility(View.GONE);
                 tv_name.setText(mentorInfo.getFirst_name() + "\t" +
                         mentorInfo.getLast_name().trim());
                 populateSlotInfo(slot);
-
-                ll_mentee_class_schedule.setVisibility(View.GONE);
-
                 ListOfClassDuration listOfClassDuration1 =
                         new ListOfClassDuration(coinciding_vacations, AboutWeekViewEvent.this);
                 lv_list_of_coinciding_vacations.setAdapter(listOfClassDuration1);
-
+                ListViewInsideScrollViewHelper.getListViewSize(lv_list_of_coinciding_vacations);
                 break;
         }
 
@@ -227,6 +223,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
             }
         });
     }
+
     Bundle bundle;
     private String for_which_event = null;
 
@@ -279,7 +276,24 @@ public class AboutWeekViewEvent extends Activity implements Callback {
             }
         }
 
-        tv_max_students.setText(slot.getSlot_max_users());
+        if(StorageHelper.getUserGroup(AboutWeekViewEvent.this,"user_group").equals("2")){
+            tv_max_students.setText(slot.getSlot_max_users());
+        }else{
+            int max_students_poss=Integer.parseInt(slot.getSlot_max_users());
+            if(mentee_found == -5){
+                tv_max_students.setText(getResources().getString(R.string.class_not_possible_as_vacation_found));
+            }else{
+                if(mentee_found == 0){
+                    tv_max_students.setText(""+max_students_poss);
+                }else{
+                    if(mentee_found > 0){
+                        int x= max_students_poss-mentee_found;
+                        tv_max_students.setText(x+" "+getResources().getString(R.string.out_of)+" "+max_students_poss);
+                    }
+                }
+            }
+
+        }
 
     }
 
@@ -510,3 +524,6 @@ public class AboutWeekViewEvent extends Activity implements Callback {
 
 
 }
+
+
+

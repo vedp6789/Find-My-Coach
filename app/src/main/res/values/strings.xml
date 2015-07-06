@@ -504,7 +504,8 @@
     <string name="end_date">End date</string>
     <string name="slot_type">Slot type:</string>
 
-    <string name="max_students">Maximum students</string>
+    <string name="max_students">Places remaining to get scheduled</string>
+    <string name="max_students_mentee">Class size</string>
     <string name="tutorial_location">Tutorial location</string>
     <string name="fmc_service">FMC Service</string>
     <string name="fmc_service_description">FMC running in service to allow push notification.</string>
@@ -618,6 +619,8 @@
     <string name="select_stop_time_vacation">Please provide end time</string>
     <string name="mentor_availability_message">Mentor can be available to your location!</string>
     <string name="mentor_non_availability_message">Mentor cannot be available to your location!</string>
+    <string name="class_not_possible_as_vacation_found">Due to vacation there is no possibility of class</string>
+    <string name="out_of">places free out of</string>
 
 
 

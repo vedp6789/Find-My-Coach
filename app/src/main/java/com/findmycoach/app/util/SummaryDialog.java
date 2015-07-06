@@ -39,7 +39,7 @@ public class SummaryDialog {
         dialog = new Dialog(context, R.style.DialogCustomTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.summary_dialog_layout);
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+       /* dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);*/
         subjectTextView=(ChizzleTextView)dialog.findViewById(R.id.subjectValue);
         startDateTextView=(ChizzleTextView)dialog.findViewById(R.id.startDateValue);
         stopDateTextView=(ChizzleTextView)dialog.findViewById(R.id.stopDateValue);

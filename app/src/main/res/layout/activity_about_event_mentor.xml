@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
     <include
         android:id="@+id/header"
@@ -327,6 +328,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/back_margin"
+
                 android:background="@drawable/custom_button_click_white_bg"
                 android:textColor="@color/custom_button_text_color_click_white_bg" />
 

@@ -120,7 +120,6 @@ public class MentorNotificationActions extends Activity implements Callback {
                         requestParams.add("status", "accepted");
                         action = "accept";
                         Log.d(TAG, "connection_id: " + connectionRequest.getConnection_id());
-
                         progressDialog.show();
                         NetworkClient.respondToConnectionRequest(MentorNotificationActions.this, requestParams, MentorNotificationActions.this, 18);
                     }
@@ -407,10 +406,12 @@ public class MentorNotificationActions extends Activity implements Callback {
                         Toast.makeText(MentorNotificationActions.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "schedule request accepted .");
                         if (ScheduleRequestFragment.scheduleRequestFragment != null) {
+                            Log.d(TAG, "ScheduleRequestFragment found not null");
                             ScheduleRequestFragment.scheduleRequestFragment.refresh();
                             finish();
 
                         } else {
+                            Log.d(TAG, "ScheduleRequestFragment found null");
                             setResult(RESULT_OK);
                             finish();
 
