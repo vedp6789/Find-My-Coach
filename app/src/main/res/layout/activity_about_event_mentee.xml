@@ -183,7 +183,7 @@
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                  android:layout_marginTop="@dimen/back_margin"
-                 android:text="@string/max_students"
+                 android:text="@string/max_students_mentee"
                  android:textColor="@color/purple"
                  android:textSize="@dimen/profile_details"
                  android:textStyle="bold" />

@@ -38,6 +38,7 @@
         android:layout_marginTop="@dimen/back_margin"
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_details"
+        android:visibility="gone"
         android:layout_below="@+id/tv_mentee_name"
         android:layout_alignBottom="@+id/view2"
         android:layout_toRightOf="@+id/view2"

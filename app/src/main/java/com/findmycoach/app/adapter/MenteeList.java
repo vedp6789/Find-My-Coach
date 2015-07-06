@@ -77,7 +77,7 @@ public class MenteeList extends BaseAdapter {
 
 
             menteeViewHolder.tv_name = (TextView) convertView.findViewById(R.id.tv_mentee_name);
-            menteeViewHolder.tv_subject = (TextView) convertView.findViewById(R.id.tv_subject);
+//            menteeViewHolder.tv_subject = (TextView) convertView.findViewById(R.id.tv_subject);  commented as subject is similar for all mentees as of slot subject
             menteeViewHolder.tv_start_date = (TextView) convertView.findViewById(R.id.tv_start_date);
             menteeViewHolder.tv_stop_date = (TextView) convertView.findViewById(R.id.tv_stop_date);
             convertView.setTag(menteeViewHolder);
@@ -111,7 +111,6 @@ public class MenteeList extends BaseAdapter {
                 }
 
                 menteeViewHolder.tv_name.setText(mentee.getFirst_name() + "\t" + mentee.getLast_name().trim());
-                menteeViewHolder.tv_subject.setVisibility(View.GONE);
                 menteeViewHolder.tv_start_date.setVisibility(View.VISIBLE);
                 menteeViewHolder.tv_stop_date.setVisibility(View.VISIBLE);
             }
