@@ -2,10 +2,14 @@ package com.findmycoach.app.util;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.text.Html;
 import android.util.Log;
 import android.widget.EditText;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.beans.mentor.Currency;
+import com.findmycoach.app.views.ChizzleTextView;
+import com.loopj.android.http.RequestParams;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -22,13 +26,23 @@ import java.io.InputStreamReader;
 /**
  * Created by ShekharKG on 29/4/15.
  */
-public class AddressFromZip extends AsyncTask<String, Void, String> {
+public class AddressFromZip extends AsyncTask<String, Void, String>  implements  Callback{
 
     private Context context;
     private EditText cityET, addressET;
     private String googleApiUrl;
+    private ChizzleTextView currencySymbol=null;
     private boolean isGettingLatLng;
 
+    public AddressFromZip(Context context, EditText cityET, EditText addressET,ChizzleTextView currencySymbol, boolean isGettingLatLng) {
+        this.context = context;
+        this.cityET = cityET;
+        this.addressET = addressET;
+        this.isGettingLatLng = isGettingLatLng;
+        this.currencySymbol=currencySymbol;
+        googleApiUrl = context.getResources().getString(R.string.google_api_lat_lng_from_zip);
+        Log.e("AddressFromZip", "Constructor");
+    }
     public AddressFromZip(Context context, EditText cityET, EditText addressET, boolean isGettingLatLng) {
         this.context = context;
         this.cityET = cityET;
@@ -89,7 +103,7 @@ public class AddressFromZip extends AsyncTask<String, Void, String> {
                 JSONObject result = jsonObject.getJSONArray("results").getJSONObject(0);
                 if (isGettingLatLng) {
                     JSONObject location = result.getJSONObject("geometry").getJSONObject("location");
-                    new AddressFromZip(context, cityET, addressET, false).execute(location.getString("lat"), location.getString("lng"));
+                    new AddressFromZip(context, cityET, addressET,currencySymbol, false).execute(location.getString("lat"), location.getString("lng"));
                 } else {
                     JSONArray address_components = result.getJSONArray("address_components");
                     String formatted_address = result.getString("formatted_address");
@@ -102,8 +116,10 @@ public class AddressFromZip extends AsyncTask<String, Void, String> {
 
                     try {
                         NetworkManager.countryName = address_components.getJSONObject(address_components.length() - 2).getString("long_name");
+                        NetworkManager.countryCode=  address_components.getJSONObject(address_components.length() - 2).getString("short_name");
                     } catch (Exception e) {
                         NetworkManager.countryName = "";
+                        NetworkManager.countryCode=  "";
                     }
 
                     try {
@@ -139,6 +155,13 @@ public class AddressFromZip extends AsyncTask<String, Void, String> {
 
                     if (NetworkManager.localityName.length() > 1)
                         addressET.setText(NetworkManager.localityName);
+
+                    if(currencySymbol!=null) {
+                        String authToken = StorageHelper.getUserDetails(context, "auth_token");
+                        RequestParams requestParams = new RequestParams();
+                        requestParams.add("country", String.valueOf(NetworkManager.countryCode));
+                        NetworkClient.getCurrencySymbol(context, requestParams, authToken, this, 52);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -173,5 +196,17 @@ public class AddressFromZip extends AsyncTask<String, Void, String> {
 //                }
 //            }
 //        }
+    }
+
+    @Override
+    public void successOperation(Object object, int statusCode, int calledApiValue) {
+        Currency currency=(Currency)object;
+        currencySymbol.setText(Html.fromHtml(currency.getCurrencySymbol()));
+
+    }
+
+    @Override
+    public void failureOperation(Object object, int statusCode, int calledApiValue) {
+
     }
 }
