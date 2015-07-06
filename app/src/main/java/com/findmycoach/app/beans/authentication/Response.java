@@ -12,6 +12,16 @@ public class Response {
     @SerializedName("auth_token")
     @Expose
     private String authToken;
+    @Expose
+    private int status;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     /**
      * @return The message

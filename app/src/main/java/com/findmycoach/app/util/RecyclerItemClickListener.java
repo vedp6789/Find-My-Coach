@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 
 import org.json.JSONException;
 
@@ -51,8 +50,4 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
     public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {
     }
 
-    @Override
-    public void onRequestDisallowInterceptTouchEvent(boolean b) {
-
-    }
 }
