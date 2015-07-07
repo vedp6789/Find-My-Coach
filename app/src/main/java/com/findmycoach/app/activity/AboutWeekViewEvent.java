@@ -51,7 +51,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
     Button b_delete;
     LinearLayout ll_list_of_mentees, ll_list_of_coincidingVacations,
             ll_non_coincidingLinearLayout,
-            ll_mentee_class_schedule, ll_coinciding_vacations;
+            ll_mentee_class_schedule, ll_coinciding_vacations,ll_slot_details;
 
     private ScrollView ll_class_slot_details;
 
@@ -139,7 +139,8 @@ public class AboutWeekViewEvent extends Activity implements Callback {
 
                 init1();
 
-                ll_class_slot_details.setVisibility(View.GONE);
+                ll_class_slot_details.setVisibility(View.VISIBLE);
+                ll_slot_details.setVisibility(View.GONE);
                 ll_list_of_coincidingVacations.setVisibility(View.GONE);
                 ll_list_of_mentees.setVisibility(View.GONE);
 
@@ -323,6 +324,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
         ll_list_of_mentees = (LinearLayout) findViewById(R.id.ll_list_of_mentees);
         ll_list_of_coincidingVacations = (LinearLayout) findViewById(R.id.ll_list_of_coincidingVacations);
         ll_non_coincidingLinearLayout = (LinearLayout) findViewById(R.id.ll_non_coinciding_vacation);
+        ll_slot_details = (LinearLayout) findViewById(R.id.ll_slot_details);
 
     }
 

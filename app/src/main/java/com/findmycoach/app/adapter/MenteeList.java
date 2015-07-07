@@ -75,7 +75,7 @@ public class MenteeList extends BaseAdapter {
             convertView = inflater.inflate(R.layout.mentee_list, parent, false);
             menteeViewHolder = new MenteeViewHolder();
 
-
+            menteeViewHolder.tv_mentee_name_label = (TextView) convertView.findViewById(R.id.view);
             menteeViewHolder.tv_name = (TextView) convertView.findViewById(R.id.tv_mentee_name);
 //            menteeViewHolder.tv_subject = (TextView) convertView.findViewById(R.id.tv_subject);  commented as subject is similar for all mentees as of slot subject
             menteeViewHolder.tv_start_date = (TextView) convertView.findViewById(R.id.tv_start_date);
@@ -109,7 +109,6 @@ public class MenteeList extends BaseAdapter {
                         }
                     }
                 }
-
                 menteeViewHolder.tv_name.setText(mentee.getFirst_name() + "\t" + mentee.getLast_name().trim());
                 menteeViewHolder.tv_start_date.setVisibility(View.VISIBLE);
                 menteeViewHolder.tv_stop_date.setVisibility(View.VISIBLE);
@@ -118,8 +117,9 @@ public class MenteeList extends BaseAdapter {
         } else {
 
             Vacation vacation = vacations.get(position);
-            menteeViewHolder.tv_start_date.setText(String.format(String.format("%02d-%02d-%d", Integer.parseInt(vacation.getStart_date().split("-")[2]), Integer.parseInt(vacation.getStart_date().split("-")[1]), Integer.parseInt(vacation.getStart_date().split("-")[0]))));
-            menteeViewHolder.tv_stop_date.setText(String.format(String.format("%02d-%02d-%d", Integer.parseInt(vacation.getStop_date().split("-")[2]), Integer.parseInt(vacation.getStop_date().split("-")[1]), Integer.parseInt(vacation.getStop_date().split("-")[0]))));
+            menteeViewHolder.tv_start_date.setText(String.format("%02d-%02d-%d", Integer.parseInt(vacation.getStart_date().split("-")[2]), Integer.parseInt(vacation.getStart_date().split("-")[1]), Integer.parseInt(vacation.getStart_date().split("-")[0])));
+            menteeViewHolder.tv_stop_date.setText(String.format("%02d-%02d-%d", Integer.parseInt(vacation.getStop_date().split("-")[2]), Integer.parseInt(vacation.getStop_date().split("-")[1]), Integer.parseInt(vacation.getStop_date().split("-")[0])));
+            menteeViewHolder.tv_mentee_name_label.setVisibility(View.GONE);
             menteeViewHolder.tv_name.setVisibility(View.GONE);
         }
 
@@ -130,6 +130,8 @@ public class MenteeList extends BaseAdapter {
     }
 
     class MenteeViewHolder {
+
+        TextView tv_mentee_name_label;
         TextView tv_name;
         TextView tv_start_date;
         TextView tv_stop_date;
