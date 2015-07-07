@@ -708,9 +708,9 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
-            if (isGettingAddress && NetworkManager.countryName != null && !NetworkManager.countryName.equals("")) {
-                requestParams.add("country", NetworkManager.countryName.trim());
-                Log.e(TAG, "Country : " + NetworkManager.countryName);
+            if (isGettingAddress && NetworkManager.countryCode != null && !NetworkManager.countryCode.equals("")) {
+                requestParams.add("country", NetworkManager.countryCode.trim());
+                Log.e(TAG, "Country : " + NetworkManager.countryCode);
             }
 
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
