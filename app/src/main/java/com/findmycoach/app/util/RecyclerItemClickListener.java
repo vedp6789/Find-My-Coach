@@ -10,9 +10,7 @@ import android.view.View;
 import org.json.JSONException;
 
 
-/**
- * Created by ved on 14/5/15.
- */
+
 public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
     private OnItemClickListener mListener;
 
@@ -48,5 +46,10 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
 
     @Override
     public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {
+    }
+
+    @Override
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
     }
 }
