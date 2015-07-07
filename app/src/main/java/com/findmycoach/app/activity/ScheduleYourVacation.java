@@ -729,13 +729,19 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
                     Toast.makeText(ScheduleYourVacation.this,getResources().getString(R.string.select_time),Toast.LENGTH_SHORT).show();
                     return false;
                 }else{
-                    if((start_hour==0 && start_min ==0)){
+                    if (check_for_days_selected()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+
+                    /*if((start_hour==0 && start_min ==0)){
                         Toast.makeText(ScheduleYourVacation.this,getResources().getString(R.string.select_start_time_vacation),Toast.LENGTH_SHORT).show();
                         return false;
                     }else {
                         Toast.makeText(ScheduleYourVacation.this,getResources().getString(R.string.select_stop_time_vacation),Toast.LENGTH_SHORT).show();
                         return false;
-                    }
+                    }*/
                 }
             }else{
                 int start_time = ((start_hour * 60) + start_min) * 60;

@@ -291,7 +291,7 @@
                 android:id="@+id/tv_subject_val"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/et_mentor_response_message"
+                android:layout_above="@+id/tv_location"
                 android:layout_alignLeft="@+id/tv_week_days_val"
                 android:layout_alignStart="@+id/tv_week_days_val"
                 android:layout_alignTop="@+id/tv_subject"
@@ -310,12 +310,47 @@
                 android:background="@color/purple_light" />
 
 
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tv_tutorial_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_subject"
+                android:layout_marginLeft="@dimen/back_margin"
+                android:layout_marginTop="@dimen/back_margin"
+                android:text="@string/location"
+                android:textColor="@color/purple_light"
+                android:textSize="@dimen/profile_details" />
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tv_tutorial_location_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/et_mentor_response_message"
+                android:layout_alignLeft="@+id/tv_week_days_val"
+                android:layout_alignStart="@+id/tv_week_days_val"
+                android:layout_alignTop="@+id/tv_subject"
+                android:gravity="center"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/textView8"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignLeft="@+id/tv_schedule_request_title_message"
+                android:layout_alignStart="@+id/tv_schedule_request_title_message"
+                android:layout_below="@+id/tv_tutorial_location_val"
+                android:layout_marginRight="@dimen/back_margin"
+                android:background="@color/purple_light" />
+
+
+
             <com.findmycoach.app.views.ChizzleEditText
                 android:id="@+id/et_mentor_response_message"
                 style="@style/EditTextCustomHoloPurple"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_subject"
+                android:layout_below="@id/tv_tutorial_location"
                 android:layout_margin="@dimen/back_margin"
                 android:gravity="center"
                 android:hint="@string/mentor_response_for_schedule_request_message" />

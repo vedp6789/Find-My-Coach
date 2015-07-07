@@ -20,13 +20,24 @@ public class ScheduleRequest implements Parcelable {
     private String start_date;
     private String status; /* read or unread*/
     private List<Durations>  durations_list;
+    private String tutorial_location;
+
 
     public List<Durations> getDurations_list() {
         return durations_list;
     }
 
+    public String getTutorial_location() {
+        return tutorial_location;
+    }
+
+    public void setTutorial_location(String tutorial_location) {
+        this.tutorial_location = tutorial_location;
+    }
+
     public void setDurations_list(List<Durations> durations_list) {
         this.durations_list = durations_list;
+
     }
 
     public String getStatus() {
@@ -199,6 +210,7 @@ public class ScheduleRequest implements Parcelable {
         this.created_date=parcel.readString();
         this.created_time=parcel.readString();
         parcel.readTypedList(this.durations_list, Durations.CREATOR);
+        this.tutorial_location=parcel.readString();
 
     }
 
@@ -238,6 +250,7 @@ public class ScheduleRequest implements Parcelable {
         dest.writeString(this.created_date);
         dest.writeString(this.created_time);
         dest.writeTypedList(this.durations_list);
+        dest.writeString(this.tutorial_location);
     }
 
 

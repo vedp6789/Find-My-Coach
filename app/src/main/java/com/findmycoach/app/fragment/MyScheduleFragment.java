@@ -164,7 +164,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         nextMonth = (ImageView) view.findViewById(R.id.nextMonth);
         nextMonth.setOnClickListener(this);
 
-        RelativeLayout customLayout=(RelativeLayout)view.findViewById(R.id.customLayout);
+        RelativeLayout customLayout = (RelativeLayout) view.findViewById(R.id.customLayout);
         customLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -202,8 +202,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         } else {
             month = month_from_dialog;  /* CustomDatePicketFragment is assigning value to month_from_dailog and year_from_dialog*/
             year = year_from_dialog;
-            month_from_dialog = 0;
-            year_from_dialog = 0;
+
             currentMonth.setText(getResources().getStringArray(R.array.months)[month - 1] + " " + year);
         }
 
@@ -295,7 +294,6 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         add_vacation.setOnClickListener(this);
 
 
-
         add_slot.setVisibility(View.GONE);
         add_vacation.setVisibility(View.GONE);
 
@@ -366,6 +364,8 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
 
         Log.d(TAG, "MyScheduleFragment: class_type preference value form shared preference: " + class_type_from_pref);
 
+        Log.d(TAG,"month from dialog: "+month_from_dialog+" year from dialog: "+year_from_dialog);
+        Log.d(TAG,"month : "+month+" year: "+year);
         if (month_from_dialog == 0 && year_from_dialog == 0) {
             if (populate_calendar_from_adapter) {
                 populate_calendar_from_adapter = false;
@@ -377,10 +377,12 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         } else {
             month = month_from_dialog;
             year = year_from_dialog;
-            month_from_dialog = 0;
-            year_from_dialog = 0;
             currentMonth.setText(getResources().getStringArray(R.array.months)[month - 1] + " " + year);
+
         }
+
+        Log.d(TAG,"month 1: "+month+" year 2: "+year);
+
 
 
         progressDialog = new ProgressDialog(getActivity());
@@ -888,7 +890,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        if(DashboardActivity.dashboardActivity.user_group == 3 ) {
+        if (DashboardActivity.dashboardActivity.user_group == 3) {
             add_slot.setVisibility(View.VISIBLE);
             add_vacation.setVisibility(View.VISIBLE);
         }
@@ -929,7 +931,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
         Log.d(TAG, "API " + calledApiValue + " failure");
         progressDialog.dismiss();
 
-        if(DashboardActivity.dashboardActivity.user_group == 3 ) {
+        if (DashboardActivity.dashboardActivity.user_group == 3) {
             add_slot.setVisibility(View.VISIBLE);
             add_vacation.setVisibility(View.VISIBLE);
         }
@@ -1210,7 +1212,10 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     calendarView.setAdapter(adapter1);
                     adapter1.notifyDataSetChanged();
                     if (month_from_dialog == 0 && year_from_dialog == 0) {
-                        currentMonth.setText(DateFormat.format(dateTemplate, _calendar.getTime()));
+                        //currentMonth.setText(DateFormat.format(dateTemplate, _calendar.getTime()));
+                    }else{
+                        month_from_dialog = 0;
+                        year_from_dialog = 0;
                     }
 
                 } else {

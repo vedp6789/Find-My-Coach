@@ -503,7 +503,7 @@
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
     <string name="slot_type">Slot type:</string>
-
+    <string name="class_location">Location</string>
     <string name="max_students">Places remaining to get scheduled</string>
     <string name="max_students_mentee">Class size</string>
     <string name="tutorial_location">Tutorial location</string>
@@ -614,7 +614,7 @@
     <string name="class_not_possible">Not possible to schedule as slot expires today!</string>
     <string name="slot_cannot_be_possible">Not possible to create a slot because the selected day is about to complete.</string>
     <string name="end_time_cannot_be_grater_the_24">There can be only 15 minutes slot time from 11:45 PM.</string>
-    <string name="select_time">Please provide time</string>
+    <string name="select_time">Provide start time and end time for the vacation</string>
     <string name="select_start_time_vacation">Please provide start time</string>
     <string name="select_stop_time_vacation">Please provide end time</string>
     <string name="mentor_availability_message">Mentor can be available to your location!</string>
