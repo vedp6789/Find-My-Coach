@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.facebook.Request;
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.facebook.model.GraphPlace;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.findmycoach.app.R;
@@ -155,7 +156,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         /** FB related */
         actionFacebook = (LoginButton) findViewById(R.id.facebook_login_button);
-        actionFacebook.setReadPermissions(Arrays.asList("user_location", "user_birthday", "email"));
+        actionFacebook.setReadPermissions(Arrays.asList("user_name", "user_location", "user_birthday", "user_email", "user_address"));
         actionFacebook.setBackgroundResource(R.drawable.facebook);
 
         /** Other views related to generic login, sign up, forget password */
@@ -403,6 +404,11 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         requestParams.add("first_name", user.getFirstName());
         requestParams.add("last_name", user.getLastName());
         requestParams.add("dob", user.getBirthday());
+        Log.e(TAG, user.getFirstName());
+        Log.e(TAG, user.getLastName());
+        Log.e(TAG, user.getBirthday());
+        GraphPlace location = user.getLocation();
+        Log.e(TAG, location.getName());
         requestParams.add("facebook_link", user.getLink());
         requestParams.add("gender", (String) user.getProperty("gender"));
         requestParams.add("photograph", "http://graph.facebook.com/" + user.getId() + "/picture?type=large");
@@ -488,15 +494,20 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         try {
             String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
             requestParams.add("email", email);
+            Log.e(TAG, email);
             saveUserEmail(email);
         } catch (Exception ignored) {
         }
         try {
             requestParams.add("first_name", currentPerson.getDisplayName().split(" ")[0]);
             requestParams.add("last_name", currentPerson.getDisplayName().split(" ")[1]);
+            Log.e(TAG, currentPerson.getDisplayName().split(" ")[0]);
+            Log.e(TAG, currentPerson.getDisplayName().split(" ")[1]);
         } catch (Exception ignored) {
         }
         try {
+            Log.e(TAG, currentPerson.getCurrentLocation());
+            Log.e(TAG, currentPerson.getBirthday());
             requestParams.add("dob", currentPerson.getBirthday());
         } catch (Exception ignored) {
         }
