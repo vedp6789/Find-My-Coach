@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.facebook.Request;
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.facebook.model.GraphPlace;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.findmycoach.app.R;
@@ -403,6 +404,14 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         requestParams.add("first_name", user.getFirstName());
         requestParams.add("last_name", user.getLastName());
         requestParams.add("dob", user.getBirthday());
+        try {
+            Log.e(TAG, user.getFirstName());
+            Log.e(TAG, user.getLastName());
+            Log.e(TAG, user.getBirthday());
+            GraphPlace location = user.getLocation();
+            Log.e(TAG, location.getName());
+        } catch (Exception ignored) {
+        }
         requestParams.add("facebook_link", user.getLink());
         requestParams.add("gender", (String) user.getProperty("gender"));
         requestParams.add("photograph", "http://graph.facebook.com/" + user.getId() + "/picture?type=large");
@@ -488,15 +497,20 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         try {
             String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
             requestParams.add("email", email);
+            Log.e(TAG, email);
             saveUserEmail(email);
         } catch (Exception ignored) {
         }
         try {
             requestParams.add("first_name", currentPerson.getDisplayName().split(" ")[0]);
             requestParams.add("last_name", currentPerson.getDisplayName().split(" ")[1]);
+            Log.e(TAG, currentPerson.getDisplayName().split(" ")[0]);
+            Log.e(TAG, currentPerson.getDisplayName().split(" ")[1]);
         } catch (Exception ignored) {
         }
         try {
+            Log.e(TAG, currentPerson.getCurrentLocation());
+            Log.e(TAG, currentPerson.getBirthday());
             requestParams.add("dob", currentPerson.getBirthday());
         } catch (Exception ignored) {
         }
@@ -855,7 +869,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 if (response.getData().getZip() != null) {
 
                     StorageHelper.storePreference(this, "user_zip_code", (String) response.getData().getZip());
-                    Log.d(TAG,"pin code get saved: "+StorageHelper.addressInformation(LoginActivity.this, "user_zip_code"));
+                    Log.d(TAG, "pin code get saved: " + StorageHelper.addressInformation(LoginActivity.this, "user_zip_code"));
 
                 }
             }
@@ -899,8 +913,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 }
             }
 
-            if(response.getStatus() == 2)
-                Toast.makeText(this, response.getMessage(),Toast.LENGTH_LONG).show();
+            if (response.getStatus() == 2)
+                Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
 
             getPhoneNumber(requestParams);
             return;
