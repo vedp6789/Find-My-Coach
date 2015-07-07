@@ -202,6 +202,7 @@ public class AddressFromZip extends AsyncTask<String, Void, String>  implements 
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         Currency currency=(Currency)object;
         currencySymbol.setText(Html.fromHtml(currency.getCurrencySymbol()));
+        StorageHelper.setCurrency(context,currency.getCurrencySymbol());
 
     }
 

@@ -473,11 +473,15 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             }
         });
 
-        if(userInfo.getCountry()!=null) {
+        if(userInfo.getCurrencyCode()!=null) {
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             RequestParams requestParams = new RequestParams();
-            requestParams.add("country", String.valueOf(userInfo.getCountry()));
-            NetworkClient.getCurrencySymbol(this, requestParams, authToken, EditProfileActivityMentor.this, 52);
+            requestParams.add("country", String.valueOf(userInfo.getCurrencyCode()));
+            NetworkClient.getCurrencySymbol(this, requestParams, authToken, this, 52);
+
+        }
+        else {
+            currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
         }
         if (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
             getAddress();
@@ -543,7 +547,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         }
 
         if(userInfo != null && (userInfo.getCountry() == null || userInfo.getCountry().toString().trim().equals(""))) {
-            userInfo.setCountry(NetworkManager.countryCode);
+            userInfo.setCurrencyCode(NetworkManager.countryCode);
         }
 
         if (userInfo != null && (userInfo.getZip() == null || userInfo.getZip().toString().trim().equals("") || userInfo.getZip().toString().trim().equals("0"))) {
@@ -763,6 +767,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
         if(calledApiValue==52){
             Currency currency = (Currency)object;
+            StorageHelper.setCurrency(this,currency.getCurrencySymbol());
             currencySymbol.setText(Html.fromHtml(currency.getCurrencySymbol()));
         }
          else if (object instanceof Suggestion) {
@@ -778,6 +783,9 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             if (currencyCode == null || currencyCode.trim().equals("")) {
                 StorageHelper.setCurrency(this, userInfo.getCurrencyCode());
                 Log.d(TAG, "Currency code : " + currencyCode);
+            }
+            else {
+                currencySymbol.setText(Html.fromHtml(currencyCode));
             }
 
             Intent intent = new Intent();

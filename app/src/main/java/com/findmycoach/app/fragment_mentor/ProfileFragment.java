@@ -148,20 +148,11 @@ public class ProfileFragment extends Fragment implements Callback {
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        if(calledApiValue==52) {
-            Currency currency = (Currency)object;
-            if (currency.getCurrencySymbol().equals(""))
-                profileCharges.setText((userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
-            else
-                profileCharges.setText(Html.fromHtml(currency.getCurrencySymbol() + " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr")));
 
-        }
-        else {
             progressDialog.hide();
             Response response = (Response) object;
             userInfo = response.getData();
             populateFields();
-        }
     }
 
 
@@ -249,11 +240,12 @@ public class ProfileFragment extends Fragment implements Callback {
         });
 
         if (userInfo.getCharges() != null) {
-            String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-            RequestParams requestParams = new RequestParams();
-            requestParams.add("country", String.valueOf(userInfo.getCountry()));
-
-            NetworkClient.getCurrencySymbol(getActivity(),requestParams,authToken,ProfileFragment.this,52);
+//            String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
+//            RequestParams requestParams = new RequestParams();
+//            requestParams.add("country", String.valueOf(userInfo.getCountry()));
+//
+//            NetworkClient.getCurrencySymbol(getActivity(),requestParams,authToken,ProfileFragment.this,52);
+            profileCharges.setText(Html.fromHtml(StorageHelper.getCurrency(getActivity())+ " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr")));
 
         }
     }
