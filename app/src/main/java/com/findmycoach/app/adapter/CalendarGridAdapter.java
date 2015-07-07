@@ -2,7 +2,6 @@ package com.findmycoach.app.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -627,39 +626,28 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                         if (availabilityFlags.vacation_found) {
                                             /* both event and vacation found */
                                             if (day_color[1].equals("CURRENT")) {
-
-                                            }else{
+                                                gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
+                                            } else {
+                                                gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event_vacation_today));
 
                                             }
-
-                                            gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event_vacation));
-                                           // gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event_vacation));
                                         } else {
                                             /* only event found*/
 
                                             if (day_color[1].equals("CURRENT")) {
-
-                                            }else{
-
+                                                gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
+                                            } else {
+                                                gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event_today));
                                             }
-
-                                            gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
-                                            //gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
                                         }
                                     } else {
                                         if (availabilityFlags.vacation_found) {
                                             /* only vacation found*/
                                             if (day_color[1].equals("CURRENT")) {
-
-                                            }else{
-
+                                                gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.vacation));
+                                            } else {
+                                                gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.vacation_today));
                                             }
-
-
-                                            gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.vacation));
-                                            gridcell.setTextColor(Color.WHITE);
-
-                                            //gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.vacation));
                                         }
                                     }
 

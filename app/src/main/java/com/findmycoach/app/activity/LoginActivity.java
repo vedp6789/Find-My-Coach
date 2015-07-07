@@ -156,7 +156,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         /** FB related */
         actionFacebook = (LoginButton) findViewById(R.id.facebook_login_button);
-        actionFacebook.setReadPermissions(Arrays.asList("user_name", "user_location", "user_birthday", "user_email", "user_address"));
+        actionFacebook.setReadPermissions(Arrays.asList("user_location", "user_birthday", "email"));
         actionFacebook.setBackgroundResource(R.drawable.facebook);
 
         /** Other views related to generic login, sign up, forget password */
@@ -404,11 +404,14 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         requestParams.add("first_name", user.getFirstName());
         requestParams.add("last_name", user.getLastName());
         requestParams.add("dob", user.getBirthday());
-        Log.e(TAG, user.getFirstName());
-        Log.e(TAG, user.getLastName());
-        Log.e(TAG, user.getBirthday());
-        GraphPlace location = user.getLocation();
-        Log.e(TAG, location.getName());
+        try {
+            Log.e(TAG, user.getFirstName());
+            Log.e(TAG, user.getLastName());
+            Log.e(TAG, user.getBirthday());
+            GraphPlace location = user.getLocation();
+            Log.e(TAG, location.getName());
+        } catch (Exception ignored) {
+        }
         requestParams.add("facebook_link", user.getLink());
         requestParams.add("gender", (String) user.getProperty("gender"));
         requestParams.add("photograph", "http://graph.facebook.com/" + user.getId() + "/picture?type=large");
@@ -866,7 +869,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 if (response.getData().getZip() != null) {
 
                     StorageHelper.storePreference(this, "user_zip_code", (String) response.getData().getZip());
-                    Log.d(TAG,"pin code get saved: "+StorageHelper.addressInformation(LoginActivity.this, "user_zip_code"));
+                    Log.d(TAG, "pin code get saved: " + StorageHelper.addressInformation(LoginActivity.this, "user_zip_code"));
 
                 }
             }
@@ -910,8 +913,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 }
             }
 
-            if(response.getStatus() == 2)
-                Toast.makeText(this, response.getMessage(),Toast.LENGTH_LONG).show();
+            if (response.getStatus() == 2)
+                Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
 
             getPhoneNumber(requestParams);
             return;

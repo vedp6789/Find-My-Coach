@@ -51,9 +51,6 @@ import com.findmycoach.app.views.ChizzleButton;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -108,7 +105,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         super.onActivityCreated(savedInstanceState);
 
         initialize(fragmentView);
-     //   updateLocationUI();
+        //   updateLocationUI();
         applyActions();
 
         DataBase dataBase = DataBase.singleton(getActivity());
@@ -131,7 +128,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
         NetworkManager.getNetworkAndGpsStatus(getActivity());
     }
-
 
 
     private void setTabForCategory(Category categoryResponse) {
@@ -444,7 +440,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                     hour++;
 
                 TimePickerFragment timePicker = new TimePickerFragment(getActivity(),
-                        HomeFragment.this, hour,min ,
+                        HomeFragment.this, hour, min,
                         false);
                 textView = fromTimingInput;
                 timePicker.show();
@@ -457,7 +453,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
                 int hour = Integer.parseInt(fromTimingInput.getText().toString().split(" ")[1]
                         .split(":")[0]);
-                if(fromTimingInput.getText().toString().contains("PM"))
+                if (fromTimingInput.getText().toString().contains("PM"))
                     hour = hour + 12;
                 int min = getSettingMinute((Integer.parseInt(fromTimingInput.getText().toString()
                         .split(" ")[1].split(":")[0])) + 14);
@@ -524,6 +520,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        currentLocationText.setText(StorageHelper.getUserAddress(getActivity()));
+        locationInput.setText(StorageHelper.getUserAddress(getActivity()));
+    }
+
     private void initialize(View view) {
         locationInput = (AutoCompleteTextView) view.findViewById(R.id.input_location);
         currentLocationText = (TextView) view.findViewById(R.id.current_location_text_view);
@@ -531,8 +534,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         changeLocation = (Button) view.findViewById(R.id.change_location);
         changeLocation.setOnClickListener(this);
         searchButton.setOnClickListener(this);
-        currentLocationText.setText(StorageHelper.getUserAddress(getActivity()));
-        locationInput.setText(StorageHelper.getUserAddress(getActivity()));
         locationLayout = (RelativeLayout) view.findViewById(R.id.current_location_layout);
         locationLayout = (RelativeLayout) view.findViewById(R.id.current_location_layout);
         timeBarrierLayout = (LinearLayout) view.findViewById(R.id.time_barrier_layout);
@@ -621,8 +622,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         if (timeBarrier) {
             String fromTiming = (String) fromTimingInput.getTag(fromTimingInput.getId());
             String toTiming = (String) toTimingInput.getTag(toTimingInput.getId());
-                requestParams.add("timing_from", fromTiming);
-                requestParams.add("timing_to", toTiming);
+            requestParams.add("timing_from", fromTiming);
+            requestParams.add("timing_to", toTiming);
             String week = "";
 
             String[] daysArray = new String[]{"Su", "M", "T", "W", "Th", "F", "S"};
@@ -684,7 +685,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     }
 
     private void updateAutoSuggestion(Suggestion suggestion) {
-        try{
+        try {
             ArrayList<String> list = new ArrayList<String>();
             List<Prediction> suggestions = suggestion.getPredictions();
             for (int index = 0; index < suggestions.size(); index++) {
@@ -692,7 +693,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             }
             arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.textview, list);
             locationInput.setAdapter(arrayAdapter);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -736,10 +737,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                     + (hourOfDay > 11 ? " PM" : " AM"));
             textView.setTag(textView.getId(), hourOfDay + ":" + min);
 
-            if(textView == fromTimingInput){
+            if (textView == fromTimingInput) {
                 int hour1 = Integer.parseInt(fromTimingInput.getText().toString().split(" ")[1]
                         .split(":")[0]);
-                if(fromTimingInput.getText().toString().contains("PM"))
+                if (fromTimingInput.getText().toString().contains("PM"))
                     hour1 = hour1 + 12;
                 int min1 = getSettingMinute((Integer.parseInt(fromTimingInput.getText().toString()
                         .split(" ")[1].split(":")[0])) + 14);
