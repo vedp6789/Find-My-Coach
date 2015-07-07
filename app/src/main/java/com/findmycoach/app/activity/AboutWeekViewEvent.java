@@ -45,7 +45,8 @@ public class AboutWeekViewEvent extends Activity implements Callback {
     TextView tv_slot_start_date, tv_slot_stop_date, tv_slot_start_time,
             tv_slot_stop_time, tv_slot_week_days, tv_slot_type, tv_max_students,
             tv_vacation_start_date, tv_vacation_stop_date, tv_vacation_start_time,
-            tv_vacation_stop_time, tv_name, tv_subject, tv_slot_subject_val;
+            tv_vacation_stop_time, tv_name, tv_subject, tv_slot_subject_val,
+            tv_class_location;
     ListView lv_list_of_mentees, lv_list_of_coinciding_vacations, lv_list_class_durations;
     Button b_delete;
     LinearLayout ll_list_of_mentees, ll_list_of_coincidingVacations,
@@ -83,7 +84,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 b_delete.setVisibility(View.GONE);
 
 
-                MenteeList menteeList = new MenteeList(AboutWeekViewEvent.this,menteeFoundOnTheDate);
+                MenteeList menteeList = new MenteeList(AboutWeekViewEvent.this, menteeFoundOnTheDate);
                 lv_list_of_mentees.setAdapter(menteeList);
                 ListViewInsideScrollViewHelper.getListViewSize(lv_list_of_mentees);
 
@@ -116,7 +117,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 init1();
                 populateSlotInfo(slot);
                 b_delete.setText(getResources().getString(R.string.delete));
-                mentee_found =0;
+                mentee_found = 0;
                 ll_list_of_mentees.setVisibility(View.GONE);
                 ll_non_coincidingLinearLayout.setVisibility(View.GONE);
                 ll_list_of_coincidingVacations.setVisibility(View.GONE);
@@ -250,6 +251,9 @@ public class AboutWeekViewEvent extends Activity implements Callback {
 
     }
 
+    /**
+     * This is used to populate class details on view
+     * */
     private void populateSlotInfo(Slot slot) {
         tv_slot_start_date.setText(String.format("%02d-%02d-%d",
                 Integer.parseInt(slot.getSlot_start_date().split("-")[2]),
@@ -266,7 +270,6 @@ public class AboutWeekViewEvent extends Activity implements Callback {
         tv_slot_subject_val.setText(slot.getSlot_subject());
         tv_slot_week_days.setText(getWeekDays(slot.getSlot_week_days()));
 
-
         String slot_type = slot.getSlot_type();
         if (slot_type.equalsIgnoreCase("group")) {
             tv_slot_type.setText(getResources().getString(R.string.group));
@@ -276,25 +279,26 @@ public class AboutWeekViewEvent extends Activity implements Callback {
             }
         }
 
-        if(StorageHelper.getUserGroup(AboutWeekViewEvent.this,"user_group").equals("2")){
+        if (StorageHelper.getUserGroup(AboutWeekViewEvent.this, "user_group").equals("2")) {
             tv_max_students.setText(slot.getSlot_max_users());
-        }else{
-            int max_students_poss=Integer.parseInt(slot.getSlot_max_users());
-            if(mentee_found == -5){
+        } else {
+            int max_students_poss = Integer.parseInt(slot.getSlot_max_users());
+            if (mentee_found == -5) {
                 tv_max_students.setText(getResources().getString(R.string.class_not_possible_as_vacation_found));
-            }else{
-                if(mentee_found == 0){
-                    tv_max_students.setText(""+max_students_poss);
-                }else{
-                    if(mentee_found > 0){
-                        int x= max_students_poss-mentee_found;
-                        tv_max_students.setText(x+" "+getResources().getString(R.string.out_of)+" "+max_students_poss);
+            } else {
+                if (mentee_found == 0) {
+                    tv_max_students.setText("" + max_students_poss);
+                } else {
+                    if (mentee_found > 0) {
+                        int x = max_students_poss - mentee_found;
+                        tv_max_students.setText(x + " " + getResources().getString(R.string.out_of) + " " + max_students_poss);
                     }
                 }
             }
 
         }
 
+        tv_class_location.setText(slot.getTutorial_location().toString().trim());
     }
 
     private void init1() {
@@ -306,6 +310,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
         tv_slot_week_days = (TextView) findViewById(R.id.tv_week_days_val);
         tv_slot_type = (TextView) findViewById(R.id.tv_slot_type_val);
         tv_max_students = (TextView) findViewById(R.id.tv_max_users_val);
+        tv_class_location = (TextView) findViewById(R.id.tv_class_location_val);
         lv_list_of_mentees = (ListView) findViewById(R.id.lv_list_of_mentees);
         lv_list_of_coinciding_vacations = (ListView) findViewById(R.id.lv_list_of_coinciding_vacations);
         tv_vacation_start_date = (TextView) findViewById(R.id.tv_vacation_start_date_val);

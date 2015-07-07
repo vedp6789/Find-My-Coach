@@ -46,7 +46,6 @@ public class MenteeNotificationActions extends Activity {
         try {
             jsonObject_notification = new JSONObject(getIntent().getStringExtra("json_string"));
             first_name = jsonObject_notification.getString("first_name");
-
             image_url = jsonObject_notification.getString("image");
             if(image_url != null){
                 Picasso.with(MenteeNotificationActions.this)

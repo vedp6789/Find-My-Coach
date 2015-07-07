@@ -224,6 +224,7 @@ public class HomeFragment extends Fragment implements Callback {
                                 scheduleRequest.setCreated_time(jsonObject_notification.getString("created_time"));
 
                                 List<Durations> durationses = new ArrayList<Durations>();
+                              //  Log.d(TAG,"durations: "+);
                                 for (int duration = 0; duration < jsonObject_notification.getJSONArray("durations").length(); duration++) {
                                     JSONObject jsonObject1 = jsonObject_notification.getJSONArray("durations").getJSONObject(duration);
                                     Durations durations = new Durations();
@@ -233,6 +234,7 @@ public class HomeFragment extends Fragment implements Callback {
                                 }
 
                                 scheduleRequest.setDurations_list(durationses);
+                                scheduleRequest.setTutorial_location(jsonObject_notification.getString("tutorial_location"));
 
 
                                 scheduleRequests.add(scheduleRequest);

@@ -88,7 +88,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private int mSignInProgress;
     private PendingIntent mSignInIntent;
     private int mSignInError;
-
     public static LoginActivity loginActivity;
 
     /**

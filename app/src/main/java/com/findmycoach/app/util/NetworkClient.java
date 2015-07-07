@@ -1410,6 +1410,7 @@ public class NetworkClient {
 
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context,getAbsoluteURL("slotsDelete",context),requestParams,new AsyncHttpResponseHandler() {
            @Override
            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1454,6 +1455,7 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
         client.post(context,getAbsoluteURL("exceptionsDelete",context),requestParams,new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {

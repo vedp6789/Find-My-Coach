@@ -33,7 +33,7 @@ import java.util.List;
  * Created by ved on 15/5/15.
  */
 public class MentorNotificationActions extends Activity implements Callback {
-    private TextView tv_start_date, tv_stop_date, tv_start_time, tv_stop_time, tv_week_days, tv_subject, tv_class_type, tv_title_message, tv_date, tv_conn_req_message_from_mentee;
+    private TextView tv_start_date, tv_stop_date, tv_start_time, tv_stop_time, tv_week_days, tv_subject, tv_class_type, tv_title_message, tv_date, tv_conn_req_message_from_mentee,tv_tutorial_location;
     Button b_accept, b_decline;
     ImageView b_profile_view;
     EditText et_mentor_reply;
@@ -52,7 +52,6 @@ public class MentorNotificationActions extends Activity implements Callback {
     String created_date, created_time;
     private TextView title;
     private final int PROFILE_DETAILS = 102;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +72,6 @@ public class MentorNotificationActions extends Activity implements Callback {
                 start_time = connectionRequest.getStart_time();
                 title.setText(getResources().getString(R.string.new_connection));
                 b_profile_view.setImageDrawable(getResources().getDrawable(R.drawable.notifications_outlined));
-
-
                 Log.d("FMC", "start_date of connection request :  " + start_date);
                 String month = getResources().getStringArray(R.array.months)[Integer.parseInt(start_date.split("-")[1]) - 1];
                 int start_day = Integer.parseInt(start_date.split("-")[2]);
@@ -228,6 +225,7 @@ public class MentorNotificationActions extends Activity implements Callback {
                 tv_week_days.setText(stringBuilder.toString());
                 tv_subject.setText(scheduleRequest.getSubject());
                 tv_class_type.setText(scheduleRequest.getClass_type());
+                tv_tutorial_location.setText(scheduleRequest.getTutorial_location());
 
                 image_url = scheduleRequest.getImage_url();
                 if (image_url != null) {
@@ -327,6 +325,7 @@ public class MentorNotificationActions extends Activity implements Callback {
         b_accept = (Button) findViewById(R.id.b_accept);
         b_decline = (Button) findViewById(R.id.b_decline);
         title = (TextView) findViewById(R.id.title);
+        tv_tutorial_location = (TextView) findViewById(R.id.tv_tutorial_location_val);
 
     }
 
