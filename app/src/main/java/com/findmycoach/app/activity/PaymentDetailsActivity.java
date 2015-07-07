@@ -216,7 +216,7 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
         super.onActivityResult(requestCode, resultCode, data);
 
         // Received card info from card.io
-        if (requestCode == MY_SCAN_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == MY_SCAN_REQUEST_CODE) {
             try {
                 String resultDisplayStr;
                 if (data != null && data.hasExtra(CardIOActivity.EXTRA_SCAN_RESULT)) {
@@ -241,6 +241,7 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
                         resultDisplayStr += "Postal Code: " + scanResult.postalCode + "\n";
                     }
 
+                    inputCardNumber.setText(scanResult.cardNumber);
                     inputCardNumber.setText(scanResult.getRedactedCardNumber());
                     inputCardExpiry.setText(DatePickerFragment.getMonth(scanResult.expiryMonth) + " - " + scanResult.expiryYear);
                     inputCardCVV.setText(scanResult.cvv);

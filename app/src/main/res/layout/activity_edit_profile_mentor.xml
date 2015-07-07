@@ -440,21 +440,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
+                    <com.findmycoach.app.views.ChizzleTextView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:id="@+id/currencySymbol"
+                        android:layout_alignBottom="@+id/input_charges" />
+
                     <com.findmycoach.app.views.ChizzleEditText
                         android:id="@+id/input_charges"
                         style="@style/EditTextCustomHoloPurple"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentStart="false"
+                        android:layout_alignParentTop="false"
                         android:layout_toLeftOf="@+id/chargesPerUnit"
                         android:layout_toStartOf="@+id/chargesPerUnit"
                         android:hint="@string/prompt_charges"
                         android:inputType="number"
                         android:singleLine="true"
                         android:textCursorDrawable="@drawable/cursor_purple"
-                        android:textSize="@dimen/profile_details" />
+                        android:textSize="@dimen/profile_details"
+                        android:layout_toRightOf="@+id/currencySymbol"
+                        android:layout_marginLeft="8dp" />
 
                     <Spinner
                         android:id="@+id/chargesPerUnit"

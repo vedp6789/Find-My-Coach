@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:orientation="horizontal"
-                android:padding="@dimen/back_margin">
+                android:layout_margin="@dimen/back_margin">
 
 
                 <com.findmycoach.app.views.ChizzleTextView
@@ -97,9 +97,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_subject"
-                android:layout_marginLeft="@dimen/back_margin"
-                android:layout_marginRight="@dimen/back_margin"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/back_margin">
 
 
                 <com.findmycoach.app.views.ChizzleTextView
@@ -138,13 +137,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_class_time"
-                android:layout_marginTop="@dimen/back_margin"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/back_margin">
 
                 <com.findmycoach.app.views.ChizzleTextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/back_margin"
                     android:gravity="center_vertical"
                     android:text="@string/days_of_week"
                     android:textColor="@color/purple"
@@ -192,7 +190,8 @@
                     android:layout_marginLeft="@dimen/back_margin"
                     android:text="@string/duration"
                     android:textColor="@color/purple"
-                    android:textSize="@dimen/profile_details" />
+                    android:textSize="@dimen/profile_details"
+                    android:layout_marginBottom="@dimen/back_margin" />
             </LinearLayout>
 
             <LinearLayout

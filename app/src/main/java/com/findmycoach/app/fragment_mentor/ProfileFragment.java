@@ -27,6 +27,7 @@ import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.EditProfileActivityMentor;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
+import com.findmycoach.app.beans.mentor.Currency;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
@@ -147,10 +148,11 @@ public class ProfileFragment extends Fragment implements Callback {
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        progressDialog.hide();
-        Response response = (Response) object;
-        userInfo = response.getData();
-        populateFields();
+
+            progressDialog.hide();
+            Response response = (Response) object;
+            userInfo = response.getData();
+            populateFields();
     }
 
 
@@ -190,14 +192,7 @@ public class ProfileFragment extends Fragment implements Callback {
             }
             profileExperience.setText(ex > 1 ? ex + " " + getResources().getString(R.string.years) : ex + " " + getResources().getString(R.string.year));
         }
-        if (userInfo.getCharges() != null) {
-            String currency = StorageHelper.getCurrency(getActivity());
-            if (currency.equals(""))
-                profileCharges.setText((userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
-            else
-                profileCharges.setText(Html.fromHtml(currency + " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr")));
 
-        }
 
         profilePhone.setText(userInfo.getPhonenumber());
         List<String> areaOfInterests = userInfo.getSubCategoryName();
@@ -243,6 +238,16 @@ public class ProfileFragment extends Fragment implements Callback {
                 }
             }
         });
+
+        if (userInfo.getCharges() != null) {
+//            String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
+//            RequestParams requestParams = new RequestParams();
+//            requestParams.add("country", String.valueOf(userInfo.getCountry()));
+//
+//            NetworkClient.getCurrencySymbol(getActivity(),requestParams,authToken,ProfileFragment.this,52);
+            profileCharges.setText(Html.fromHtml(StorageHelper.getCurrency(getActivity())+ " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr")));
+
+        }
     }
 
 

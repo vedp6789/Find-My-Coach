@@ -1,14 +1,18 @@
 package com.findmycoach.app.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +24,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +32,7 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
+import com.findmycoach.app.beans.mentor.Currency;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
@@ -38,6 +44,7 @@ import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.util.TermsAndCondition;
 import com.findmycoach.app.views.ChizzleTextView;
+import com.findmycoach.app.views.ChizzleTextViewBold;
 import com.findmycoach.app.views.DobPicker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -80,6 +87,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     private boolean isGettingAddress, isDobForReview;
     private List<Prediction> predictions;
     private ChizzleTextView addPhoto;
+    private ChizzleTextView currencySymbol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +136,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         pinCode = (EditText) findViewById(R.id.input_pin);
         chargeInput = (EditText) findViewById(R.id.input_charges);
+        currencySymbol=(ChizzleTextView)findViewById(R.id.currencySymbol);
         chargeInput.setSelectAllOnFocus(true);
         accomplishment = (EditText) findViewById(R.id.input_accomplishment);
         experienceInput = (Spinner) findViewById(R.id.input_experience);
@@ -269,7 +278,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                         || (actionId == EditorInfo.IME_ACTION_DONE
                         || actionId == EditorInfo.IME_ACTION_NEXT)) {
                     try {
-                        new AddressFromZip(EditProfileActivityMentor.this, profileAddress1, profileAddress, true).execute(pinCode.getText().toString());
+                        new AddressFromZip(EditProfileActivityMentor.this, profileAddress1, profileAddress,currencySymbol, true).execute(pinCode.getText().toString());
                         isGettingAddress = true;
                     } catch (Exception ignored) {
                     }
@@ -469,6 +478,16 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             }
         });
 
+        if(userInfo.getCurrencyCode()!=null) {
+            String authToken = StorageHelper.getUserDetails(this, "auth_token");
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("country", String.valueOf(userInfo.getCurrencyCode()));
+            NetworkClient.getCurrencySymbol(this, requestParams, authToken, this, 52);
+
+        }
+        else {
+            currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
+        }
         if (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
             getAddress();
     }
@@ -520,6 +539,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         if (userInfo != null && (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))) {
             try {
                 userInfo.setAddress(NetworkManager.localityName);
+                String s= NetworkManager.countryName;
             } catch (Exception ignored) {
             }
         }
@@ -529,6 +549,10 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                 userInfo.setCity(NetworkManager.cityName);
             } catch (Exception ignored) {
             }
+        }
+
+        if(userInfo != null && (userInfo.getCountry() == null || userInfo.getCountry().toString().trim().equals(""))) {
+            userInfo.setCurrencyCode(NetworkManager.countryCode);
         }
 
         if (userInfo != null && (userInfo.getZip() == null || userInfo.getZip().toString().trim().equals("") || userInfo.getZip().toString().trim().equals("0"))) {
@@ -730,7 +754,40 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         if (newUser == null || !newUser.contains(userInfo.getId()))
             finish();
         else
-            Toast.makeText(this, R.string.prompt_update_profile, Toast.LENGTH_LONG).show();
+            showSignOutDialog();
+    }
+
+    private void showSignOutDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle(getResources().getString(R.string.action_logout));
+        final TextView textView = new ChizzleTextViewBold(this);
+        textView.setText(getResources().getString(R.string.sure_to_logout));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(18, 18, 18, 18);
+        textView.setLayoutParams(params);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextSize(18f);
+        alertDialog.setView(textView);
+        alertDialog.setCancelable(false);
+        alertDialog.setPositiveButton(getResources().getString(R.string.action_logout),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DashboardActivity.dashboardActivity != null)
+                            DashboardActivity.dashboardActivity.logout();
+                    }
+                }
+        );
+        alertDialog.setNegativeButton(getResources().getString(R.string.cancel),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+
+                    }
+                }
+        );
+        alertDialog.show();
     }
 
     private void updateAutoSuggestion(Suggestion suggestion) {
@@ -745,7 +802,13 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        if (object instanceof Suggestion) {
+
+        if(calledApiValue==52){
+            Currency currency = (Currency)object;
+            StorageHelper.setCurrency(this,currency.getCurrencySymbol());
+            currencySymbol.setText(Html.fromHtml(currency.getCurrencySymbol()));
+        }
+         else if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
         } else {
@@ -759,8 +822,10 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                 StorageHelper.setCurrency(this, userInfo.getCurrencyCode());
                 Log.d(TAG, "Currency code : " + currencyCode);
             }
+            else {
+                currencySymbol.setText(Html.fromHtml(currencyCode));
+            }
 
-            Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
             Intent intent = new Intent();
             intent.putExtra("user_info", new Gson().toJson(userInfo));
             setResult(Activity.RESULT_OK, intent);
@@ -832,8 +897,6 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         String message = (String) object;
         progressDialog.dismiss();
-        if (!message.equals("false"))
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-        Log.d(TAG, "success response message : in EditProfileActivity : " + message);
+         Log.d(TAG, "success response message : in EditProfileActivity : " + message);
     }
 }
