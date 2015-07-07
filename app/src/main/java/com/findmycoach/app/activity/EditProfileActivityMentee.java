@@ -590,9 +590,9 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
             requestParams.add("id", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
             requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
-            Log.e(TAG, "Country : " + NetworkManager.countryName);
-            if (isGettingAddress && NetworkManager.countryName != null && !NetworkManager.countryName.equals("")) {
-                requestParams.add("country", NetworkManager.countryName.trim());
+            Log.e(TAG, "Country : " + NetworkManager.countryCode);
+            if (isGettingAddress && NetworkManager.countryCode != null && !NetworkManager.countryCode.equals("")) {
+                requestParams.add("country", NetworkManager.countryCode.trim());
             }
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
@@ -620,7 +620,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
     public void onBackPressed() {
         if (newUser == null || !newUser.contains(userInfo.getId()))
             finish();
-        else
+
             showSignOutDialog();
     }
 
