@@ -87,6 +87,9 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 MenteeList menteeList = new MenteeList(AboutWeekViewEvent.this, menteeFoundOnTheDate);
                 lv_list_of_mentees.setAdapter(menteeList);
                 ListViewInsideScrollViewHelper.getListViewSize(lv_list_of_mentees);
+                TextView title = (TextView) findViewById(R.id.title);
+                title.setText(getResources().getString(R.string.class_info));
+
                 break;
             case "coinciding_vacation_mentor":
                 setContentView(R.layout.activity_about_event_mentor);
@@ -106,7 +109,8 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                         AboutWeekViewEvent.this);
                 lv_list_of_coinciding_vacations.setAdapter(menteeList1);
                 ListViewInsideScrollViewHelper.getListViewSize(lv_list_of_coinciding_vacations);
-
+                TextView title1 = (TextView) findViewById(R.id.title);
+                title1.setText(getResources().getString(R.string.class_info));
                 break;
             case "slot_not_scheduled":
                 setContentView(R.layout.activity_about_event_mentor);
@@ -129,6 +133,8 @@ public class AboutWeekViewEvent extends Activity implements Callback {
 
                     }
                 });
+                TextView title2 = (TextView) findViewById(R.id.title);
+                title2.setText(getResources().getString(R.string.class_slot_info));
                 break;
             case "non_coinciding_vacation":
                 setContentView(R.layout.activity_about_event_mentor);
@@ -155,18 +161,6 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 tv_vacation_stop_time.setText(getTime(non_coinciding_vacation.getStop_time()));
                 b_delete.setText(getResources().getString(R.string.delete));
 
-               /* String slot_type = slot.getSlot_type();
-                if (slot_type.equalsIgnoreCase("group")) {
-                    tv_slot_type.setText(getResources().getString(R.string.group));
-                } else {
-                    if (slot_type.equalsIgnoreCase("individual")) {
-                        tv_slot_type.setText(getResources().getString(R.string.individual));
-                    }
-                }
-                tv_max_students.setText(slot.getSlot_max_users());
-*/
-
-
                 b_delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -176,6 +170,8 @@ public class AboutWeekViewEvent extends Activity implements Callback {
 
                     }
                 });
+                TextView title3 = (TextView) findViewById(R.id.title);
+                title3.setText(getResources().getString(R.string.vacation_details));
                 break;
             case "scheduled_class_mentee":
                 setContentView(R.layout.activity_about_event_mentee);
@@ -188,13 +184,13 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 tv_name.setText(mentorInfo.getFirst_name() + "\t" + mentorInfo.getLast_name().
                         trim());
                 populateSlotInfo(slot);
-                //tv_subject.setText(""); /* not required as mentee class is similar to slot subject*/
-                // /*  Not setting because this value is not available correctly*/
 
                 ListOfClassDuration listOfClassDuration =
                         new ListOfClassDuration(AboutWeekViewEvent.this, menteeFoundOnTheDate);
                 lv_list_class_durations.setAdapter(listOfClassDuration);
                 ListViewInsideScrollViewHelper.getListViewSize(lv_list_class_durations);
+                TextView title4 = (TextView) findViewById(R.id.title);
+                title4.setText(getResources().getString(R.string.class_info));
                 break;
             case "coinciding_vacation_mentee":
                 setContentView(R.layout.activity_about_event_mentee);
@@ -211,11 +207,12 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                         new ListOfClassDuration(coinciding_vacations, AboutWeekViewEvent.this);
                 lv_list_of_coinciding_vacations.setAdapter(listOfClassDuration1);
                 ListViewInsideScrollViewHelper.getListViewSize(lv_list_of_coinciding_vacations);
+                TextView title5 = (TextView) findViewById(R.id.title);
+                title5.setText(getResources().getString(R.string.class_info));
                 break;
         }
 
-        TextView title = (TextView) findViewById(R.id.title);
-        title.setText(getResources().getString(R.string.class_info));
+
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
