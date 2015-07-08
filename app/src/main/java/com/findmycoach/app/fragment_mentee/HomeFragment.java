@@ -192,7 +192,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                         String first = d.get(0).getSubCategories().get(0).getName();
                         String next = "<font color='#AFA4C4'> - " + type + "</font> (" + d.get(0).getName() + ")";
                         subCategoryTextView.setText(Html.fromHtml(first + next));
-                        subCategoryTextView.setTag(d.get(0).getId());
+                        if(d.get(0).getSubCategories()!=null){
+                            subCategoryTextView.setTag(d.get(0).getSubCategories().get(0).getId());
+
+                        }
+                        else {
+                            subCategoryTextView.setTag(d.get(0).getId());
+                        }
                         subCategoryTextView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
