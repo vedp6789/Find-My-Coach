@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.suggestion.Prediction;
@@ -74,8 +75,15 @@ public class CalendarPreferences extends Activity implements Callback {
         sp_class_type = (Spinner) findViewById(R.id.sp_class_type);
         auto_tv_location = (AutoCompleteTextView) findViewById(R.id.auto_tv_location);
         b_save = (Button) findViewById(R.id.b_save);
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
-
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(getResources().getString(R.string.calendar_preference));
         auto_tv_location.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

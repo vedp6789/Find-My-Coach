@@ -36,7 +36,7 @@
                 android:text="Subject:"
                 android:id="@+id/subject"
                 android:textStyle="bold"
-                android:textColor="@color/purple"
+                android:textColor="@color/purple_light"
                 android:layout_marginLeft="16dp"
                 android:textSize="16sp" />
 
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:text="New Text"
                 android:id="@+id/subjectValue"
-                android:textColor="@color/purple_light"
+                android:textColor="@color/purple"
                 android:layout_marginLeft="16dp"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -64,7 +64,7 @@
                 android:text="Start date:"
                 android:id="@+id/startDate"
                 android:textStyle="bold"
-                android:textColor="@color/purple"
+                android:textColor="@color/purple_light"
 
                 android:layout_marginLeft="16dp"
                 android:textSize="16sp" />
@@ -74,7 +74,8 @@
                 android:layout_height="wrap_content"
                 android:text="New Text"
                 android:id="@+id/startDateValue"
-                android:textColor="@color/purple_light"
+                android:textColor="@color/purple"
+
 
                 android:layout_marginLeft="16dp"
 
@@ -96,7 +97,7 @@
                 android:text="Stop date:"
                 android:id="@+id/stopDate"
                 android:textStyle="bold"
-                android:textColor="@color/purple"
+                android:textColor="@color/purple_light"
 
                 android:layout_marginLeft="16dp"
                 android:textSize="16sp" />
@@ -107,7 +108,8 @@
                 android:text="New Text"
                 android:id="@+id/stopDateValue"
                 android:layout_marginLeft="16dp"
-                android:textColor="@color/purple_light"
+                android:textColor="@color/purple"
+
 
                 android:textSize="14sp" />
         </LinearLayout>
@@ -126,7 +128,7 @@
                 android:id="@+id/timing"
                 android:textStyle="bold"
                 android:layout_marginLeft="16dp"
-                android:textColor="@color/purple"
+                android:textColor="@color/purple_light"
 
                 android:textSize="16sp" />
 
@@ -136,7 +138,7 @@
                 android:text="New Text"
                 android:id="@+id/timingValue"
                 android:layout_marginLeft="16dp"
-                android:textColor="@color/purple_light"
+                android:textColor="@color/purple"
 
                 android:textSize="14sp" />
         </LinearLayout>
@@ -156,7 +158,7 @@
                 android:id="@+id/weekdays"
                 android:textStyle="bold"
                 android:layout_marginLeft="16dp"
-                android:textColor="@color/purple"
+                android:textColor="@color/purple_light"
 
                 android:textSize="16sp" />
 
@@ -166,7 +168,8 @@
                 android:text="New Text"
                 android:id="@+id/weekdaysValue"
                 android:layout_marginLeft="16dp"
-                android:textColor="@color/purple_light"
+                android:textColor="@color/purple"
+
 
                 android:textSize="14sp" />
         </LinearLayout>
@@ -184,7 +187,7 @@
                 android:text="Slot type:"
                 android:id="@+id/slotType"
                 android:textStyle="bold"
-                android:textColor="@color/purple"
+                android:textColor="@color/purple_light"
 
                 android:layout_marginLeft="16dp"
                 android:textSize="16sp" />
@@ -194,7 +197,7 @@
                 android:layout_height="wrap_content"
                 android:text="New Text"
                 android:id="@+id/slotTypeValue"
-                android:textColor="@color/purple_light"
+                android:textColor="@color/purple"
 
                 android:layout_marginLeft="16dp"
                 android:textSize="14sp" />
@@ -213,7 +216,7 @@
                 android:layout_height="wrap_content"
                 android:text="Location:"
                 android:id="@+id/location"
-                android:textColor="@color/purple"
+                android:textColor="@color/purple_light"
 
                 android:textStyle="bold"
                 android:layout_marginLeft="16dp"
@@ -225,7 +228,8 @@
                 android:text="New Text"
                 android:id="@+id/locationValue"
                 android:layout_marginLeft="16dp"
-                android:textColor="@color/purple_light"
+                android:textColor="@color/purple"
+
 
                 android:textSize="14sp" />
         </LinearLayout>
