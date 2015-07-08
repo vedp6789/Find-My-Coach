@@ -198,7 +198,7 @@ public class GcmFmcService extends IntentService {
                 if (Integer.parseInt(user_group) == 2 && StorageHelper.getUserGroup(getApplicationContext(), "user_group").equals(user_group) && StorageHelper.getUserDetails(getApplicationContext(),"user_id").equals(receiver_id)) {
                     if (opcode == 2) {
                         contentTitle = "Chizzle";
-                        message = getResources().getString(R.string.connection_request_accepted) + f_name;
+                        message = f_name+" "+getResources().getString(R.string.connection_request_accepted);
                         Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
                         intent.putExtra("fragment", 2);
                         intent.putExtra("group", 2);
@@ -211,7 +211,7 @@ public class GcmFmcService extends IntentService {
                     }
                     if (opcode == 3) {
                         contentTitle = "Chizzle";
-                        message = getResources().getString(R.string.connection_request_rejected) + f_name;
+                        message =f_name+" "+ getResources().getString(R.string.connection_request_rejected);
                         Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
                         intent.putExtra("fragment", 3);
                         intent.putExtra("group", 2);
@@ -224,7 +224,7 @@ public class GcmFmcService extends IntentService {
                     }
                     if (opcode == 5) {
                         contentTitle = "Chizzle";
-                        message = getResources().getString(R.string.schedule_confirmation) + f_name;
+                        message = getResources().getString(R.string.schedule_confirmation) +" "+ f_name;
                         Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
                         intent.putExtra("fragment", 5);
                         intent.putExtra("group", 2);
@@ -237,7 +237,7 @@ public class GcmFmcService extends IntentService {
                     }
                     if (opcode == 6) {
                         contentTitle = "Chizzle";
-                        message = getResources().getString(R.string.schedule_rejection) + f_name;
+                        message = getResources().getString(R.string.schedule_rejection) +" "+ f_name;
                         Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
                         intent.putExtra("fragment", 6);
                         intent.putExtra("group", 2);

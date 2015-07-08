@@ -634,10 +634,10 @@
     <string name="out_of">places free out of</string>
     <string name="mentor_class_availability">Class availability</string>
     <string name="my_schedule">My schedules</string>
-    <string name="conn_request_accepted">Hi, your connection request is accepted by </string>
-    <string name="conn_request_rejected">Hi, your connection request is rejected by </string>
-    <string name="schedule_confirmation">Hi, your schedule request get confirmed by </string>
-    <string name="schedule_rejection">Your schedule request get rejected by </string>
+    <string name="conn_request_accepted">Hi, your connection request is accepted by</string>
+    <string name="conn_request_rejected">Hi, your connection request is rejected by</string>
+    <string name="schedule_confirmation">Hi, your schedule request get confirmed by</string>
+    <string name="schedule_rejection">Your schedule request get rejected by</string>
     <string name="push_text_message">Hi you got a text message</string>
     <string name="push_image_message">Hi you got an image message</string>
     <string name="push_video_message">Hi you got a video message</string>
