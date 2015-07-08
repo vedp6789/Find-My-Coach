@@ -467,7 +467,7 @@
     <string name="resend_code">Resend verification code</string>
     <string name="find_mentor">Find mentor</string>
     <string name="trainee">Trainees</string>
-    <string name="coinciding_vacation">Coinciding vacation</string>
+    <string name="coinciding_vacation">Class coming with the vacation</string>
     <string name="change_location">Change</string>
     <string name="preferred_time">Preferred Time</string>
     <string name="search">Search</string>
@@ -528,7 +528,11 @@
     <string name="class_type">Type</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
-    <string name="class_info">Class slot details</string>
+    <string name="class_info">Class details</string>
+    <string name="class_slot_info">Class slot details</string>
+    <string name="vacation_details">Vacation details</string>
+
+
     <string name="mentor_details">Mentor\'s information</string>
     <string name="tutorial_preference_by_mentee">You will attend this class at the mentor\'s location.</string>
 
@@ -621,6 +625,9 @@
     <string name="mentor_non_availability_message">Mentor cannot be available to your location!</string>
     <string name="class_not_possible_as_vacation_found">Due to vacation there is no possibility of class</string>
     <string name="out_of">places free out of</string>
+    <string name="mentor_class_availability">Class availability</string>
+    <string name="my_schedule">My schedules</string>
+
 
 
 

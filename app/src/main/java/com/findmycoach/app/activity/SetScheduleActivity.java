@@ -159,6 +159,12 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             });
 
             titleTextView = (TextView) findViewById(R.id.title);
+            if(this_activity_for.equals("MentorDetailsActivity")){
+                titleTextView.setText(getResources().getString(R.string.mentor_class_availability));
+            }else{
+                titleTextView.setText(getResources().getString(R.string.my_schedule));
+            }
+
 
             mWeekView = (WeekView) findViewById(R.id.weekView);
 
