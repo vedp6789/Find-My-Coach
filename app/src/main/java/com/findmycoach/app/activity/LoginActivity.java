@@ -941,8 +941,13 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         if (statusCode == 200) {
             saveUserPhn("True");
-            finish();
             startActivity(new Intent(this, DashboardActivity.class));
+            if (response.getData().isNewUser()) {
+                StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getId());
+                if (user_group == 2)
+                    startActivity(new Intent(this, PaymentDetailsActivity.class));
+            }
+            finish();
         }
     }
 

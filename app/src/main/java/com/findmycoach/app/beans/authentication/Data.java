@@ -112,7 +112,7 @@ public class Data {
         this.chargesClass = chargesClass;
     }
 
-    public boolean getNewUser() {
+    public boolean isNewUser() {
         return newUser;
     }
 
