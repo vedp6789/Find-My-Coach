@@ -51,7 +51,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
     Button b_delete;
     LinearLayout ll_list_of_mentees, ll_list_of_coincidingVacations,
             ll_non_coincidingLinearLayout,
-            ll_mentee_class_schedule, ll_coinciding_vacations,ll_slot_details;
+            ll_mentee_class_schedule, ll_coinciding_vacations, ll_slot_details;
 
     private ScrollView ll_class_slot_details;
 
@@ -87,8 +87,6 @@ public class AboutWeekViewEvent extends Activity implements Callback {
                 MenteeList menteeList = new MenteeList(AboutWeekViewEvent.this, menteeFoundOnTheDate);
                 lv_list_of_mentees.setAdapter(menteeList);
                 ListViewInsideScrollViewHelper.getListViewSize(lv_list_of_mentees);
-
-
                 break;
             case "coinciding_vacation_mentor":
                 setContentView(R.layout.activity_about_event_mentor);
@@ -254,7 +252,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
 
     /**
      * This is used to populate class details on view
-     * */
+     */
     private void populateSlotInfo(Slot slot) {
         tv_slot_start_date.setText(String.format("%02d-%02d-%d",
                 Integer.parseInt(slot.getSlot_start_date().split("-")[2]),
