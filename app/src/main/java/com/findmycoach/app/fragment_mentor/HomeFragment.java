@@ -235,6 +235,8 @@ public class HomeFragment extends Fragment implements Callback {
 
                                 scheduleRequest.setDurations_list(durationses);
                                 scheduleRequest.setTutorial_location(jsonObject_notification.getString("tutorial_location"));
+                                //scheduleRequest.setTutorial_location("tutorial location hardcoded");
+
 
 
                                 scheduleRequests.add(scheduleRequest);

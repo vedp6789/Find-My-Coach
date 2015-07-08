@@ -532,9 +532,9 @@
     <string name="class_slot_info">Class slot details</string>
     <string name="vacation_details">Vacation details</string>
     <string name="free_class">Availability</string>
-    <string name="active_slot">Active slot</string>
+    <string name="active_slot">Free slot</string>
     <string name="vacation_time">Vacation time</string>
-    <string name="coinciding_vac">Vacation on slot time</string>
+    <string name="coinciding_vac">Vacation over class</string>
     <string name="class_time">Class time</string>
     <string name="scheduled_event_of">Scheduled event of</string>
 
@@ -630,13 +630,19 @@
     <string name="select_stop_time_vacation">Please provide end time</string>
     <string name="mentor_availability_message">Mentor can be available to your location!</string>
     <string name="mentor_non_availability_message">Mentor cannot be available to your location!</string>
-    <string name="class_not_possible_as_vacation_found">Due to vacation there is no possibility of class</string>
+    <string name="class_not_possible_as_vacation_found">You have vacation on this day</string>
     <string name="out_of">places free out of</string>
     <string name="mentor_class_availability">Class availability</string>
     <string name="my_schedule">My schedules</string>
-
-
-
+    <string name="conn_request_accepted">Hi, your connection request is accepted by </string>
+    <string name="conn_request_rejected">Hi, your connection request is rejected by </string>
+    <string name="schedule_confirmation">Hi, your schedule request get confirmed by </string>
+    <string name="schedule_rejection">Your schedule request get rejected by </string>
+    <string name="push_text_message">Hi you got a text message</string>
+    <string name="push_image_message">Hi you got an image message</string>
+    <string name="push_video_message">Hi you got a video message</string>
+    <string name="schedule_request_push_notification">Hi, you have a new class schedule request from </string>
+    <string name="conn_req_push">"Hi, connection request from "</string>
 
 
 

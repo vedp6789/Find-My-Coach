@@ -106,7 +106,7 @@ public class GcmFmcService extends IntentService {
                 user_group = jsonObject.getString("user_group");
                 jsonObject1 = new JSONObject(jsonObject.getString("data"));
                 Log.d(TAG, "json object data" + jsonObject1.toString());
-                message = jsonObject1.getString("message");
+                //message = jsonObject1.getString("message");
                 jsonObject2 = new JSONObject(jsonObject1.getString("user"));
                 jsonObject_receiver = jsonObject1.getJSONObject("receiver");
                 receiver_id = jsonObject_receiver.getString("id");
@@ -120,8 +120,8 @@ public class GcmFmcService extends IntentService {
                     if (opcode == 1) {
                         Log.d(TAG, "Inside opcode match for opcode 1");
                         contentTitle = "Find My Coach";
-                        /*message = "Hi, connection request from " + f_name;
-                        */Intent intent = new Intent(this, DashboardActivity.class);
+                        message = getResources().getString(R.string.conn_req_push) + f_name;
+                        Intent intent = new Intent(this, DashboardActivity.class);
                         intent.putExtra("fragment", 1);
                         intent.putExtra("group", 3);
                         intent.setAction("" + Math.random());
@@ -134,8 +134,8 @@ public class GcmFmcService extends IntentService {
                     }
                     if (opcode == 4) {
                         contentTitle = "Find My Coach";
-                        /*message = "Hi, you have a new class schedule request from " + f_name;
-                        */Intent intent = new Intent(this, DashboardActivity.class);
+                        message = getResources().getString(R.string.schedule_request_push_notification) + f_name;
+                        Intent intent = new Intent(this, DashboardActivity.class);
                         intent.putExtra("fragment", 4);
                         //String slot_type = jsonObject1.getString("slot_type");
                         //String event_id = jsonObject1.getString("event_id");
@@ -154,8 +154,8 @@ public class GcmFmcService extends IntentService {
                     }
                     if (opcode == 7) {
                         contentTitle = "Find My Coach";
-                        /*message = "Hi, " + f_name + " has sent a text message.";
-                        */Intent intent = new Intent(this, DashboardActivity.class);
+                        message = getResources().getString(R.string.push_text_message);
+                        Intent intent = new Intent(this, DashboardActivity.class);
                         intent.putExtra("fragment", 7);
                         intent.putExtra("group", 3);
                         intent.setAction("" + Math.random());
@@ -166,8 +166,9 @@ public class GcmFmcService extends IntentService {
                     }
                     if (opcode == 8) {
                         contentTitle = "Find My Coach";
-                        /*message = "Hi, " + f_name + " has sent an image message.";
-                        */Intent intent = new Intent(this, DashboardActivity.class);
+                        message = getResources().getString(R.string.push_image_message);
+
+                        Intent intent = new Intent(this, DashboardActivity.class);
                         intent.putExtra("fragment", 8);
                         intent.putExtra("group", 3);
                         intent.setAction("" + Math.random());
@@ -180,8 +181,8 @@ public class GcmFmcService extends IntentService {
                     }
                     if (opcode == 9) {
                         contentTitle = "Find My Coach";
-                        /*message = "Hi, " + f_name + " has sent a video message.";
-                        */Intent intent = new Intent(this, DashboardActivity.class);
+                        message = getResources().getString(R.string.push_video_message);
+                        Intent intent = new Intent(this, DashboardActivity.class);
                         intent.putExtra("fragment", 9);
                         intent.putExtra("group", 3);
                         intent.setAction("" + Math.random());
@@ -196,9 +197,9 @@ public class GcmFmcService extends IntentService {
 
                 if (Integer.parseInt(user_group) == 2 && StorageHelper.getUserGroup(getApplicationContext(), "user_group").equals(user_group) && StorageHelper.getUserDetails(getApplicationContext(),"user_id").equals(receiver_id)) {
                     if (opcode == 2) {
-                        contentTitle = "Find My Coach";
-                        /*message = "Hi, your connection request is accepted by " + f_name;
-                        */Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
+                        contentTitle = "Chizzle";
+                        message = getResources().getString(R.string.connection_request_accepted) + f_name;
+                        Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
                         intent.putExtra("fragment", 2);
                         intent.putExtra("group", 2);
                         intent.setAction("" + Math.random());
@@ -209,9 +210,9 @@ public class GcmFmcService extends IntentService {
                         createNotification(NOTIFICATION_ID_REQUEST_ACCEPTED);
                     }
                     if (opcode == 3) {
-                        contentTitle = "Find My Coach";
-                        /*message = "Hi, your connection request is rejected by " + f_name;
-                        */Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
+                        contentTitle = "Chizzle";
+                        message = getResources().getString(R.string.connection_request_rejected) + f_name;
+                        Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
                         intent.putExtra("fragment", 3);
                         intent.putExtra("group", 2);
                         intent.setAction("" + Math.random());
@@ -222,9 +223,9 @@ public class GcmFmcService extends IntentService {
                         createNotification(NOTIFICATION_ID_REQUEST_REJECTED);
                     }
                     if (opcode == 5) {
-                        contentTitle = "Find My Coach";
-                        /*message = "Hi, your schedule get confirmed by " + f_name;
-                        */Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
+                        contentTitle = "Chizzle";
+                        message = getResources().getString(R.string.schedule_confirmation) + f_name;
+                        Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
                         intent.putExtra("fragment", 5);
                         intent.putExtra("group", 2);
                         intent.setAction("" + Math.random());
@@ -235,9 +236,9 @@ public class GcmFmcService extends IntentService {
                         createNotification(NOTIFICATION_ID_SCHEDULE_CONFIRMED);
                     }
                     if (opcode == 6) {
-                        contentTitle = "Find My Coach";
-                        /*message = "Sorry, your schedule get rejected by " + f_name;
-                        */Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
+                        contentTitle = "Chizzle";
+                        message = getResources().getString(R.string.schedule_rejection) + f_name;
+                        Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
                         intent.putExtra("fragment", 6);
                         intent.putExtra("group", 2);
                         intent.setAction("" + Math.random());
@@ -249,9 +250,9 @@ public class GcmFmcService extends IntentService {
                     }
                     if (opcode == 7) {
                         Log.d(TAG, "opcode 7 for mentee");
-                        contentTitle = "Find My Coach";
-                        /*message = "Hi, " + f_name + " has sent a text message.";
-                        */Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
+                        contentTitle = "Chizzle";
+                        message = getResources().getString(R.string.push_text_message);
+                        Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
                         intent.putExtra("fragment", 7);
                         intent.putExtra("group", 2);
                         intent.setAction("" + Math.random());
@@ -262,9 +263,9 @@ public class GcmFmcService extends IntentService {
                         createNotification(NOTIFICATION_ID_TEXT_CHAT_MENTEE);
                     }
                     if (opcode == 8) {
-                        contentTitle = "Find My Coach";
-                        /*message = "Hi, " + f_name + " has sent an image message.";
-                        */Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
+                        contentTitle = "Chizzle";
+                        message = getResources().getString(R.string.push_image_message);
+                        Intent intent = new Intent(this, com.findmycoach.app.activity.DashboardActivity.class);
                         intent.putExtra("fragment", 8);
                         intent.putExtra("group", 2);
                         intent.setAction("" + Math.random());
@@ -274,9 +275,9 @@ public class GcmFmcService extends IntentService {
                         createNotification(NOTIFICATION_ID_IMAGE_CHAT_MENTEE);
                     }
                     if (opcode == 9) {
-                        contentTitle = "Find My Coach";
-                        /*message = "Hi, " + f_name + " has sent a video message.";
-                        */Intent intent = new Intent(this, DashboardActivity.class);
+                        contentTitle = "Chizzle";
+                        message = getResources().getString(R.string.push_video_message);
+                        Intent intent = new Intent(this, DashboardActivity.class);
                         intent.putExtra("fragment", 9);
                         intent.putExtra("group", 2);
                         intent.setAction("" + Math.random());
