@@ -72,6 +72,18 @@ public class Data {
     @Expose
     private String currencyCode;
 
+    @SerializedName("auth_token")
+    @Expose
+    private String authToken;
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
+
     public String getCurrencyCode() {
         return currencyCode;
     }
@@ -100,7 +112,7 @@ public class Data {
         this.chargesClass = chargesClass;
     }
 
-    public boolean getNewUser() {
+    public boolean isNewUser() {
         return newUser;
     }
 

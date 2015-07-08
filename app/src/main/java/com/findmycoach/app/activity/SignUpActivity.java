@@ -30,6 +30,9 @@ import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -100,7 +103,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         });
 
         user_group = getIntent().getIntExtra("user_group", 3);
-        if(user_group == 2)
+        if (user_group == 2)
             radioButton_mentee_signup.setChecked(true);
 
         firstNameInput.setOnTouchListener(onTouchListener);
@@ -345,33 +348,136 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
      */
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
+//        progressDialog.dismiss();
+//
+//        try {
+//            String name = firstNameInput.getText().toString() + " " + lastNameInput.getText().toString();
+//            StorageHelper.storePreference(this, "user_full_name", name);
+//        } catch (Exception ignored) {
+//        }
+//
+//        try {
+//            Response response = (Response) object;
+//            Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
+//            StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getData().getId());
+//            Log.e("SignUp", StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user)) + "");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        saveUserEmail(email);
+//        saveUserPhoneNumber(phoneNumber);
+//        StorageHelper.storePreference(this, "user_group", String.valueOf(user_group));
+//        Intent intent = new Intent(SignUpActivity.this, ValidatePhoneActivity.class);
+//        intent.putExtra("from", "SignUpActivity");
+//        startActivity(intent);
+//
+//        LoginActivity.loginActivity.finish();
+//        finish();
+//        StorageHelper.storePreference(this, "login_with", "Login");
         progressDialog.dismiss();
 
-        try {
-            String name = firstNameInput.getText().toString() + " " + lastNameInput.getText().toString();
-            StorageHelper.storePreference(this, "user_full_name", name);
-        } catch (Exception ignored) {
-        }
 
-        try {
-            Response response = (Response) object;
-            Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
-            StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getData().getId());
-            Log.e("SignUp", StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user)) + "");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        Response response = (Response) object;
+        if (response == null)
+            return;
         saveUserEmail(email);
         saveUserPhoneNumber(phoneNumber);
-        StorageHelper.storePreference(this, "user_group", String.valueOf(user_group));
-        Intent intent = new Intent(SignUpActivity.this, ValidatePhoneActivity.class);
-        intent.putExtra("from", "SignUpActivity");
-        startActivity(intent);
 
-        LoginActivity.loginActivity.finish();
-        finish();
-        StorageHelper.storePreference(this, "login_with", "Login");
+
+        /** If phone number is not verified then starting ValidatePhoneActivity */
+        if (response.getData() == null) {
+            StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getId());
+            StorageHelper.storePreference(this, "user_group", String.valueOf(user_group));
+            StorageHelper.storePreference(this, "login_with", "Login");
+            startActivity(new Intent(this, ValidatePhoneActivity.class));
+            finish();
+            return;
+        }
+
+        /** Login is successful start DashBoard Activity */
+
+
+        if (statusCode == 200 && response.getData() != null) {
+            /** Saving user group */
+
+
+            String user_group_saved = StorageHelper.getUserGroup(SignUpActivity.this, "user_group");
+            if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group))) {
+                StorageHelper.storePreference(SignUpActivity.this, "user_group", String.valueOf(user_group));
+            }
+
+
+            /** Saving auth token and user id of user for further use */
+            if (response.getData().getAuthToken() != null && response.getData() != null && response.getData().getId() != null) {
+                saveUser(response.getData().getAuthToken(), response.getData().getId());
+            }
+
+            try {
+                String currencyCode = StorageHelper.getCurrency(this);
+                if (currencyCode == null || currencyCode.trim().equals("")) {
+                    StorageHelper.setCurrency(this, response.getData().getCurrencyCode());
+                }
+            } catch (Exception ignored) {
+            }
+
+            try {
+                /** Saving address, city and zip of user */
+                if (response.getData() != null && response.getData().getAddress() != null) {
+                    StorageHelper.storePreference(this, "user_local_address", (String) response.getData().getAddress());
+                    if (response.getData().getCity() != null) {
+                        StorageHelper.storePreference(this, "user_city_state", (String) response.getData().getCity());
+                    }
+                    if (response.getData().getZip() != null) {
+
+                        StorageHelper.storePreference(this, "user_zip_code", (String) response.getData().getZip());
+
+                    }
+                }
+            } catch (Exception ignored) {
+
+            }
+
+            try {
+             /* Saving training location for mentee type user */
+                if (StorageHelper.getUserGroup(SignUpActivity.this, "user_group").equals("2") && response.getData().isTrainingLocation() != null) {
+                    StorageHelper.storePreference(this, "training_location", (String) response.getData().isTrainingLocation());
+                }
+            } catch (Exception ignored) {
+            }
+
+            try {
+        /*Saving mentor's area of coaching i.e. subcategories to sharedpreference in string set*/
+                if (StorageHelper.getUserGroup(SignUpActivity.this, "user_group").equals("3")) {
+                    List<String> sub_category_list = response.getData().getSubCategoryName();
+                    Set<String> sub_category_stringSet = new HashSet<String>();
+                    for (int i = 0; i < sub_category_list.size(); i++) {
+                        sub_category_stringSet.add(sub_category_list.get(i));
+                    }
+                    StorageHelper.storeListOfCoachingSubCategories(SignUpActivity.this, sub_category_stringSet);
+                }
+            } catch (Exception ignored) {
+            }
+
+            try {
+                String name = response.getData().getFirstName() + " " + response.getData().getLastName();
+                StorageHelper.storePreference(this, "user_full_name", name);
+            } catch (Exception ignored) {
+            }
+
+            saveUserPhn("True");
+            finish();
+            if (user_group == 2)
+                startActivity(new Intent(this, PaymentDetailsActivity.class));
+            else
+                startActivity(new Intent(this, DashboardActivity.class));
+
+        }
+    }
+
+
+    private void saveUserPhn(String isPhnVerified) {
+        StorageHelper.storePreference(this, "phone_verified", isPhnVerified);
     }
 
     /**
@@ -382,6 +488,13 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         progressDialog.dismiss();
         Toast.makeText(this, (String) object, Toast.LENGTH_LONG).show();
     }
+
+    private void saveUser(String authToken, String userId) {
+        StorageHelper.storePreference(this, "auth_token", authToken);
+        StorageHelper.storePreference(this, "user_id", userId);
+
+    }
+
 
     /**
      * Automatic detect country code

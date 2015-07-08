@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -416,9 +415,6 @@ public class DashboardActivity extends FragmentActivity
                 group_push_notification=user_group_from_push;
             }
 
-
-
-
             if (fragment_to_launch_from_notification == 0) {
                 if (!checkPlayServices()) {
                     Toast.makeText(DashboardActivity.this, getResources().getString(R.string.google_play_services_not_supported), Toast.LENGTH_LONG).show();
@@ -469,7 +465,7 @@ public class DashboardActivity extends FragmentActivity
                         Log.e(TAG, "reside menu item not null");
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.switch_login), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.switch_login), Toast.LENGTH_SHORT).show();
                 }
             }
         } catch (Exception ignored) {

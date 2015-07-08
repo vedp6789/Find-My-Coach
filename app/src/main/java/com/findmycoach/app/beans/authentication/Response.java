@@ -15,6 +15,17 @@ public class Response {
     @Expose
     private int status;
 
+    @Expose
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getStatus() {
         return status;
     }

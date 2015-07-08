@@ -551,7 +551,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             }
         }
 
-        if(userInfo != null && (userInfo.getCountry() == null || userInfo.getCountry().toString().trim().equals(""))) {
+        if(userInfo != null) {
             userInfo.setCurrencyCode(NetworkManager.countryCode);
         }
 
