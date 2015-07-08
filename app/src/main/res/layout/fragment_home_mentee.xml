@@ -65,7 +65,7 @@
                         android:textSize="@dimen/button_text_size" />
                 </RelativeLayout>
 
-                <AutoCompleteTextView
+                <com.findmycoach.app.views.ChizzleAutoCompleteTextView
                     android:id="@+id/input_location"
                     style="@style/EditTextCustomHolo"
                     android:layout_width="match_parent"

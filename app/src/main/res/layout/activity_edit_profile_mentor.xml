@@ -219,7 +219,7 @@
 
                 </LinearLayout>
 
-                <AutoCompleteTextView
+                <com.findmycoach.app.views.ChizzleAutoCompleteTextView
                     android:id="@+id/input_address"
                     style="@style/EditTextCustomHoloPurple"
                     android:layout_width="match_parent"
@@ -257,7 +257,7 @@
 
                 </LinearLayout>
 
-                <AutoCompleteTextView
+                <com.findmycoach.app.views.ChizzleAutoCompleteTextView
                     android:id="@+id/input_address1"
                     style="@style/EditTextCustomHoloPurple"
                     android:layout_width="match_parent"
