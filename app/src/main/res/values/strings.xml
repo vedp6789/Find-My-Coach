@@ -531,6 +531,13 @@
     <string name="class_info">Class details</string>
     <string name="class_slot_info">Class slot details</string>
     <string name="vacation_details">Vacation details</string>
+    <string name="free_class">Availability</string>
+    <string name="active_slot">Active slot</string>
+    <string name="vacation_time">Vacation time</string>
+    <string name="coinciding_vac">Vacation on slot time</string>
+    <string name="class_time">Class time</string>
+    <string name="scheduled_event_of">Scheduled event of</string>
+
 
 
     <string name="mentor_details">Mentor\'s information</string>

@@ -1189,7 +1189,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     private String getEventTitle(Calendar time, int stop_hour, int stop_min) {
 
-        return String.format("Scheduled event of %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
+        return String.format(getResources().getString(R.string.scheduled_event_of)+" %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
 
 
     }
@@ -1197,9 +1197,9 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     private String getMenteeEventTitle(Calendar time, int stop_hour, int stop_min, String sub_category_name) {
         if (sub_category_name != null) {
-            return String.format("Class time: %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "Subject: " + sub_category_name;
+            return String.format(getResources().getString(R.string.class_time)+": %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min) + "Subject: " + sub_category_name;
         } else {
-            return String.format("Class time: %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
+            return String.format(getResources().getString(R.string.class_time)+": %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
         }
 
     }
@@ -1207,20 +1207,20 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     /* Non coinciding vacation */
     private String getVacationTitle(Calendar time, int stop_hour, int stop_min) {
 
-        return String.format("Vacation time: %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
+        return String.format(getResources().getString(R.string.vacation_time)+": %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
 
     }
 
     /* Non coinciding vacation */
     private String getVacationTitleForCoincidingVacation(Calendar time, int stop_hour, int stop_min) {
 
-        return String.format("Vacation on slot time: %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
+        return String.format(getResources().getString(R.string.coinciding_vac)+": %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
 
     }
 
 
     private String getMenteeVacationTitle(Calendar time, int stop_hour, int stop_min) {
-        return String.format("Vacation time: %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
+        return String.format(getResources().getString(R.string.vacation_time)+": %02d:%02d to %02d:%02d \n", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), stop_hour, stop_min);
 
     }
 
@@ -1279,7 +1279,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
         }
 
 
-        return String.format("Active Slot: %02d-%02d-%d to %02d-%02d-%d ",
+        return String.format(getResources().getString(R.string.active_slot)+": %02d-%02d-%d to %02d-%02d-%d ",
                 Integer.parseInt(slot_start_date.split("-", 3)[2]), Integer.parseInt(slot_start_date.split("-", 3)[1]), Integer.parseInt(slot_start_date.split("-", 3)[0]),
                 Integer.parseInt(slot_stop_date.split("-", 3)[2]), Integer.parseInt(slot_stop_date.split("-", 3)[1]), Integer.parseInt(slot_stop_date.split("-", 3)[0]));
 
@@ -1347,7 +1347,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
             }
 
         }
-        return String.format("Free slot: %02d-%02d-%d to %02d-%02d-%d", slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year);
+        return String.format(getResources().getString(R.string.free_class)+": %02d-%02d-%d to %02d-%02d-%d", slot_start_day, slot_start_month, slot_start_year, slot_stop_day, slot_stop_month, slot_stop_year);
 
 
 /* commented as this much data is not coming sometimes clearly on week view event .
