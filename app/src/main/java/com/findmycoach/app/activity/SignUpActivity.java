@@ -26,7 +26,6 @@ import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
-import com.google.android.gms.plus.Plus;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
@@ -104,7 +103,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         });
 
         user_group = getIntent().getIntExtra("user_group", 3);
-        if(user_group == 2)
+        if (user_group == 2)
             radioButton_mentee_signup.setChecked(true);
 
         firstNameInput.setOnTouchListener(onTouchListener);
@@ -387,19 +386,19 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
 
 
         /** If phone number is not verified then starting ValidatePhoneActivity */
-        if (response.getData()==null) {
+        if (response.getData() == null) {
             StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getId());
             StorageHelper.storePreference(this, "user_group", String.valueOf(user_group));
             StorageHelper.storePreference(this, "login_with", "Login");
             startActivity(new Intent(this, ValidatePhoneActivity.class));
             finish();
             return;
-          }
+        }
 
         /** Login is successful start DashBoard Activity */
 
 
-        if (statusCode == 200 && response.getData()!=null) {
+        if (statusCode == 200 && response.getData() != null) {
             /** Saving user group */
 
 
@@ -407,7 +406,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group))) {
                 StorageHelper.storePreference(SignUpActivity.this, "user_group", String.valueOf(user_group));
             }
-
 
 
             /** Saving auth token and user id of user for further use */
@@ -469,7 +467,11 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
 
             saveUserPhn("True");
             finish();
-            startActivity(new Intent(this, DashboardActivity.class));
+            if (user_group == 2)
+                startActivity(new Intent(this, PaymentDetailsActivity.class));
+            else
+                startActivity(new Intent(this, DashboardActivity.class));
+
         }
     }
 
