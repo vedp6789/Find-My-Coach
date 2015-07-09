@@ -173,6 +173,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         progressDialog.setContentView(R.layout.progressbar_textview);
+        progressDialog.setCanceledOnTouchOutside(false);
         TextView msg = (TextView) progressDialog.findViewById(R.id.msg);
         msg.setText(getResources().getString(R.string.logging_in));
 

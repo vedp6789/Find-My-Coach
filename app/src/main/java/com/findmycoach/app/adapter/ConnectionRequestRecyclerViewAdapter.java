@@ -45,8 +45,8 @@ public class ConnectionRequestRecyclerViewAdapter extends RecyclerView.Adapter<C
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (no_connection_request) {
-            Log.d("FMC", "NO connection request found");
             holder.tv_connection_request_message.setText(context.getResources().getString(R.string.no_connection_request));
+            no_connection_request=false;
         } else {
             String first_name = connectionRequests.get(position).getFirst_name();
             String start_date = connectionRequests.get(position).getStart_date();

@@ -246,7 +246,6 @@ public class HomeFragment extends Fragment implements Callback {
 
                     mentorNotifications.setList_of_connection_request(connectionRequests);
                     mentorNotifications.setList_of_schedule_request(scheduleRequests);
-                    Log.d(TAG, "update mentor notification");
 
                     mentorNotificationTabsPagerAdapter = new MentorNotificationTabsPagerAdapter(getActivity().getSupportFragmentManager(), mentorNotifications, getActivity());
                     notifications_on_viewpager.setAdapter(mentorNotificationTabsPagerAdapter);

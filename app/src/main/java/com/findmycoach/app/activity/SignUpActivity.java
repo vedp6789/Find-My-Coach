@@ -340,6 +340,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
      * Displaying error is any detail is wrong
      */
     private void showErrorMessage(final TextView view, String string) {
+        view.requestFocus();
         view.setError(string);
     }
 

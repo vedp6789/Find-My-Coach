@@ -299,6 +299,17 @@ public class MentorNotificationActions extends Activity implements Callback {
                 break;
         }
 
+        TextView title = (TextView) findViewById(R.id.title);
+        switch (mentor_notificaton_for) {
+            case "connection_request":
+                title.setText("Connection request");
+                break;
+            case "schedule_request":
+                title.setText("Schedule request");
+                break;
+        }
+
+
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

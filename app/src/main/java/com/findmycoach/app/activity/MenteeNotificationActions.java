@@ -3,6 +3,7 @@ package com.findmycoach.app.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,8 +42,8 @@ public class MenteeNotificationActions extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.metee_notification_action_page);
-        initialize();
         action_for = getIntent().getStringExtra("action_for");
+        initialize();
         try {
             jsonObject_notification = new JSONObject(getIntent().getStringExtra("json_string"));
             first_name = jsonObject_notification.getString("first_name");
@@ -105,6 +106,30 @@ public class MenteeNotificationActions extends Activity {
         tv_date = (TextView) findViewById(R.id.tv_date);
         tv_user_message = (TextView) findViewById(R.id.tv_user_message);
         b_profile_view = (Button) findViewById(R.id.b_profile);
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        TextView title = (TextView) findViewById(R.id.title);
+        switch (action_for) {
+            case "connection_accepted":
+                title.setText("Connection status");
+                break;
+            case "connection_rejected":
+                title.setText("Connection status");
+                break;
+            case "schedule_accepted":
+                title.setText("Schedule status");
+                break;
+
+            case "schedule_rejected":
+                title.setText("Schedule status");
+                break;
+        }
+
     }
 
 
