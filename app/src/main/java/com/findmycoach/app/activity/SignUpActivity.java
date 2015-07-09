@@ -2,6 +2,7 @@ package com.findmycoach.app.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,7 +46,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
     private EditText confirmPasswordInput;
     private EditText emailInput;
     private EditText phoneNumberInput;
-    public Dialog progressDialog;
+    public ProgressDialog progressDialog;
     private RadioButton radioButton_mentee_signup, radioButton_mentor_signup;
     private int user_group = 3;
     private TextView countryCodeTV;
@@ -84,12 +85,12 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         countryCodeTV.setText(code.equals("") ? getResources().getString(R.string.select) : code);
         countryCodeTV.setOnClickListener(this);
         findViewById(R.id.button_signup).setOnClickListener(this);
-        progressDialog = new Dialog(this);
-        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        progressDialog.setContentView(R.layout.progressbar_textview);
-        TextView msg = (TextView) progressDialog.findViewById(R.id.msg);
-        msg.setText(getResources().getString(R.string.please_wait));
+        progressDialog = new ProgressDialog(this);
+//        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//        progressDialog.setContentView(R.layout.progressbar_textview);
+//        TextView msg = (TextView) progressDialog.findViewById(R.id.msg);
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
 
         findViewById(R.id.action_login).setOnClickListener(this);
 
@@ -106,21 +107,21 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         if (user_group == 2)
             radioButton_mentee_signup.setChecked(true);
 
-        firstNameInput.setOnTouchListener(onTouchListener);
-        lastNameInput.setOnTouchListener(onTouchListener);
-        countryCodeTV.setOnTouchListener(onTouchListener);
-        phoneNumberInput.setOnTouchListener(onTouchListener);
-        emailInput.setOnTouchListener(onTouchListener);
-        passwordInput.setOnTouchListener(onTouchListener);
-        confirmPasswordInput.setOnTouchListener(onTouchListener);
-
-        firstNameInput.setOnFocusChangeListener(onFocusChangeListener);
-        lastNameInput.setOnFocusChangeListener(onFocusChangeListener);
-        countryCodeTV.setOnFocusChangeListener(onFocusChangeListener);
-        phoneNumberInput.setOnFocusChangeListener(onFocusChangeListener);
-        emailInput.setOnFocusChangeListener(onFocusChangeListener);
-        passwordInput.setOnFocusChangeListener(onFocusChangeListener);
-        confirmPasswordInput.setOnFocusChangeListener(onFocusChangeListener);
+//        firstNameInput.setOnTouchListener(onTouchListener);
+//        lastNameInput.setOnTouchListener(onTouchListener);
+//        countryCodeTV.setOnTouchListener(onTouchListener);
+//        phoneNumberInput.setOnTouchListener(onTouchListener);
+//        emailInput.setOnTouchListener(onTouchListener);
+//        passwordInput.setOnTouchListener(onTouchListener);
+//        confirmPasswordInput.setOnTouchListener(onTouchListener);
+//
+//        firstNameInput.setOnFocusChangeListener(onFocusChangeListener);
+//        lastNameInput.setOnFocusChangeListener(onFocusChangeListener);
+//        countryCodeTV.setOnFocusChangeListener(onFocusChangeListener);
+//        phoneNumberInput.setOnFocusChangeListener(onFocusChangeListener);
+//        emailInput.setOnFocusChangeListener(onFocusChangeListener);
+//        passwordInput.setOnFocusChangeListener(onFocusChangeListener);
+//        confirmPasswordInput.setOnFocusChangeListener(onFocusChangeListener);
     }
 
     /**

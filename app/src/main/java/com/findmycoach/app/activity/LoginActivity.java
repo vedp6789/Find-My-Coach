@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -68,7 +69,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     public static boolean doLogout = false;
     private EditText inputUserName;
     private EditText inputPassword;
-    private Dialog progressDialog;
+    private ProgressDialog progressDialog;
     private int user_group;
     private TextView countryCodeTV;
     private ArrayList<String> country_code;
@@ -169,13 +170,12 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         forgotAction.setOnClickListener(this);
 
         /** initializing progress dialog and setting up progress message*/
-        progressDialog = new Dialog(this);
-        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        progressDialog.setContentView(R.layout.progressbar_textview);
-        progressDialog.setCanceledOnTouchOutside(false);
-        TextView msg = (TextView) progressDialog.findViewById(R.id.msg);
-        msg.setText(getResources().getString(R.string.logging_in));
+        progressDialog = new ProgressDialog(this);
+//        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//        progressDialog.setContentView(R.layout.progressbar_textview);
+//        TextView msg = (TextView) progressDialog.findViewById(R.id.msg);
+        progressDialog.setMessage(getResources().getString(R.string.logging_in));
 
         inputPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
