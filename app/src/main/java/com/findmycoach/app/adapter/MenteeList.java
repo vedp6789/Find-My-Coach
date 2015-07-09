@@ -1,7 +1,6 @@
 package com.findmycoach.app.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +74,7 @@ public class MenteeList extends BaseAdapter {
             convertView = inflater.inflate(R.layout.mentee_list, parent, false);
             menteeViewHolder = new MenteeViewHolder();
 
-            menteeViewHolder.tv_mentee_name_label = (TextView) convertView.findViewById(R.id.view);
+            menteeViewHolder.tv_mentee_name_label = (TextView) convertView.findViewById(R.id.nameField);
             menteeViewHolder.tv_name = (TextView) convertView.findViewById(R.id.tv_mentee_name);
 //            menteeViewHolder.tv_subject = (TextView) convertView.findViewById(R.id.tv_subject);  commented as subject is similar for all mentees as of slot subject
             menteeViewHolder.tv_start_date = (TextView) convertView.findViewById(R.id.tv_start_date);

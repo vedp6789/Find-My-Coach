@@ -4,7 +4,9 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:orientation="vertical"
-    android:padding="@dimen/back_margin">
+    android:paddingLeft="@dimen/back_margin"
+    android:paddingRight="@dimen/back_margin"
+    android:paddingBottom="@dimen/back_margin">
 
     <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="wrap_content"
@@ -15,7 +17,7 @@
         android:layout_alignTop="@+id/tv_mentee_name"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
-        android:id="@+id/view" />
+        android:id="@+id/nameField" />
 
     <com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/tv_mentee_name"
@@ -24,7 +26,8 @@
         android:layout_marginLeft="@dimen/underline"
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_details"
-        android:layout_toRightOf="@+id/view" />
+        android:layout_toRightOf="@+id/nameField"
+        android:layout_marginTop="8dp" />
 
 
     <LinearLayout
