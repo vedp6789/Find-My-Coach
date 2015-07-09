@@ -77,12 +77,13 @@ import org.json.JSONObject;
     *       resetPassword                   44
     *       setPhoneNumber                  45     // To change Phone number
     *       event                           46     // used when Mentee go for all details validation for a schedule
-    *       getCardDetails                  47     // used to get saved card and PayPal details from server
+    *       savePayPalConsent               47     // used to get save PayPal consent details on server
     *       payMentor                       48
     *       eventFinalize                   49
-    *       exceptions                      50   // deleteVacation
-    *       availableSlots                  51 // deleteClassSlot
+    *       exceptions                      50     // deleteVacation
+    *       availableSlots                  51     // deleteClassSlot
     *       currencySymbol                  52
+    *       saveCardDetails                 53     //Save entered card details
     * */
 
 
@@ -1413,37 +1414,37 @@ public class NetworkClient {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
         client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.post(context,getAbsoluteURL("slotsDelete",context),requestParams,new AsyncHttpResponseHandler() {
-           @Override
-           public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-               try {
-                   Log.d(TAG, "Success : Status code : " + statusCode);
-                   String responseJson = new String(responseBody);
-                   Log.d(TAG, "Success : Response : " + responseJson);
-                   callback.successOperation(responseJson, statusCode, calledApiValue);
-               } catch (Exception e) {
-                   e.printStackTrace();
-                   onFailure(statusCode, headers, responseBody, null);
-               }
-           }
+        client.post(context, getAbsoluteURL("slotsDelete", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    Log.d(TAG, "Success : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success : Response : " + responseJson);
+                    callback.successOperation(responseJson, statusCode, calledApiValue);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseBody, null);
+                }
+            }
 
-           @Override
-           public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-               try {
-                   Log.d(TAG, "Failure : Status code : " + statusCode);
-                   String responseJson = new String(responseBody);
-                   Log.d(TAG, "Failure : Response : " + responseJson);
-                   Response response = new Gson().fromJson(responseJson, Response.class);
-                   callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
-               } catch (Exception e) {
-                   try {
-                       Log.d(TAG, "Failure: Error:" + e.getMessage());
-                       callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
-                   } catch (Exception ignored) {
-                   }
-               }
-           }
-       });
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    Log.d(TAG, "Failure : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    try {
+                        Log.d(TAG, "Failure: Error:" + e.getMessage());
+                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        });
 
 
 
@@ -1767,7 +1768,51 @@ public class NetworkClient {
     }
 
 
-    public static void getCardDetails(final Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
+    public static void saveCardDetails(final Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
+        if (!NetworkManager.isNetworkConnected(context)) {
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
+        client.post(context, getAbsoluteURL("getCardDetails", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    Log.d(TAG, "Success : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success : Response : " + responseJson);
+//                    Response response = new Gson().fromJson(responseJson, Response.class);
+//                    if(statusCode == 200)
+//                        callback.successOperation(response, statusCode, calledApiValue);
+//                    else
+//                        callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseBody, null);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    Log.d(TAG, "Failure : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    try {
+                        Log.d(TAG, "Failure: Error:" + e.getMessage());
+                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        });
+    }
+
+    public static void savePayPalConsent(final Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
         if (!NetworkManager.isNetworkConnected(context)) {
             callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
             return;

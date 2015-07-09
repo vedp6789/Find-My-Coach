@@ -1068,8 +1068,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         ArrayList<Vacation> vacationArrayList = new ArrayList<Vacation>();
 
 
-
-
         for (int vacation_no = 0; vacation_no < vacations.size(); vacation_no++) {
             Vacation vacation = vacations.get(vacation_no);
             String start_date = vacation.getStart_date();
