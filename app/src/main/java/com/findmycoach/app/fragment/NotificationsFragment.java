@@ -81,6 +81,7 @@ public class NotificationsFragment extends Fragment implements Callback {
                             switch (title) {
                                 case "connection_accepted":
                                     action_for = "connection_accepted";
+
                                     break;
                                 case "connection_rejected":
                                     action_for = "connection_rejected";
