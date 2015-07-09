@@ -116,7 +116,6 @@
             android:name="com.findmycoach.app.activity.ValidatePhoneActivity"
             android:label="@string/title_validate_phone"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="adjustPan|stateVisible" />
         <activity
             android:name="com.findmycoach.app.activity.AddNewSlotActivity"
