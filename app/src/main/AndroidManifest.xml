@@ -60,14 +60,12 @@
             android:name="com.findmycoach.app.activity.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.findmycoach.app.activity.SignUpActivity"
             android:label="@string/title_activity_signup"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.facebook.LoginActivity"
@@ -78,8 +76,7 @@
             android:name="com.findmycoach.app.activity.ForgotPasswordActivity"
             android:label="@string/title_activity_forgot_password"
             android:noHistory="true"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.findmycoach.app.activity.DashboardActivity"
             android:label="@string/title_activity_dashboard"

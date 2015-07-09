@@ -167,20 +167,20 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(getResources().getString(R.string.title_edit_profile_menu));
 
-        profileFirstName.setOnFocusChangeListener(onFocusChangeListener);
-        profileFirstName.setOnTouchListener(onTouchListener);
-        profileLastName.setOnFocusChangeListener(onFocusChangeListener);
-        profileLastName.setOnTouchListener(onTouchListener);
-        profileDOB.setOnFocusChangeListener(onFocusChangeListener);
-        profileDOB.setOnTouchListener(onTouchListener);
-        profileAddress.setOnFocusChangeListener(onFocusChangeListener);
-        profileAddress.setOnTouchListener(onTouchListener);
-        profileAddress1.setOnFocusChangeListener(onFocusChangeListener);
-        profileAddress1.setOnTouchListener(onTouchListener);
-        pinCode.setOnFocusChangeListener(onFocusChangeListener);
-        pinCode.setOnTouchListener(onTouchListener);
-        areaOfCoaching.setOnFocusChangeListener(onFocusChangeListener);
-        areaOfCoaching.setOnTouchListener(onTouchListener);
+//        profileFirstName.setOnFocusChangeListener(onFocusChangeListener);
+//        profileFirstName.setOnTouchListener(onTouchListener);
+//        profileLastName.setOnFocusChangeListener(onFocusChangeListener);
+//        profileLastName.setOnTouchListener(onTouchListener);
+//        profileDOB.setOnFocusChangeListener(onFocusChangeListener);
+//        profileDOB.setOnTouchListener(onTouchListener);
+//        profileAddress.setOnFocusChangeListener(onFocusChangeListener);
+//        profileAddress.setOnTouchListener(onTouchListener);
+//        profileAddress1.setOnFocusChangeListener(onFocusChangeListener);
+//        profileAddress1.setOnTouchListener(onTouchListener);
+//        pinCode.setOnFocusChangeListener(onFocusChangeListener);
+//        pinCode.setOnTouchListener(onTouchListener);
+//        areaOfCoaching.setOnFocusChangeListener(onFocusChangeListener);
+//        areaOfCoaching.setOnTouchListener(onTouchListener);
     }
 
     /**

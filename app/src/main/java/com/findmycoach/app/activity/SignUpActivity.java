@@ -106,21 +106,21 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         if (user_group == 2)
             radioButton_mentee_signup.setChecked(true);
 
-        firstNameInput.setOnTouchListener(onTouchListener);
-        lastNameInput.setOnTouchListener(onTouchListener);
-        countryCodeTV.setOnTouchListener(onTouchListener);
-        phoneNumberInput.setOnTouchListener(onTouchListener);
-        emailInput.setOnTouchListener(onTouchListener);
-        passwordInput.setOnTouchListener(onTouchListener);
-        confirmPasswordInput.setOnTouchListener(onTouchListener);
-
-        firstNameInput.setOnFocusChangeListener(onFocusChangeListener);
-        lastNameInput.setOnFocusChangeListener(onFocusChangeListener);
-        countryCodeTV.setOnFocusChangeListener(onFocusChangeListener);
-        phoneNumberInput.setOnFocusChangeListener(onFocusChangeListener);
-        emailInput.setOnFocusChangeListener(onFocusChangeListener);
-        passwordInput.setOnFocusChangeListener(onFocusChangeListener);
-        confirmPasswordInput.setOnFocusChangeListener(onFocusChangeListener);
+//        firstNameInput.setOnTouchListener(onTouchListener);
+//        lastNameInput.setOnTouchListener(onTouchListener);
+//        countryCodeTV.setOnTouchListener(onTouchListener);
+//        phoneNumberInput.setOnTouchListener(onTouchListener);
+//        emailInput.setOnTouchListener(onTouchListener);
+//        passwordInput.setOnTouchListener(onTouchListener);
+//        confirmPasswordInput.setOnTouchListener(onTouchListener);
+//
+//        firstNameInput.setOnFocusChangeListener(onFocusChangeListener);
+//        lastNameInput.setOnFocusChangeListener(onFocusChangeListener);
+//        countryCodeTV.setOnFocusChangeListener(onFocusChangeListener);
+//        phoneNumberInput.setOnFocusChangeListener(onFocusChangeListener);
+//        emailInput.setOnFocusChangeListener(onFocusChangeListener);
+//        passwordInput.setOnFocusChangeListener(onFocusChangeListener);
+//        confirmPasswordInput.setOnFocusChangeListener(onFocusChangeListener);
     }
 
     /**

@@ -185,10 +185,10 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             }
         });
 
-        inputUserName.setOnTouchListener(onTouchListener);
-        inputPassword.setOnTouchListener(onTouchListener);
-        inputUserName.setOnFocusChangeListener(onFocusChangeListener);
-        inputPassword.setOnFocusChangeListener(onFocusChangeListener);
+//        inputUserName.setOnTouchListener(onTouchListener);
+//        inputPassword.setOnTouchListener(onTouchListener);
+//        inputUserName.setOnFocusChangeListener(onFocusChangeListener);
+//        inputPassword.setOnFocusChangeListener(onFocusChangeListener);
     }
 
     /**
