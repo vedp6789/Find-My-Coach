@@ -90,7 +90,7 @@ public class DashboardActivity extends FragmentActivity
 
     int fragment_to_launch_from_notification = 0;  ///  On a tap over Push notification, then it will be used to identify which operation to perform
     int group_push_notification = 0;      /// it will identify push notification for which type of user.
-    int user_group_from_push=0;
+    int user_group_from_push = 0;
     /**
      * Related to reside menu
      */
@@ -114,9 +114,9 @@ public class DashboardActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-      //  new GetLocation().execute();
+        //  new GetLocation().execute();
 
-        if(LoginActivity.loginActivity != null)
+        if (LoginActivity.loginActivity != null)
             LoginActivity.loginActivity.finish();
 
         dashboardActivity = this;
@@ -139,7 +139,7 @@ public class DashboardActivity extends FragmentActivity
                 requestParams.add("user_group", user_group + "");
                 NetworkClient.getProfile(this, requestParams, authToken, this, 4);
                 isProfileOpen = true;
-                if(!NetworkManager.isNetworkConnected(this))
+                if (!NetworkManager.isNetworkConnected(this))
                     logout();
             }
         } catch (Exception e) {
@@ -171,7 +171,7 @@ public class DashboardActivity extends FragmentActivity
         StorageHelper.createAppMediaFolders(this);
 
         fragment_to_launch_from_notification = getIntent().getIntExtra("fragment", 0);
-        Log.d(TAG,"on create "+fragment_to_launch_from_notification);
+        Log.d(TAG, "on create " + fragment_to_launch_from_notification);
         group_push_notification = getIntent().getIntExtra("group", 0);
 
         if (fragment_to_launch_from_notification == 0) {
@@ -207,7 +207,7 @@ public class DashboardActivity extends FragmentActivity
 
     /**
      * Gets the current registration ID for application on GCM service.
-     * <p/>
+     * <p>
      * If result is empty, the app needs to register.
      *
      * @return registration ID, or empty string if there is no existing
@@ -271,7 +271,7 @@ public class DashboardActivity extends FragmentActivity
 
     /**
      * Registers the application with GCM servers asynchronously.
-     * <p/>
+     * <p>
      * Stores the registration ID and app versionCode in the application's
      * shared preferences.
      */
@@ -330,9 +330,10 @@ public class DashboardActivity extends FragmentActivity
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-            try{
+            try {
                 sendRegistrationIdToBackend();
-            }catch (Exception ignored){}
+            } catch (Exception ignored) {
+            }
         }
 
         private void sendRegistrationIdToBackend() {
@@ -383,10 +384,10 @@ public class DashboardActivity extends FragmentActivity
         super.onNewIntent(intent);
 
         onNewIntentCalled = true;
-        fragment_to_open =intent.getIntExtra("fragment",-2);
-        user_group_from_push=intent.getIntExtra("group",-4);
-        Log.d(TAG,"intent for fragment key in onNewIntent: "+intent.getIntExtra("fragment",-2));
-        Log.d(TAG,"intent extra from getIntent for fragment key in onNewIntent: "+getIntent().getIntExtra("fragment",-3));
+        fragment_to_open = intent.getIntExtra("fragment", -2);
+        user_group_from_push = intent.getIntExtra("group", -4);
+        Log.d(TAG, "intent for fragment key in onNewIntent: " + intent.getIntExtra("fragment", -2));
+        Log.d(TAG, "intent extra from getIntent for fragment key in onNewIntent: " + getIntent().getIntExtra("fragment", -3));
 
     }
 
@@ -394,7 +395,7 @@ public class DashboardActivity extends FragmentActivity
     protected void onResume() {
         super.onResume();
 
-        Log.d(TAG,"Dashboard Activity on Resume");
+        Log.d(TAG, "Dashboard Activity on Resume");
 
         String tNc = StorageHelper.getUserDetails(this, "terms");
         if ((tNc == null || !tNc.equals("yes")) && !isProfileOpen) {
@@ -409,10 +410,10 @@ public class DashboardActivity extends FragmentActivity
 //                map.setOnMyLocationChangeListener(null);
 //                map = null;
 //            }
-            if(onNewIntentCalled){
+            if (onNewIntentCalled) {
                 onNewIntentCalled = false;
                 fragment_to_launch_from_notification = fragment_to_open;
-                group_push_notification=user_group_from_push;
+                group_push_notification = user_group_from_push;
             }
 
             if (fragment_to_launch_from_notification == 0) {
@@ -428,7 +429,7 @@ public class DashboardActivity extends FragmentActivity
                     ResideMenuItem item = null;
 
 
-                    Log.d(TAG,"fragment to launch from notification: "+fragment_to_launch_from_notification);
+                    Log.d(TAG, "fragment to launch from notification: " + fragment_to_launch_from_notification);
 
                     switch (fragment_to_launch_from_notification) {
                         case 1:
@@ -491,8 +492,6 @@ public class DashboardActivity extends FragmentActivity
         }
         return true;
     }
-
-
 
 
     public void logout() {
@@ -654,16 +653,21 @@ public class DashboardActivity extends FragmentActivity
                 clearIcon();
                 itemHome.setIcon(resideMenuItemIcons.get("HomeSelected"));
                 titleTV.setText(navigationTitle[1]);
-                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                for (int i = 0; i < fragmentManager.getBackStackEntryCount() - 1; ++i) {
                     fragmentManager.popBackStack();
                 }
                 String tag = (String) itemHome.getTag(itemHome.getId());
                 Bundle bundle = new Bundle();
                 bundle.putString("OpenTab", tag);
                 Log.e(TAG, tag + " <== Tag");
-                com.findmycoach.app.fragment_mentor.HomeFragment homeFragmentMentor = new com.findmycoach.app.fragment_mentor.HomeFragment();
-                homeFragmentMentor.setArguments(bundle);
-                fragmentTransaction.add(R.id.container, homeFragmentMentor).addToBackStack("Home");
+                try {
+                    if (!fragmentManager.getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals("Home")) {
+                    }
+                } catch (Exception e) {
+                    com.findmycoach.app.fragment_mentor.HomeFragment homeFragmentMentor = new com.findmycoach.app.fragment_mentor.HomeFragment();
+                    homeFragmentMentor.setArguments(bundle);
+                    fragmentTransaction.add(R.id.container, homeFragmentMentor).addToBackStack("Home");
+                }
                 position = 0;
             } else if (view == itemNotification) {
                 clearIcon();
@@ -711,10 +715,15 @@ public class DashboardActivity extends FragmentActivity
                 clearIcon();
                 itemHome.setIcon(resideMenuItemIcons.get("HomeSelected"));
                 titleTV.setText("");
-                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+                for (int i = 0; i < fragmentManager.getBackStackEntryCount() - 1; ++i) {
                     fragmentManager.popBackStack();
                 }
-                fragmentTransaction.add(R.id.container, new HomeFragment()).addToBackStack("Home");
+                try {
+                    if (!fragmentManager.getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals("Home")) {
+                    }
+                } catch (Exception e) {
+                    fragmentTransaction.add(R.id.container, new HomeFragment()).addToBackStack("Home");
+                }
                 position = 0;
             } else if (view == itemNotification) {
                 clearIcon();
