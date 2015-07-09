@@ -106,8 +106,9 @@ public class ChooseImageActivity extends Activity {
         chooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK);
+                galleryIntent.setType("image/*");
+                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(galleryIntent, REQUEST_CODE);
             }
         });
@@ -154,7 +155,15 @@ public class ChooseImageActivity extends Activity {
             String imgDecodableString = cursor.getString(columnIndex);
             cursor.close();
             /** Set the Image in ImageView after decoding the String */
-            cropImageView.setImageBitmap(decodeFile(new File(imgDecodableString)));
+            try {
+                cropImageView.setImageBitmap(decodeFile(new File(imgDecodableString)));
+            } catch (Exception e) {
+                Toast.makeText(this, getResources().getString(R.string.error_picking_image), Toast.LENGTH_SHORT).show();
+                try {
+                    cropImageView.setImageBitmap(BinaryForImage.getBitmapFromBinaryString(getIntent().getStringExtra("BitMap")));
+                } catch (Exception ignored) {
+                }
+            }
         } else {
             Toast.makeText(this, getResources().getString(R.string.image_not_picked),
                     Toast.LENGTH_LONG).show();
