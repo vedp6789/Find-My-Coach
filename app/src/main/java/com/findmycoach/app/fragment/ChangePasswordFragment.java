@@ -3,7 +3,6 @@ package com.findmycoach.app.fragment;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -87,51 +86,39 @@ public class ChangePasswordFragment extends DialogFragment implements View.OnCli
         boolean isValid = true;
         new_password = et_new_password.getText().toString();
         confirm_new_password = et_confirm_new_password.getText().toString();
-        if(et_old_password.getText().toString().length() < 5){
-            showErrorMessage(et_old_password, getResources().getString(R.string.enter_valid_password));
+
+        if (et_old_password.getText().toString().length() < 5) {
+            showErrorMessage(et_old_password, getResources().getString(R.string.enter_valid_password), isValid);
             isValid = false;
         }
         if (new_password.equals("")) {
-
-            if (confirm_new_password.equals("")) {
-                showErrorMessage2(et_new_password, et_confirm_new_password, getResources().getString(R.string.error_field_required));
-                isValid = false;
-            } else {
-                showErrorMessage(et_new_password, getResources().getString(R.string.error_field_required));
-                isValid = false;
-            }
-        }
-
-        if (!new_password.equals(confirm_new_password)) {
-            showErrorMessage(et_confirm_new_password, getResources().getString(R.string.error_field_not_match));
+            showErrorMessage(et_new_password, getResources().getString(R.string.error_field_required), isValid);
+            isValid = false;
+        } else if (new_password.length() < 5) {
+            showErrorMessage(et_new_password, getResources().getString(R.string.error_password_size), isValid);
             isValid = false;
         }
 
+        if (confirm_new_password.equals("")) {
+            showErrorMessage(et_confirm_new_password, getResources().getString(R.string.error_field_required), isValid);
+            isValid = false;
+        } else if (confirm_new_password.length() < 5) {
+            showErrorMessage(et_confirm_new_password, getResources().getString(R.string.error_password_size), isValid);
+            isValid = false;
+        }
 
+        if (!new_password.equals(confirm_new_password)) {
+            showErrorMessage(et_confirm_new_password, getResources().getString(R.string.error_field_not_match), isValid);
+            isValid = false;
+        }
+        
         return isValid;
-
-
     }
 
-    private void showErrorMessage(final EditText view, String string) {
+    private void showErrorMessage(final EditText view, String string, boolean isValid) {
         view.setError(string);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                view.setError(null);
-            }
-        }, 3500);
-    }
-
-    private void showErrorMessage2(final EditText view, final EditText editText, String string) {
-        view.setError(string);
-        editText.setError(string);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                view.setError(null);
-            }
-        }, 3500);
+        if (isValid)
+            view.requestFocus();
     }
 
     @Override

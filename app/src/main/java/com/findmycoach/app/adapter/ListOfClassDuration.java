@@ -67,7 +67,6 @@ public class ListOfClassDuration extends BaseAdapter {
 
 
             menteeViewHolder.tv_name = (TextView) convertView.findViewById(R.id.tv_mentee_name);
-//            menteeViewHolder.tv_subject = (TextView) convertView.findViewById(R.id.tv_subject);   commented,  as subject is similar to slot subject
             menteeViewHolder.tv_start_date = (TextView) convertView.findViewById(R.id.tv_start_date);
             menteeViewHolder.tv_stop_date = (TextView) convertView.findViewById(R.id.tv_stop_date);
             convertView.setTag(menteeViewHolder);
@@ -81,7 +80,6 @@ public class ListOfClassDuration extends BaseAdapter {
             if(mentees.size()> 0){
                 EventDuration eventDuration = eventDurations.get(position);
                 menteeViewHolder.tv_name.setVisibility(View.GONE);
-//                menteeViewHolder.tv_subject.setVisibility(View.GONE);
                 menteeViewHolder.tv_start_date.setText(String.format(String.format("%02d-%02d-%d", Integer.parseInt(eventDuration.getStart_date().split("-")[2]), Integer.parseInt(eventDuration.getStart_date().split("-")[1]), Integer.parseInt(eventDuration.getStart_date().split("-")[0]))));
                 menteeViewHolder.tv_stop_date.setText(String.format(String.format("%02d-%02d-%d", Integer.parseInt(eventDuration.getStop_date().split("-")[2]), Integer.parseInt(eventDuration.getStop_date().split("-")[1]), Integer.parseInt(eventDuration.getStop_date().split("-")[0]))));
             }
@@ -92,7 +90,6 @@ public class ListOfClassDuration extends BaseAdapter {
             menteeViewHolder.tv_start_date.setText(String.format(String.format("%02d-%02d-%d", Integer.parseInt(vacation.getStart_date().split("-")[2]), Integer.parseInt(vacation.getStart_date().split("-")[1]), Integer.parseInt(vacation.getStart_date().split("-")[0]))));
             menteeViewHolder.tv_stop_date.setText(String.format(String.format("%02d-%02d-%d", Integer.parseInt(vacation.getStop_date().split("-")[2]), Integer.parseInt(vacation.getStop_date().split("-")[1]), Integer.parseInt(vacation.getStop_date().split("-")[0]))));
             menteeViewHolder.tv_name.setVisibility(View.GONE);
-//            menteeViewHolder.tv_subject.setVisibility(View.GONE);
         }
 
 
@@ -102,7 +99,6 @@ public class ListOfClassDuration extends BaseAdapter {
 
     class DurationViewHolder{
         TextView tv_name;
-      //  TextView tv_subject;
         TextView tv_start_date;
         TextView tv_stop_date;
     }

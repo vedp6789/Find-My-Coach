@@ -137,6 +137,16 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
                 if (validateData(inputCardNumber.getText().toString(), inputCardName.getText().toString(),
                         inputCardExpiry.getText().toString(), inputCardCVV.getText().toString())) {
                     Toast.makeText(this, getResources().getString(R.string.cards_detail_will_saved), Toast.LENGTH_LONG).show();
+//                progressDialog.show();
+                    RequestParams requestParams = new RequestParams();
+                    requestParams.add("id", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
+                    requestParams.add("email", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_email)));
+                    requestParams.add("user_group", String.valueOf(DashboardActivity.dashboardActivity.user_group));
+                    requestParams.add("name_on_card", inputCardName.getText().toString().trim());
+                    requestParams.add("card_number", inputCardNumber.getText().toString().trim());
+                    requestParams.add("card_expiry", inputCardExpiry.getText().toString().trim());
+                    requestParams.add("card_cvv", inputCardCVV.getText().toString().trim());
+//                NetworkClient.saveCardDetails(this, requestParams, this, 53);
                     finish();
                 }
                 break;
@@ -152,7 +162,6 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
                 scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, true); // default: false
                 scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, false); // default: false
                 scanIntent.putExtra(CardIOActivity.EXTRA_SUPPRESS_MANUAL_ENTRY, true);
-
                 // MY_SCAN_REQUEST_CODE is arbitrary and is only used within this activity.
                 startActivityForResult(scanIntent, MY_SCAN_REQUEST_CODE);
                 break;
@@ -242,7 +251,6 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
                     }
 
                     inputCardNumber.setText(scanResult.cardNumber);
-                    inputCardNumber.setText(scanResult.getRedactedCardNumber());
                     inputCardExpiry.setText(DatePickerFragment.getMonth(scanResult.expiryMonth) + " - " + scanResult.expiryYear);
                     inputCardCVV.setText(scanResult.cvv);
 
@@ -276,7 +284,7 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
                 requestParams.add("email", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_email)));
                 requestParams.add("user_group", String.valueOf(DashboardActivity.dashboardActivity.user_group));
                 requestParams.add("paypal_consent", authorization_code);
-//                NetworkClient.getCardDetails(this, requestParams, this, 47);
+//                NetworkClient.savePayPalConsent(this, requestParams, this, 47);
             }
         }
     }

@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -134,7 +133,7 @@ public class GcmFmcService extends IntentService {
                     }
                     if (opcode == 4) {
                         contentTitle = "Find My Coach";
-                        message = getResources().getString(R.string.schedule_request_push_notification) + f_name;
+                        message = getResources().getString(R.string.schedule_request_push_notification) +" "+ f_name;
                         Intent intent = new Intent(this, DashboardActivity.class);
                         intent.putExtra("fragment", 4);
                         //String slot_type = jsonObject1.getString("slot_type");
