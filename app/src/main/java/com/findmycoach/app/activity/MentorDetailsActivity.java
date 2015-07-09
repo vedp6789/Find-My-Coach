@@ -417,7 +417,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         Response mentorDetails = new Gson().fromJson(jsonData, Response.class);
         userInfo = mentorDetails.getData();
 
-        String searchedKeyWord = getIntent().getStringExtra("searched_keyword");
+      //  String searchedKeyWord = getIntent().getStringExtra("searched_keyword");
 //        if (searchedKeyWord != null && !searchedKeyWord.equals("-1")) {
 //            searchedKeyWord = DataBase.singleton(this).getSubCategory(searchedKeyWord);
 //            List<String> newSubCategory = new ArrayList<String>();

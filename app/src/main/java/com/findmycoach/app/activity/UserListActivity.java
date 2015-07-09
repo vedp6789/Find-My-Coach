@@ -143,10 +143,10 @@ public class UserListActivity extends Activity implements Callback {
         if (calledApiValue == 24) {
             Intent intent = new Intent(getApplicationContext(), MentorDetailsActivity.class);
             intent.putExtra("mentorDetails", (String) object);
-            try {
+            /*try {
                 intent.putExtra("searched_keyword", getIntent().getStringExtra("searched_keyword"));
             } catch (Exception ignored) {
-            }
+            }*/
             intent.putExtra("connection_status", connection_status_for_Selected_mentor);
             datum = null;
             startActivityForResult(intent, NEED_TO_REFRESH);

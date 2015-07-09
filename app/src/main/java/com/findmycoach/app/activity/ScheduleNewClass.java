@@ -384,35 +384,46 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         String timing = String.format("%02d:%02d to %02d:%02d", slot_start_hour, slot_start_minute, slot_stop_hour, slot_stop_minute);
         tv_class_timing.setText(stringBuilder.toString());
 
+        ArrayList<String> week_days_as_per_calendar_class = new ArrayList<String>();
 
         List<Integer> selectedDays = new ArrayList<>();
         for (int slot_week_day = 0; slot_week_day < slot_on_week_days.length; slot_week_day++) {
             String day = slot_on_week_days[slot_week_day];
             if (day.equals("M")) {
                 selectedDays.add(0);
+                week_days_as_per_calendar_class.add("M");
             }
             if (day.equals("T")) {
                 selectedDays.add(1);
+                week_days_as_per_calendar_class.add("T");
+
             }
             if (day.equals("W")) {
                 selectedDays.add(2);
+                week_days_as_per_calendar_class.add("W");
+
             }
             if (day.equals("Th")) {
                 selectedDays.add(3);
+                week_days_as_per_calendar_class.add("Th");
+
             }
             if (day.equals("F")) {
                 selectedDays.add(4);
+                week_days_as_per_calendar_class.add("F");
+
             }
             if (day.equals("S")) {
                 selectedDays.add(5);
+                week_days_as_per_calendar_class.add("S");
+
             }
             if (day.equals("Su")) {
                 selectedDays.add(6);
+                week_days_as_per_calendar_class.add("Su");
             }
         }
 
-
-        gridView.setAdapter(new AddSlotAdapter(getResources().getStringArray(R.array.week_days_mon), selectedDays, this));
 
 
         Log.d(TAG, "mentor availability : " + bundle.getString("mentor_availability"));
@@ -467,12 +478,81 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         Log.d(TAG, "schedule start date and millis: " + class_schedule_start_year + "/" + class_schedule_start_month + "/" + class_schedule_start_day + " millis:" + start_date_of_this_class_millis);
         Log.d(TAG, "schedule start date in millis " + start_date_of_this_class_millis);
 
-
         Calendar calendar_stop_date_of_schedule = Calendar.getInstance();
         calendar_stop_date_of_schedule.set(slot_stop_year, slot_stop_month - 1, slot_stop_day);
         long stop_date_of_this_class_in_millis = calendar_stop_date_of_schedule.getTimeInMillis();
         Log.d(TAG, "schedule stop date in millis " + stop_date_of_this_class_in_millis);
         Log.d(TAG, "schedule stop date and millis: " + slot_stop_year + "/" + slot_stop_month + "/" + slot_stop_day + " millis: " + stop_date_of_this_class_in_millis);
+
+        String week_days[] = new String[week_days_as_per_calendar_class.size()];
+        for (int i = 0; i < week_days_as_per_calendar_class.size(); i++) {
+            week_days[i] = week_days_as_per_calendar_class.get(i);
+        }
+
+        for(String i:week_days){
+            Log.d(TAG,"week dya: "+i);
+        }
+
+        List<Integer> week_day_list_as_per_duration= new ArrayList<Integer>();
+        Calendar calendar_start= (Calendar) calendar_schedule_start_date.clone();
+        Calendar calendar_stop = (Calendar) calendar_stop_date_of_schedule.clone();
+        ArrayList<SlotDurationDetailBean> slotDurationDetailBeans1 = slot.calculateNoOfTotalClassDays(calendar_start, calendar_stop, week_days);
+        if(slotDurationDetailBeans1.size() < 7){
+            Log.d(TAG,"week_days size: "+slotDurationDetailBeans1.size());
+            for(int i =0 ; i < slotDurationDetailBeans1.size(); i++){
+                 SlotDurationDetailBean slotDurationDetailBean=slotDurationDetailBeans1.get(i);
+                 int i1=Integer.parseInt(slotDurationDetailBean.getWeek_day());
+                 week_day_list_as_per_duration.add(i1);
+                 /*boolean match_not_found=true;
+                 for(int u=0 ; u < week_days_as_per_calendar_class.size(); u++){
+                     int day=week_days_as_per_calendar_class.get(u);
+                     if(day == i1){
+                         match_not_found =false;
+                         break;
+                     }
+                 }
+                 if(match_not_found){
+                     int index = week_days_as_per_calendar_class.indexOf(i1);
+                     week_days_as_per_calendar_class.remove(index);
+                 }*/
+
+            }
+            selectedDays = new ArrayList<>();
+            for(int s=0; s < week_day_list_as_per_duration.size();s++){
+                int i = week_day_list_as_per_duration.get(s);
+                switch (i){
+                    case 1:
+                        selectedDays.add(6);
+                        break;
+                    case 2:
+                        selectedDays.add(0);
+                        break;
+                    case 3:
+                        selectedDays.add(1);
+                        break;
+                    case 4:
+                        selectedDays.add(2);
+                        break;
+                    case 5:
+                        selectedDays.add(3);
+                        break;
+                    case 6:
+                        selectedDays.add(4);
+                        break;
+                    case 7:
+                        selectedDays.add(5);
+                        break;
+                }
+            }
+            gridView.setAdapter(new AddSlotAdapter(getResources().getStringArray(R.array.week_days_mon), selectedDays, this));
+
+
+        }else{
+            gridView.setAdapter(new AddSlotAdapter(getResources().getStringArray(R.array.week_days_mon), selectedDays, this));
+
+        }
+
+
 
 
         Calendar calendar_temp_start_date = Calendar.getInstance();
@@ -721,7 +801,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 ++workDays;
 
             }
-            calendar_schedule_start_date.add(Calendar.DAY_OF_MONTH, 1);
+            calendar_schedule_start_date.add(Calendar.DATE, 1);
 
 
         }
@@ -1141,15 +1221,15 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                 b_payment.setEnabled(true);
                 Toast.makeText(ScheduleNewClass.this, (String) object, Toast.LENGTH_SHORT).show();
                 if (MentorDetailsActivity.mentorDetailsActivity != null) {
-                    Log.d(TAG,"mentor details activity found not null ");
-                    if(SetScheduleActivity.setScheduleActivity != null){
-                        Log.d(TAG,"Set schedule activity found not null ");
+                    Log.d(TAG, "mentor details activity found not null ");
+                    if (SetScheduleActivity.setScheduleActivity != null) {
+                        Log.d(TAG, "Set schedule activity found not null ");
                         SetScheduleActivity.setScheduleActivity.finish();
                     }
 
                     MentorDetailsActivity.mentorDetailsActivity.getCalendarDetailsAPICall();
-                }else{
-                    Log.d(TAG,"mentor details activity found null ");
+                } else {
+                    Log.d(TAG, "mentor details activity found null ");
                 }
                 finish();
             }

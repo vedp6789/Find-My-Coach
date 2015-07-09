@@ -683,7 +683,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             progressDialog.dismiss();
             Intent intent = new Intent(getActivity(), UserListActivity.class);
             intent.putExtra("list", (String) object);
-            intent.putExtra("searched_keyword", -1);
+           // intent.putExtra("searched_keyword", -1);
             intent.putExtra("search_for", subCategoryTextView.getText().toString());
             startActivity(intent);
             isSearching = false;

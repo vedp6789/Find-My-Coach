@@ -372,6 +372,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                 currentMonth.setText(getResources().getStringArray(R.array.months)[month - 1] + " " + year);
             } else {
                 startPointForCalendar();
+                currentMonth.setText(getResources().getStringArray(R.array.months)[month - 1] + " " + year);
             }
 
         } else {
