@@ -238,6 +238,7 @@ public class AboutWeekViewEvent extends Activity implements Callback {
         tv_slot_type = (TextView) findViewById(R.id.tv_slot_type_val);
         tv_max_students = (TextView) findViewById(R.id.tv_max_users_val);
         tv_subject = (TextView) findViewById(R.id.tv_subject_val);
+        tv_class_location = (TextView) findViewById(R.id.tv_class_location_val);
         lv_list_class_durations = (ListView) findViewById(R.id.lv_class_durations);
         lv_list_of_coinciding_vacations = (ListView) findViewById(R.id.lv_coinciding_vacations);
 
@@ -251,50 +252,54 @@ public class AboutWeekViewEvent extends Activity implements Callback {
      * This is used to populate class details on view
      */
     private void populateSlotInfo(Slot slot) {
-        tv_slot_start_date.setText(String.format("%02d-%02d-%d",
-                Integer.parseInt(slot.getSlot_start_date().split("-")[2]),
-                Integer.parseInt(slot.getSlot_start_date().split("-")[1]),
-                Integer.parseInt(slot.getSlot_start_date().split("-")[0])));
-        tv_slot_stop_date.setText(String.format("%02d-%02d-%d",
-                Integer.parseInt(slot.getSlot_stop_date().split("-")[2]),
-                Integer.parseInt(slot.getSlot_stop_date().split("-")[1]),
-                Integer.parseInt(slot.getSlot_stop_date().split("-")[0])));
+        try {
+            tv_slot_start_date.setText(String.format("%02d-%02d-%d",
+                    Integer.parseInt(slot.getSlot_start_date().split("-")[2]),
+                    Integer.parseInt(slot.getSlot_start_date().split("-")[1]),
+                    Integer.parseInt(slot.getSlot_start_date().split("-")[0])));
+            tv_slot_stop_date.setText(String.format("%02d-%02d-%d",
+                    Integer.parseInt(slot.getSlot_stop_date().split("-")[2]),
+                    Integer.parseInt(slot.getSlot_stop_date().split("-")[1]),
+                    Integer.parseInt(slot.getSlot_stop_date().split("-")[0])));
 
-        tv_slot_start_time.setText(getTime(slot.getSlot_start_time()));
-        tv_slot_stop_time.setText(getTime(slot.getSlot_stop_time()));
+            tv_slot_start_time.setText(getTime(slot.getSlot_start_time()));
+            tv_slot_stop_time.setText(getTime(slot.getSlot_stop_time()));
 
-        tv_slot_subject_val.setText(slot.getSlot_subject());
-        tv_slot_week_days.setText(getWeekDays(slot.getSlot_week_days()));
+            tv_slot_subject_val.setText(slot.getSlot_subject());
+            tv_slot_week_days.setText(getWeekDays(slot.getSlot_week_days()));
 
-        String slot_type = slot.getSlot_type();
-        if (slot_type.equalsIgnoreCase("group")) {
-            tv_slot_type.setText(getResources().getString(R.string.group));
-        } else {
-            if (slot_type.equalsIgnoreCase("individual")) {
-                tv_slot_type.setText(getResources().getString(R.string.individual));
-            }
-        }
-
-        if (StorageHelper.getUserGroup(AboutWeekViewEvent.this, "user_group").equals("2")) {
-            tv_max_students.setText(slot.getSlot_max_users());
-        } else {
-            int max_students_poss = Integer.parseInt(slot.getSlot_max_users());
-            if (mentee_found == -5) {
-                tv_max_students.setText(getResources().getString(R.string.class_not_possible_as_vacation_found));
+            String slot_type = slot.getSlot_type();
+            if (slot_type.equalsIgnoreCase("group")) {
+                tv_slot_type.setText(getResources().getString(R.string.group));
             } else {
-                if (mentee_found == 0) {
-                    tv_max_students.setText("" + max_students_poss);
-                } else {
-                    if (mentee_found > 0) {
-                        int x = max_students_poss - mentee_found;
-                        tv_max_students.setText(x + " " + getResources().getString(R.string.out_of) + " " + max_students_poss);
-                    }
+                if (slot_type.equalsIgnoreCase("individual")) {
+                    tv_slot_type.setText(getResources().getString(R.string.individual));
                 }
             }
 
-        }
+            if (StorageHelper.getUserGroup(AboutWeekViewEvent.this, "user_group").equals("2")) {
+                tv_max_students.setText(slot.getSlot_max_users());
+            } else {
+                int max_students_poss = Integer.parseInt(slot.getSlot_max_users());
+                if (mentee_found == -5) {
+                    tv_max_students.setText(getResources().getString(R.string.class_not_possible_as_vacation_found));
+                } else {
+                    if (mentee_found == 0) {
+                        tv_max_students.setText("" + max_students_poss);
+                    } else {
+                        if (mentee_found > 0) {
+                            int x = max_students_poss - mentee_found;
+                            tv_max_students.setText(x + " " + getResources().getString(R.string.out_of) + " " + max_students_poss);
+                        }
+                    }
+                }
 
-        tv_class_location.setText(slot.getTutorial_location().toString().trim());
+            }
+
+            tv_class_location.setText(slot.getTutorial_location().toString().trim());
+        }catch (Exception e){
+
+        }
     }
 
     private void init1() {

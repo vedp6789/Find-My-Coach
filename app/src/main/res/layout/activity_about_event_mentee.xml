@@ -196,6 +196,26 @@
                  android:textColor="@color/purple"
                  android:textSize="@dimen/profile_details" />
 
+
+             <com.findmycoach.app.views.ChizzleTextView
+                 android:id="@+id/tv_class_location"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="@dimen/back_margin"
+                 android:text="@string/class_location"
+                 android:textColor="@color/purple"
+                 android:textSize="@dimen/profile_title"
+                 android:textStyle="bold" />
+
+             <com.findmycoach.app.views.ChizzleTextView
+                 android:id="@+id/tv_class_location_val"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="@dimen/days_margin"
+                 android:textColor="@color/purple"
+                 android:textSize="@dimen/profile_details" />
+
+
          </LinearLayout>
 
 
@@ -220,23 +240,6 @@
                  android:layout_height="1dp"
                  android:background="@color/purple" />
 
-             <com.findmycoach.app.views.ChizzleTextView
-                 android:id="@+id/tv_subject"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_marginTop="@dimen/back_margin"
-                 android:text="@string/subject"
-                 android:textColor="@color/purple"
-                 android:textSize="@dimen/profile_details" />
-
-             <com.findmycoach.app.views.ChizzleTextView
-                 android:id="@+id/tv_subject_val"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_marginTop="@dimen/days_margin"
-                 android:textColor="@color/purple"
-                 android:textSize="@dimen/profile_details" />
-
 
              <ListView
                  android:id="@+id/lv_class_durations"
@@ -254,6 +257,27 @@
              android:layout_below="@id/ll_mentee_class_schedule"
              android:orientation="vertical">
 
+             <com.findmycoach.app.views.ChizzleTextView
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="@dimen/days_margin"
+                 android:text="@string/vacation_today"
+                 android:textColor="@color/purple"
+                 android:textSize="@dimen/profile_name" />
+
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="1dp"
+                 android:background="@color/purple" />
+
+             <com.findmycoach.app.views.ChizzleTextView
+                 android:id="@+id/tv_subject"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="@dimen/back_margin"
+                 android:text="@string/vacation_schedule"
+                 android:textColor="@color/purple"
+                 android:textSize="@dimen/profile_details" />
              <ListView
                  android:id="@+id/lv_coinciding_vacations"
                  android:layout_width="match_parent"

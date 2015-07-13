@@ -512,6 +512,7 @@
     <string name="fmc_service_description">FMC running in service to allow push notification.</string>
     <string name="class_schedule">Class schedule</string>
     <string name="your_class_schedule">Your class schedule</string>
+    <string name="vacation_today">There is vacation on this day</string>
     <string name="payment_details">Payment details</string>
     <string name="payment_details_method">Add payment method</string>
     <string name="not_free">Not free</string>
@@ -538,6 +539,7 @@
     <string name="coinciding_vac">Vacation over class</string>
     <string name="class_time">Class time</string>
     <string name="scheduled_event_of">Scheduled event of</string>
+    <string name="vacation_schedule">Vacations</string>
 
 
 
