@@ -369,19 +369,23 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         Calendar calendar_slot_start_date = Calendar.getInstance();
                         calendar_slot_start_date.set(Integer.parseInt(slot_start_date.split("-")[0]), Integer.parseInt(slot_start_date.split("-")[1]) - 1, Integer.parseInt(slot_start_date.split("-")[2]));
                         long new_slot_start_date_millis = calendar_slot_start_date.getTimeInMillis();
-
+                        Log.d(TAG,"slot start date: "+slot_start_date.toString()+" in millis: "+new_slot_start_date_millis);
 
                         Calendar calendar_for_day_of_this_month = Calendar.getInstance();   /* each day of this month will get initialized as loop executes. For each day, matching the possible events or vacation coming for the mentee */
                         calendar_for_day_of_this_month.set(newYear, newMonth - 1, day_of_this_month);
                         long this_day_in_millis = calendar_for_day_of_this_month.getTimeInMillis();
                         int this_day_week_day = calendar_for_day_of_this_month.get(Calendar.DAY_OF_WEEK);
+                        Log.d(TAG,"day of the cal: "+newYear+"/"+newMonth+"/"+day_of_this_month+" in millis: "+this_day_in_millis);
 
+                        Log.d(TAG,"date while week view for mentee cal: "+newYear+"/"+(newMonth - 1)+"/"+ day_of_this_month);
 
                         Calendar calendar_slot_stop_date = Calendar.getInstance();
                         calendar_slot_stop_date.set(Integer.parseInt(slot_stop_date.split("-")[0]), Integer.parseInt(slot_stop_date.split("-")[1]) - 1, Integer.parseInt(slot_stop_date.split("-")[2]));
                         long new_slot_stop_date_millis = calendar_slot_stop_date.getTimeInMillis();
+                        Log.d(TAG,"slot stop date: "+slot_stop_date.toString()+" in millis: "+new_slot_stop_date_millis);
 
                         if ((this_day_in_millis == new_slot_start_date_millis) || (this_day_in_millis == new_slot_stop_date_millis) || (this_day_in_millis > new_slot_start_date_millis && this_day_in_millis < new_slot_stop_date_millis)) {
+
                             if (thisDayMatchesWithArrayOfWeekDays(slot_week_days, this_day_week_day)) {
                                     /* slot found on this day */
 
@@ -422,11 +426,13 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                         for (int day_no = 0; day_no < slotDurationDetailBeans.size(); day_no++) {
                                             SlotDurationDetailBean slotDurationDetailBean = slotDurationDetailBeans.get(day_no);
                                             String date = slotDurationDetailBean.getDate();
+                                            Log.d(TAG,"date for event duration : "+date+" date of cal: "+newYear+"/"+newMonth+"/"+day_of_this_month);
                                             Calendar calendar_for_this_date = Calendar.getInstance();
                                             calendar_for_this_date.set(Integer.parseInt(date.split("-")[0]), Integer.parseInt(date.split("-")[1]) - 1, Integer.parseInt(date.split("-")[2]));
                                             long this_date_in_millis = calendar_for_this_date.getTimeInMillis();
 
-                                            if ((Integer.parseInt(date.split("-")[0]) == newYear) || (Integer.parseInt(date.split("-")[1]) == newMonth) || (Integer.parseInt(date.split("-")[2]) == day_of_this_month)) {
+                                            if ((Integer.parseInt(date.split("-")[0]) == newYear) && (Integer.parseInt(date.split("-")[1]) == (newMonth-1)) && (Integer.parseInt(date.split("-")[2]) == day_of_this_month)) {
+                                                Log.d(TAG,"event duration found");
                                                 menteeFoundOnThisDate.add(mentee);
                                                 break level_event_duration;
                                             }
@@ -995,6 +1001,8 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                 } else {
                                     /* individual group */
                                     List<Event> class_already_scheduled = new_Slot.getEvents();
+                                    Log.d(TAG,"events size: "+class_already_scheduled.size());
+
                                     if (class_already_scheduled.size() > 0) {
                                         Event event = class_already_scheduled.get(0);
                                         int no_of_active_mentee = Integer.parseInt(event.getEvent_total_mentee());

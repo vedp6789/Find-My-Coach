@@ -504,6 +504,7 @@
     <string name="end_date">End date</string>
     <string name="slot_type">Slot type:</string>
     <string name="class_location">Location</string>
+    <string name="possible_max_users">Maximum number of students</string>
     <string name="max_students">Places remaining to get scheduled</string>
     <string name="max_students_mentee">Class size</string>
     <string name="tutorial_location">Tutorial location</string>

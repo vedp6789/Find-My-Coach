@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
 
     <!-- Permission to read SMS for reading OTP from received SMS-->
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
@@ -24,8 +24,6 @@
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-
-
     <uses-permission android:name="com.findmycoach.app.permission.C2D_MESSAGE" />
 
     <application
@@ -156,9 +154,10 @@
             android:label="@string/event_desc"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".activity.CalendarPreferences"
+        <activity
+            android:name=".activity.CalendarPreferences"
             android:label="@string/calendar_preference"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MentorNotificationActions"
             android:screenOrientation="portrait" />
@@ -174,8 +173,8 @@
 
         <!-- Activities and service responsible for gathering customer consent and for future payments  -->
         <service
-        android:name="com.paypal.android.sdk.payments.PayPalService"
-        android:exported="false" />
+            android:name="com.paypal.android.sdk.payments.PayPalService"
+            android:exported="false" />
 
         <activity android:name="com.paypal.android.sdk.payments.LoginActivity" />
         <activity android:name="com.paypal.android.sdk.payments.PayPalFuturePaymentActivity" />

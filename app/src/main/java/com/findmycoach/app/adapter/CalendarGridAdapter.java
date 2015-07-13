@@ -619,12 +619,14 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                                 finalizeWhatTypeOfOccurencesForThisDay(Integer.parseInt(theyear), the_current_month, Integer.parseInt(theday), availabilityFlags);
 
-
+Log.d(TAG,"date: "+Integer.parseInt(theyear)+"/"+the_current_month+"/"+ Integer.parseInt(theday));
                                 /* We will have to populate calendar grid color only when there is some slot for this */
                                 if (availabilityFlags.slot_found) {
                                     if (availabilityFlags.event_found) {
                                         if (availabilityFlags.vacation_found) {
                                             /* both event and vacation found */
+                                            Log.d(TAG,"both event and vacation found");
+
                                             if (day_color[1].equals("CURRENT")) {
                                                 gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
                                             } else {
@@ -633,6 +635,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                             }
                                         } else {
                                             /* only event found*/
+                                            Log.d(TAG,"only event found");
 
                                             if (day_color[1].equals("CURRENT")) {
                                                 gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event));
@@ -643,6 +646,9 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                     } else {
                                         if (availabilityFlags.vacation_found) {
                                             /* only vacation found*/
+
+                                            Log.d(TAG,"only vacation found");
+
                                             if (day_color[1].equals("CURRENT")) {
                                                 gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.vacation));
                                             } else {
@@ -1047,10 +1053,10 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                         /* Now checking whether the_day is having week day similar to one of the slot week days, if found then we have to consider this slot for this day otherwise not*/
                 if (thisDayMatchesWithWeekDaysArray(slot_week_days, week_day_for_this_day)) {
                     availabilityFlags.slot_found = true;
-                    //Log.d(TAG,"slot_found for "+year+"-"+month+"-"+day);
+                    Log.d(TAG,"slot_found for "+year+"-"+month+"-"+day);
                                             /* Now to check whether in this slot any event is coming for this day and now we do not need to check week day of this day as if event is there so evnets are of same slot and we already checked week_day for the slot*/
                     if (new_slot.anyEventFound(year, month, day)) {
-                      //  Log.d(TAG,"event_found for "+year+"-"+month+"-"+day);
+                      Log.d(TAG,"event_found for "+year+"-"+month+"-"+day);
 
                         availabilityFlags.event_found = true;
                     }
@@ -1058,7 +1064,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
                                             /* Now to check whether any coinciding vacation found or not */
                     if (new_slot.anyVacationFound(year, month, day)) {
                         availabilityFlags.vacation_found = true;
-                        //Log.d(TAG,"vacation_found for "+year+"-"+month+"-"+day);
+                       Log.d(TAG,"vacation_found for "+year+"-"+month+"-"+day);
 
                     }
                 }

@@ -380,7 +380,7 @@
                     android:layout_height="@dimen/login_button_height"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="@string/max_students"
+                    android:text="@string/possible_max_users"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_details" />
 

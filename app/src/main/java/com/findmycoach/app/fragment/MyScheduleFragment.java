@@ -1429,7 +1429,7 @@ public class MyScheduleFragment extends Fragment implements View.OnClickListener
                     vacation.setVacation_id(vacation_jsonObject.getString("vacation_id"));
                     vacation.setStart_date(vacation_jsonObject.getString("start_date"));
                     vacation.setStop_date(vacation_jsonObject.getString("stop_date"));
-                    vacation.setCause_of_the_vacation(vacation_jsonObject.getString("cause_of_the_vacation"));
+                    vacation.setCause_of_the_vacation(vacation_jsonObject.getString("cause_of_vacation"));
                     /*JSONArray vacation_weekdays = vacation_jsonObject.getJSONArray("weekdays");
                     String vacation_weekdays_array[] = new String[vacation_weekdays.length()];
                     for (int week_day = 0; week_day < vacation_weekdays.length(); week_day++) {

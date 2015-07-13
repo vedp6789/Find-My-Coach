@@ -193,7 +193,6 @@ public class DashboardActivity extends FragmentActivity
                 Log.i(TAG, "No valid Google Play Services APK found.");
             }
             initialize();
-
         } else {
             initialize();
         }
@@ -207,7 +206,7 @@ public class DashboardActivity extends FragmentActivity
 
     /**
      * Gets the current registration ID for application on GCM service.
-     * <p>
+     * <p/>
      * If result is empty, the app needs to register.
      *
      * @return registration ID, or empty string if there is no existing
@@ -271,7 +270,7 @@ public class DashboardActivity extends FragmentActivity
 
     /**
      * Registers the application with GCM servers asynchronously.
-     * <p>
+     * <p/>
      * Stores the registration ID and app versionCode in the application's
      * shared preferences.
      */
