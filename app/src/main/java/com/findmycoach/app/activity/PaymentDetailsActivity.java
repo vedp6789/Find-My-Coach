@@ -117,13 +117,20 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
         findViewById(R.id.scanCard).setOnClickListener(this);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (DashboardActivity.dashboardActivity == null && getIntent().getIntExtra("onBackPress", -1) != 1) {
+            startActivity(new Intent(this, DashboardActivity.class));
+        } else if (getIntent().getIntExtra("onBackPress", -1) == 1 && DashboardActivity.dashboardActivity != null) {
+            DashboardActivity.dashboardActivity.finish();
+        }
+    }
 
     @Override
     protected void onDestroy() {
         stopService(new Intent(this, PayPalService.class));
         super.onDestroy();
-        if (DashboardActivity.dashboardActivity == null)
-            startActivity(new Intent(this, DashboardActivity.class));
     }
 
     @Override
@@ -131,6 +138,10 @@ public class PaymentDetailsActivity extends Activity implements View.OnClickList
         int id = v.getId();
         switch (id) {
             case R.id.buttonSkip:
+                try {
+                    DashboardActivity.dashboardActivity.mainLayout.setVisibility(View.VISIBLE);
+                } catch (Exception ignored) {
+                }
                 finish();
                 break;
             case R.id.buttonSave:

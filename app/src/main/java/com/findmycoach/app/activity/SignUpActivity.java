@@ -469,10 +469,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
 
             saveUserPhn("True");
             finish();
-            if (user_group == 2)
-                startActivity(new Intent(this, PaymentDetailsActivity.class));
-            else
-                startActivity(new Intent(this, DashboardActivity.class));
+            startActivity(new Intent(this, DashboardActivity.class));
 
         }
     }

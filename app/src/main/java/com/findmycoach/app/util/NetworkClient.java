@@ -378,11 +378,11 @@ public class NetworkClient {
                         String responseJson = new String(responseBody);
                         Log.d(TAG, "Success: Response:" + responseJson);
                         Log.d(TAG, "Success: Response Code:" + statusCode);
-
-                        if (DashboardActivity.dashboardActivity.user_group == 3) {
+                        int user_group = Integer.parseInt(StorageHelper.getUserGroup(context, "user_group"));
+                        if (user_group == 3) {
                             Response response = new Gson().fromJson(responseJson, Response.class);
                             callback.successOperation(response, statusCode, calledApiValue);
-                        } else if (DashboardActivity.dashboardActivity.user_group == 2) {
+                        } else if (user_group == 2) {
                             Log.d(TAG, "getprofile");
                             ProfileResponse response = new Gson().fromJson(responseJson, ProfileResponse.class);
                             callback.successOperation(response, statusCode, calledApiValue);
@@ -689,8 +689,7 @@ public class NetworkClient {
                     Log.d(TAG, "Success: Response Code:" + statusCode);
                     if (statusCode == 200) {
                         callback.successOperation("Success", statusCode, calledApiValue);
-                    }
-                    else {
+                    } else {
                         try {
                             Response response = new Gson().fromJson(responseJson, Response.class);
                             callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
@@ -1409,7 +1408,7 @@ public class NetworkClient {
             callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
             return;
         }
-    // Header[] headers = {new BasicHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value)), new BasicHeader(context.getResources().getString(R.string.auth_key), authToken)};
+        // Header[] headers = {new BasicHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value)), new BasicHeader(context.getResources().getString(R.string.auth_key), authToken)};
 
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
@@ -1447,7 +1446,6 @@ public class NetworkClient {
         });
 
 
-
     }
 
 
@@ -1459,7 +1457,7 @@ public class NetworkClient {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
         client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.post(context,getAbsoluteURL("exceptionsDelete",context),requestParams,new AsyncHttpResponseHandler() {
+        client.post(context, getAbsoluteURL("exceptionsDelete", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
@@ -1988,6 +1986,7 @@ public class NetworkClient {
             }
         });
     }
+
     public static void getCurrencySymbol(final Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
         if (!NetworkManager.isNetworkConnected(context)) {
             callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
@@ -2025,11 +2024,11 @@ public class NetworkClient {
     }
 
 
-    private static void printLongLog(String veryLongString){
+    private static void printLongLog(String veryLongString) {
         int maxLogSize = 1000;
-        for(int i = 0; i <= veryLongString.length() / maxLogSize; i++) {
+        for (int i = 0; i <= veryLongString.length() / maxLogSize; i++) {
             int start = i * maxLogSize;
-            int end = (i+1) * maxLogSize;
+            int end = (i + 1) * maxLogSize;
             end = end > veryLongString.length() ? veryLongString.length() : end;
             Log.v(TAG, veryLongString.substring(start, end));
         }

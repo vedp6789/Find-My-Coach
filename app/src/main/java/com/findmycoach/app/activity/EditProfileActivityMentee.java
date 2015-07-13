@@ -10,6 +10,8 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -189,24 +191,24 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             }
         });
 
-//        profileAddress1.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                city = null;
-//                String input = profileAddress1.getText().toString();
-//                if (input.length() >= 2) {
-//                    getAutoSuggestions(input);
-//                }
-//            }
-//        });
+        profileAddress1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                city = null;
+                String input = profileAddress1.getText().toString();
+                if (input.length() >= 2) {
+                    getAutoSuggestions(input);
+                }
+            }
+        });
 
         profileAddress1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -620,7 +622,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
     public void onBackPressed() {
         if (newUser == null || !newUser.contains(userInfo.getId()))
             finish();
-
+        else
             showSignOutDialog();
     }
 
@@ -703,15 +705,17 @@ public class EditProfileActivityMentee extends Activity implements Callback {
                 StorageHelper.storePreference(this, "user_full_name", name);
             } catch (Exception ignored) {
             }
-            finish();
 
             if (newUser != null && newUser.contains(userInfo.getId())) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.remove(getResources().getString(R.string.new_user));
                 editor.apply();
-                DashboardActivity.dashboardActivity.mainLayout.setVisibility(View.VISIBLE);
+                Intent intent1 = new Intent(this, PaymentDetailsActivity.class);
+                intent1.putExtra("onBackPress", 1);
+                startActivity(intent1);
             }
+            finish();
 
             /* Saving address, city and zip */
             if (profileAddress.getText().toString() != null) {
