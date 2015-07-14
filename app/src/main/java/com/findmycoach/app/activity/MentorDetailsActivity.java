@@ -64,11 +64,11 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private TextView profileAddress;
     private RatingBar profileRatting;
     private TextView profileCharges;
-//    private TextView profileEmail;
+    //    private TextView profileEmail;
     private TextView profileExperience;
     private TextView profileQualification;
     private TextView profileTravelAvailable;
-//    private TextView profilePhone;
+    //    private TextView profilePhone;
     private TextView profileDob;
     private LinearLayout areaOfCoaching;
     private Data userInfo = null;
@@ -153,7 +153,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             @Override
             public void onClick(View v) {
                 DatePickerFragment datePickerDialog = new DatePickerFragment();
-                datePickerDialog.textView =tv_currentMonth;
+                datePickerDialog.textView = tv_currentMonth;
                 Bundle bundle = new Bundle();
                 bundle.putString("for", "MentorDetailsActivity");
                 datePickerDialog.setArguments(bundle);
@@ -325,8 +325,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         prev_month_requested_date = String.valueOf(stringBuilder);
         requestParams.add("limit", String.valueOf(days_in_new_prev_month));
         networkCall2(requestParams);
-
-
     }
 
     /* Network call for getting previous to previous month data in case of mentor login*/
@@ -417,7 +415,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         Response mentorDetails = new Gson().fromJson(jsonData, Response.class);
         userInfo = mentorDetails.getData();
 
-      //  String searchedKeyWord = getIntent().getStringExtra("searched_keyword");
+        //  String searchedKeyWord = getIntent().getStringExtra("searched_keyword");
 //        if (searchedKeyWord != null && !searchedKeyWord.equals("-1")) {
 //            searchedKeyWord = DataBase.singleton(this).getSubCategory(searchedKeyWord);
 //            List<String> newSubCategory = new ArrayList<String>();
@@ -533,9 +531,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         }
         if (userInfo.getExperience() != null) {
             int ex = 0;
-            try{
+            try {
                 ex = Integer.parseInt(userInfo.getExperience());
-            }catch (Exception e){
+            } catch (Exception e) {
                 ex = 0;
             }
             profileExperience.setText(ex > 1 ? ex + " " + getResources().getString(R.string.years) : ex + " " + getResources().getString(R.string.year));
@@ -594,7 +592,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         linearLayout.invalidate();
         int maxWidth = display.getWidth() - 40;
 
-        LinearLayout.LayoutParams params=null;
+        LinearLayout.LayoutParams params = null;
         LinearLayout newLL = new LinearLayout(context);
         newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         newLL.setOrientation(LinearLayout.VERTICAL);
@@ -939,11 +937,10 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         try {
 
             JSONObject jsonObject = new JSONObject((String) object);
-            JSONObject jsonObject_data =jsonObject.getJSONObject("data");
+            JSONObject jsonObject_data = jsonObject.getJSONObject("data");
             JSONArray jsonArray_mentor = jsonObject_data.getJSONArray("mentor");
             JSONArray jsonArray_data = jsonObject_data.getJSONArray("slots");
             JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");
-
 
 
             //  Log.d(TAG, "json array size : " + jsonArray_data.length());
@@ -1121,8 +1118,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         ArrayList<Slot> slotArrayList = new ArrayList<Slot>();
 
 
-
-
         for (int slot_no = 0; slot_no < slots.size(); slot_no++) {
             Slot slot = slots.get(slot_no);
             String start_date = slot.getSlot_start_date();
@@ -1131,7 +1126,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             Calendar calendar_start_of_month = Calendar.getInstance();
             calendar_start_of_month.set(year, month - 1, 1);
             long month_start_date_in_millis = calendar_start_of_month.getTimeInMillis();
-
 
 
             Calendar calendar_slot_start_date = Calendar.getInstance();
@@ -1226,14 +1220,14 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 for (int event_jsonArray_index = 0; event_jsonArray_index < event_jsonArray.length(); event_jsonArray_index++) {
                     Event event = new Event();
                     JSONObject event_jsonObject = event_jsonArray.getJSONObject(event_jsonArray_index);
-                    JSONArray event_mentees=event_jsonObject.getJSONArray("mentee");
-                    List<Mentee> mentees=new ArrayList<Mentee>();
-                    for(int mentee_index=0; mentee_index < event_mentees.length(); mentee_index++ ){
-                        Mentee mentee=new Mentee();
-                        JSONObject mentee_jsonObject=event_mentees.getJSONObject(mentee_index);
+                    JSONArray event_mentees = event_jsonObject.getJSONArray("mentee");
+                    List<Mentee> mentees = new ArrayList<Mentee>();
+                    for (int mentee_index = 0; mentee_index < event_mentees.length(); mentee_index++) {
+                        Mentee mentee = new Mentee();
+                        JSONObject mentee_jsonObject = event_mentees.getJSONObject(mentee_index);
                         JSONArray event_durations = mentee_jsonObject.getJSONArray("durations");
-                        List<EventDuration> eventDurations =new ArrayList<EventDuration>();
-                        for(int event_duration_no = 0 ; event_duration_no < event_durations.length(); event_duration_no++){
+                        List<EventDuration> eventDurations = new ArrayList<EventDuration>();
+                        for (int event_duration_no = 0; event_duration_no < event_durations.length(); event_duration_no++) {
                             JSONObject jsonObject_event_duration = event_durations.getJSONObject(event_duration_no);
                             EventDuration eventDuration = new EventDuration();
                             eventDuration.setStart_date(jsonObject_event_duration.getString("start_date"));
