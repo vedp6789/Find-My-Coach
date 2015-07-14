@@ -189,7 +189,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         else if (calledApiValue == 27) {
             if (response.getData() == null) {
                 Toast toast = Toast.makeText(ValidatePhoneActivity.this, response.getMessage(), Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.TOP, 0, 0);
                 toast.show();
                 return;
             } else if (response.getAuthToken() != null && !response.getAuthToken().equals(""))
@@ -201,16 +201,16 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         finish();
         Log.e(TAG, "DashBoard");
 
-        /** If newly registered user is mentee then open PaymentDetail Activity for getting card details */
-        if (user_group == 2) {
-            Log.e(TAG, "User group");
-            Log.d(TAG, "user_group and payment initiate :" + user_group);
-            Log.d(TAG, "Launched from : " + from);
-            if (from == null || !from.equals("ChangePhoneNoFragment")) {
-                Log.e(TAG, "DashBoard if");
-                startActivity(new Intent(this, PaymentDetailsActivity.class));
-            }
-        }
+//        /** If newly registered user is mentee then open PaymentDetail Activity for getting card details */
+//        if (user_group == 2) {
+//            Log.e(TAG, "User group");
+//            Log.d(TAG, "user_group and payment initiate :" + user_group);
+//            Log.d(TAG, "Launched from : " + from);
+//            if (from == null || !from.equals("ChangePhoneNoFragment")) {
+//                Log.e(TAG, "DashBoard if");
+//                startActivity(new Intent(this, PaymentDetailsActivity.class));
+//            }
+//        }
     }
 
     @Override
