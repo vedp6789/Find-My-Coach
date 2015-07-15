@@ -715,7 +715,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 /** Phone number is provided with country code, updating user's phone number in server */
                 else {
                     dialog.dismiss();
-                    requestParams.add("phone_number", countryCodeTV.getText().toString().trim() + "-" + phnNum);
+                    requestParams.add("phone_number", countryCodeTV.getText().toString().trim().replace("+","") + "-" + phnNum);
                     requestParams.add("user_group", String.valueOf(user_group));
                     saveUserPhoneNumber(phnNum);
                     Log.e("Login dialog", "phone_number : " + countryCodeTV.getText().toString().trim() + "-" + phnNum);

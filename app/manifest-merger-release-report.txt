@@ -41,18 +41,6 @@ uses-permission#android.permission.READ_PROFILE
 ADDED from AndroidManifest.xml:11:5
 	android:name
 		ADDED from AndroidManifest.xml:11:22
-uses-permission#android.permission.READ_CONTACTS
-ADDED from AndroidManifest.xml:12:5
-	android:name
-		ADDED from AndroidManifest.xml:12:22
-uses-permission#android.permission.RECEIVE_SMS
-ADDED from AndroidManifest.xml:15:5
-	android:name
-		ADDED from AndroidManifest.xml:15:22
-uses-permission#android.permission.READ_SMS
-ADDED from AndroidManifest.xml:16:5
-	android:name
-		ADDED from AndroidManifest.xml:16:22
 uses-permission#android.permission.READ_EXTERNAL_STORAGE
 ADDED from AndroidManifest.xml:20:5
 	android:name
@@ -61,20 +49,16 @@ uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
 ADDED from AndroidManifest.xml:21:5
 	android:name
 		ADDED from AndroidManifest.xml:21:22
-uses-permission#android.permission.WAKE_LOCK
-ADDED from AndroidManifest.xml:25:5
-	android:name
-		ADDED from AndroidManifest.xml:25:22
 uses-permission#com.google.android.c2dm.permission.RECEIVE
 ADDED from AndroidManifest.xml:26:5
 	android:name
 		ADDED from AndroidManifest.xml:26:22
 uses-permission#com.findmycoach.app.permission.C2D_MESSAGE
-ADDED from AndroidManifest.xml:29:5
+ADDED from AndroidManifest.xml:27:5
 	android:name
-		ADDED from AndroidManifest.xml:29:22
+		ADDED from AndroidManifest.xml:27:22
 application
-ADDED from AndroidManifest.xml:31:5
+ADDED from AndroidManifest.xml:29:5
 MERGED from com.facebook.android:facebook:3.21.0:24:5
 MERGED from com.android.support:support-v4:22.1.1:22:5
 MERGED from com.google.android.gms:play-services:6.5.87:20:5
@@ -87,118 +71,122 @@ MERGED from com.android.support:support-v4:22.1.1:22:5
 MERGED from com.github.alamkanak:android-week-view:1.2.1:9:5
 MERGED from com.android.support:appcompat-v7:22.0.0:22:5
 MERGED from com.android.support:support-v4:22.1.1:22:5
-MERGED from io.card:android-sdk:5.0.0:21:5
+MERGED from io.card:android-sdk:5.0.1:21:5
 MERGED from com.android.support:recyclerview-v7:22.1.1:22:5
 MERGED from com.android.support:support-v4:22.1.1:22:5
 MERGED from com.android.support:support-v4:22.1.1:22:5
 	android:label
-		ADDED from AndroidManifest.xml:35:9
-	android:hardwareAccelerated
 		ADDED from AndroidManifest.xml:33:9
+	android:hardwareAccelerated
+		ADDED from AndroidManifest.xml:31:9
 	android:allowBackup
-		ADDED from AndroidManifest.xml:32:9
+		ADDED from AndroidManifest.xml:30:9
 	android:icon
+		ADDED from AndroidManifest.xml:32:9
+	android:theme
 		ADDED from AndroidManifest.xml:34:9
-	android:theme
-		ADDED from AndroidManifest.xml:36:9
 activity#com.findmycoach.app.activity.SplashActivity
-ADDED from AndroidManifest.xml:37:9
+ADDED from AndroidManifest.xml:35:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:39:13
+		ADDED from AndroidManifest.xml:37:13
 	android:theme
-		ADDED from AndroidManifest.xml:40:13
-	android:name
 		ADDED from AndroidManifest.xml:38:13
+	android:name
+		ADDED from AndroidManifest.xml:36:13
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:41:13
+ADDED from AndroidManifest.xml:39:13
 action#android.intent.action.MAIN
+ADDED from AndroidManifest.xml:40:17
+	android:name
+		ADDED from AndroidManifest.xml:40:25
+category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:42:17
 	android:name
-		ADDED from AndroidManifest.xml:42:25
-category#android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:44:17
-	android:name
-		ADDED from AndroidManifest.xml:44:27
+		ADDED from AndroidManifest.xml:42:27
 meta-data#com.google.android.gms.version
-ADDED from AndroidManifest.xml:48:9
+ADDED from AndroidManifest.xml:46:9
 MERGED from com.google.android.gms:play-services:6.5.87:21:9
 	android:value
-		ADDED from AndroidManifest.xml:50:13
+		ADDED from AndroidManifest.xml:48:13
 	android:name
-		ADDED from AndroidManifest.xml:49:13
+		ADDED from AndroidManifest.xml:47:13
 meta-data#com.facebook.sdk.ApplicationId
-ADDED from AndroidManifest.xml:51:9
+ADDED from AndroidManifest.xml:49:9
 	android:value
-		ADDED from AndroidManifest.xml:53:13
+		ADDED from AndroidManifest.xml:51:13
 	android:name
-		ADDED from AndroidManifest.xml:52:13
+		ADDED from AndroidManifest.xml:50:13
 meta-data#com.google.android.maps.v2.API_KEY
-ADDED from AndroidManifest.xml:55:9
+ADDED from AndroidManifest.xml:53:9
 	android:value
-		ADDED from AndroidManifest.xml:57:13
+		ADDED from AndroidManifest.xml:55:13
 	android:name
-		ADDED from AndroidManifest.xml:56:13
+		ADDED from AndroidManifest.xml:54:13
 activity#com.findmycoach.app.activity.LoginActivity
-ADDED from AndroidManifest.xml:59:9
+ADDED from AndroidManifest.xml:57:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:62:13
-	android:label
-		ADDED from AndroidManifest.xml:61:13
-	android:windowSoftInputMode
-		ADDED from AndroidManifest.xml:64:13
-	android:theme
-		ADDED from AndroidManifest.xml:63:13
-	android:name
 		ADDED from AndroidManifest.xml:60:13
-activity#com.findmycoach.app.activity.SignUpActivity
-ADDED from AndroidManifest.xml:65:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:69:13
 	android:label
-		ADDED from AndroidManifest.xml:67:13
-	android:noHistory
-		ADDED from AndroidManifest.xml:68:13
+		ADDED from AndroidManifest.xml:59:13
 	android:windowSoftInputMode
-		ADDED from AndroidManifest.xml:71:13
-	android:theme
-		ADDED from AndroidManifest.xml:70:13
+		ADDED from AndroidManifest.xml:61:13
 	android:name
+		ADDED from AndroidManifest.xml:58:13
+activity#com.findmycoach.app.activity.SignUpActivity
+ADDED from AndroidManifest.xml:62:9
+	android:screenOrientation
 		ADDED from AndroidManifest.xml:66:13
+	android:label
+		ADDED from AndroidManifest.xml:64:13
+	android:noHistory
+		ADDED from AndroidManifest.xml:65:13
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:67:13
+	android:name
+		ADDED from AndroidManifest.xml:63:13
 activity#com.facebook.LoginActivity
-ADDED from AndroidManifest.xml:72:9
+ADDED from AndroidManifest.xml:68:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:76:13
+		ADDED from AndroidManifest.xml:72:13
 	android:label
-		ADDED from AndroidManifest.xml:74:13
+		ADDED from AndroidManifest.xml:70:13
 	android:noHistory
-		ADDED from AndroidManifest.xml:75:13
+		ADDED from AndroidManifest.xml:71:13
 	android:name
-		ADDED from AndroidManifest.xml:73:13
+		ADDED from AndroidManifest.xml:69:13
 activity#com.findmycoach.app.activity.ForgotPasswordActivity
-ADDED from AndroidManifest.xml:77:9
+ADDED from AndroidManifest.xml:73:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:81:13
+		ADDED from AndroidManifest.xml:77:13
 	android:label
-		ADDED from AndroidManifest.xml:79:13
+		ADDED from AndroidManifest.xml:75:13
 	android:noHistory
-		ADDED from AndroidManifest.xml:80:13
-	android:theme
-		ADDED from AndroidManifest.xml:82:13
+		ADDED from AndroidManifest.xml:76:13
 	android:name
-		ADDED from AndroidManifest.xml:78:13
+		ADDED from AndroidManifest.xml:74:13
 activity#com.findmycoach.app.activity.DashboardActivity
-ADDED from AndroidManifest.xml:83:9
+ADDED from AndroidManifest.xml:78:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:82:13
+	android:label
+		ADDED from AndroidManifest.xml:80:13
+	android:launchMode
+		ADDED from AndroidManifest.xml:81:13
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:83:13
+	android:name
+		ADDED from AndroidManifest.xml:79:13
+activity#com.findmycoach.app.activity.EditProfileActivityMentor
+ADDED from AndroidManifest.xml:84:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:87:13
 	android:label
-		ADDED from AndroidManifest.xml:85:13
-	android:launchMode
 		ADDED from AndroidManifest.xml:86:13
 	android:windowSoftInputMode
 		ADDED from AndroidManifest.xml:88:13
 	android:name
-		ADDED from AndroidManifest.xml:84:13
-activity#com.findmycoach.app.activity.EditProfileActivityMentor
+		ADDED from AndroidManifest.xml:85:13
+activity#com.findmycoach.app.activity.EditProfileActivityMentee
 ADDED from AndroidManifest.xml:89:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:92:13
@@ -208,226 +196,214 @@ ADDED from AndroidManifest.xml:89:9
 		ADDED from AndroidManifest.xml:93:13
 	android:name
 		ADDED from AndroidManifest.xml:90:13
-activity#com.findmycoach.app.activity.EditProfileActivityMentee
+activity#com.findmycoach.app.activity.AreasOfInterestActivity
 ADDED from AndroidManifest.xml:94:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:97:13
 	android:label
 		ADDED from AndroidManifest.xml:96:13
-	android:windowSoftInputMode
-		ADDED from AndroidManifest.xml:98:13
 	android:name
 		ADDED from AndroidManifest.xml:95:13
-activity#com.findmycoach.app.activity.AreasOfInterestActivity
-ADDED from AndroidManifest.xml:99:9
-	android:label
-		ADDED from AndroidManifest.xml:101:13
-	android:name
-		ADDED from AndroidManifest.xml:100:13
 activity#com.findmycoach.app.activity.ChooseImageActivity
-ADDED from AndroidManifest.xml:102:9
+ADDED from AndroidManifest.xml:97:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:105:13
+		ADDED from AndroidManifest.xml:100:13
 	android:label
-		ADDED from AndroidManifest.xml:104:13
+		ADDED from AndroidManifest.xml:99:13
 	android:name
-		ADDED from AndroidManifest.xml:103:13
+		ADDED from AndroidManifest.xml:98:13
 activity#com.findmycoach.app.activity.ChatWidgetActivity
-ADDED from AndroidManifest.xml:106:9
+ADDED from AndroidManifest.xml:101:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:109:13
+		ADDED from AndroidManifest.xml:104:13
 	android:label
-		ADDED from AndroidManifest.xml:108:13
+		ADDED from AndroidManifest.xml:103:13
 	android:name
-		ADDED from AndroidManifest.xml:107:13
+		ADDED from AndroidManifest.xml:102:13
 activity#com.findmycoach.app.activity.Settings
-ADDED from AndroidManifest.xml:110:9
+ADDED from AndroidManifest.xml:105:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:113:13
+		ADDED from AndroidManifest.xml:108:13
 	android:label
-		ADDED from AndroidManifest.xml:112:13
+		ADDED from AndroidManifest.xml:107:13
 	android:name
-		ADDED from AndroidManifest.xml:111:13
+		ADDED from AndroidManifest.xml:106:13
 activity#com.findmycoach.app.activity.SetScheduleActivity
-ADDED from AndroidManifest.xml:114:9
+ADDED from AndroidManifest.xml:109:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:117:13
+		ADDED from AndroidManifest.xml:112:13
 	android:label
-		ADDED from AndroidManifest.xml:116:13
+		ADDED from AndroidManifest.xml:111:13
 	android:name
-		ADDED from AndroidManifest.xml:115:13
+		ADDED from AndroidManifest.xml:110:13
 activity#com.findmycoach.app.activity.ValidatePhoneActivity
+ADDED from AndroidManifest.xml:113:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:116:13
+	android:label
+		ADDED from AndroidManifest.xml:115:13
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:117:13
+	android:name
+		ADDED from AndroidManifest.xml:114:13
+activity#com.findmycoach.app.activity.AddNewSlotActivity
 ADDED from AndroidManifest.xml:118:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:121:13
 	android:label
 		ADDED from AndroidManifest.xml:120:13
-	android:windowSoftInputMode
-		ADDED from AndroidManifest.xml:123:13
-	android:theme
-		ADDED from AndroidManifest.xml:122:13
 	android:name
 		ADDED from AndroidManifest.xml:119:13
-activity#com.findmycoach.app.activity.AddNewSlotActivity
-ADDED from AndroidManifest.xml:124:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:127:13
-	android:label
-		ADDED from AndroidManifest.xml:126:13
-	android:name
-		ADDED from AndroidManifest.xml:125:13
 activity#com.findmycoach.app.activity.StudentDetailActivity
-ADDED from AndroidManifest.xml:129:9
+ADDED from AndroidManifest.xml:123:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:131:13
+		ADDED from AndroidManifest.xml:125:13
 	android:name
-		ADDED from AndroidManifest.xml:130:13
+		ADDED from AndroidManifest.xml:124:13
 activity#com.findmycoach.app.activity.MentorDetailsActivity
-ADDED from AndroidManifest.xml:132:9
+ADDED from AndroidManifest.xml:126:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:135:13
+		ADDED from AndroidManifest.xml:129:13
 	android:label
-		ADDED from AndroidManifest.xml:134:13
+		ADDED from AndroidManifest.xml:128:13
 	android:name
-		ADDED from AndroidManifest.xml:133:13
+		ADDED from AndroidManifest.xml:127:13
 activity#com.findmycoach.app.activity.UserListActivity
-ADDED from AndroidManifest.xml:136:9
+ADDED from AndroidManifest.xml:130:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:133:13
+	android:label
+		ADDED from AndroidManifest.xml:132:13
+	android:name
+		ADDED from AndroidManifest.xml:131:13
+activity#com.findmycoach.app.activity.ScheduleYourVacation
+ADDED from AndroidManifest.xml:135:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:139:13
 	android:label
-		ADDED from AndroidManifest.xml:138:13
-	android:name
 		ADDED from AndroidManifest.xml:137:13
-activity#com.findmycoach.app.activity.ScheduleYourVacation
-ADDED from AndroidManifest.xml:141:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:145:13
-	android:label
-		ADDED from AndroidManifest.xml:143:13
 	android:name
-		ADDED from AndroidManifest.xml:142:13
+		ADDED from AndroidManifest.xml:136:13
 activity#com.findmycoach.app.activity.ScheduleNewClass
-ADDED from AndroidManifest.xml:146:9
+ADDED from AndroidManifest.xml:140:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:149:13
+		ADDED from AndroidManifest.xml:143:13
 	android:label
-		ADDED from AndroidManifest.xml:148:13
+		ADDED from AndroidManifest.xml:142:13
 	android:name
-		ADDED from AndroidManifest.xml:147:13
+		ADDED from AndroidManifest.xml:141:13
 activity#com.findmycoach.app.activity.PaymentDetailsActivity
-ADDED from AndroidManifest.xml:151:9
+ADDED from AndroidManifest.xml:145:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:154:13
+		ADDED from AndroidManifest.xml:148:13
 	android:label
-		ADDED from AndroidManifest.xml:153:13
+		ADDED from AndroidManifest.xml:147:13
 	android:name
-		ADDED from AndroidManifest.xml:152:13
+		ADDED from AndroidManifest.xml:146:13
 activity#com.findmycoach.app.activity.SubCategoryActivity
-ADDED from AndroidManifest.xml:156:9
+ADDED from AndroidManifest.xml:150:9
 	android:name
-		ADDED from AndroidManifest.xml:156:19
+		ADDED from AndroidManifest.xml:150:19
 activity#com.findmycoach.app.activity.AboutWeekViewEvent
-ADDED from AndroidManifest.xml:158:9
+ADDED from AndroidManifest.xml:152:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:161:13
+		ADDED from AndroidManifest.xml:155:13
 	android:label
-		ADDED from AndroidManifest.xml:160:13
+		ADDED from AndroidManifest.xml:154:13
 	android:name
-		ADDED from AndroidManifest.xml:159:13
+		ADDED from AndroidManifest.xml:153:13
 activity#com.findmycoach.app.activity.CalendarPreferences
-ADDED from AndroidManifest.xml:163:9
+ADDED from AndroidManifest.xml:157:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:165:13
+		ADDED from AndroidManifest.xml:160:13
 	android:label
-		ADDED from AndroidManifest.xml:164:13
+		ADDED from AndroidManifest.xml:159:13
 	android:name
-		ADDED from AndroidManifest.xml:163:19
+		ADDED from AndroidManifest.xml:158:13
 activity#com.findmycoach.app.activity.MentorNotificationActions
-ADDED from AndroidManifest.xml:166:9
+ADDED from AndroidManifest.xml:161:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:168:13
+		ADDED from AndroidManifest.xml:163:13
 	android:name
-		ADDED from AndroidManifest.xml:167:13
+		ADDED from AndroidManifest.xml:162:13
 activity#com.findmycoach.app.activity.MenteeNotificationActions
+ADDED from AndroidManifest.xml:165:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:167:13
+	android:name
+		ADDED from AndroidManifest.xml:166:13
+activity#com.findmycoach.app.activity.AreaOfInterestSub
 ADDED from AndroidManifest.xml:170:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:172:13
 	android:name
 		ADDED from AndroidManifest.xml:171:13
-activity#com.findmycoach.app.activity.AreaOfInterestSub
+service#com.paypal.android.sdk.payments.PayPalService
 ADDED from AndroidManifest.xml:175:9
-	android:screenOrientation
+	android:exported
 		ADDED from AndroidManifest.xml:177:13
 	android:name
 		ADDED from AndroidManifest.xml:176:13
-service#com.paypal.android.sdk.payments.PayPalService
-ADDED from AndroidManifest.xml:180:9
-	android:exported
-		ADDED from AndroidManifest.xml:182:9
-	android:name
-		ADDED from AndroidManifest.xml:181:9
 activity#com.paypal.android.sdk.payments.LoginActivity
-ADDED from AndroidManifest.xml:184:9
+ADDED from AndroidManifest.xml:179:9
 	android:name
-		ADDED from AndroidManifest.xml:184:19
+		ADDED from AndroidManifest.xml:179:19
 activity#com.paypal.android.sdk.payments.PayPalFuturePaymentActivity
-ADDED from AndroidManifest.xml:185:9
+ADDED from AndroidManifest.xml:180:9
 	android:name
-		ADDED from AndroidManifest.xml:185:19
+		ADDED from AndroidManifest.xml:180:19
 activity#com.paypal.android.sdk.payments.FuturePaymentConsentActivity
-ADDED from AndroidManifest.xml:186:9
+ADDED from AndroidManifest.xml:181:9
 	android:name
-		ADDED from AndroidManifest.xml:186:19
+		ADDED from AndroidManifest.xml:181:19
 activity#com.paypal.android.sdk.payments.FuturePaymentInfoActivity
-ADDED from AndroidManifest.xml:187:9
+ADDED from AndroidManifest.xml:182:9
 	android:name
-		ADDED from AndroidManifest.xml:187:19
+		ADDED from AndroidManifest.xml:182:19
 activity#io.card.payment.CardIOActivity
-ADDED from AndroidManifest.xml:190:9
-MERGED from io.card:android-sdk:5.0.0:22:9
+ADDED from AndroidManifest.xml:185:9
+MERGED from io.card:android-sdk:5.0.1:22:9
 	android:configChanges
+		ADDED from AndroidManifest.xml:187:13
+	android:name
+		ADDED from AndroidManifest.xml:186:13
+activity#io.card.payment.DataEntryActivity
+ADDED from AndroidManifest.xml:188:9
+MERGED from io.card:android-sdk:5.0.1:25:9
+	android:name
+		ADDED from AndroidManifest.xml:188:19
+receiver#com.findmycoach.app.GcmBroadcastReceiver
+ADDED from AndroidManifest.xml:190:9
+	android:permission
 		ADDED from AndroidManifest.xml:192:13
 	android:name
 		ADDED from AndroidManifest.xml:191:13
-activity#io.card.payment.DataEntryActivity
-ADDED from AndroidManifest.xml:193:9
-MERGED from io.card:android-sdk:5.0.0:25:9
-	android:name
-		ADDED from AndroidManifest.xml:193:19
-receiver#com.findmycoach.app.GcmBroadcastReceiver
-ADDED from AndroidManifest.xml:195:9
-	android:permission
-		ADDED from AndroidManifest.xml:197:13
-	android:name
-		ADDED from AndroidManifest.xml:196:13
 intent-filter#com.findmycoach.app+com.google.android.c2dm.intent.RECEIVE
-ADDED from AndroidManifest.xml:198:13
+ADDED from AndroidManifest.xml:193:13
 action#com.google.android.c2dm.intent.RECEIVE
-ADDED from AndroidManifest.xml:199:17
+ADDED from AndroidManifest.xml:194:17
 	android:name
-		ADDED from AndroidManifest.xml:199:25
+		ADDED from AndroidManifest.xml:194:25
 category#com.findmycoach.app
-ADDED from AndroidManifest.xml:200:17
+ADDED from AndroidManifest.xml:195:17
 	android:name
-		ADDED from AndroidManifest.xml:200:27
+		ADDED from AndroidManifest.xml:195:27
 receiver#com.findmycoach.app.broadcast.IncomingSms
-ADDED from AndroidManifest.xml:204:9
+ADDED from AndroidManifest.xml:199:9
 	android:name
-		ADDED from AndroidManifest.xml:204:19
+		ADDED from AndroidManifest.xml:199:19
 intent-filter#android.provider.Telephony.SMS_RECEIVED
-ADDED from AndroidManifest.xml:205:13
+ADDED from AndroidManifest.xml:200:13
 action#android.provider.Telephony.SMS_RECEIVED
-ADDED from AndroidManifest.xml:206:17
+ADDED from AndroidManifest.xml:201:17
 	android:name
-		ADDED from AndroidManifest.xml:206:25
+		ADDED from AndroidManifest.xml:201:25
 service#com.findmycoach.app.GcmFmcService
-ADDED from AndroidManifest.xml:210:9
+ADDED from AndroidManifest.xml:205:9
 	android:name
-		ADDED from AndroidManifest.xml:210:18
+		ADDED from AndroidManifest.xml:205:18
 service#com.findmycoach.app.BackgroundService
-ADDED from AndroidManifest.xml:211:9
+ADDED from AndroidManifest.xml:206:9
 	android:name
-		ADDED from AndroidManifest.xml:211:18
+		ADDED from AndroidManifest.xml:206:18
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.facebook.android:facebook:3.21.0:20:5
@@ -444,7 +420,7 @@ MERGED from com.android.support:support-v4:22.1.1:20:5
 MERGED from com.github.alamkanak:android-week-view:1.2.1:5:5
 MERGED from com.android.support:appcompat-v7:22.0.0:20:5
 MERGED from com.android.support:support-v4:22.1.1:20:5
-MERGED from io.card:android-sdk:5.0.0:7:5
+MERGED from io.card:android-sdk:5.0.1:7:5
 MERGED from com.android.support:recyclerview-v7:22.1.1:20:5
 MERGED from com.android.support:support-v4:22.1.1:20:5
 MERGED from com.android.support:support-v4:22.1.1:20:5
@@ -455,25 +431,25 @@ MERGED from com.android.support:support-v4:22.1.1:20:5
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
 uses-permission#android.permission.CAMERA
-ADDED from io.card:android-sdk:5.0.0:11:5
+ADDED from io.card:android-sdk:5.0.1:11:5
 	android:name
-		ADDED from io.card:android-sdk:5.0.0:11:22
+		ADDED from io.card:android-sdk:5.0.1:11:22
 uses-permission#android.permission.VIBRATE
-ADDED from io.card:android-sdk:5.0.0:12:5
+ADDED from io.card:android-sdk:5.0.1:12:5
 	android:name
-		ADDED from io.card:android-sdk:5.0.0:12:22
+		ADDED from io.card:android-sdk:5.0.1:12:22
 uses-feature#android.hardware.camera
-ADDED from io.card:android-sdk:5.0.0:14:5
+ADDED from io.card:android-sdk:5.0.1:14:5
 	android:required
-		ADDED from io.card:android-sdk:5.0.0:16:9
+		ADDED from io.card:android-sdk:5.0.1:16:9
 	android:name
-		ADDED from io.card:android-sdk:5.0.0:15:9
+		ADDED from io.card:android-sdk:5.0.1:15:9
 uses-feature#android.hardware.camera.autofocus
-ADDED from io.card:android-sdk:5.0.0:17:5
+ADDED from io.card:android-sdk:5.0.1:17:5
 	android:required
-		ADDED from io.card:android-sdk:5.0.0:19:9
+		ADDED from io.card:android-sdk:5.0.1:19:9
 	android:name
-		ADDED from io.card:android-sdk:5.0.0:18:9
+		ADDED from io.card:android-sdk:5.0.1:18:9
 activity#android.support.v7.widget.TestActivity
 ADDED from com.android.support:recyclerview-v7:22.1.1:23:9
 	android:label

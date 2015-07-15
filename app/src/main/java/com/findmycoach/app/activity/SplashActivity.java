@@ -13,8 +13,6 @@ import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
 import com.loopj.android.http.RequestParams;
 
-import java.util.TimeZone;
-
 /**
  * Created by prem on 11/3/15.
  */
@@ -34,10 +32,6 @@ public class SplashActivity extends Activity implements Callback {
         setContentView(R.layout.activity_splash);
 
         isStart = true;
-        TimeZone tz = TimeZone.getDefault();
-        NetworkClient.timeZone = tz.getDisplayName(false, TimeZone.SHORT);
-        NetworkClient.timeZone = NetworkClient.timeZone.replace("GMT", "");
-        Log.e("TimeZone : ", NetworkClient.timeZone + " Timezone id :: " + tz.getID());
         getDataFromServer();
 
     }

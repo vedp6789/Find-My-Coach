@@ -83,7 +83,7 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
                     requestParams.add("user_group", StorageHelper.getUserGroup(getActivity(), "user_group"));
                     Log.d(TAG, "Phone no. to get update : " + countryCodeTV.getText().toString() + "-" + phnNum);
                     requestParams.add("email", StorageHelper.getUserDetails(getActivity(), "user_email"));
-                    requestParams.add("phone_number", countryCodeTV.getText().toString() + "-" + phnNum);
+                    requestParams.add("phone_number", countryCodeTV.getText().toString().trim().replace("+","") + "-" + phnNum);
                     Log.e("Change phone dialog","phone_number : " + countryCodeTV.getText().toString().trim() + "-" + phnNum);
                     progressDialog.show();
                     NetworkClient.setNewPhoneNumber(getActivity(), requestParams, this, 45);

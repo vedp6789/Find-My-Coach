@@ -238,8 +238,8 @@
                 android:text="@string/action_forgot_password"
                 android:textAlignment="center"
                 android:textColor="@color/custom_button_text_color_click_purple_light"
-                android:textSize="@dimen/forget_password_text_size" />
-
+                android:textSize="@dimen/forget_password_text_size"
+                android:layout_marginBottom="@dimen/back_margin"/>
 
         </RelativeLayout>
 
