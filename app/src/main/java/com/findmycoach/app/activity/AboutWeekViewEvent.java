@@ -63,6 +63,14 @@ public class AboutWeekViewEvent extends Activity implements Callback {
     int mentee_found;
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(SetScheduleActivity.setScheduleActivity != null){
+            SetScheduleActivity.setScheduleActivity.makeOnEventClickEnable();
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

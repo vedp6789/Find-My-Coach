@@ -120,6 +120,14 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     private List<Prediction> predictions;
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(SetScheduleActivity.setScheduleActivity != null){
+            SetScheduleActivity.setScheduleActivity.makeOnEventClickEnable();
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_new_class);

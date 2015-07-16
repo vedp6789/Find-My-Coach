@@ -554,7 +554,7 @@ public class CalendarGridAdapter extends BaseAdapter implements View.OnClickList
 
                                             if (day_color[1].equals("CURRENT")) {
                                                 gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event_vacation));
-                                            }else {
+                                            } else {
                                                 gridcell.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.event_vacation_today));
                                             }
                                         } else {
