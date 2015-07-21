@@ -286,7 +286,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                 final String phnNum = phoneEditText.getText().toString();
 
                 /** If phone number is null */
-                if (phnNum.equals("") || phnNum.length() < 8) {
+                if (phnNum.equals("") || phnNum.length() < getResources().getInteger(R.integer.min_phone_length)) {
                     phoneEditText.setError(getResources().getString(R.string.enter_valid_phone_no));
                 }
 

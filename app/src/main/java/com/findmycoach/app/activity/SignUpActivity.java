@@ -282,7 +282,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         if (phone.equals("")) {
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_field_required));
             isCorrect = false;
-        } else if (phone.length() < 8) {
+        } else if (phone.length() < getResources().getInteger(R.integer.min_phone_length)) {
             showErrorMessage(phoneNumberInput, getResources().getString(R.string.error_phone_number_invalid));
             isCorrect = false;
         }

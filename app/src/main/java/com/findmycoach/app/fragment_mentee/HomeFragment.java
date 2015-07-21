@@ -120,6 +120,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             Log.d(TAG, "sub category api not called");
         }
 
+        try {
+            Log.e(TAG, categoryFromDb.getOtpLength() + " : " + categoryFromDb.getOtpPosition());
+        } catch (Exception ignored) {
+        }
+
         homeFragmentMentee = this;
 
 //        if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
@@ -192,11 +197,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                         String first = d.get(0).getSubCategories().get(0).getName();
                         String next = "<font color='#AFA4C4'> - " + type + "</font> (" + d.get(0).getName() + ")";
                         subCategoryTextView.setText(Html.fromHtml(first + next));
-                        if(d.get(0).getSubCategories()!=null){
+                        if (d.get(0).getSubCategories() != null) {
                             subCategoryTextView.setTag(d.get(0).getSubCategories().get(0).getId());
 
-                        }
-                        else {
+                        } else {
                             subCategoryTextView.setTag(d.get(0).getId());
                         }
                         subCategoryTextView.setOnClickListener(new View.OnClickListener() {
@@ -683,7 +687,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             progressDialog.dismiss();
             Intent intent = new Intent(getActivity(), UserListActivity.class);
             intent.putExtra("list", (String) object);
-           // intent.putExtra("searched_keyword", -1);
+            // intent.putExtra("searched_keyword", -1);
             intent.putExtra("search_for", subCategoryTextView.getText().toString());
             startActivity(intent);
             isSearching = false;
