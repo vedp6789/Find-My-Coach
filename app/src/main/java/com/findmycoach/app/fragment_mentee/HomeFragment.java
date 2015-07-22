@@ -120,6 +120,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             Log.d(TAG, "sub category api not called");
         }
 
+        try {
+            Log.e(TAG, categoryFromDb.getOtpLength() + " : " + categoryFromDb.getOtpPosition());
+        } catch (Exception ignored) {
+        }
+
         homeFragmentMentee = this;
 
 //        if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {

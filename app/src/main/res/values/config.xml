@@ -46,6 +46,10 @@
     <!--Google api for getting address from zip-->
     <string name="google_api_lat_lng_from_zip">http://maps.googleapis.com/maps/api/geocode/json?</string>
 
+    <!--Used as key for saving paypal consent-->
     <string name="customer_consent">customer_consent</string>
+
+    <!--Minimum length of digits for mobile number-->
+    <integer name="min_phone_length">7</integer>
 
 </resources>
