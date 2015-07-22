@@ -27,7 +27,9 @@
         app:hourHeight="60dp"
         app:noOfVisibleDays="1"
         app:textSize="12sp"
-        app:todayBackgroundColor="#1848adff" />
+        app:todayBackgroundColor="#1848adff"
+        android:fadeScrollbars="false"
+        />
 
     <LinearLayout
         android:id="@+id/footer"

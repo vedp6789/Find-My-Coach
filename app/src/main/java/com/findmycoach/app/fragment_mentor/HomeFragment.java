@@ -121,7 +121,6 @@ public class HomeFragment extends Fragment implements Callback {
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.mentor_notification_tab);
         pagerSlidingTabStrip.setShouldExpand(true);
         pagerSlidingTabStrip.setViewPager(notifications_on_viewpager);
-
         if (tag != null && tag.equalsIgnoreCase("Schedule")) {
             notifications_on_viewpager.setCurrentItem(1);
 
@@ -224,7 +223,7 @@ public class HomeFragment extends Fragment implements Callback {
                                 scheduleRequest.setCreated_time(jsonObject_notification.getString("created_time"));
 
                                 List<Durations> durationses = new ArrayList<Durations>();
-                              //  Log.d(TAG,"durations: "+);
+                                //  Log.d(TAG,"durations: "+);
                                 for (int duration = 0; duration < jsonObject_notification.getJSONArray("durations").length(); duration++) {
                                     JSONObject jsonObject1 = jsonObject_notification.getJSONArray("durations").getJSONObject(duration);
                                     Durations durations = new Durations();
@@ -236,7 +235,6 @@ public class HomeFragment extends Fragment implements Callback {
                                 scheduleRequest.setDurations_list(durationses);
                                 scheduleRequest.setTutorial_location(jsonObject_notification.getString("tutorial_location"));
                                 //scheduleRequest.setTutorial_location("tutorial location hardcoded");
-
 
 
                                 scheduleRequests.add(scheduleRequest);
@@ -269,7 +267,7 @@ public class HomeFragment extends Fragment implements Callback {
 
 
                 } else {
-          //          Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    //          Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                 }
 
             } catch (JSONException e) {

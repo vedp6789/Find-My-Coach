@@ -192,11 +192,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                         String first = d.get(0).getSubCategories().get(0).getName();
                         String next = "<font color='#AFA4C4'> - " + type + "</font> (" + d.get(0).getName() + ")";
                         subCategoryTextView.setText(Html.fromHtml(first + next));
-                        if(d.get(0).getSubCategories()!=null){
+                        if (d.get(0).getSubCategories() != null) {
                             subCategoryTextView.setTag(d.get(0).getSubCategories().get(0).getId());
 
-                        }
-                        else {
+                        } else {
                             subCategoryTextView.setTag(d.get(0).getId());
                         }
                         subCategoryTextView.setOnClickListener(new View.OnClickListener() {
@@ -628,8 +627,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         if (timeBarrier) {
             String fromTiming = (String) fromTimingInput.getTag(fromTimingInput.getId());
             String toTiming = (String) toTimingInput.getTag(toTimingInput.getId());
-            requestParams.add("timing_from", fromTiming);
-            requestParams.add("timing_to", toTiming);
+            requestParams.add("timing_from", fromTiming + ":00");
+            requestParams.add("timing_to", toTiming + ":00");
+            Log.e(TAG, fromTiming + "- " + toTiming);
             String week = "";
 
             String[] daysArray = new String[]{"Su", "M", "T", "W", "Th", "F", "S"};
@@ -683,7 +683,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             progressDialog.dismiss();
             Intent intent = new Intent(getActivity(), UserListActivity.class);
             intent.putExtra("list", (String) object);
-           // intent.putExtra("searched_keyword", -1);
+            // intent.putExtra("searched_keyword", -1);
             intent.putExtra("search_for", subCategoryTextView.getText().toString());
             startActivity(intent);
             isSearching = false;

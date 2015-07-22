@@ -11,7 +11,7 @@
     <!-- FMC API KEY HEADER KEY AND VALUES -->
     <string name="api_key">FMC-API-KEY</string>
     <string name="auth_key">FMC-AUTH-TOKEN</string>
-    <string name="time_zone">utc</string>
+    <string name="time_zone">gmt</string>
     <string name="device_language">language</string>
     <string name="api_key_value">01b0c1d332f6516fdc63d3d3dcf7b79273cdeb58</string>
 
@@ -22,6 +22,7 @@
     <!--<string name="BASE_URL_WITH_AUTH">http://10.1.1.108/fmcweb/www/api/auth/</string>-->
     <string name="BASE_URL_WITH_AUTH">http://demo.iglulabs.com/fmcweb/www/api/auth/</string>
     <!--<string name="BASE_URL">http://10.1.1.108/fmcweb/www/api/v1/</string>-->
+    <!--<string name="BASE_URL">http://10.1.1.154/fmcweb/www/api/v1/</string>-->
     <string name="BASE_URL">http://demo.iglulabs.com/fmcweb/www/api/v1/</string>
 
     <!--WEB SOCKET URL-->

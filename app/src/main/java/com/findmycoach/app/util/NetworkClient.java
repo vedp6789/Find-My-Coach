@@ -99,7 +99,8 @@ public class NetworkClient {
 
     private static String getTimeZone() {
         TimeZone tz = TimeZone.getDefault();
-        return tz.getDisplayName(false, TimeZone.SHORT).replace("GMT", "");
+        Log.e(TAG + "VED", tz.getDisplayName(false, TimeZone.SHORT));
+        return tz.getDisplayName(false, TimeZone.SHORT).replace("GMT", "")+":00";
     }
 
     private static String getSystemLanguage() {
@@ -132,8 +133,9 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
+
         client.post(context, getAuthAbsoluteURL("register", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -174,8 +176,8 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(getAuthAbsoluteURL("login", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -219,8 +221,8 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAuthAbsoluteURL("socialAuthentication", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -264,8 +266,8 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAuthAbsoluteURL("setPhoneNumber", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -309,8 +311,8 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
         client.post(context, getAbsoluteURL("deviceRegistration", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -350,8 +352,8 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(getAuthAbsoluteURL("forgotPassword", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -398,8 +400,8 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
         client.get(context, getAbsoluteURL("profile", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -453,8 +455,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAbsoluteURL("profile", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -504,8 +506,8 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAuthAbsoluteURL("repostOtp", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -545,8 +547,8 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAuthAbsoluteURL("validateOtp", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -624,8 +626,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.get(context, getAbsoluteURL("connectionRequest", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -665,8 +667,8 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAbsoluteURL("respondToConnectionRequest", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -715,8 +717,8 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAbsoluteURL("breakConnection", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -765,8 +767,8 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, "auth_token"));
         Log.d(TAG, StorageHelper.getUserDetails(context, "auth_token"));
         client.get(context, getAbsoluteURL("connections", context), requestParams, new AsyncHttpResponseHandler() {
@@ -818,8 +820,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, "auth_token"));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAbsoluteURL("attachment", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -867,8 +869,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, "auth_token"));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.get(context, getAbsoluteURL("chats", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -912,8 +914,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.get(context, getAbsoluteURL("studentDetails", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -955,8 +957,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.get(context, getAuthAbsoluteURL("metaData", context), requestParams, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1078,8 +1080,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.get(context, getAbsoluteURL("search", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1131,8 +1133,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAbsoluteURL("categorySubCategory", context), requestParams, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1176,8 +1178,8 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAbsoluteURL("connectionRequest", context), requestParams, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1226,8 +1228,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.get(context, getAbsoluteURL("mentorDetails", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1268,8 +1270,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), auth_token);
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         //requestParams.add(userGroup, "3");
         client.post(getAbsoluteURL("availableSlots", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -1322,8 +1324,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), auth_token);
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         //requestParams.add(userGroup, "3");
         client.post(getAbsoluteURL("exceptions", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -1372,8 +1374,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         // client.get(context, getAbsoluteURL("calenderDetails", context), requestParams, new AsyncHttpResponseHandler() {
         client.get(context, getAbsoluteURL("calenderDetails", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -1416,8 +1418,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         // client.get(context, getAbsoluteURL("calenderDetails", context), requestParams, new AsyncHttpResponseHandler() {
         client.get(context, getAbsoluteURL("calenderDetailsMentee", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -1462,8 +1464,8 @@ public class NetworkClient {
 
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAbsoluteURL("slotsDelete", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1507,8 +1509,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAbsoluteURL("exceptionsDelete", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1551,8 +1553,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         // client.get(context, getAbsoluteURL("calenderDetails", context), requestParams, new AsyncHttpResponseHandler() {
         client.get(context, getAbsoluteURL("calenderEvents", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -1595,8 +1597,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), auth_token);
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         //requestParams.add(userGroup, "3");
         client.post(getAuthAbsoluteURL("resetPassword", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -1644,8 +1646,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, context.getString(R.string.auth_token)));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAuthAbsoluteURL("setPhoneNumber", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1691,8 +1693,8 @@ public class NetworkClient {
         }
         Log.d("API", getAuthAbsoluteURL("mentorRating", context));
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAbsoluteURL("mentorRating", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1737,8 +1739,8 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAbsoluteURL("event", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1783,8 +1785,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, context.getString(R.string.auth_token)));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAbsoluteURL("event", context), requestParams, new AsyncHttpResponseHandler() {
 //            client.post(context, getAbsoluteURL("event", context), requestParams, new AsyncHttpResponseHandler() {
 
@@ -1830,8 +1832,8 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAbsoluteURL("getCardDetails", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1875,8 +1877,8 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAbsoluteURL("getCardDetails", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1921,8 +1923,8 @@ public class NetworkClient {
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(context, getAbsoluteURL("getCardDetails", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1968,8 +1970,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), StorageHelper.getUserDetails(context, context.getString(R.string.auth_token)));
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.post(getAbsoluteURL("eventFinalize", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -2015,8 +2017,9 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.addHeader(context.getResources().getString(R.string.time_zone), timeZone);
-        client.addHeader(context.getResources().getString(R.string.device_language), language);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        Log.d(TAG, "time zone: " + timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.get(context, getAbsoluteURL("notification", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {

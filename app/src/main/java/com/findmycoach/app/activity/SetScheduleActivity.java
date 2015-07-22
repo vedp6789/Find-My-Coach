@@ -36,7 +36,7 @@ import java.util.List;
 
 
 public class SetScheduleActivity extends Activity implements WeekView.MonthChangeListener,
-        WeekView.EventClickListener, WeekView.EventLongPressListener, Callback {
+        WeekView.EventClickListener, WeekView.EventLongPressListener, Callback, View.OnClickListener, WeekView.EmptyViewClickListener {
 
     private WeekView mWeekView;
     private String date_of_grid_selected_from_calendar;
@@ -179,6 +179,10 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
 
             mWeekView = (WeekView) findViewById(R.id.weekView);
+            mWeekView.setVerticalScrollBarEnabled(true);
+           /*mWeekView.setScrollbarFadingEnabled(false);
+            mWeekView.setVerticalFadingEdgeEnabled(false);*/
+            // mWeekView.setScrollbarFadingEnabled(false);
 
             /*When SetScheduleActivity opens, it always get three months(previous, current(calendar tap day), coming) data to populate */
 
@@ -203,11 +207,11 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
     }
 
     private void applyProperties() {
-//        if (getActionBar() != null)
-//            getActionBar().setDisplayHomeAsUpEnabled(true);
+
         mWeekView.setOnEventClickListener(this);
         mWeekView.setMonthChangeListener(this);
         mWeekView.setEventLongPressListener(this);
+        mWeekView.setEmptyViewClickListener(this);
     }
 
     @Override
@@ -284,9 +288,17 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
 
         }
-
-
         return events;
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onEmptyViewClicked(Calendar time) {
+        Log.d(TAG, "date onEmptyViewClick: " + time.get(Calendar.DATE) + "/" + time.get(Calendar.MONTH) + 1 + "/" + time.get(Calendar.YEAR));
     }
 
     public class AvailabilityFlags {
@@ -387,9 +399,6 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         calendar_for_day_of_this_month.set(newYear, newMonth - 1, day_of_this_month);
                         long this_day_in_millis = calendar_for_day_of_this_month.getTimeInMillis();
                         int this_day_week_day = calendar_for_day_of_this_month.get(Calendar.DAY_OF_WEEK);
-                        //        Log.d(TAG,"day of the cal: "+newYear+"/"+newMonth+"/"+day_of_this_month+" in millis: "+this_day_in_millis);
-
-                        //       Log.d(TAG,"date while week view for mentee cal: "+newYear+"/"+(newMonth - 1)+"/"+ day_of_this_month);
 
                         Calendar calendar_slot_stop_date = Calendar.getInstance();
                         calendar_slot_stop_date.set(Integer.parseInt(slot_stop_date.split("-")[0]), Integer.parseInt(slot_stop_date.split("-")[1]) - 1, Integer.parseInt(slot_stop_date.split("-")[2]));
@@ -1377,7 +1386,10 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
+        Log.d(TAG, "on event click start time : ");
         try {
+            Log.d(TAG, "on event click start time : " + event.getmStartTime());
+
             if (on_event_click) {
                 on_event_click = false;
                 int event_type = event.getEvent_type();
@@ -1553,6 +1565,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
 
     @Override
     public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
+        Log.d(TAG, "on Long Press start time : " + event.getmStartTime());
         Toast.makeText(SetScheduleActivity.this, getResources().getString(R.string.long_pressed_event) + event.getName(), Toast.LENGTH_SHORT).show();
     }
 
