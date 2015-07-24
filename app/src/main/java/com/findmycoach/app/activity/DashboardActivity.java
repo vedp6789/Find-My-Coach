@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -114,7 +115,7 @@ public class DashboardActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //  new GetLocation().execute();
+          new GetLocation().execute();
 
         if (LoginActivity.loginActivity != null)
             LoginActivity.loginActivity.finish();
@@ -403,12 +404,12 @@ public class DashboardActivity extends FragmentActivity
         }
 
         try {
-//            if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
-//                HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
-//                HomeFragment.homeFragmentMentee = null;
-//                map.setOnMyLocationChangeListener(null);
-//                map = null;
-//            }
+            if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
+                HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
+                HomeFragment.homeFragmentMentee = null;
+                map.setOnMyLocationChangeListener(null);
+                map = null;
+            }
             if (onNewIntentCalled) {
                 onNewIntentCalled = false;
                 fragment_to_launch_from_notification = fragment_to_open;
@@ -879,34 +880,34 @@ public class DashboardActivity extends FragmentActivity
     /**
      * Getting user current location
      */
-//    private class GetLocation extends AsyncTask<Void, Void, Void> {
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
-//                @Override
-//                public void onMyLocationChange(Location location) {
-//                    Log.e("MapTest", location.getLatitude() + " : " + location.getLongitude() + " : " + userCurrentAddress);
-//                    if (userCurrentAddress.equals("")) {
-//                        userCurrentAddress = NetworkManager.getCompleteAddressString(DashboardActivity.this, location.getLatitude(), location.getLongitude());
-//                        Log.e("MapTest", userCurrentAddress);
-//
-//                        if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
-//                            HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
-//                            HomeFragment.homeFragmentMentee = null;
-//                            map.setOnMyLocationChangeListener(null);
-//                            map = null;
-//                        } else if (!userCurrentAddress.equals("")) {
-//                            map.setOnMyLocationChangeListener(null);
-//                            map = null;
-//                        }
-//
-//                        latitude = location.getLatitude();
-//                        longitude = location.getLongitude();
-//                    }
-//                }
-//            };
-//            return null;
-//        }
-//    }
+    private class GetLocation extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+                @Override
+                public void onMyLocationChange(Location location) {
+                    Log.e("MapTest", location.getLatitude() + " : " + location.getLongitude() + " : " + userCurrentAddress);
+                    if (userCurrentAddress.equals("")) {
+                        userCurrentAddress = NetworkManager.getCompleteAddressString(DashboardActivity.this, location.getLatitude(), location.getLongitude());
+                        Log.e("MapTest", userCurrentAddress);
+
+                        if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
+                            HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
+                            HomeFragment.homeFragmentMentee = null;
+                            map.setOnMyLocationChangeListener(null);
+                            map = null;
+                        } else if (!userCurrentAddress.equals("")) {
+                            map.setOnMyLocationChangeListener(null);
+                            map = null;
+                        }
+
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+                    }
+                }
+            };
+            return null;
+        }
+    }
 }
