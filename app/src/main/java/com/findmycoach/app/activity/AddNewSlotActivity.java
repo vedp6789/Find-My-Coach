@@ -964,12 +964,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
                                 stringBuilder1.append(", Sat");
                             if (day.equals("Su"))
                                 stringBuilder1.append(", Sun");
-
                         }
-
-
-
-                    /* if condition is checking whether the flag is 0 or 1 in case of single coinciding slot with Week-days mentioned, or in case of single coinciding exception with Week-days in Json string .*/
+                        /* if condition is checking whether the flag is 0 or 1 in case of single coinciding slot with Week-days mentioned, or in case of single coinciding exception with Week-days in Json string .*/
                         if (flag == 0) {
                             stringBuilder.append(getResources().getString(R.string.already_slot_found) + simpleDateFormat.format(start_date) + getResources().getString(R.string.and) + simpleDateFormat.format(stop_date) + getResources().getString(R.string.from1) + s_time.substring(0, 5) + getResources().getString(R.string.to2) + st_time.substring(0, 5) + getResources().getString(R.string.for1) + stringBuilder1.toString() + getResources().getString(R.string.cannot_placed));
 
@@ -1003,7 +999,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
 
                             }
                         }
-
                     }
 
 
@@ -1035,8 +1030,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
                 }
 
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-
-
                 stringBuilder.append(getResources().getString(R.string.vacation_similar_to_slot_request) + simpleDateFormat.format(start_date) + "\t" + getResources().getString(R.string.to1) + "\t" + simpleDateFormat.format(stop_date) + getResources().getString(R.string.from1) + ss_time.substring(0, 5) + getResources().getString(R.string.to2) + sst_time.substring(0, 5));
                 showCoincidingAlertMessage(stringBuilder.toString(), flag);
                 Log.d(TAG, "Message for coinciding exception while add new slot : " + stringBuilder.toString());
