@@ -31,6 +31,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.Session;
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
@@ -182,16 +183,16 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 //        profileFirstName.setOnTouchListener(onTouchListener);
 //        profileLastName.setOnFocusChangeListener(onFocusChangeListener);
 //        profileLastName.setOnTouchListener(onTouchListener);
-//        profileDOB.setOnFocusChangeListener(onFocusChangeListener);
-//        profileDOB.setOnTouchListener(onTouchListener);
+        profileDOB.setOnFocusChangeListener(onFocusChangeListener);
+        profileDOB.setOnTouchListener(onTouchListener);
 //        profileAddress.setOnFocusChangeListener(onFocusChangeListener);
 //        profileAddress.setOnTouchListener(onTouchListener);
 //        profileAddress1.setOnFocusChangeListener(onFocusChangeListener);
 //        profileAddress1.setOnTouchListener(onTouchListener);
 //        pinCode.setOnFocusChangeListener(onFocusChangeListener);
 //        pinCode.setOnTouchListener(onTouchListener);
-//        areaOfCoaching.setOnFocusChangeListener(onFocusChangeListener);
-//        areaOfCoaching.setOnTouchListener(onTouchListener);
+        areaOfCoaching.setOnFocusChangeListener(onFocusChangeListener);
+        areaOfCoaching.setOnTouchListener(onTouchListener);
     }
 
     /**
@@ -785,8 +786,9 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         alertDialog.setPositiveButton(getResources().getString(R.string.action_logout),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if (DashboardActivity.dashboardActivity != null)
-                            DashboardActivity.dashboardActivity.logout();
+                        setResult(RESULT_OK);
+                        dialog.dismiss();
+                        finish();
                     }
                 }
         );
@@ -909,5 +911,18 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         String message = (String) object;
         progressDialog.dismiss();
          Log.d(TAG, "success response message : in EditProfileActivity : " + message);
+    }
+
+    public void fbClearToken() {
+        Session session = Session.getActiveSession();
+        if (session != null) {
+            if (!session.isClosed()) {
+                session.closeAndClearTokenInformation();
+            }
+        } else {
+            session = new Session(this);
+            Session.setActiveSession(session);
+            session.closeAndClearTokenInformation();
+        }
     }
 }
