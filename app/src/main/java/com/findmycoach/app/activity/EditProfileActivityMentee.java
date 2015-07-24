@@ -152,8 +152,8 @@ public class EditProfileActivityMentee extends Activity implements Callback {
 //        profileFirstName.setOnTouchListener(onTouchListener);
 //        profileLastName.setOnFocusChangeListener(onFocusChangeListener);
 //        profileLastName.setOnTouchListener(onTouchListener);
-//        profileDOB.setOnFocusChangeListener(onFocusChangeListener);
-//        profileDOB.setOnTouchListener(onTouchListener);
+        profileDOB.setOnFocusChangeListener(onFocusChangeListener);
+        profileDOB.setOnTouchListener(onTouchListener);
 //        profileAddress.setOnFocusChangeListener(onFocusChangeListener);
 //        profileAddress.setOnTouchListener(onTouchListener);
 //        profileAddress1.setOnFocusChangeListener(onFocusChangeListener);
