@@ -18,7 +18,8 @@
 
     <string-array name="mentor_for">
         <item>Self</item>
-        <item>Child</item>
+        <item>My Children</item>
+        <item>Both</item>
     </string-array>
 
     <!-- Countries -->
@@ -947,6 +948,8 @@
     <string name="age_experience_message">Your age or years of experience seems to be invalid.</string>
     <string name="view_calendar_by">View schedule calendar by</string>
     <string name="mentor_response_for_schedule_request_message">Your reply to mentee!</string>
+    
+    <string name="child_name">Name</string>
     <!-- Static Text -->
 
     <!-- String s related to week days -->
@@ -967,8 +970,12 @@
     <string name="f">Fri</string>
     <string name="s">Sat</string>
     <string name="su">Sun</string>
+    
+    
+    
     <!-- -->
 
+    
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~ String related to SharePreferences ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="terms1">terms</string>
     <string name="user_id">user_id</string>
@@ -1014,6 +1021,19 @@
         <item>October</item>
         <item>November</item>
         <item>December</item>
+    </string-array>
+
+
+    <string-array name="teaching_preferences">
+        <item>I teach at my own location</item>
+        <item>I travel to student location</item>
+        <item>I am fine with either</item>
+       </string-array>
+
+    <string-array name="mentor_class_type">
+        <item>Individual</item>
+        <item>Group</item>
+        <item>I am fine with either</item>
     </string-array>
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->

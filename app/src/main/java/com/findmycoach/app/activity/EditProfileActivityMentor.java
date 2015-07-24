@@ -75,7 +75,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     private EditText pinCode;
     private EditText accomplishment;
     private EditText chargeInput;
-    private Spinner experienceInput;
+    private Spinner experienceInput,teachingPreference,classTypeSpinner;
     private CheckBox isReadyToTravel;
     private Button updateAction;
     private Spinner chargesPerUnit;
@@ -142,14 +142,23 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         chargeInput.setSelectAllOnFocus(true);
         accomplishment = (EditText) findViewById(R.id.input_accomplishment);
         experienceInput = (Spinner) findViewById(R.id.input_experience);
+        teachingPreference=(Spinner)findViewById(R.id.teachingPreferencesSpinner);
+        classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
+
 
         String[] yearOfExperience = new String[51];
         for (int i = 0; i < yearOfExperience.length; i++) {
             yearOfExperience[i] = String.valueOf(i);
         }
 
+
+        String[] preferences = getResources().getStringArray(R.array.teaching_preferences);
+        String[] classType = getResources().getStringArray(R.array.mentor_class_type);
+
         addPhoto=(ChizzleTextView)findViewById(R.id.addPhotoMentor);
         experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, yearOfExperience));
+        teachingPreference.setAdapter(new ArrayAdapter<>(this,R.layout.textview,preferences));
+        classTypeSpinner.setAdapter(new ArrayAdapter<>(this,R.layout.textview,classType));
         isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
         updateAction = (Button) findViewById(R.id.button_update);
         chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);

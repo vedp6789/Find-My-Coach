@@ -38,6 +38,7 @@ import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.ChildDetailsDialog;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
@@ -145,6 +146,23 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             }
         });
 
+        mentorFor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // your code here
+                if(position==1 || position==2) {
+                    ChildDetailsDialog childDetailsDialog=new ChildDetailsDialog(EditProfileActivityMentee.this);
+                    childDetailsDialog.showPopUp();
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(getResources().getString(R.string.title_edit_profile_menu));
 
