@@ -110,6 +110,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         /** If user is already logged-in in app then open Dashboard Activity */
         if (userToken != null && phnVerified != null) {
+            Log.e(TAG, "Login from onCreate");
             Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
             this.finish();
@@ -715,7 +716,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 /** Phone number is provided with country code, updating user's phone number in server */
                 else {
                     dialog.dismiss();
-                    requestParams.add("phone_number", countryCodeTV.getText().toString().trim().replace("+","") + "-" + phnNum);
+                    requestParams.add("phone_number", countryCodeTV.getText().toString().trim().replace("+", "") + "-" + phnNum);
                     requestParams.add("user_group", String.valueOf(user_group));
                     saveUserPhoneNumber(phnNum);
                     Log.e("Login dialog", "phone_number : " + countryCodeTV.getText().toString().trim() + "-" + phnNum);
@@ -942,6 +943,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         if (statusCode == 200) {
             saveUserPhn("True");
+            Log.e(TAG, "Login from Success");
             startActivity(new Intent(this, DashboardActivity.class));
             if (response.getData().isNewUser()) {
                 StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getId());

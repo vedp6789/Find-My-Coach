@@ -29,6 +29,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.Session;
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.student.Data;
 import com.findmycoach.app.beans.student.ProfileResponse;
@@ -662,8 +663,9 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         alertDialog.setPositiveButton(getResources().getString(R.string.action_logout),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if (DashboardActivity.dashboardActivity != null)
-                            DashboardActivity.dashboardActivity.logout();
+                        setResult(RESULT_OK);
+                        dialog.dismiss();
+                        finish();
                     }
                 }
         );
@@ -762,4 +764,18 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         progressDialog.dismiss();
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
+
+    public void fbClearToken() {
+        Session session = Session.getActiveSession();
+        if (session != null) {
+            if (!session.isClosed()) {
+                session.closeAndClearTokenInformation();
+            }
+        } else {
+            session = new Session(this);
+            Session.setActiveSession(session);
+            session.closeAndClearTokenInformation();
+        }
+    }
+
 }
