@@ -1,6 +1,8 @@
 -- Merging decision tree log ---
 manifest
 ADDED from AndroidManifest.xml:2:1
+	xmlns:android
+		ADDED from AndroidManifest.xml:2:11
 	package
 		ADDED from AndroidManifest.xml:3:5
 		INJECTED from AndroidManifest.xml:0:0
@@ -8,8 +10,6 @@ ADDED from AndroidManifest.xml:2:1
 	android:versionName
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
-	xmlns:android
-		ADDED from AndroidManifest.xml:2:11
 	android:versionCode
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
@@ -41,6 +41,14 @@ uses-permission#android.permission.READ_PROFILE
 ADDED from AndroidManifest.xml:11:5
 	android:name
 		ADDED from AndroidManifest.xml:11:22
+uses-feature#android.RECEIVE_SMS
+ADDED from AndroidManifest.xml:15:5
+	android:name
+		ADDED from AndroidManifest.xml:15:19
+uses-feature#android.permission.READ_SMS
+ADDED from AndroidManifest.xml:16:5
+	android:name
+		ADDED from AndroidManifest.xml:16:19
 uses-permission#android.permission.READ_EXTERNAL_STORAGE
 ADDED from AndroidManifest.xml:20:5
 	android:name
@@ -60,31 +68,30 @@ ADDED from AndroidManifest.xml:27:5
 application
 ADDED from AndroidManifest.xml:29:5
 MERGED from com.facebook.android:facebook:3.21.0:24:5
-MERGED from com.android.support:support-v4:22.1.1:22:5
+MERGED from com.android.support:support-v4:22.2.0:22:5
 MERGED from com.google.android.gms:play-services:6.5.87:20:5
-MERGED from com.android.support:support-v4:22.1.1:22:5
+MERGED from com.android.support:support-v4:22.2.0:22:5
 MERGED from com.android.support:appcompat-v7:22.0.0:22:5
-MERGED from com.android.support:support-v4:22.1.1:22:5
+MERGED from com.android.support:support-v4:22.2.0:22:5
 MERGED from com.astuetz:pagerslidingtabstrip:1.0.1:4:5
-MERGED from com.android.support:support-v4:22.1.1:22:5
-MERGED from com.android.support:support-v4:22.1.1:22:5
+MERGED from com.android.support:support-v4:22.2.0:22:5
+MERGED from com.android.support:support-v4:22.2.0:22:5
 MERGED from com.github.alamkanak:android-week-view:1.2.1:9:5
 MERGED from com.android.support:appcompat-v7:22.0.0:22:5
-MERGED from com.android.support:support-v4:22.1.1:22:5
+MERGED from com.android.support:support-v4:22.2.0:22:5
 MERGED from io.card:android-sdk:5.0.1:21:5
-MERGED from com.android.support:recyclerview-v7:22.1.1:22:5
-MERGED from com.android.support:support-v4:22.1.1:22:5
-MERGED from com.android.support:support-v4:22.1.1:22:5
+MERGED from com.android.support:support-v4:22.2.0:22:5
+MERGED from com.android.support:support-v4:22.2.0:22:5
 	android:label
 		ADDED from AndroidManifest.xml:33:9
-	android:hardwareAccelerated
-		ADDED from AndroidManifest.xml:31:9
 	android:allowBackup
 		ADDED from AndroidManifest.xml:30:9
 	android:icon
 		ADDED from AndroidManifest.xml:32:9
 	android:theme
 		ADDED from AndroidManifest.xml:34:9
+	android:hardwareAccelerated
+		ADDED from AndroidManifest.xml:31:9
 activity#com.findmycoach.app.activity.SplashActivity
 ADDED from AndroidManifest.xml:35:9
 	android:screenOrientation
@@ -106,94 +113,94 @@ ADDED from AndroidManifest.xml:42:17
 meta-data#com.google.android.gms.version
 ADDED from AndroidManifest.xml:46:9
 MERGED from com.google.android.gms:play-services:6.5.87:21:9
-	android:value
-		ADDED from AndroidManifest.xml:48:13
 	android:name
 		ADDED from AndroidManifest.xml:47:13
+	android:value
+		ADDED from AndroidManifest.xml:48:13
 meta-data#com.facebook.sdk.ApplicationId
 ADDED from AndroidManifest.xml:49:9
-	android:value
-		ADDED from AndroidManifest.xml:51:13
 	android:name
 		ADDED from AndroidManifest.xml:50:13
+	android:value
+		ADDED from AndroidManifest.xml:51:13
 meta-data#com.google.android.maps.v2.API_KEY
 ADDED from AndroidManifest.xml:53:9
-	android:value
-		ADDED from AndroidManifest.xml:55:13
 	android:name
 		ADDED from AndroidManifest.xml:54:13
+	android:value
+		ADDED from AndroidManifest.xml:55:13
 activity#com.findmycoach.app.activity.LoginActivity
 ADDED from AndroidManifest.xml:57:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:61:13
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:60:13
 	android:label
 		ADDED from AndroidManifest.xml:59:13
-	android:windowSoftInputMode
-		ADDED from AndroidManifest.xml:61:13
 	android:name
 		ADDED from AndroidManifest.xml:58:13
 activity#com.findmycoach.app.activity.SignUpActivity
 ADDED from AndroidManifest.xml:62:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:66:13
-	android:label
-		ADDED from AndroidManifest.xml:64:13
-	android:noHistory
-		ADDED from AndroidManifest.xml:65:13
 	android:windowSoftInputMode
 		ADDED from AndroidManifest.xml:67:13
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:66:13
+	android:noHistory
+		ADDED from AndroidManifest.xml:65:13
+	android:label
+		ADDED from AndroidManifest.xml:64:13
 	android:name
 		ADDED from AndroidManifest.xml:63:13
 activity#com.facebook.LoginActivity
 ADDED from AndroidManifest.xml:68:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:72:13
-	android:label
-		ADDED from AndroidManifest.xml:70:13
 	android:noHistory
 		ADDED from AndroidManifest.xml:71:13
+	android:label
+		ADDED from AndroidManifest.xml:70:13
 	android:name
 		ADDED from AndroidManifest.xml:69:13
 activity#com.findmycoach.app.activity.ForgotPasswordActivity
 ADDED from AndroidManifest.xml:73:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:77:13
-	android:label
-		ADDED from AndroidManifest.xml:75:13
 	android:noHistory
 		ADDED from AndroidManifest.xml:76:13
+	android:label
+		ADDED from AndroidManifest.xml:75:13
 	android:name
 		ADDED from AndroidManifest.xml:74:13
 activity#com.findmycoach.app.activity.DashboardActivity
 ADDED from AndroidManifest.xml:78:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:83:13
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:82:13
 	android:label
 		ADDED from AndroidManifest.xml:80:13
-	android:launchMode
-		ADDED from AndroidManifest.xml:81:13
-	android:windowSoftInputMode
-		ADDED from AndroidManifest.xml:83:13
 	android:name
 		ADDED from AndroidManifest.xml:79:13
+	android:launchMode
+		ADDED from AndroidManifest.xml:81:13
 activity#com.findmycoach.app.activity.EditProfileActivityMentor
 ADDED from AndroidManifest.xml:84:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:88:13
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:87:13
 	android:label
 		ADDED from AndroidManifest.xml:86:13
-	android:windowSoftInputMode
-		ADDED from AndroidManifest.xml:88:13
 	android:name
 		ADDED from AndroidManifest.xml:85:13
 activity#com.findmycoach.app.activity.EditProfileActivityMentee
 ADDED from AndroidManifest.xml:89:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:93:13
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:92:13
 	android:label
 		ADDED from AndroidManifest.xml:91:13
-	android:windowSoftInputMode
-		ADDED from AndroidManifest.xml:93:13
 	android:name
 		ADDED from AndroidManifest.xml:90:13
 activity#com.findmycoach.app.activity.AreasOfInterestActivity
@@ -236,12 +243,12 @@ ADDED from AndroidManifest.xml:109:9
 		ADDED from AndroidManifest.xml:110:13
 activity#com.findmycoach.app.activity.ValidatePhoneActivity
 ADDED from AndroidManifest.xml:113:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:117:13
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:116:13
 	android:label
 		ADDED from AndroidManifest.xml:115:13
-	android:windowSoftInputMode
-		ADDED from AndroidManifest.xml:117:13
 	android:name
 		ADDED from AndroidManifest.xml:114:13
 activity#com.findmycoach.app.activity.AddNewSlotActivity
@@ -407,23 +414,23 @@ ADDED from AndroidManifest.xml:206:9
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.facebook.android:facebook:3.21.0:20:5
-MERGED from com.android.support:support-v4:22.1.1:20:5
-MERGED from FindMyCoach:cropper:unspecified:7:5
+MERGED from com.android.support:support-v4:22.2.0:20:5
+MERGED from fmcmentor:cropper:unspecified:7:5
 MERGED from com.google.android.gms:play-services:6.5.87:18:5
-MERGED from com.android.support:support-v4:22.1.1:20:5
+MERGED from com.android.support:support-v4:22.2.0:20:5
 MERGED from com.android.support:appcompat-v7:22.0.0:20:5
-MERGED from com.android.support:support-v4:22.1.1:20:5
+MERGED from com.android.support:support-v4:22.2.0:20:5
 MERGED from com.astuetz:pagerslidingtabstrip:1.0.1:2:5
-MERGED from com.android.support:support-v4:22.1.1:20:5
+MERGED from com.android.support:support-v4:22.2.0:20:5
 MERGED from com.roomorama:caldroid:1.1.7:7:5
-MERGED from com.android.support:support-v4:22.1.1:20:5
+MERGED from com.android.support:support-v4:22.2.0:20:5
 MERGED from com.github.alamkanak:android-week-view:1.2.1:5:5
 MERGED from com.android.support:appcompat-v7:22.0.0:20:5
-MERGED from com.android.support:support-v4:22.1.1:20:5
+MERGED from com.android.support:support-v4:22.2.0:20:5
 MERGED from io.card:android-sdk:5.0.1:7:5
-MERGED from com.android.support:recyclerview-v7:22.1.1:20:5
-MERGED from com.android.support:support-v4:22.1.1:20:5
-MERGED from com.android.support:support-v4:22.1.1:20:5
+MERGED from com.android.support:recyclerview-v7:22.2.0:20:5
+MERGED from com.android.support:support-v4:22.2.0:20:5
+MERGED from com.android.support:support-v4:22.2.0:20:5
 	android:targetSdkVersion
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
@@ -450,9 +457,3 @@ ADDED from io.card:android-sdk:5.0.1:17:5
 		ADDED from io.card:android-sdk:5.0.1:19:9
 	android:name
 		ADDED from io.card:android-sdk:5.0.1:18:9
-activity#android.support.v7.widget.TestActivity
-ADDED from com.android.support:recyclerview-v7:22.1.1:23:9
-	android:label
-		ADDED from com.android.support:recyclerview-v7:22.1.1:25:13
-	android:name
-		ADDED from com.android.support:recyclerview-v7:22.1.1:24:13
