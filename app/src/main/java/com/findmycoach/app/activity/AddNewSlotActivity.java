@@ -161,8 +161,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         } else {
             String user_current_address = DashboardActivity.dashboardActivity.userCurrentAddress;
             if (!user_current_address.equals("")) {
-
-
             } else {
                 et_tutorial_location.setText(user_current_address);
             }
@@ -183,7 +181,10 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
 
 
         set_of_coaching_subjects = StorageHelper.getListOfCoachingSubCategories(AddNewSlotActivity.this, "area_of_coaching_set");
-        if (set_of_coaching_subjects != null) {
+        Log.e(TAG, " coaching_subjects size: " + set_of_coaching_subjects.size());
+
+
+        if (set_of_coaching_subjects != null && set_of_coaching_subjects.size() != 0) {
             Log.d(TAG, "set of sub size: " + set_of_coaching_subjects.size());
 
             Iterator<String> iterator = set_of_coaching_subjects.iterator();
@@ -226,6 +227,8 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
                     }
                 }
             }
+        } else {
+            Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.prompt_update_profile), Toast.LENGTH_LONG).show();
         }
 
         progressDialog = new ProgressDialog(AddNewSlotActivity.this);
@@ -240,7 +243,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         from_year = Integer.parseInt(current_date.substring(4, 8));
         tv_start_date.setText(date_from);
         date_to = getResources().getString(R.string.end_date);
-
 
 
         allListeners();
@@ -286,7 +288,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         findViewById(R.id.infoIconNewSlot).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getBaseContext(),"Please select time slots within a day",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Please select time slots within a day", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -725,7 +727,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
     }
 
     private void showSummaryAsAlert() {
-        SummaryDialog dialog=new SummaryDialog(this,class_subject,class_start_date,class_stop_date,class_start_time+ " to "+class_stop_time,selected_days_of_this_slot.toString(),class_slot_type,class_location);
+        SummaryDialog dialog = new SummaryDialog(this, class_subject, class_start_date, class_stop_date, class_start_time + " to " + class_stop_time, selected_days_of_this_slot.toString(), class_slot_type, class_location);
         dialog.showPopUp();
 
     }
