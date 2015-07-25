@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.DashboardActivity;
+import com.findmycoach.app.activity.Settings;
 import com.findmycoach.app.activity.ValidatePhoneActivity;
 import com.findmycoach.app.adapter.CountryCodeAdapter;
 import com.findmycoach.app.util.Callback;
@@ -83,14 +85,14 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
                     requestParams.add("user_group", StorageHelper.getUserGroup(getActivity(), "user_group"));
                     Log.d(TAG, "Phone no. to get update : " + countryCodeTV.getText().toString() + "-" + phnNum);
                     requestParams.add("email", StorageHelper.getUserDetails(getActivity(), "user_email"));
-                    requestParams.add("phone_number", countryCodeTV.getText().toString().trim().replace("+","") + "-" + phnNum);
-                    Log.e("Change phone dialog","phone_number : " + countryCodeTV.getText().toString().trim() + "-" + phnNum);
+                    requestParams.add("phone_number", countryCodeTV.getText().toString().trim().replace("+", "") + "-" + phnNum);
+                    Log.e("Change phone dialog", "phone_number : " + countryCodeTV.getText().toString().trim() + "-" + phnNum);
                     progressDialog.show();
                     NetworkClient.setNewPhoneNumber(getActivity(), requestParams, this, 45);
                 }
                 break;
             case R.id.countryCodeTV:
-                    showCountryCodeDialog();
+                showCountryCodeDialog();
                 break;
         }
     }
@@ -175,18 +177,24 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        String message= (String) object;
+        String message = (String) object;
         /*Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();*/
         try {
             JSONObject jsonObject = new JSONObject(message);
             String status = jsonObject.getString("status");
-            if(status.equals("1")){
-                Intent intent=new Intent(getActivity(),ValidatePhoneActivity.class);
-                intent.putExtra("from","ChangePhoneNoFragment");
+            if (status.equals("1")) {
+                Intent intent = new Intent(getActivity(), ValidatePhoneActivity.class);
+                intent.putExtra("from", "ChangePhoneNoFragment");
                 startActivity(intent);
-            }else{
-                if(status.equals("2")){
-                    Toast.makeText(getActivity(),jsonObject.getString("message"),Toast.LENGTH_LONG).show();
+
+                if (Settings.settings != null)
+                    Settings.settings.finish();
+
+                if (DashboardActivity.dashboardActivity != null)
+                    DashboardActivity.dashboardActivity.finish();
+            } else {
+                if (status.equals("2")) {
+                    Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                 }
             }
         } catch (JSONException e) {

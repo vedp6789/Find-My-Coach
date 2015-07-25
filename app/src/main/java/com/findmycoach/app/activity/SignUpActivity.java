@@ -389,7 +389,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
 
         /** If phone number is not verified then starting ValidatePhoneActivity */
         if (response.getData() == null) {
-            StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getId());
+//            StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getId());
             StorageHelper.storePreference(this, "user_group", String.valueOf(user_group));
             StorageHelper.storePreference(this, "login_with", "Login");
             startActivity(new Intent(this, ValidatePhoneActivity.class));

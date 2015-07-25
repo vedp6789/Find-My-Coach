@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -247,6 +248,15 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
 
         allListeners();
 
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (DashboardActivity.dashboardActivity == null)
+            startActivity(new Intent(this, DashboardActivity.class));
+
+        finish();
     }
 
     private void allListeners() {
@@ -1461,7 +1471,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
         TextView title = (TextView) findViewById(R.id.title);

@@ -93,10 +93,11 @@ public class StorageHelper {
         editor.remove("user_local_address");
         editor.remove("user_city_state");
         editor.remove("user_zip_code");
+        editor.remove("user_profile_whole_data");
 //        editor.remove("terms");
         editor.remove("currency_code");
 
-        if (StorageHelper.getUserGroup(context, "user_group").equals("2")){
+        if (StorageHelper.getUserGroup(context, "user_group").equals("2")) {
             editor.remove("training_location");
 
         }
@@ -143,11 +144,20 @@ public class StorageHelper {
         preferences.edit().putString("currency_code", currencyCode).apply();
     }
 
-    public static String  getUserAddress(Context context) {
+    public static String getUserAddress(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return  preferences.getString("user_local_address","")+" "+preferences.getString("user_city_state","")
-                +" "+preferences.getString("user_country","")+" "+ preferences.getString("user_zip_code","");
+        return preferences.getString("user_local_address", "") + " " + preferences.getString("user_city_state", "")
+                + " " + preferences.getString("user_country", "") + " " + preferences.getString("user_zip_code", "");
 
+    }
+
+    public static void saveUserProfile(Context context, String data) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.edit().putString("user_profile_whole_data", data).apply();
+    }
+
+    public static String getUserProfile(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString("user_profile_whole_data", null);
     }
 
 }

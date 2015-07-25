@@ -124,27 +124,29 @@ public class DashboardActivity extends FragmentActivity
         fragmentManager = getSupportFragmentManager();
         isProfileOpen = false;
 
-        String userId = StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id));
-        String newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
+        Log.e("VedBabu", StorageHelper.getUserProfile(this));
 
-        Log.e("SignUp", StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user)) + "");
+//        String userId = StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id));
+//        String newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
+//
+//        Log.e("SignUp", StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user)) + "");
 
         try {
             user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
-            if (userId != null && newUser != null && userId.equals(newUser.split("#")[1])) {
-                String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
-                RequestParams requestParams = new RequestParams();
-                Log.d(TAG2, "Stored User Id:" + userId);
-                Log.d(TAG2, "auth_token" + authToken);
-                requestParams.add("id", userId);
-                requestParams.add("user_group", user_group + "");
-                isProfileOpen = true;
-                if (!NetworkManager.isNetworkConnected(this)){
-                    logout();
-                }else{
-                    NetworkClient.getProfile(this, requestParams, authToken, this, 4);
-                }
-            }
+//            if (userId != null && newUser != null && userId.equals(newUser.split("#")[1])) {
+//                String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
+//                RequestParams requestParams = new RequestParams();
+//                Log.d(TAG2, "Stored User Id:" + userId);
+//                Log.d(TAG2, "auth_token" + authToken);
+//                requestParams.add("id", userId);
+//                requestParams.add("user_group", user_group + "");
+//                isProfileOpen = true;
+//                if (!NetworkManager.isNetworkConnected(this)) {
+//                    logout();
+//                } else {
+//                    NetworkClient.getProfile(this, requestParams, authToken, this, 4);
+//                }
+//            }
         } catch (Exception e) {
             e.printStackTrace();
             logout();
@@ -377,13 +379,10 @@ public class DashboardActivity extends FragmentActivity
     }
 
 
-    public void whenProfileNotGetUpdated(){
-        Log.d(TAG,"Dashboard Activity whenProfileNotGetUpdated");
+    public void whenProfileNotGetUpdated() {
+        Log.d(TAG, "Dashboard Activity whenProfileNotGetUpdated");
         logout();
     }
-
-
-
 
 
     @Override

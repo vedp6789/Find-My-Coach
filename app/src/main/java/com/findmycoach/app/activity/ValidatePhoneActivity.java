@@ -29,6 +29,7 @@ import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
+import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
@@ -193,7 +194,21 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         }
 
         /** Opens Dashboard activity*/
-        startActivity(new Intent(this, DashboardActivity.class));
+        if (response.getData().getCity() == null || response.getData().getCity().toString().trim().equals("")
+                || response.getData().getSubCategoryName() == null || response.getData().getSubCategoryName().size() < 1) {
+            int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
+            if (userGroup == 2) {
+                Intent intent = new Intent(this, EditProfileActivityMentee.class);
+                intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                startActivity(intent);
+            } else if (userGroup == 3) {
+                Intent intent = new Intent(this, EditProfileActivityMentor.class);
+                intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                startActivity(intent);
+            }
+
+        } else
+            startActivity(new Intent(this, DashboardActivity.class));
         finish();
         Log.e(TAG, "DashBoard");
     }

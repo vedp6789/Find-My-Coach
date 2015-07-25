@@ -2,7 +2,9 @@ package com.findmycoach.app.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -85,12 +87,13 @@ public class EditProfileActivityMentee extends Activity implements Callback {
     private List<Prediction> predictions;
     private ChizzleTextView addText;
     public boolean needToCheckOnDestroy;
+    private String userCurrentAddress = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile_mentee);
-        newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
+        newUser = getIntent().getStringExtra("newUser");
         initialize();
         applyAction();
         populateUserData();
@@ -459,18 +462,18 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
                 @Override
                 public void onMyLocationChange(Location location) {
-                    if (DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
-                        DashboardActivity.dashboardActivity.userCurrentAddress = NetworkManager.getCompleteAddressString(EditProfileActivityMentee.this, location.getLatitude(), location.getLongitude());
+                    if (userCurrentAddress.equals("")) {
+                        userCurrentAddress = NetworkManager.getCompleteAddressString(EditProfileActivityMentee.this, location.getLatitude(), location.getLongitude());
 
-                        if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
+                        if (!userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
                             if (updateAddress())
                                 populateUserData();
                         }
 
-                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
-                        DashboardActivity.dashboardActivity.longitude = location.getLongitude();
-                    } else if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
+//                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
+//                        DashboardActivity.dashboardActivity.longitude = location.getLongitude();
+                    } else if (!userCurrentAddress.equals("")) {
                         map.setOnMyLocationChangeListener(null);
                         if (updateAddress())
                             populateUserData();
@@ -503,7 +506,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
                 if (NetworkManager.postalCodeName != null && !NetworkManager.postalCodeName.trim().equals(""))
                     userInfo.setZip(NetworkManager.postalCodeName);
                 else {
-                    String address = DashboardActivity.dashboardActivity.userCurrentAddress.trim();
+                    String address = userCurrentAddress.trim();
                     if (!address.equals("")) {
                         String[] temp = address.split(" ");
                         userInfo.setZip(temp[temp.length - 1]);
@@ -519,7 +522,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         RequestParams requestParams = new RequestParams();
         requestParams.add("input", input);
         requestParams.add("key", getResources().getString(R.string.google_location_api_key));
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+        requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
         NetworkClient.autoComplete(getApplicationContext(), requestParams, this, 32);
     }
 
@@ -624,7 +627,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
 
             String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
             requestParams.add("id", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
-            requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+            requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
             Log.e(TAG, "Country : " + NetworkManager.countryCode);
             if (isGettingAddress && NetworkManager.countryCode != null && !NetworkManager.countryCode.equals("")) {
                 requestParams.add("country", NetworkManager.countryCode.trim());
@@ -653,7 +656,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
 
     @Override
     public void onBackPressed() {
-        if (newUser == null || !newUser.contains(userInfo.getId()))
+        if (DashboardActivity.dashboardActivity != null)
             finish();
         else
             showSignOutDialog();
@@ -678,10 +681,8 @@ public class EditProfileActivityMentee extends Activity implements Callback {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         needToCheckOnDestroy = true;
-                        try {
-                            DashboardActivity.dashboardActivity.whenProfileNotGetUpdated();
-                        } catch (Exception ignored) {
-                        }
+                        logout();
+                        startActivity(new Intent(EditProfileActivityMentee.this, LoginActivity.class));
                         dialog.dismiss();
                         finish();
                     }
@@ -744,15 +745,15 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             } catch (Exception ignored) {
             }
 
-            if (newUser != null && newUser.contains(userInfo.getId())) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.remove(getResources().getString(R.string.new_user));
-                editor.apply();
-                Intent intent1 = new Intent(this, PaymentDetailsActivity.class);
-                intent1.putExtra("onBackPress", 1);
-                startActivity(intent1);
-            }
+//            if (newUser != null && newUser.contains(userInfo.getId())) {
+//                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+//                SharedPreferences.Editor editor = preferences.edit();
+//                editor.remove(getResources().getString(R.string.new_user));
+//                editor.apply();
+//                Intent intent1 = new Intent(this, PaymentDetailsActivity.class);
+//                intent1.putExtra("onBackPress", 1);
+//                startActivity(intent1);
+//            }
             finish();
 
             /* Saving address, city and zip */
@@ -783,7 +784,19 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    public void fbClearToken() {
+    public void logout() {
+
+        String loginWith = StorageHelper.getUserDetails(this, "login_with");
+        if (loginWith == null || loginWith.equals("G+")) {
+            LoginActivity.doLogout = true;
+            Log.e(TAG, "Logout G+ true");
+        }
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+        StorageHelper.clearUser(this);
+        StorageHelper.clearUserPhone(this);
+
         Session session = Session.getActiveSession();
         if (session != null) {
             if (!session.isClosed()) {
