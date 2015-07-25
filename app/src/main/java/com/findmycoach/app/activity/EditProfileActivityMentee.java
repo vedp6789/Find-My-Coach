@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -88,6 +89,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
     private ChizzleTextView addText;
     public boolean needToCheckOnDestroy;
     private String userCurrentAddress = "";
+    private ScrollView scroll_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +145,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         addText = (ChizzleTextView) findViewById(R.id.addPhotoMentee);
+        scroll_view= (ScrollView) findViewById(R.id.main_scroll_view);
 
         profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
 
@@ -544,6 +547,8 @@ public class EditProfileActivityMentee extends Activity implements Callback {
 
         if (profileDOB.getText().toString().trim().equals("")) {
             profileDOB.setError(getResources().getString(R.string.enter_dob));
+            scroll_view.fullScroll(ScrollView.FOCUS_UP);
+            Toast.makeText(EditProfileActivityMentee.this,getResources().getString(R.string.date_of_birth_please),Toast.LENGTH_SHORT).show();
             if (isValid)
                 profileDOB.requestFocus();
             isValid = false;
