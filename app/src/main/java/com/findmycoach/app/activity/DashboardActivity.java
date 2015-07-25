@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -109,12 +110,13 @@ public class DashboardActivity extends FragmentActivity
     public double latitude;
     public double longitude;
     private GoogleMap.OnMyLocationChangeListener myLocationChangeListener;
+    private final int NEED_TO_SIGN_OUT = 1111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //  new GetLocation().execute();
+          new GetLocation().execute();
 
         if (LoginActivity.loginActivity != null)
             LoginActivity.loginActivity.finish();
@@ -285,12 +287,12 @@ public class DashboardActivity extends FragmentActivity
                 ProfileResponse response = (ProfileResponse) object;
                 Intent intent = new Intent(this, EditProfileActivityMentee.class);
                 intent.putExtra("user_info", new Gson().toJson(response.getData()));
-                startActivity(intent);
+                startActivityForResult(intent, NEED_TO_SIGN_OUT);
             } else if (user_group == 3) {
                 Response response = (Response) object;
                 Intent intent = new Intent(this, EditProfileActivityMentor.class);
                 intent.putExtra("user_info", new Gson().toJson(response.getData()));
-                startActivity(intent);
+                startActivityForResult(intent, NEED_TO_SIGN_OUT);
             }
             isProfileOpen = false;
         }
@@ -374,8 +376,11 @@ public class DashboardActivity extends FragmentActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        Log.d(TAG, "onActivityResult dashboard");
+        Log.e(TAG, requestCode + " : " + resultCode);
+        Log.e(TAG, "onActivityResult dashboard");
+        if(resultCode == RESULT_OK && requestCode == NEED_TO_SIGN_OUT){
+            logout();
+        }
     }
 
     @Override
@@ -403,12 +408,12 @@ public class DashboardActivity extends FragmentActivity
         }
 
         try {
-//            if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
-//                HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
-//                HomeFragment.homeFragmentMentee = null;
-//                map.setOnMyLocationChangeListener(null);
-//                map = null;
-//            }
+            if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
+                HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
+                HomeFragment.homeFragmentMentee = null;
+                map.setOnMyLocationChangeListener(null);
+                map = null;
+            }
             if (onNewIntentCalled) {
                 onNewIntentCalled = false;
                 fragment_to_launch_from_notification = fragment_to_open;
@@ -494,9 +499,11 @@ public class DashboardActivity extends FragmentActivity
 
 
     public void logout() {
+        Log.e(TAG, "Logout");
         String loginWith = StorageHelper.getUserDetails(this, "login_with");
         if (loginWith == null || loginWith.equals("G+")) {
             LoginActivity.doLogout = true;
+            Log.e(TAG, "Logout G+ true");
         }
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -844,6 +851,7 @@ public class DashboardActivity extends FragmentActivity
     }
 
     public void fbClearToken() {
+        Log.e(TAG, "Logout fb clear");
         Session session = Session.getActiveSession();
         if (session != null) {
             if (!session.isClosed()) {
@@ -879,34 +887,34 @@ public class DashboardActivity extends FragmentActivity
     /**
      * Getting user current location
      */
-//    private class GetLocation extends AsyncTask<Void, Void, Void> {
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
-//                @Override
-//                public void onMyLocationChange(Location location) {
-//                    Log.e("MapTest", location.getLatitude() + " : " + location.getLongitude() + " : " + userCurrentAddress);
-//                    if (userCurrentAddress.equals("")) {
-//                        userCurrentAddress = NetworkManager.getCompleteAddressString(DashboardActivity.this, location.getLatitude(), location.getLongitude());
-//                        Log.e("MapTest", userCurrentAddress);
-//
-//                        if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
-//                            HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
-//                            HomeFragment.homeFragmentMentee = null;
-//                            map.setOnMyLocationChangeListener(null);
-//                            map = null;
-//                        } else if (!userCurrentAddress.equals("")) {
-//                            map.setOnMyLocationChangeListener(null);
-//                            map = null;
-//                        }
-//
-//                        latitude = location.getLatitude();
-//                        longitude = location.getLongitude();
-//                    }
-//                }
-//            };
-//            return null;
-//        }
-//    }
+    private class GetLocation extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+                @Override
+                public void onMyLocationChange(Location location) {
+                    Log.e("MapTest", location.getLatitude() + " : " + location.getLongitude() + " : " + userCurrentAddress);
+                    if (userCurrentAddress.equals("")) {
+                        userCurrentAddress = NetworkManager.getCompleteAddressString(DashboardActivity.this, location.getLatitude(), location.getLongitude());
+                        Log.e("MapTest", userCurrentAddress);
+
+                        if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
+                            HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
+                            HomeFragment.homeFragmentMentee = null;
+                            map.setOnMyLocationChangeListener(null);
+                            map = null;
+                        } else if (!userCurrentAddress.equals("")) {
+                            map.setOnMyLocationChangeListener(null);
+                            map = null;
+                        }
+
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+                    }
+                }
+            };
+            return null;
+        }
+    }
 }
