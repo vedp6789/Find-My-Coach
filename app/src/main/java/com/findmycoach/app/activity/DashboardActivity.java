@@ -110,13 +110,12 @@ public class DashboardActivity extends FragmentActivity
     public double latitude;
     public double longitude;
     private GoogleMap.OnMyLocationChangeListener myLocationChangeListener;
-    private final int NEED_TO_SIGN_OUT = 1111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-          new GetLocation().execute();
+        new GetLocation().execute();
 
         if (LoginActivity.loginActivity != null)
             LoginActivity.loginActivity.finish();
@@ -139,10 +138,12 @@ public class DashboardActivity extends FragmentActivity
                 Log.d(TAG2, "auth_token" + authToken);
                 requestParams.add("id", userId);
                 requestParams.add("user_group", user_group + "");
-                NetworkClient.getProfile(this, requestParams, authToken, this, 4);
                 isProfileOpen = true;
-                if (!NetworkManager.isNetworkConnected(this))
+                if (!NetworkManager.isNetworkConnected(this)){
                     logout();
+                }else{
+                    NetworkClient.getProfile(this, requestParams, authToken, this, 4);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -283,16 +284,18 @@ public class DashboardActivity extends FragmentActivity
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         if (calledApiValue == 4) {
+            Log.e(TAG, "Start activity for result");
+
             if (user_group == 2) {
                 ProfileResponse response = (ProfileResponse) object;
                 Intent intent = new Intent(this, EditProfileActivityMentee.class);
                 intent.putExtra("user_info", new Gson().toJson(response.getData()));
-                startActivityForResult(intent, NEED_TO_SIGN_OUT);
+                startActivity(intent);
             } else if (user_group == 3) {
                 Response response = (Response) object;
                 Intent intent = new Intent(this, EditProfileActivityMentor.class);
                 intent.putExtra("user_info", new Gson().toJson(response.getData()));
-                startActivityForResult(intent, NEED_TO_SIGN_OUT);
+                startActivity(intent);
             }
             isProfileOpen = false;
         }
@@ -373,15 +376,15 @@ public class DashboardActivity extends FragmentActivity
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.e(TAG, requestCode + " : " + resultCode);
-        Log.e(TAG, "onActivityResult dashboard");
-        if(resultCode == RESULT_OK && requestCode == NEED_TO_SIGN_OUT){
-            logout();
-        }
+
+    public void whenProfileNotGetUpdated(){
+        Log.d(TAG,"Dashboard Activity whenProfileNotGetUpdated");
+        logout();
     }
+
+
+
+
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -513,7 +516,7 @@ public class DashboardActivity extends FragmentActivity
         StorageHelper.clearUserPhone(this);
         fbClearToken();
         removeGCMRegistrationId();
-        this.finish();
+        finish();
         startActivity(new Intent(this, LoginActivity.class));
     }
 

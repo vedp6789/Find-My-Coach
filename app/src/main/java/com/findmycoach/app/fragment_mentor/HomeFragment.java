@@ -88,6 +88,7 @@ public class HomeFragment extends Fragment implements Callback {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d("FMC", "Inside mentor home fragment onDestroy");
         homeFragment = null;
     }
 

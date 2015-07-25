@@ -1,5 +1,6 @@
 package com.findmycoach.app.util;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
+import com.findmycoach.app.activity.EditProfileActivityMentee;
+import com.findmycoach.app.activity.EditProfileActivityMentor;
 
 /**
  * Created by ShekharKG on 26/6/15.
@@ -17,7 +20,7 @@ import com.findmycoach.app.activity.DashboardActivity;
 public class TermsAndCondition {
 
 
-    public void showTermsAndConditions(final Context context) {
+    public void showTermsAndConditions(final Activity context) {
         Log.e("TnC", "Dialog");
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         alertDialog.setTitle(context.getResources().getString(R.string.t_and_c));
@@ -43,9 +46,22 @@ public class TermsAndCondition {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
+
+                        if(context instanceof EditProfileActivityMentee){
+                            EditProfileActivityMentee activityMentee = (EditProfileActivityMentee) context;
+                            activityMentee.needToCheckOnDestroy = true;
+                            activityMentee.finish();
+                        }else if(context instanceof EditProfileActivityMentor){
+                            EditProfileActivityMentor activityMentor = (EditProfileActivityMentor) context;
+                            activityMentor.needToCheckOnDestroy = true;
+                            activityMentor.finish();
+                        }
+
                         updateTermsAndConditionsStatus(context, "cancel");
                         if (DashboardActivity.dashboardActivity != null)
                             DashboardActivity.dashboardActivity.logout();
+
+
                     }
                 }
         );

@@ -97,10 +97,6 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     private void initView() {
         email = StorageHelper.getUserDetails(this, "user_email");
         progressDialog = new ProgressDialog(this);
-//        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-//        progressDialog.setContentView(R.layout.progressbar_textview);
-//        msg = (TextView) progressDialog.findViewById(R.id.msg);
         verificationCode = (EditText) findViewById(R.id.verificationCodeET);
         findViewById(R.id.btnVerify).setOnClickListener(this);
         findViewById(R.id.btnResend).setOnClickListener(this);
@@ -200,17 +196,6 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         startActivity(new Intent(this, DashboardActivity.class));
         finish();
         Log.e(TAG, "DashBoard");
-
-//        /** If newly registered user is mentee then open PaymentDetail Activity for getting card details */
-//        if (user_group == 2) {
-//            Log.e(TAG, "User group");
-//            Log.d(TAG, "user_group and payment initiate :" + user_group);
-//            Log.d(TAG, "Launched from : " + from);
-//            if (from == null || !from.equals("ChangePhoneNoFragment")) {
-//                Log.e(TAG, "DashBoard if");
-//                startActivity(new Intent(this, PaymentDetailsActivity.class));
-//            }
-//        }
     }
 
     @Override

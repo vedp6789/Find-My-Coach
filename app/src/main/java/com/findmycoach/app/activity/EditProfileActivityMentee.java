@@ -84,6 +84,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
     private boolean isGettingAddress;
     private List<Prediction> predictions;
     private ChizzleTextView addText;
+    public boolean needToCheckOnDestroy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +95,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         applyAction();
         populateUserData();
         isGettingAddress = false;
+        needToCheckOnDestroy = false;
 
         if (newUser != null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
             getAddress();
@@ -115,7 +117,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (DashboardActivity.dashboardActivity == null)
+        if (!needToCheckOnDestroy && DashboardActivity.dashboardActivity == null)
             startActivity(new Intent(this, DashboardActivity.class));
     }
 
@@ -152,8 +154,8 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // your code here
-                if(position==1 || position==2) {
-                    ChildDetailsDialog childDetailsDialog=new ChildDetailsDialog(EditProfileActivityMentee.this);
+                if (position == 1 || position == 2) {
+                    ChildDetailsDialog childDetailsDialog = new ChildDetailsDialog(EditProfileActivityMentee.this);
                     childDetailsDialog.showPopUp();
                 }
 
@@ -526,35 +528,43 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         boolean isValid = true;
         if (profileAddress1.getText().toString().trim().equals("")) {
             profileAddress1.setError(getResources().getString(R.string.enter_city));
+            profileAddress1.requestFocus();
             isValid = false;
         }
 
         if (profileAddress.getText().toString().trim().equals("")) {
             profileAddress.setError(getResources().getString(R.string.enter_address));
+            if (isValid)
+                profileAddress.requestFocus();
             isValid = false;
         }
 
         if (profileDOB.getText().toString().trim().equals("")) {
             profileDOB.setError(getResources().getString(R.string.enter_dob));
-            profileDOB.requestFocus();
+            if (isValid)
+                profileDOB.requestFocus();
             isValid = false;
         }
 
         if (pinCode.getText().toString().trim().equals("")) {
             pinCode.setError(getResources().getString(R.string.enter_pin));
-
+            if (isValid)
+                pinCode.requestFocus();
             isValid = false;
         }
 
         String firstName = profileFirstName.getText().toString().trim().replaceAll(" ", "");
         if (firstName.equals("")) {
             showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
-            profileFirstName.requestFocus();
+            if (isValid)
+                profileFirstName.requestFocus();
             isValid = false;
         } else {
             for (int i = 0; i < firstName.length(); i++) {
                 if (!Character.isLetter(firstName.charAt(i))) {
                     showErrorMessage(profileFirstName, getResources().getString(R.string.error_not_a_name));
+                    if (isValid)
+                        profileFirstName.requestFocus();
                     isValid = false;
                 }
             }
@@ -563,12 +573,15 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         String lastName = profileLastName.getText().toString().trim().replaceAll(" ", "");
         if (lastName.equals("")) {
             showErrorMessage(profileLastName, getResources().getString(R.string.error_field_required));
-            profileLastName.requestFocus();
+            if (isValid)
+                profileLastName.requestFocus();
             isValid = false;
         } else {
             for (int i = 0; i < lastName.length(); i++) {
                 if (!Character.isLetter(lastName.charAt(i))) {
                     showErrorMessage(profileLastName, getResources().getString(R.string.error_not_a_name));
+                    if (isValid)
+                        profileLastName.requestFocus();
                     isValid = false;
                 }
             }
@@ -664,7 +677,11 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         alertDialog.setPositiveButton(getResources().getString(R.string.action_logout),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        setResult(RESULT_OK);
+                        needToCheckOnDestroy = true;
+                        try {
+                            DashboardActivity.dashboardActivity.whenProfileNotGetUpdated();
+                        } catch (Exception ignored) {
+                        }
                         dialog.dismiss();
                         finish();
                     }
