@@ -113,8 +113,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         if (userToken != null && phnVerified != null) {
             Log.e(TAG, "Login from onCreate");
             Response response = new Gson().fromJson(StorageHelper.getUserProfile(this), Response.class);
-            if (response.getData().getCity() == null || response.getData().getCity().toString().trim().equals("")
-                    || response.getData().getSubCategoryName() == null || response.getData().getSubCategoryName().size() < 1) {
+            if (response.getData().getCity() == null || response.getData().getCity().toString().trim().equals("")) {
                 int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
                 if (userGroup == 2) {
                     Intent intent = new Intent(this, EditProfileActivityMentee.class);
@@ -960,8 +959,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             saveUserPhn("True");
             Log.e(TAG, "Login from Success");
 
-            if (response.getData().getCity() == null || response.getData().getCity().toString().trim().equals("")
-                    || response.getData().getSubCategoryName() == null || response.getData().getSubCategoryName().size() < 0) {
+            if (response.getData().getCity() == null || response.getData().getCity().toString().trim().equals("")) {
                 int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
                 if (userGroup == 2) {
                     Intent intent = new Intent(this, EditProfileActivityMentee.class);
