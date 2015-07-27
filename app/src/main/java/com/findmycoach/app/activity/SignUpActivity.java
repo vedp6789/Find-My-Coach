@@ -204,7 +204,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
         String confirmPassword = confirmPasswordInput.getText().toString();
-        String countryCode = countryCodeTV.getText().toString().trim().replace("+","");
+        String countryCode = countryCodeTV.getText().toString().trim().replace("+", "");
 
         /** Validating form data */
         boolean isValid = validate(firstName, lastName, phone, email, password, confirmPassword, countryCode);
@@ -394,6 +394,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             StorageHelper.storePreference(this, "login_with", "Login");
             startActivity(new Intent(this, ValidatePhoneActivity.class));
             finish();
+            if (LoginActivity.loginActivity != null)
+                LoginActivity.loginActivity.finish();
             return;
         }
 
