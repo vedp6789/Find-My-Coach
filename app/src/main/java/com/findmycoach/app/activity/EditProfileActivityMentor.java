@@ -108,7 +108,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         isDobForReview = false;
         needToCheckOnDestroy = false;
 
-        if (newUser != null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
+        if (newUser != null || userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
             getAddress();
 
     }
@@ -505,7 +505,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             } else {
                 currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
             }
-            if (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
+            if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
                 getAddress();
         } catch (Exception e) {
             e.printStackTrace();
@@ -599,17 +599,17 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         boolean isValid = true;
 
         if (profileAddress1.getText().toString().trim().equals("")) {
-            profileAddress1.setError(getResources().getString(R.string.enter_city));
+            profileAddress1.setError(getResources().getString(R.string.enter_locality));
             profileAddress1.requestFocus();
             isValid = false;
         }
 
-        if (profileAddress.getText().toString().trim().equals("")) {
-            profileAddress.setError(getResources().getString(R.string.enter_address));
-            if (isValid)
-                profileAddress.requestFocus();
-            isValid = false;
-        }
+//        if (profileAddress.getText().toString().trim().equals("")) {
+//            profileAddress.setError(getResources().getString(R.string.enter_address));
+//            if (isValid)
+//                profileAddress.requestFocus();
+//            isValid = false;
+//        }
 
         if (profileDOB.getText().toString().trim().equals("")) {
             profileDOB.setError(getResources().getString(R.string.enter_dob));
@@ -874,11 +874,24 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
 /* Saving mentor address in shared preference */
 
-            StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
-            StorageHelper.storePreference(this, "user_city_state", profileAddress1.getText().toString());
+            /* Saving address, city and zip */
+            if (!profileAddress.getText().toString().trim().equals("")) {
+                StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
+            } else
+                StorageHelper.removePreference(this, "user_local_address");
+
+            if (!profileAddress1.getText().toString().trim().equals("")) {
+                StorageHelper.storePreference(this, "user_city_state_country_info", profileAddress1.getText().toString());
+            } else
+                StorageHelper.removePreference(this, "user_city_state_country_info");
+
+            if (response.getData().getZip() != null) {
+                StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
+            } else
+                StorageHelper.removePreference(this, "user_zip_code");
+
             if (isGettingAddress && NetworkManager.countryName != null && !NetworkManager.countryName.equals(""))
                 StorageHelper.storePreference(this, "user_country", NetworkManager.countryName);
-            StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
 
 
             Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentor.this, "user_local_address"));

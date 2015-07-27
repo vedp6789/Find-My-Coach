@@ -753,10 +753,14 @@
     <string name="prompt_phone">Mobile number</string>
     <string name="prompt_submit">Submit</string>
     <string name="prompt_address">Address</string>
+    <string name="prompt_flat_street">Flat/house/street no.</string>
+    <string name="prompt_address_line_1">Address line 1</string>
 
-    <string name="prompt_address1">City state country</string>
+    <string name="prompt_address1">City, state, country</string>
     <string name="prompt_city">City</string>
+    <string name="prompt_locality">Locality</string>
     <string name="enter_city">Enter city</string>
+    <string name="enter_locality">Enter locality</string>
     <string name="enter_address">Enter address</string>
     <string name="enter_dob">Enter date of birth</string>
     <string name="select_dob">Select date of birth</string>

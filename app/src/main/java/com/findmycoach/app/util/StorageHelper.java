@@ -22,6 +22,13 @@ public class StorageHelper {
         editor.apply();
     }
 
+    public static void removePreference(Context context, String key) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(key);
+        editor.apply();
+    }
+
 
     public static void storeListOfCoachingSubCategories(Context context, Set<String> stringSet) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);

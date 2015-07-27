@@ -118,7 +118,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         isGettingAddress = false;
         needToCheckOnDestroy = false;
 
-        if (newUser != null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
+        if (newUser != null || userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
             getAddress();
 
     }
@@ -537,7 +537,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         } catch (Exception ignored) {
         }
 
-        if (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
+        if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
             getAddress();
 
     }
@@ -620,22 +620,22 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
     private boolean validateUserUpdate() {
         boolean isValid = true;
         if (profileAddress1.getText().toString().trim().equals("")) {
-            profileAddress1.setError(getResources().getString(R.string.enter_city));
+            profileAddress1.setError(getResources().getString(R.string.enter_locality));
             profileAddress1.requestFocus();
             isValid = false;
         }
 
-        if (profileAddress.getText().toString().trim().equals("")) {
-            profileAddress.setError(getResources().getString(R.string.enter_address));
-            if (isValid)
-                profileAddress.requestFocus();
-            isValid = false;
-        }
+//        if (profileAddress.getText().toString().trim().equals("")) {
+//            profileAddress.setError(getResources().getString(R.string.enter_address));
+//            if (isValid)
+//                profileAddress.requestFocus();
+//            isValid = false;
+//        }
 
         if (profileDOB.getText().toString().trim().equals("")) {
             profileDOB.setError(getResources().getString(R.string.enter_dob));
             scroll_view.fullScroll(ScrollView.FOCUS_UP);
-            Toast.makeText(EditProfileActivityMentee.this,getResources().getString(R.string.date_of_birth_please),Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditProfileActivityMentee.this, getResources().getString(R.string.date_of_birth_please), Toast.LENGTH_SHORT).show();
             if (isValid)
                 profileDOB.requestFocus();
             isValid = false;
@@ -827,10 +827,6 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
                 Log.d(TAG, "Currency code : " + currencyCode);
             }
 
-            Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
-            Intent intent = new Intent();
-            intent.putExtra("user_info", new Gson().toJson(userInfo));
-            setResult(Activity.RESULT_OK, intent);
             try {
                 String name = profileFirstName.getText().toString() + " " + profileLastName.getText().toString();
                 StorageHelper.storePreference(this, "user_full_name", name);
@@ -849,21 +845,30 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             finish();
 
             /* Saving address, city and zip */
-            if (profileAddress.getText().toString() != null) {
+            if (!profileAddress.getText().toString().trim().equals("")) {
                 StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
-                if (profileAddress1.getText().toString() != null) {
-                    StorageHelper.storePreference(this, "user_city_state_country_info", profileAddress1.getText().toString());
-                }
+            } else
+                StorageHelper.removePreference(this, "user_local_address");
 
-                if (response.getData().getZip() != null) {
-                    StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
-                }
-            }
+            if (!profileAddress1.getText().toString().trim().equals("")) {
+                StorageHelper.storePreference(this, "user_city_state_country_info", profileAddress1.getText().toString());
+            } else
+                StorageHelper.removePreference(this, "user_city_state_country_info");
+
+            if (response.getData().getZip() != null) {
+                StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
+            } else
+                StorageHelper.removePreference(this, "user_zip_code");
 
 
-            if (trainingLocation.getText().toString() != null) {
+            if (!trainingLocation.getText().toString().equals("")) {
                 StorageHelper.storePreference(this, "training_location", trainingLocation.getText().toString());
             }
+
+            Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
+            Intent intent = new Intent();
+            intent.putExtra("user_info", new Gson().toJson(userInfo));
+            setResult(Activity.RESULT_OK, intent);
 
 
             if (DashboardActivity.dashboardActivity == null)

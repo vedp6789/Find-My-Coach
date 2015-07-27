@@ -533,13 +533,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     @Override
     public void onResume() {
         super.onResume();
-        if (location == null || location == "") {
+//        if (location == null || location == "") {
             location = StorageHelper.getUserAddress(getActivity());
             if (location == null || location.trim().equals(""))
                 location = "";
 
             updateLocationUI();
-        }
+//        }
     }
 
     private void initialize(View view) {

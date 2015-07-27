@@ -203,18 +203,18 @@
                     <com.findmycoach.app.views.ChizzleTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/prompt_address"
+                        android:text="@string/prompt_address_line_1"
                         android:textColor="@color/purple_light"
                         android:textSize="@dimen/profile_heading"
                         android:textStyle="bold" />
 
-                    <com.findmycoach.app.views.ChizzleTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" *"
-                        android:textColor="@color/purple"
-                        android:textSize="@dimen/profile_heading"
-                        android:textStyle="bold" />
+                    <!--<com.findmycoach.app.views.ChizzleTextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text=" *"-->
+                        <!--android:textColor="@color/purple"-->
+                        <!--android:textSize="@dimen/profile_heading"-->
+                        <!--android:textStyle="bold" />-->
 
                 </LinearLayout>
 
@@ -224,7 +224,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
-                    android:hint="@string/prompt_address"
+                    android:hint="@string/prompt_flat_street"
                     android:inputType="textAutoComplete|textCapWords"
                     android:textColor="@color/purple"
                     android:textColorHint="@color/purple_light"
@@ -241,7 +241,7 @@
                     <com.findmycoach.app.views.ChizzleTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/prompt_city"
+                        android:text="@string/prompt_locality"
                         android:textColor="@color/purple_light"
                         android:textSize="@dimen/profile_heading"
                         android:textStyle="bold" />

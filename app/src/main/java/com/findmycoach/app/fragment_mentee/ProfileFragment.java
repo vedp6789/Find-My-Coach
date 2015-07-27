@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.EditProfileActivityMentee;
-import com.findmycoach.app.activity.Settings;
 import com.findmycoach.app.beans.student.Data;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
@@ -152,7 +151,7 @@ public class ProfileFragment extends Fragment implements Callback {
         }catch (Exception e){
         }
         String address = "";
-        if (userInfo.getAddress() != null) {
+        if (userInfo.getAddress() != null && !userInfo.getAddress().toString().trim().equals("")) {
             address = address + userInfo.getAddress() + ", ";
         }
         if (userInfo.getCity() != null) {
