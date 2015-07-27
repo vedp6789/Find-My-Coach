@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.student.ChildDetails;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
@@ -32,8 +33,11 @@ public class AddAddressDialog implements  Callback {
 
     private Context context;
     private Dialog dialog;
-    private ChizzleEditText addressLine1;
+    private ChizzleEditText addressLine1,zip;
     private ChizzleAutoCompleteTextView locality;
+    private Button doneButton;
+    private Button cancelButton;
+    private AddressAddedListener mAddressAddedListener;
 
     public AddAddressDialog(Context context) {
         this.context = context;
@@ -48,6 +52,9 @@ public class AddAddressDialog implements  Callback {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.add_address_dialog);
         addressLine1=(ChizzleEditText)dialog.findViewById(R.id.addressLine1);
+        doneButton=(Button)dialog.findViewById(R.id.done);
+        zip=(ChizzleEditText)dialog.findViewById(R.id.zip);
+        cancelButton=(Button)dialog.findViewById(R.id.cancel);
         locality=(ChizzleAutoCompleteTextView)dialog.findViewById(R.id.locality);
 
         locality.addTextChangedListener(new TextWatcher() {
@@ -68,6 +75,24 @@ public class AddAddressDialog implements  Callback {
             }
         });
 
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Address address=new Address();
+                address.setAddressLine1(addressLine1.getText().toString());
+                address.setLocality(locality.getText().toString());
+                address.setZip(zip.getText().toString());
+                onChildDetailsAdded(address);
+                dialog.dismiss();
+            }
+        });
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
 
         dialog.show();
 
@@ -78,7 +103,6 @@ public class AddAddressDialog implements  Callback {
         RequestParams requestParams = new RequestParams();
         requestParams.add("input", input);
         requestParams.add("key",context.getResources().getString(R.string.google_location_api_key));
-//        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
         NetworkClient.autoComplete(context, requestParams, AddAddressDialog.this, 32);
     }
 
@@ -110,4 +134,19 @@ public class AddAddressDialog implements  Callback {
         }
 
     }
+
+    public void setAddressAddedListener(
+            AddressAddedListener childDetailsAddedListener) {
+        mAddressAddedListener = childDetailsAddedListener;
+    }
+
+    public void onChildDetailsAdded (Address address) {
+        mAddressAddedListener.onAddressAdded(address);
+    }
+
+    public interface AddressAddedListener {
+        public void onAddressAdded(Address address);
+    }
+
+
 }

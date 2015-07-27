@@ -40,7 +40,9 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.findmycoach.app.R;
+import com.findmycoach.app.adapter.AddressAdapter;
 import com.findmycoach.app.adapter.ChildDetailsAdapter;
+import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.student.ChildDetails;
 import com.findmycoach.app.beans.student.Data;
 import com.findmycoach.app.beans.student.ProfileResponse;
@@ -68,7 +70,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class EditProfileActivityMentee extends Activity implements Callback,ChildDetailsDialog.ChildDetailsAddedListener {
+public class EditProfileActivityMentee extends Activity implements Callback,ChildDetailsDialog.ChildDetailsAddedListener,AddAddressDialog.AddressAddedListener {
 
 
     int REQUEST_CODE = 100;
@@ -102,9 +104,12 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
     private Spinner locationPreferenceSpinner;
     private RelativeLayout groupDetailsLayout;
     private ArrayList<ChildDetails> childDetailsArrayList;
-    private ListView childDetailsListView;
+    private ListView childDetailsListView,addressListView;
     private ChildDetailsAdapter childDetailsAdapter;
     private Button addMore,addAddress;
+    private ArrayList<Address> addressArrayList;
+    private AddressAdapter addressAdapter;
+
 
 
     @Override
@@ -169,6 +174,8 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         addMore=(Button)findViewById(R.id.addMoreButton);
         addAddress=(Button)findViewById(R.id.addAddress);
         CheckBox mutipleAddress=(CheckBox)findViewById(R.id.inputMutipleAddresses);
+        addressListView=(ListView)findViewById(R.id.addressesListView);
+        addressArrayList=new ArrayList<>();
         profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
 
         locationPreferenceSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.location_preference)));
@@ -180,9 +187,14 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             }
         });
 
+        addressAdapter=new AddressAdapter(this,R.layout.textview,addressArrayList);
         childDetailsArrayList=new ArrayList<>();
         childDetailsAdapter=new ChildDetailsAdapter(this,R.layout.child_details_list_item,childDetailsArrayList);
         childDetailsListView.setAdapter(childDetailsAdapter);
+        addressListView.setAdapter(addressAdapter);
+
+
+
         mentorFor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -213,10 +225,15 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         mutipleAddress.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
+                if(isChecked) {
                     addAddress.setVisibility(View.VISIBLE);
-                else
+                }
+                else {
+                    addressArrayList.clear();
+                    addressAdapter.notifyDataSetChanged();
+                    addressListView.setVisibility(View.GONE);
                     addAddress.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -225,6 +242,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             @Override
             public void onClick(View v) {
                 AddAddressDialog dialog=new AddAddressDialog(EditProfileActivityMentee.this);
+                dialog.setAddressAddedListener(EditProfileActivityMentee.this);
                 dialog.showPopUp();
             }
         });
@@ -947,5 +965,37 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         listView.setLayoutParams(params);
         listView.requestLayout();
     }
+
+    @Override
+    public void onAddressAdded(Address address) {
+        addressArrayList.add(address);
+        addressAdapter.notifyDataSetChanged();
+        setHeight(addressListView);
+        addressListView.setVisibility(View.VISIBLE);
+
+
+    }
+
+    public static void setHeight(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
+
+
 
 }
