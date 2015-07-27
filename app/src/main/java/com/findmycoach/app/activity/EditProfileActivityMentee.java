@@ -7,11 +7,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -25,6 +23,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,13 +38,16 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.findmycoach.app.R;
+import com.findmycoach.app.adapter.AddressAdapter;
 import com.findmycoach.app.adapter.ChildDetailsAdapter;
+import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.student.ChildDetails;
 import com.findmycoach.app.beans.student.Data;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
+import com.findmycoach.app.util.AddAddressDialog;
 import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
@@ -65,13 +68,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class EditProfileActivityMentee extends Activity implements Callback,ChildDetailsDialog.ChildDetailsAddedListener {
+public class EditProfileActivityMentee extends Activity implements Callback,ChildDetailsDialog.ChildDetailsAddedListener,AddAddressDialog.AddressAddedListener {
 
 
     int REQUEST_CODE = 100;
     private ImageView profilePicture;
     private TextView profileEmail;
     private EditText profileFirstName;
+    private EditText profileMiddleName;
     private EditText profileLastName;
     private Spinner profileGender;
     private TextView profileDOB;
@@ -89,7 +93,6 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
     ArrayAdapter<String> arrayAdapter;
     private String city = null;
     private static final String TAG = "FMC";
-    private String newUser;
     private boolean isGettingAddress;
     private List<Prediction> predictions;
     private ChizzleTextView addText;
@@ -99,22 +102,25 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
     private Spinner locationPreferenceSpinner;
     private RelativeLayout groupDetailsLayout;
     private ArrayList<ChildDetails> childDetailsArrayList;
-    private ListView childDetailsListView;
+    private ListView childDetailsListView,addressListView;
     private ChildDetailsAdapter childDetailsAdapter;
-    private Button addMore;
+    private Button addMore,addAddress;
+    private ArrayList<Address> addressArrayList;
+    private AddressAdapter addressAdapter;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile_mentee);
-        newUser = getIntent().getStringExtra("newUser");
         initialize();
         applyAction();
         populateUserData();
         isGettingAddress = false;
         needToCheckOnDestroy = false;
 
-        if (newUser != null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
+        if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
             getAddress();
 
     }
@@ -122,6 +128,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
     @Override
     protected void onResume() {
         super.onResume();
+
 
         String tNc = StorageHelper.getUserDetails(this, "terms");
         if (tNc == null || !tNc.equals("yes")) {
@@ -145,13 +152,14 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
         profileFirstName = (EditText) findViewById(R.id.input_first_name);
+        profileMiddleName = (EditText) findViewById(R.id.input_middle_name);
         profileLastName = (EditText) findViewById(R.id.input_last_name);
         profileAddress = (AutoCompleteTextView) findViewById(R.id.input_address);
         profileAddress1 = (AutoCompleteTextView) findViewById(R.id.input_address1);
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         pinCode = (EditText) findViewById(R.id.input_pin);
         mentorFor = (Spinner) findViewById(R.id.input_mentor_for);
-        locationPreferenceSpinner=(Spinner)findViewById(R.id.locationPreferenceSpinner);
+        locationPreferenceSpinner = (Spinner) findViewById(R.id.locationPreferenceSpinner);
         trainingLocation = (EditText) findViewById(R.id.input_training_location);
         coachingType = (Spinner) findViewById(R.id.input_coaching_type);
         updateAction = (Button) findViewById(R.id.button_update);
@@ -162,6 +170,10 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         groupDetailsLayout=(RelativeLayout)findViewById(R.id.groupClassesDetails);
         childDetailsListView=(ListView)findViewById(R.id.childDetailsListView);
         addMore=(Button)findViewById(R.id.addMoreButton);
+        addAddress=(Button)findViewById(R.id.addAddress);
+        CheckBox mutipleAddress=(CheckBox)findViewById(R.id.inputMutipleAddresses);
+        addressListView=(ListView)findViewById(R.id.addressesListView);
+        addressArrayList=new ArrayList<>();
         profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
 
         locationPreferenceSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.location_preference)));
@@ -173,9 +185,14 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             }
         });
 
+        addressAdapter=new AddressAdapter(this,R.layout.textview,addressArrayList);
         childDetailsArrayList=new ArrayList<>();
         childDetailsAdapter=new ChildDetailsAdapter(this,R.layout.child_details_list_item,childDetailsArrayList);
         childDetailsListView.setAdapter(childDetailsAdapter);
+        addressListView.setAdapter(addressAdapter);
+
+
+
         mentorFor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -186,8 +203,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
                     ChildDetailsDialog childDetailsDialog = new ChildDetailsDialog(EditProfileActivityMentee.this);
                     childDetailsDialog.setChildAddedListener(EditProfileActivityMentee.this);
                     childDetailsDialog.showPopUp();
-                }
-                else {
+                } else {
                     childDetailsListView.setVisibility(View.GONE);
                     addMore.setVisibility(View.GONE);
 
@@ -202,14 +218,40 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
 
         });
 
+
+        mutipleAddress.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    addAddress.setVisibility(View.VISIBLE);
+
+                else {
+                    addressArrayList.clear();
+                    addressAdapter.notifyDataSetChanged();
+                    addressListView.setVisibility(View.GONE);
+                    addAddress.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+        addAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddAddressDialog dialog=new AddAddressDialog(EditProfileActivityMentee.this);
+                dialog.setAddressAddedListener(EditProfileActivityMentee.this);
+                dialog.showPopUp();
+            }
+        });
+
+
         coachingType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // your code here
                 if (position == 1 || position == 2) {
                     groupDetailsLayout.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     groupDetailsLayout.setVisibility(View.GONE);
 
                 }
@@ -457,6 +499,10 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         } catch (Exception ignored) {
         }
         try {
+            profileMiddleName.setText(userInfo.getMiddleName());
+        } catch (Exception ignored) {
+        }
+        try {
             profileLastName.setText(userInfo.getLastName());
         } catch (Exception ignored) {
         }
@@ -509,7 +555,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         } catch (Exception ignored) {
         }
 
-        if (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
+        if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
             getAddress();
 
     }
@@ -592,22 +638,22 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
     private boolean validateUserUpdate() {
         boolean isValid = true;
         if (profileAddress1.getText().toString().trim().equals("")) {
-            profileAddress1.setError(getResources().getString(R.string.enter_city));
+            profileAddress1.setError(getResources().getString(R.string.enter_locality));
             profileAddress1.requestFocus();
             isValid = false;
         }
 
-        if (profileAddress.getText().toString().trim().equals("")) {
-            profileAddress.setError(getResources().getString(R.string.enter_address));
-            if (isValid)
-                profileAddress.requestFocus();
-            isValid = false;
-        }
+//        if (profileAddress.getText().toString().trim().equals("")) {
+//            profileAddress.setError(getResources().getString(R.string.enter_address));
+//            if (isValid)
+//                profileAddress.requestFocus();
+//            isValid = false;
+//        }
 
         if (profileDOB.getText().toString().trim().equals("")) {
             profileDOB.setError(getResources().getString(R.string.enter_dob));
             scroll_view.fullScroll(ScrollView.FOCUS_UP);
-            Toast.makeText(EditProfileActivityMentee.this,getResources().getString(R.string.date_of_birth_please),Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditProfileActivityMentee.this, getResources().getString(R.string.date_of_birth_please), Toast.LENGTH_SHORT).show();
             if (isValid)
                 profileDOB.requestFocus();
             isValid = false;
@@ -668,8 +714,9 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         progressDialog.show();
         try {
             RequestParams requestParams = new RequestParams();
-            requestParams.add("first_name", profileFirstName.getText().toString());
-            requestParams.add("last_name", profileLastName.getText().toString());
+            requestParams.add("first_name", profileFirstName.getText().toString().trim());
+            requestParams.add("middle_name", profileMiddleName.getText().toString().trim());
+            requestParams.add("last_name", profileLastName.getText().toString().trim());
             String sex = profileGender.getSelectedItem().toString();
             if (sex.equals("Male"))
                 requestParams.add("gender", "M");
@@ -799,10 +846,6 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
                 Log.d(TAG, "Currency code : " + currencyCode);
             }
 
-            Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
-            Intent intent = new Intent();
-            intent.putExtra("user_info", new Gson().toJson(userInfo));
-            setResult(Activity.RESULT_OK, intent);
             try {
                 String name = profileFirstName.getText().toString() + " " + profileLastName.getText().toString();
                 StorageHelper.storePreference(this, "user_full_name", name);
@@ -821,21 +864,30 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             finish();
 
             /* Saving address, city and zip */
-            if (profileAddress.getText().toString() != null) {
+            if (!profileAddress.getText().toString().trim().equals("")) {
                 StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
-                if (profileAddress1.getText().toString() != null) {
-                    StorageHelper.storePreference(this, "user_city_state_country_info", profileAddress1.getText().toString());
-                }
+            } else
+                StorageHelper.removePreference(this, "user_local_address");
 
-                if (response.getData().getZip() != null) {
-                    StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
-                }
-            }
+            if (!profileAddress1.getText().toString().trim().equals("")) {
+                StorageHelper.storePreference(this, "user_city_state_country_info", profileAddress1.getText().toString());
+            } else
+                StorageHelper.removePreference(this, "user_city_state_country_info");
+
+            if (response.getData().getZip() != null) {
+                StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
+            } else
+                StorageHelper.removePreference(this, "user_zip_code");
 
 
-            if (trainingLocation.getText().toString() != null) {
+            if (!trainingLocation.getText().toString().equals("")) {
                 StorageHelper.storePreference(this, "training_location", trainingLocation.getText().toString());
             }
+
+            Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
+            Intent intent = new Intent();
+            intent.putExtra("user_info", new Gson().toJson(userInfo));
+            setResult(Activity.RESULT_OK, intent);
 
 
             if (DashboardActivity.dashboardActivity == null)
@@ -880,11 +932,14 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
 
     @Override
     public void onChildDetailsAdded(ChildDetails childDetails) {
-        childDetailsArrayList.add(childDetailsArrayList.size(), childDetails);
-        childDetailsAdapter.notifyDataSetChanged();
-        setListViewHeightBasedOnChildren(childDetailsListView);
-        childDetailsListView.setVisibility(View.VISIBLE);
-        addMore.setVisibility(View.VISIBLE);
+        if (childDetails != null) {
+            childDetailsArrayList.add(childDetailsArrayList.size(), childDetails);
+            childDetailsAdapter.notifyDataSetChanged();
+            setListViewHeightBasedOnChildren(childDetailsListView);
+            childDetailsListView.setVisibility(View.VISIBLE);
+            addMore.setVisibility(View.VISIBLE);
+        }
+
 
     }
 
@@ -916,5 +971,37 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         listView.setLayoutParams(params);
         listView.requestLayout();
     }
+
+    @Override
+    public void onAddressAdded(Address address) {
+        addressArrayList.add(address);
+        addressAdapter.notifyDataSetChanged();
+        setHeight(addressListView);
+        addressListView.setVisibility(View.VISIBLE);
+
+
+    }
+
+    public static void setHeight(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
+
+
 
 }

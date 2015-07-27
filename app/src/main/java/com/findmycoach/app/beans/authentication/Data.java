@@ -21,7 +21,7 @@ public class Data {
     private String phonenumber;
     @SerializedName("middle_name")
     @Expose
-    private Object middleName;
+    private String middleName;
     @Expose
     private Object address;
     @Expose
@@ -228,14 +228,14 @@ public class Data {
     /**
      * @return The middleName
      */
-    public Object getMiddleName() {
+    public String getMiddleName() {
         return middleName;
     }
 
     /**
      * @param middleName The middle_name
      */
-    public void setMiddleName(Object middleName) {
+    public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
 

@@ -27,6 +27,7 @@ public class StudentPreferenceSelection extends BaseAdapter {
     Context context;
     JSONArray jsonArray;
     public ArrayList<Integer> integerArrayList;  /* This is used to store the list of jsonArray index whose values are checked*/
+    CheckBox student_selection;
 
     public StudentPreferenceSelection(Context context, JSONArray jsonArray) {
         this.context = context;
@@ -57,27 +58,23 @@ public class StudentPreferenceSelection extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        StudentViewHolder studentViewHolder;
-        if (convertView == null) {
+
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.student_preference_selection, parent, false);
-            studentViewHolder = new StudentViewHolder();
 
-            studentViewHolder.student_selection = (CheckBox) convertView.findViewById(R.id.cb_student_pref);
-            convertView.setTag(studentViewHolder);
-        } else {
-            studentViewHolder = (StudentViewHolder) convertView.getTag();
-        }
+
+            student_selection = (CheckBox) convertView.findViewById(R.id.cb_student_pref);
+
 
         try {
             if (jsonArray.getString(position) != null) {
-                studentViewHolder.student_selection.setText(jsonArray.getString(position));
+                student_selection.setText(jsonArray.getString(position));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        studentViewHolder.student_selection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        student_selection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -91,9 +88,7 @@ public class StudentPreferenceSelection extends BaseAdapter {
     }
 
 
-    class StudentViewHolder {
-        CheckBox student_selection;
-    }
+
 
 
 }

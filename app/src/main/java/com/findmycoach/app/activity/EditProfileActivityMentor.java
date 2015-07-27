@@ -72,6 +72,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     private TextView profileEmail;
     private TextView areaOfCoaching;
     private EditText profileFirstName;
+    private EditText profileMiddleName;
     private EditText profileLastName;
     private Spinner profileGender;
     private TextView profileDOB;
@@ -90,7 +91,6 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     ArrayAdapter<String> arrayAdapter;
     private String city = null;
     private String TAG = "FMC";
-    private String newUser;
     private boolean isGettingAddress, isDobForReview;
     public boolean needToCheckOnDestroy;
     private List<Prediction> predictions;
@@ -104,7 +104,6 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile_mentor);
-        newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
         initialize();
         applyAction();
         populateUserData();
@@ -112,7 +111,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         isDobForReview = false;
         needToCheckOnDestroy = false;
 
-        if (newUser != null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
+        if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
             getAddress();
 
     }
@@ -142,6 +141,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
         profileFirstName = (EditText) findViewById(R.id.input_first_name);
+        profileMiddleName = (EditText) findViewById(R.id.input_middle_name);
         profileLastName = (EditText) findViewById(R.id.input_last_name);
         profileAddress = (EditText) findViewById(R.id.input_address);
         profileAddress1 = (AutoCompleteTextView) findViewById(R.id.input_address1);
@@ -339,7 +339,18 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                 jsonArray.put("D");
                 jsonArray.put("E");
                 jsonArray.put("F");
-                jsonArray.put("G");
+                jsonArray.put("I");
+                jsonArray.put("J");
+                jsonArray.put("K");
+                jsonArray.put("L");
+                jsonArray.put("M");
+                jsonArray.put("N");
+                jsonArray.put("O");
+                jsonArray.put("P");
+                jsonArray.put("Q");
+                jsonArray.put("R");
+                jsonArray.put("S");
+
 
                 StudentsPreference studentsPreference=new StudentsPreference(EditProfileActivityMentor.this,jsonArray);
                 studentsPreference.showStudentPreferenceDialog();
@@ -437,6 +448,11 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                 profileFirstName.setText(userInfo.getFirstName());
             } catch (Exception ignored) {
             }
+
+            try {
+                profileMiddleName.setText(userInfo.getMiddleName());
+            } catch (Exception ignored) {
+            }
             try {
                 profileLastName.setText(userInfo.getLastName());
             } catch (Exception ignored) {
@@ -528,7 +544,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             } else {
                 currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
             }
-            if (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
+            if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
                 getAddress();
         } catch (Exception e) {
             e.printStackTrace();
@@ -622,17 +638,17 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         boolean isValid = true;
 
         if (profileAddress1.getText().toString().trim().equals("")) {
-            profileAddress1.setError(getResources().getString(R.string.enter_city));
+            profileAddress1.setError(getResources().getString(R.string.enter_locality));
             profileAddress1.requestFocus();
             isValid = false;
         }
 
-        if (profileAddress.getText().toString().trim().equals("")) {
-            profileAddress.setError(getResources().getString(R.string.enter_address));
-            if (isValid)
-                profileAddress.requestFocus();
-            isValid = false;
-        }
+//        if (profileAddress.getText().toString().trim().equals("")) {
+//            profileAddress.setError(getResources().getString(R.string.enter_address));
+//            if (isValid)
+//                profileAddress.requestFocus();
+//            isValid = false;
+//        }
 
         if (profileDOB.getText().toString().trim().equals("")) {
             profileDOB.setError(getResources().getString(R.string.enter_dob));
@@ -735,8 +751,9 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         progressDialog.show();
         try {
             RequestParams requestParams = new RequestParams();
-            requestParams.add("first_name", profileFirstName.getText().toString());
-            requestParams.add("last_name", profileLastName.getText().toString());
+            requestParams.add("first_name", profileFirstName.getText().toString().trim());
+            requestParams.add("middle_name", profileMiddleName.getText().toString().trim());
+            requestParams.add("last_name", profileLastName.getText().toString().trim());
             String sex = profileGender.getSelectedItem().toString();
             if (sex.equals("Male"))
                 requestParams.add("gender", "M");
@@ -897,11 +914,24 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
 /* Saving mentor address in shared preference */
 
-            StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
-            StorageHelper.storePreference(this, "user_city_state", profileAddress1.getText().toString());
+            /* Saving address, city and zip */
+            if (!profileAddress.getText().toString().trim().equals("")) {
+                StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
+            } else
+                StorageHelper.removePreference(this, "user_local_address");
+
+            if (!profileAddress1.getText().toString().trim().equals("")) {
+                StorageHelper.storePreference(this, "user_city_state_country_info", profileAddress1.getText().toString());
+            } else
+                StorageHelper.removePreference(this, "user_city_state_country_info");
+
+            if (response.getData().getZip() != null) {
+                StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
+            } else
+                StorageHelper.removePreference(this, "user_zip_code");
+
             if (isGettingAddress && NetworkManager.countryName != null && !NetworkManager.countryName.equals(""))
                 StorageHelper.storePreference(this, "user_country", NetworkManager.countryName);
-            StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
 
 
             Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentor.this, "user_local_address"));
@@ -948,7 +978,8 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 //                DashboardActivity.dashboardActivity.mainLayout.setVisibility(View.VISIBLE);
 
             boolean isAddSlotOpen = false;
-            if (!isDobForReview) {
+            boolean isNewUser = getIntent().getBooleanExtra("new_user", false);
+            if (!isDobForReview && isNewUser) {
                 needToCheckOnDestroy = true;
                 isAddSlotOpen = true;
                 startActivity(new Intent(this, AddNewSlotActivity.class));

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,7 +23,7 @@ public class StudentsPreference {
     JSONArray different_preferences;
     Context context;
     Dialog dialog;
-    Button back_button;
+    ImageView back_button;
     TextView title;
     ListView student_list_preference;
     StudentPreferenceSelection studentPreferenceSelection;
@@ -38,7 +39,7 @@ public class StudentsPreference {
         dialog = new Dialog(context, R.style.DialogCustomTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.students_preferences);
-        back_button = (Button) dialog.findViewById(R.id.backButton);
+        back_button = (ImageView) dialog.findViewById(R.id.backButton);
         title = (TextView) dialog.findViewById(R.id.title);
         title.setText(context.getResources().getString(R.string.students_preference));
         student_list_preference = (ListView) dialog.findViewById(R.id.student_preference_list);

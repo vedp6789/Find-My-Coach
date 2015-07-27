@@ -27,7 +27,6 @@ import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.EditProfileActivityMentor;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
-import com.findmycoach.app.beans.mentor.Currency;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
@@ -157,7 +156,13 @@ public class ProfileFragment extends Fragment implements Callback {
 
 
     private void populateFields() {
-        profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
+        try {
+            if (userInfo.getMiddleName() == null || userInfo.getMiddleName().trim().equals(""))
+                profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
+            else
+                profileName.setText(userInfo.getFirstName() + " " + userInfo.getMiddleName() + " " + userInfo.getLastName());
+        } catch (Exception e) {
+        }
         try {
             profileEmail.setText(userInfo.getEmail());
         } catch (Exception e) {
@@ -167,7 +172,7 @@ public class ProfileFragment extends Fragment implements Callback {
         } catch (Exception e) {
         }
         String address = "";
-        if (userInfo.getAddress() != null) {
+        if (userInfo.getAddress() != null && !userInfo.getAddress().toString().trim().equals("")) {
             address = address + userInfo.getAddress() + ", ";
         }
         if (userInfo.getCity() != null) {

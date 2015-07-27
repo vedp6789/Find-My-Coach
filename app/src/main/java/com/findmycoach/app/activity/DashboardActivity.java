@@ -115,8 +115,6 @@ public class DashboardActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        new GetLocation().execute();
-
         if (LoginActivity.loginActivity != null)
             LoginActivity.loginActivity.finish();
 
@@ -124,7 +122,7 @@ public class DashboardActivity extends FragmentActivity
         fragmentManager = getSupportFragmentManager();
         isProfileOpen = false;
 
-        Log.e("VedBabu", StorageHelper.getUserProfile(this));
+        Log.e(TAG, StorageHelper.getUserProfile(this));
 
 //        String userId = StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id));
 //        String newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
@@ -201,6 +199,10 @@ public class DashboardActivity extends FragmentActivity
         } else {
             initialize();
         }
+    }
+
+    public void getCurrentLocation() {
+        new GetLocation().execute();
     }
 
     @Override
