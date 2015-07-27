@@ -104,56 +104,56 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        loginActivity = this;
+    loginActivity = this;
 
-        final String userToken = StorageHelper.getUserDetails(this, "auth_token");
-        String phnVerified = StorageHelper.getUserDetails(this, "phone_verified");
+    final String userToken = StorageHelper.getUserDetails(this, "auth_token");
+    String phnVerified = StorageHelper.getUserDetails(this, "phone_verified");
 
-        /** If user is already logged-in in app then open Dashboard Activity */
-        if (userToken != null && phnVerified != null) {
-            Log.e(TAG, "Login from onCreate");
-            Response response = new Gson().fromJson(StorageHelper.getUserProfile(this), Response.class);
-            int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
-            if (response.getData().getCity() == null || response.getData().getCity().toString().trim().equals("")) {
-                if (userGroup == 2) {
-                    Intent intent = new Intent(this, EditProfileActivityMentee.class);
-                    intent.putExtra("user_info", new Gson().toJson(response.getData()));
-                    intent.putExtra("new_user", true);
-                    startActivity(intent);
-                } else if (userGroup == 3) {
-                    Intent intent = new Intent(this, EditProfileActivityMentor.class);
-                    intent.putExtra("user_info", new Gson().toJson(response.getData()));
-                    intent.putExtra("new_user", true);
-                    startActivity(intent);
-                }
-
-            } else if (userGroup == 3 && (response.getData().getSubCategoryName() == null || response.getData().getSubCategoryName().size() < 1)) {
+    /** If user is already logged-in in app then open Dashboard Activity */
+    if (userToken != null && phnVerified != null) {
+        Log.e(TAG, "Login from onCreate");
+        Response response = new Gson().fromJson(StorageHelper.getUserProfile(this), Response.class);
+        int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
+        if (response != null && (response.getData().getCity() == null || response.getData().getCity().toString().trim().equals(""))) {
+            if (userGroup == 2) {
+                Intent intent = new Intent(this, EditProfileActivityMentee.class);
+                intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                intent.putExtra("new_user", true);
+                startActivity(intent);
+            } else if (userGroup == 3) {
                 Intent intent = new Intent(this, EditProfileActivityMentor.class);
                 intent.putExtra("user_info", new Gson().toJson(response.getData()));
                 intent.putExtra("new_user", true);
                 startActivity(intent);
-            } else
-                startActivity(new Intent(this, DashboardActivity.class));
-            this.finish();
-        }
-        /** Else setup the login screen */
-        else {
-            setContentView(R.layout.activity_login);
-            user_group = 3;
-            RadioGroup radioGroup_user_login = (RadioGroup) findViewById(R.id.radio_group_user_login);
-            radioGroup_user_login.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    if (checkedId == R.id.radio_button_mentee_login) {
-                        user_group = 2;
-                    }
-                    if (checkedId == R.id.radio_button_mentor_login) {
-                        user_group = 3;
-                    }
+            }
+
+        } else if (userGroup == 3 && (response.getData().getSubCategoryName() == null || response.getData().getSubCategoryName().size() < 1)) {
+            Intent intent = new Intent(this, EditProfileActivityMentor.class);
+            intent.putExtra("user_info", new Gson().toJson(response.getData()));
+            intent.putExtra("new_user", true);
+            startActivity(intent);
+        } else
+            startActivity(new Intent(this, DashboardActivity.class));
+        this.finish();
+    }
+    /** Else setup the login screen */
+    else {
+        setContentView(R.layout.activity_login);
+        user_group = 3;
+        RadioGroup radioGroup_user_login = (RadioGroup) findViewById(R.id.radio_group_user_login);
+        radioGroup_user_login.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.radio_button_mentee_login) {
+                    user_group = 2;
                 }
-            });
-            initialize(savedInstanceState);
-        }
+                if (checkedId == R.id.radio_button_mentor_login) {
+                    user_group = 3;
+                }
+            }
+        });
+        initialize(savedInstanceState);
+    }
     }
 
     @Override

@@ -654,6 +654,33 @@
                 </LinearLayout>
 
 
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:text="@string/students_preference"
+                    android:textColor="@color/purple_light"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:id="@+id/students_preference"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:textColor="@color/purple_light"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold"
+                    />
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentLeft="true"
+                    android:background="@color/purple_light" />
+
+
+
+
                 <com.findmycoach.app.views.ChizzleButton
                     android:id="@+id/button_update"
                     android:layout_width="match_parent"
@@ -670,12 +697,15 @@
 
             </LinearLayout>
 
+
             <fragment
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.MapFragment"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:visibility="gone" />
+
+
         </LinearLayout>
 
     </ScrollView>

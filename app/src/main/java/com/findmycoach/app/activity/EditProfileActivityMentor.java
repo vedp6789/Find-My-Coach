@@ -46,6 +46,7 @@ import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
+import com.findmycoach.app.util.StudentsPreference;
 import com.findmycoach.app.util.TermsAndCondition;
 import com.findmycoach.app.views.ChizzleTextView;
 import com.findmycoach.app.views.ChizzleTextViewBold;
@@ -54,6 +55,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -95,6 +98,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     private ChizzleTextView currencySymbol;
     private String userCurrentAddress = "";
     private ScrollView scrollView;
+    private TextView students_preference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +155,8 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         teachingPreference = (Spinner) findViewById(R.id.teachingPreferencesSpinner);
         classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
         scrollView = (ScrollView) findViewById(R.id.main_scroll_view);
+        students_preference = (TextView) findViewById(R.id.students_preference);
+
 
         String[] yearOfExperience = new String[51];
         for (int i = 0; i < yearOfExperience.length; i++) {
@@ -320,6 +326,34 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                     pinCode.setFocusable(true);
                 }
                 return false;
+            }
+        });
+
+        students_preference.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONArray jsonArray=new JSONArray();
+                jsonArray.put("A");
+                jsonArray.put("B");
+                jsonArray.put("C");
+                jsonArray.put("D");
+                jsonArray.put("E");
+                jsonArray.put("F");
+                jsonArray.put("I");
+                jsonArray.put("J");
+                jsonArray.put("K");
+                jsonArray.put("L");
+                jsonArray.put("M");
+                jsonArray.put("N");
+                jsonArray.put("O");
+                jsonArray.put("P");
+                jsonArray.put("Q");
+                jsonArray.put("R");
+                jsonArray.put("S");
+
+
+                StudentsPreference studentsPreference=new StudentsPreference(EditProfileActivityMentor.this,jsonArray);
+                studentsPreference.showStudentPreferenceDialog();
             }
         });
 
