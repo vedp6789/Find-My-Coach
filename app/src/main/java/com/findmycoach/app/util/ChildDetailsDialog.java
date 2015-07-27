@@ -25,6 +25,8 @@ public class ChildDetailsDialog {
     private Context context;
     private Dialog dialog;
     private Spinner genderSpinner;
+    private Button doneButton;
+    private Button cancelButton;
 
     public ChildDetailsDialog(Context context){
         this.context=context;
@@ -36,6 +38,8 @@ public class ChildDetailsDialog {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.child_details_layout);
         genderSpinner=(Spinner)dialog.findViewById(R.id.childGender);
+        doneButton=(Button)dialog.findViewById(R.id.done);
+        cancelButton=(Button)dialog.findViewById(R.id.cancel);
         final TextView childDOB=(TextView)dialog.findViewById(R.id.childDOB);
         childDOB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,8 +50,22 @@ public class ChildDetailsDialog {
             }
         });
         genderSpinner.setAdapter(new ArrayAdapter<String>(context, R.layout.textview,context.getResources().getStringArray(R.array.gender)));
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         dialog.show();
+
+
 
     }
 

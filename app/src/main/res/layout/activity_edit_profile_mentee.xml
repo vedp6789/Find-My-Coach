@@ -319,6 +319,16 @@
                     android:background="@android:color/transparent"
                     android:spinnerMode="dropdown" />
 
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/childDetailsListView"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone"
+                    />
+
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
