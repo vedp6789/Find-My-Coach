@@ -19,6 +19,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,6 +28,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,6 +38,8 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.findmycoach.app.R;
+import com.findmycoach.app.adapter.ChildDetailsAdapter;
+import com.findmycoach.app.beans.student.ChildDetails;
 import com.findmycoach.app.beans.student.Data;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.beans.suggestion.Prediction;
@@ -59,7 +65,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class EditProfileActivityMentee extends Activity implements Callback {
+public class EditProfileActivityMentee extends Activity implements Callback,ChildDetailsDialog.ChildDetailsAddedListener {
 
 
     int REQUEST_CODE = 100;
@@ -90,6 +96,12 @@ public class EditProfileActivityMentee extends Activity implements Callback {
     public boolean needToCheckOnDestroy;
     private String userCurrentAddress = "";
     private ScrollView scroll_view;
+    private Spinner locationPreferenceSpinner;
+    private RelativeLayout groupDetailsLayout;
+    private ArrayList<ChildDetails> childDetailsArrayList;
+    private ListView childDetailsListView;
+    private ChildDetailsAdapter childDetailsAdapter;
+    private Button addMore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +151,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         pinCode = (EditText) findViewById(R.id.input_pin);
         mentorFor = (Spinner) findViewById(R.id.input_mentor_for);
+        locationPreferenceSpinner=(Spinner)findViewById(R.id.locationPreferenceSpinner);
         trainingLocation = (EditText) findViewById(R.id.input_training_location);
         coachingType = (Spinner) findViewById(R.id.input_coaching_type);
         updateAction = (Button) findViewById(R.id.button_update);
@@ -146,8 +159,12 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         addText = (ChizzleTextView) findViewById(R.id.addPhotoMentee);
         scroll_view= (ScrollView) findViewById(R.id.main_scroll_view);
-
+        groupDetailsLayout=(RelativeLayout)findViewById(R.id.groupClassesDetails);
+        childDetailsListView=(ListView)findViewById(R.id.childDetailsListView);
+        addMore=(Button)findViewById(R.id.addMoreButton);
         profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
+
+        locationPreferenceSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.location_preference)));
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,13 +173,24 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             }
         });
 
+        childDetailsArrayList=new ArrayList<>();
+        childDetailsAdapter=new ChildDetailsAdapter(this,R.layout.child_details_list_item,childDetailsArrayList);
+        childDetailsListView.setAdapter(childDetailsAdapter);
         mentorFor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // your code here
                 if (position == 1 || position == 2) {
+                    childDetailsArrayList.clear();
+                    childDetailsAdapter.notifyDataSetChanged();
                     ChildDetailsDialog childDetailsDialog = new ChildDetailsDialog(EditProfileActivityMentee.this);
+                    childDetailsDialog.setChildAddedListener(EditProfileActivityMentee.this);
                     childDetailsDialog.showPopUp();
+                }
+                else {
+                    childDetailsListView.setVisibility(View.GONE);
+                    addMore.setVisibility(View.GONE);
+
                 }
 
             }
@@ -173,6 +201,37 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             }
 
         });
+
+        coachingType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // your code here
+                if (position == 1 || position == 2) {
+                    groupDetailsLayout.setVisibility(View.VISIBLE);
+                }
+                else {
+                    groupDetailsLayout.setVisibility(View.GONE);
+
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
+
+        addMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChildDetailsDialog childDetailsDialog = new ChildDetailsDialog(EditProfileActivityMentee.this);
+                childDetailsDialog.setChildAddedListener(EditProfileActivityMentee.this);
+                childDetailsDialog.showPopUp();
+            }
+        });
+
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(getResources().getString(R.string.title_edit_profile_menu));
 
@@ -812,6 +871,45 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             Session.setActiveSession(session);
             session.closeAndClearTokenInformation();
         }
+    }
+
+    @Override
+    public void onChildDetailsAdded(ChildDetails childDetails) {
+        childDetailsArrayList.add(childDetailsArrayList.size(), childDetails);
+        childDetailsAdapter.notifyDataSetChanged();
+        setListViewHeightBasedOnChildren(childDetailsListView);
+        childDetailsListView.setVisibility(View.VISIBLE);
+        addMore.setVisibility(View.VISIBLE);
+
+    }
+
+    public void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+
+
+            if (listItem != null) {
+                // This next line is needed before you call measure or else you won't get measured height at all. The listitem needs to be drawn first to know the height.
+                listItem.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+                listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+                int h = listItem.getMeasuredHeight();
+                totalHeight += listItem.getMeasuredHeight();
+
+            }
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 
 }

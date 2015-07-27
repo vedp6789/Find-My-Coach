@@ -502,7 +502,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_button_height"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginTop="@dimen/back_margin">
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:visibility="gone">
 
                     <com.findmycoach.app.views.ChizzleTextView
                         android:id="@+id/checkboxTextView"
@@ -514,12 +515,12 @@
                         android:layout_toLeftOf="@+id/input_willing"
                         android:layout_toStartOf="@+id/input_willing"
                         android:gravity="center_vertical"
-                        android:text="@string/prompt_willing_to_travel"
+                        android:text="@string/prompt_hosting_yes"
                         android:textColor="@color/purple"
                         android:textSize="@dimen/profile_details" />
 
                     <CheckBox
-                        android:id="@+id/input_willing"
+                        android:id="@+id/input_hosting"
                         android:layout_width="@dimen/activity_vertical_margin"
                         android:layout_height="@dimen/activity_vertical_margin"
                         android:layout_alignParentEnd="true"

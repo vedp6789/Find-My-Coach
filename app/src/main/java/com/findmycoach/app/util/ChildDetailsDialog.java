@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.AddNewSlotActivity;
+import com.findmycoach.app.beans.student.ChildDetails;
 import com.findmycoach.app.fragment.MyScheduleFragment;
+import com.findmycoach.app.views.ChizzleAutoCompleteTextView;
 import com.findmycoach.app.views.ChizzleTextView;
 import com.findmycoach.app.views.DobPicker;
 
@@ -27,18 +29,35 @@ public class ChildDetailsDialog {
     private Spinner genderSpinner;
     private Button doneButton;
     private Button cancelButton;
+    private ChildDetails childDetails;
+    private ChizzleAutoCompleteTextView childName;
+    private ChildDetailsAddedListener mChildDetailsAddedListener;
 
     public ChildDetailsDialog(Context context){
         this.context=context;
 
 
+
+
+
     }
+    public void setChildAddedListener(
+            ChildDetailsAddedListener childDetailsAddedListener) {
+        mChildDetailsAddedListener = childDetailsAddedListener;
+    }
+
+    public void onChildDetailsAdded (ChildDetails childDetails) {
+        mChildDetailsAddedListener.onChildDetailsAdded(childDetails);
+    }
+
+
     public void showPopUp() {
         dialog = new Dialog(context, R.style.DialogCustomTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.child_details_layout);
         genderSpinner=(Spinner)dialog.findViewById(R.id.childGender);
         doneButton=(Button)dialog.findViewById(R.id.done);
+        childName=(ChizzleAutoCompleteTextView)dialog.findViewById(R.id.childName);
         cancelButton=(Button)dialog.findViewById(R.id.cancel);
         final TextView childDOB=(TextView)dialog.findViewById(R.id.childDOB);
         childDOB.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +78,12 @@ public class ChildDetailsDialog {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                childDetails=new ChildDetails();
+                childDetails.setGender(genderSpinner.getSelectedItem().toString());
+                childDetails.setName(childName.getText().toString());
+                childDetails.setDob(childDOB.getText().toString());
+                onChildDetailsAdded(childDetails);
+                dialog.dismiss();
 
             }
         });
@@ -68,5 +93,10 @@ public class ChildDetailsDialog {
 
 
     }
+
+    public interface ChildDetailsAddedListener {
+        public void onChildDetailsAdded(ChildDetails childDetails);
+    }
+
 
 }

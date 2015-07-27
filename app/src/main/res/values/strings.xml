@@ -5,8 +5,9 @@
     <integer name="sub_category">3</integer>
 
     <string-array name="coaching_type">
-        <item>Individual</item>
-        <item>Group</item>
+        <item>I prefer individual classes</item>
+        <item>I prefer group classes</item>
+        <item>I am ok with either</item>
     </string-array>
 
     <string-array name="class_type">
@@ -825,6 +826,10 @@
     <string name="mentee_add">Mentee\'s address:</string>
     <string name="mentor_add">Mentor\'s address:</string>
     <string name="requested_class_details">Requested class detail</string>
+    <string name="prompt_hosting_yes">I can host group classes at my location</string>
+    <string name="prompt_fellow_student_location">I am fine to attend group classes at a nearby fellow students location
+</string>
+
 
     <!-- Prompting -->
 
@@ -1034,6 +1039,13 @@
     <string-array name="mentor_class_type">
         <item>Individual</item>
         <item>Group</item>
+        <item>I am fine with either</item>
+    </string-array>
+
+
+    <string-array name="location_preference">
+        <item>I prefer for the mentor to come to my location </item>
+        <item>I am ok to go to the mentor location or institute</item>
         <item>I am fine with either</item>
     </string-array>
 
