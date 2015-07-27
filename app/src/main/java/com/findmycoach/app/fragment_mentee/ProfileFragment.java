@@ -43,7 +43,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageView editProfile;
     private TextView title;
 
-    private static final String TAG="TAG";
+    private static final String TAG = "TAG";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -76,7 +76,7 @@ public class ProfileFragment extends Fragment implements Callback {
         Log.d(TAG, "Stored User Id : " + StorageHelper.getUserDetails(getActivity(), "user_id"));
         Log.d(TAG, "Auth Token : " + authToken);
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
         Log.d(TAG, "getprofile");
         NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
     }
@@ -138,17 +138,20 @@ public class ProfileFragment extends Fragment implements Callback {
     }
 
     private void populateFields() {
-        try{
-            profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
-        }catch (Exception e){
+        try {
+            if (userInfo.getMiddleName() == null || userInfo.getMiddleName().trim().equals(""))
+                profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
+            else
+                profileName.setText(userInfo.getFirstName() + " " + userInfo.getMiddleName() + " " + userInfo.getLastName());
+        } catch (Exception e) {
         }
-        try{
+        try {
             profileEmail.setText(userInfo.getEmail());
-        }catch (Exception e){
+        } catch (Exception e) {
         }
-        try{
+        try {
             profileDob.setText((String) userInfo.getDob());
-        }catch (Exception e){
+        } catch (Exception e) {
         }
         String address = "";
         if (userInfo.getAddress() != null && !userInfo.getAddress().toString().trim().equals("")) {
@@ -165,8 +168,8 @@ public class ProfileFragment extends Fragment implements Callback {
         }
         profileAddress.setText(address);
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-           imgLoader = new ImageLoader(profileImage);
-           imgLoader.execute((String) userInfo.getPhotograph());
+            imgLoader = new ImageLoader(profileImage);
+            imgLoader.execute((String) userInfo.getPhotograph());
         }
         mentorFor.setText(userInfo.getMentorFor());
         trainingLocation.setText((String) userInfo.getTrainingLocation());

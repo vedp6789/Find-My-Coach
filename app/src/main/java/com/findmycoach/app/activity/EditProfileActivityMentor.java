@@ -69,6 +69,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     private TextView profileEmail;
     private TextView areaOfCoaching;
     private EditText profileFirstName;
+    private EditText profileMiddleName;
     private EditText profileLastName;
     private Spinner profileGender;
     private TextView profileDOB;
@@ -87,7 +88,6 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     ArrayAdapter<String> arrayAdapter;
     private String city = null;
     private String TAG = "FMC";
-    private String newUser;
     private boolean isGettingAddress, isDobForReview;
     public boolean needToCheckOnDestroy;
     private List<Prediction> predictions;
@@ -100,7 +100,6 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile_mentor);
-        newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
         initialize();
         applyAction();
         populateUserData();
@@ -108,7 +107,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         isDobForReview = false;
         needToCheckOnDestroy = false;
 
-        if (newUser != null || userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
+        if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
             getAddress();
 
     }
@@ -138,6 +137,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
         profileFirstName = (EditText) findViewById(R.id.input_first_name);
+        profileMiddleName = (EditText) findViewById(R.id.input_middle_name);
         profileLastName = (EditText) findViewById(R.id.input_last_name);
         profileAddress = (EditText) findViewById(R.id.input_address);
         profileAddress1 = (AutoCompleteTextView) findViewById(R.id.input_address1);
@@ -412,6 +412,11 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
             try {
                 profileFirstName.setText(userInfo.getFirstName());
+            } catch (Exception ignored) {
+            }
+
+            try {
+                profileMiddleName.setText(userInfo.getMiddleName());
             } catch (Exception ignored) {
             }
             try {
@@ -712,8 +717,9 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         progressDialog.show();
         try {
             RequestParams requestParams = new RequestParams();
-            requestParams.add("first_name", profileFirstName.getText().toString());
-            requestParams.add("last_name", profileLastName.getText().toString());
+            requestParams.add("first_name", profileFirstName.getText().toString().trim());
+            requestParams.add("middle_name", profileMiddleName.getText().toString().trim());
+            requestParams.add("last_name", profileLastName.getText().toString().trim());
             String sex = profileGender.getSelectedItem().toString();
             if (sex.equals("Male"))
                 requestParams.add("gender", "M");
@@ -938,7 +944,8 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 //                DashboardActivity.dashboardActivity.mainLayout.setVisibility(View.VISIBLE);
 
             boolean isAddSlotOpen = false;
-            if (!isDobForReview) {
+            boolean isNewUser = getIntent().getBooleanExtra("new_user", false);
+            if (!isDobForReview && isNewUser) {
                 needToCheckOnDestroy = true;
                 isAddSlotOpen = true;
                 startActivity(new Intent(this, AddNewSlotActivity.class));

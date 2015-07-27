@@ -41,6 +41,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
 
 
     private EditText firstNameInput;
+    private EditText middleNameInput;
     private EditText lastNameInput;
     private EditText passwordInput;
     private EditText confirmPasswordInput;
@@ -72,6 +73,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         radioButton_mentee_signup = (RadioButton) findViewById(R.id.radio_button_mentee_signup);
         radioButton_mentor_signup = (RadioButton) findViewById(R.id.radio_button_mentor_signup);
         firstNameInput = (EditText) findViewById(R.id.input_first_name);
+        middleNameInput = (EditText) findViewById(R.id.input_middle_name);
         lastNameInput = (EditText) findViewById(R.id.input_last_name);
         emailInput = (EditText) findViewById(R.id.input_email);
         passwordInput = (EditText) findViewById(R.id.input_password);
@@ -198,8 +200,9 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
      * Registering user with FMC
      */
     private void registerUser() {
-        String firstName = firstNameInput.getText().toString();
-        String lastName = lastNameInput.getText().toString();
+        String firstName = firstNameInput.getText().toString().trim();
+        String middleName = middleNameInput.getText().toString().trim();
+        String lastName = lastNameInput.getText().toString().trim();
         String phone = phoneNumberInput.getText().toString();
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
@@ -219,6 +222,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             } else {
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("first_name", firstName);
+                requestParams.add("middle_name", middleName);
                 requestParams.add("last_name", lastName);
                 requestParams.add("email", email);
                 requestParams.add("password", password);
@@ -393,9 +397,10 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             StorageHelper.storePreference(this, "user_group", String.valueOf(user_group));
             StorageHelper.storePreference(this, "login_with", "Login");
             startActivity(new Intent(this, ValidatePhoneActivity.class));
-            finish();
-            if (LoginActivity.loginActivity != null)
+            if (LoginActivity.loginActivity != null) {
                 LoginActivity.loginActivity.finish();
+            }
+            finish();
             return;
         }
 

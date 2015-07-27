@@ -7,11 +7,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -77,6 +75,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
     private ImageView profilePicture;
     private TextView profileEmail;
     private EditText profileFirstName;
+    private EditText profileMiddleName;
     private EditText profileLastName;
     private Spinner profileGender;
     private TextView profileDOB;
@@ -94,7 +93,6 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
     ArrayAdapter<String> arrayAdapter;
     private String city = null;
     private static final String TAG = "FMC";
-    private String newUser;
     private boolean isGettingAddress;
     private List<Prediction> predictions;
     private ChizzleTextView addText;
@@ -116,14 +114,13 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile_mentee);
-        newUser = getIntent().getStringExtra("newUser");
         initialize();
         applyAction();
         populateUserData();
         isGettingAddress = false;
         needToCheckOnDestroy = false;
 
-        if (newUser != null || userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
+        if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
             getAddress();
 
     }
@@ -155,13 +152,14 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
         profileFirstName = (EditText) findViewById(R.id.input_first_name);
+        profileMiddleName = (EditText) findViewById(R.id.input_middle_name);
         profileLastName = (EditText) findViewById(R.id.input_last_name);
         profileAddress = (AutoCompleteTextView) findViewById(R.id.input_address);
         profileAddress1 = (AutoCompleteTextView) findViewById(R.id.input_address1);
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         pinCode = (EditText) findViewById(R.id.input_pin);
         mentorFor = (Spinner) findViewById(R.id.input_mentor_for);
-        locationPreferenceSpinner=(Spinner)findViewById(R.id.locationPreferenceSpinner);
+        locationPreferenceSpinner = (Spinner) findViewById(R.id.locationPreferenceSpinner);
         trainingLocation = (EditText) findViewById(R.id.input_training_location);
         coachingType = (Spinner) findViewById(R.id.input_coaching_type);
         updateAction = (Button) findViewById(R.id.button_update);
@@ -205,8 +203,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
                     ChildDetailsDialog childDetailsDialog = new ChildDetailsDialog(EditProfileActivityMentee.this);
                     childDetailsDialog.setChildAddedListener(EditProfileActivityMentee.this);
                     childDetailsDialog.showPopUp();
-                }
-                else {
+                } else {
                     childDetailsListView.setVisibility(View.GONE);
                     addMore.setVisibility(View.GONE);
 
@@ -225,9 +222,9 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         mutipleAddress.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
+                if (isChecked)
                     addAddress.setVisibility(View.VISIBLE);
-                }
+
                 else {
                     addressArrayList.clear();
                     addressAdapter.notifyDataSetChanged();
@@ -254,8 +251,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
                 // your code here
                 if (position == 1 || position == 2) {
                     groupDetailsLayout.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     groupDetailsLayout.setVisibility(View.GONE);
 
                 }
@@ -503,6 +499,10 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         } catch (Exception ignored) {
         }
         try {
+            profileMiddleName.setText(userInfo.getMiddleName());
+        } catch (Exception ignored) {
+        }
+        try {
             profileLastName.setText(userInfo.getLastName());
         } catch (Exception ignored) {
         }
@@ -714,8 +714,9 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         progressDialog.show();
         try {
             RequestParams requestParams = new RequestParams();
-            requestParams.add("first_name", profileFirstName.getText().toString());
-            requestParams.add("last_name", profileLastName.getText().toString());
+            requestParams.add("first_name", profileFirstName.getText().toString().trim());
+            requestParams.add("middle_name", profileMiddleName.getText().toString().trim());
+            requestParams.add("last_name", profileLastName.getText().toString().trim());
             String sex = profileGender.getSelectedItem().toString();
             if (sex.equals("Male"))
                 requestParams.add("gender", "M");
@@ -931,7 +932,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
 
     @Override
     public void onChildDetailsAdded(ChildDetails childDetails) {
-        if(childDetails!=null) {
+        if (childDetails != null) {
             childDetailsArrayList.add(childDetailsArrayList.size(), childDetails);
             childDetailsAdapter.notifyDataSetChanged();
             setListViewHeightBasedOnChildren(childDetailsListView);
