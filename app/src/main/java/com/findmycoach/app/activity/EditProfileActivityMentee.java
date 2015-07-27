@@ -290,7 +290,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             @Override
             public void afterTextChanged(Editable s) {
                 city = null;
-                String input = profileAddress1.getText().toString();
+                String input = profileAddress1.getText().toString().trim();
                 if (input.length() >= 2) {
                     getAutoSuggestions(input);
                 }
@@ -837,6 +837,11 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
                 StorageHelper.storePreference(this, "training_location", trainingLocation.getText().toString());
             }
 
+
+            if (DashboardActivity.dashboardActivity == null)
+                startActivity(new Intent(this, DashboardActivity.class));
+
+            finish();
 
         }
     }

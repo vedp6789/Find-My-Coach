@@ -67,7 +67,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
             return;
         }
         setContentView(R.layout.activity_validate_phone);
-        Toast.makeText(this,"An Otp has been sent to your registered number",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getResources().getString(R.string.otp_sent_to_registered_number), Toast.LENGTH_SHORT).show();
         initView();
     }
 
@@ -186,7 +186,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         else if (calledApiValue == 27) {
             if (response.getData() == null) {
                 Toast toast = Toast.makeText(ValidatePhoneActivity.this, response.getMessage(), Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.TOP, 0, 0);
+                toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 0);
                 toast.show();
                 return;
             } else if (response.getAuthToken() != null && !response.getAuthToken().equals(""))
@@ -194,8 +194,8 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         }
 
         /** Opens Dashboard activity*/
+        int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
         if (response.getData().getCity() == null || response.getData().getCity().toString().trim().equals("")) {
-            int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
             if (userGroup == 2) {
                 Intent intent = new Intent(this, EditProfileActivityMentee.class);
                 intent.putExtra("user_info", new Gson().toJson(response.getData()));
@@ -205,6 +205,11 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                 intent.putExtra("user_info", new Gson().toJson(response.getData()));
                 startActivity(intent);
             }
+
+        } else if (userGroup == 3 && (response.getData().getSubCategoryName() == null || response.getData().getSubCategoryName().size() < 1)) {
+            Intent intent = new Intent(this, EditProfileActivityMentor.class);
+            intent.putExtra("user_info", new Gson().toJson(response.getData()));
+            startActivity(intent);
 
         } else
             startActivity(new Intent(this, DashboardActivity.class));
@@ -306,7 +311,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                     /** Phone number is provided with country code, updating user's phone number in server and sending OTP to that number */
                     else {
                         StorageHelper.storePreference(ValidatePhoneActivity.this, "phone_number", phnNum);
-                        requestParams.add("phone_number", countryCodeTV.getText().toString().trim().replace("+","") + "-" + phnNum);
+                        requestParams.add("phone_number", countryCodeTV.getText().toString().trim().replace("+", "") + "-" + phnNum);
                         Log.e("Validate phone dialog", "phone_number : " + countryCodeTV.getText().toString().trim() + "-" + phnNum);
                         Log.d(TAG, countryCodeTV.getText().toString().trim() + phnNum);
                         progressDialog.show();

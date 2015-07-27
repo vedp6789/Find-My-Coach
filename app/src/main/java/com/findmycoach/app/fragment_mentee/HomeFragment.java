@@ -368,7 +368,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
             @Override
             public void afterTextChanged(Editable s) {
-                String input = locationInput.getText().toString();
+                String input = locationInput.getText().toString().trim();
                 if (input.length() >= 2) {
                     getAutoSuggestions(input);
 //                    if (input.length() > 4 && input.length() < 8) {
