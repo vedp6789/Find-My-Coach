@@ -105,7 +105,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         super.onActivityCreated(savedInstanceState);
 
         initialize(fragmentView);
-        //   updateLocationUI();
+        updateLocationUI();
         applyActions();
 
         DataBase dataBase = DataBase.singleton(getActivity());
@@ -127,9 +127,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
         homeFragmentMentee = this;
 
-//        if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
-//            updateLocationFromAsync(DashboardActivity.dashboardActivity.userCurrentAddress);
-//        }
+        if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
+            updateLocationFromAsync(DashboardActivity.dashboardActivity.userCurrentAddress);
+        }
 
         NetworkManager.getNetworkAndGpsStatus(getActivity());
     }
@@ -533,8 +533,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     @Override
     public void onResume() {
         super.onResume();
-        currentLocationText.setText(StorageHelper.getUserAddress(getActivity()));
-        locationInput.setText(StorageHelper.getUserAddress(getActivity()));
+        if (location == null || location == "") {
+            location = StorageHelper.getUserAddress(getActivity());
+            if (location == null || location.trim().equals(""))
+                location = "";
+
+            updateLocationUI();
+        }
     }
 
     private void initialize(View view) {
@@ -544,7 +549,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         changeLocation = (Button) view.findViewById(R.id.change_location);
         changeLocation.setOnClickListener(this);
         searchButton.setOnClickListener(this);
-        locationLayout = (RelativeLayout) view.findViewById(R.id.current_location_layout);
         locationLayout = (RelativeLayout) view.findViewById(R.id.current_location_layout);
         timeBarrierLayout = (LinearLayout) view.findViewById(R.id.time_barrier_layout);
         progressDialog = new ProgressDialog(getActivity());
@@ -764,5 +768,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
             textView = null;
         }
+    }
+
+    public void updateLocationFromAsync(String userCurrentAddress) {
+        location = userCurrentAddress;
+        updateLocationUI();
     }
 }

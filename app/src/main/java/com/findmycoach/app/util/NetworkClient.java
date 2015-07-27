@@ -100,7 +100,7 @@ public class NetworkClient {
     private static String getTimeZone() {
         TimeZone tz = TimeZone.getDefault();
         Log.e(TAG + "VED", tz.getDisplayName(false, TimeZone.SHORT));
-        return tz.getDisplayName(false, TimeZone.SHORT).replace("GMT", "")+":00";
+        return tz.getDisplayName(false, TimeZone.SHORT).replace("GMT", "") + ":00";
     }
 
     private static String getSystemLanguage() {
@@ -186,9 +186,10 @@ public class NetworkClient {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Success : Response : " + responseJson);
                     Response response = new Gson().fromJson(responseJson, Response.class);
-                    if (statusCode == 200)
+                    if (statusCode == 200) {
+                        StorageHelper.saveUserProfile(context, responseJson);
                         callback.successOperation(response, statusCode, calledApiValue);
-                    else
+                    } else
                         callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -231,9 +232,10 @@ public class NetworkClient {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Success : Response : " + responseJson);
                     Response response = new Gson().fromJson(responseJson, Response.class);
-                    if (statusCode == 200 || statusCode == 206)
+                    if (statusCode == 200 || statusCode == 206) {
+                        StorageHelper.saveUserProfile(context, responseJson);
                         callback.successOperation(response, statusCode, calledApiValue);
-                    else
+                    } else
                         callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -465,15 +467,18 @@ public class NetworkClient {
                         String responseJson = new String(responseBody);
                         Log.d(TAG, "Success: Response:" + responseJson);
                         Log.d(TAG, "Success: Response Code:" + statusCode);
-                        if (DashboardActivity.dashboardActivity.user_group == 3) {
+                        int userGroup = Integer.parseInt(StorageHelper.getUserGroup(context, "user_group"));
+                        if (userGroup == 3) {
                             Response response = new Gson().fromJson(responseJson, Response.class);
                             callback.successOperation(response, statusCode, calledApiValue);
-                        } else if (DashboardActivity.dashboardActivity.user_group == 2) {
+                        } else if (userGroup == 2) {
                             ProfileResponse response = new Gson().fromJson(responseJson, ProfileResponse.class);
                             callback.successOperation(response, statusCode, calledApiValue);
                         }
+                        if (statusCode == 200)
+                            StorageHelper.saveUserProfile(context, responseJson);
                     } catch (Exception e) {
-                        Log.d(TAG, "Exception: " + e.getMessage());
+                        Log.d(TAG, "Exception: " + e);
                         callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
                     }
                 } catch (Exception e) {
@@ -558,6 +563,7 @@ public class NetworkClient {
                     Log.d(TAG, "Success: Response Code:" + statusCode);
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     if (statusCode == 200) {
+                        StorageHelper.saveUserProfile(context, responseJson);
                         callback.successOperation(response, statusCode, calledApiValue);
                     } else {
                         callback.failureOperation(response.getMessage(), statusCode, calledApiValue);

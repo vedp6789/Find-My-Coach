@@ -12,8 +12,8 @@
 
 
     <!-- Permission to read SMS for reading OTP from received SMS-->
-    <uses-feature android:name="android.RECEIVE_SMS" />
-    <uses-feature android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
 
     <!-- Permission to vibrate - recommended, allows vibration feedback on scan -->
 

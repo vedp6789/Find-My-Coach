@@ -150,11 +150,15 @@ public class AddressFromZip extends AsyncTask<String, Void, String>  implements 
                     Log.d("AddressFromZip", NetworkManager.countryName);
                     Log.d("AddressFromZip", NetworkManager.postalCodeName);
 
-                    if (NetworkManager.cityName.length() > 1)
+                    if (NetworkManager.cityName.length() > 1) {
                         cityET.setText(NetworkManager.cityName);
+                        cityET.setError(null);
+                    }
 
-                    if (NetworkManager.localityName.length() > 1)
+                    if (NetworkManager.localityName.length() > 1) {
                         addressET.setText(NetworkManager.localityName);
+                        cityET.setError(null);
+                    }
 
                     if(currencySymbol!=null) {
                         String authToken = StorageHelper.getUserDetails(context, "auth_token");

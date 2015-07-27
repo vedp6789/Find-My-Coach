@@ -29,6 +29,7 @@ import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
+import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
@@ -97,10 +98,6 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
     private void initView() {
         email = StorageHelper.getUserDetails(this, "user_email");
         progressDialog = new ProgressDialog(this);
-//        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-//        progressDialog.setContentView(R.layout.progressbar_textview);
-//        msg = (TextView) progressDialog.findViewById(R.id.msg);
         verificationCode = (EditText) findViewById(R.id.verificationCodeET);
         findViewById(R.id.btnVerify).setOnClickListener(this);
         findViewById(R.id.btnResend).setOnClickListener(this);
@@ -197,20 +194,22 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         }
 
         /** Opens Dashboard activity*/
-        startActivity(new Intent(this, DashboardActivity.class));
+        if (response.getData().getCity() == null || response.getData().getCity().toString().trim().equals("")) {
+            int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
+            if (userGroup == 2) {
+                Intent intent = new Intent(this, EditProfileActivityMentee.class);
+                intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                startActivity(intent);
+            } else if (userGroup == 3) {
+                Intent intent = new Intent(this, EditProfileActivityMentor.class);
+                intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                startActivity(intent);
+            }
+
+        } else
+            startActivity(new Intent(this, DashboardActivity.class));
         finish();
         Log.e(TAG, "DashBoard");
-
-//        /** If newly registered user is mentee then open PaymentDetail Activity for getting card details */
-//        if (user_group == 2) {
-//            Log.e(TAG, "User group");
-//            Log.d(TAG, "user_group and payment initiate :" + user_group);
-//            Log.d(TAG, "Launched from : " + from);
-//            if (from == null || !from.equals("ChangePhoneNoFragment")) {
-//                Log.e(TAG, "DashBoard if");
-//                startActivity(new Intent(this, PaymentDetailsActivity.class));
-//            }
-//        }
     }
 
     @Override

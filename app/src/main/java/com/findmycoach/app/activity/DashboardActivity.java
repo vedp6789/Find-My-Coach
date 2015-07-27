@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -114,7 +115,7 @@ public class DashboardActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //  new GetLocation().execute();
+        new GetLocation().execute();
 
         if (LoginActivity.loginActivity != null)
             LoginActivity.loginActivity.finish();
@@ -123,25 +124,29 @@ public class DashboardActivity extends FragmentActivity
         fragmentManager = getSupportFragmentManager();
         isProfileOpen = false;
 
-        String userId = StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id));
-        String newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
+        Log.e("VedBabu", StorageHelper.getUserProfile(this));
 
-        Log.e("SignUp", StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user)) + "");
+//        String userId = StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id));
+//        String newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
+//
+//        Log.e("SignUp", StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user)) + "");
 
         try {
             user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
-            if (userId != null && newUser != null && userId.equals(newUser.split("#")[1])) {
-                String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
-                RequestParams requestParams = new RequestParams();
-                Log.d(TAG2, "Stored User Id:" + userId);
-                Log.d(TAG2, "auth_token" + authToken);
-                requestParams.add("id", userId);
-                requestParams.add("user_group", user_group + "");
-                NetworkClient.getProfile(this, requestParams, authToken, this, 4);
-                isProfileOpen = true;
-                if (!NetworkManager.isNetworkConnected(this))
-                    logout();
-            }
+//            if (userId != null && newUser != null && userId.equals(newUser.split("#")[1])) {
+//                String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
+//                RequestParams requestParams = new RequestParams();
+//                Log.d(TAG2, "Stored User Id:" + userId);
+//                Log.d(TAG2, "auth_token" + authToken);
+//                requestParams.add("id", userId);
+//                requestParams.add("user_group", user_group + "");
+//                isProfileOpen = true;
+//                if (!NetworkManager.isNetworkConnected(this)) {
+//                    logout();
+//                } else {
+//                    NetworkClient.getProfile(this, requestParams, authToken, this, 4);
+//                }
+//            }
         } catch (Exception e) {
             e.printStackTrace();
             logout();
@@ -281,6 +286,8 @@ public class DashboardActivity extends FragmentActivity
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         if (calledApiValue == 4) {
+            Log.e(TAG, "Start activity for result");
+
             if (user_group == 2) {
                 ProfileResponse response = (ProfileResponse) object;
                 Intent intent = new Intent(this, EditProfileActivityMentee.class);
@@ -371,12 +378,12 @@ public class DashboardActivity extends FragmentActivity
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        Log.d(TAG, "onActivityResult dashboard");
+    public void whenProfileNotGetUpdated() {
+        Log.d(TAG, "Dashboard Activity whenProfileNotGetUpdated");
+        logout();
     }
+
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -403,12 +410,12 @@ public class DashboardActivity extends FragmentActivity
         }
 
         try {
-//            if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
-//                HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
-//                HomeFragment.homeFragmentMentee = null;
-//                map.setOnMyLocationChangeListener(null);
-//                map = null;
-//            }
+            if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
+                HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
+                HomeFragment.homeFragmentMentee = null;
+                map.setOnMyLocationChangeListener(null);
+                map = null;
+            }
             if (onNewIntentCalled) {
                 onNewIntentCalled = false;
                 fragment_to_launch_from_notification = fragment_to_open;
@@ -494,9 +501,11 @@ public class DashboardActivity extends FragmentActivity
 
 
     public void logout() {
+        Log.e(TAG, "Logout");
         String loginWith = StorageHelper.getUserDetails(this, "login_with");
         if (loginWith == null || loginWith.equals("G+")) {
             LoginActivity.doLogout = true;
+            Log.e(TAG, "Logout G+ true");
         }
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -506,7 +515,7 @@ public class DashboardActivity extends FragmentActivity
         StorageHelper.clearUserPhone(this);
         fbClearToken();
         removeGCMRegistrationId();
-        this.finish();
+        finish();
         startActivity(new Intent(this, LoginActivity.class));
     }
 
@@ -844,6 +853,7 @@ public class DashboardActivity extends FragmentActivity
     }
 
     public void fbClearToken() {
+        Log.e(TAG, "Logout fb clear");
         Session session = Session.getActiveSession();
         if (session != null) {
             if (!session.isClosed()) {
@@ -879,34 +889,34 @@ public class DashboardActivity extends FragmentActivity
     /**
      * Getting user current location
      */
-//    private class GetLocation extends AsyncTask<Void, Void, Void> {
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
-//                @Override
-//                public void onMyLocationChange(Location location) {
-//                    Log.e("MapTest", location.getLatitude() + " : " + location.getLongitude() + " : " + userCurrentAddress);
-//                    if (userCurrentAddress.equals("")) {
-//                        userCurrentAddress = NetworkManager.getCompleteAddressString(DashboardActivity.this, location.getLatitude(), location.getLongitude());
-//                        Log.e("MapTest", userCurrentAddress);
-//
-//                        if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
-//                            HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
-//                            HomeFragment.homeFragmentMentee = null;
-//                            map.setOnMyLocationChangeListener(null);
-//                            map = null;
-//                        } else if (!userCurrentAddress.equals("")) {
-//                            map.setOnMyLocationChangeListener(null);
-//                            map = null;
-//                        }
-//
-//                        latitude = location.getLatitude();
-//                        longitude = location.getLongitude();
-//                    }
-//                }
-//            };
-//            return null;
-//        }
-//    }
+    private class GetLocation extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+                @Override
+                public void onMyLocationChange(Location location) {
+                    Log.e("MapTest", location.getLatitude() + " : " + location.getLongitude() + " : " + userCurrentAddress);
+                    if (userCurrentAddress.equals("")) {
+                        userCurrentAddress = NetworkManager.getCompleteAddressString(DashboardActivity.this, location.getLatitude(), location.getLongitude());
+                        Log.e("MapTest", userCurrentAddress);
+
+                        if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
+                            HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
+                            HomeFragment.homeFragmentMentee = null;
+                            map.setOnMyLocationChangeListener(null);
+                            map = null;
+                        } else if (!userCurrentAddress.equals("")) {
+                            map.setOnMyLocationChangeListener(null);
+                            map = null;
+                        }
+
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+                    }
+                }
+            };
+            return null;
+        }
+    }
 }

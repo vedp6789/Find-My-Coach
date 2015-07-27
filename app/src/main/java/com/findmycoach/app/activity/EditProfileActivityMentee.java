@@ -2,7 +2,9 @@ package com.findmycoach.app.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,10 +27,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.Session;
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.student.Data;
 import com.findmycoach.app.beans.student.ProfileResponse;
@@ -57,6 +61,7 @@ import java.util.List;
 
 public class EditProfileActivityMentee extends Activity implements Callback {
 
+
     int REQUEST_CODE = 100;
     private ImageView profilePicture;
     private TextView profileEmail;
@@ -82,16 +87,20 @@ public class EditProfileActivityMentee extends Activity implements Callback {
     private boolean isGettingAddress;
     private List<Prediction> predictions;
     private ChizzleTextView addText;
+    public boolean needToCheckOnDestroy;
+    private String userCurrentAddress = "";
+    private ScrollView scroll_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile_mentee);
-        newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
+        newUser = getIntent().getStringExtra("newUser");
         initialize();
         applyAction();
         populateUserData();
         isGettingAddress = false;
+        needToCheckOnDestroy = false;
 
         if (newUser != null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
             getAddress();
@@ -113,7 +122,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (DashboardActivity.dashboardActivity == null)
+        if (!needToCheckOnDestroy && DashboardActivity.dashboardActivity == null)
             startActivity(new Intent(this, DashboardActivity.class));
     }
 
@@ -136,6 +145,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         addText = (ChizzleTextView) findViewById(R.id.addPhotoMentee);
+        scroll_view= (ScrollView) findViewById(R.id.main_scroll_view);
 
         profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
 
@@ -150,8 +160,8 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // your code here
-                if(position==1 || position==2) {
-                    ChildDetailsDialog childDetailsDialog=new ChildDetailsDialog(EditProfileActivityMentee.this);
+                if (position == 1 || position == 2) {
+                    ChildDetailsDialog childDetailsDialog = new ChildDetailsDialog(EditProfileActivityMentee.this);
                     childDetailsDialog.showPopUp();
                 }
 
@@ -170,8 +180,8 @@ public class EditProfileActivityMentee extends Activity implements Callback {
 //        profileFirstName.setOnTouchListener(onTouchListener);
 //        profileLastName.setOnFocusChangeListener(onFocusChangeListener);
 //        profileLastName.setOnTouchListener(onTouchListener);
-//        profileDOB.setOnFocusChangeListener(onFocusChangeListener);
-//        profileDOB.setOnTouchListener(onTouchListener);
+        profileDOB.setOnFocusChangeListener(onFocusChangeListener);
+        profileDOB.setOnTouchListener(onTouchListener);
 //        profileAddress.setOnFocusChangeListener(onFocusChangeListener);
 //        profileAddress.setOnTouchListener(onTouchListener);
 //        profileAddress1.setOnFocusChangeListener(onFocusChangeListener);
@@ -455,18 +465,18 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
                 @Override
                 public void onMyLocationChange(Location location) {
-                    if (DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
-                        DashboardActivity.dashboardActivity.userCurrentAddress = NetworkManager.getCompleteAddressString(EditProfileActivityMentee.this, location.getLatitude(), location.getLongitude());
+                    if (userCurrentAddress.equals("")) {
+                        userCurrentAddress = NetworkManager.getCompleteAddressString(EditProfileActivityMentee.this, location.getLatitude(), location.getLongitude());
 
-                        if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
+                        if (!userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
                             if (updateAddress())
                                 populateUserData();
                         }
 
-                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
-                        DashboardActivity.dashboardActivity.longitude = location.getLongitude();
-                    } else if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
+//                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
+//                        DashboardActivity.dashboardActivity.longitude = location.getLongitude();
+                    } else if (!userCurrentAddress.equals("")) {
                         map.setOnMyLocationChangeListener(null);
                         if (updateAddress())
                             populateUserData();
@@ -499,7 +509,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
                 if (NetworkManager.postalCodeName != null && !NetworkManager.postalCodeName.trim().equals(""))
                     userInfo.setZip(NetworkManager.postalCodeName);
                 else {
-                    String address = DashboardActivity.dashboardActivity.userCurrentAddress.trim();
+                    String address = userCurrentAddress.trim();
                     if (!address.equals("")) {
                         String[] temp = address.split(" ");
                         userInfo.setZip(temp[temp.length - 1]);
@@ -515,7 +525,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         RequestParams requestParams = new RequestParams();
         requestParams.add("input", input);
         requestParams.add("key", getResources().getString(R.string.google_location_api_key));
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+        requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
         NetworkClient.autoComplete(getApplicationContext(), requestParams, this, 32);
     }
 
@@ -524,35 +534,45 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         boolean isValid = true;
         if (profileAddress1.getText().toString().trim().equals("")) {
             profileAddress1.setError(getResources().getString(R.string.enter_city));
+            profileAddress1.requestFocus();
             isValid = false;
         }
 
         if (profileAddress.getText().toString().trim().equals("")) {
             profileAddress.setError(getResources().getString(R.string.enter_address));
+            if (isValid)
+                profileAddress.requestFocus();
             isValid = false;
         }
 
         if (profileDOB.getText().toString().trim().equals("")) {
             profileDOB.setError(getResources().getString(R.string.enter_dob));
-            profileDOB.requestFocus();
+            scroll_view.fullScroll(ScrollView.FOCUS_UP);
+            Toast.makeText(EditProfileActivityMentee.this,getResources().getString(R.string.date_of_birth_please),Toast.LENGTH_SHORT).show();
+            if (isValid)
+                profileDOB.requestFocus();
             isValid = false;
         }
 
         if (pinCode.getText().toString().trim().equals("")) {
             pinCode.setError(getResources().getString(R.string.enter_pin));
-
+            if (isValid)
+                pinCode.requestFocus();
             isValid = false;
         }
 
         String firstName = profileFirstName.getText().toString().trim().replaceAll(" ", "");
         if (firstName.equals("")) {
             showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
-            profileFirstName.requestFocus();
+            if (isValid)
+                profileFirstName.requestFocus();
             isValid = false;
         } else {
             for (int i = 0; i < firstName.length(); i++) {
                 if (!Character.isLetter(firstName.charAt(i))) {
                     showErrorMessage(profileFirstName, getResources().getString(R.string.error_not_a_name));
+                    if (isValid)
+                        profileFirstName.requestFocus();
                     isValid = false;
                 }
             }
@@ -561,12 +581,15 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         String lastName = profileLastName.getText().toString().trim().replaceAll(" ", "");
         if (lastName.equals("")) {
             showErrorMessage(profileLastName, getResources().getString(R.string.error_field_required));
-            profileLastName.requestFocus();
+            if (isValid)
+                profileLastName.requestFocus();
             isValid = false;
         } else {
             for (int i = 0; i < lastName.length(); i++) {
                 if (!Character.isLetter(lastName.charAt(i))) {
                     showErrorMessage(profileLastName, getResources().getString(R.string.error_not_a_name));
+                    if (isValid)
+                        profileLastName.requestFocus();
                     isValid = false;
                 }
             }
@@ -609,7 +632,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
 
             String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
             requestParams.add("id", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
-            requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+            requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
             Log.e(TAG, "Country : " + NetworkManager.countryCode);
             if (isGettingAddress && NetworkManager.countryCode != null && !NetworkManager.countryCode.equals("")) {
                 requestParams.add("country", NetworkManager.countryCode.trim());
@@ -638,7 +661,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
 
     @Override
     public void onBackPressed() {
-        if (newUser == null || !newUser.contains(userInfo.getId()))
+        if (DashboardActivity.dashboardActivity != null)
             finish();
         else
             showSignOutDialog();
@@ -662,8 +685,11 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         alertDialog.setPositiveButton(getResources().getString(R.string.action_logout),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if (DashboardActivity.dashboardActivity != null)
-                            DashboardActivity.dashboardActivity.logout();
+                        needToCheckOnDestroy = true;
+                        logout();
+                        startActivity(new Intent(EditProfileActivityMentee.this, LoginActivity.class));
+                        dialog.dismiss();
+                        finish();
                     }
                 }
         );
@@ -724,15 +750,15 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             } catch (Exception ignored) {
             }
 
-            if (newUser != null && newUser.contains(userInfo.getId())) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.remove(getResources().getString(R.string.new_user));
-                editor.apply();
-                Intent intent1 = new Intent(this, PaymentDetailsActivity.class);
-                intent1.putExtra("onBackPress", 1);
-                startActivity(intent1);
-            }
+//            if (newUser != null && newUser.contains(userInfo.getId())) {
+//                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+//                SharedPreferences.Editor editor = preferences.edit();
+//                editor.remove(getResources().getString(R.string.new_user));
+//                editor.apply();
+//                Intent intent1 = new Intent(this, PaymentDetailsActivity.class);
+//                intent1.putExtra("onBackPress", 1);
+//                startActivity(intent1);
+//            }
             finish();
 
             /* Saving address, city and zip */
@@ -762,4 +788,30 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         progressDialog.dismiss();
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
+
+    public void logout() {
+
+        String loginWith = StorageHelper.getUserDetails(this, "login_with");
+        if (loginWith == null || loginWith.equals("G+")) {
+            LoginActivity.doLogout = true;
+            Log.e(TAG, "Logout G+ true");
+        }
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+        StorageHelper.clearUser(this);
+        StorageHelper.clearUserPhone(this);
+
+        Session session = Session.getActiveSession();
+        if (session != null) {
+            if (!session.isClosed()) {
+                session.closeAndClearTokenInformation();
+            }
+        } else {
+            session = new Session(this);
+            Session.setActiveSession(session);
+            session.closeAndClearTokenInformation();
+        }
+    }
+
 }

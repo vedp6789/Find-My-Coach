@@ -2,7 +2,9 @@ package com.findmycoach.app.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,10 +29,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.Session;
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
@@ -75,7 +79,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     private EditText pinCode;
     private EditText accomplishment;
     private EditText chargeInput;
-    private Spinner experienceInput,teachingPreference,classTypeSpinner;
+    private Spinner experienceInput, teachingPreference, classTypeSpinner;
     private CheckBox isReadyToTravel;
     private Button updateAction;
     private Spinner chargesPerUnit;
@@ -87,9 +91,12 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     private String TAG = "FMC";
     private String newUser;
     private boolean isGettingAddress, isDobForReview;
+    public boolean needToCheckOnDestroy;
     private List<Prediction> predictions;
     private ChizzleTextView addPhoto;
     private ChizzleTextView currencySymbol;
+    private String userCurrentAddress = "";
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +108,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         populateUserData();
         isGettingAddress = false;
         isDobForReview = false;
+        needToCheckOnDestroy = false;
 
         if (newUser != null || userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
             getAddress();
@@ -122,7 +130,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (DashboardActivity.dashboardActivity == null)
+        if (!needToCheckOnDestroy && DashboardActivity.dashboardActivity == null)
             startActivity(new Intent(this, DashboardActivity.class));
     }
 
@@ -138,13 +146,13 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         pinCode = (EditText) findViewById(R.id.input_pin);
         chargeInput = (EditText) findViewById(R.id.input_charges);
-        currencySymbol=(ChizzleTextView)findViewById(R.id.currencySymbol);
+        currencySymbol = (ChizzleTextView) findViewById(R.id.currencySymbol);
         chargeInput.setSelectAllOnFocus(true);
         accomplishment = (EditText) findViewById(R.id.input_accomplishment);
         experienceInput = (Spinner) findViewById(R.id.input_experience);
-        teachingPreference=(Spinner)findViewById(R.id.teachingPreferencesSpinner);
+        teachingPreference = (Spinner) findViewById(R.id.teachingPreferencesSpinner);
         classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
-
+scrollView= (ScrollView) findViewById(R.id.main_scroll_view);
 
         String[] yearOfExperience = new String[51];
         for (int i = 0; i < yearOfExperience.length; i++) {
@@ -155,10 +163,10 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         String[] preferences = getResources().getStringArray(R.array.teaching_preferences);
         String[] classType = getResources().getStringArray(R.array.mentor_class_type);
 
-        addPhoto=(ChizzleTextView)findViewById(R.id.addPhotoMentor);
+        addPhoto = (ChizzleTextView) findViewById(R.id.addPhotoMentor);
         experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, yearOfExperience));
-        teachingPreference.setAdapter(new ArrayAdapter<>(this,R.layout.textview,preferences));
-        classTypeSpinner.setAdapter(new ArrayAdapter<>(this,R.layout.textview,classType));
+        teachingPreference.setAdapter(new ArrayAdapter<>(this, R.layout.textview, preferences));
+        classTypeSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.textview, classType));
         isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
         updateAction = (Button) findViewById(R.id.button_update);
         chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
@@ -182,16 +190,16 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 //        profileFirstName.setOnTouchListener(onTouchListener);
 //        profileLastName.setOnFocusChangeListener(onFocusChangeListener);
 //        profileLastName.setOnTouchListener(onTouchListener);
-//        profileDOB.setOnFocusChangeListener(onFocusChangeListener);
-//        profileDOB.setOnTouchListener(onTouchListener);
+        profileDOB.setOnFocusChangeListener(onFocusChangeListener);
+        profileDOB.setOnTouchListener(onTouchListener);
 //        profileAddress.setOnFocusChangeListener(onFocusChangeListener);
 //        profileAddress.setOnTouchListener(onTouchListener);
 //        profileAddress1.setOnFocusChangeListener(onFocusChangeListener);
 //        profileAddress1.setOnTouchListener(onTouchListener);
 //        pinCode.setOnFocusChangeListener(onFocusChangeListener);
 //        pinCode.setOnTouchListener(onTouchListener);
-//        areaOfCoaching.setOnFocusChangeListener(onFocusChangeListener);
-//        areaOfCoaching.setOnTouchListener(onTouchListener);
+        areaOfCoaching.setOnFocusChangeListener(onFocusChangeListener);
+        areaOfCoaching.setOnTouchListener(onTouchListener);
     }
 
     /**
@@ -289,7 +297,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                         || (actionId == EditorInfo.IME_ACTION_DONE
                         || actionId == EditorInfo.IME_ACTION_NEXT)) {
                     try {
-                        new AddressFromZip(EditProfileActivityMentor.this, profileAddress1, profileAddress,currencySymbol, true).execute(pinCode.getText().toString());
+                        new AddressFromZip(EditProfileActivityMentor.this, profileAddress1, profileAddress, currencySymbol, true).execute(pinCode.getText().toString());
                         isGettingAddress = true;
                     } catch (Exception ignored) {
                     }
@@ -394,113 +402,116 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 //    }
 
     public void populateUserData() {
-        if (userInfo == null) {
-            return;
-        }
-        if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-            ImageLoader imgLoader = new ImageLoader(profilePicture);
-            imgLoader.execute((String) userInfo.getPhotograph());
-        }
-        profileEmail.setText(userInfo.getEmail());
+       try {
+           if (userInfo == null) {
+               return;
+           }
+           if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
+               ImageLoader imgLoader = new ImageLoader(profilePicture);
+               imgLoader.execute((String) userInfo.getPhotograph());
+           }
+           profileEmail.setText(userInfo.getEmail());
 
-        try {
-            profileFirstName.setText(userInfo.getFirstName());
-        } catch (Exception ignored) {
-        }
-        try {
-            profileLastName.setText(userInfo.getLastName());
-        } catch (Exception ignored) {
-        }
-        try {
-            profileAddress.setText((String) userInfo.getAddress());
-        } catch (Exception ignored) {
-        }
-        try {
-            profileAddress1.setText((String) userInfo.getCity());
-        } catch (Exception ignored) {
-        }
-        try {
-            city = (String) userInfo.getCity();                 /* city string initially set to the city i.e. earlier get updated*/
-        } catch (Exception ignored) {
-        }
-        try {
-            profileDOB.setText((String) userInfo.getDob());
-        } catch (Exception ignored) {
-        }
-        try {
-            pinCode.setText((String) userInfo.getZip());
-        } catch (Exception ignored) {
-        }
+           try {
+               profileFirstName.setText(userInfo.getFirstName());
+           } catch (Exception ignored) {
+           }
+           try {
+               profileLastName.setText(userInfo.getLastName());
+           } catch (Exception ignored) {
+           }
+           try {
+               profileAddress.setText((String) userInfo.getAddress());
+           } catch (Exception ignored) {
+           }
+           try {
+               profileAddress1.setText((String) userInfo.getCity());
+           } catch (Exception ignored) {
+           }
+           try {
+               city = (String) userInfo.getCity();                 /* city string initially set to the city i.e. earlier get updated*/
+           } catch (Exception ignored) {
+           }
+           try {
+               profileDOB.setText((String) userInfo.getDob());
+           } catch (Exception ignored) {
+           }
+           try {
+               pinCode.setText((String) userInfo.getZip());
+           } catch (Exception ignored) {
+           }
 
-        try {
-            chargeInput.setText(userInfo.getCharges());
-        } catch (Exception ignored) {
-        }
-        try {
-            chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, new String[]{"hour"}));
-            chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
-        } catch (Exception ignored) {
-        }
+           try {
+               chargeInput.setText(userInfo.getCharges());
+           } catch (Exception ignored) {
+           }
+           try {
+               chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, new String[]{"hour"}));
+               chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
+           } catch (Exception ignored) {
+           }
 
-        try {
-            int index = Integer.parseInt(userInfo.getExperience());
-            if (index > 51)
-                index = 0;
-            experienceInput.setSelection(index);
-        } catch (Exception e) {
-            experienceInput.setSelection(0);
-        }
-        if (userInfo.getGender() != null) {
-            if (userInfo.getGender().equals("M"))
-                profileGender.setSelection(0);
-            else
-                profileGender.setSelection(1);
-        }
-        if (userInfo.getAccomplishments() != null) {
-            accomplishment.setText(userInfo.getAccomplishments());
-        }
-        if (userInfo.getAvailabilityYn().equals("1")) {
-            isReadyToTravel.setChecked(true);
-        } else {
-            isReadyToTravel.setChecked(false);
-        }
+           try {
+               int index = Integer.parseInt(userInfo.getExperience());
+               if (index > 51)
+                   index = 0;
+               experienceInput.setSelection(index);
+           } catch (Exception e) {
+               experienceInput.setSelection(0);
+           }
+           if (userInfo.getGender() != null) {
+               if (userInfo.getGender().equals("M"))
+                   profileGender.setSelection(0);
+               else
+                   profileGender.setSelection(1);
+           }
+           if (userInfo.getAccomplishments() != null) {
+               accomplishment.setText(userInfo.getAccomplishments());
+           }
+           if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {
+               isReadyToTravel.setChecked(true);
+           } else {
+               isReadyToTravel.setChecked(false);
+           }
 
-        try {
-            List<String> areaOfInterests = userInfo.getSubCategoryName();
-            if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).equals(" ")) {
-                String areaOfInterest = "";
-                for (int index = 0; index < areaOfInterests.size(); index++) {
-                    if (index != 0) {
-                        areaOfInterest = areaOfInterest + ", " + areaOfInterests.get(index);
-                    } else {
-                        areaOfInterest = areaOfInterest + areaOfInterests.get(index);
-                    }
-                }
-                areaOfCoaching.setText(areaOfInterest);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+           try {
+               List<String> areaOfInterests = userInfo.getSubCategoryName();
+               if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).equals(" ")) {
+                   String areaOfInterest = "";
+                   for (int index = 0; index < areaOfInterests.size(); index++) {
+                       if (index != 0) {
+                           areaOfInterest = areaOfInterest + ", " + areaOfInterests.get(index);
+                       } else {
+                           areaOfInterest = areaOfInterest + areaOfInterests.get(index);
+                       }
+                   }
+                   areaOfCoaching.setText(areaOfInterest);
+               }
+           } catch (Exception e) {
+               e.printStackTrace();
+           }
 
-        areaOfCoaching.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openAreaOfCoachingActivity();
-            }
-        });
+           areaOfCoaching.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   openAreaOfCoachingActivity();
+               }
+           });
 
-        if(userInfo.getCurrencyCode()!=null) {
-            String authToken = StorageHelper.getUserDetails(this, "auth_token");
-            RequestParams requestParams = new RequestParams();
-            requestParams.add("country", String.valueOf(userInfo.getCurrencyCode()));
-            NetworkClient.getCurrencySymbol(this, requestParams, authToken, this, 52);
+           if (userInfo.getCurrencyCode() != null) {
+               String authToken = StorageHelper.getUserDetails(this, "auth_token");
+               RequestParams requestParams = new RequestParams();
+               requestParams.add("country", String.valueOf(userInfo.getCurrencyCode()));
+               NetworkClient.getCurrencySymbol(this, requestParams, authToken, this, 52);
 
-        }
-        else {
-            currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
-        }
-        if (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
-            getAddress();
+           } else {
+               currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
+           }
+           if (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
+               getAddress();
+       }catch (Exception e){
+           e.printStackTrace();
+       }
     }
 
     private void openAreaOfCoachingActivity() {
@@ -522,18 +533,18 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
                 @Override
                 public void onMyLocationChange(Location location) {
-                    if (DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
-                        DashboardActivity.dashboardActivity.userCurrentAddress = NetworkManager.getCompleteAddressString(EditProfileActivityMentor.this, location.getLatitude(), location.getLongitude());
+                    if (userCurrentAddress.equals("")) {
+                        userCurrentAddress = NetworkManager.getCompleteAddressString(EditProfileActivityMentor.this, location.getLatitude(), location.getLongitude());
 
-                        if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
+                        if (!userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
                             if (updateAddress())
                                 populateUserData();
                         }
 
-                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
-                        DashboardActivity.dashboardActivity.longitude = location.getLongitude();
-                    } else if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
+//                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
+//                        DashboardActivity.dashboardActivity.longitude = location.getLongitude();
+                    } else if (!userCurrentAddress.equals("")) {
                         map.setOnMyLocationChangeListener(null);
                         if (updateAddress())
                             populateUserData();
@@ -550,7 +561,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         if (userInfo != null && (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))) {
             try {
                 userInfo.setAddress(NetworkManager.localityName);
-                String s= NetworkManager.countryName;
+                String s = NetworkManager.countryName;
             } catch (Exception ignored) {
             }
         }
@@ -562,7 +573,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             }
         }
 
-        if(userInfo != null) {
+        if (userInfo != null) {
             userInfo.setCurrencyCode(NetworkManager.countryCode);
         }
 
@@ -571,7 +582,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
                 if (NetworkManager.postalCodeName != null && !NetworkManager.postalCodeName.trim().equals(""))
                     userInfo.setZip(NetworkManager.postalCodeName);
                 else {
-                    String address = DashboardActivity.dashboardActivity.userCurrentAddress.trim();
+                    String address = userCurrentAddress.trim();
                     if (!address.equals("")) {
                         String[] temp = address.split(" ");
                         userInfo.setZip(temp[temp.length - 1]);
@@ -591,23 +602,31 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
         if (profileAddress1.getText().toString().trim().equals("")) {
             profileAddress1.setError(getResources().getString(R.string.enter_city));
+            profileAddress1.requestFocus();
             isValid = false;
         }
 
         if (profileAddress.getText().toString().trim().equals("")) {
             profileAddress.setError(getResources().getString(R.string.enter_address));
+            if (isValid)
+                profileAddress.requestFocus();
             isValid = false;
         }
 
         if (profileDOB.getText().toString().trim().equals("")) {
             profileDOB.setError(getResources().getString(R.string.enter_dob));
-            profileDOB.requestFocus();
+            scrollView.fullScroll(ScrollView.FOCUS_UP);
+            //Toast.makeText(EditProfileActivityMentor.this,getResources().getString(R.string.date_of_birth_please),Toast.LENGTH_SHORT).show();
+            if (isValid)
+                profileDOB.requestFocus();
 
             isValid = false;
         }
 
         if (pinCode.getText().toString().trim().equals("")) {
             pinCode.setError(getResources().getString(R.string.enter_pin));
+            if (isValid)
+                pinCode.requestFocus();
             isValid = false;
         }
 
@@ -615,12 +634,15 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         String firstName = profileFirstName.getText().toString().trim().replaceAll(" ", "");
         if (firstName.equals("")) {
             showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
-            profileFirstName.requestFocus();
+            if (isValid)
+                profileFirstName.requestFocus();
             isValid = false;
         } else {
             for (int i = 0; i < firstName.length(); i++) {
                 if (!Character.isLetter(firstName.charAt(i))) {
                     showErrorMessage(profileFirstName, getResources().getString(R.string.error_not_a_name));
+                    if (isValid)
+                        profileFirstName.requestFocus();
                     isValid = false;
                 }
             }
@@ -629,12 +651,15 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         String lastName = profileLastName.getText().toString().trim().replaceAll(" ", "");
         if (lastName.equals("")) {
             showErrorMessage(profileLastName, getResources().getString(R.string.error_field_required));
-            profileLastName.requestFocus();
+            if (isValid)
+                profileLastName.requestFocus();
             isValid = false;
         } else {
             for (int i = 0; i < lastName.length(); i++) {
                 if (!Character.isLetter(lastName.charAt(i))) {
                     showErrorMessage(profileLastName, getResources().getString(R.string.error_not_a_name));
+                    if (isValid)
+                        profileLastName.requestFocus();
                     isValid = false;
                 }
             }
@@ -642,6 +667,8 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
         if (areaOfCoaching.getText().toString().trim().equals("")) {
             showErrorMessage(areaOfCoaching, getResources().getString(R.string.error_field_required));
+            if (isValid)
+                areaOfCoaching.requestFocus();
             isValid = false;
         }
 
@@ -679,7 +706,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         RequestParams requestParams = new RequestParams();
         requestParams.add("input", input);
         requestParams.add("key", getResources().getString(R.string.google_location_api_key));
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+        requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
         NetworkClient.autoComplete(getApplicationContext(), requestParams, this, 32);
     }
 
@@ -718,7 +745,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
-            requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+            requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
             if (isGettingAddress && NetworkManager.countryCode != null && !NetworkManager.countryCode.equals("")) {
                 requestParams.add("country", NetworkManager.countryCode.trim());
                 Log.e(TAG, "Country : " + NetworkManager.countryCode);
@@ -762,7 +789,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
     @Override
     public void onBackPressed() {
-        if (newUser == null || !newUser.contains(userInfo.getId()))
+        if (DashboardActivity.dashboardActivity != null)
             finish();
         else
             showSignOutDialog();
@@ -785,8 +812,11 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         alertDialog.setPositiveButton(getResources().getString(R.string.action_logout),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if (DashboardActivity.dashboardActivity != null)
-                            DashboardActivity.dashboardActivity.logout();
+                        needToCheckOnDestroy = true;
+                        logout();
+                        startActivity(new Intent(EditProfileActivityMentor.this, LoginActivity.class));
+                        dialog.dismiss();
+                        finish();
                     }
                 }
         );
@@ -814,12 +844,11 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
 
-        if(calledApiValue==52){
-            Currency currency = (Currency)object;
-            StorageHelper.setCurrency(this,currency.getCurrencySymbol());
+        if (calledApiValue == 52) {
+            Currency currency = (Currency) object;
+            StorageHelper.setCurrency(this, currency.getCurrencySymbol());
             currencySymbol.setText(Html.fromHtml(currency.getCurrencySymbol()));
-        }
-         else if (object instanceof Suggestion) {
+        } else if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
         } else {
@@ -832,8 +861,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             if (currencyCode == null || currencyCode.trim().equals("")) {
                 StorageHelper.setCurrency(this, userInfo.getCurrencyCode());
                 Log.d(TAG, "Currency code : " + currencyCode);
-            }
-            else {
+            } else {
                 currencySymbol.setText(Html.fromHtml(currencyCode));
             }
 
@@ -891,15 +919,17 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             }
 
 
-            if (newUser != null && newUser.contains(userInfo.getId())) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.remove(getResources().getString(R.string.new_user));
-                editor.apply();
-                DashboardActivity.dashboardActivity.mainLayout.setVisibility(View.VISIBLE);
-                if (!isDobForReview)
+//            if (newUser != null && newUser.contains(userInfo.getId())) {
+//                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+//                SharedPreferences.Editor editor = preferences.edit();
+//                editor.remove(getResources().getString(R.string.new_user));
+//                editor.apply();
+//                DashboardActivity.dashboardActivity.mainLayout.setVisibility(View.VISIBLE);
+                if (!isDobForReview) {
+                    needToCheckOnDestroy = true;
                     startActivity(new Intent(this, AddNewSlotActivity.class));
-            }
+                }
+//            }
             finish();
         }
     }
@@ -908,6 +938,31 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         String message = (String) object;
         progressDialog.dismiss();
-         Log.d(TAG, "success response message : in EditProfileActivity : " + message);
+        Log.d(TAG, "success response message : in EditProfileActivity : " + message);
+    }
+
+    public void logout() {
+
+        String loginWith = StorageHelper.getUserDetails(this, "login_with");
+        if (loginWith == null || loginWith.equals("G+")) {
+            LoginActivity.doLogout = true;
+            Log.e(TAG, "Logout G+ true");
+        }
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+        StorageHelper.clearUser(this);
+        StorageHelper.clearUserPhone(this);
+
+        Session session = Session.getActiveSession();
+        if (session != null) {
+            if (!session.isClosed()) {
+                session.closeAndClearTokenInformation();
+            }
+        } else {
+            session = new Session(this);
+            Session.setActiveSession(session);
+            session.closeAndClearTokenInformation();
+        }
     }
 }

@@ -24,6 +24,7 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
 //    private ActionBar actionbar;
 
     LinearLayout ll_calendar_preferences;
+    public static Settings settings;
 
 
     @Override
@@ -31,9 +32,15 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        settings = this;
         initView();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        settings = null;
+    }
 
     @Override
     protected void onPause() {
@@ -68,14 +75,8 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
         TextView textView = (TextView) findViewById(R.id.title);
         textView.setText(getResources().getString(R.string.action_settings));
 
-        applyActionbarProperties();
     }
 
-    private void applyActionbarProperties() {
-//        actionbar = getActionBar();
-//        if(actionbar != null)
-//            actionbar.setDisplayHomeAsUpEnabled(true);
-    }
 
     @Override
     public void onClick(View v) {

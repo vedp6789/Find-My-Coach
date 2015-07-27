@@ -45,6 +45,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
@@ -110,8 +111,22 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         /** If user is already logged-in in app then open Dashboard Activity */
         if (userToken != null && phnVerified != null) {
-            Intent intent = new Intent(this, DashboardActivity.class);
-            startActivity(intent);
+            Log.e(TAG, "Login from onCreate");
+            Response response = new Gson().fromJson(StorageHelper.getUserProfile(this), Response.class);
+            if (response.getData().getCity() == null || response.getData().getCity().toString().trim().equals("")) {
+                int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
+                if (userGroup == 2) {
+                    Intent intent = new Intent(this, EditProfileActivityMentee.class);
+                    intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                    startActivity(intent);
+                } else if (userGroup == 3) {
+                    Intent intent = new Intent(this, EditProfileActivityMentor.class);
+                    intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                    startActivity(intent);
+                }
+
+            } else
+                startActivity(new Intent(this, DashboardActivity.class));
             this.finish();
         }
         /** Else setup the login screen */
@@ -715,7 +730,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 /** Phone number is provided with country code, updating user's phone number in server */
                 else {
                     dialog.dismiss();
-                    requestParams.add("phone_number", countryCodeTV.getText().toString().trim().replace("+","") + "-" + phnNum);
+                    requestParams.add("phone_number", countryCodeTV.getText().toString().trim().replace("+", "") + "-" + phnNum);
                     requestParams.add("user_group", String.valueOf(user_group));
                     saveUserPhoneNumber(phnNum);
                     Log.e("Login dialog", "phone_number : " + countryCodeTV.getText().toString().trim() + "-" + phnNum);
@@ -903,15 +918,15 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         if (statusCode == 206 || response.getStatus() == 2) {
             RequestParams requestParams = new RequestParams();
             requestParams.add("email", StorageHelper.getUserDetails(this, "user_email"));
-            try {
-                StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getData().getId());
-            } catch (Exception e) {
-                try {
-                    StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" +
-                            StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
-                } catch (Exception ex) {
-                }
-            }
+//            try {
+//                StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getData().getId());
+//            } catch (Exception e) {
+//                try {
+//                    StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" +
+//                            StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
+//                } catch (Exception ex) {
+//                }
+//            }
 
             if (response.getStatus() == 2)
                 Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
@@ -942,12 +957,28 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         if (statusCode == 200) {
             saveUserPhn("True");
-            startActivity(new Intent(this, DashboardActivity.class));
-            if (response.getData().isNewUser()) {
-                StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getId());
-                if (user_group == 2)
-                    startActivity(new Intent(this, PaymentDetailsActivity.class));
-            }
+            Log.e(TAG, "Login from Success");
+
+            if (response.getData().getCity() == null || response.getData().getCity().toString().trim().equals("")) {
+                int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
+                if (userGroup == 2) {
+                    Intent intent = new Intent(this, EditProfileActivityMentee.class);
+                    intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                    startActivity(intent);
+                } else if (userGroup == 3) {
+                    Intent intent = new Intent(this, EditProfileActivityMentor.class);
+                    intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                    startActivity(intent);
+                }
+
+            } else
+                startActivity(new Intent(this, DashboardActivity.class));
+
+//            if (response.getData().isNewUser()) {
+//                StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getId());
+//                if (user_group == 2)
+//                    startActivity(new Intent(this, PaymentDetailsActivity.class));
+//            }
             finish();
         }
     }
