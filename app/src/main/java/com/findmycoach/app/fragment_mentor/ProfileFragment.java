@@ -156,7 +156,13 @@ public class ProfileFragment extends Fragment implements Callback {
 
 
     private void populateFields() {
-        profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
+        try {
+            if (userInfo.getMiddleName() == null || userInfo.getMiddleName().trim().equals(""))
+                profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
+            else
+                profileName.setText(userInfo.getFirstName() + " " + userInfo.getMiddleName() + " " + userInfo.getLastName());
+        } catch (Exception e) {
+        }
         try {
             profileEmail.setText(userInfo.getEmail());
         } catch (Exception e) {

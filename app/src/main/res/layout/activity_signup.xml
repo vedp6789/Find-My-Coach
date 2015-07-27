@@ -153,6 +153,18 @@
                         android:textCursorDrawable="@drawable/cursor_white" />
 
                     <com.findmycoach.app.views.ChizzleEditText
+                        android:id="@+id/input_middle_name"
+                        style="@style/EditTextCustomHolo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_middle_name"
+                        android:inputType="textCapSentences|textNoSuggestions|textCapWords"
+                        android:minHeight="@dimen/abc_action_bar_stacked_max_height"
+                        android:padding="4dp"
+                        android:singleLine="true"
+                        android:textCursorDrawable="@drawable/cursor_white" />
+
+                    <com.findmycoach.app.views.ChizzleEditText
                         android:id="@+id/input_last_name"
                         style="@style/EditTextCustomHolo"
                         android:layout_width="match_parent"
