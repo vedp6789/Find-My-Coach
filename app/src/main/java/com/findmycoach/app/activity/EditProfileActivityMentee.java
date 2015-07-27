@@ -25,6 +25,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -45,6 +47,7 @@ import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
+import com.findmycoach.app.util.AddAddressDialog;
 import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
@@ -101,7 +104,8 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
     private ArrayList<ChildDetails> childDetailsArrayList;
     private ListView childDetailsListView;
     private ChildDetailsAdapter childDetailsAdapter;
-    private Button addMore;
+    private Button addMore,addAddress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +126,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
     @Override
     protected void onResume() {
         super.onResume();
+
 
         String tNc = StorageHelper.getUserDetails(this, "terms");
         if (tNc == null || !tNc.equals("yes")) {
@@ -162,6 +167,8 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         groupDetailsLayout=(RelativeLayout)findViewById(R.id.groupClassesDetails);
         childDetailsListView=(ListView)findViewById(R.id.childDetailsListView);
         addMore=(Button)findViewById(R.id.addMoreButton);
+        addAddress=(Button)findViewById(R.id.addAddress);
+        CheckBox mutipleAddress=(CheckBox)findViewById(R.id.inputMutipleAddresses);
         profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
 
         locationPreferenceSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.location_preference)));
@@ -201,6 +208,27 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             }
 
         });
+
+
+        mutipleAddress.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                    addAddress.setVisibility(View.VISIBLE);
+                else
+                    addAddress.setVisibility(View.GONE);
+            }
+        });
+
+
+        addAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddAddressDialog dialog=new AddAddressDialog(EditProfileActivityMentee.this);
+                dialog.showPopUp();
+            }
+        });
+
 
         coachingType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -880,11 +908,14 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
 
     @Override
     public void onChildDetailsAdded(ChildDetails childDetails) {
-        childDetailsArrayList.add(childDetailsArrayList.size(), childDetails);
-        childDetailsAdapter.notifyDataSetChanged();
-        setListViewHeightBasedOnChildren(childDetailsListView);
-        childDetailsListView.setVisibility(View.VISIBLE);
-        addMore.setVisibility(View.VISIBLE);
+        if(childDetails!=null) {
+            childDetailsArrayList.add(childDetailsArrayList.size(), childDetails);
+            childDetailsAdapter.notifyDataSetChanged();
+            setListViewHeightBasedOnChildren(childDetailsListView);
+            childDetailsListView.setVisibility(View.VISIBLE);
+            addMore.setVisibility(View.VISIBLE);
+        }
+
 
     }
 

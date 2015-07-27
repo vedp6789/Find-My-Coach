@@ -520,7 +520,7 @@
                         android:textSize="@dimen/profile_details" />
 
                     <CheckBox
-                        android:id="@+id/input_hosting"
+                        android:id="@+id/input_willing"
                         android:layout_width="@dimen/activity_vertical_margin"
                         android:layout_height="@dimen/activity_vertical_margin"
                         android:layout_alignParentEnd="true"

@@ -73,6 +73,7 @@ public class ChildDetailsDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+
             }
         });
         doneButton.setOnClickListener(new View.OnClickListener() {
