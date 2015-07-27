@@ -29,9 +29,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
-                android:weightSum="4"
-                android:layout_marginTop="16dp">
+                android:weightSum="4">
 
                 <FrameLayout
                     android:layout_width="@dimen/user_image_height_width"
@@ -44,6 +44,7 @@
                         android:src="@drawable/user_icon" />
 
                     <com.findmycoach.app.views.ChizzleTextView
+                        android:id="@+id/addPhotoMentor"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/indicator"
                         android:layout_gravity="center_horizontal|bottom"
@@ -51,8 +52,7 @@
                         android:padding="@dimen/days_margin"
                         android:text="Change photo"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/profile_add_photo"
-                        android:id="@+id/addPhotoMentor" />
+                        android:textSize="@dimen/profile_add_photo" />
 
                 </FrameLayout>
 
@@ -334,8 +334,8 @@
                     android:id="@+id/teachingPreferencesSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_button_height"
-                    android:spinnerMode="dropdown"
-                    android:background="@android:color/transparent" />
+                    android:background="@android:color/transparent"
+                    android:spinnerMode="dropdown" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -387,8 +387,8 @@
                     android:id="@+id/classTypeSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_button_height"
-                    android:spinnerMode="dropdown"
-                    android:background="@android:color/transparent" />
+                    android:background="@android:color/transparent"
+                    android:spinnerMode="dropdown" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -520,7 +520,7 @@
                         android:textSize="@dimen/profile_details" />
 
                     <CheckBox
-                        android:id="@+id/input_hosting"
+                        android:id="@+id/input_willing"
                         android:layout_width="@dimen/activity_vertical_margin"
                         android:layout_height="@dimen/activity_vertical_margin"
                         android:layout_alignParentEnd="true"
@@ -547,9 +547,9 @@
                     android:layout_height="match_parent">
 
                     <com.findmycoach.app.views.ChizzleTextView
+                        android:id="@+id/currencySymbol"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:id="@+id/currencySymbol"
                         android:layout_alignBottom="@+id/input_charges" />
 
                     <com.findmycoach.app.views.ChizzleEditText
@@ -560,15 +560,15 @@
                         android:layout_alignParentLeft="false"
                         android:layout_alignParentStart="false"
                         android:layout_alignParentTop="false"
+                        android:layout_marginLeft="8dp"
                         android:layout_toLeftOf="@+id/chargesPerUnit"
+                        android:layout_toRightOf="@+id/currencySymbol"
                         android:layout_toStartOf="@+id/chargesPerUnit"
                         android:hint="@string/prompt_charges"
                         android:inputType="number"
                         android:singleLine="true"
                         android:textCursorDrawable="@drawable/cursor_purple"
-                        android:textSize="@dimen/profile_details"
-                        android:layout_toRightOf="@+id/currencySymbol"
-                        android:layout_marginLeft="8dp" />
+                        android:textSize="@dimen/profile_details" />
 
                     <Spinner
                         android:id="@+id/chargesPerUnit"
@@ -644,6 +644,33 @@
                 </LinearLayout>
 
 
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:text="@string/students_preference"
+                    android:textColor="@color/purple_light"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:id="@+id/students_preference"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:textColor="@color/purple_light"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold"
+                    />
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentLeft="true"
+                    android:background="@color/purple_light" />
+
+
+
+
                 <com.findmycoach.app.views.ChizzleButton
                     android:id="@+id/button_update"
                     android:layout_width="match_parent"
@@ -660,12 +687,15 @@
 
             </LinearLayout>
 
+
             <fragment
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.MapFragment"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:visibility="gone" />
+
+
         </LinearLayout>
 
     </ScrollView>

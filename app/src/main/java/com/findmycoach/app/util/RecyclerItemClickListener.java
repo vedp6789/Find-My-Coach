@@ -1,6 +1,5 @@
 package com.findmycoach.app.util;
 
-
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
@@ -8,8 +7,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import org.json.JSONException;
-
-
 
 public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
     private OnItemClickListener mListener;
@@ -36,8 +33,7 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
         if (childView != null && mListener != null && mGestureDetector.onTouchEvent(e)) {
             try{
                 mListener.onItemClick(childView, view.getChildPosition(childView));
-
-            }catch (Exception e1){
+        }catch (Exception e1){
                 e1.printStackTrace();
             }
         }
@@ -46,12 +42,9 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
 
     @Override
     public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {
-    }
-
-    @Override
-    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
     }
+
 
 
 }
