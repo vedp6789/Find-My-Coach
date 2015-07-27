@@ -7,11 +7,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -145,7 +143,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         addText = (ChizzleTextView) findViewById(R.id.addPhotoMentee);
-        scroll_view= (ScrollView) findViewById(R.id.main_scroll_view);
+        scroll_view = (ScrollView) findViewById(R.id.main_scroll_view);
 
         profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
 
@@ -231,7 +229,7 @@ public class EditProfileActivityMentee extends Activity implements Callback {
             @Override
             public void afterTextChanged(Editable s) {
                 city = null;
-                String input = profileAddress1.getText().toString();
+                String input = profileAddress1.getText().toString().trim();
                 if (input.length() >= 2) {
                     getAutoSuggestions(input);
                 }
@@ -759,7 +757,6 @@ public class EditProfileActivityMentee extends Activity implements Callback {
 //                intent1.putExtra("onBackPress", 1);
 //                startActivity(intent1);
 //            }
-            finish();
 
             /* Saving address, city and zip */
             if (profileAddress.getText().toString() != null) {
@@ -778,6 +775,11 @@ public class EditProfileActivityMentee extends Activity implements Callback {
                 StorageHelper.storePreference(this, "training_location", trainingLocation.getText().toString());
             }
 
+
+            if (DashboardActivity.dashboardActivity == null)
+                startActivity(new Intent(this, DashboardActivity.class));
+
+            finish();
 
         }
     }

@@ -7,11 +7,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -152,7 +150,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         experienceInput = (Spinner) findViewById(R.id.input_experience);
         teachingPreference = (Spinner) findViewById(R.id.teachingPreferencesSpinner);
         classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
-scrollView= (ScrollView) findViewById(R.id.main_scroll_view);
+        scrollView = (ScrollView) findViewById(R.id.main_scroll_view);
 
         String[] yearOfExperience = new String[51];
         for (int i = 0; i < yearOfExperience.length; i++) {
@@ -243,7 +241,7 @@ scrollView= (ScrollView) findViewById(R.id.main_scroll_view);
             @Override
             public void afterTextChanged(Editable s) {
                 city = null; /* making city null because if user do changes in city and does not select city from suggested city then this city string should be null which is used to validate the city */
-                String input = profileAddress1.getText().toString();
+                String input = profileAddress1.getText().toString().trim();
                 if (input.length() >= 2) {
                     getAutoSuggestions(input);
                 }
@@ -402,116 +400,116 @@ scrollView= (ScrollView) findViewById(R.id.main_scroll_view);
 //    }
 
     public void populateUserData() {
-       try {
-           if (userInfo == null) {
-               return;
-           }
-           if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-               ImageLoader imgLoader = new ImageLoader(profilePicture);
-               imgLoader.execute((String) userInfo.getPhotograph());
-           }
-           profileEmail.setText(userInfo.getEmail());
+        try {
+            if (userInfo == null) {
+                return;
+            }
+            if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
+                ImageLoader imgLoader = new ImageLoader(profilePicture);
+                imgLoader.execute((String) userInfo.getPhotograph());
+            }
+            profileEmail.setText(userInfo.getEmail());
 
-           try {
-               profileFirstName.setText(userInfo.getFirstName());
-           } catch (Exception ignored) {
-           }
-           try {
-               profileLastName.setText(userInfo.getLastName());
-           } catch (Exception ignored) {
-           }
-           try {
-               profileAddress.setText((String) userInfo.getAddress());
-           } catch (Exception ignored) {
-           }
-           try {
-               profileAddress1.setText((String) userInfo.getCity());
-           } catch (Exception ignored) {
-           }
-           try {
-               city = (String) userInfo.getCity();                 /* city string initially set to the city i.e. earlier get updated*/
-           } catch (Exception ignored) {
-           }
-           try {
-               profileDOB.setText((String) userInfo.getDob());
-           } catch (Exception ignored) {
-           }
-           try {
-               pinCode.setText((String) userInfo.getZip());
-           } catch (Exception ignored) {
-           }
+            try {
+                profileFirstName.setText(userInfo.getFirstName());
+            } catch (Exception ignored) {
+            }
+            try {
+                profileLastName.setText(userInfo.getLastName());
+            } catch (Exception ignored) {
+            }
+            try {
+                profileAddress.setText((String) userInfo.getAddress());
+            } catch (Exception ignored) {
+            }
+            try {
+                profileAddress1.setText((String) userInfo.getCity());
+            } catch (Exception ignored) {
+            }
+            try {
+                city = (String) userInfo.getCity();                 /* city string initially set to the city i.e. earlier get updated*/
+            } catch (Exception ignored) {
+            }
+            try {
+                profileDOB.setText((String) userInfo.getDob());
+            } catch (Exception ignored) {
+            }
+            try {
+                pinCode.setText((String) userInfo.getZip());
+            } catch (Exception ignored) {
+            }
 
-           try {
-               chargeInput.setText(userInfo.getCharges());
-           } catch (Exception ignored) {
-           }
-           try {
-               chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, new String[]{"hour"}));
-               chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
-           } catch (Exception ignored) {
-           }
+            try {
+                chargeInput.setText(userInfo.getCharges());
+            } catch (Exception ignored) {
+            }
+            try {
+                chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, new String[]{"hour"}));
+                chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
+            } catch (Exception ignored) {
+            }
 
-           try {
-               int index = Integer.parseInt(userInfo.getExperience());
-               if (index > 51)
-                   index = 0;
-               experienceInput.setSelection(index);
-           } catch (Exception e) {
-               experienceInput.setSelection(0);
-           }
-           if (userInfo.getGender() != null) {
-               if (userInfo.getGender().equals("M"))
-                   profileGender.setSelection(0);
-               else
-                   profileGender.setSelection(1);
-           }
-           if (userInfo.getAccomplishments() != null) {
-               accomplishment.setText(userInfo.getAccomplishments());
-           }
-           if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {
-               isReadyToTravel.setChecked(true);
-           } else {
-               isReadyToTravel.setChecked(false);
-           }
+            try {
+                int index = Integer.parseInt(userInfo.getExperience());
+                if (index > 51)
+                    index = 0;
+                experienceInput.setSelection(index);
+            } catch (Exception e) {
+                experienceInput.setSelection(0);
+            }
+            if (userInfo.getGender() != null) {
+                if (userInfo.getGender().equals("M"))
+                    profileGender.setSelection(0);
+                else
+                    profileGender.setSelection(1);
+            }
+            if (userInfo.getAccomplishments() != null) {
+                accomplishment.setText(userInfo.getAccomplishments());
+            }
+            if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {
+                isReadyToTravel.setChecked(true);
+            } else {
+                isReadyToTravel.setChecked(false);
+            }
 
-           try {
-               List<String> areaOfInterests = userInfo.getSubCategoryName();
-               if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).equals(" ")) {
-                   String areaOfInterest = "";
-                   for (int index = 0; index < areaOfInterests.size(); index++) {
-                       if (index != 0) {
-                           areaOfInterest = areaOfInterest + ", " + areaOfInterests.get(index);
-                       } else {
-                           areaOfInterest = areaOfInterest + areaOfInterests.get(index);
-                       }
-                   }
-                   areaOfCoaching.setText(areaOfInterest);
-               }
-           } catch (Exception e) {
-               e.printStackTrace();
-           }
+            try {
+                List<String> areaOfInterests = userInfo.getSubCategoryName();
+                if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).equals(" ")) {
+                    String areaOfInterest = "";
+                    for (int index = 0; index < areaOfInterests.size(); index++) {
+                        if (index != 0) {
+                            areaOfInterest = areaOfInterest + ", " + areaOfInterests.get(index);
+                        } else {
+                            areaOfInterest = areaOfInterest + areaOfInterests.get(index);
+                        }
+                    }
+                    areaOfCoaching.setText(areaOfInterest);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-           areaOfCoaching.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                   openAreaOfCoachingActivity();
-               }
-           });
+            areaOfCoaching.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openAreaOfCoachingActivity();
+                }
+            });
 
-           if (userInfo.getCurrencyCode() != null) {
-               String authToken = StorageHelper.getUserDetails(this, "auth_token");
-               RequestParams requestParams = new RequestParams();
-               requestParams.add("country", String.valueOf(userInfo.getCurrencyCode()));
-               NetworkClient.getCurrencySymbol(this, requestParams, authToken, this, 52);
+            if (userInfo.getCurrencyCode() != null) {
+                String authToken = StorageHelper.getUserDetails(this, "auth_token");
+                RequestParams requestParams = new RequestParams();
+                requestParams.add("country", String.valueOf(userInfo.getCurrencyCode()));
+                NetworkClient.getCurrencySymbol(this, requestParams, authToken, this, 52);
 
-           } else {
-               currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
-           }
-           if (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
-               getAddress();
-       }catch (Exception e){
-           e.printStackTrace();
-       }
+            } else {
+                currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
+            }
+            if (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))
+                getAddress();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void openAreaOfCoachingActivity() {
@@ -925,11 +923,17 @@ scrollView= (ScrollView) findViewById(R.id.main_scroll_view);
 //                editor.remove(getResources().getString(R.string.new_user));
 //                editor.apply();
 //                DashboardActivity.dashboardActivity.mainLayout.setVisibility(View.VISIBLE);
-                if (!isDobForReview) {
-                    needToCheckOnDestroy = true;
-                    startActivity(new Intent(this, AddNewSlotActivity.class));
-                }
+
+            boolean isAddSlotOpen = false;
+            if (!isDobForReview) {
+                needToCheckOnDestroy = true;
+                isAddSlotOpen = true;
+                startActivity(new Intent(this, AddNewSlotActivity.class));
+            }
 //            }
+
+            if (!isAddSlotOpen && DashboardActivity.dashboardActivity == null)
+                startActivity(new Intent(this, DashboardActivity.class));
             finish();
         }
     }

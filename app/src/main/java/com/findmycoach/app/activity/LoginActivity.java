@@ -113,8 +113,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         if (userToken != null && phnVerified != null) {
             Log.e(TAG, "Login from onCreate");
             Response response = new Gson().fromJson(StorageHelper.getUserProfile(this), Response.class);
+            int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
             if (response.getData().getCity() == null || response.getData().getCity().toString().trim().equals("")) {
-                int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
                 if (userGroup == 2) {
                     Intent intent = new Intent(this, EditProfileActivityMentee.class);
                     intent.putExtra("user_info", new Gson().toJson(response.getData()));
@@ -125,6 +125,10 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                     startActivity(intent);
                 }
 
+            } else if (userGroup == 3 && (response.getData().getSubCategoryName() == null || response.getData().getSubCategoryName().size() < 1)) {
+                Intent intent = new Intent(this, EditProfileActivityMentor.class);
+                intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                startActivity(intent);
             } else
                 startActivity(new Intent(this, DashboardActivity.class));
             this.finish();
@@ -959,8 +963,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             saveUserPhn("True");
             Log.e(TAG, "Login from Success");
 
+            int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
             if (response.getData().getCity() == null || response.getData().getCity().toString().trim().equals("")) {
-                int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
                 if (userGroup == 2) {
                     Intent intent = new Intent(this, EditProfileActivityMentee.class);
                     intent.putExtra("user_info", new Gson().toJson(response.getData()));
@@ -970,6 +974,11 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                     intent.putExtra("user_info", new Gson().toJson(response.getData()));
                     startActivity(intent);
                 }
+
+            } else if (userGroup == 3 && (response.getData().getSubCategoryName() == null || response.getData().getSubCategoryName().size() < 1)) {
+                Intent intent = new Intent(this, EditProfileActivityMentor.class);
+                intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                startActivity(intent);
 
             } else
                 startActivity(new Intent(this, DashboardActivity.class));
