@@ -1,11 +1,13 @@
 package com.findmycoach.app.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -21,6 +23,10 @@ import com.findmycoach.app.util.BinaryForImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ChooseImageActivity extends Activity {
 
@@ -147,22 +153,85 @@ public class ChooseImageActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK
                 && null != data) {
-            Uri targetUri = data.getData();
-            Bitmap bitmap;
-            try {
-                bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
-                cropImageView.setImageBitmap(bitmap);
+            Uri selectedImage = data.getData();
+//            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//            Cursor cursor = getContentResolver().query(selectedImage,
+//                    filePathColumn, null, null, null);
+//            cursor.moveToFirst();
+//            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+           String imgDecodableString = getRealPathFromURI(this,selectedImage);
+          //  cursor.close();
 
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+
+            /** Set the Image in ImageView after decoding the String */
+            try {
+                cropImageView.setImageBitmap(decodeFile(new File(imgDecodableString)));
+
+            } catch (Exception e) {
+                Toast.makeText(this, getResources().getString(R.string.error_picking_image), Toast.LENGTH_SHORT).show();
+                try {
+                    cropImageView.setImageBitmap(BinaryForImage.getBitmapFromBinaryString(getIntent().getStringExtra("BitMap")));
+                } catch (Exception ignored) {
+                }
+            }
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.image_not_picked),
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public static String getRealPathFromURI(Context context, Uri uri) {
+        Cursor cursor = null;
+        try {
+            Uri newUri = handleImageUri(uri);
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = context.getContentResolver().query(newUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } catch (Exception e) {
+            return null;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
             }
         }
     }
 
+    private Bitmap decodeFile(File f) {
+        try {
+            //Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
 
+            //The new size we want to scale to
+            final int REQUIRED_SIZE = 225;
 
+            //Find the correct scale value. It should be the power of 2.
+            int scale = 1;
+            while (o.outWidth / scale / 2 >= REQUIRED_SIZE && o.outHeight / scale / 2 >= REQUIRED_SIZE)
+                scale *= 2;
 
+            //Decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+        } catch (FileNotFoundException e) {
+        }
+        return  null;
+    }
 
+    public static Uri handleImageUri(Uri uri) {
+        Pattern pattern = Pattern.compile("(content://media/.*\\d)");
+        if (uri.getPath().contains("content")) {
+            Matcher matcher = pattern.matcher(uri.getPath());
+            if (matcher.find())
+                return Uri.parse(matcher.group(1));
+            else
+                throw new IllegalArgumentException("Cannot handle this URI");
+        } else
+            return uri;
+    }
 }
 
