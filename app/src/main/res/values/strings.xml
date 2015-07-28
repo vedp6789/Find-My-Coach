@@ -839,6 +839,12 @@
     <string name="prompt_fellow_student_location">I am fine to attend group classes at a nearby fellow students location
 </string>
 
+   <string name="prompt_summary"> I would also like to tell something additional about myself</string>
+    <string name="my_qualification">My Qualifications</string>
+    <string name="my_accreditions">My accreditions</string>
+    <string name="my_experience">My experience</string>
+    <string name="my_teaching_methodology">My teaching methodology</string>
+    <string name="my_awards">My awards</string>
 
     <!-- Prompting -->
 

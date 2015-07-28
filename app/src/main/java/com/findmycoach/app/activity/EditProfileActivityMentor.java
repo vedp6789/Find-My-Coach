@@ -99,6 +99,9 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     private String userCurrentAddress = "";
     private ScrollView scrollView;
     private TextView students_preference;
+    private ChizzleTextView summaryHeader;
+    private LinearLayout summaryDetailsLayout;
+    private boolean hiddenFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +157,9 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         experienceInput = (Spinner) findViewById(R.id.input_experience);
         teachingPreference = (Spinner) findViewById(R.id.teachingPreferencesSpinner);
         classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
+        summaryHeader=(ChizzleTextView)findViewById(R.id.summaryText);
         scrollView = (ScrollView) findViewById(R.id.main_scroll_view);
+         summaryDetailsLayout=(LinearLayout)findViewById(R.id.summaryDetailsLayout);
         students_preference = (TextView) findViewById(R.id.students_preference);
 
 
@@ -354,6 +359,21 @@ public class EditProfileActivityMentor extends Activity implements Callback {
 
                 StudentsPreference studentsPreference=new StudentsPreference(EditProfileActivityMentor.this,jsonArray);
                 studentsPreference.showStudentPreferenceDialog();
+            }
+        });
+
+        summaryHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(hiddenFlag) {
+                    summaryDetailsLayout.setVisibility(View.GONE);
+                    hiddenFlag=false;
+
+                }
+                else {
+                    summaryDetailsLayout.setVisibility(View.VISIBLE);
+                    hiddenFlag=true;
+                }
             }
         });
 
