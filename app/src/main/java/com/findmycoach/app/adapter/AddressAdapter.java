@@ -5,17 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
-
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.student.ChildDetails;
+import com.findmycoach.app.views.ChizzleTextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by abhi7 on 27/07/15.
- */
+
 public class AddressAdapter extends ArrayAdapter<ChildDetails> {
 
     private Context context;
@@ -44,7 +41,7 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
         if (convertView == null) {
             convertView = inflater.inflate(resourceId, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.address = (TextView) convertView.findViewById(android.R.id.text1);
+            viewHolder.address = (ChizzleTextView) convertView.findViewById(R.id.address);
 
             convertView.setTag(viewHolder);
         } else {
@@ -57,7 +54,7 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
 
 
     private class ViewHolder {
-        private TextView address;
+        private ChizzleTextView address;
 
 
     }

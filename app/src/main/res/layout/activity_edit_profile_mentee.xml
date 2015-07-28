@@ -362,15 +362,15 @@
 
 
                 <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Add more"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:text="+"
                     android:id="@+id/addMoreButton"
                     android:layout_gravity="right"
                     android:layout_marginRight="16dp"
                     android:background="@color/purple"
                     android:textColor="@color/white"
-                    android:padding="4dp"
+                    android:padding="2dp"
                     android:visibility="gone" />
 
                 <RelativeLayout
@@ -415,16 +415,17 @@
                     android:visibility="gone" />
 
                 <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Add address"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:text="+"
                     android:id="@+id/addAddress"
-                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="8dp"
                     android:background="@color/purple"
                     android:textColor="@color/white"
-                    android:padding="3dp"
-                    android:visibility="gone" />
+                    android:padding="2dp"
+                    android:visibility="gone"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="16dp" />
 
                 <com.findmycoach.app.views.ChizzleTextView
                     android:layout_width="match_parent"

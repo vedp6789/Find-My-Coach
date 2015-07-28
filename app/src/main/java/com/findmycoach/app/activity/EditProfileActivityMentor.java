@@ -49,6 +49,7 @@ import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.util.StudentsPreference;
+import com.findmycoach.app.util.TeachingMediumPreferenceDialog;
 import com.findmycoach.app.util.TermsAndCondition;
 import com.findmycoach.app.views.ChizzleTextView;
 import com.findmycoach.app.views.ChizzleTextViewBold;
@@ -67,7 +68,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class EditProfileActivityMentor extends Activity implements Callback {
+public class EditProfileActivityMentor extends Activity implements Callback,TeachingMediumPreferenceDialog.TeachingMediumAddedListener {
 
     int REQUEST_CODE = 100;
     private ImageView profilePicture;
@@ -105,6 +106,7 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     private LinearLayout summaryDetailsLayout;
     private boolean hiddenFlag;
     private ImageButton arrow;
+    private ChizzleTextView teachingMediumPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,8 +164,9 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
         summaryHeader=(RelativeLayout)findViewById(R.id.summaryHeader);
         scrollView = (ScrollView) findViewById(R.id.main_scroll_view);
-         summaryDetailsLayout=(LinearLayout)findViewById(R.id.summaryDetailsLayout);
+        summaryDetailsLayout=(LinearLayout)findViewById(R.id.summaryDetailsLayout);
         students_preference = (TextView) findViewById(R.id.students_preference);
+        teachingMediumPreference=(ChizzleTextView)findViewById(R.id.teaching_medium_preference);
         arrow=(ImageButton)findViewById(R.id.arrow);
 
 
@@ -383,8 +386,28 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             }
         });
 
+        teachingMediumPreference.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<String> languagesList=new ArrayList<String>();
+                languagesList.add(0,"Select");
+                languagesList.add(1,"English");
+                languagesList.add(2,"Mandarin");
+                languagesList.add(3,"Malay");
+                languagesList.add(4,"Hindi");
+                languagesList.add(5,"Marathi");
+                languagesList.add(6,"Spanish");
+
+                TeachingMediumPreferenceDialog dialog=new TeachingMediumPreferenceDialog(EditProfileActivityMentor.this,languagesList);
+                dialog.setTeachingMediumAddedListener(EditProfileActivityMentor.this);
+                dialog.showPopUp();
+            }
+        });
+
 
     }
+
+
 
 //    private void getPostalFromCity(String cityName) {
 //        city = cityName;
@@ -1048,5 +1071,23 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             Session.setActiveSession(session);
             session.closeAndClearTokenInformation();
         }
+    }
+
+    @Override
+    public void onTeachingMediumAdded(String language1, String language2, String language3, String language4) {
+        String finalString="";
+        if(!language1.equalsIgnoreCase("select")) {
+            finalString+=language1+", ";
+        }
+        if(!language2.equalsIgnoreCase("select")) {
+            finalString+=language2+", ";
+        }
+        if(!language3.equalsIgnoreCase("select")) {
+            finalString+=language3+", ";
+        }
+        if(!language4.equalsIgnoreCase("select")) {
+            finalString+=language4;
+        }
+        teachingMediumPreference.setText(finalString);
     }
 }

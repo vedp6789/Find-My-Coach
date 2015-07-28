@@ -185,7 +185,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             }
         });
 
-        addressAdapter=new AddressAdapter(this,R.layout.textview,addressArrayList);
+        addressAdapter=new AddressAdapter(this,R.layout.muti_address_list_item,addressArrayList);
         childDetailsArrayList=new ArrayList<>();
         childDetailsAdapter=new ChildDetailsAdapter(this,R.layout.child_details_list_item,childDetailsArrayList);
         childDetailsListView.setAdapter(childDetailsAdapter);

@@ -655,6 +655,29 @@
 
                 </LinearLayout>
 
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:text="@string/teaching_medium_preferences"
+                    android:textColor="@color/purple_light"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:id="@+id/teaching_medium_preference"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold"
+                    android:textColor="@color/purple" />
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentLeft="true"
+                    android:background="@color/purple_light" />
+
 
                 <com.findmycoach.app.views.ChizzleTextView
                     android:layout_width="match_parent"
