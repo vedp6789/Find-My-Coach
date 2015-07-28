@@ -14,6 +14,7 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.beans.CalendarSchedule.EventDuration;
 import com.findmycoach.app.beans.CalendarSchedule.Mentee;
 import com.findmycoach.app.beans.CalendarSchedule.Vacation;
+import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,14 +28,14 @@ import java.util.List;
  */
 public class StudentPreferenceSelection extends BaseAdapter {
     Context context;
-    public JSONArray jsonArray;
     public ArrayList<Integer> selected_preferences;
+    List<AgeGroupPreferences> different_preferences;
     String TAG = "FMC";
 
 
-    public StudentPreferenceSelection(Context context, JSONArray jsonArray, ArrayList<Integer> selected_preferences) {
+    public StudentPreferenceSelection(Context context, List<AgeGroupPreferences> different_preferences, ArrayList<Integer> selected_preferences) {
         this.context = context;
-        this.jsonArray = jsonArray;
+        this.different_preferences = different_preferences;
         this.selected_preferences = selected_preferences;
         if (this.selected_preferences == null)
             this.selected_preferences = new ArrayList<Integer>();
@@ -42,15 +43,15 @@ public class StudentPreferenceSelection extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return jsonArray.length();
+        return different_preferences.size();
     }
 
     @Override
     public Object getItem(int position) {
-        JSONObject s = null;
+        AgeGroupPreferences s = null;
         try {
-            s = jsonArray.getJSONObject(position);
-        } catch (JSONException e) {
+            s = different_preferences.get(position);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return s;
@@ -80,10 +81,10 @@ public class StudentPreferenceSelection extends BaseAdapter {
             checkBox.setOnCheckedChangeListener(null);
             checkBox.setChecked(false);
 
-            final JSONObject jsonObject = jsonArray.getJSONObject(position);
+            final AgeGroupPreferences ageGroupPreferences = different_preferences.get(position);
 
-            String description = jsonObject.getString("description");
-            final int id = Integer.parseInt(jsonObject.getString("id"));
+            String description = ageGroupPreferences.getValue();
+            final int id = ageGroupPreferences.getId();
 
             checkBox.setText(description);
 
@@ -106,11 +107,9 @@ public class StudentPreferenceSelection extends BaseAdapter {
                 }
             });
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-
         return convertView;
     }
 

@@ -76,6 +76,34 @@ public class Data {
     @Expose
     private String authToken;
 
+    @SerializedName("age_group_preferences")
+    @Expose
+    private String ageGroupPreferences;
+
+    @SerializedName("all_age_group_preferences")
+    @Expose
+    private List<AgeGroupPreferences> allAgeGroupPreferences;
+
+    public String getAgeGroupPreferences() {
+        return ageGroupPreferences;
+    }
+
+    public void setAgeGroupPreferences(String ageGroupPreferences) {
+        this.ageGroupPreferences = ageGroupPreferences;
+    }
+
+    public List<AgeGroupPreferences> getAllAgeGroupPreferences() {
+        return allAgeGroupPreferences;
+    }
+
+    public void setAllAgeGroupPreferences(List<AgeGroupPreferences> allAgeGroupPreferences) {
+        this.allAgeGroupPreferences = allAgeGroupPreferences;
+    }
+
+    public Object getTrainingLocation() {
+        return trainingLocation;
+    }
+
     public String getAuthToken() {
         return authToken;
     }

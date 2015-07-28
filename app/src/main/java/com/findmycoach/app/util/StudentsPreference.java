@@ -13,18 +13,20 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.StudentPreferenceSelection;
+import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ved on 27/7/15.
  */
 public class StudentsPreference {
-    JSONArray different_preferences;
+    List<AgeGroupPreferences> different_preferences;
     Context context;
     Dialog dialog;
     ImageView back_button;
@@ -35,9 +37,10 @@ public class StudentsPreference {
     ArrayList<Integer> id_of_selected_preferences;
 
 
-    public StudentsPreference(Context context, JSONArray different_preferences, ArrayList<Integer> selected_preferences) {
+
+    public StudentsPreference(Context context, List<AgeGroupPreferences> allPreferences, ArrayList<Integer> selected_preferences) {
         this.context = context;
-        this.different_preferences = different_preferences;
+        this.different_preferences = allPreferences;
         id_of_selected_preferences = selected_preferences;
     }
 
