@@ -117,6 +117,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private ChizzleTextView teachingMediumPreference;
     String o;
     ArrayList<Integer> arrayList;
+    public static ArrayList<Integer> integerArrayList_Of_UpdatedStudentPreference;
+    public EditProfileActivityMentor editProfileActivityMentor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,11 +130,13 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         isGettingAddress = false;
         isDobForReview = false;
         needToCheckOnDestroy = false;
-
+        integerArrayList_Of_UpdatedStudentPreference = new ArrayList<>();
+        editProfileActivityMentor = this;
         if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
             getAddress();
 
     }
+
 
     @Override
     protected void onResume() {
@@ -149,12 +153,17 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        editProfileActivityMentor = null;
+        integerArrayList_Of_UpdatedStudentPreference = null;
+
+
         if (!needToCheckOnDestroy && DashboardActivity.dashboardActivity == null)
             startActivity(new Intent(this, DashboardActivity.class));
     }
 
     private void initialize() {
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
+        Log.e(TAG, getIntent().getStringExtra("user_info"));
         profileGender = (Spinner) findViewById(R.id.input_gender);
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
@@ -228,6 +237,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         areaOfCoaching.setOnTouchListener(onTouchListener);
 
         o = userInfo.getAgeGroupPreferences();
+
+        Log.d(TAG,"selected student pref: "+userInfo.getAgeGroupPreferences());
+        Log.d(TAG,"all selected student pref: "+userInfo.getAllAgeGroupPreferences().size());
+
+
         ArrayList<Integer> arrayList = new ArrayList<Integer>();
         if (o != null && !o.trim().equals("")) {
             String array_of_id[] = o.split(",");
@@ -238,50 +252,88 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
 
 
+        populateSubjectPreference(arrayList,userInfo.getAllAgeGroupPreferences());
+
 
     }
 
-    private void populateSubjectPreference(ArrayList<Integer> arrayList, List<AgeGroupPreferences> allAgeGroupPreferences) {
+    public void populateSubjectPreference(ArrayList<Integer> arrayList, List<AgeGroupPreferences> allAgeGroupPreferences) {
 
-        if(arrayList.size() > 0){
-            populateSubjectPreference(arrayList, userInfo.getAllAgeGroupPreferences());
-        }else{
+        if (arrayList.size() > 0) {
+            TreeSet<Integer> treeSet = new TreeSet<>();
+            for (int i : arrayList) {
+                treeSet.add(i);
+            }
+            boolean greater_than_one = false;
+
+            if (treeSet.size() > 1) {
+                greater_than_one = true;
+            }
+
+
+            StringBuilder stringBuilder = new StringBuilder();
+            Iterator<Integer> iterator = treeSet.iterator();
+            boolean first = true;
+            while (iterator.hasNext()) {
+
+                int id = iterator.next();
+                for (AgeGroupPreferences ageGroupPreferences : allAgeGroupPreferences) {
+
+                    if (greater_than_one) {
+
+                        if (id == ageGroupPreferences.getId()) {
+                            if (first) {
+                                first = false;   /* To insert comma from second value */
+                                stringBuilder.append(ageGroupPreferences.getValue().trim());
+                                String min = ageGroupPreferences.getMin();
+                                String max = ageGroupPreferences.getMax();
+                                addInStringBuilder(min, max, stringBuilder);
+
+
+                            } else {
+                                stringBuilder.append(", " + ageGroupPreferences.getValue().trim());
+                                String min = ageGroupPreferences.getMin();
+                                String max = ageGroupPreferences.getMax();
+                                addInStringBuilder(min, max, stringBuilder);
+
+                            }
+                        }
+
+
+                    } else {
+                        if (id == ageGroupPreferences.getId()) {
+                            stringBuilder.append(ageGroupPreferences.getValue().trim());
+                            String min1 = ageGroupPreferences.getMin();
+                            String max1 = ageGroupPreferences.getMax();
+                            addInStringBuilder(min1, max1, stringBuilder);
+                        }
+                    }
+                }
+            }
+            students_preference.setText(stringBuilder.toString());
+        } else {
             students_preference.setText(getResources().getString(R.string.select));
         }
 
-        TreeSet<Integer> treeSet = new TreeSet<>();
-        for (int i : arrayList) {
-            treeSet.add(i);
-        }
-        boolean greater_than_one=false;
-
-        if(treeSet.size() > 1){
-            greater_than_one=true;
-        }
 
 
-        StringBuilder stringBuilder = new StringBuilder();
-        Iterator<Integer> iterator = treeSet.iterator();
-        while (iterator.hasNext()) {
+    }
 
-        int id=iterator.next();
-        for(AgeGroupPreferences ageGroupPreferences: allAgeGroupPreferences){
+    private void addInStringBuilder(String min, String max, StringBuilder stringBuilder) {
+        if (min != null && max != null) {
+            if (min.equals("any") && max.equals("any")) {
 
-            if(greater_than_one){
+            } else if (min.equals("any") && !max.equals("any")) {
+                stringBuilder.append(" (" + getResources().getString(R.string.up_to) + " " + max + " " + getResources().getString(R.string.years) + ")");
+            } else if (!min.equals("any") && max.equals("any")) {
+                stringBuilder.append(System.getProperty("line.separator"));
+                stringBuilder.append(" (" + min + " " + getResources().getString(R.string.and) + " " + getResources().getString(R.string.above) + ")");
 
-            }else{
-
-            }
-
-
-            if(id == ageGroupPreferences.getId()){
-
-             //   stringBuilder.
+            } else {
+                stringBuilder.append(System.getProperty("line.separator"));
+                stringBuilder.append(" (" + min + " - " + max + " " + getResources().getString(R.string.years) + ")");
             }
         }
-        }
-
-
     }
 
     /**
@@ -485,8 +537,16 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         e.printStackTrace();
                     }
 
-                    StudentsPreference studentsPreference = new StudentsPreference(EditProfileActivityMentor.this, userInfo.getAllAgeGroupPreferences(), arrayList);
-                    studentsPreference.showStudentPreferenceDialog();
+                    if(integerArrayList_Of_UpdatedStudentPreference != null && integerArrayList_Of_UpdatedStudentPreference.size() > 0){
+                        StudentsPreference studentsPreference = new StudentsPreference(EditProfileActivityMentor.this, userInfo.getAllAgeGroupPreferences(), integerArrayList_Of_UpdatedStudentPreference,editProfileActivityMentor);
+                        studentsPreference.showStudentPreferenceDialog();
+
+                    }else{
+                        StudentsPreference studentsPreference = new StudentsPreference(EditProfileActivityMentor.this, userInfo.getAllAgeGroupPreferences(), arrayList,editProfileActivityMentor);
+                        studentsPreference.showStudentPreferenceDialog();
+
+                    }
+
 
 
                 } catch (Exception e) {

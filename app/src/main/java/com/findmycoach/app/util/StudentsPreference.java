@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.EditProfileActivityMentor;
 import com.findmycoach.app.adapter.StudentPreferenceSelection;
 import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
 
@@ -35,13 +36,14 @@ public class StudentsPreference {
     ListView student_list_preference;
     StudentPreferenceSelection studentPreferenceSelection;
     ArrayList<Integer> id_of_selected_preferences;
+EditProfileActivityMentor editProfileActivityMentor;
 
 
-
-    public StudentsPreference(Context context, List<AgeGroupPreferences> allPreferences, ArrayList<Integer> selected_preferences) {
+    public StudentsPreference(Context context, List<AgeGroupPreferences> allPreferences, ArrayList<Integer> selected_preferences,EditProfileActivityMentor editProfileActivityMentor) {
         this.context = context;
         this.different_preferences = allPreferences;
         id_of_selected_preferences = selected_preferences;
+        this.editProfileActivityMentor=editProfileActivityMentor;
     }
 
     public void showStudentPreferenceDialog() {
@@ -66,6 +68,10 @@ public class StudentsPreference {
             @Override
             public void onClick(View v) {
                 ArrayList<Integer> arrayList = studentPreferenceSelection.selected_preferences;
+                if(arrayList != null){
+                    editProfileActivityMentor.populateSubjectPreference(arrayList,different_preferences);
+                    editProfileActivityMentor.integerArrayList_Of_UpdatedStudentPreference=arrayList;
+                }
 
                 for (int i : arrayList) {
                     Log.d("FMC", "list of pref: " + i);

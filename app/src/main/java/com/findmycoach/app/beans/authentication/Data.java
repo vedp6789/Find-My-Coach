@@ -76,11 +76,11 @@ public class Data {
     @Expose
     private String authToken;
 
-    @SerializedName("age_group_preferences")
+    @SerializedName("age_group_preference")
     @Expose
     private String ageGroupPreferences;
 
-    @SerializedName("all_age_group_preferences")
+    @SerializedName("all_age_group_preference")
     @Expose
     private List<AgeGroupPreferences> allAgeGroupPreferences;
 
