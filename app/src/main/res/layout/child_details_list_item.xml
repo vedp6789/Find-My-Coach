@@ -4,42 +4,53 @@
     android:layout_height="match_parent"
     android:padding="@dimen/back_margin">
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
         android:id="@+id/childNameEditProfile"
-        android:textSize="16sp" />
+        android:textSize="14sp"
+        android:textColor="@color/purple" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="DOB:"
         android:id="@+id/textView"
         android:layout_below="@+id/childNameEditProfile"
-        android:layout_marginTop="6dp" />
+        android:layout_marginTop="6dp"
+        android:textSize="12sp"
+        android:textIsSelectable="false"
+        android:textColor="@color/purple_light" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/dobText"
         android:layout_toRightOf="@+id/textView"
         android:layout_alignTop="@+id/textView"
-        android:layout_marginLeft="3dp" />
+        android:layout_marginLeft="3dp"
+        android:textSize="12sp"
+        android:textColor="@color/purple" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/genderText"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/dobText" />
+        android:layout_alignTop="@+id/dobText"
+        android:textSize="12sp"
+        android:textIsSelectable="false"
+        android:textColor="@color/purple" />
 
-    <TextView
+    <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Gender"
+        android:text="Gender:"
         android:id="@+id/textView3"
         android:layout_alignTop="@+id/genderText"
         android:layout_toLeftOf="@+id/genderText"
-        android:layout_marginRight="3dp" />
+        android:layout_marginRight="3dp"
+        android:textSize="12sp"
+        android:textColor="@color/purple_light" />
 </RelativeLayout>
