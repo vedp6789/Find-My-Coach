@@ -649,6 +649,9 @@
     <string name="push_video_message">Hi you got a video message</string>
     <string name="schedule_request_push_notification">Hi, you have a new class schedule request from </string>
     <string name="conn_req_push">"Hi, connection request from "</string>
+    <string name="up_to">Up to</string>
+    <string name="above">above</string>
+    
 
 
 
@@ -752,6 +755,7 @@
     <string name="prompt_male">Male</string>
     <string name="prompt_female">Female</string>
     <string name="prompt_phone">Mobile number</string>
+    <string name="prompt_qualified">Select in which area you are qualified?</string>
     <string name="prompt_submit">Submit</string>
     <string name="prompt_address">Address</string>
     <string name="prompt_flat_street">Flat/house/street no.</string>

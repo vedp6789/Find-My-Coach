@@ -83,10 +83,29 @@ public class StudentPreferenceSelection extends BaseAdapter {
 
             final AgeGroupPreferences ageGroupPreferences = different_preferences.get(position);
 
+            StringBuilder stringBuilder = new StringBuilder();
             String description = ageGroupPreferences.getValue();
             final int id = ageGroupPreferences.getId();
+            String min = ageGroupPreferences.getMin();
+            String max = ageGroupPreferences.getMax();
+            stringBuilder.append(description);
+            if (min != null && max != null) {
+                if (min.equals("any") && max.equals("any")) {
 
-            checkBox.setText(description);
+                } else if (min.equals("any") && !max.equals("any")) {
+                    stringBuilder.append(System.getProperty("line.separator"));
+                    stringBuilder.append("(" + context.getResources().getString(R.string.up_to) + " " + max + " " + context.getResources().getString(R.string.years) + ")");
+                } else if (!min.equals("any") && max.equals("any")) {
+                    stringBuilder.append(System.getProperty("line.separator"));
+                    stringBuilder.append("(" + min + " " + context.getResources().getString(R.string.and) + " " + context.getResources().getString(R.string.above) + ")");
+
+                } else {
+                    stringBuilder.append(System.getProperty("line.separator"));
+                    stringBuilder.append("(" + min + " - " + max + " " + context.getResources().getString(R.string.years) + ")");
+                }
+            }
+
+            checkBox.setText(stringBuilder);
 
             for (int i = 0; i < selected_preferences.size(); i++) {
                 if (selected_preferences.contains(id)) {

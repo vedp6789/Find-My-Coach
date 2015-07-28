@@ -2,6 +2,7 @@ package com.findmycoach.app.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,6 +30,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -36,6 +39,8 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.findmycoach.app.R;
+import com.findmycoach.app.adapter.QualifiedAreaOfCoachingAdapter;
+import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.mentor.Currency;
@@ -69,8 +74,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
-public class EditProfileActivityMentor extends Activity implements Callback,TeachingMediumPreferenceDialog.TeachingMediumAddedListener {
+public class EditProfileActivityMentor extends Activity implements Callback, TeachingMediumPreferenceDialog.TeachingMediumAddedListener {
 
     int REQUEST_CODE = 100;
     private ImageView profilePicture;
@@ -109,6 +115,8 @@ public class EditProfileActivityMentor extends Activity implements Callback,Teac
     private boolean hiddenFlag;
     private ImageButton arrow;
     private ChizzleTextView teachingMediumPreference;
+    String o;
+    ArrayList<Integer> arrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +144,6 @@ public class EditProfileActivityMentor extends Activity implements Callback,Teac
             TermsAndCondition termsAndCondition = new TermsAndCondition();
             termsAndCondition.showTermsAndConditions(this);
         }
-
     }
 
     @Override
@@ -165,12 +172,12 @@ public class EditProfileActivityMentor extends Activity implements Callback,Teac
         experienceInput = (Spinner) findViewById(R.id.input_experience);
         teachingPreference = (Spinner) findViewById(R.id.teachingPreferencesSpinner);
         classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
-        summaryHeader=(RelativeLayout)findViewById(R.id.summaryHeader);
+        summaryHeader = (RelativeLayout) findViewById(R.id.summaryHeader);
         scrollView = (ScrollView) findViewById(R.id.main_scroll_view);
-        summaryDetailsLayout=(LinearLayout)findViewById(R.id.summaryDetailsLayout);
+        summaryDetailsLayout = (LinearLayout) findViewById(R.id.summaryDetailsLayout);
         students_preference = (TextView) findViewById(R.id.students_preference);
-        teachingMediumPreference=(ChizzleTextView)findViewById(R.id.teaching_medium_preference);
-        arrow=(ImageButton)findViewById(R.id.arrow);
+        teachingMediumPreference = (ChizzleTextView) findViewById(R.id.teaching_medium_preference);
+        arrow = (ImageButton) findViewById(R.id.arrow);
 
 
         String[] yearOfExperience = new String[51];
@@ -219,6 +226,34 @@ public class EditProfileActivityMentor extends Activity implements Callback,Teac
 //        pinCode.setOnTouchListener(onTouchListener);
         areaOfCoaching.setOnFocusChangeListener(onFocusChangeListener);
         areaOfCoaching.setOnTouchListener(onTouchListener);
+
+        o = userInfo.getAgeGroupPreferences();
+        ArrayList<Integer> arrayList = new ArrayList<Integer>();
+        if (o != null && !o.trim().equals("")) {
+            String array_of_id[] = o.split(",");
+            for (String id : array_of_id) {
+                arrayList.add((Integer.parseInt(id)));
+            }
+        }
+
+
+        populateSubjectPreference(arrayList, userInfo.getAllAgeGroupPreferences());
+
+
+    }
+
+    private void populateSubjectPreference(ArrayList<Integer> arrayList, List<AgeGroupPreferences> allAgeGroupPreferences) {
+        TreeSet<Integer> treeSet = new TreeSet<>();
+        for (int i : arrayList) {
+            treeSet.add(i);
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        Iterator<Integer> iterator = treeSet.iterator();
+        while (iterator.hasNext()) {
+
+        }
+
+
     }
 
     /**
@@ -344,7 +379,6 @@ public class EditProfileActivityMentor extends Activity implements Callback,Teac
             }
         });
 
-
         students_preference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -423,38 +457,29 @@ public class EditProfileActivityMentor extends Activity implements Callback,Teac
                         e.printStackTrace();
                     }
 
-                    String o = userInfo.getAgeGroupPreferences();
-                    ArrayList<Integer> arrayList = new ArrayList<Integer>();
-                    if (o != null && !o.trim().equals("")) {
-                        String array_of_id[] = o.split(",");
-                        for (String id : array_of_id) {
-                            arrayList.add((Integer.parseInt(id)));
-                        }
-                    }
-
                     StudentsPreference studentsPreference = new StudentsPreference(EditProfileActivityMentor.this, userInfo.getAllAgeGroupPreferences(), arrayList);
                     studentsPreference.showStudentPreferenceDialog();
 
 
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
 
+
         summaryHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(hiddenFlag) {
+                if (hiddenFlag) {
                     summaryDetailsLayout.setVisibility(View.GONE);
                     arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
-                    hiddenFlag=false;
+                    hiddenFlag = false;
 
-                }
-                else {
+                } else {
                     summaryDetailsLayout.setVisibility(View.VISIBLE);
                     arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
-                    hiddenFlag=true;
+                    hiddenFlag = true;
                 }
             }
         });
@@ -462,16 +487,16 @@ public class EditProfileActivityMentor extends Activity implements Callback,Teac
         teachingMediumPreference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<String> languagesList=new ArrayList<String>();
-                languagesList.add(0,"Select");
-                languagesList.add(1,"English");
-                languagesList.add(2,"Mandarin");
-                languagesList.add(3,"Malay");
-                languagesList.add(4,"Hindi");
-                languagesList.add(5,"Marathi");
-                languagesList.add(6,"Spanish");
+                ArrayList<String> languagesList = new ArrayList<String>();
+                languagesList.add(0, "Select");
+                languagesList.add(1, "English");
+                languagesList.add(2, "Mandarin");
+                languagesList.add(3, "Malay");
+                languagesList.add(4, "Hindi");
+                languagesList.add(5, "Marathi");
+                languagesList.add(6, "Spanish");
 
-                TeachingMediumPreferenceDialog dialog=new TeachingMediumPreferenceDialog(EditProfileActivityMentor.this,languagesList);
+                TeachingMediumPreferenceDialog dialog = new TeachingMediumPreferenceDialog(EditProfileActivityMentor.this, languagesList);
                 dialog.setTeachingMediumAddedListener(EditProfileActivityMentor.this);
                 dialog.showPopUp();
             }
@@ -479,7 +504,6 @@ public class EditProfileActivityMentor extends Activity implements Callback,Teac
 
 
     }
-
 
 
 //    private void getPostalFromCity(String cityName) {
@@ -944,7 +968,32 @@ public class EditProfileActivityMentor extends Activity implements Callback,Teac
                 }
             }
             areaOfCoaching.setText(interests);
+            if (list.size() > 0)
+                showQualifiedOrNotDialog(list);
         }
+    }
+
+    private void showQualifiedOrNotDialog(List<String> selectedAreaOfCoaching) {
+        final Dialog dialog = new Dialog(EditProfileActivityMentor.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.qualified_area_of_coachings);
+        ListView listView = (ListView) dialog.findViewById(R.id.listView);
+        listView.setAdapter(new QualifiedAreaOfCoachingAdapter(selectedAreaOfCoaching,
+                new ArrayList<String>(), EditProfileActivityMentor.this));
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//            }
+//        });
+
+        dialog.findViewById(R.id.doneButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     @Override
@@ -1148,22 +1197,25 @@ public class EditProfileActivityMentor extends Activity implements Callback,Teac
 
     @Override
     public void onTeachingMediumAdded(String language1, String language2, String language3, String language4) {
-        String finalString="";
-        if(!language1.equalsIgnoreCase("select")) {
-            finalString+=language1+", ";
+        String finalString = "";
+        if (!language1.equalsIgnoreCase("select")) {
+            finalString += language1 + ", ";
         }
-        if(!language2.equalsIgnoreCase("select")) {
-            finalString+=language2+", ";
+        if (!language2.equalsIgnoreCase("select")) {
+            finalString += language2 + ", ";
         }
-        if(!language3.equalsIgnoreCase("select")) {
-            finalString+=language3+", ";
+        if (!language3.equalsIgnoreCase("select")) {
+            finalString += language3 + ", ";
         }
-        if(!language4.equalsIgnoreCase("select")) {
-            finalString+=language4;
+        if (!language4.equalsIgnoreCase("select")) {
+            finalString += language4;
+            if (!language4.equalsIgnoreCase("select")) {
+                finalString += language4;
+            }
+            if (finalString.length() > 0 && finalString.charAt(finalString.length() - 1) == ' ') {
+                finalString = finalString.substring(0, finalString.length() - 2);
+            }
+            teachingMediumPreference.setText(finalString);
         }
-        if (finalString.length() > 0 && finalString.charAt(finalString.length()-1)==' ') {
-            finalString = finalString.substring(0, finalString.length()-2);
-        }
-        teachingMediumPreference.setText(finalString);
     }
 }
