@@ -1,0 +1,40 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <com.findmycoach.app.views.ChizzleTextView
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/login_button_height"
+        android:background="@color/purple"
+        android:gravity="center"
+        android:text="@string/prompt_qualified"
+        android:textColor="@color/white"
+        android:textSize="@dimen/profile_title"
+        android:textStyle="bold" />
+
+    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/listView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/login_button_height"
+        android:layout_marginBottom="@dimen/login_button_height"
+        android:clickable="true" />
+
+
+    <com.findmycoach.app.views.ChizzleButton
+        android:id="@+id/doneButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_button_height"
+        android:background="@drawable/custom_button_click_white_bg"
+        android:gravity="center"
+        android:text="@string/done"
+        android:textColor="@color/custom_button_text_color_click_white_bg"
+        android:textSize="@dimen/button_text_size"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal|bottom" />
+
+</FrameLayout>
