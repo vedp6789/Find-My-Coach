@@ -454,7 +454,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             showEmailDialog(requestParams);
             return;
         }
-//        NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
+        NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
     }
 
     private void getFbFriends() {
