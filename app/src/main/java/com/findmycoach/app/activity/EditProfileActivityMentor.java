@@ -140,7 +140,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             TermsAndCondition termsAndCondition = new TermsAndCondition();
             termsAndCondition.showTermsAndConditions(this);
         }
-
     }
 
     @Override
@@ -234,20 +233,19 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
 
 
-        populateSubjectPreference(arrayList,userInfo.getAllAgeGroupPreferences());
-
+        populateSubjectPreference(arrayList, userInfo.getAllAgeGroupPreferences());
 
 
     }
 
     private void populateSubjectPreference(ArrayList<Integer> arrayList, List<AgeGroupPreferences> allAgeGroupPreferences) {
-        TreeSet<Integer> treeSet=new TreeSet<>();
-        for(int i:arrayList){
+        TreeSet<Integer> treeSet = new TreeSet<>();
+        for (int i : arrayList) {
             treeSet.add(i);
         }
-        StringBuilder stringBuilder=new StringBuilder();
-        Iterator<Integer>  iterator = treeSet.iterator();
-        while (iterator.hasNext()){
+        StringBuilder stringBuilder = new StringBuilder();
+        Iterator<Integer> iterator = treeSet.iterator();
+        while (iterator.hasNext()) {
 
         }
 
@@ -377,7 +375,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
         });
 
-
         students_preference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -465,7 +462,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 }
             }
         });
-
 
 
         summaryHeader.setOnClickListener(new View.OnClickListener() {
@@ -968,7 +964,13 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 }
             }
             areaOfCoaching.setText(interests);
+            if (list.size() > 0)
+                showQualifiedOrNotDialog(list);
         }
+    }
+
+    private void showQualifiedOrNotDialog(List<String> selectedAreaOfCoaching) {
+
     }
 
     @Override
@@ -1184,10 +1186,13 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
         if (!language4.equalsIgnoreCase("select")) {
             finalString += language4;
+            if (!language4.equalsIgnoreCase("select")) {
+                finalString += language4;
+            }
+            if (finalString.length() > 0 && finalString.charAt(finalString.length() - 1) == ' ') {
+                finalString = finalString.substring(0, finalString.length() - 2);
+            }
+            teachingMediumPreference.setText(finalString);
         }
-        if (finalString.length() > 0 && finalString.charAt(finalString.length()-1)==' ') {
-            finalString = finalString.substring(0, finalString.length()-2);
-        }
-        teachingMediumPreference.setText(finalString);
     }
 }
