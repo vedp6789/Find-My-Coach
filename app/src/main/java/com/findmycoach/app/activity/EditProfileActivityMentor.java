@@ -25,8 +25,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -99,9 +101,10 @@ public class EditProfileActivityMentor extends Activity implements Callback {
     private String userCurrentAddress = "";
     private ScrollView scrollView;
     private TextView students_preference;
-    private ChizzleTextView summaryHeader;
+    private RelativeLayout summaryHeader;
     private LinearLayout summaryDetailsLayout;
     private boolean hiddenFlag;
+    private ImageButton arrow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,10 +160,11 @@ public class EditProfileActivityMentor extends Activity implements Callback {
         experienceInput = (Spinner) findViewById(R.id.input_experience);
         teachingPreference = (Spinner) findViewById(R.id.teachingPreferencesSpinner);
         classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
-        summaryHeader=(ChizzleTextView)findViewById(R.id.summaryText);
+        summaryHeader=(RelativeLayout)findViewById(R.id.summaryHeader);
         scrollView = (ScrollView) findViewById(R.id.main_scroll_view);
          summaryDetailsLayout=(LinearLayout)findViewById(R.id.summaryDetailsLayout);
         students_preference = (TextView) findViewById(R.id.students_preference);
+        arrow=(ImageButton)findViewById(R.id.arrow);
 
 
         String[] yearOfExperience = new String[51];
@@ -367,11 +371,13 @@ public class EditProfileActivityMentor extends Activity implements Callback {
             public void onClick(View v) {
                 if(hiddenFlag) {
                     summaryDetailsLayout.setVisibility(View.GONE);
+                    arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
                     hiddenFlag=false;
 
                 }
                 else {
                     summaryDetailsLayout.setVisibility(View.VISIBLE);
+                    arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
                     hiddenFlag=true;
                 }
             }

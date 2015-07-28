@@ -106,6 +106,7 @@ public class ChooseImageActivity extends Activity {
         chooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK);
                 galleryIntent.setType("image/*");
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
@@ -146,52 +147,22 @@ public class ChooseImageActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK
                 && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String imgDecodableString = cursor.getString(columnIndex);
-            cursor.close();
-            /** Set the Image in ImageView after decoding the String */
+            Uri targetUri = data.getData();
+            Bitmap bitmap;
             try {
-                cropImageView.setImageBitmap(decodeFile(new File(imgDecodableString)));
-            } catch (Exception e) {
-                Toast.makeText(this, getResources().getString(R.string.error_picking_image), Toast.LENGTH_SHORT).show();
-                try {
-                    cropImageView.setImageBitmap(BinaryForImage.getBitmapFromBinaryString(getIntent().getStringExtra("BitMap")));
-                } catch (Exception ignored) {
-                }
+                bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
+                cropImageView.setImageBitmap(bitmap);
+
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-        } else {
-            Toast.makeText(this, getResources().getString(R.string.image_not_picked),
-                    Toast.LENGTH_LONG).show();
         }
     }
 
-    private Bitmap decodeFile(File f) {
-        try {
-            //Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
 
-            //The new size we want to scale to
-            final int REQUIRED_SIZE = 225;
 
-            //Find the correct scale value. It should be the power of 2.
-            int scale = 1;
-            while (o.outWidth / scale / 2 >= REQUIRED_SIZE && o.outHeight / scale / 2 >= REQUIRED_SIZE)
-                scale *= 2;
 
-            //Decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-        } catch (FileNotFoundException e) {
-        }
-        return null;
-    }
+
 }
 
