@@ -649,6 +649,9 @@
     <string name="push_video_message">Hi you got a video message</string>
     <string name="schedule_request_push_notification">Hi, you have a new class schedule request from </string>
     <string name="conn_req_push">"Hi, connection request from "</string>
+    <string name="up_to">Up to</string>
+    <string name="above">above</string>
+    
 
 
 

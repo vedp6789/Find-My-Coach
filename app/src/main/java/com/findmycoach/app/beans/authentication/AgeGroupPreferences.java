@@ -12,9 +12,27 @@ public class AgeGroupPreferences {
     int id;
     @Expose
     String description;
-    @SerializedName("age_range")
     @Expose
-    String ageGroup;
+    String min;
+
+    @Expose
+    String max;
+
+    public String getMax() {
+        return max;
+    }
+
+    public void setMax(String max) {
+        this.max = max;
+    }
+
+    public String getMin() {
+        return min;
+    }
+
+    public void setMin(String min) {
+        this.min = min;
+    }
 
     public int getId() {
         return id;
@@ -32,11 +50,4 @@ public class AgeGroupPreferences {
         this.description = value;
     }
 
-    public String getAgeGroup() {
-        return ageGroup;
-    }
-
-    public void setAgeGroup(String ageGroup) {
-        this.ageGroup = ageGroup;
-    }
 }
