@@ -237,27 +237,46 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
 
 
-        populateSubjectPreference(arrayList, userInfo.getAllAgeGroupPreferences());
 
 
     }
 
     private void populateSubjectPreference(ArrayList<Integer> arrayList, List<AgeGroupPreferences> allAgeGroupPreferences) {
+
+        if(arrayList.size() > 0){
+            populateSubjectPreference(arrayList, userInfo.getAllAgeGroupPreferences());
+        }else{
+            students_preference.setText(getResources().getString(R.string.select));
+        }
+
         TreeSet<Integer> treeSet = new TreeSet<>();
         for (int i : arrayList) {
             treeSet.add(i);
         }
+        boolean greater_than_one=false;
+
+        if(treeSet.size() > 1){
+            greater_than_one=true;
+        }
+
+
         StringBuilder stringBuilder = new StringBuilder();
         Iterator<Integer> iterator = treeSet.iterator();
         while (iterator.hasNext()) {
 
         int id=iterator.next();
         for(AgeGroupPreferences ageGroupPreferences: allAgeGroupPreferences){
+
+            if(greater_than_one){
+
+            }else{
+
+            }
+
+
             if(id == ageGroupPreferences.getId()){
-                if(treeSet.size() > 1){
-                    
-                }
-                stringBuilder.
+
+             //   stringBuilder.
             }
         }
         }
