@@ -249,6 +249,15 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         Iterator<Integer>  iterator = treeSet.iterator();
         while (iterator.hasNext()){
 
+        int id=iterator.next();
+        for(AgeGroupPreferences ageGroupPreferences: allAgeGroupPreferences){
+            if(id == ageGroupPreferences.getId()){
+                if(treeSet.size() > 1){
+                    
+                }
+                stringBuilder.
+            }
+        }
         }
 
 
