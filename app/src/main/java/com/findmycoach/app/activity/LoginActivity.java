@@ -178,7 +178,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         /** FB related */
         actionFacebook = (LoginButton) findViewById(R.id.facebook_login_button);
-        actionFacebook.setReadPermissions(Arrays.asList("user_location", "user_birthday", "email"));
+        actionFacebook.setReadPermissions(Arrays.asList("user_location", "user_birthday", "email", "user_friends"));
         actionFacebook.setBackgroundResource(R.drawable.facebook);
 
         /** Other views related to generic login, sign up, forget password */
@@ -208,10 +208,10 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             }
         });
 
-        inputUserName.setOnTouchListener(onTouchListener);
-        inputPassword.setOnTouchListener(onTouchListener);
-        inputUserName.setOnFocusChangeListener(onFocusChangeListener);
-        inputPassword.setOnFocusChangeListener(onFocusChangeListener);
+//        inputUserName.setOnTouchListener(onTouchListener);
+//        inputPassword.setOnTouchListener(onTouchListener);
+//        inputUserName.setOnFocusChangeListener(onFocusChangeListener);
+//        inputPassword.setOnFocusChangeListener(onFocusChangeListener);
     }
 
     /**
@@ -427,9 +427,13 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         requestParams.add("last_name", user.getLastName());
         requestParams.add("dob", user.getBirthday());
         try {
+            getFbFriends();
+            Log.e(TAG, user.getId());
             Log.e(TAG, user.getFirstName());
             Log.e(TAG, user.getLastName());
             Log.e(TAG, user.getBirthday());
+            Log.e(TAG, (String) user.getProperty("email"));
+            Log.e(TAG, (String) user.getProperty("gender"));
             GraphPlace location = user.getLocation();
             Log.e(TAG, location.getName());
         } catch (Exception ignored) {
@@ -450,7 +454,39 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             showEmailDialog(requestParams);
             return;
         }
-        NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
+//        NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
+    }
+
+    private void getFbFriends() {
+        Log.e(TAG, "Method called");
+        Session activeSession = Session.getActiveSession();
+        if (activeSession.getState().isOpened()) {
+            Log.e(TAG, "inside if");
+            Request friendRequest = Request.newMyFriendsRequest(activeSession,
+                    new Request.GraphUserListCallback() {
+                        @Override
+                        public void onCompleted(List<GraphUser> users, com.facebook.Response response) {
+                            Log.e(TAG, "OnComplete : " + users.size());
+                            for(GraphUser user : users){
+                                try {
+                                    Log.e(TAG, user.getFirstName());
+                                    Log.e(TAG, user.getLastName());
+                                    Log.e(TAG, user.getBirthday());
+                                    Log.e(TAG, (String) user.getProperty("email"));
+                                    Log.e(TAG, (String) user.getProperty("gender"));
+                                    GraphPlace location = user.getLocation();
+                                    Log.e(TAG, location.getName());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
+            Bundle params = new Bundle();
+            params.putString("fields", "id,name,friends");
+            friendRequest.setParameters(params);
+            friendRequest.executeAsync();
+        }
     }
 
     /**

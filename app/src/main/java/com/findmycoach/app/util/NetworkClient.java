@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.findmycoach.app.R;
-import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.beans.attachment.Attachment;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.category.Category;
@@ -1278,6 +1277,7 @@ public class NetworkClient {
         client.addHeader(context.getResources().getString(R.string.auth_key), auth_token);
         requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
         requestParams.add(context.getResources().getString(R.string.device_language), language);
+        Log.e(TAG, timeZone + " : " + language);
         //requestParams.add(userGroup, "3");
         client.post(getAbsoluteURL("availableSlots", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
