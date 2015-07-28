@@ -1088,6 +1088,9 @@ public class EditProfileActivityMentor extends Activity implements Callback,Teac
         if(!language4.equalsIgnoreCase("select")) {
             finalString+=language4;
         }
+        if (finalString.length() > 0 && finalString.charAt(finalString.length()-1)==' ') {
+            finalString = finalString.substring(0, finalString.length()-2);
+        }
         teachingMediumPreference.setText(finalString);
     }
 }
