@@ -60,6 +60,8 @@ import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -134,6 +136,7 @@ public class EditProfileActivityMentor extends Activity implements Callback,Teac
             TermsAndCondition termsAndCondition = new TermsAndCondition();
             termsAndCondition.showTermsAndConditions(this);
         }
+
     }
 
     @Override
@@ -341,31 +344,101 @@ public class EditProfileActivityMentor extends Activity implements Callback,Teac
             }
         });
 
+
         students_preference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JSONArray jsonArray=new JSONArray();
-                jsonArray.put("A");
-                jsonArray.put("B");
-                jsonArray.put("C");
-                jsonArray.put("D");
-                jsonArray.put("E");
-                jsonArray.put("F");
-                jsonArray.put("I");
-                jsonArray.put("J");
-                jsonArray.put("K");
-                jsonArray.put("L");
-                jsonArray.put("M");
-                jsonArray.put("N");
-                jsonArray.put("O");
-                jsonArray.put("P");
-                jsonArray.put("Q");
-                jsonArray.put("R");
-                jsonArray.put("S");
+                try {
+
+                    JSONArray jsonArray = new JSONArray();
+
+                    try {
+                        JSONObject jsonObject1 = new JSONObject();
+                        jsonObject1.put("description", "A");
+                        jsonObject1.put("id", "1");
+                        jsonArray.put(jsonObject1);
+                        JSONObject jsonObject2 = new JSONObject();
+                        jsonObject2.put("description", "B");
+                        jsonObject2.put("id", 2);
+                        jsonArray.put(jsonObject2);
+                        JSONObject jsonObject3 = new JSONObject();
+                        jsonObject3.put("description", "C");
+                        jsonObject3.put("id", 3);
+                        jsonArray.put(jsonObject3);
+                        JSONObject jsonObject4 = new JSONObject();
+                        jsonObject4.put("description", "D");
+                        jsonObject4.put("id", 4);
+                        jsonArray.put(jsonObject4);
+                        JSONObject jsonObject5 = new JSONObject();
+                        jsonObject5.put("description", "E");
+                        jsonObject5.put("id", 5);
+                        jsonArray.put(jsonObject5);
+                        JSONObject jsonObject6 = new JSONObject();
+                        jsonObject6.put("description", "F");
+                        jsonObject6.put("id", 6);
+                        jsonArray.put(jsonObject6);
+                        JSONObject jsonObject7 = new JSONObject();
+                        jsonObject7.put("description", "G");
+                        jsonObject7.put("id", 7);
+                        jsonArray.put(jsonObject7);
+                        JSONObject jsonObject8 = new JSONObject();
+                        jsonObject8.put("description", "H");
+                        jsonObject8.put("id", 8);
+                        jsonArray.put(jsonObject8);
+                        JSONObject jsonObject9 = new JSONObject();
+                        jsonObject9.put("description", "I");
+                        jsonObject9.put("id", 9);
+                        jsonArray.put(jsonObject9);
+                        JSONObject jsonObject10 = new JSONObject();
+                        jsonObject10.put("description", "J");
+                        jsonObject10.put("id", 10);
+                        jsonArray.put(jsonObject10);
+                        JSONObject jsonObject11 = new JSONObject();
+                        jsonObject11.put("description", "K");
+                        jsonObject11.put("id", 11);
+                        jsonArray.put(jsonObject11);
+                        JSONObject jsonObject12 = new JSONObject();
+                        jsonObject12.put("description", "L");
+                        jsonObject12.put("id", 12);
+                        jsonArray.put(jsonObject12);
+                        JSONObject jsonObject13 = new JSONObject();
+                        jsonObject13.put("description", "M");
+                        jsonObject13.put("id", 13);
+                        jsonArray.put(jsonObject13);
+                        JSONObject jsonObject14 = new JSONObject();
+                        jsonObject14.put("description", "N");
+                        jsonObject14.put("id", 14);
+                        jsonArray.put(jsonObject14);
+                        JSONObject jsonObject15 = new JSONObject();
+                        jsonObject15.put("description", "O");
+                        jsonObject15.put("id", 15);
+                        jsonArray.put(jsonObject15);
+                        JSONObject jsonObject16 = new JSONObject();
+                        jsonObject16.put("description", "P");
+                        jsonObject16.put("id", 16);
+                        jsonArray.put(jsonObject16);
 
 
-                StudentsPreference studentsPreference=new StudentsPreference(EditProfileActivityMentor.this,jsonArray);
-                studentsPreference.showStudentPreferenceDialog();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    String o = userInfo.getAgeGroupPreferences();
+                    ArrayList<Integer> arrayList = new ArrayList<Integer>();
+                    if (o != null && !o.trim().equals("")) {
+                        String array_of_id[] = o.split(",");
+                        for (String id : array_of_id) {
+                            arrayList.add((Integer.parseInt(id)));
+                        }
+                    }
+
+                    StudentsPreference studentsPreference = new StudentsPreference(EditProfileActivityMentor.this, userInfo.getAllAgeGroupPreferences(), arrayList);
+                    studentsPreference.showStudentPreferenceDialog();
+
+
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
             }
         });
 

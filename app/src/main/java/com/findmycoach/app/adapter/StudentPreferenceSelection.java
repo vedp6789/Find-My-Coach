@@ -1,6 +1,7 @@
 package com.findmycoach.app.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,11 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.beans.CalendarSchedule.EventDuration;
 import com.findmycoach.app.beans.CalendarSchedule.Mentee;
 import com.findmycoach.app.beans.CalendarSchedule.Vacation;
+import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,27 +28,30 @@ import java.util.List;
  */
 public class StudentPreferenceSelection extends BaseAdapter {
     Context context;
-    JSONArray jsonArray;
-    public ArrayList<Integer> integerArrayList;  /* This is used to store the list of jsonArray index whose values are checked*/
-    CheckBox student_selection;
+    public ArrayList<Integer> selected_preferences;
+    List<AgeGroupPreferences> different_preferences;
+    String TAG = "FMC";
 
-    public StudentPreferenceSelection(Context context, JSONArray jsonArray) {
+
+    public StudentPreferenceSelection(Context context, List<AgeGroupPreferences> different_preferences, ArrayList<Integer> selected_preferences) {
         this.context = context;
-        this.jsonArray = jsonArray;
-        integerArrayList = new ArrayList<>();
+        this.different_preferences = different_preferences;
+        this.selected_preferences = selected_preferences;
+        if (this.selected_preferences == null)
+            this.selected_preferences = new ArrayList<Integer>();
     }
 
     @Override
     public int getCount() {
-        return jsonArray.length();
+        return different_preferences.size();
     }
 
     @Override
     public Object getItem(int position) {
-        String s = null;
+        AgeGroupPreferences s = null;
         try {
-            s = jsonArray.getString(position);
-        } catch (JSONException e) {
+            s = different_preferences.get(position);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return s;
@@ -58,37 +64,59 @@ public class StudentPreferenceSelection extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-
+        StudentViewHolder studentViewHolder = null;
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.student_preference_selection, parent, false);
-
-
-            student_selection = (CheckBox) convertView.findViewById(R.id.cb_student_pref);
-
-
-        try {
-            if (jsonArray.getString(position) != null) {
-                student_selection.setText(jsonArray.getString(position));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+            studentViewHolder = new StudentViewHolder();
+            studentViewHolder.student_selection = (CheckBox) convertView.findViewById(R.id.cb_student_pref);
+            convertView.setTag(studentViewHolder);
+        } else {
+            studentViewHolder = (StudentViewHolder) convertView.getTag();
         }
 
-        student_selection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    integerArrayList.add(position);
-                } else {
-                    integerArrayList.remove(position);
+        try {
+            final CheckBox checkBox = studentViewHolder.student_selection;
+
+            checkBox.setOnCheckedChangeListener(null);
+            checkBox.setChecked(false);
+
+            final AgeGroupPreferences ageGroupPreferences = different_preferences.get(position);
+
+            String description = ageGroupPreferences.getValue();
+            final int id = ageGroupPreferences.getId();
+
+            checkBox.setText(description);
+
+            for (int i = 0; i < selected_preferences.size(); i++) {
+                if (selected_preferences.contains(id)) {
+                    checkBox.setChecked(true);
                 }
             }
-        });
+
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    if (isChecked && !selected_preferences.contains(id)) {
+                        selected_preferences.add(id);
+                    } else if (!isChecked && selected_preferences.contains(id)) {
+                        selected_preferences.remove(selected_preferences.indexOf(id));
+                    }
+
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return convertView;
     }
 
 
-
+    class StudentViewHolder {
+        CheckBox student_selection;
+    }
 
 
 }
