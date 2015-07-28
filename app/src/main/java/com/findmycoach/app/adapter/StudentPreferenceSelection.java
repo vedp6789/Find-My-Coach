@@ -1,6 +1,7 @@
 package com.findmycoach.app.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.findmycoach.app.beans.CalendarSchedule.Vacation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +27,17 @@ import java.util.List;
  */
 public class StudentPreferenceSelection extends BaseAdapter {
     Context context;
-    JSONArray jsonArray;
-    public ArrayList<Integer> integerArrayList;  /* This is used to store the list of jsonArray index whose values are checked*/
-    CheckBox student_selection;
+    public JSONArray jsonArray;
+    public ArrayList<Integer> selected_preferences;
+    String TAG = "FMC";
 
-    public StudentPreferenceSelection(Context context, JSONArray jsonArray) {
+
+    public StudentPreferenceSelection(Context context, JSONArray jsonArray, ArrayList<Integer> selected_preferences) {
         this.context = context;
         this.jsonArray = jsonArray;
-        integerArrayList = new ArrayList<>();
+        this.selected_preferences = selected_preferences;
+        if (this.selected_preferences == null)
+            this.selected_preferences = new ArrayList<Integer>();
     }
 
     @Override
@@ -42,9 +47,9 @@ public class StudentPreferenceSelection extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        String s = null;
+        JSONObject s = null;
         try {
-            s = jsonArray.getString(position);
+            s = jsonArray.getJSONObject(position);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -58,37 +63,61 @@ public class StudentPreferenceSelection extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-
+        StudentViewHolder studentViewHolder = null;
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.student_preference_selection, parent, false);
-
-
-            student_selection = (CheckBox) convertView.findViewById(R.id.cb_student_pref);
-
+            studentViewHolder = new StudentViewHolder();
+            studentViewHolder.student_selection = (CheckBox) convertView.findViewById(R.id.cb_student_pref);
+            convertView.setTag(studentViewHolder);
+        } else {
+            studentViewHolder = (StudentViewHolder) convertView.getTag();
+        }
 
         try {
-            if (jsonArray.getString(position) != null) {
-                student_selection.setText(jsonArray.getString(position));
+            final CheckBox checkBox = studentViewHolder.student_selection;
+
+            checkBox.setOnCheckedChangeListener(null);
+            checkBox.setChecked(false);
+
+            final JSONObject jsonObject = jsonArray.getJSONObject(position);
+
+            String description = jsonObject.getString("description");
+            final int id = Integer.parseInt(jsonObject.getString("id"));
+
+            checkBox.setText(description);
+
+            for (int i = 0; i < selected_preferences.size(); i++) {
+                if (selected_preferences.contains(id)) {
+                    checkBox.setChecked(true);
+                }
             }
+
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    if (isChecked && !selected_preferences.contains(id)) {
+                        selected_preferences.add(id);
+                    } else if (!isChecked && selected_preferences.contains(id)) {
+                        selected_preferences.remove(selected_preferences.indexOf(id));
+                    }
+
+                }
+            });
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        student_selection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    integerArrayList.add(position);
-                } else {
-                    integerArrayList.remove(position);
-                }
-            }
-        });
+
         return convertView;
     }
 
 
-
+    class StudentViewHolder {
+        CheckBox student_selection;
+    }
 
 
 }
