@@ -90,7 +90,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private EditText accomplishment;
     private EditText chargeInput;
     private Spinner experienceInput, teachingPreference, classTypeSpinner;
-    private CheckBox isReadyToTravel;
+   // private CheckBox isReadyToTravel;
     private Button updateAction;
     private Spinner chargesPerUnit;
     private ProgressDialog progressDialog;
@@ -210,7 +210,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, yearOfExperience));
         teachingPreference.setAdapter(new ArrayAdapter<>(this, R.layout.textview, preferences));
         classTypeSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.textview, classType));
-        isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
+      //  isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
         updateAction = (Button) findViewById(R.id.button_update);
         chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
         areaOfCoaching = (TextView) findViewById(R.id.input_areas_of_coaching);
@@ -420,12 +420,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         });
 
 
-        findViewById(R.id.checkboxTextView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isReadyToTravel.setChecked(!isReadyToTravel.isChecked());
-            }
-        });
 
         pinCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -611,12 +605,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             if (userInfo.getAccomplishments() != null) {
                 accomplishment.setText(userInfo.getAccomplishments());
             }
-            if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {
-                isReadyToTravel.setChecked(true);
-            } else {
-                isReadyToTravel.setChecked(false);
-            }
-
+            
             try {
                 List<String> areaOfInterests = userInfo.getSubCategoryName();
                 if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).equals(" ")) {
@@ -894,11 +883,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             requestParams.add("accomplishments", accomplishment.getText().toString());
             if (!imageInBinary.equals(""))
                 requestParams.add("photograph", imageInBinary);
-            if (isReadyToTravel.isChecked())
-                requestParams.add("availability_yn", "1");
-            else
-                requestParams.add("availability_yn", "0");
+//            if (isReadyToTravel.isChecked())
+//                requestParams.add("availability_yn", "1");
+//            else
+//                requestParams.add("availability_yn", "0");
 
+            requestParams.add("availability_yn", String.valueOf(teachingPreference.getSelectedItemPosition()));
             requestParams.add("sub_category", areaOfCoaching.getText().toString().length() < 2 ? " " : areaOfCoaching.getText().toString());
 
 
@@ -931,6 +921,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
+            requestParams.add("slot_type", String.valueOf(classTypeSpinner.getSelectedItemPosition()));
             requestParams.add("section_1", myQualification.getText().toString());
             requestParams.add("section_2", myAccredition.getText().toString());
             requestParams.add("section_3", myExperience.getText().toString());

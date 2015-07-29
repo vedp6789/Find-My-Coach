@@ -207,7 +207,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/back_margin"
                 android:gravity="center_vertical"
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_details" />
@@ -227,7 +226,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/back_margin"
                 android:gravity="center_vertical"
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_details" />
@@ -266,9 +264,108 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
-                android:orientation="vertical" />
+                android:orientation="vertical" >
+
+                <com.findmycoach.app.views.ChizzleTextViewBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:text="@string/my_qualification"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:id="@+id/myQualificationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_details"
+                    android:layout_marginTop="@dimen/textView_padding_margin" />
+
+                <com.findmycoach.app.views.ChizzleTextViewBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:text="@string/my_accreditions"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:id="@+id/myAccreditionsText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_details"
+                    android:layout_marginTop="@dimen/textView_padding_margin" />
+                <com.findmycoach.app.views.ChizzleTextViewBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:text="@string/my_experience"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:id="@+id/myExperienceText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_details"
+                    android:layout_marginTop="@dimen/textView_padding_margin" />
+                <com.findmycoach.app.views.ChizzleTextViewBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:text="@string/my_teaching_methodology"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:id="@+id/myTeachingMethodologyText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_details"
+                    android:layout_marginTop="@dimen/textView_padding_margin" />
+                <com.findmycoach.app.views.ChizzleTextViewBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:text="@string/my_awards"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:id="@+id/myAwardsText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_details"
+                    android:layout_marginTop="@dimen/textView_padding_margin" />
 
 
+
+</LinearLayout>
         </LinearLayout>
 
     </ScrollView>
