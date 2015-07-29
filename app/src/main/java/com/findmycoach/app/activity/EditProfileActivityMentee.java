@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -109,6 +110,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
     private Button addMore,addAddress;
     private ArrayList<Address> addressArrayList;
     private AddressAdapter addressAdapter;
+    private RadioGroup radioGroup;
 
 
 
@@ -176,6 +178,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         CheckBox mutipleAddress=(CheckBox)findViewById(R.id.inputMutipleAddresses);
         addressListView=(ListView)findViewById(R.id.addressesListView);
         addressArrayList=new ArrayList<>();
+        radioGroup=(RadioGroup)findViewById(R.id.radioGroupDetails);
         profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
 
         locationPreferenceSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.location_preference)));
@@ -735,11 +738,21 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
                     ? profileAddress.getText().toString() + ", "
                     + profileAddress1.getText().toString() + ", "
                     + pinCode.getText().toString() : trainLoc);
-            requestParams.add("coaching_type", coachingType.getSelectedItem().toString());
+            requestParams.add("coaching_type", String.valueOf(coachingType.getSelectedItemPosition()));
+            if(coachingType.getSelectedItemPosition()==1 || coachingType.getSelectedItemPosition()==2){
+                if(radioGroup.getCheckedRadioButtonId()==R.id.radioHostingYes) {
+                    requestParams.add("group_class_preference","0");
+
+                }
+                else {
+                    requestParams.add("group_class_preference","1");
+
+                }
+            }
            //TODO
             requestParams.add("children", new Gson().toJson(childDetailsArrayList));
             requestParams.add("multiple_address", new Gson().toJson(addressArrayList));
-
+            requestParams.add("location_preference", String.valueOf(locationPreferenceSpinner.getSelectedItemPosition()));
             if (!imageInBinary.equals(""))
                 requestParams.add("photograph", imageInBinary);
 
