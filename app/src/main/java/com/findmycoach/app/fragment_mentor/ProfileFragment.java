@@ -25,18 +25,21 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.EditProfileActivityMentor;
+import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
-import com.findmycoach.app.views.ChizzleButton;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.TreeSet;
 
 public class ProfileFragment extends Fragment implements Callback {
 
@@ -51,7 +54,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView profileExperience;
     private TextView profileAccomplishment;
     private TextView profileCharges;
-    private LinearLayout areaOfCoaching;
+    private LinearLayout areaOfCoaching, loveToTeachLL;
     private TextView profileTravelAvailable;
     private TextView profilePhone;
     private Data userInfo = null;
@@ -108,6 +111,7 @@ public class ProfileFragment extends Fragment implements Callback {
         profileCharges = (TextView) view.findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) view.findViewById(R.id.profile_travel_available);
         areaOfCoaching = (LinearLayout) view.findViewById(R.id.areas_of_coaching);
+        loveToTeachLL = (LinearLayout) view.findViewById(R.id.loveToTeachLL);
         profileEmail = (TextView) view.findViewById(R.id.profile_email);
         profileDob = (TextView) view.findViewById(R.id.profile_dob);
         profilePhone = (TextView) view.findViewById(R.id.profile_phone);
@@ -148,10 +152,10 @@ public class ProfileFragment extends Fragment implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
 
-            progressDialog.hide();
-            Response response = (Response) object;
-            userInfo = response.getData();
-            populateFields();
+        progressDialog.hide();
+        Response response = (Response) object;
+        userInfo = response.getData();
+        populateFields();
     }
 
 
@@ -202,15 +206,33 @@ public class ProfileFragment extends Fragment implements Callback {
         profilePhone.setText(userInfo.getPhonenumber());
         List<String> areaOfInterests = userInfo.getSubCategoryName();
         if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).trim().equals("")) {
-            List<com.findmycoach.app.views.ChizzleButton> buttons = new ArrayList<>();
+            List<View> buttons = new ArrayList<>();
             LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            for (String areaOfInterest : areaOfInterests) {
+            for (String title : areaOfInterests) {
                 Button button = (Button) inflater.inflate(R.layout.button, null);
-                button.setText(areaOfInterest);
-                buttons.add((ChizzleButton) button);
+                button.setText(title);
+                buttons.add(button);
             }
             populateViews(areaOfCoaching, buttons, getActivity());
         }
+
+        String agePreferences = userInfo.getAgeGroupPreferences();
+        if (agePreferences != null && !agePreferences.trim().equals("")) {
+            ArrayList<String> integerArrayList = new ArrayList<>();
+            String[] temp = agePreferences.split(",");
+            Collections.addAll(integerArrayList, temp);
+            String[] userSelectedAgePreferences = populateSubjectPreference(integerArrayList, userInfo.getAllAgeGroupPreferences()).split("###");
+
+            List<View> views = new ArrayList<>();
+            LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            for (String title : userSelectedAgePreferences) {
+                Button button = (Button) inflater.inflate(R.layout.button, null);
+                button.setText(title);
+                views.add(button);
+            }
+            populateViews(loveToTeachLL, views, getActivity());
+        }
+
 
         try {
             profileRatting.setRating(Float.parseFloat(userInfo.getRating()));
@@ -250,13 +272,91 @@ public class ProfileFragment extends Fragment implements Callback {
 //            requestParams.add("country", String.valueOf(userInfo.getCountry()));
 //
 //            NetworkClient.getCurrencySymbol(getActivity(),requestParams,authToken,ProfileFragment.this,52);
-            profileCharges.setText(Html.fromHtml(StorageHelper.getCurrency(getActivity())+ " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr")));
+            profileCharges.setText(Html.fromHtml(StorageHelper.getCurrency(getActivity()) + " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr")));
 
         }
     }
 
+    public String populateSubjectPreference(ArrayList<String> arrayListString, List<AgeGroupPreferences> allAgeGroupPreferences) {
 
-    private void populateViews(LinearLayout linearLayout, List<com.findmycoach.app.views.ChizzleButton> views, Context context) {
+        ArrayList<Integer> arrayList = new ArrayList<>();
+
+        for (String s : arrayListString)
+            arrayList.add(Integer.parseInt(s));
+
+        if (arrayList.size() > 0) {
+            TreeSet<Integer> treeSet = new TreeSet<>();
+            for (int i : arrayList) {
+                treeSet.add(i);
+            }
+            boolean greater_than_one = false;
+
+            if (treeSet.size() > 1) {
+                greater_than_one = true;
+            }
+
+
+            StringBuilder stringBuilder = new StringBuilder();
+            Iterator<Integer> iterator = treeSet.iterator();
+            boolean first = true;
+            while (iterator.hasNext()) {
+
+                int id = iterator.next();
+                for (AgeGroupPreferences ageGroupPreferences : allAgeGroupPreferences) {
+
+                    if (greater_than_one) {
+
+                        if (id == ageGroupPreferences.getId()) {
+                            if (first) {
+                                first = false;   /* To insert comma from second value */
+                                stringBuilder.append(ageGroupPreferences.getValue().trim());
+                                String min = ageGroupPreferences.getMin();
+                                String max = ageGroupPreferences.getMax();
+                                addInStringBuilder(min, max, stringBuilder);
+
+
+                            } else {
+                                stringBuilder.append("###").append(ageGroupPreferences.getValue().trim());
+                                String min = ageGroupPreferences.getMin();
+                                String max = ageGroupPreferences.getMax();
+                                addInStringBuilder(min, max, stringBuilder);
+
+                            }
+                        }
+
+
+                    } else {
+                        if (id == ageGroupPreferences.getId()) {
+                            stringBuilder.append(ageGroupPreferences.getValue().trim());
+                            String min1 = ageGroupPreferences.getMin();
+                            String max1 = ageGroupPreferences.getMax();
+                            addInStringBuilder(min1, max1, stringBuilder);
+                        }
+                    }
+                }
+            }
+            return stringBuilder.toString();
+        }
+        return null;
+    }
+
+    private void addInStringBuilder(String min, String max, StringBuilder stringBuilder) {
+        if (min != null && max != null) {
+            if (min.equals("any") && max.equals("any")) {
+
+            } else if (min.equals("any") && !max.equals("any")) {
+                stringBuilder.append(" (" + getResources().getString(R.string.up_to) + " " + max + " " + getResources().getString(R.string.years) + ")");
+            } else if (!min.equals("any") && max.equals("any")) {
+                stringBuilder.append(" (" + min + " " + getResources().getString(R.string.and) + " " + getResources().getString(R.string.above) + ")");
+
+            } else {
+                stringBuilder.append(" (" + min + " - " + max + " " + getResources().getString(R.string.years) + ")");
+            }
+        }
+    }
+
+
+    private void populateViews(LinearLayout linearLayout, List<View> views, Context context) {
 
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         linearLayout.removeAllViews();
@@ -270,7 +370,7 @@ public class ProfileFragment extends Fragment implements Callback {
 
         int widthSoFar = 0;
 
-        for (Button view : views) {
+        for (View view : views) {
             LinearLayout LL = new LinearLayout(context);
             LL.setOrientation(LinearLayout.HORIZONTAL);
             LL.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);

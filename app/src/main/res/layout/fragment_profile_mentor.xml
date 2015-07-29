@@ -161,6 +161,24 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/back_margin"
+                android:text="@string/students_preference"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_heading"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/loveToTeachLL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_vertical"
+                android:orientation="vertical" />
+
+            <com.findmycoach.app.views.ChizzleTextViewBold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/back_margin"
                 android:text="@string/prompt_accomplishment"
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_heading"
