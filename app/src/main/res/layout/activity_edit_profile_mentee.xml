@@ -412,7 +412,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/addressesListView"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    android:isScrollContainer="false"
+                    android:layout_marginTop="8dp" />
 
                 <Button
                     android:layout_width="32dp"
