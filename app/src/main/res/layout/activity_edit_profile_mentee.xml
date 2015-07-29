@@ -69,6 +69,7 @@
 
             </LinearLayout>
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -352,52 +353,50 @@
                 </LinearLayout>
 
                 <ListView
-                    android:id="@+id/childDetailsListView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/childDetailsListView"
                     android:layout_marginTop="8dp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    />
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/addChildLayout"
-                android:layout_gravity="right"
-                android:visibility="gone"
-                android:layout_marginTop="8dp">
-                <com.findmycoach.app.views.ChizzleTextView
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add Details"
-                    android:id="@+id/textView9"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="8dp"
-                    android:textColor="@color/purple"
-                    android:textSize="@dimen/profile_details"/>
-
-                <Button
-                    android:id="@+id/addMoreButton"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:id="@+id/addChildLayout"
                     android:layout_gravity="right"
-                    android:layout_marginRight="16dp"
-                    android:background="@color/purple"
-                    android:padding="2dp"
-<<<<<<< HEAD
-                    android:text="+"
-                    android:textColor="@color/white"
-                    android:visibility="gone" />
-=======
-                    android:visibility="visible"
-                    android:layout_toRightOf="@+id/textView9" />
+                    android:visibility="gone"
+                    android:layout_marginTop="8dp">
+                    <com.findmycoach.app.views.ChizzleTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Details"
+                        android:id="@+id/textView9"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="8dp"
+                        android:textColor="@color/purple"
+                        android:textSize="@dimen/profile_details"/>
+
+                    <Button
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="+"
+                        android:id="@+id/addMoreButton"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="16dp"
+                        android:background="@color/purple"
+                        android:textColor="@color/white"
+                        android:padding="2dp"
+                        android:visibility="visible"
+                        android:layout_toRightOf="@+id/textView9" />
                 </RelativeLayout>
->>>>>>> 34a9035047e6371ed17403a9ae42ac3f4d59dd28
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_button_height"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginTop="@dimen/back_margin">
+                    android:layout_marginTop="@dimen/back_margin"
+                    >
 
                     <com.findmycoach.app.views.ChizzleTextView
                         android:id="@+id/checkBoxTextAdresses"
@@ -428,25 +427,25 @@
 
 
                 <ListView
-                    android:id="@+id/addressesListView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:id="@+id/addressesListView"
+                    android:visibility="gone"
                     android:isScrollContainer="false"
-                    android:visibility="gone" />
+                    android:layout_marginTop="8dp" />
 
                 <Button
-                    android:id="@+id/addAddress"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:layout_gravity="right"
-                    android:layout_marginRight="16dp"
+                    android:text="+"
+                    android:id="@+id/addAddress"
                     android:layout_marginTop="8dp"
                     android:background="@color/purple"
-                    android:padding="2dp"
-                    android:text="+"
                     android:textColor="@color/white"
-                    android:visibility="gone" />
+                    android:padding="2dp"
+                    android:visibility="gone"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="16dp" />
 
                 <com.findmycoach.app.views.ChizzleTextView
                     android:layout_width="match_parent"
@@ -478,10 +477,10 @@
                     <com.findmycoach.app.views.ChizzleTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/prompt_location_preference"
                         android:textColor="@color/purple_light"
                         android:textSize="@dimen/profile_heading"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:text="@string/prompt_location_preference" />
 
                     <com.findmycoach.app.views.ChizzleTextView
                         android:layout_width="wrap_content"
@@ -497,8 +496,8 @@
                     android:id="@+id/locationPreferenceSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_button_height"
-                    android:background="@android:color/transparent"
-                    android:spinnerMode="dropdown" />
+                    android:spinnerMode="dropdown"
+                    android:background="@android:color/transparent" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -559,11 +558,11 @@
                 </LinearLayout>
 
                 <RelativeLayout
-                    android:id="@+id/groupClassesDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="@dimen/back_margin"
+                    android:id="@+id/groupClassesDetails"
                     android:visibility="gone">
 
                     <RadioGroup
@@ -582,19 +581,20 @@
                             android:paddingLeft="@dimen/radio_button_padding"
                             android:text="@string/prompt_hosting_yes"
                             android:textColor="@color/purple"
-                            android:textSize="@dimen/profile_heading" />
+                            android:textSize="@dimen/profile_heading"
+                            />
 
                         <RadioButton
                             android:id="@+id/radioHostingNo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
                             android:button="@drawable/custom_check_box"
                             android:paddingLeft="@dimen/radio_button_padding"
                             android:text="@string/prompt_fellow_student_location"
+                            android:textSize="@dimen/profile_heading"
                             android:textColor="@color/purple"
 
-                            android:textSize="@dimen/profile_heading" />
+                            android:layout_marginTop="12dp" />
                     </RadioGroup>
 
                 </RelativeLayout>
