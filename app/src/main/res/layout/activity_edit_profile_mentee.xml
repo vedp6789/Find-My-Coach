@@ -358,6 +358,22 @@
                     android:layout_marginTop="8dp"
                     android:visibility="gone" />
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/addChildLayout"
+                android:layout_gravity="right"
+                android:visibility="gone"
+                android:layout_marginTop="8dp">
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Details"
+                    android:id="@+id/textView9"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_details"/>
 
                 <Button
                     android:id="@+id/addMoreButton"
@@ -367,9 +383,15 @@
                     android:layout_marginRight="16dp"
                     android:background="@color/purple"
                     android:padding="2dp"
+<<<<<<< HEAD
                     android:text="+"
                     android:textColor="@color/white"
                     android:visibility="gone" />
+=======
+                    android:visibility="visible"
+                    android:layout_toRightOf="@+id/textView9" />
+                </RelativeLayout>
+>>>>>>> 34a9035047e6371ed17403a9ae42ac3f4d59dd28
 
                 <RelativeLayout
                     android:layout_width="match_parent"

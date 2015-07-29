@@ -2,7 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/back_margin">
+    android:paddingLeft="24dp"
+    android:paddingTop="@dimen/back_margin"
+    android:paddingRight="@dimen/back_margin"
+    android:paddingBottom="@dimen/back_margin">
+
+    <com.findmycoach.app.views.ChizzleTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name: "
+        android:id="@+id/textView4"
+        android:layout_marginRight="3dp"
+        android:textSize="14sp"
+        android:textColor="@color/purple_light" />
 
     <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="wrap_content"
@@ -10,7 +22,8 @@
         android:text="New Text"
         android:id="@+id/childNameEditProfile"
         android:textSize="14sp"
-        android:textColor="@color/purple" />
+        android:textColor="@color/purple"
+        android:layout_toRightOf="@+id/textView4" />
 
     <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="wrap_content"
@@ -18,8 +31,8 @@
         android:text="DOB:"
         android:id="@+id/textView"
         android:layout_below="@+id/childNameEditProfile"
-        android:layout_marginTop="6dp"
-        android:textSize="12sp"
+        android:layout_marginTop="8dp"
+        android:textSize="14sp"
         android:textIsSelectable="false"
         android:textColor="@color/purple_light" />
 
@@ -33,24 +46,27 @@
         android:textSize="12sp"
         android:textColor="@color/purple" />
 
-    <com.findmycoach.app.views.ChizzleTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/genderText"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/dobText"
-        android:textSize="12sp"
-        android:textIsSelectable="false"
-        android:textColor="@color/purple" />
 
     <com.findmycoach.app.views.ChizzleTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Gender:"
         android:id="@+id/textView3"
-        android:layout_alignTop="@+id/genderText"
-        android:layout_toLeftOf="@+id/genderText"
         android:layout_marginRight="3dp"
-        android:textSize="12sp"
-        android:textColor="@color/purple_light" />
+        android:textSize="14sp"
+        android:textColor="@color/purple_light"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/dobText" />
+
+    <com.findmycoach.app.views.ChizzleTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/genderText"
+        android:layout_alignParentRight="false"
+        android:textSize="14sp"
+        android:textIsSelectable="false"
+        android:textColor="@color/purple"
+        android:layout_toRightOf="@+id/textView3"
+        android:layout_alignTop="@+id/textView3" />
+
 </RelativeLayout>
