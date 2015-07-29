@@ -150,6 +150,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             TermsAndCondition termsAndCondition = new TermsAndCondition();
             termsAndCondition.showTermsAndConditions(this);
         }
+
+
     }
 
     @Override
@@ -250,17 +252,14 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 //        Log.d(TAG,"all selected student pref: "+userInfo.getAllAgeGroupPreferences().size());
 
 
-        ArrayList<Integer> arrayList = new ArrayList<Integer>();
+        arrayList = new ArrayList<Integer>();
         if (o != null && !o.trim().equals("")) {
             String array_of_id[] = o.split(",");
             for (String id : array_of_id) {
                 arrayList.add((Integer.parseInt(id)));
             }
         }
-
-
-
-        populateSubjectPreference(arrayList,userInfo.getAllAgeGroupPreferences());
+        populateSubjectPreference(arrayList, userInfo.getAllAgeGroupPreferences());
 
 
     }
@@ -324,7 +323,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
 
 
-
     }
 
     private void addInStringBuilder(String min, String max, StringBuilder stringBuilder) {
@@ -334,11 +332,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } else if (min.equals("any") && !max.equals("any")) {
                 stringBuilder.append(" (" + getResources().getString(R.string.up_to) + " " + max + " " + getResources().getString(R.string.years) + ")");
             } else if (!min.equals("any") && max.equals("any")) {
-                stringBuilder.append(System.getProperty("line.separator"));
                 stringBuilder.append(" (" + min + " " + getResources().getString(R.string.and) + " " + getResources().getString(R.string.above) + ")");
 
             } else {
-                stringBuilder.append(System.getProperty("line.separator"));
                 stringBuilder.append(" (" + min + " - " + max + " " + getResources().getString(R.string.years) + ")");
             }
         }
@@ -472,16 +468,15 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             public void onClick(View v) {
                 try {
 
-                    if(integerArrayList_Of_UpdatedStudentPreference != null && integerArrayList_Of_UpdatedStudentPreference.size() > 0){
-                        StudentsPreference studentsPreference = new StudentsPreference(EditProfileActivityMentor.this, userInfo.getAllAgeGroupPreferences(), integerArrayList_Of_UpdatedStudentPreference,editProfileActivityMentor);
+                    if (integerArrayList_Of_UpdatedStudentPreference != null && integerArrayList_Of_UpdatedStudentPreference.size() > 0) {
+                        StudentsPreference studentsPreference = new StudentsPreference(EditProfileActivityMentor.this, userInfo.getAllAgeGroupPreferences(), integerArrayList_Of_UpdatedStudentPreference, editProfileActivityMentor);
                         studentsPreference.showStudentPreferenceDialog();
 
-                    }else{
-                        StudentsPreference studentsPreference = new StudentsPreference(EditProfileActivityMentor.this, userInfo.getAllAgeGroupPreferences(), arrayList,editProfileActivityMentor);
+                    } else {
+                        StudentsPreference studentsPreference = new StudentsPreference(EditProfileActivityMentor.this, userInfo.getAllAgeGroupPreferences(), arrayList, editProfileActivityMentor);
                         studentsPreference.showStudentPreferenceDialog();
 
                     }
-
 
 
                 } catch (Exception e) {
@@ -507,6 +502,23 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
         });
 
+        arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (hiddenFlag) {
+                    summaryDetailsLayout.setVisibility(View.GONE);
+                    arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
+                    hiddenFlag = false;
+
+                } else {
+                    summaryDetailsLayout.setVisibility(View.VISIBLE);
+                    arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
+                    hiddenFlag = true;
+                }
+            }
+        });
+
+
         teachingMediumPreference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -528,79 +540,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
     }
 
-
-//    private void getPostalFromCity(String cityName) {
-//        city = cityName;
-//
-//        Geocoder geocoder = new Geocoder(EditProfileActivityMentor.this, Locale.getDefault());
-//        try {
-//            ArrayList<Address> addresses = (ArrayList<Address>) geocoder.getFromLocationName(city, 1);
-//            Address address = addresses.get(0);
-//            Log.i(TAG, "address according to Geo coder : " + "\n postal code : " + address.getPostalCode() + "\n country name : " + address.getCountryName() + "\n address line 0 : " + address.getAddressLine(0) + "\n address line 1 : " + address.getAddressLine(1));
-//            for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-//                Log.i(TAG, "address line " + i + " : " + address.getAddressLine(i));
-//            }
-//            Log.i(TAG, "address locality " + address.getLocality() + "latitude : " + address.getLatitude() + "longitude : " + address.getLongitude());
-//
-//
-//            double latitude = address.getLatitude();
-//            double longitude = address.getLongitude();
-//
-//            final ArrayList<Double> doubles = new ArrayList<Double>();
-//            doubles.add(latitude);
-//            doubles.add(longitude);
-//
-//
-//            new AsyncTask<ArrayList, Void, String>() {
-//
-//                @Override
-//                protected String doInBackground(ArrayList... params) {
-//                    ArrayList<Double> doubles1 = params[0];
-//                    XPath xpath = XPathFactory.newInstance().newXPath();
-//                    String expression = "//GeocodeResponse/result/address_component[type=\"postal_code\"]/long_name/text()";
-//                    Log.d(TAG, "lat in async " + doubles1.get(0));
-//                    Log.d(TAG, "long in async " + doubles1.get(1));
-//
-//                    InputSource inputSource = new InputSource("https://maps.googleapis.com/maps/api/geocode/xml?latlng=" + doubles1.get(0) + "," + doubles1.get(1) + "&sensor=true");
-//                    String zipcode = null;
-//                    try {
-//                        zipcode = (String) xpath.evaluate(expression, inputSource, XPathConstants.STRING);
-//                    } catch (XPathExpressionException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//
-//                    Log.i(TAG, "zip code 1 : " + zipcode);
-//
-//
-//                    return zipcode;
-//                }
-//
-//
-//                @Override
-//                protected void onPostExecute(String s) {
-//                    super.onPostExecute(s);
-//                    if (s != null) {
-//                        try {
-//                            pinCode.setText(s);
-//                        } catch (Exception ignored) {
-//                        }
-//                    } else {
-//                        try {
-//                            pinCode.setText("");
-//                        } catch (Exception ignored) {
-//                        }
-//                    }
-//
-//
-//                }
-//            }.execute(doubles);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
 
     public void populateUserData() {
         try {
@@ -950,18 +889,32 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             requestParams.add("sub_category", areaOfCoaching.getText().toString().length() < 2 ? " " : areaOfCoaching.getText().toString());
 
-           /* if(integerArrayList_Of_UpdatedStudentPreference!=null && integerArrayList_Of_UpdatedStudentPreference.size() > 0){
-                StringBuilder stringBuilder=new StringBuilder();
-                for(int i:integerArrayList_Of_UpdatedStudentPreference){
-                   if(i > 1){
 
-                   }else{
-
-                   }
+            if (integerArrayList_Of_UpdatedStudentPreference != null && integerArrayList_Of_UpdatedStudentPreference.size() > 0) {
+                for (int i : integerArrayList_Of_UpdatedStudentPreference) {
+                    Log.e(TAG, "students age preference: " + i);
                 }
 
-                requestParams.add();
-            }*/
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = 0; i < integerArrayList_Of_UpdatedStudentPreference.size(); i++) {
+                    if (integerArrayList_Of_UpdatedStudentPreference.size() > 1) {
+                        if (i == 0) {
+                            stringBuilder.append(integerArrayList_Of_UpdatedStudentPreference.get(i));
+                        } else {
+                            stringBuilder.append("," + integerArrayList_Of_UpdatedStudentPreference.get(i));
+                        }
+                    } else {
+                        stringBuilder.append(integerArrayList_Of_UpdatedStudentPreference.get(i));
+                    }
+                }
+
+                requestParams.add("preferences", stringBuilder.toString());
+                Log.d(TAG, "preferences: " + stringBuilder.toString());
+            } else {
+                requestParams.add("preferences", "");
+                Log.d(TAG, "preferences: " + "");
+
+            }
 
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
