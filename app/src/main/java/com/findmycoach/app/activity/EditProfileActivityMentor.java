@@ -90,7 +90,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private EditText accomplishment;
     private EditText chargeInput;
     private Spinner experienceInput, teachingPreference, classTypeSpinner;
-    private CheckBox isReadyToTravel;
+   // private CheckBox isReadyToTravel;
     private Button updateAction;
     private Spinner chargesPerUnit;
     private ProgressDialog progressDialog;
@@ -116,7 +116,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     ArrayList<Integer> arrayList;
     public static ArrayList<Integer> integerArrayList_Of_UpdatedStudentPreference;
     public EditProfileActivityMentor editProfileActivityMentor;
-    private ChizzleEditText myQualification,myAccredition,myExperience,myTeachingMethodology,myAwards;
+    private ChizzleEditText myQualification, myAccredition, myExperience, myTeachingMethodology, myAwards;
+    private int ageAndExperienceErrorCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +164,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
     private void initialize() {
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
+        ageAndExperienceErrorCounter = 0;
         Log.e(TAG, getIntent().getStringExtra("user_info"));
         profileGender = (Spinner) findViewById(R.id.input_gender);
         profilePicture = (ImageView) findViewById(R.id.profile_image);
@@ -188,11 +190,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         teachingMediumPreference = (ChizzleTextView) findViewById(R.id.teaching_medium_preference);
         arrow = (ImageButton) findViewById(R.id.arrow);
 
-        myQualification=(ChizzleEditText)findViewById(R.id.myQualification);
-        myAccredition=(ChizzleEditText)findViewById(R.id.myAccreditions);
-        myExperience=(ChizzleEditText)findViewById(R.id.myExperience);
-        myTeachingMethodology=(ChizzleEditText)findViewById(R.id.myTeachingMethodology);
-        myAwards=(ChizzleEditText)findViewById(R.id.myAwards);
+        myQualification = (ChizzleEditText) findViewById(R.id.myQualification);
+        myAccredition = (ChizzleEditText) findViewById(R.id.myAccreditions);
+        myExperience = (ChizzleEditText) findViewById(R.id.myExperience);
+        myTeachingMethodology = (ChizzleEditText) findViewById(R.id.myTeachingMethodology);
+        myAwards = (ChizzleEditText) findViewById(R.id.myAwards);
 
 
         String[] yearOfExperience = new String[51];
@@ -208,7 +210,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, yearOfExperience));
         teachingPreference.setAdapter(new ArrayAdapter<>(this, R.layout.textview, preferences));
         classTypeSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.textview, classType));
-        isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
+      //  isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
         updateAction = (Button) findViewById(R.id.button_update);
         chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
         areaOfCoaching = (TextView) findViewById(R.id.input_areas_of_coaching);
@@ -418,12 +420,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         });
 
 
-        findViewById(R.id.checkboxTextView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isReadyToTravel.setChecked(!isReadyToTravel.isChecked());
-            }
-        });
 
         pinCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -609,12 +605,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             if (userInfo.getAccomplishments() != null) {
                 accomplishment.setText(userInfo.getAccomplishments());
             }
-            if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {
-                isReadyToTravel.setChecked(true);
-            } else {
-                isReadyToTravel.setChecked(false);
-            }
-
+            
             try {
                 List<String> areaOfInterests = userInfo.getSubCategoryName();
                 if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).equals(" ")) {
@@ -829,10 +820,24 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             Log.e(TAG, yearsOfExperience + " : " + age + " : " + minExperience);
             if (dobYear > 0 && age - yearsOfExperience < minExperience) {
                 Toast.makeText(this, getResources().getString(R.string.age_experience_message), Toast.LENGTH_LONG).show();
+                ageAndExperienceErrorCounter++;
                 isValid = false;
             } else if (dobYear > 0 && (Calendar.getInstance().get(Calendar.YEAR) - (dobYear) < 19)) {
                 Toast.makeText(this, getResources().getString(R.string.age_review_message), Toast.LENGTH_LONG).show();
                 isDobForReview = true;
+            }
+
+            if (ageAndExperienceErrorCounter > 2) {
+                needToCheckOnDestroy = true;
+                logout();
+                startActivity(new Intent(EditProfileActivityMentor.this, LoginActivity.class));
+                if (Settings.settings != null)
+                    Settings.settings.finish();
+                if (DashboardActivity.dashboardActivity != null)
+                    DashboardActivity.dashboardActivity.finish();
+
+                Toast.makeText(this, getResources().getString(R.string.account_blocked), Toast.LENGTH_LONG).show();
+                finish();
             }
         }
 
@@ -878,11 +883,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             requestParams.add("accomplishments", accomplishment.getText().toString());
             if (!imageInBinary.equals(""))
                 requestParams.add("photograph", imageInBinary);
-            if (isReadyToTravel.isChecked())
-                requestParams.add("availability_yn", "1");
-            else
-                requestParams.add("availability_yn", "0");
+//            if (isReadyToTravel.isChecked())
+//                requestParams.add("availability_yn", "1");
+//            else
+//                requestParams.add("availability_yn", "0");
 
+            requestParams.add("availability_yn", String.valueOf(teachingPreference.getSelectedItemPosition()));
             requestParams.add("sub_category", areaOfCoaching.getText().toString().length() < 2 ? " " : areaOfCoaching.getText().toString());
 
 
@@ -915,11 +921,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
-            requestParams.add("section_1",myQualification.getText().toString());
-            requestParams.add("section_2",myAccredition.getText().toString());
-            requestParams.add("section_3",myExperience.getText().toString());
-            requestParams.add("section_4",myTeachingMethodology.getText().toString());
-            requestParams.add("section_5",myAwards.getText().toString());
+            requestParams.add("slot_type", String.valueOf(classTypeSpinner.getSelectedItemPosition()));
+            requestParams.add("section_1", myQualification.getText().toString());
+            requestParams.add("section_2", myAccredition.getText().toString());
+            requestParams.add("section_3", myExperience.getText().toString());
+            requestParams.add("section_4", myTeachingMethodology.getText().toString());
+            requestParams.add("section_5", myAwards.getText().toString());
             if (isGettingAddress && NetworkManager.countryCode != null && !NetworkManager.countryCode.equals("")) {
                 requestParams.add("country", NetworkManager.countryCode.trim());
                 Log.e(TAG, "Country : " + NetworkManager.countryCode);

@@ -213,7 +213,7 @@ public class ProfileFragment extends Fragment implements Callback {
                 button.setText(title);
                 buttons.add(button);
             }
-            populateViews(areaOfCoaching, buttons, getActivity());
+            populateViews(areaOfCoaching, buttons, getActivity(), profileEmail.getHeight());
         }
 
         String agePreferences = userInfo.getAgeGroupPreferences();
@@ -230,8 +230,8 @@ public class ProfileFragment extends Fragment implements Callback {
                 button.setText(title);
                 views.add(button);
             }
-            populateViews(loveToTeachLL, views, getActivity());
-        }else{
+            populateViews(loveToTeachLL, views, getActivity(), profileEmail.getHeight());
+        } else {
             loveToTeachLL.removeAllViews();
         }
 
@@ -358,7 +358,7 @@ public class ProfileFragment extends Fragment implements Callback {
     }
 
 
-    private void populateViews(LinearLayout linearLayout, List<View> views, Context context) {
+    private void populateViews(LinearLayout linearLayout, List<View> views, Context context, int height) {
 
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         linearLayout.removeAllViews();
@@ -379,7 +379,7 @@ public class ProfileFragment extends Fragment implements Callback {
             LL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
             view.measure(0, 0);
-            params = new LinearLayout.LayoutParams(view.getMeasuredWidth(), profileEmail.getHeight());
+            params = new LinearLayout.LayoutParams(view.getMeasuredWidth(), height);
             params.setMargins(2, 2, 2, 2);
 
             LL.addView(view, params);
@@ -389,7 +389,7 @@ public class ProfileFragment extends Fragment implements Callback {
                 linearLayout.addView(newLL);
 
                 newLL = new LinearLayout(context);
-                newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, profileEmail.getHeight()));
+                newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height));
                 newLL.setOrientation(LinearLayout.HORIZONTAL);
                 newLL.setGravity(Gravity.CENTER_HORIZONTAL);
                 params = new LinearLayout.LayoutParams(LL.getMeasuredWidth(), LL.getMeasuredHeight());

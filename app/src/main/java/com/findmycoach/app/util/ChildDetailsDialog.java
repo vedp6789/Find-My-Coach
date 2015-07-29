@@ -83,8 +83,8 @@ public class ChildDetailsDialog {
             @Override
             public void onClick(View v) {
                 new DobPicker(context, childDOB,
-                        context.getResources().getInteger(R.integer.starting_year),
-                        Calendar.getInstance().get(Calendar.YEAR) - context.getResources().getInteger(R.integer.mentee_min_age));
+                        context.getResources().getInteger(R.integer.starting_year_child),
+                        Calendar.getInstance().get(Calendar.YEAR) - context.getResources().getInteger(R.integer.mentee_min_age_child));
             }
         });
         genderSpinner.setAdapter(new ArrayAdapter<String>(context, R.layout.textview, context.getResources().getStringArray(R.array.gender)));

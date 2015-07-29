@@ -782,6 +782,7 @@
     <string name="prompt_experience">Experience</string>
     <string name="prompt_experience_in_years">Experience in year</string>
     <string name="students_preference">I like to teach</string>
+    <string name="about_me">About me</string>
     <string name="teaching_medium_preferences">Teaching medium</string>
     <string name="prompt_facebook">Facebook</string>
     <string name="prompt_google_plus">Google +</string>
@@ -972,7 +973,8 @@
     <string name="loc">Location</string>
     <string name="age_review_message">You seem to be too young to be a teacher, your case will be reviewed and our support team will call you back.</string>
     <string name="sure_to_logout">Going back will log you out from Chizzle!\nAre you sure want to logout?</string>
-    <string name="age_experience_message">Your age or years of experience seems to be invalid.</string>
+    <string name="age_experience_message">Your years of experience do not match your age, you will need to correct either the date of birth or years of experience.</string>
+    <string name="account_blocked">Your profile has been locked , please logout and we wil be in touch with you on the email ID/phone number provided by you.</string>
     <string name="view_calendar_by">View schedule calendar by</string>
     <string name="mentor_response_for_schedule_request_message">Your reply to mentee!</string>
     
