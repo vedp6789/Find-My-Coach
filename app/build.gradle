@@ -8,8 +8,8 @@ android {
         applicationId "com.findmycoach.app"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 24
-        versionName "1.0.a21"
+        versionCode 25
+        versionName "1.0.a22"
     }
     buildTypes {
         release {

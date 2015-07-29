@@ -1,7 +1,6 @@
 package com.findmycoach.app.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.findmycoach.app.R;
-import com.findmycoach.app.beans.CalendarSchedule.EventDuration;
-import com.findmycoach.app.beans.CalendarSchedule.Mentee;
-import com.findmycoach.app.beans.CalendarSchedule.Vacation;
 import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,9 +59,10 @@ public class StudentPreferenceSelection extends BaseAdapter {
         StudentViewHolder studentViewHolder = null;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.student_preference_selection, parent, false);
+            convertView = inflater.inflate(R.layout.qualified_coaching_single_row, parent, false);
             studentViewHolder = new StudentViewHolder();
-            studentViewHolder.student_selection = (CheckBox) convertView.findViewById(R.id.cb_student_pref);
+            studentViewHolder.student_selection = (CheckBox) convertView.findViewById(R.id.checkbox);
+            studentViewHolder.textView = (TextView) convertView.findViewById(R.id.textView);
             convertView.setTag(studentViewHolder);
         } else {
             studentViewHolder = (StudentViewHolder) convertView.getTag();
@@ -77,9 +70,11 @@ public class StudentPreferenceSelection extends BaseAdapter {
 
         try {
             final CheckBox checkBox = studentViewHolder.student_selection;
+            final TextView textView = studentViewHolder.textView;
 
             checkBox.setOnCheckedChangeListener(null);
             checkBox.setChecked(false);
+            convertView.setOnClickListener(null);
 
             final AgeGroupPreferences ageGroupPreferences = different_preferences.get(position);
 
@@ -105,7 +100,7 @@ public class StudentPreferenceSelection extends BaseAdapter {
                 }
             }
 
-            checkBox.setText(stringBuilder);
+            textView.setText(stringBuilder);
 
             for (int i = 0; i < selected_preferences.size(); i++) {
                 if (selected_preferences.contains(id)) {
@@ -126,6 +121,13 @@ public class StudentPreferenceSelection extends BaseAdapter {
                 }
             });
 
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkBox.setChecked(!checkBox.isChecked());
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -135,6 +137,7 @@ public class StudentPreferenceSelection extends BaseAdapter {
 
     class StudentViewHolder {
         CheckBox student_selection;
+        TextView textView;
     }
 
 

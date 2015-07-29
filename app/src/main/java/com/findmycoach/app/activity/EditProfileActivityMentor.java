@@ -238,8 +238,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
         o = userInfo.getAgeGroupPreferences();
 
-        Log.d(TAG,"selected student pref: "+userInfo.getAgeGroupPreferences());
-        Log.d(TAG,"all selected student pref: "+userInfo.getAllAgeGroupPreferences().size());
+//        Log.d(TAG,"selected student pref: "+userInfo.getAgeGroupPreferences());
+//        Log.d(TAG,"all selected student pref: "+userInfo.getAllAgeGroupPreferences().size());
 
 
         ArrayList<Integer> arrayList = new ArrayList<Integer>();
