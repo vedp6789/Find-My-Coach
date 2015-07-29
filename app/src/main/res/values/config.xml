@@ -40,7 +40,9 @@
 
     <!--Minimum year for DOB dialog-->
     <integer name="starting_year">1941</integer>
+    <integer name="starting_year_child">1990</integer>
     <integer name="mentee_min_age">16</integer>
+    <integer name="mentee_min_age_child">1</integer>
     <integer name="mentor_min_age">16</integer>
     <integer name="mentor_min_age_experience_difference">16</integer>
 
