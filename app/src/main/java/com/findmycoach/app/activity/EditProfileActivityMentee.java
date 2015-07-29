@@ -64,6 +64,8 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -727,12 +729,17 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             requestParams.add("city", profileAddress1.getText().toString());
             requestParams.add("zip", pinCode.getText().toString());
             requestParams.add("mentor_for", mentorFor.getSelectedItem().toString());
+
             String trainLoc = trainingLocation.getText().toString().trim();
             requestParams.add("training_location", trainLoc.length() < 2
                     ? profileAddress.getText().toString() + ", "
                     + profileAddress1.getText().toString() + ", "
                     + pinCode.getText().toString() : trainLoc);
             requestParams.add("coaching_type", coachingType.getSelectedItem().toString());
+           //TODO
+            requestParams.add("children", new Gson().toJson(childDetailsArrayList));
+            requestParams.add("multiple_address", new Gson().toJson(addressArrayList));
+
             if (!imageInBinary.equals(""))
                 requestParams.add("photograph", imageInBinary);
 
@@ -743,6 +750,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             if (isGettingAddress && NetworkManager.countryCode != null && !NetworkManager.countryCode.equals("")) {
                 requestParams.add("country", NetworkManager.countryCode.trim());
             }
+
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
             progressDialog.dismiss();
@@ -933,7 +941,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
     @Override
     public void onChildDetailsAdded(ChildDetails childDetails) {
         if (childDetails != null) {
-            childDetailsArrayList.add(childDetailsArrayList.size(), childDetails);
+            childDetailsArrayList.add(childDetails);
             childDetailsAdapter.notifyDataSetChanged();
             setListViewHeightBasedOnChildren(childDetailsListView);
             childDetailsListView.setVisibility(View.VISIBLE);
@@ -990,9 +998,10 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         }
 
         int totalHeight = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
         for (int i = 0; i < listAdapter.getCount(); i++) {
             View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(0, 0);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
             totalHeight += listItem.getMeasuredHeight();
         }
 
