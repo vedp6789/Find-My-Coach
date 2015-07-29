@@ -459,10 +459,10 @@
                     <com.findmycoach.app.views.ChizzleTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Location Preference"
                         android:textColor="@color/purple_light"
                         android:textSize="@dimen/profile_heading"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:text="@string/prompt_location_preference" />
 
                     <com.findmycoach.app.views.ChizzleTextView
                         android:layout_width="wrap_content"

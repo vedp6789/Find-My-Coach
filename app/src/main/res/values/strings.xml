@@ -544,7 +544,7 @@
     <string name="vacation_schedule">Vacations</string>
 
 
-
+    <string name="children_details">Children details</string>
     <string name="mentor_details">Mentor\'s information</string>
     <string name="tutorial_preference_by_mentee">You will attend this class at the mentor\'s location.</string>
 
@@ -844,6 +844,7 @@
     <string name="prompt_addressline1">House no/street no</string>
     <string name="prompt_fellow_student_location">I am fine to attend group classes at a nearby fellow students location
 </string>
+    <string name="prompt_location_preference">Location Preference</string>
 
    <string name="prompt_summary"> I would also like to tell something additional about myself</string>
     <string name="my_qualification">My Qualifications</string>
