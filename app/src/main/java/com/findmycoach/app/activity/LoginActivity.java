@@ -36,6 +36,7 @@ import com.facebook.widget.LoginButton;
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.CountryCodeAdapter;
 import com.findmycoach.app.beans.authentication.Response;
+import com.findmycoach.app.beans.authentication.SubCategoryName;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
@@ -957,10 +958,10 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         try {
         /*Saving mentor's area of coaching i.e. subcategories to sharedpreference in string set*/
             if (StorageHelper.getUserGroup(LoginActivity.this, "user_group").equals("3")) {
-                List<String> sub_category_list = response.getData().getSubCategoryName();
+                List<SubCategoryName> sub_category_list = response.getData().getSubCategoryName();
                 Set<String> sub_category_stringSet = new HashSet<String>();
                 for (int i = 0; i < sub_category_list.size(); i++) {
-                    sub_category_stringSet.add(sub_category_list.get(i));
+                    sub_category_stringSet.add(sub_category_list.get(i).getSub_category_name());
                 }
                 StorageHelper.storeListOfCoachingSubCategories(LoginActivity.this, sub_category_stringSet);
             }

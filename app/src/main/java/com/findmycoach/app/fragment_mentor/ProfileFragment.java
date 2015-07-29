@@ -28,6 +28,7 @@ import com.findmycoach.app.activity.EditProfileActivityMentor;
 import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
+import com.findmycoach.app.beans.authentication.SubCategoryName;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
@@ -204,14 +205,15 @@ public class ProfileFragment extends Fragment implements Callback {
 
 
         profilePhone.setText(userInfo.getPhonenumber());
-        List<String> areaOfInterests = userInfo.getSubCategoryName();
-        if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).trim().equals("")) {
+        List<SubCategoryName> areaOfInterests = userInfo.getSubCategoryName();
+        if (areaOfInterests.get(0) != null && areaOfInterests.size() > 0) {
             List<View> buttons = new ArrayList<>();
             LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            for (String title : areaOfInterests) {
+            for (SubCategoryName title : areaOfInterests) {
                 Button button = (Button) inflater.inflate(R.layout.button, null);
-                button.setText(title);
+                button.setText(title.getSub_category_name());
                 buttons.add(button);
+                Log.e(TAG, title.getSub_category_name() + " : " + title.isQualified());
             }
             populateViews(areaOfCoaching, buttons, getActivity(), profileEmail.getHeight());
         }

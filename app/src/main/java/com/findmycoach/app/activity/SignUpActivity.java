@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.CountryCodeAdapter;
 import com.findmycoach.app.beans.authentication.Response;
+import com.findmycoach.app.beans.authentication.SubCategoryName;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -458,10 +459,10 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             try {
         /*Saving mentor's area of coaching i.e. subcategories to sharedpreference in string set*/
                 if (StorageHelper.getUserGroup(SignUpActivity.this, "user_group").equals("3")) {
-                    List<String> sub_category_list = response.getData().getSubCategoryName();
+                    List<SubCategoryName> sub_category_list = response.getData().getSubCategoryName();
                     Set<String> sub_category_stringSet = new HashSet<String>();
                     for (int i = 0; i < sub_category_list.size(); i++) {
-                        sub_category_stringSet.add(sub_category_list.get(i));
+                        sub_category_stringSet.add(sub_category_list.get(i).getSub_category_name());
                     }
                     StorageHelper.storeListOfCoachingSubCategories(SignUpActivity.this, sub_category_stringSet);
                 }

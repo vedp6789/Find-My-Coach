@@ -65,8 +65,6 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONArray;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -763,7 +761,8 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             }
            //TODO
             requestParams.add("children", new Gson().toJson(childDetailsArrayList));
-            requestParams.add("multiple_address", new Gson().toJson(addressArrayList));
+            Log.e(TAG + " Kids ", new Gson().toJson(childDetailsArrayList));
+//            requestParams.add("multiple_address", new Gson().toJson(addressArrayList));
             requestParams.add("location_preference", String.valueOf(locationPreferenceSpinner.getSelectedItemPosition()));
             if (!imageInBinary.equals(""))
                 requestParams.add("photograph", imageInBinary);
