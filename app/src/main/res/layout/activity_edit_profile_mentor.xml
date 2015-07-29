@@ -748,7 +748,7 @@
                         android:textSize="@dimen/profile_heading"
                         android:textStyle="bold" />
 
-                    <EditText
+                    <com.findmycoach.app.views.ChizzleEditText
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:inputType="textMultiLine|textCapSentences"
@@ -767,7 +767,7 @@
                         android:textStyle="bold"
                         android:layout_marginTop="8dp" />
 
-                    <EditText
+                    <com.findmycoach.app.views.ChizzleEditText
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:inputType="textMultiLine|textCapSentences"
@@ -786,7 +786,7 @@
                         android:textStyle="bold"
                         android:layout_marginTop="8dp" />
 
-                    <EditText
+                    <com.findmycoach.app.views.ChizzleEditText
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
                         android:inputType="textMultiLine|textCapSentences"
@@ -805,7 +805,7 @@
                         android:textStyle="bold"
                         android:layout_marginTop="8dp" />
 
-                    <EditText
+                    <com.findmycoach.app.views.ChizzleEditText
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
                         android:inputType="textMultiLine|textCapSentences"
@@ -824,7 +824,7 @@
                         android:textStyle="bold"
                         android:layout_marginTop="8dp" />
 
-                    <EditText
+                    <com.findmycoach.app.views.ChizzleEditText
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:inputType="textMultiLine|textCapSentences"
