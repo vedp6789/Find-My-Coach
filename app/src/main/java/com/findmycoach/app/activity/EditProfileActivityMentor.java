@@ -56,6 +56,7 @@ import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.util.StudentsPreference;
 import com.findmycoach.app.util.TeachingMediumPreferenceDialog;
 import com.findmycoach.app.util.TermsAndCondition;
+import com.findmycoach.app.views.ChizzleEditText;
 import com.findmycoach.app.views.ChizzleTextView;
 import com.findmycoach.app.views.ChizzleTextViewBold;
 import com.findmycoach.app.views.DobPicker;
@@ -119,6 +120,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     ArrayList<Integer> arrayList;
     public static ArrayList<Integer> integerArrayList_Of_UpdatedStudentPreference;
     public EditProfileActivityMentor editProfileActivityMentor;
+    private ChizzleEditText myQualification,myAccredition,myExperience,myTeachingMethodology,myAwards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,6 +191,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         students_preference = (TextView) findViewById(R.id.students_preference);
         teachingMediumPreference = (ChizzleTextView) findViewById(R.id.teaching_medium_preference);
         arrow = (ImageButton) findViewById(R.id.arrow);
+
+        myQualification=(ChizzleEditText)findViewById(R.id.myQualification);
+        myAccredition=(ChizzleEditText)findViewById(R.id.myAccreditions);
+        myExperience=(ChizzleEditText)findViewById(R.id.myExperience);
+        myTeachingMethodology=(ChizzleEditText)findViewById(R.id.myTeachingMethodology);
+        myAwards=(ChizzleEditText)findViewById(R.id.myAwards);
 
 
         String[] yearOfExperience = new String[51];
@@ -911,6 +919,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
+            requestParams.add("section_1",myQualification.getText().toString());
+            requestParams.add("section_2",myAccredition.getText().toString());
+            requestParams.add("section_3",myExperience.getText().toString());
+            requestParams.add("section_4",myTeachingMethodology.getText().toString());
+            requestParams.add("section_5",myAwards.getText().toString());
             if (isGettingAddress && NetworkManager.countryCode != null && !NetworkManager.countryCode.equals("")) {
                 requestParams.add("country", NetworkManager.countryCode.trim());
                 Log.e(TAG, "Country : " + NetworkManager.countryCode);
@@ -1178,6 +1191,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
     @Override
     public void onTeachingMediumAdded(String language1, String language2, String language3, String language4) {
+        teachingMediumPreference.setText("");
         String finalString = "";
         if (!language1.equalsIgnoreCase("select")) {
             finalString += language1 + ", ";
@@ -1190,13 +1204,15 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
         if (!language4.equalsIgnoreCase("select")) {
             finalString += language4;
-            if (!language4.equalsIgnoreCase("select")) {
-                finalString += language4;
-            }
-            if (finalString.length() > 0 && finalString.charAt(finalString.length() - 1) == ' ') {
-                finalString = finalString.substring(0, finalString.length() - 2);
-            }
-            teachingMediumPreference.setText(finalString);
+
+
         }
+
+
+        if (finalString.length() > 0 && finalString.charAt(finalString.length() - 1) == ' ') {
+            finalString = finalString.substring(0, finalString.length() - 2);
+        }
+
+        teachingMediumPreference.setText(finalString);
     }
 }
