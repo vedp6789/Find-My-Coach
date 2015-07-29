@@ -33,6 +33,7 @@ import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
+import com.findmycoach.app.views.ChizzleTextView;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
@@ -62,6 +63,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageLoader imgLoader;
     private ImageView editProfile;
     private TextView title;
+    private ChizzleTextView teachingMediumText,myQualification,myAccreditions,myExperience,myTeachingMethodology,myAwards;
 
     private static final String TAG = "FMC:";
 
@@ -119,6 +121,13 @@ public class ProfileFragment extends Fragment implements Callback {
         editProfile = (ImageView) view.findViewById(R.id.menuItem);
         title = (TextView) view.findViewById(R.id.title);
         title.setText(getResources().getString(R.string.profile));
+        teachingMediumText=(ChizzleTextView)view.findViewById(R.id.teachingMediumText);
+        myQualification=(ChizzleTextView)view.findViewById(R.id.myQualificationText);
+        myAccreditions=(ChizzleTextView)view.findViewById(R.id.myAccreditionsText);
+        myExperience=(ChizzleTextView)view.findViewById(R.id.myExperienceText);
+        myAwards=(ChizzleTextView)view.findViewById(R.id.myAwardsText);
+        myTeachingMethodology=(ChizzleTextView)view.findViewById(R.id.myTeachingMethodologyText);
+
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
 
         view.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
@@ -203,6 +212,24 @@ public class ProfileFragment extends Fragment implements Callback {
             profileExperience.setText(ex > 1 ? ex + " " + getResources().getString(R.string.years) : ex + " " + getResources().getString(R.string.year));
         }
 
+        if(!userInfo.getSection1().equalsIgnoreCase("")) {
+            myQualification.setText(userInfo.getSection1());
+        }
+
+        if(!userInfo.getSection2().equalsIgnoreCase("")) {
+            myAccreditions.setText(userInfo.getSection2());
+        }
+        if(!userInfo.getSection3().equalsIgnoreCase("")) {
+            myExperience.setText(userInfo.getSection3());
+        }
+        if(!userInfo.getSection4().equalsIgnoreCase("")) {
+            myTeachingMethodology.setText(userInfo.getSection4());
+        }
+        if(!userInfo.getSection5().equalsIgnoreCase("")) {
+            myAwards.setText(userInfo.getSection5());
+        }
+     
+
 
         profilePhone.setText(userInfo.getPhonenumber());
         List<SubCategoryName> areaOfInterests = userInfo.getSubCategoryName();
@@ -257,6 +284,8 @@ public class ProfileFragment extends Fragment implements Callback {
             imgLoader = new ImageLoader(profileImage);
             imgLoader.execute((String) userInfo.getPhotograph());
         }
+
+        teachingMediumText.setText(StorageHelper.getUserDetails(getActivity(),"teaching_medium"));
 
 
         editProfile.setOnClickListener(new View.OnClickListener() {

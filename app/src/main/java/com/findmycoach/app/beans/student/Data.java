@@ -3,6 +3,7 @@ package com.findmycoach.app.beans.student;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
@@ -41,7 +42,7 @@ public class Data {
     private Object trainingLocation;
     @SerializedName("coaching_type")
     @Expose
-    private Object coachingType;
+    private int coachingType;
     @SerializedName("mentor_for")
     @Expose
     private String mentorFor;
@@ -66,6 +67,45 @@ public class Data {
     @SerializedName("unicode")
     @Expose
     private String currencyCode;
+
+    @SerializedName("location_preference")
+    @Expose
+    private int locationPreference;
+
+
+    @SerializedName("children")
+    @Expose
+    private ArrayList<Children> children;
+
+    @SerializedName("multiple_address")
+    @Expose
+    private ArrayList<Address> multipleAddress;
+
+
+
+    public int getLocationPreference() {
+        return locationPreference;
+    }
+
+    public void setLocationPreference(int locationPreference) {
+        this.locationPreference = locationPreference;
+    }
+
+    public ArrayList<Address> getMultipleAddress() {
+        return multipleAddress;
+    }
+
+    public void setMultipleAddress(ArrayList<Address> multipleAddress) {
+        this.multipleAddress = multipleAddress;
+    }
+
+    public ArrayList<Children> getChildren() {
+        return children;
+    }
+
+    public void setChildren(ArrayList<Children> children) {
+        this.children = children;
+    }
 
     public String getCurrencyCode() {
         return currencyCode;
@@ -319,14 +359,14 @@ public class Data {
     /**
      * @return The coachingType
      */
-    public Object getCoachingType() {
+    public int getCoachingType() {
         return coachingType;
     }
 
     /**
      * @param coachingType The coaching_type
      */
-    public void setCoachingType(Object coachingType) {
+    public void setCoachingType(int coachingType) {
         this.coachingType = coachingType;
     }
 

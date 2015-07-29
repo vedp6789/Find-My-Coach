@@ -1217,5 +1217,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
 
         teachingMediumPreference.setText(finalString);
+        StorageHelper.storePreference(EditProfileActivityMentor.this,"teaching_medium",finalString);
     }
 }

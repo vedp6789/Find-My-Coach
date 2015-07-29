@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
+import com.findmycoach.app.views.ChizzleTextView;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
@@ -42,6 +44,9 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageLoader imgLoader;
     private ImageView editProfile;
     private TextView title;
+    private RelativeLayout childDetailsLayout,preferredAddressLayout;
+    private ChizzleTextView locationPreference;
+
 
     private static final String TAG = "TAG";
 
@@ -96,6 +101,9 @@ public class ProfileFragment extends Fragment implements Callback {
         editProfile = (ImageView) view.findViewById(R.id.menuItem);
         title = (TextView) view.findViewById(R.id.title);
         title.setText(getResources().getString(R.string.profile));
+        locationPreference=(ChizzleTextView)view.findViewById(R.id.location_preference);
+        childDetailsLayout=(RelativeLayout)view.findViewById(R.id.childDetailsProfile);
+        preferredAddressLayout=(RelativeLayout)view.findViewById(R.id.preferredAddressLayout);
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
 
         view.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
@@ -173,8 +181,45 @@ public class ProfileFragment extends Fragment implements Callback {
         }
         mentorFor.setText(userInfo.getMentorFor());
         trainingLocation.setText((String) userInfo.getTrainingLocation());
-        coachingType.setText((String) userInfo.getCoachingType());
+
+        switch (userInfo.getCoachingType()) {
+            case 0:
+                coachingType.setText("I prefer individual classes");
+                break;
+            case 1:
+                coachingType.setText("I prefer group classes");
+                break;
+            case 2:
+                coachingType.setText("I am ok with either");
+                break;
+
+
+        }
+
+
+        switch (userInfo.getLocationPreference()) {
+            case 0:
+                locationPreference.setText("I prefer for the mentor to come to my location");
+                break;
+            case 1:
+                locationPreference.setText("I am ok to go to the mentor location or institute");
+                break;
+            case 2:
+                locationPreference.setText("I am fine with either");
+                break;
+        }
+  //      coachingType.setText((String) userInfo.getCoachingType());
         profilePhone.setText(userInfo.getPhonenumber());
+
+        if(userInfo.getChildren().size()<1) {
+            childDetailsLayout.setVisibility(View.GONE);
+        }
+
+        if(userInfo.getMultipleAddress().size()<1) {
+            preferredAddressLayout.setVisibility(View.GONE);
+        }
+
+
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override

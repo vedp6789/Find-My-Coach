@@ -113,6 +113,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -561,7 +562,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         } catch (Exception ignored) {
         }
         try {
-            String selectedCoachingType = (String) userInfo.getCoachingType();
+            String selectedCoachingType = String.valueOf(userInfo.getCoachingType());
             coachingType.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, coachingTypeOptions));
             if (selectedCoachingType.equalsIgnoreCase(coachingTypeOptions[0]))
                 coachingType.setSelection(0);

@@ -1,9 +1,14 @@
 package com.findmycoach.app.beans.student;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by abhi7 on 27/07/15.
  */
 public class Address {
+    @SerializedName("addressline1")
+    @Expose
     private String addressLine1;
     private String locality;
     private String zip;

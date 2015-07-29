@@ -84,6 +84,68 @@ public class Data {
     @Expose
     private List<AgeGroupPreferences> allAgeGroupPreferences;
 
+    @SerializedName("section_1")
+    @Expose
+    private String section1;
+
+    @SerializedName("section_2")
+    @Expose
+    private String section2;
+
+    @SerializedName("section_3")
+    @Expose
+    private String section3;
+
+    @SerializedName("section_4")
+    @Expose
+    private String section4;
+
+    @SerializedName("section_5")
+    @Expose
+    private String section5;
+
+
+    public String getSection1() {
+        return section1;
+    }
+
+    public void setSection1(String section1) {
+        this.section1 = section1;
+    }
+
+    public String getSection2() {
+        return section2;
+    }
+
+    public void setSection2(String section2) {
+        this.section2 = section2;
+    }
+
+    public String getSection3() {
+        return section3;
+    }
+
+    public void setSection3(String section3) {
+        this.section3 = section3;
+    }
+
+    public String getSection4() {
+        return section4;
+    }
+
+    public void setSection4(String section4) {
+        this.section4 = section4;
+    }
+
+    public String getSection5() {
+        return section5;
+    }
+
+    public void setSection5(String section5) {
+        this.section5 = section5;
+    }
+
+
     public String getAgeGroupPreferences() {
         return ageGroupPreferences;
     }
