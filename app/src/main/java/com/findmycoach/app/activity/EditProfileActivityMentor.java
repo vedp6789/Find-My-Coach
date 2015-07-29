@@ -25,7 +25,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -43,6 +42,7 @@ import com.findmycoach.app.adapter.QualifiedAreaOfCoachingAdapter;
 import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
+import com.findmycoach.app.beans.authentication.SubCategoryName;
 import com.findmycoach.app.beans.mentor.Currency;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
@@ -607,14 +607,14 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
 
             try {
-                List<String> areaOfInterests = userInfo.getSubCategoryName();
-                if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).equals(" ")) {
+                List<SubCategoryName> areaOfInterests = userInfo.getSubCategoryName();
+                if (areaOfInterests.get(0) != null && areaOfInterests.size() > 0) {
                     String areaOfInterest = "";
                     for (int index = 0; index < areaOfInterests.size(); index++) {
                         if (index != 0) {
-                            areaOfInterest = areaOfInterest + ", " + areaOfInterests.get(index);
+                            areaOfInterest = areaOfInterest + ", " + areaOfInterests.get(index).getSub_category_name();
                         } else {
-                            areaOfInterest = areaOfInterest + areaOfInterests.get(index);
+                            areaOfInterest = areaOfInterest + areaOfInterests.get(index).getSub_category_name();
                         }
                     }
                     areaOfCoaching.setText(areaOfInterest);

@@ -64,7 +64,7 @@ public class Data {
     private String gender;
     @SerializedName("sub_category_name")
     @Expose
-    private List<String> subCategoryName;
+    private List<SubCategoryName> subCategoryName;
     @SerializedName("new_user")
     @Expose
     private boolean newUser;
@@ -148,11 +148,11 @@ public class Data {
         this.newUser = newUser;
     }
 
-    public List<String> getSubCategoryName() {
+    public List<SubCategoryName> getSubCategoryName() {
         return subCategoryName;
     }
 
-    public void setSubCategoryName(List<String> subCategoryName) {
+    public void setSubCategoryName(List<SubCategoryName> subCategoryName) {
         this.subCategoryName = subCategoryName;
     }
 

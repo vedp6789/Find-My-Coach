@@ -2,6 +2,7 @@ package com.findmycoach.app.util;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
@@ -10,8 +11,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.AddNewSlotActivity;
 import com.findmycoach.app.beans.student.ChildDetails;
+import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.views.ChizzleAutoCompleteTextView;
+import com.findmycoach.app.views.ChizzleTextView;
 import com.findmycoach.app.views.DobPicker;
 
 import java.util.Calendar;
@@ -45,6 +49,24 @@ public class ChildDetailsDialog {
         mChildDetailsAddedListener.onChildDetailsAdded(childDetails);
     }
 
+    /**
+     * Clear error from edit text when focused or on touch
+     */
+    View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus)
+                ((TextView) v).setError(null);
+        }
+    };
+
+    View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            ((TextView) v).setError(null);
+            return false;
+        }
+    };
 
     public void showPopUp() {
         dialog = new Dialog(context, R.style.DialogCustomTheme);
@@ -55,6 +77,8 @@ public class ChildDetailsDialog {
         childName = (ChizzleAutoCompleteTextView) dialog.findViewById(R.id.childName);
         cancelButton = (Button) dialog.findViewById(R.id.cancel);
         final TextView childDOB = (TextView) dialog.findViewById(R.id.childDOB);
+        childDOB.setOnTouchListener(onTouchListener);
+        childDOB.setOnFocusChangeListener(onFocusChangeListener);
         childDOB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,19 +98,35 @@ public class ChildDetailsDialog {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                childDetails = new ChildDetails();
-                childDetails.setGender(genderSpinner.getSelectedItem().toString());
-                childDetails.setName(childName.getText().toString());
-                childDetails.setDob(childDOB.getText().toString());
-                onChildDetailsAdded(childDetails);
-                dialog.dismiss();
 
+                if (validate()) {
+                    childDetails = new ChildDetails();
+                    childDetails.setGender(genderSpinner.getSelectedItem().toString());
+                    childDetails.setName(childName.getText().toString());
+                    childDetails.setDob(childDOB.getText().toString());
+                    onChildDetailsAdded(childDetails);
+                    dialog.dismiss();
+                }
+
+
+            }
+
+            private boolean validate() {
+                boolean is_valid = true;
+                if (childName != null && childName.getText().toString().trim().length() < 1) {
+                    is_valid = false;
+                    childName.setError(context.getResources().getString(R.string.error_field_required));
+                }
+
+                if (childDOB.getText().toString().trim().length() < 1) {
+                    is_valid = false;
+                    childDOB.setError(context.getResources().getString(R.string.error_field_required));
+                }
+                return is_valid;
             }
         });
 
         dialog.show();
-
-
     }
 
     public interface ChildDetailsAddedListener {

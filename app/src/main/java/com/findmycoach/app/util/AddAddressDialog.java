@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
@@ -45,6 +46,24 @@ public class AddAddressDialog implements  Callback {
 
     }
 
+    /**
+     * Clear error from edit text when focused or on touch
+     */
+    View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus)
+                ((TextView) v).setError(null);
+        }
+    };
+
+    View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            ((TextView) v).setError(null);
+            return false;
+        }
+    };
 
 
     public void showPopUp() {
@@ -78,12 +97,33 @@ public class AddAddressDialog implements  Callback {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Address address=new Address();
-                address.setAddressLine1(addressLine1.getText().toString());
-                address.setLocality(locality.getText().toString());
-                address.setZip(zip.getText().toString());
-                onChildDetailsAdded(address);
-                dialog.dismiss();
+
+                if(validate()){
+                    Address address=new Address();
+                    address.setAddressLine1(addressLine1.getText().toString());
+                    address.setLocality(locality.getText().toString());
+                    address.setZip(zip.getText().toString());
+                    onChildDetailsAdded(address);
+                    dialog.dismiss();
+                }
+
+            }
+
+            private boolean validate() {
+                boolean is_valid=true;
+                if(addressLine1.getText().toString().trim().length() < 1){
+                    is_valid =false;
+                    addressLine1.setError(context.getResources().getString(R.string.error_field_required));
+                }
+                if(locality.getText().toString().trim().length() < 1){
+                    is_valid =false;
+                locality.setError(context.getResources().getString(R.string.error_field_required));
+                }
+                if(zip.getText().toString().trim().length() < 1){
+                    is_valid=false;
+                zip.setError(context.getResources().getString(R.string.error_field_required));
+                }
+                return is_valid;
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
