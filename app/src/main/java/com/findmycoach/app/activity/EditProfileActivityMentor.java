@@ -1238,6 +1238,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
     @Override
     public void onTeachingMediumAdded(String language1, String language2, String language3, String language4) {
+        teachingMediumPreference.setText("");
         String finalString = "";
         if (!language1.equalsIgnoreCase("select")) {
             finalString += language1 + ", ";
@@ -1250,13 +1251,15 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
         if (!language4.equalsIgnoreCase("select")) {
             finalString += language4;
-            if (!language4.equalsIgnoreCase("select")) {
-                finalString += language4;
-            }
-            if (finalString.length() > 0 && finalString.charAt(finalString.length() - 1) == ' ') {
-                finalString = finalString.substring(0, finalString.length() - 2);
-            }
-            teachingMediumPreference.setText(finalString);
+
+
         }
+
+
+        if (finalString.length() > 0 && finalString.charAt(finalString.length() - 1) == ' ') {
+            finalString = finalString.substring(0, finalString.length() - 2);
+        }
+
+        teachingMediumPreference.setText(finalString);
     }
 }
