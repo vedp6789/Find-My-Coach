@@ -231,6 +231,8 @@ public class ProfileFragment extends Fragment implements Callback {
                 views.add(button);
             }
             populateViews(loveToTeachLL, views, getActivity());
+        }else{
+            loveToTeachLL.removeAllViews();
         }
 
 

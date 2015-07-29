@@ -65,10 +65,6 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -909,10 +905,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 }
 
                 requestParams.add("preferences", stringBuilder.toString());
-                Log.d(TAG, "preferences: " + stringBuilder.toString());
+                Log.d(TAG, "preferences if :  " + stringBuilder.toString());
             } else {
                 requestParams.add("preferences", "");
-                Log.d(TAG, "preferences: " + "");
+                Log.d(TAG, "preferences else : " + "");
 
             }
 
