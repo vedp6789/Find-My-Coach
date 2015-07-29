@@ -630,6 +630,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 }
             });
 
+            teachingPreference.setSelection(Integer.parseInt(userInfo.getAvailabilityYn()));
+            classTypeSpinner.setSelection(Integer.parseInt(userInfo.getSlotType()));
             if (userInfo.getCurrencyCode() != null) {
                 String authToken = StorageHelper.getUserDetails(this, "auth_token");
                 RequestParams requestParams = new RequestParams();
@@ -639,6 +641,29 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } else {
                 currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
             }
+
+
+            if(!userInfo.getSection1().equalsIgnoreCase("")) {
+                myQualification.setText(userInfo.getSection1());
+            }
+
+            if(!userInfo.getSection2().equalsIgnoreCase("")) {
+                myAccredition.setText(userInfo.getSection2());
+            }
+            if(!userInfo.getSection3().equalsIgnoreCase("")) {
+                myExperience.setText(userInfo.getSection3());
+            }
+            if(!userInfo.getSection4().equalsIgnoreCase("")) {
+                myTeachingMethodology.setText(userInfo.getSection4());
+            }
+            if(!userInfo.getSection5().equalsIgnoreCase("")) {
+                myAwards.setText(userInfo.getSection5());
+            }
+
+
+            teachingMediumPreference.setText(StorageHelper.getUserDetails(EditProfileActivityMentor.this,"teaching_medium"));
+
+
             if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
                 getAddress();
         } catch (Exception e) {

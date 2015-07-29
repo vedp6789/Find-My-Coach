@@ -383,16 +383,14 @@
                     android:layout_marginRight="16dp"
                     android:background="@color/purple"
                     android:padding="2dp"
-<<<<<<< HEAD
+
                     android:text="+"
                     android:textColor="@color/white"
                     android:visibility="gone" />
-=======
+
                     android:visibility="visible"
                     android:layout_toRightOf="@+id/textView9" />
                 </RelativeLayout>
->>>>>>> 34a9035047e6371ed17403a9ae42ac3f4d59dd28
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_button_height"

@@ -104,6 +104,18 @@ public class Data {
     @Expose
     private String section5;
 
+    @SerializedName("slot_type")
+    @Expose
+    private String slotType;
+
+
+    public String getSlotType() {
+        return slotType;
+    }
+
+    public void setSlotType(String slotType) {
+        this.slotType = slotType;
+    }
 
     public String getSection1() {
         return section1;

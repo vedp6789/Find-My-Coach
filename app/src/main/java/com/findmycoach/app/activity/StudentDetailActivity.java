@@ -119,7 +119,7 @@ public class StudentDetailActivity extends Activity implements Callback {
         }
         mentorFor.setText(studentDetails.getMentorFor());
         trainingLocation.setText((String) studentDetails.getTrainingLocation());
-        coachingType.setText((String) studentDetails.getCoachingType());
+        coachingType.setText(String.valueOf( studentDetails.getCoachingType()));
         profilePhone.setText(studentDetails.getPhonenumber());
 
         ImageView connectionButton = (ImageView) findViewById(R.id.menuItem);
