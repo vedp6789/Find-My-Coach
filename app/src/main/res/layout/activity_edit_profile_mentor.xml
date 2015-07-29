@@ -693,7 +693,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/back_margin"
-                    android:textColor="@color/purple_light"
+                    android:textColor="@color/purple"
                     android:textSize="@dimen/profile_heading"
                     android:textStyle="bold"
                     />
