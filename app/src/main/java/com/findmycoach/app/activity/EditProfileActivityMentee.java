@@ -111,6 +111,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
     private ArrayList<Address> addressArrayList;
     private AddressAdapter addressAdapter;
     private RadioGroup radioGroup;
+    private RelativeLayout addChildLayout;
 
 
 
@@ -179,6 +180,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         addressListView=(ListView)findViewById(R.id.addressesListView);
         addressArrayList=new ArrayList<>();
         radioGroup=(RadioGroup)findViewById(R.id.radioGroupDetails);
+        addChildLayout=(RelativeLayout)findViewById(R.id.addChildLayout);
         profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
 
         locationPreferenceSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.location_preference)));
@@ -205,12 +207,11 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
                 if (position == 1 || position == 2) {
                     childDetailsArrayList.clear();
                     childDetailsAdapter.notifyDataSetChanged();
-                    ChildDetailsDialog childDetailsDialog = new ChildDetailsDialog(EditProfileActivityMentee.this);
-                    childDetailsDialog.setChildAddedListener(EditProfileActivityMentee.this);
-                    childDetailsDialog.showPopUp();
+                    addChildLayout.setVisibility(View.VISIBLE);
+
                 } else {
                     childDetailsListView.setVisibility(View.GONE);
-                    addMore.setVisibility(View.GONE);
+                    addChildLayout.setVisibility(View.GONE);
 
                 }
 
@@ -221,6 +222,17 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
                 // your code here
             }
 
+        });
+
+
+        addChildLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChildDetailsDialog childDetailsDialog = new ChildDetailsDialog(EditProfileActivityMentee.this);
+                childDetailsDialog.setChildAddedListener(EditProfileActivityMentee.this);
+                childDetailsDialog.showPopUp();
+
+            }
         });
 
 

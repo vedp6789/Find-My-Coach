@@ -605,7 +605,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             if (userInfo.getAccomplishments() != null) {
                 accomplishment.setText(userInfo.getAccomplishments());
             }
-            
+
             try {
                 List<String> areaOfInterests = userInfo.getSubCategoryName();
                 if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).equals(" ")) {

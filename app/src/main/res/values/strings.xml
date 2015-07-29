@@ -545,6 +545,7 @@
 
 
     <string name="children_details">Children details</string>
+    <string name="address_preference">Address preferences</string>
     <string name="mentor_details">Mentor\'s information</string>
     <string name="tutorial_preference_by_mentee">You will attend this class at the mentor\'s location.</string>
 
@@ -777,7 +778,7 @@
     <string name="prompt_profession">Profession</string>
     <string name="prompt_accomplishment">Qualification</string>
     <string name="enter_accomplishment">Enter qualification</string>
-    <string name="prompt_willing_to_travel">Available to travel trainee location</string>
+    <string name="prompt_willing_to_travel">Teaching location preference </string>
     <string name="prompt_charges">Coaching fee</string>
     <string name="prompt_experience">Experience</string>
     <string name="prompt_experience_in_years">Experience in year</string>

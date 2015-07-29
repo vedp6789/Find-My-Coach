@@ -360,6 +360,22 @@
                     android:visibility="gone"
                     />
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/addChildLayout"
+                android:layout_gravity="right"
+                android:visibility="gone"
+                android:layout_marginTop="8dp">
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Details"
+                    android:id="@+id/textView9"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_details"/>
 
                 <Button
                     android:layout_width="32dp"
@@ -371,7 +387,9 @@
                     android:background="@color/purple"
                     android:textColor="@color/white"
                     android:padding="2dp"
-                    android:visibility="gone" />
+                    android:visibility="visible"
+                    android:layout_toRightOf="@+id/textView9" />
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"

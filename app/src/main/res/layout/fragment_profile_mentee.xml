@@ -159,7 +159,8 @@
                 android:layout_height="fill_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/back_margin"
-                android:visibility="gone">
+                android:visibility="visible"
+                android:id="@+id/childDetailsProfile">
 
                 <com.findmycoach.app.views.ChizzleTextViewBold
                     android:layout_gravity="center_horizontal"
@@ -177,9 +178,34 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/childrenDetailsListViewProfile"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="48dp"
-                    android:layout_marginRight="48dp"
                     android:layout_below="@+id/childDetailsHeader" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/back_margin"
+                android:visibility="visible"
+                android:id="@+id/preferredAddressLayout">
+
+                <com.findmycoach.app.views.ChizzleTextViewBold
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/address_preference"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/preferredAddressHeader" />
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/addressProfileListView"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/preferredAddressHeader" />
             </RelativeLayout>
 
             <com.findmycoach.app.views.ChizzleTextViewBold
