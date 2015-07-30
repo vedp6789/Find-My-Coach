@@ -179,7 +179,8 @@ public class ProfileFragment extends Fragment implements Callback {
             imgLoader = new ImageLoader(profileImage);
             imgLoader.execute((String) userInfo.getPhotograph());
         }
-        mentorFor.setText(userInfo.getMentorFor());
+        String [] mentor_for1=getResources().getStringArray(R.array.mentor_for);
+        mentorFor.setText(mentor_for1[Integer.parseInt(userInfo.getMentorFor())]);
         trainingLocation.setText((String) userInfo.getTrainingLocation());
 
         switch (userInfo.getCoachingType()) {

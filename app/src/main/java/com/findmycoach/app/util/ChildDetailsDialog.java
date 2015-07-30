@@ -40,8 +40,7 @@ public class ChildDetailsDialog {
 
     }
 
-    public void setChildAddedListener(
-            ChildDetailsAddedListener childDetailsAddedListener) {
+    public void setChildAddedListener(ChildDetailsAddedListener childDetailsAddedListener) {
         mChildDetailsAddedListener = childDetailsAddedListener;
     }
 

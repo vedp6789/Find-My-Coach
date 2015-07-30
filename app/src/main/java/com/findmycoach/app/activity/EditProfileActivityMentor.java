@@ -90,7 +90,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private EditText accomplishment;
     private EditText chargeInput;
     private Spinner experienceInput, teachingPreference, classTypeSpinner;
-   // private CheckBox isReadyToTravel;
     private Button updateAction;
     private Spinner chargesPerUnit;
     private ProgressDialog progressDialog;
@@ -210,7 +209,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, yearOfExperience));
         teachingPreference.setAdapter(new ArrayAdapter<>(this, R.layout.textview, preferences));
         classTypeSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.textview, classType));
-      //  isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
+        //  isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
         updateAction = (Button) findViewById(R.id.button_update);
         chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
         areaOfCoaching = (TextView) findViewById(R.id.input_areas_of_coaching);
@@ -418,7 +417,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     callUpdateService();
             }
         });
-
 
 
         pinCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -643,25 +641,25 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
 
 
-            if(!userInfo.getSection1().equalsIgnoreCase("")) {
+            if (!userInfo.getSection1().equalsIgnoreCase("")) {
                 myQualification.setText(userInfo.getSection1());
             }
 
-            if(!userInfo.getSection2().equalsIgnoreCase("")) {
+            if (!userInfo.getSection2().equalsIgnoreCase("")) {
                 myAccredition.setText(userInfo.getSection2());
             }
-            if(!userInfo.getSection3().equalsIgnoreCase("")) {
+            if (!userInfo.getSection3().equalsIgnoreCase("")) {
                 myExperience.setText(userInfo.getSection3());
             }
-            if(!userInfo.getSection4().equalsIgnoreCase("")) {
+            if (!userInfo.getSection4().equalsIgnoreCase("")) {
                 myTeachingMethodology.setText(userInfo.getSection4());
             }
-            if(!userInfo.getSection5().equalsIgnoreCase("")) {
+            if (!userInfo.getSection5().equalsIgnoreCase("")) {
                 myAwards.setText(userInfo.getSection5());
             }
 
 
-            teachingMediumPreference.setText(StorageHelper.getUserDetails(EditProfileActivityMentor.this,"teaching_medium"));
+            teachingMediumPreference.setText(StorageHelper.getUserDetails(EditProfileActivityMentor.this, "teaching_medium"));
 
 
             if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
@@ -938,8 +936,30 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 requestParams.add("preferences", stringBuilder.toString());
                 Log.d(TAG, "preferences if :  " + stringBuilder.toString());
             } else {
-                requestParams.add("preferences", "");
-                Log.d(TAG, "preferences else : " + "");
+                if(arrayList != null && arrayList.size() >0){
+                    for (int i : arrayList) {
+                        Log.e(TAG, "students age preference: " + i);
+                    }
+
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (int i = 0; i < arrayList.size(); i++) {
+                        if (arrayList.size() > 1) {
+                            if (i == 0) {
+                                stringBuilder.append(arrayList.get(i));
+                            } else {
+                                stringBuilder.append("," + arrayList.get(i));
+                            }
+                        } else {
+                            stringBuilder.append(arrayList.get(i));
+                        }
+                    }
+
+                    requestParams.add("preferences", stringBuilder.toString());
+                    Log.d(TAG,"preferences: "+stringBuilder.toString());
+                }else{
+                    requestParams.add("preferences", "");
+                    Log.d(TAG, "preferences else : " + "");
+                }
 
             }
 
@@ -1242,6 +1262,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
 
         teachingMediumPreference.setText(finalString);
-        StorageHelper.storePreference(EditProfileActivityMentor.this,"teaching_medium",finalString);
+        StorageHelper.storePreference(EditProfileActivityMentor.this, "teaching_medium", finalString);
     }
 }

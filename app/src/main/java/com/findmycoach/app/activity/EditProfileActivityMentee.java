@@ -543,8 +543,11 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         } catch (Exception ignored) {
         }
         try {
-            if (userInfo.getMentorFor().equalsIgnoreCase(mentorForArray[1]))
+            /*if (userInfo.getMentorFor().equalsIgnoreCase(mentorForArray[1]))
                 mentorFor.setSelection(1);
+*/
+            mentorFor.setSelection(Integer.parseInt(userInfo.getMentorFor()));
+
         } catch (Exception ignored) {
         }
 
@@ -742,7 +745,8 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             requestParams.add("address", profileAddress.getText().toString());
             requestParams.add("city", profileAddress1.getText().toString());
             requestParams.add("zip", pinCode.getText().toString());
-            requestParams.add("mentor_for", mentorFor.getSelectedItem().toString());
+            Log.e(TAG,"mentor_for: "+mentorFor.getSelectedItemPosition());
+            requestParams.add("mentor_for", String.valueOf(mentorFor.getSelectedItemPosition()));
 
             String trainLoc = trainingLocation.getText().toString().trim();
             requestParams.add("training_location", trainLoc.length() < 2
