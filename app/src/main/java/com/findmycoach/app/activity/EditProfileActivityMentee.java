@@ -560,7 +560,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
                 profileGender.setSelection(1);
         }
 
-      
+
         if(userInfo.getChildren()!=null && userInfo.getChildren().size()>=1){
             childDetailsArrayList.clear();
             childDetailsAdapter.notifyDataSetChanged();
