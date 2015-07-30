@@ -251,7 +251,7 @@
 
             <RelativeLayout
                 android:layout_width="150dp"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/back_margin"
                 android:layout_gravity="center"
                 android:id="@+id/summaryHeaderProfile"
@@ -295,13 +295,14 @@
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:layout_marginBottom="@dimen/back_margin">
 
                 <com.findmycoach.app.views.ChizzleTextViewBold
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/back_margin"
+                    android:layout_marginTop="10dp"
                     android:text="@string/my_qualification"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_heading"

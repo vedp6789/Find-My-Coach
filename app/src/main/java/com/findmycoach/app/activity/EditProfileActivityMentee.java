@@ -205,8 +205,9 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // your code here
                 if (position == 1 || position == 2) {
-                    childDetailsArrayList.clear();
-                    childDetailsAdapter.notifyDataSetChanged();
+//                    childDetailsArrayList.clear();
+//                    childDetailsAdapter.notifyDataSetChanged();
+//                    childDetailsListView.setVisibility(View.VISIBLE);
                     addChildLayout.setVisibility(View.VISIBLE);
 
                 } else {
@@ -501,8 +502,6 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
             ImageLoader imgLoader = new ImageLoader(profilePicture);
             imgLoader.execute((String) userInfo.getPhotograph());
-        }else{
-            addText.setText(getResources().getString(R.string.add_photo));
         }
 
         try {
@@ -559,6 +558,21 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
                 profileGender.setSelection(0);
             else
                 profileGender.setSelection(1);
+        }
+
+      
+        if(userInfo.getChildren()!=null && userInfo.getChildren().size()>=1){
+            childDetailsArrayList.clear();
+            childDetailsAdapter.notifyDataSetChanged();
+            for(int i=0;i<userInfo.getChildren().size();i++){
+                childDetailsArrayList.add(userInfo.getChildren().get(i));
+
+            }
+            childDetailsAdapter.notifyDataSetChanged();
+            setHeight(childDetailsListView);
+            childDetailsListView.setVisibility(View.VISIBLE);
+            addChildLayout.setVisibility(View.VISIBLE);
+
         }
         try {
             String temp = (String) userInfo.getTrainingLocation();
@@ -748,8 +762,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             requestParams.add("address", profileAddress.getText().toString());
             requestParams.add("city", profileAddress1.getText().toString());
             requestParams.add("zip", pinCode.getText().toString());
-            Log.e(TAG,"mentor_for: "+mentorFor.getSelectedItemPosition());
-            requestParams.add("mentor_for", String.valueOf(mentorFor.getSelectedItemPosition()));
+            requestParams.add("mentor_for", mentorFor.getSelectedItem().toString());
 
             String trainLoc = trainingLocation.getText().toString().trim();
             requestParams.add("training_location", trainLoc.length() < 2
@@ -796,7 +809,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             Bitmap userPic = (Bitmap) data.getParcelableExtra("image");
             profilePicture.setImageBitmap(userPic);
-            addText.setText(getResources().getString(R.string.change_photo));
+            addText.setVisibility(View.GONE);
             try {
                 imageInBinary = BinaryForImage.getBinaryStringFromBitmap(userPic);
             } catch (Exception e) {

@@ -146,6 +146,23 @@ public class ProfileFragment extends Fragment implements Callback {
             }
         });
 
+
+        arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (hiddenFlag) {
+                    aboutMeLL.setVisibility(View.GONE);
+                    arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
+                    hiddenFlag = false;
+
+                } else {
+                    aboutMeLL.setVisibility(View.VISIBLE);
+                    arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
+                    hiddenFlag = true;
+                }
+            }
+        });
+
         summaryHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

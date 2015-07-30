@@ -58,7 +58,6 @@ public class ChildDetailsAdapter extends ArrayAdapter<ChildDetails> {
         viewHolder.childName.setText(childDetailsArrayList.get(position).getName());
         viewHolder.dobText.setText(childDetailsArrayList.get(position).getDob());
         viewHolder.genderText.setText(childDetailsArrayList.get(position).getGender());
-
         return convertView;
     }
 

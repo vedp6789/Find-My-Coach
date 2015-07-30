@@ -75,7 +75,7 @@ public class Data {
 
     @SerializedName("children")
     @Expose
-    private ArrayList<Children> children;
+    private ArrayList<ChildDetails> children;
 
     @SerializedName("multiple_address")
     @Expose
@@ -99,11 +99,11 @@ public class Data {
         this.multipleAddress = multipleAddress;
     }
 
-    public ArrayList<Children> getChildren() {
+    public ArrayList<ChildDetails> getChildren() {
         return children;
     }
 
-    public void setChildren(ArrayList<Children> children) {
+    public void setChildren(ArrayList<ChildDetails> children) {
         this.children = children;
     }
 
