@@ -558,8 +558,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 languagesList.add(0, "Select");
                 languagesList.add(1, "English");
                 languagesList.add(2, "Mandarin");
-                languagesList.add(3, "Malay");
                 languagesList.add(4, "Hindi");
+                languagesList.add(3, "Malay");
                 languagesList.add(5, "Marathi");
                 languagesList.add(6, "Spanish");
 
@@ -936,6 +936,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             else
                 requestParams.add("gender", "F");
             requestParams.add("dob", profileDOB.getText().toString());
+            Log.e(TAG + " dob", profileDOB.getText().toString());
             requestParams.add("address", profileAddress.getText().toString());
             requestParams.add("city", profileAddress1.getText().toString());
             requestParams.add("zip", pinCode.getText().toString());
@@ -1296,8 +1297,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
         if (!language4.equalsIgnoreCase("select")) {
             finalString += language4;
-
-
         }
 
 
