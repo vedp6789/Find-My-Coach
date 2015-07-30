@@ -21,8 +21,11 @@
     <!--api urls-->
     <!--<string name="BASE_URL_WITH_AUTH">http://demo.iglulabs.com/fmcweb/www/api/auth/</string>-->
     <!--<string name="BASE_URL">http://demo.iglulabs.com/fmcweb/www/api/v1/</string>-->
-    <string name="BASE_URL_WITH_AUTH">http://54.169.233.2/api/auth/</string>
-    <string name="BASE_URL">http://54.169.233.2/api/v1/</string>
+<!--    <string name="BASE_URL_WITH_AUTH">http://54.169.233.2/api/auth/</string>
+    <string name="BASE_URL">http://54.169.233.2/api/v1/</string>-->
+    <string name="BASE_URL_WITH_AUTH">http://10.1.1.158/api/auth/</string>
+    <string name="BASE_URL">http://10.1.1.158/api/v1/</string>
+
     <!--  Production URL http://54.169.233.2/api/v1-->
 
     <!--WEB SOCKET URL-->
