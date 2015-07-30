@@ -389,8 +389,7 @@
                         android:visibility="visible"
                         android:layout_toRightOf="@+id/textView9" />
 
-                    android:visibility="visible"
-                    android:layout_toRightOf="@+id/textView9" />
+
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
