@@ -236,7 +236,7 @@
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_heading"
                 android:textStyle="bold"
-                android:layout_marginBottom="@dimen/back_margin" />
+                />
 
             <com.findmycoach.app.views.ChizzleTextView
                 android:layout_gravity="center_horizontal"

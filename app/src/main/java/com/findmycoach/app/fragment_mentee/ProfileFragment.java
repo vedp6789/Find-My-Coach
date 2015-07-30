@@ -18,6 +18,10 @@ import android.widget.Toast;
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.EditProfileActivityMentee;
+import com.findmycoach.app.adapter.AddressAdapter;
+import com.findmycoach.app.adapter.ChildDetailsAdapter;
+import com.findmycoach.app.beans.student.Address;
+import com.findmycoach.app.beans.student.ChildDetails;
 import com.findmycoach.app.beans.student.Data;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
@@ -27,6 +31,8 @@ import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.views.ChizzleTextView;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
+
+import java.util.ArrayList;
 
 public class ProfileFragment extends Fragment implements Callback {
 
@@ -47,7 +53,11 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView title;
     private RelativeLayout childDetailsLayout, preferredAddressLayout;
     private ChizzleTextView locationPreference;
-    private ListView childrenDetailsListViewProfile;
+    private ListView childrenDetailsListViewProfile,addressListView;
+    private ArrayList<Address> addressArrayList;
+    private AddressAdapter addressAdapter;
+    private ChildDetailsAdapter childDetailsAdapter;
+    private ArrayList<ChildDetails> childDetailsArrayList;
 
 
     private static final String TAG = "TAG";
@@ -107,7 +117,22 @@ public class ProfileFragment extends Fragment implements Callback {
         childDetailsLayout = (RelativeLayout) view.findViewById(R.id.childDetailsProfile);
         preferredAddressLayout = (RelativeLayout) view.findViewById(R.id.preferredAddressLayout);
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
+
         childrenDetailsListViewProfile = (ListView) view.findViewById(R.id.childrenDetailsListViewProfile);
+        childrenDetailsListViewProfile.setDivider(null);
+        childrenDetailsListViewProfile.setDividerHeight(0);
+        childDetailsArrayList = new ArrayList<>();
+        childDetailsAdapter = new ChildDetailsAdapter(getActivity(), R.layout.child_details_list_item_centre_horizontal, childDetailsArrayList);
+        childrenDetailsListViewProfile.setAdapter(childDetailsAdapter);
+
+        addressArrayList=new ArrayList<>();
+        addressListView= (ListView) view.findViewById(R.id.addressProfileListView);
+        addressListView.setDivider(null);
+        addressListView.setDividerHeight(0);
+        addressAdapter=new AddressAdapter(getActivity(),R.layout.muti_address_list_item_centre_horizontal,addressArrayList);
+        addressListView.setAdapter(addressAdapter);
+
+
         view.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,90 +174,117 @@ public class ProfileFragment extends Fragment implements Callback {
 
     private void populateFields() {
         try {
-            if (userInfo.getMiddleName() == null || userInfo.getMiddleName().trim().equals(""))
-                profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
-            else
-                profileName.setText(userInfo.getFirstName() + " " + userInfo.getMiddleName() + " " + userInfo.getLastName());
-        } catch (Exception e) {
-        }
-        try {
-            profileEmail.setText(userInfo.getEmail());
-        } catch (Exception e) {
-        }
-        try {
-            profileDob.setText((String) userInfo.getDob());
-        } catch (Exception e) {
-        }
-        String address = "";
-        if (userInfo.getAddress() != null && !userInfo.getAddress().toString().trim().equals("")) {
-            address = address + userInfo.getAddress() + ", ";
-        }
-        if (userInfo.getCity() != null) {
-            address = address + userInfo.getCity() + ", ";
-        }
-        if (userInfo.getState() != null) {
-            address = address + userInfo.getState() + ", ";
-        }
-        if (userInfo.getZip() != null) {
-            address = address + userInfo.getZip();
-        }
-        profileAddress.setText(address);
-        if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
-            imgLoader = new ImageLoader(profileImage);
-            imgLoader.execute((String) userInfo.getPhotograph());
-        }
-        String[] mentor_for1 = getResources().getStringArray(R.array.mentor_for);
-        mentorFor.setText(mentor_for1[Integer.parseInt(userInfo.getMentorFor())]);
-        trainingLocation.setText((String) userInfo.getTrainingLocation());
-
-        switch (userInfo.getCoachingType()) {
-            case 0:
-                coachingType.setText("I prefer individual classes");
-                break;
-            case 1:
-                coachingType.setText("I prefer group classes");
-                break;
-            case 2:
-                coachingType.setText("I am ok with either");
-                break;
-        }
-
-
-        switch (userInfo.getLocationPreference()) {
-            case 0:
-                locationPreference.setText("I prefer for the mentor to come to my location");
-                break;
-            case 1:
-                locationPreference.setText("I am ok to go to the mentor location or institute");
-                break;
-            case 2:
-                locationPreference.setText("I am fine with either");
-                break;
-        }
-        //      coachingType.setText((String) userInfo.getCoachingType());
-        profilePhone.setText(userInfo.getPhonenumber());
-
-        if (userInfo.getChildren().size() < 1) {
-            childDetailsLayout.setVisibility(View.GONE);
-        }
-
-        if (userInfo.getMultipleAddress().size() < 1) {
-            preferredAddressLayout.setVisibility(View.GONE);
-        }
-
-
-        editProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (userInfo != null) {
-                    Intent intent = new Intent(getActivity(), EditProfileActivityMentee.class);
-                    intent.putExtra("user_info", new Gson().toJson(userInfo));
-                    startActivityForResult(intent, REQUEST_CODE);
-                }
+            try {
+                if (userInfo.getMiddleName() == null || userInfo.getMiddleName().trim().equals(""))
+                    profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
+                else
+                    profileName.setText(userInfo.getFirstName() + " " + userInfo.getMiddleName() + " " + userInfo.getLastName());
+            } catch (Exception e) {
             }
-        });
+            try {
+                profileEmail.setText(userInfo.getEmail());
+            } catch (Exception e) {
+            }
+            try {
+                profileDob.setText((String) userInfo.getDob());
+            } catch (Exception e) {
+            }
+            String address = "";
+            if (userInfo.getAddress() != null && !userInfo.getAddress().toString().trim().equals("")) {
+                address = address + userInfo.getAddress() + ", ";
+            }
+            if (userInfo.getCity() != null) {
+                address = address + userInfo.getCity() + ", ";
+            }
+            if (userInfo.getState() != null) {
+                address = address + userInfo.getState() + ", ";
+            }
+            if (userInfo.getZip() != null) {
+                address = address + userInfo.getZip();
+            }
+            profileAddress.setText(address);
+            if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
+                imgLoader = new ImageLoader(profileImage);
+                imgLoader.execute((String) userInfo.getPhotograph());
+            }
+            String[] mentor_for1 = getResources().getStringArray(R.array.mentor_for);
+            mentorFor.setText(mentor_for1[Integer.parseInt(userInfo.getMentorFor())]);
+            trainingLocation.setText((String) userInfo.getTrainingLocation());
+
+            switch (userInfo.getCoachingType()) {
+                case 0:
+                    coachingType.setText("I prefer individual classes");
+                    break;
+                case 1:
+                    coachingType.setText("I prefer group classes");
+                    break;
+                case 2:
+                    coachingType.setText("I am ok with either");
+                    break;
+            }
 
 
+            switch (userInfo.getLocationPreference()) {
+                case 0:
+                    locationPreference.setText("I prefer for the mentor to come to my location");
+                    break;
+                case 1:
+                    locationPreference.setText("I am ok to go to the mentor location or institute");
+                    break;
+                case 2:
+                    locationPreference.setText("I am fine with either");
+                    break;
+            }
+            //      coachingType.setText((String) userInfo.getCoachingType());
+            profilePhone.setText(userInfo.getPhonenumber());
+
+            if (userInfo.getChildren().size() < 1) {
+                childDetailsLayout.setVisibility(View.GONE);
+            }
+
+            if (userInfo.getChildren() != null && userInfo.getChildren().size() >= 1) {
+                childDetailsLayout.setVisibility(View.VISIBLE);
+                childDetailsAdapter.notifyDataSetChanged();
+                for (int i = 0; i < userInfo.getChildren().size(); i++) {
+                    childDetailsArrayList.add(userInfo.getChildren().get(i));
+
+                }
+                childrenDetailsListViewProfile.setAdapter(childDetailsAdapter);
+                childDetailsAdapter.notifyDataSetChanged();
+                EditProfileActivityMentee.setHeight(childrenDetailsListViewProfile);
+            }
+
+
+            if (userInfo.getMultipleAddress().size() < 1) {
+                preferredAddressLayout.setVisibility(View.GONE);
+            }
+
+            if(userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1){
+                preferredAddressLayout.setVisibility(View.VISIBLE);
+                addressAdapter.notifyDataSetChanged();
+                for(int i =0; i<userInfo.getMultipleAddress().size(); i++){
+                    addressArrayList.add(userInfo.getMultipleAddress().get(i));
+                }
+                addressListView.setAdapter(addressAdapter);
+                addressAdapter.notifyDataSetChanged();
+                EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListView);
+            }
+
+
+            editProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (userInfo != null) {
+                        Intent intent = new Intent(getActivity(), EditProfileActivityMentee.class);
+                        intent.putExtra("user_info", new Gson().toJson(userInfo));
+                        startActivityForResult(intent, REQUEST_CODE);
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

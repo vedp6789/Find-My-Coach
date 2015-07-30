@@ -100,8 +100,15 @@ public class ChildDetailsDialog {
 
                 if (validate()) {
                     childDetails = new ChildDetails();
-                    childDetails.setGender(genderSpinner.getSelectedItem().toString());
+                    String sex = genderSpinner.getSelectedItem().toString();
+             // TODO
+                    if (sex.equals("Male"))
+                        childDetails.setGender("M");
+                    else
+                        childDetails.setGender("F");
+
                     childDetails.setName(childName.getText().toString());
+
                     childDetails.setDob(childDOB.getText().toString());
                     onChildDetailsAdded(childDetails);
                     dialog.dismiss();

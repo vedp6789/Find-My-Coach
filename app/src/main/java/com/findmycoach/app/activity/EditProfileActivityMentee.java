@@ -110,9 +110,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
     private AddressAdapter addressAdapter;
     private RadioGroup radioGroup;
     private RelativeLayout addChildLayout;
-
-
-
+    private CheckBox mutipleAddress;
 
 
     @Override
@@ -176,13 +174,12 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         childDetailsListView=(ListView)findViewById(R.id.childDetailsListView);
         addMore=(Button)findViewById(R.id.addMoreButton);
         addAddress=(Button)findViewById(R.id.addAddress);
-        CheckBox mutipleAddress=(CheckBox)findViewById(R.id.inputMutipleAddresses);
+        mutipleAddress=(CheckBox)findViewById(R.id.inputMutipleAddresses);
         addressListView=(ListView)findViewById(R.id.addressesListView);
         addressArrayList=new ArrayList<>();
         radioGroup=(RadioGroup)findViewById(R.id.radioGroupDetails);
         addChildLayout=(RelativeLayout)findViewById(R.id.addChildLayout);
         profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
-        childrenDetailsListViewProfile= (ListView) findViewById(R.id.childrenDetailsListViewProfile);
         locationPreferenceSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.location_preference)));
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
@@ -209,6 +206,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
 //                    childDetailsAdapter.notifyDataSetChanged();
 //                    childDetailsListView.setVisibility(View.VISIBLE);
                     addChildLayout.setVisibility(View.VISIBLE);
+                    childDetailsListView.setVisibility(View.VISIBLE);
 
                 } else {
                     childDetailsListView.setVisibility(View.GONE);
@@ -240,14 +238,16 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         mutipleAddress.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
+                if (isChecked) {
+                    addressListView.setVisibility(View.VISIBLE);
                     addAddress.setVisibility(View.VISIBLE);
+                }
 
                 else {
-                    addressArrayList.clear();
-                    addressAdapter.notifyDataSetChanged();
+
                     addressListView.setVisibility(View.GONE);
                     addAddress.setVisibility(View.GONE);
+
                 }
             }
         });
@@ -574,6 +574,22 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             addChildLayout.setVisibility(View.VISIBLE);
 
         }
+
+        if(userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1){
+            addressArrayList.clear();
+            addressAdapter.notifyDataSetChanged();
+            for(int i=0;i<userInfo.getMultipleAddress().size();i++){
+                addressArrayList.add(userInfo.getMultipleAddress().get(i));
+
+            }
+            addressAdapter.notifyDataSetChanged();
+            setHeight(addressListView);
+            addressListView.setVisibility(View.VISIBLE);
+            addAddress.setVisibility(View.VISIBLE);
+            setListViewHeightBasedOnChildren(addressListView);
+            mutipleAddress.setChecked(true);
+        }
+
         try {
             String temp = (String) userInfo.getTrainingLocation();
             if (temp == null || temp.equals(""))
@@ -784,6 +800,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             requestParams.add("children", new Gson().toJson(childDetailsArrayList));
             Log.e(TAG + " Kids ", new Gson().toJson(childDetailsArrayList));
             requestParams.add("multiple_address", new Gson().toJson(addressArrayList));
+            Log.e(TAG,"mul add: "+ new Gson().toJson(addressArrayList));
             requestParams.add("location_preference", String.valueOf(locationPreferenceSpinner.getSelectedItemPosition()));
             if (!imageInBinary.equals(""))
                 requestParams.add("photograph", imageInBinary);
@@ -996,7 +1013,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
 
     }
 
-    public void setListViewHeightBasedOnChildren(ListView listView) {
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
             // pre-condition
