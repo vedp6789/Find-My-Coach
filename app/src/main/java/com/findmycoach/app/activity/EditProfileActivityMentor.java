@@ -90,6 +90,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private EditText accomplishment;
     private EditText chargeInput;
     private Spinner experienceInput, teachingPreference, classTypeSpinner;
+    // private CheckBox isReadyToTravel;
     private Button updateAction;
     private Spinner chargesPerUnit;
     private ProgressDialog progressDialog;
@@ -539,6 +540,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
                 ImageLoader imgLoader = new ImageLoader(profilePicture);
                 imgLoader.execute((String) userInfo.getPhotograph());
+            } else {
+                addPhoto.setText(getResources().getString(R.string.add_photo));
             }
             profileEmail.setText(userInfo.getEmail());
 
@@ -991,7 +994,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             Bitmap userPic = (Bitmap) data.getParcelableExtra("image");
             profilePicture.setImageBitmap(userPic);
-            addPhoto.setVisibility(View.GONE);
+            addPhoto.setText(getResources().getString(R.string.change_photo));
             try {
                 imageInBinary = BinaryForImage.getBinaryStringFromBitmap(userPic);
             } catch (Exception e) {
