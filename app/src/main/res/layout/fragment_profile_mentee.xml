@@ -159,7 +159,7 @@
                 android:layout_height="fill_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/back_margin"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/childDetailsProfile">
 
                 <com.findmycoach.app.views.ChizzleTextViewBold
@@ -185,8 +185,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/back_margin"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/preferredAddressLayout">
 
                 <com.findmycoach.app.views.ChizzleTextViewBold
@@ -212,7 +211,6 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/back_margin"
                 android:text="@string/prompt_coaching_type"
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_heading"
