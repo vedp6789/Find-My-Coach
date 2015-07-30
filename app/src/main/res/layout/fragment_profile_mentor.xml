@@ -248,13 +248,54 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical" />
 
+
+            <RelativeLayout
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/back_margin"
+                android:layout_gravity="center"
+                android:id="@+id/summaryHeaderProfile"
+                android:gravity="center_horizontal|fill_vertical">
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/summaryText"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_heading"
+                    android:text="@string/about_me"
+                    android:layout_alignParentRight="false"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="10dp"
+                    android:layout_toLeftOf="@+id/arrowProfile"
+                    android:layout_centerVertical="true" />
+
+
+                <ImageButton
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:id="@+id/arrowProfile"
+                    android:src="@drawable/arrow_down"
+                    android:background="@null"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="-30dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_alignWithParentIfMissing="false"
+                    android:layout_centerVertical="true"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter" />
+
+
+            </RelativeLayout>
+
             <LinearLayout
                 android:id="@+id/aboutMeLL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <com.findmycoach.app.views.ChizzleTextViewBold
                     android:layout_width="wrap_content"

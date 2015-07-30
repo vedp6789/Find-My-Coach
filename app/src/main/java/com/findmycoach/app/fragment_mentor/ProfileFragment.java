@@ -16,9 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +66,9 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageView editProfile;
     private TextView title;
     private ChizzleTextView teachingMediumText,myQualification,myAccreditions,myExperience,myTeachingMethodology,myAwards;
+    private RelativeLayout summaryHeader;
+    private LinearLayout aboutMeLL;
+    private boolean hiddenFlag;
 
     private static final String TAG = "FMC:";
 
@@ -127,6 +132,10 @@ public class ProfileFragment extends Fragment implements Callback {
         myExperience=(ChizzleTextView)view.findViewById(R.id.myExperienceText);
         myAwards=(ChizzleTextView)view.findViewById(R.id.myAwardsText);
         myTeachingMethodology=(ChizzleTextView)view.findViewById(R.id.myTeachingMethodologyText);
+        summaryHeader=(RelativeLayout)view.findViewById(R.id.summaryHeaderProfile);
+        aboutMeLL=(LinearLayout)view.findViewById(R.id.aboutMeLL);
+        final ImageButton arrow=(ImageButton)view.findViewById(R.id.arrowProfile);
+
 
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
 
@@ -134,6 +143,22 @@ public class ProfileFragment extends Fragment implements Callback {
             @Override
             public void onClick(View v) {
                 getActivity().onBackPressed();
+            }
+        });
+
+        summaryHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (hiddenFlag) {
+                    aboutMeLL.setVisibility(View.GONE);
+                    arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
+                    hiddenFlag = false;
+
+                } else {
+                    aboutMeLL.setVisibility(View.VISIBLE);
+                    arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
+                    hiddenFlag = true;
+                }
             }
         });
     }
