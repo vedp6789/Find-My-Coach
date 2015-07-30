@@ -86,7 +86,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class EditProfileActivityMentor extends Activity implements Callback, TeachingMediumPreferenceDialog.TeachingMediumAddedListener,AddAddressDialog.AddressAddedListener {
+public class EditProfileActivityMentor extends Activity implements Callback, TeachingMediumPreferenceDialog.TeachingMediumAddedListener, AddAddressDialog.AddressAddedListener {
 
     int REQUEST_CODE = 100;
     private ImageView profilePicture;
@@ -209,16 +209,16 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         students_preference = (TextView) findViewById(R.id.students_preference);
         teachingMediumPreference = (ChizzleTextView) findViewById(R.id.teaching_medium_preference);
         arrow = (ImageButton) findViewById(R.id.arrow);
-        multipleAddressMentor=(CheckBox)findViewById(R.id.inputMutipleAddressesMentor);
+        multipleAddressMentor = (CheckBox) findViewById(R.id.inputMutipleAddressesMentor);
         myQualification = (ChizzleEditText) findViewById(R.id.myQualification);
         myAccredition = (ChizzleEditText) findViewById(R.id.myAccreditions);
         myExperience = (ChizzleEditText) findViewById(R.id.myExperience);
         myTeachingMethodology = (ChizzleEditText) findViewById(R.id.myTeachingMethodology);
         myAwards = (ChizzleEditText) findViewById(R.id.myAwards);
-        addMoreAddress=(Button)findViewById(R.id.addAddressMentor);
-        addressListViewMentor=(ListView)findViewById(R.id.addressesListViewMentor);
-        addressArrayListMentor=new ArrayList<>();
-        addressAdapter=new AddressAdapter(this,R.layout.muti_address_list_item,addressArrayListMentor);
+        addMoreAddress = (Button) findViewById(R.id.addAddressMentor);
+        addressListViewMentor = (ListView) findViewById(R.id.addressesListViewMentor);
+        addressArrayListMentor = new ArrayList<>();
+        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayListMentor);
         addressListViewMentor.setAdapter(addressAdapter);
 
         String[] yearOfExperience = new String[51];
@@ -229,11 +229,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         multipleAddressMentor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
+                if (isChecked) {
                     addMoreAddress.setVisibility(View.VISIBLE);
 
-                }
-                else {
+                } else {
                     addressArrayListMentor.clear();
                     addressAdapter.notifyDataSetChanged();
                     addressListViewMentor.setVisibility(View.GONE);
@@ -246,7 +245,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         addMoreAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddAddressDialog dialog=new AddAddressDialog(EditProfileActivityMentor.this);
+                AddAddressDialog dialog = new AddAddressDialog(EditProfileActivityMentor.this);
                 dialog.setAddressAddedListener(EditProfileActivityMentor.this);
                 dialog.showPopUp();
             }
@@ -970,8 +969,24 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 requestParams.add("gender", "M");
             else
                 requestParams.add("gender", "F");
-            requestParams.add("dob", profileDOB.getText().toString());
-            Log.e(TAG + " dob", profileDOB.getText().toString());
+
+
+            try{
+                String[] dob = profileDOB.getText().toString().split("-");
+                int mon = 0;
+                String[] months = getResources().getStringArray(R.array.months_short);
+                for (int i = 0; i < months.length; i++) {
+                    if (months[i].trim().equalsIgnoreCase(dob[1])) {
+                        mon = i + 1;
+                        break;
+                    }
+                }
+                requestParams.add("dob", dob[2] + "-" + mon + "-" + dob[0]);
+                Log.e(TAG + " dob", dob[2] + "-" + mon + "-" + dob[0]);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
             requestParams.add("address", profileAddress.getText().toString());
             requestParams.add("city", profileAddress1.getText().toString());
             requestParams.add("zip", pinCode.getText().toString());
@@ -1165,7 +1180,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                                 jsonObject.put("qualified", true);
                             else
                                 jsonObject.put("qualified", false);
-                             jsonObject.put("sub_category_id", integers.get(i));
+                            jsonObject.put("sub_category_id", integers.get(i));
 
 
                             selectedAreaOfCoachingJson.put(jsonObject);

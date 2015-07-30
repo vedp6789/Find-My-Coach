@@ -430,10 +430,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         try {
             String dob = user.getBirthday();
             String[] dobs = dob.split("/");
-            int month = Integer.parseInt(dobs[0]);
-            String[] months = getResources().getStringArray(R.array.months_short);
-            requestParams.add("dob", dobs[1] + "-" + months[month - 1] + "-" + dobs[2]);
-            Log.e("dob", dobs[1] + "-" + months[month - 1] + "-" + dobs[2]);
+            requestParams.add("dob", dobs[2] + "-" + dobs[0] + "-" + dobs[1]);
+            Log.e("dob", dobs[2] + "-" + dobs[0] + "-" + dobs[1]);
         } catch (Exception e) {
             e.printStackTrace();
         }
