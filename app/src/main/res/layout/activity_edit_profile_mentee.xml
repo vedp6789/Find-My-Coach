@@ -49,7 +49,7 @@
                         android:layout_gravity="center_horizontal|bottom"
                         android:background="@color/purple"
                         android:padding="@dimen/days_margin"
-                        android:text="Change photo"
+                        android:text="@string/change_photo"
                         android:textColor="@color/white"
                         android:textSize="@dimen/profile_add_photo" />
 

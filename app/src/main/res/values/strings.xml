@@ -498,7 +498,6 @@
     <string name="no">No</string>
     <string name="gcm_notification">GCM notification</string>
     <string name="email_not_present_in_db">Email is not present in database.</string>
-    <string name="add_photo">Add photo</string>
     <string name="email_not_registered">Email is not registered.</string>
     <string name="problem_in_connection_server">Problem connecting to server.</string>
     <string name="problem_in_url">Not updated by mentor yet.</string>
@@ -784,6 +783,8 @@
     <string name="prompt_experience_in_years">Experience in year</string>
     <string name="students_preference">I like to teach</string>
     <string name="about_me">About me</string>
+    <string name="change_photo">Change photo</string>
+    <string name="add_photo">Add photo</string>
     <string name="teaching_medium_preferences">Teaching medium</string>
     <string name="prompt_facebook">Facebook</string>
     <string name="prompt_google_plus">Google +</string>
