@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,8 +45,9 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageLoader imgLoader;
     private ImageView editProfile;
     private TextView title;
-    private RelativeLayout childDetailsLayout,preferredAddressLayout;
+    private RelativeLayout childDetailsLayout, preferredAddressLayout;
     private ChizzleTextView locationPreference;
+    private ListView childrenDetailsListViewProfile;
 
 
     private static final String TAG = "TAG";
@@ -101,11 +103,11 @@ public class ProfileFragment extends Fragment implements Callback {
         editProfile = (ImageView) view.findViewById(R.id.menuItem);
         title = (TextView) view.findViewById(R.id.title);
         title.setText(getResources().getString(R.string.profile));
-        locationPreference=(ChizzleTextView)view.findViewById(R.id.location_preference);
-        childDetailsLayout=(RelativeLayout)view.findViewById(R.id.childDetailsProfile);
-        preferredAddressLayout=(RelativeLayout)view.findViewById(R.id.preferredAddressLayout);
+        locationPreference = (ChizzleTextView) view.findViewById(R.id.location_preference);
+        childDetailsLayout = (RelativeLayout) view.findViewById(R.id.childDetailsProfile);
+        preferredAddressLayout = (RelativeLayout) view.findViewById(R.id.preferredAddressLayout);
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
-
+        childrenDetailsListViewProfile = (ListView) view.findViewById(R.id.childrenDetailsListViewProfile);
         view.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,7 +181,7 @@ public class ProfileFragment extends Fragment implements Callback {
             imgLoader = new ImageLoader(profileImage);
             imgLoader.execute((String) userInfo.getPhotograph());
         }
-        String [] mentor_for1=getResources().getStringArray(R.array.mentor_for);
+        String[] mentor_for1 = getResources().getStringArray(R.array.mentor_for);
         mentorFor.setText(mentor_for1[Integer.parseInt(userInfo.getMentorFor())]);
         trainingLocation.setText((String) userInfo.getTrainingLocation());
 
@@ -193,8 +195,6 @@ public class ProfileFragment extends Fragment implements Callback {
             case 2:
                 coachingType.setText("I am ok with either");
                 break;
-
-
         }
 
 
@@ -209,17 +209,16 @@ public class ProfileFragment extends Fragment implements Callback {
                 locationPreference.setText("I am fine with either");
                 break;
         }
-  //      coachingType.setText((String) userInfo.getCoachingType());
+        //      coachingType.setText((String) userInfo.getCoachingType());
         profilePhone.setText(userInfo.getPhonenumber());
 
-        if(userInfo.getChildren().size()<1) {
+        if (userInfo.getChildren().size() < 1) {
             childDetailsLayout.setVisibility(View.GONE);
         }
 
-        if(userInfo.getMultipleAddress().size()<1) {
+        if (userInfo.getMultipleAddress().size() < 1) {
             preferredAddressLayout.setVisibility(View.GONE);
         }
-
 
 
         editProfile.setOnClickListener(new View.OnClickListener() {

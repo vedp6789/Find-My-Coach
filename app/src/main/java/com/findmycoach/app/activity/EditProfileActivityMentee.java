@@ -114,6 +114,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -181,7 +182,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         radioGroup=(RadioGroup)findViewById(R.id.radioGroupDetails);
         addChildLayout=(RelativeLayout)findViewById(R.id.addChildLayout);
         profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
-
+        childrenDetailsListViewProfile= (ListView) findViewById(R.id.childrenDetailsListViewProfile);
         locationPreferenceSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.location_preference)));
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
