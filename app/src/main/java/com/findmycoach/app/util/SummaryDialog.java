@@ -1,39 +1,38 @@
 package com.findmycoach.app.util;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.AddNewSlotActivity;
+import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.views.ChizzleTextView;
-
-import java.util.ArrayList;
 
 /**
  * Created by abhi7 on 03/07/15.
  */
 public class SummaryDialog {
 
-    private  Context context;
+    private Context context;
     private Dialog dialog;
-    private ChizzleTextView subjectTextView,startDateTextView,stopDateTextView,timingTextView,weekdaysTextView,slotTypeTextView,locationTextView;
-    private String subject,startDate,stopDate,timing,weekdays,slotType,location;
+    private ChizzleTextView subjectTextView, startDateTextView, stopDateTextView, timingTextView, weekdaysTextView, slotTypeTextView, locationTextView;
+    private String subject, startDate, stopDate, timing, weekdays, slotType, location;
     private Button okButton;
-    public SummaryDialog(Context context,String subject,String startDate, String stopDate, String timing, String weekdays, String slotType,String location) {
+
+    public SummaryDialog(Context context, String subject, String startDate, String stopDate, String timing, String weekdays, String slotType, String location) {
         this.context = context;
-        this.subject=subject;
-        this.startDate=startDate;
-        this.stopDate=stopDate;
-        this.timing=timing;
-        this.weekdays=weekdays;
-        this.slotType=slotType;
-        this.location=location;
+        this.subject = subject;
+        this.startDate = startDate;
+        this.stopDate = stopDate;
+        this.timing = timing;
+        this.weekdays = weekdays;
+        this.slotType = slotType;
+        this.location = location;
 
     }
 
@@ -41,14 +40,14 @@ public class SummaryDialog {
         dialog = new Dialog(context, R.style.DialogCustomTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.summary_dialog_layout);
-        subjectTextView=(ChizzleTextView)dialog.findViewById(R.id.subjectValue);
-        startDateTextView=(ChizzleTextView)dialog.findViewById(R.id.startDateValue);
-        stopDateTextView=(ChizzleTextView)dialog.findViewById(R.id.stopDateValue);
-        weekdaysTextView=(ChizzleTextView)dialog.findViewById(R.id.weekdaysValue);
-        slotTypeTextView=(ChizzleTextView)dialog.findViewById(R.id.slotTypeValue);
-        timingTextView=(ChizzleTextView)dialog.findViewById(R.id.timingValue);
-        locationTextView=(ChizzleTextView)dialog.findViewById(R.id.locationValue);
-        okButton=(Button)dialog.findViewById(R.id.okButtonSummary);
+        subjectTextView = (ChizzleTextView) dialog.findViewById(R.id.subjectValue);
+        startDateTextView = (ChizzleTextView) dialog.findViewById(R.id.startDateValue);
+        stopDateTextView = (ChizzleTextView) dialog.findViewById(R.id.stopDateValue);
+        weekdaysTextView = (ChizzleTextView) dialog.findViewById(R.id.weekdaysValue);
+        slotTypeTextView = (ChizzleTextView) dialog.findViewById(R.id.slotTypeValue);
+        timingTextView = (ChizzleTextView) dialog.findViewById(R.id.timingValue);
+        locationTextView = (ChizzleTextView) dialog.findViewById(R.id.locationValue);
+        okButton = (Button) dialog.findViewById(R.id.okButtonSummary);
         subjectTextView.setText(subject);
         startDateTextView.setText(startDate);
         stopDateTextView.setText(stopDate);
@@ -63,11 +62,13 @@ public class SummaryDialog {
                     MyScheduleFragment.myScheduleFragment.getCalendarDetailsAPICall();
                 }
                 dialog.dismiss();
-                ((AddNewSlotActivity)context).finish();
+                if (DashboardActivity.dashboardActivity == null)
+                    context.startActivity(new Intent(context, DashboardActivity.class));
+                ((AddNewSlotActivity) context).finish();
             }
         });
 
-    dialog.show();
+        dialog.show();
 
     }
 }
