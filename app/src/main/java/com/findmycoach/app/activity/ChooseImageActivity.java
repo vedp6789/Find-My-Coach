@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -23,8 +22,6 @@ import com.findmycoach.app.util.BinaryForImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,6 +43,7 @@ public class ChooseImageActivity extends Activity {
     private CropImageView cropImageView;
     private Button chooseImage;
     private Button rotateButton;
+    private boolean isImageSelected = false;
 
     /**
      * Saves the state upon rotating the screen/restarting the activity
@@ -137,7 +135,8 @@ public class ChooseImageActivity extends Activity {
             croppedImage = Bitmap.createScaledBitmap(croppedImage, 175, 175, false);
             Intent intent = new Intent();
             intent.putExtra("image", croppedImage);
-            setResult(RESULT_OK, intent);
+            if (isImageSelected)
+                setResult(RESULT_OK, intent);
             finish();
             onBackPressed();
         } catch (Exception exception) {
@@ -159,18 +158,20 @@ public class ChooseImageActivity extends Activity {
 //                    filePathColumn, null, null, null);
 //            cursor.moveToFirst();
 //            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-           String imgDecodableString = getRealPathFromURI(this,selectedImage);
-          //  cursor.close();
+            String imgDecodableString = getRealPathFromURI(this, selectedImage);
+            //  cursor.close();
 
 
             /** Set the Image in ImageView after decoding the String */
             try {
                 cropImageView.setImageBitmap(decodeFile(new File(imgDecodableString)));
+                isImageSelected = true;
 
             } catch (Exception e) {
                 Toast.makeText(this, getResources().getString(R.string.error_picking_image), Toast.LENGTH_SHORT).show();
                 try {
                     cropImageView.setImageBitmap(BinaryForImage.getBitmapFromBinaryString(getIntent().getStringExtra("BitMap")));
+                    isImageSelected = true;
                 } catch (Exception ignored) {
                 }
             }
@@ -219,7 +220,7 @@ public class ChooseImageActivity extends Activity {
             return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
         } catch (FileNotFoundException e) {
         }
-        return  null;
+        return null;
     }
 
     public static Uri handleImageUri(Uri uri) {

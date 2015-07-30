@@ -32,7 +32,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -47,9 +46,11 @@ import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.authentication.SubCategoryName;
+import com.findmycoach.app.beans.category.Category;
+import com.findmycoach.app.beans.category.Datum;
+import com.findmycoach.app.beans.category.DatumSub;
 import com.findmycoach.app.beans.mentor.Currency;
 import com.findmycoach.app.beans.student.Address;
-import com.findmycoach.app.beans.student.Children;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
@@ -57,6 +58,7 @@ import com.findmycoach.app.util.AddAddressDialog;
 import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
@@ -71,6 +73,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -125,6 +131,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     public EditProfileActivityMentor editProfileActivityMentor;
     private ChizzleEditText myQualification, myAccredition, myExperience, myTeachingMethodology, myAwards;
     private int ageAndExperienceErrorCounter;
+    private JSONArray selectedAreaOfCoachingJson;
+    private Category category;
     private CheckBox multipleAddressMentor;
     private Button addMoreAddress;
     private ListView addressListViewMentor;
@@ -558,12 +566,32 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 languagesList.add(0, "Select");
                 languagesList.add(1, "English");
                 languagesList.add(2, "Mandarin");
-                languagesList.add(4, "Hindi");
-                languagesList.add(3, "Malay");
+                languagesList.add(3, "Hindi");
+                languagesList.add(4, "Malay");
                 languagesList.add(5, "Marathi");
                 languagesList.add(6, "Spanish");
 
-                TeachingMediumPreferenceDialog dialog = new TeachingMediumPreferenceDialog(EditProfileActivityMentor.this, languagesList);
+                int lng1 = 0;
+                int lng2 = 0;
+                int lng3 = 0;
+                int lng4 = 0;
+
+                String mediumSelected = teachingMediumPreference.getText().toString().trim();
+                if (!mediumSelected.equals("") && !mediumSelected.equalsIgnoreCase(getResources().getString(R.string.select))) {
+                    String[] arr = mediumSelected.split(",");
+                    for (int i = 0; i < arr.length; i++) {
+                        if (i == 0) {
+                            lng1 = languagesList.indexOf(arr[i].trim());
+                        } else if (i == 1) {
+                            lng2 = languagesList.indexOf(arr[i].trim());
+                        } else if (i == 2) {
+                            lng3 = languagesList.indexOf(arr[i].trim());
+                        } else if (i == 3) {
+                            lng4 = languagesList.indexOf(arr[i].trim());
+                        }
+                    }
+                }
+                TeachingMediumPreferenceDialog dialog = new TeachingMediumPreferenceDialog(EditProfileActivityMentor.this, languagesList, lng1, lng2, lng3, lng4);
                 dialog.setTeachingMediumAddedListener(EditProfileActivityMentor.this);
                 dialog.showPopUp();
             }
@@ -650,7 +678,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             try {
                 List<SubCategoryName> areaOfInterests = userInfo.getSubCategoryName();
-                if (areaOfInterests.get(0) != null && areaOfInterests.size() > 0) {
+                if (areaOfInterests != null && areaOfInterests.size() > 0 && areaOfInterests.get(0) != null) {
                     String areaOfInterest = "";
                     for (int index = 0; index < areaOfInterests.size(); index++) {
                         if (index != 0) {
@@ -711,6 +739,13 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+        if (teachingMediumPreference.getText().toString().trim().equals(""))
+            teachingMediumPreference.setText(StorageHelper.getUserGroup(this, "teaching_medium"));
+
+        if (teachingMediumPreference.getText().toString().trim().equals(""))
+            teachingMediumPreference.setText(getResources().getString(R.string.select));
     }
 
     private void openAreaOfCoachingActivity() {
@@ -957,7 +992,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 //                requestParams.add("availability_yn", "0");
 
             requestParams.add("availability_yn", String.valueOf(teachingPreference.getSelectedItemPosition()));
-            requestParams.add("sub_category", areaOfCoaching.getText().toString().length() < 2 ? " " : areaOfCoaching.getText().toString());
+            if (selectedAreaOfCoachingJson != null) {
+                requestParams.add("sub_category", selectedAreaOfCoachingJson.toString());
+                Log.e(TAG, selectedAreaOfCoachingJson.toString());
+            }
 
 
             if (integerArrayList_Of_UpdatedStudentPreference != null && integerArrayList_Of_UpdatedStudentPreference.size() > 0) {
@@ -981,7 +1019,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 requestParams.add("preferences", stringBuilder.toString());
                 Log.d(TAG, "preferences if :  " + stringBuilder.toString());
             } else {
-                if(arrayList != null && arrayList.size() >0){
+                if (arrayList != null && arrayList.size() > 0) {
                     for (int i : arrayList) {
                         Log.e(TAG, "students age preference: " + i);
                     }
@@ -1000,8 +1038,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     }
 
                     requestParams.add("preferences", stringBuilder.toString());
-                    Log.d(TAG,"preferences: "+stringBuilder.toString());
-                }else{
+                    Log.d(TAG, "preferences: " + stringBuilder.toString());
+                } else {
                     requestParams.add("preferences", "");
                     Log.d(TAG, "preferences else : " + "");
                 }
@@ -1036,9 +1074,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             Bitmap userPic = (Bitmap) data.getParcelableExtra("image");
             profilePicture.setImageBitmap(userPic);
-            addPhoto.setText(getResources().getString(R.string.change_photo));
             try {
                 imageInBinary = BinaryForImage.getBinaryStringFromBitmap(userPic);
+                addPhoto.setText(getResources().getString(R.string.change_photo));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1046,6 +1084,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         if (requestCode == 500 && resultCode == RESULT_OK && data != null) {
             String listJson = data.getStringExtra("interests");
             List<String> list = new Gson().fromJson(listJson, List.class);
+            List<String> isSelected = new ArrayList<>();
+            for (String s : list)
+                isSelected.add("false");
             String interests = "";
             for (int index = 0; index < list.size(); index++) {
                 if (interests.equalsIgnoreCase("")) {
@@ -1056,17 +1097,27 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
             areaOfCoaching.setText(interests);
             if (list.size() > 0)
-                showQualifiedOrNotDialog(list);
+                showQualifiedOrNotDialog(list, isSelected);
         }
     }
 
-    private void showQualifiedOrNotDialog(List<String> selectedAreaOfCoaching) {
+    private void showQualifiedOrNotDialog(List<String> selectedAreaOfCoaching, List<String> isSelected) {
+        List<SubCategoryName> subCategoryNames = userInfo.getSubCategoryName();
+        for (int i = 0; i < selectedAreaOfCoaching.size(); i++) {
+            for (SubCategoryName subCategoryName : subCategoryNames) {
+                if (subCategoryName.getSub_category_name().trim().equalsIgnoreCase(selectedAreaOfCoaching.get(i).trim())) {
+                    isSelected.set(i, "true");
+                }
+            }
+        }
+
         final Dialog dialog = new Dialog(EditProfileActivityMentor.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.qualified_area_of_coachings);
         ListView listView = (ListView) dialog.findViewById(R.id.listView);
-        listView.setAdapter(new QualifiedAreaOfCoachingAdapter(selectedAreaOfCoaching,
-                new ArrayList<String>(), EditProfileActivityMentor.this));
+        final QualifiedAreaOfCoachingAdapter adapter = new QualifiedAreaOfCoachingAdapter(selectedAreaOfCoaching,
+                isSelected, EditProfileActivityMentor.this);
+        listView.setAdapter(adapter);
 //        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -1074,9 +1125,55 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 //            }
 //        });
 
+        DataBase dataBase = DataBase.singleton(this);
+        try {
+            String categoryData = dataBase.getAll();
+            category = new Gson().fromJson(categoryData, Category.class);
+        } catch (Exception e) {
+            category = null;
+            e.printStackTrace();
+        }
+
+        final Category finalCategory = category;
         dialog.findViewById(R.id.doneButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                selectedAreaOfCoachingJson = new JSONArray();
+                List<Integer> integers = new ArrayList<Integer>();
+
+                if (category != null && category.getData().size() > 0) {
+                    for (Datum datum : finalCategory.getData()) {
+                        for (DatumSub datumSub : datum.getSubCategories()) {
+                            if (adapter.selectedAreaOfCoaching.contains(datumSub.getName().trim())) {
+                                integers.add(Integer.parseInt(datumSub.getId()));
+                            }
+                        }
+
+                        for (Datum datum1 : datum.getCategories())
+                            for (DatumSub datumSub : datum1.getSubCategories()) {
+                                if (adapter.selectedAreaOfCoaching.contains(datumSub.getName().trim())) {
+                                    integers.add(Integer.parseInt(datumSub.getId()));
+                                }
+                            }
+                    }
+
+
+                    for (int i = 0; i < adapter.selectedAreaOfCoaching.size(); i++) {
+                        try {
+                            JSONObject jsonObject = new JSONObject();
+                            if (adapter.isSelected.get(i).equalsIgnoreCase("true"))
+                                jsonObject.put("qualified", true);
+                            else
+                                jsonObject.put("qualified", false);
+                             jsonObject.put("sub_category_id", integers.get(i));
+
+
+                            selectedAreaOfCoachingJson.put(jsonObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
                 dialog.dismiss();
             }
         });

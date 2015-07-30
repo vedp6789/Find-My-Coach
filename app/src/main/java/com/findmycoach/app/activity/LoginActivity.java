@@ -431,7 +431,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             String dob = user.getBirthday();
             String[] dobs = dob.split("/");
             int month = Integer.parseInt(dobs[0]);
-            String[] months = getResources().getStringArray(R.array.months);
+            String[] months = getResources().getStringArray(R.array.months_short);
             requestParams.add("dob", dobs[1] + "-" + months[month - 1] + "-" + dobs[2]);
             Log.e("dob", dobs[1] + "-" + months[month - 1] + "-" + dobs[2]);
         } catch (Exception e) {

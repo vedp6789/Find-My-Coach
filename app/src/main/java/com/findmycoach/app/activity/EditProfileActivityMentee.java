@@ -503,6 +503,8 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
             ImageLoader imgLoader = new ImageLoader(profilePicture);
             imgLoader.execute((String) userInfo.getPhotograph());
+        }else{
+            addText.setText(getResources().getString(R.string.add_photo));
         }
 
         try {
@@ -828,9 +830,9 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             Bitmap userPic = (Bitmap) data.getParcelableExtra("image");
             profilePicture.setImageBitmap(userPic);
-            addText.setVisibility(View.GONE);
             try {
                 imageInBinary = BinaryForImage.getBinaryStringFromBitmap(userPic);
+                addText.setText(getResources().getString(R.string.change_photo));
             } catch (Exception e) {
                 e.printStackTrace();
             }

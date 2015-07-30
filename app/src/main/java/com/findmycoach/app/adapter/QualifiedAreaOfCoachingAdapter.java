@@ -1,6 +1,7 @@
 package com.findmycoach.app.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,8 @@ import java.util.List;
  */
 public class QualifiedAreaOfCoachingAdapter extends BaseAdapter {
 
-    private List<String> selectedAreaOfCoaching;
-    private List<String> isSelected;
+    public List<String> selectedAreaOfCoaching;
+    public List<String> isSelected;
     private Context context;
     private LayoutInflater layoutInflater;
 
@@ -45,15 +46,19 @@ public class QualifiedAreaOfCoachingAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View v = layoutInflater.inflate(R.layout.qualified_coaching_single_row, null);
         TextView textView = (TextView) v.findViewById(R.id.textView);
         textView.setText(selectedAreaOfCoaching.get(position));
         final CheckBox cb = (CheckBox) v.findViewById(R.id.checkbox);
+        if (isSelected.get(position).equalsIgnoreCase("true"))
+            cb.setChecked(true);
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cb.setChecked(!cb.isChecked());
+                isSelected.set(position, cb.isChecked() + "");
+                Log.e("fmc", cb.isChecked() + " : " + selectedAreaOfCoaching.get(position));
             }
         });
 

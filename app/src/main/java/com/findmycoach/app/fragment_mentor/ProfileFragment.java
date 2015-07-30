@@ -254,20 +254,20 @@ public class ProfileFragment extends Fragment implements Callback {
             profileExperience.setText(ex > 1 ? ex + " " + getResources().getString(R.string.years) : ex + " " + getResources().getString(R.string.year));
         }
 
-        if(!userInfo.getSection1().equalsIgnoreCase("")) {
+        if(userInfo.getSection1() != null && !userInfo.getSection1().equalsIgnoreCase("")) {
             myQualification.setText(userInfo.getSection1());
         }
 
-        if(!userInfo.getSection2().equalsIgnoreCase("")) {
+        if(userInfo.getSection2() != null && !userInfo.getSection2().equalsIgnoreCase("")) {
             myAccreditions.setText(userInfo.getSection2());
         }
-        if(!userInfo.getSection3().equalsIgnoreCase("")) {
+        if(userInfo.getSection3() != null && !userInfo.getSection3().equalsIgnoreCase("")) {
             myExperience.setText(userInfo.getSection3());
         }
-        if(!userInfo.getSection4().equalsIgnoreCase("")) {
+        if(userInfo.getSection4() != null && !userInfo.getSection4().equalsIgnoreCase("")) {
             myTeachingMethodology.setText(userInfo.getSection4());
         }
-        if(!userInfo.getSection5().equalsIgnoreCase("")) {
+        if(userInfo.getSection5() != null && !userInfo.getSection5().equalsIgnoreCase("")) {
             myAwards.setText(userInfo.getSection5());
         }
 
