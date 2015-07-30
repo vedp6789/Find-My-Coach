@@ -53,6 +53,7 @@ import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.ChildDetailsDialog;
+import com.findmycoach.app.util.ListViewInsideScrollViewHelper;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
@@ -194,7 +195,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         childDetailsAdapter=new ChildDetailsAdapter(this,R.layout.child_details_list_item,childDetailsArrayList);
         childDetailsListView.setAdapter(childDetailsAdapter);
         addressListView.setAdapter(addressAdapter);
-
+        ///ListViewInsideScrollViewHelper.getListViewSize(addressListView);
 
 
         mentorFor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -587,6 +588,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             addressListView.setVisibility(View.VISIBLE);
             addAddress.setVisibility(View.VISIBLE);
             setListViewHeightBasedOnChildren(addressListView);
+            //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
             mutipleAddress.setChecked(true);
         }
 

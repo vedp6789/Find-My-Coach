@@ -26,6 +26,7 @@ import com.findmycoach.app.beans.student.Data;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.ListViewInsideScrollViewHelper;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.views.ChizzleTextView;
@@ -268,6 +269,7 @@ public class ProfileFragment extends Fragment implements Callback {
                 addressListView.setAdapter(addressAdapter);
                 addressAdapter.notifyDataSetChanged();
                 EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListView);
+                //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
             }
 
 
