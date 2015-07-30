@@ -199,13 +199,16 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
 
 
 
+
+
         mentorFor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // your code here
                 if (position == 1 || position == 2) {
-                    childDetailsArrayList.clear();
-                    childDetailsAdapter.notifyDataSetChanged();
+//                    childDetailsArrayList.clear();
+//                    childDetailsAdapter.notifyDataSetChanged();
+//                    childDetailsListView.setVisibility(View.VISIBLE);
                     addChildLayout.setVisibility(View.VISIBLE);
 
                 } else {
@@ -542,17 +545,32 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             pinCode.setText((String) userInfo.getZip());
         } catch (Exception ignored) {
         }
-        try {
-            if (userInfo.getMentorFor().equalsIgnoreCase(mentorForArray[1]))
-                mentorFor.setSelection(1);
-        } catch (Exception ignored) {
-        }
+//        try {
+//            if (userInfo.getMentorFor().equalsIgnoreCase(mentorForArray[1]))
+//                mentorFor.setSelection(1);
+//        } catch (Exception ignored) {
+//        }
 
         if (userInfo.getGender() != null) {
             if (userInfo.getGender().equals("M"))
                 profileGender.setSelection(0);
             else
                 profileGender.setSelection(1);
+        }
+
+        mentorFor.setSelection(1);
+        if(userInfo.getChildren()!=null && userInfo.getChildren().size()>=1){
+            childDetailsArrayList.clear();
+            childDetailsAdapter.notifyDataSetChanged();
+            for(int i=0;i<userInfo.getChildren().size();i++){
+                childDetailsArrayList.add(userInfo.getChildren().get(i));
+
+            }
+            childDetailsAdapter.notifyDataSetChanged();
+            setHeight(childDetailsListView);
+            childDetailsListView.setVisibility(View.VISIBLE);
+            addChildLayout.setVisibility(View.VISIBLE);
+
         }
         try {
             String temp = (String) userInfo.getTrainingLocation();
@@ -608,6 +626,8 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
             map.setOnMyLocationChangeListener(myLocationChangeListener);
         } catch (Exception ignored) {
         }
+
+
     }
 
     public boolean updateAddress() {
@@ -968,7 +988,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
         if (childDetails != null) {
             childDetailsArrayList.add(childDetails);
             childDetailsAdapter.notifyDataSetChanged();
-            setListViewHeightBasedOnChildren(childDetailsListView);
+            setHeight(childDetailsListView);
             childDetailsListView.setVisibility(View.VISIBLE);
             addMore.setVisibility(View.VISIBLE);
         }
