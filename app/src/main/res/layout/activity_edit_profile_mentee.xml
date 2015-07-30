@@ -358,35 +358,36 @@
                     android:layout_marginTop="8dp"
                     android:visibility="gone" />
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/addChildLayout"
-                android:layout_gravity="right"
-                android:visibility="gone"
-                android:layout_marginTop="8dp">
-                <com.findmycoach.app.views.ChizzleTextView
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add Details"
-                    android:id="@+id/textView9"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="8dp"
-                    android:textColor="@color/purple"
-                    android:textSize="@dimen/profile_details"/>
-
-                <Button
-                    android:id="@+id/addMoreButton"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:id="@+id/addChildLayout"
                     android:layout_gravity="right"
-                    android:layout_marginRight="16dp"
-                    android:background="@color/purple"
-                    android:padding="2dp"
+                    android:visibility="gone"
+                    android:layout_marginTop="8dp">
+                    <com.findmycoach.app.views.ChizzleTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Details"
+                        android:id="@+id/textView9"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="8dp"
+                        android:textColor="@color/purple"
+                        android:textSize="@dimen/profile_details"/>
 
-                    android:text="+"
-                    android:textColor="@color/white"
-                    android:visibility="gone" />
+                    <Button
+                        android:id="@+id/addMoreButton"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="16dp"
+                        android:background="@color/purple"
+                        android:padding="2dp"
+
+                        android:text="+"
+                        android:textColor="@color/white"
+                        android:visibility="visible"
+                        android:layout_toRightOf="@+id/textView9" />
 
                     android:visibility="visible"
                     android:layout_toRightOf="@+id/textView9" />
