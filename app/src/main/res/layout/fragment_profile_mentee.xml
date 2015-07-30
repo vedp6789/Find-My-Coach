@@ -159,7 +159,7 @@
                 android:layout_height="fill_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/back_margin"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:id="@+id/childDetailsProfile">
 
                 <com.findmycoach.app.views.ChizzleTextViewBold
@@ -186,7 +186,7 @@
                 android:layout_height="fill_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/back_margin"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:id="@+id/preferredAddressLayout">
 
                 <com.findmycoach.app.views.ChizzleTextViewBold

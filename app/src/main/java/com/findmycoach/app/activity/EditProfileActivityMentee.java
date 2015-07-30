@@ -763,7 +763,7 @@ public class EditProfileActivityMentee extends Activity implements Callback,Chil
            //TODO
             requestParams.add("children", new Gson().toJson(childDetailsArrayList));
             Log.e(TAG + " Kids ", new Gson().toJson(childDetailsArrayList));
-//            requestParams.add("multiple_address", new Gson().toJson(addressArrayList));
+            requestParams.add("multiple_address", new Gson().toJson(addressArrayList));
             requestParams.add("location_preference", String.valueOf(locationPreferenceSpinner.getSelectedItemPosition()));
             if (!imageInBinary.equals(""))
                 requestParams.add("photograph", imageInBinary);

@@ -228,7 +228,7 @@ public class ProfileFragment extends Fragment implements Callback {
         if(!userInfo.getSection5().equalsIgnoreCase("")) {
             myAwards.setText(userInfo.getSection5());
         }
-     
+
 
 
         profilePhone.setText(userInfo.getPhonenumber());
@@ -275,10 +275,19 @@ public class ProfileFragment extends Fragment implements Callback {
         stars.getDrawable(1).setColorFilter(getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(0).setColorFilter(getResources().getColor(R.color.purple_light), PorterDuff.Mode.SRC_ATOP);
 
-        if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {
-            profileTravelAvailable.setText(getResources().getString(R.string.yes));
-        } else {
-            profileTravelAvailable.setText(getResources().getString(R.string.no));
+
+
+        switch (Integer.parseInt(userInfo.getAvailabilityYn())) {
+            case 0:
+                profileTravelAvailable.setText("I teach at my own location");
+                break;
+            case 1:
+                profileTravelAvailable.setText("I travel to student location");
+                break;
+            case 2:
+                profileTravelAvailable.setText("I am fine with either");
+                break;
+
         }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
             imgLoader = new ImageLoader(profileImage);
