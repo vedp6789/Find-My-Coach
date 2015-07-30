@@ -847,6 +847,7 @@
     <string name="prompt_addressline1">House no/street no</string>
     <string name="prompt_fellow_student_location">I am fine to attend group classes at a nearby fellow students location
 </string>
+    <string name="prompt_mutiple_address_mentor">I am available at different addresses</string>
     <string name="prompt_location_preference">Location Preference</string>
 
    <string name="prompt_summary"> I would also like to tell something additional about myself</string>

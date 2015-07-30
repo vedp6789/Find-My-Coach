@@ -25,11 +25,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -38,15 +41,19 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.findmycoach.app.R;
+import com.findmycoach.app.adapter.AddressAdapter;
 import com.findmycoach.app.adapter.QualifiedAreaOfCoachingAdapter;
 import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.authentication.SubCategoryName;
 import com.findmycoach.app.beans.mentor.Currency;
+import com.findmycoach.app.beans.student.Address;
+import com.findmycoach.app.beans.student.Children;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
+import com.findmycoach.app.util.AddAddressDialog;
 import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
@@ -73,7 +80,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class EditProfileActivityMentor extends Activity implements Callback, TeachingMediumPreferenceDialog.TeachingMediumAddedListener {
+public class EditProfileActivityMentor extends Activity implements Callback, TeachingMediumPreferenceDialog.TeachingMediumAddedListener,AddAddressDialog.AddressAddedListener {
 
     int REQUEST_CODE = 100;
     private ImageView profilePicture;
@@ -118,6 +125,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     public EditProfileActivityMentor editProfileActivityMentor;
     private ChizzleEditText myQualification, myAccredition, myExperience, myTeachingMethodology, myAwards;
     private int ageAndExperienceErrorCounter;
+    private CheckBox multipleAddressMentor;
+    private Button addMoreAddress;
+    private ListView addressListViewMentor;
+    private ArrayList<Address> addressArrayListMentor;
+    private AddressAdapter addressAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,19 +201,48 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         students_preference = (TextView) findViewById(R.id.students_preference);
         teachingMediumPreference = (ChizzleTextView) findViewById(R.id.teaching_medium_preference);
         arrow = (ImageButton) findViewById(R.id.arrow);
-
+        multipleAddressMentor=(CheckBox)findViewById(R.id.inputMutipleAddressesMentor);
         myQualification = (ChizzleEditText) findViewById(R.id.myQualification);
         myAccredition = (ChizzleEditText) findViewById(R.id.myAccreditions);
         myExperience = (ChizzleEditText) findViewById(R.id.myExperience);
         myTeachingMethodology = (ChizzleEditText) findViewById(R.id.myTeachingMethodology);
         myAwards = (ChizzleEditText) findViewById(R.id.myAwards);
-
+        addMoreAddress=(Button)findViewById(R.id.addAddressMentor);
+        addressListViewMentor=(ListView)findViewById(R.id.addressesListViewMentor);
+        addressArrayListMentor=new ArrayList<>();
+        addressAdapter=new AddressAdapter(this,R.layout.muti_address_list_item,addressArrayListMentor);
+        addressListViewMentor.setAdapter(addressAdapter);
 
         String[] yearOfExperience = new String[51];
         for (int i = 0; i < yearOfExperience.length; i++) {
             yearOfExperience[i] = String.valueOf(i);
         }
 
+        multipleAddressMentor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    addMoreAddress.setVisibility(View.VISIBLE);
+
+                }
+                else {
+                    addressArrayListMentor.clear();
+                    addressAdapter.notifyDataSetChanged();
+                    addressListViewMentor.setVisibility(View.GONE);
+                    addMoreAddress.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+        addMoreAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddAddressDialog dialog=new AddAddressDialog(EditProfileActivityMentor.this);
+                dialog.setAddressAddedListener(EditProfileActivityMentor.this);
+                dialog.showPopUp();
+            }
+        });
 
         String[] preferences = getResources().getStringArray(R.array.teaching_preferences);
         String[] classType = getResources().getStringArray(R.array.mentor_class_type);
@@ -965,7 +1006,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 }
 
             }
-
+            requestParams.add("mutiple_address", new Gson().toJson(addressArrayListMentor));
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
@@ -1266,5 +1307,13 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
         teachingMediumPreference.setText(finalString);
         StorageHelper.storePreference(EditProfileActivityMentor.this, "teaching_medium", finalString);
+    }
+
+    @Override
+    public void onAddressAdded(Address address) {
+        addressArrayListMentor.add(address);
+        addressAdapter.notifyDataSetChanged();
+        EditProfileActivityMentee.setHeight(addressListViewMentor);
+        addressListViewMentor.setVisibility(View.VISIBLE);
     }
 }
