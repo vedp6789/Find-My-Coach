@@ -646,8 +646,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
                         if (!userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
-                            if (updateAddress())
-                                populateUserData();
+                            if (updateAddress());
                         }
 
 //                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
@@ -668,14 +667,14 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     public boolean updateAddress() {   //TODO
         if (userInfo != null && (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))) {
             try {
-                userInfo.setAddress(NetworkManager.localityName);
+                profileAddress.setText(NetworkManager.localityName);
             } catch (Exception ignored) {
             }
         }
 
         if (userInfo != null && (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))) {
             try {
-                userInfo.setCity(NetworkManager.cityName);
+                profileAddress1.setText(NetworkManager.cityName);
             } catch (Exception ignored) {
             }
         }
@@ -688,7 +687,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                     String address = userCurrentAddress.trim();
                     if (!address.equals("")) {
                         String[] temp = address.split(" ");
-                        userInfo.setZip(temp[temp.length - 1]);
+                        pinCode.setText(temp[temp.length - 1]);
                     }
                 }
             } catch (Exception ignored) {

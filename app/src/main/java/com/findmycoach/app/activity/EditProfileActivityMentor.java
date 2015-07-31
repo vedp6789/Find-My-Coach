@@ -151,6 +151,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         needToCheckOnDestroy = false;
         integerArrayList_Of_UpdatedStudentPreference = new ArrayList<>();
         editProfileActivityMentor = this;
+
+        Log.e(TAG, userInfo.getMultipleAddress().size() + "");
         if (userInfo.getMultipleAddress() == null || userInfo.getMultipleAddress().size() == 0)
             getAddress();
 
@@ -719,10 +721,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 getAddress();
 
 
+            Log.e(TAG, userInfo.getMultipleAddress().size() + " address size");
             if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
 
                 int position = -1;
-                Log.e(TAG, userInfo.getMultipleAddress().size() + " address size");
                 for (Address a : userInfo.getMultipleAddress()) {
                     Log.e(TAG, "Inside address for loop : " + a.getDefault_yn());
                     if (a.getDefault_yn() == 1) {
@@ -758,7 +760,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 } catch (Exception ignored) {
                 }
 
-
                 addressArrayListMentor.clear();
                 addressAdapter.notifyDataSetChanged();
                 for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
@@ -768,6 +769,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 addressListViewMentor.setVisibility(View.VISIBLE);
                 addMoreAddress.setVisibility(View.VISIBLE);
                 EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListViewMentor);
+                //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
                 multipleAddressMentor.setChecked(true);
             }
 
@@ -808,8 +810,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
                         if (!userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
-                            if (updateAddress())
-                                populateUserData();
+                            if (updateAddress());
                         }
 
 //                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
@@ -830,7 +831,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     public boolean updateAddress() {   // TODO
         if (userInfo != null && (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))) {
             try {
-                userInfo.setAddress(NetworkManager.localityName);
+                profileAddress.setText(NetworkManager.localityName);
                 String s = NetworkManager.countryName;
             } catch (Exception ignored) {
             }
@@ -838,7 +839,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
         if (userInfo != null && (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))) {
             try {
-                userInfo.setCity(NetworkManager.cityName);
+                profileAddress1.setText(NetworkManager.cityName);
             } catch (Exception ignored) {
             }
         }
@@ -855,7 +856,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     String address = userCurrentAddress.trim();
                     if (!address.equals("")) {
                         String[] temp = address.split(" ");
-                        userInfo.setZip(temp[temp.length - 1]);
+                        pinCode.setText(temp[temp.length - 1]);
                     }
                 }
             } catch (Exception ignored) {
@@ -1123,7 +1124,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
 
             requestParams.add("locations", new Gson().toJson(addressArrayListMentor));
-            Log.e(TAG, "locations: " + new Gson().toJson(addressArrayListMentor));
+            Log.e(TAG, "locations sending : " + new Gson().toJson(addressArrayListMentor));
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
