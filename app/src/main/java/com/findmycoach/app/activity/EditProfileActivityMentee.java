@@ -875,7 +875,11 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 }
             }
             Log.e(TAG + " dob", dob[2] + "-" + mon + "-" + dob[0]);
-            return dob[2] + "-" + mon + "-" + dob[0];
+            if(mon == 0){
+                return dobInDdMmmYyyy;
+            }else{
+                return dob[2] + "-" + mon + "-" + dob[0];
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

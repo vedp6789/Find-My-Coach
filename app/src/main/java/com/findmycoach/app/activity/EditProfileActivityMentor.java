@@ -478,7 +478,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         isGettingAddress = true;
                     } catch (Exception ignored) {
                     }
-                    openAreaOfCoachingActivity();
+//                    openAreaOfCoachingActivity();
                 }
                 return false;
             }
@@ -1019,7 +1019,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         break;
                     }
                 }
-                requestParams.add("dob", dob[2] + "-" + mon + "-" + dob[0]);
+                if(mon == 0){
+                    requestParams.add("dob", profileDOB.getText().toString());
+                }else{
+                    requestParams.add("dob", dob[2] + "-" + mon + "-" + dob[0]);
+                }
                 Log.e(TAG + " dob", dob[2] + "-" + mon + "-" + dob[0]);
             } catch (Exception e) {
                 e.printStackTrace();
