@@ -583,7 +583,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
             }
             addressAdapter.notifyDataSetChanged();
-            setHeight(addressListView);
             addressListView.setVisibility(View.VISIBLE);
             addAddress.setVisibility(View.VISIBLE);
             setListViewHeightBasedOnChildren(addressListView);

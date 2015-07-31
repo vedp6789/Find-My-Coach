@@ -784,6 +784,8 @@
     <string name="prompt_experience_in_years">Experience in year</string>
     <string name="students_preference">I like to teach</string>
     <string name="about_me">About me</string>
+    <string name="other_address">My other address</string>
+    <string name="other_addresses">My other addresses</string>
     <string name="change_photo">Change photo</string>
     <string name="add_photo">Add photo</string>
     <string name="teaching_medium_preferences">Teaching medium</string>

@@ -167,8 +167,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             TermsAndCondition termsAndCondition = new TermsAndCondition();
             termsAndCondition.showTermsAndConditions(this);
         }
-
-
     }
 
     @Override
@@ -231,10 +229,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     addMoreAddress.setVisibility(View.VISIBLE);
-
+                    addressListViewMentor.setVisibility(View.VISIBLE);
                 } else {
-                    addressArrayListMentor.clear();
-                    addressAdapter.notifyDataSetChanged();
+                    /*addressArrayListMentor.clear();
+                    addressAdapter.notifyDataSetChanged();*/
                     addressListViewMentor.setVisibility(View.GONE);
                     addMoreAddress.setVisibility(View.GONE);
                 }
@@ -735,6 +733,21 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
                 getAddress();
+
+            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1) {
+                addressArrayListMentor.clear();
+                addressAdapter.notifyDataSetChanged();
+                for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
+                    addressArrayListMentor.add(userInfo.getMultipleAddress().get(i));
+                }
+                addressAdapter.notifyDataSetChanged();
+                addressListViewMentor.setVisibility(View.VISIBLE);
+                addMoreAddress.setVisibility(View.VISIBLE);
+                EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListViewMentor);
+                multipleAddressMentor.setChecked(true);
+            }
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -971,7 +984,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 requestParams.add("gender", "F");
 
 
-            try{
+            try {
                 String[] dob = profileDOB.getText().toString().split("-");
                 int mon = 0;
                 String[] months = getResources().getStringArray(R.array.months_short);
@@ -983,7 +996,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 }
                 requestParams.add("dob", dob[2] + "-" + mon + "-" + dob[0]);
                 Log.e(TAG + " dob", dob[2] + "-" + mon + "-" + dob[0]);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -1061,6 +1074,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             }
             requestParams.add("mutiple_address", new Gson().toJson(addressArrayListMentor));
+            Log.i(TAG, "multiple_Address: " + new Gson().toJson(addressArrayListMentor));
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));

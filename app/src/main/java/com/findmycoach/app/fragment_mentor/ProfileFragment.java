@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
+import android.location.Address;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,7 +28,9 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
+import com.findmycoach.app.activity.EditProfileActivityMentee;
 import com.findmycoach.app.activity.EditProfileActivityMentor;
+import com.findmycoach.app.adapter.AddressAdapter;
 import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
@@ -64,12 +68,17 @@ public class ProfileFragment extends Fragment implements Callback {
     private Data userInfo = null;
     private ImageLoader imgLoader;
     private ImageView editProfile;
-    private TextView title;
+    private TextView title,otherAddressTV;
     private ChizzleTextView teachingMediumText,myQualification,myAccreditions,myExperience,myTeachingMethodology,myAwards;
     private RelativeLayout summaryHeader;
     private LinearLayout aboutMeLL;
     private boolean hiddenFlag;
-
+    private RelativeLayout multipleAddressRL,multipleAddressValRL;
+    private ListView multipleAddressLV;
+    private ArrayList<com.findmycoach.app.beans.student.Address> addressArrayListMentor;
+    private AddressAdapter addressAdapter;
+    boolean multiple_address_visible=false;
+    private ImageButton arrow,arrow_multiple_address;
     private static final String TAG = "FMC:";
 
     public ProfileFragment() {
@@ -134,8 +143,15 @@ public class ProfileFragment extends Fragment implements Callback {
         myTeachingMethodology=(ChizzleTextView)view.findViewById(R.id.myTeachingMethodologyText);
         summaryHeader=(RelativeLayout)view.findViewById(R.id.summaryHeaderProfile);
         aboutMeLL=(LinearLayout)view.findViewById(R.id.aboutMeLL);
-        final ImageButton arrow=(ImageButton)view.findViewById(R.id.arrowProfile);
-
+        arrow=(ImageButton)view.findViewById(R.id.arrowProfile);
+        arrow_multiple_address= (ImageButton) view.findViewById(R.id.arrowOtherAddress);
+        otherAddressTV= (TextView) view.findViewById(R.id.otherAddressesTV);
+        multipleAddressRL= (RelativeLayout) view.findViewById(R.id.multiple_Address_RL);
+        multipleAddressValRL= (RelativeLayout) view.findViewById(R.id.multiple_Address_Val_RL);
+        multipleAddressLV= (ListView) view.findViewById(R.id.multipleAddressLV);
+        addressArrayListMentor = new ArrayList<>();
+        addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item, addressArrayListMentor);
+        multipleAddressLV.setAdapter(addressAdapter);
 
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
 
@@ -162,6 +178,41 @@ public class ProfileFragment extends Fragment implements Callback {
                 }
             }
         });
+
+        multipleAddressRL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(multiple_address_visible){
+                    multiple_address_visible=false;
+                    multipleAddressValRL.setVisibility(View.GONE);
+                    arrow_multiple_address.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
+                }else{
+                    multipleAddressValRL.setVisibility(View.VISIBLE);
+                    multiple_address_visible=true;
+                    arrow_multiple_address.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
+
+                }
+
+            }
+        });
+
+        arrow_multiple_address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(multiple_address_visible){
+                    multiple_address_visible=false;
+                    multipleAddressValRL.setVisibility(View.GONE);
+                    arrow_multiple_address.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
+                }else{
+                    multipleAddressValRL.setVisibility(View.VISIBLE);
+                    multiple_address_visible=true;
+                    arrow_multiple_address.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
+
+                }
+
+            }
+        });
+
 
         summaryHeader.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -359,6 +410,30 @@ public class ProfileFragment extends Fragment implements Callback {
             profileCharges.setText(Html.fromHtml(StorageHelper.getCurrency(getActivity()) + " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr")));
 
         }
+
+        if(userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1){
+            if(userInfo.getMultipleAddress().size() >1){
+                otherAddressTV.setText(getResources().getString(R.string.other_addresses));
+            }else{
+                otherAddressTV.setText(getResources().getString(R.string.other_address));
+            }
+            multiple_address_visible=false;
+            multipleAddressRL.setVisibility(View.VISIBLE);
+            addressAdapter.notifyDataSetChanged();
+            for(int i = 0; i<userInfo.getMultipleAddress().size(); i++){
+                addressArrayListMentor.add(userInfo.getMultipleAddress().get(i));
+            }
+            multipleAddressLV.setAdapter(addressAdapter);
+            addressAdapter.notifyDataSetChanged();
+            EditProfileActivityMentee.setListViewHeightBasedOnChildren(multipleAddressLV);
+            //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
+        }else{
+            multipleAddressRL.setVisibility(View.GONE);
+            multipleAddressValRL.setVisibility(View.GONE);
+        }
+
+
+
     }
 
     public String populateSubjectPreference(ArrayList<String> arrayListString, List<AgeGroupPreferences> allAgeGroupPreferences) {

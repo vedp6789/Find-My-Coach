@@ -1,11 +1,24 @@
 package com.findmycoach.app.beans.authentication;
 
+import com.findmycoach.app.beans.student.Address;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
+    @SerializedName("multiple_address")
+    @Expose
+    private ArrayList<Address> multipleAddress;
+
+    public ArrayList<Address> getMultipleAddress() {
+        return multipleAddress;
+    }
+
+    public void setMultipleAddress(ArrayList<Address> multipleAddress) {
+        this.multipleAddress = multipleAddress;
+    }
 
     @Expose
     private String id;
