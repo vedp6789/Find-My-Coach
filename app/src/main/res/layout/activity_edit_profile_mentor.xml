@@ -551,7 +551,8 @@
                     android:text="@string/prompt_accomplishment"
                     android:textColor="@color/purple_light"
                     android:textSize="@dimen/profile_heading"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <com.findmycoach.app.views.ChizzleEditText
                     android:id="@+id/input_accomplishment"
@@ -562,7 +563,8 @@
                     android:inputType="text"
                     android:singleLine="true"
                     android:textCursorDrawable="@drawable/cursor_purple"
-                    android:textSize="@dimen/profile_details" />
+                    android:textSize="@dimen/profile_details"
+                    android:visibility="gone" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
