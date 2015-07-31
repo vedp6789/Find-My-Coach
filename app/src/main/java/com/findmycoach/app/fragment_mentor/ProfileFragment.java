@@ -65,17 +65,17 @@ public class ProfileFragment extends Fragment implements Callback {
     private Data userInfo = null;
     private ImageLoader imgLoader;
     private ImageView editProfile;
-    private TextView title,otherAddressTV;
-    private ChizzleTextView teachingMediumText,myQualification,myAccreditions,myExperience,myTeachingMethodology,myAwards;
+    private TextView title, otherAddressTV;
+    private ChizzleTextView teachingMediumText, myQualification, myAccreditions, myExperience, myTeachingMethodology, myAwards;
     private RelativeLayout summaryHeader;
     private LinearLayout aboutMeLL;
     private boolean hiddenFlag;
-    private RelativeLayout multipleAddressRL,multipleAddressValRL;
+    private RelativeLayout multipleAddressRL, multipleAddressValRL;
     private ListView multipleAddressLV;
     private ArrayList<com.findmycoach.app.beans.student.Address> addressArrayListMentor;
     private AddressAdapter addressAdapter;
-    boolean multiple_address_visible=false;
-    private ImageButton arrow,arrow_multiple_address;
+    boolean multiple_address_visible = false;
+    private ImageButton arrow, arrow_multiple_address;
     private static final String TAG = "FMC:";
     private ScrollView scrollView;
 
@@ -119,7 +119,7 @@ public class ProfileFragment extends Fragment implements Callback {
     }
 
     private void initialize(View view) {
-        scrollView= (ScrollView) view.findViewById(R.id.scrollview);
+        scrollView = (ScrollView) view.findViewById(R.id.scrollview);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         profileImage = (ImageView) view.findViewById(R.id.profile_image);
@@ -138,20 +138,20 @@ public class ProfileFragment extends Fragment implements Callback {
         editProfile = (ImageView) view.findViewById(R.id.menuItem);
         title = (TextView) view.findViewById(R.id.title);
         title.setText(getResources().getString(R.string.profile));
-        teachingMediumText=(ChizzleTextView)view.findViewById(R.id.teachingMediumText);
-        myQualification=(ChizzleTextView)view.findViewById(R.id.myQualificationText);
-        myAccreditions=(ChizzleTextView)view.findViewById(R.id.myAccreditionsText);
-        myExperience=(ChizzleTextView)view.findViewById(R.id.myExperienceText);
-        myAwards=(ChizzleTextView)view.findViewById(R.id.myAwardsText);
-        myTeachingMethodology=(ChizzleTextView)view.findViewById(R.id.myTeachingMethodologyText);
-        summaryHeader=(RelativeLayout)view.findViewById(R.id.summaryHeaderProfile);
-        aboutMeLL=(LinearLayout)view.findViewById(R.id.aboutMeLL);
-        arrow=(ImageButton)view.findViewById(R.id.arrowProfile);
-        arrow_multiple_address= (ImageButton) view.findViewById(R.id.arrowOtherAddress);
-        otherAddressTV= (TextView) view.findViewById(R.id.otherAddressesTV);
-        multipleAddressRL= (RelativeLayout) view.findViewById(R.id.multiple_Address_RL);
-        multipleAddressValRL= (RelativeLayout) view.findViewById(R.id.multiple_Address_Val_RL);
-        multipleAddressLV= (ListView) view.findViewById(R.id.multipleAddressLV);
+        teachingMediumText = (ChizzleTextView) view.findViewById(R.id.teachingMediumText);
+        myQualification = (ChizzleTextView) view.findViewById(R.id.myQualificationText);
+        myAccreditions = (ChizzleTextView) view.findViewById(R.id.myAccreditionsText);
+        myExperience = (ChizzleTextView) view.findViewById(R.id.myExperienceText);
+        myAwards = (ChizzleTextView) view.findViewById(R.id.myAwardsText);
+        myTeachingMethodology = (ChizzleTextView) view.findViewById(R.id.myTeachingMethodologyText);
+        summaryHeader = (RelativeLayout) view.findViewById(R.id.summaryHeaderProfile);
+        aboutMeLL = (LinearLayout) view.findViewById(R.id.aboutMeLL);
+        arrow = (ImageButton) view.findViewById(R.id.arrowProfile);
+        arrow_multiple_address = (ImageButton) view.findViewById(R.id.arrowOtherAddress);
+        otherAddressTV = (TextView) view.findViewById(R.id.otherAddressesTV);
+        multipleAddressRL = (RelativeLayout) view.findViewById(R.id.multiple_Address_RL);
+        multipleAddressValRL = (RelativeLayout) view.findViewById(R.id.multiple_Address_Val_RL);
+        multipleAddressLV = (ListView) view.findViewById(R.id.multipleAddressLV);
         addressArrayListMentor = new ArrayList<>();
         addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayListMentor);
         multipleAddressLV.setAdapter(addressAdapter);
@@ -203,13 +203,13 @@ public class ProfileFragment extends Fragment implements Callback {
         arrow_multiple_address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(multiple_address_visible){
-                    multiple_address_visible=false;
+                if (multiple_address_visible) {
+                    multiple_address_visible = false;
                     multipleAddressValRL.setVisibility(View.GONE);
                     arrow_multiple_address.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
-                }else{
+                } else {
                     multipleAddressValRL.setVisibility(View.VISIBLE);
-                    multiple_address_visible=true;
+                    multiple_address_visible = true;
                     arrow_multiple_address.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
                     scrollView.fullScroll(ScrollView.FOCUS_DOWN);
 
@@ -283,7 +283,7 @@ public class ProfileFragment extends Fragment implements Callback {
             profileDob.setText((String) userInfo.getDob());
         } catch (Exception e) {
         }
-        String address = "";
+        /*String address = "";
         if (userInfo.getAddress() != null && !userInfo.getAddress().toString().trim().equals("")) {
             address = address + userInfo.getAddress() + ", ";
         }
@@ -296,7 +296,7 @@ public class ProfileFragment extends Fragment implements Callback {
         if (userInfo.getZip() != null) {
             address = address + userInfo.getZip();
         }
-        profileAddress.setText(address);
+        profileAddress.setText(address);*/
         if (userInfo.getAccomplishments() != null) {
             profileAccomplishment.setText(userInfo.getAccomplishments());
         }
@@ -310,23 +310,22 @@ public class ProfileFragment extends Fragment implements Callback {
             profileExperience.setText(ex > 1 ? ex + " " + getResources().getString(R.string.years) : ex + " " + getResources().getString(R.string.year));
         }
 
-        if(userInfo.getSection1() != null && !userInfo.getSection1().equalsIgnoreCase("")) {
+        if (userInfo.getSection1() != null && !userInfo.getSection1().equalsIgnoreCase("")) {
             myQualification.setText(userInfo.getSection1());
         }
 
-        if(userInfo.getSection2() != null && !userInfo.getSection2().equalsIgnoreCase("")) {
+        if (userInfo.getSection2() != null && !userInfo.getSection2().equalsIgnoreCase("")) {
             myAccreditions.setText(userInfo.getSection2());
         }
-        if(userInfo.getSection3() != null && !userInfo.getSection3().equalsIgnoreCase("")) {
+        if (userInfo.getSection3() != null && !userInfo.getSection3().equalsIgnoreCase("")) {
             myExperience.setText(userInfo.getSection3());
         }
-        if(userInfo.getSection4() != null && !userInfo.getSection4().equalsIgnoreCase("")) {
+        if (userInfo.getSection4() != null && !userInfo.getSection4().equalsIgnoreCase("")) {
             myTeachingMethodology.setText(userInfo.getSection4());
         }
-        if(userInfo.getSection5() != null && !userInfo.getSection5().equalsIgnoreCase("")) {
+        if (userInfo.getSection5() != null && !userInfo.getSection5().equalsIgnoreCase("")) {
             myAwards.setText(userInfo.getSection5());
         }
-
 
 
         profilePhone.setText(userInfo.getPhonenumber());
@@ -374,7 +373,6 @@ public class ProfileFragment extends Fragment implements Callback {
         stars.getDrawable(0).setColorFilter(getResources().getColor(R.color.purple_light), PorterDuff.Mode.SRC_ATOP);
 
 
-
         switch (Integer.parseInt(userInfo.getAvailabilityYn())) {
             case 0:
                 profileTravelAvailable.setText("I teach at my own location");
@@ -392,15 +390,16 @@ public class ProfileFragment extends Fragment implements Callback {
             imgLoader.execute((String) userInfo.getPhotograph());
         }
 
-        teachingMediumText.setText(StorageHelper.getUserDetails(getActivity(),"teaching_medium"));
+        teachingMediumText.setText(StorageHelper.getUserDetails(getActivity(), "teaching_medium"));
 
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (userInfo != null) {
+                    Response response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), Response.class);
                     Intent intent = new Intent(getActivity(), EditProfileActivityMentor.class);
-                    intent.putExtra("user_info", new Gson().toJson(userInfo));
+                    intent.putExtra("user_info", new Gson().toJson(response.getData()));
                     startActivityForResult(intent, REQUEST_CODE);
                 }
             }
@@ -416,28 +415,48 @@ public class ProfileFragment extends Fragment implements Callback {
 
         }
 
-        if(userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1){
+        addressArrayListMentor.clear();
+
+        if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
             multipleAddressValRL.setVisibility(View.GONE);
-            if(userInfo.getMultipleAddress().size() >1){
+            if (userInfo.getMultipleAddress().size() > 1) {
                 otherAddressTV.setText(getResources().getString(R.string.other_addresses));
-            }else{
+            } else {
                 otherAddressTV.setText(getResources().getString(R.string.other_address));
             }
-            multiple_address_visible=false;
+            multiple_address_visible = false;
             multipleAddressRL.setVisibility(View.VISIBLE);
             addressAdapter.notifyDataSetChanged();
-            for(int i = 0; i<userInfo.getMultipleAddress().size(); i++){
+            for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
+
+                int default_yn = userInfo.getMultipleAddress().get(i).getDefault_yn();
+                if (default_yn == 1) {
+                    String address = "";
+                    if (userInfo.getMultipleAddress().get(i).getAddressLine1() != null && !userInfo.getMultipleAddress().get(i).getAddressLine1().trim().equals("")) {
+                        address = address + userInfo.getMultipleAddress().get(i).getAddressLine1().trim() + ", ";
+                    }
+                    if (userInfo.getMultipleAddress().get(i).getLocality() != null) {
+                        address = address + userInfo.getMultipleAddress().get(i).getLocality() + ", ";
+                    }
+/*                        if (userInfo.getState() != null) {
+                            address = address + userInfo.getState() + ", ";
+                        }*/
+                    if (userInfo.getMultipleAddress().get(i).getZip() != null) {
+                        address = address + userInfo.getMultipleAddress().get(i).getZip();
+                    }
+                    profileAddress.setText(address);
+                    continue;
+                }
                 addressArrayListMentor.add(userInfo.getMultipleAddress().get(i));
             }
             multipleAddressLV.setAdapter(addressAdapter);
             addressAdapter.notifyDataSetChanged();
             EditProfileActivityMentee.setListViewHeightBasedOnChildren(multipleAddressLV);
             //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
-        }else{
+        } else {
             multipleAddressRL.setVisibility(View.GONE);
             multipleAddressValRL.setVisibility(View.GONE);
         }
-
 
 
     }

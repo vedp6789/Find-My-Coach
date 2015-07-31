@@ -78,6 +78,7 @@ public class StudentPreferenceSelection extends BaseAdapter {
 
             final AgeGroupPreferences ageGroupPreferences = different_preferences.get(position);
 
+
             StringBuilder stringBuilder = new StringBuilder();
             String description = ageGroupPreferences.getValue();
             final int id = ageGroupPreferences.getId();

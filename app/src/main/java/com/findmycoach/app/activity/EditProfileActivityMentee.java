@@ -123,7 +123,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         isGettingAddress = false;
         needToCheckOnDestroy = false;
 
-        if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
+        if (userInfo.getMultipleAddress() == null || userInfo.getMultipleAddress().size() == 0)
             getAddress();
 
     }
@@ -193,8 +193,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         childDetailsListView.setAdapter(childDetailsAdapter);
         addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayList);
         addressListView.setAdapter(addressAdapter);
-
-
 
 
         ///ListViewInsideScrollViewHelper.getListViewSize(addressListView);
@@ -528,23 +526,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         } catch (Exception ignored) {
         }
         try {
-            profileAddress.setText((String) userInfo.getAddress());
-        } catch (Exception ignored) {
-        }
-        try {
-            profileAddress1.setText((String) userInfo.getCity());
-        } catch (Exception ignored) {
-        }
-        try {
-            city = (String) userInfo.getCity();  /* city string initially set to the city i.e. earlier get updated*/
-        } catch (Exception ignored) {
-        }
-        try {
             profileDOB.setText((String) userInfo.getDob());
-        } catch (Exception ignored) {
-        }
-        try {
-            pinCode.setText((String) userInfo.getZip());
         } catch (Exception ignored) {
         }
         try {
@@ -568,14 +550,54 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             for (int i = 0; i < userInfo.getChildren().size(); i++) {
                 childDetailsArrayList.add(userInfo.getChildren().get(i));
             }
-           childDetailsAdapter.notifyDataSetChanged();
+            childDetailsAdapter.notifyDataSetChanged();
             setHeight(childDetailsListView);
             childDetailsListView.setVisibility(View.VISIBLE);
             addChildLayout.setVisibility(View.VISIBLE);
 
         }
 
-        if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1) {
+        Log.e(TAG, userInfo.getMultipleAddress().size() + " address size");
+        if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
+
+            int position = -1;
+            for (Address a : userInfo.getMultipleAddress()) {
+                Log.e(TAG, "Inside address for loop : " + a.getDefault_yn());
+                if (a.getDefault_yn() == 1) {
+                    position = userInfo.getMultipleAddress().indexOf(a);
+                    Log.e(TAG, "found at : " + position);
+                    break;
+                }
+            }
+
+            Address address = null;
+            if (position != -1) {
+                address = userInfo.getMultipleAddress().get(position);
+                userInfo.getMultipleAddress().remove(position);
+            } else {
+                address = userInfo.getMultipleAddress().get(0);
+                userInfo.getMultipleAddress().remove(0);
+            }
+
+            try {
+                profileAddress.setText(address.getAddressLine1());
+            } catch (Exception ignored) {
+            }
+            try {
+                profileAddress1.setText(address.getLocality());
+            } catch (Exception ignored) {
+            }
+            try {
+                pinCode.setText(address.getZip());
+            } catch (Exception ignored) {
+            }
+            try {
+                city = address.getLocality();                 /* city string initially set to the city i.e. earlier get updated*/
+            } catch (Exception ignored) {
+            }
+
+            addressArrayList.clear();
+            addressAdapter.notifyDataSetChanged();
             for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
                 addressArrayList.add(userInfo.getMultipleAddress().get(i));
             }
@@ -624,8 +646,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
                         if (!userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
-                            if (updateAddress())
-                                populateUserData();
+                            if (updateAddress());
                         }
 
 //                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
@@ -646,14 +667,14 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     public boolean updateAddress() {   //TODO
         if (userInfo != null && (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))) {
             try {
-                userInfo.setAddress(NetworkManager.localityName);
+                profileAddress.setText(NetworkManager.localityName);
             } catch (Exception ignored) {
             }
         }
 
         if (userInfo != null && (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))) {
             try {
-                userInfo.setCity(NetworkManager.cityName);
+                profileAddress1.setText(NetworkManager.cityName);
             } catch (Exception ignored) {
             }
         }
@@ -666,7 +687,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                     String address = userCurrentAddress.trim();
                     if (!address.equals("")) {
                         String[] temp = address.split(" ");
-                        userInfo.setZip(temp[temp.length - 1]);
+                        pinCode.setText(temp[temp.length - 1]);
                     }
                 }
             } catch (Exception ignored) {
@@ -798,12 +819,27 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             requestParams.add("children", new Gson().toJson(childDetailsArrayList));
             Log.e(TAG + " Kids ", new Gson().toJson(childDetailsArrayList));
 
-            Address address=new Address();
+            Address address = new Address();
             address.setAddressLine1(profileAddress.getText().toString());
             address.setLocality(profileAddress1.getText().toString());
             address.setZip(pinCode.getText().toString());
             address.setDefault_yn(1);
-            addressArrayList.add(address);
+
+            int position = -1;
+            Log.e(TAG, addressArrayList.size() + " address size");
+            for (Address a : addressArrayList) {
+                Log.e(TAG, "Inside address for loop : " + a.getDefault_yn());
+                if (a.getDefault_yn() == 1) {
+                    position = addressArrayList.indexOf(a);
+                    Log.e(TAG, "found at : " + position);
+                    break;
+                }
+            }
+
+            if (position == -1)
+                addressArrayList.add(address);
+            else
+                addressArrayList.set(position, address);
 
 
             requestParams.add("locations", new Gson().toJson(addressArrayList));

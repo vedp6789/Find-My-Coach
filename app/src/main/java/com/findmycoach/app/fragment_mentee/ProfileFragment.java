@@ -50,7 +50,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView title;
     private RelativeLayout childDetailsLayout, preferredAddressLayout;
     private ChizzleTextView locationPreference;
-    private ListView childrenDetailsListViewProfile,addressListView;
+    private ListView childrenDetailsListViewProfile, addressListView;
     private ArrayList<Address> addressArrayList;
     private AddressAdapter addressAdapter;
     private ChildDetailsAdapter childDetailsAdapter;
@@ -118,7 +118,7 @@ public class ProfileFragment extends Fragment implements Callback {
         childDetailsLayout = (RelativeLayout) view.findViewById(R.id.childDetailsProfile);
         preferredAddressLayout = (RelativeLayout) view.findViewById(R.id.preferredAddressLayout);
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
-        addressListView= (ListView) view.findViewById(R.id.addressProfileListView);
+        addressListView = (ListView) view.findViewById(R.id.addressProfileListView);
         addressListView.setDivider(null);
         addressListView.setDividerHeight(0);
 
@@ -184,26 +184,17 @@ public class ProfileFragment extends Fragment implements Callback {
                 profileDob.setText((String) userInfo.getDob());
             } catch (Exception e) {
             }
-            String address = "";
-            if (userInfo.getAddress() != null && !userInfo.getAddress().toString().trim().equals("")) {
-                address = address + userInfo.getAddress() + ", ";
-            }
-            if (userInfo.getCity() != null) {
-                address = address + userInfo.getCity() + ", ";
-            }
-            if (userInfo.getState() != null) {
-                address = address + userInfo.getState() + ", ";
-            }
-            if (userInfo.getZip() != null) {
-                address = address + userInfo.getZip();
-            }
-            profileAddress.setText(address);
+
             if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
                 imgLoader = new ImageLoader(profileImage);
                 imgLoader.execute((String) userInfo.getPhotograph());
             }
             String[] mentor_for1 = getResources().getStringArray(R.array.mentor_for);
-            mentorFor.setText(mentor_for1[Integer.parseInt(userInfo.getMentorFor())]);
+            try {
+                mentorFor.setText(mentor_for1[Integer.parseInt(userInfo.getMentorFor())]);
+            } catch (Exception ignored) {
+
+            }
             trainingLocation.setText((String) userInfo.getTrainingLocation());
 
             String[] coachingType = getResources().getStringArray(R.array.coaching_type);
@@ -258,13 +249,34 @@ public class ProfileFragment extends Fragment implements Callback {
                 preferredAddressLayout.setVisibility(View.GONE);
             }
 
-            if(userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1){
+            addressArrayList = new ArrayList<>();
+
+            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1) {
                 preferredAddressLayout.setVisibility(View.VISIBLE);
-                addressArrayList=new ArrayList<>();
-                for(int i =0; i<userInfo.getMultipleAddress().size(); i++){
+                for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
+                    int default_yn = userInfo.getMultipleAddress().get(i).getDefault_yn();
+                    if (default_yn == 1) {
+                        String address = "";
+                        if (userInfo.getMultipleAddress().get(i).getAddressLine1() != null && !userInfo.getMultipleAddress().get(i).getAddressLine1().trim().equals("")) {
+                            address = address + userInfo.getMultipleAddress().get(i).getAddressLine1().trim() + ", ";
+                        }
+                        if (userInfo.getMultipleAddress().get(i).getLocality() != null) {
+                            address = address + userInfo.getMultipleAddress().get(i).getLocality() + ", ";
+                        }
+/*                        if (userInfo.getState() != null) {
+                            address = address + userInfo.getState() + ", ";
+                        }*/
+                        if (userInfo.getMultipleAddress().get(i).getZip() != null) {
+                            address = address + userInfo.getMultipleAddress().get(i).getZip();
+                        }
+                        profileAddress.setText(address);
+                        continue;
+                    }
                     addressArrayList.add(userInfo.getMultipleAddress().get(i));
                 }
-                addressAdapter=new AddressAdapter(getActivity(),R.layout.muti_address_list_item_centre_horizontal,addressArrayList);
+
+
+                addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayList);
                 addressListView.setAdapter(addressAdapter);
                 EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListView);
                 //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
@@ -275,8 +287,9 @@ public class ProfileFragment extends Fragment implements Callback {
                 @Override
                 public void onClick(View v) {
                     if (userInfo != null) {
+                        ProfileResponse response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), ProfileResponse.class);
                         Intent intent = new Intent(getActivity(), EditProfileActivityMentee.class);
-                        intent.putExtra("user_info", new Gson().toJson(userInfo));
+                        intent.putExtra("user_info", new Gson().toJson(response.getData()));
                         startActivityForResult(intent, REQUEST_CODE);
                     }
                 }

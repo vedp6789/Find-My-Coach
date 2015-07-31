@@ -165,7 +165,8 @@
                 android:text="@string/prompt_accomplishment"
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_heading"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/profile_accomplishment"
@@ -173,7 +174,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@color/purple"
-                android:textSize="@dimen/profile_details" />
+                android:textSize="@dimen/profile_details"
+                android:visibility="gone" />
 
             <com.findmycoach.app.views.ChizzleTextViewBold
                 android:layout_width="wrap_content"

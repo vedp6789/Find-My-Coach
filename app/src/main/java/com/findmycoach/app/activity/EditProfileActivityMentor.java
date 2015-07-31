@@ -151,7 +151,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         needToCheckOnDestroy = false;
         integerArrayList_Of_UpdatedStudentPreference = new ArrayList<>();
         editProfileActivityMentor = this;
-        if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
+
+        Log.e(TAG, userInfo.getMultipleAddress().size() + "");
+        if (userInfo.getMultipleAddress() == null || userInfo.getMultipleAddress().size() == 0)
             getAddress();
 
     }
@@ -625,23 +627,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } catch (Exception ignored) {
             }
             try {
-                profileAddress.setText((String) userInfo.getAddress());
-            } catch (Exception ignored) {
-            }
-            try {
-                profileAddress1.setText((String) userInfo.getCity());
-            } catch (Exception ignored) {
-            }
-            try {
-                city = (String) userInfo.getCity();                 /* city string initially set to the city i.e. earlier get updated*/
-            } catch (Exception ignored) {
-            }
-            try {
                 profileDOB.setText((String) userInfo.getDob());
-            } catch (Exception ignored) {
-            }
-            try {
-                pinCode.setText((String) userInfo.getZip());
             } catch (Exception ignored) {
             }
 
@@ -734,7 +720,46 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
                 getAddress();
 
-            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1) {
+
+            Log.e(TAG, userInfo.getMultipleAddress().size() + " address size");
+            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
+
+                int position = -1;
+                for (Address a : userInfo.getMultipleAddress()) {
+                    Log.e(TAG, "Inside address for loop : " + a.getDefault_yn());
+                    if (a.getDefault_yn() == 1) {
+                        position = userInfo.getMultipleAddress().indexOf(a);
+                        Log.e(TAG, "found at : " + position);
+                        break;
+                    }
+                }
+
+                Address address = null;
+                if (position != -1) {
+                    address = userInfo.getMultipleAddress().get(position);
+                    userInfo.getMultipleAddress().remove(position);
+                } else {
+                    address = userInfo.getMultipleAddress().get(0);
+                    userInfo.getMultipleAddress().remove(0);
+                }
+
+                try {
+                    profileAddress.setText(address.getAddressLine1());
+                } catch (Exception ignored) {
+                }
+                try {
+                    profileAddress1.setText(address.getLocality());
+                } catch (Exception ignored) {
+                }
+                try {
+                    pinCode.setText(address.getZip());
+                } catch (Exception ignored) {
+                }
+                try {
+                    city = address.getLocality();                 /* city string initially set to the city i.e. earlier get updated*/
+                } catch (Exception ignored) {
+                }
+
                 addressArrayListMentor.clear();
                 addressAdapter.notifyDataSetChanged();
                 for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
@@ -744,6 +769,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 addressListViewMentor.setVisibility(View.VISIBLE);
                 addMoreAddress.setVisibility(View.VISIBLE);
                 EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListViewMentor);
+                //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
                 multipleAddressMentor.setChecked(true);
             }
 
@@ -784,8 +810,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
                         if (!userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
-                            if (updateAddress())
-                                populateUserData();
+                            if (updateAddress());
                         }
 
 //                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
@@ -806,7 +831,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     public boolean updateAddress() {   // TODO
         if (userInfo != null && (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))) {
             try {
-                userInfo.setAddress(NetworkManager.localityName);
+                profileAddress.setText(NetworkManager.localityName);
                 String s = NetworkManager.countryName;
             } catch (Exception ignored) {
             }
@@ -814,7 +839,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
         if (userInfo != null && (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))) {
             try {
-                userInfo.setCity(NetworkManager.cityName);
+                profileAddress1.setText(NetworkManager.cityName);
             } catch (Exception ignored) {
             }
         }
@@ -831,7 +856,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     String address = userCurrentAddress.trim();
                     if (!address.equals("")) {
                         String[] temp = address.split(" ");
-                        userInfo.setZip(temp[temp.length - 1]);
+                        pinCode.setText(temp[temp.length - 1]);
                     }
                 }
             } catch (Exception ignored) {
@@ -1074,11 +1099,32 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             }
 
+            Address address = new Address();
+            address.setAddressLine1(profileAddress.getText().toString());
+            address.setLocality(profileAddress1.getText().toString());
+            address.setZip(pinCode.getText().toString());
+            address.setDefault_yn(1);
 
+
+            int position = -1;
+            Log.e(TAG, addressArrayListMentor.size() + " address size");
+            for (Address a : addressArrayListMentor) {
+                Log.e(TAG, "Inside address for loop : " + a.getDefault_yn());
+                if (a.getDefault_yn() == 1) {
+                    position = addressArrayListMentor.indexOf(a);
+                    Log.e(TAG, "found at : " + position);
+                    break;
+                }
+            }
+
+            if (position == -1)
+                addressArrayListMentor.add(address);
+            else
+                addressArrayListMentor.set(position, address);
 
 
             requestParams.add("locations", new Gson().toJson(addressArrayListMentor));
-            Log.e(TAG, "locations: " + new Gson().toJson(addressArrayListMentor));
+            Log.e(TAG, "locations sending : " + new Gson().toJson(addressArrayListMentor));
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
@@ -1092,7 +1138,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 requestParams.add("country", NetworkManager.countryCode.trim());
                 Log.e(TAG, "Country : " + NetworkManager.countryCode);
             }
-Log.e(TAG,"request params: "+requestParams.toString());
+            Log.e(TAG, "request params: " + requestParams.toString());
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
             progressDialog.dismiss();
