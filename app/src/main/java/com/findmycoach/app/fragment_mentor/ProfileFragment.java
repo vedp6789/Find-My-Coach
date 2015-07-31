@@ -78,7 +78,6 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageButton arrow, arrow_multiple_address;
     private static final String TAG = "FMC:";
     private ScrollView scrollView;
-    private Response response;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -114,7 +113,7 @@ public class ProfileFragment extends Fragment implements Callback {
 //        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
 //        NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
 
-        response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), Response.class);
+        Response response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), Response.class);
         userInfo = response.getData();
         populateFields();
     }
@@ -398,6 +397,7 @@ public class ProfileFragment extends Fragment implements Callback {
             @Override
             public void onClick(View v) {
                 if (userInfo != null) {
+                    Response response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), Response.class);
                     Intent intent = new Intent(getActivity(), EditProfileActivityMentor.class);
                     intent.putExtra("user_info", new Gson().toJson(response.getData()));
                     startActivityForResult(intent, REQUEST_CODE);
