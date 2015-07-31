@@ -54,11 +54,12 @@ public class UserListActivity extends Activity implements Callback {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 connection_status_for_Selected_mentor = null;
                 if (users != null) {
-                    Log.d(TAG, "ListView click");
-                    selectedPosition = position;
-                    datum = users.get(position);
-                    connection_status_for_Selected_mentor = datum.getConnectionStatus();
-                    getMentorDetails(datum.getId());
+//                    Log.d(TAG, "ListView click");
+//                    selectedPosition = position;
+//                    datum = users.get(position);
+//                    connection_status_for_Selected_mentor = datum.getConnectionStatus();
+//                    getMentorDetails(datum.getId());
+                    Toast.makeText(UserListActivity.this, "Please use connection button to send connection. Mentor Profile is under construction.", Toast.LENGTH_LONG).show();
                 }
             }
         });
