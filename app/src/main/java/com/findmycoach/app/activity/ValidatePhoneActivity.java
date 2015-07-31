@@ -195,7 +195,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
 
         /** Opens Dashboard activity*/
         int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
-        if (response.getData().getCity() == null || response.getData().getCity().toString().trim().equals("")) {
+        if (response.getData().getMultipleAddress() == null || response.getData().getMultipleAddress().size() == 0) {
             if (userGroup == 2) {
                 Intent intent = new Intent(this, EditProfileActivityMentee.class);
                 intent.putExtra("user_info", new Gson().toJson(response.getData()));

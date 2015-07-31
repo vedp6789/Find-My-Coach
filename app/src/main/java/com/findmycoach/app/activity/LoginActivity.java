@@ -115,7 +115,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             Log.e(TAG, "Login from onCreate");
             Response response = new Gson().fromJson(StorageHelper.getUserProfile(this), Response.class);
             int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
-            if (response != null && (response.getData().getCity() == null || response.getData().getCity().toString().trim().equals(""))) {
+            if (response.getData().getMultipleAddress() == null || response.getData().getMultipleAddress().size() == 0) {
                 if (userGroup == 2) {
                     Intent intent = new Intent(this, EditProfileActivityMentee.class);
                     intent.putExtra("user_info", new Gson().toJson(response.getData()));
@@ -1013,7 +1013,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             Log.e(TAG, "Login from Success");
 
             int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
-            if (response.getData().getCity() == null || response.getData().getCity().toString().trim().equals("")) {
+            if (response.getData().getMultipleAddress() == null || response.getData().getMultipleAddress().size() == 0) {
                 if (userGroup == 2) {
                     Intent intent = new Intent(this, EditProfileActivityMentee.class);
                     intent.putExtra("user_info", new Gson().toJson(response.getData()));

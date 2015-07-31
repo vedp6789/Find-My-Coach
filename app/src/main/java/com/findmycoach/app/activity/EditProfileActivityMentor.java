@@ -1074,12 +1074,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             }
 
-            Address address=new Address();
-            address.setAddressLine1(profileAddress.getText().toString());
-            address.setLocality(profileAddress1.getText().toString());
-            address.setZip(pinCode.getText().toString());
-            address.setDefault_yn(1);
-            addressArrayListMentor.add(address);
+
 
 
             requestParams.add("locations", new Gson().toJson(addressArrayListMentor));

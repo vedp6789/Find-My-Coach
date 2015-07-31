@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,6 +77,7 @@ public class ProfileFragment extends Fragment implements Callback {
     boolean multiple_address_visible=false;
     private ImageButton arrow,arrow_multiple_address;
     private static final String TAG = "FMC:";
+    private ScrollView scrollView;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -117,6 +119,7 @@ public class ProfileFragment extends Fragment implements Callback {
     }
 
     private void initialize(View view) {
+        scrollView= (ScrollView) view.findViewById(R.id.scrollview);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         profileImage = (ImageView) view.findViewById(R.id.profile_image);
@@ -170,11 +173,11 @@ public class ProfileFragment extends Fragment implements Callback {
                     aboutMeLL.setVisibility(View.GONE);
                     arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
                     hiddenFlag = false;
-
                 } else {
                     aboutMeLL.setVisibility(View.VISIBLE);
                     arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
                     hiddenFlag = true;
+                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
                 }
             }
         });
@@ -190,6 +193,7 @@ public class ProfileFragment extends Fragment implements Callback {
                     multipleAddressValRL.setVisibility(View.VISIBLE);
                     multiple_address_visible = true;
                     arrow_multiple_address.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
+                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
 
                 }
 
@@ -207,6 +211,7 @@ public class ProfileFragment extends Fragment implements Callback {
                     multipleAddressValRL.setVisibility(View.VISIBLE);
                     multiple_address_visible=true;
                     arrow_multiple_address.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
+                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
 
                 }
 
@@ -226,6 +231,7 @@ public class ProfileFragment extends Fragment implements Callback {
                     aboutMeLL.setVisibility(View.VISIBLE);
                     arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
                     hiddenFlag = true;
+                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
                 }
             }
         });
@@ -411,6 +417,7 @@ public class ProfileFragment extends Fragment implements Callback {
         }
 
         if(userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1){
+            multipleAddressValRL.setVisibility(View.GONE);
             if(userInfo.getMultipleAddress().size() >1){
                 otherAddressTV.setText(getResources().getString(R.string.other_addresses));
             }else{
