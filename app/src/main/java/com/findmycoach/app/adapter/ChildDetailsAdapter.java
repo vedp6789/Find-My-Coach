@@ -5,13 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.student.ChildDetails;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -31,7 +28,6 @@ public class ChildDetailsAdapter extends ArrayAdapter<ChildDetails> {
         resourceId=resource;
         inflater = LayoutInflater.from(context);
         this.childDetailsArrayList=childDetailsArrayList;
-
     }
     @Override
     public int getCount() {
