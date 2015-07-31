@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
-import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.EditProfileActivityMentee;
 import com.findmycoach.app.adapter.AddressAdapter;
 import com.findmycoach.app.adapter.ChildDetailsAdapter;
@@ -26,11 +25,9 @@ import com.findmycoach.app.beans.student.Data;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
-import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.views.ChizzleTextView;
 import com.google.gson.Gson;
-import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
 
@@ -87,15 +84,19 @@ public class ProfileFragment extends Fragment implements Callback {
     }
 
     private void getProfileInfo() {
-        progressDialog.show();
-        String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-        RequestParams requestParams = new RequestParams();
-        Log.d(TAG, "Stored User Id : " + StorageHelper.getUserDetails(getActivity(), "user_id"));
-        Log.d(TAG, "Auth Token : " + authToken);
-        requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
-        Log.d(TAG, "getprofile");
-        NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
+//        progressDialog.show();
+//        String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
+//        RequestParams requestParams = new RequestParams();
+//        Log.d(TAG, "Stored User Id : " + StorageHelper.getUserDetails(getActivity(), "user_id"));
+//        Log.d(TAG, "Auth Token : " + authToken);
+//        requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
+//        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+//        Log.d(TAG, "getprofile");
+//        NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
+
+        ProfileResponse response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), ProfileResponse.class);
+        userInfo = response.getData();
+        populateFields();
     }
 
     private void initialize(View view) {
@@ -160,10 +161,10 @@ public class ProfileFragment extends Fragment implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.hide();
-        Log.d(TAG, "show profile");
-        ProfileResponse response = (ProfileResponse) object;
-        userInfo = response.getData();
-        populateFields();
+//        Log.d(TAG, "show profile");
+//        ProfileResponse response = (ProfileResponse) object;
+//        userInfo = response.getData();
+//        populateFields();
     }
 
     private void populateFields() {
@@ -237,9 +238,6 @@ public class ProfileFragment extends Fragment implements Callback {
             if (userInfo.getChildren().size() < 1) {
                 childDetailsLayout.setVisibility(View.GONE);
             }
-
-
-
 
 
             Log.e(TAG, userInfo.getChildren().size() + " Child size");
