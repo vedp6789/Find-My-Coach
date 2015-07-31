@@ -179,6 +179,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         radioGroup = (RadioGroup) findViewById(R.id.radioGroupDetails);
         addChildLayout = (RelativeLayout) findViewById(R.id.addChildLayout);
         profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
+        childDetailsArrayList = new ArrayList<>();
+        addressArrayList = new ArrayList<>();
         locationPreferenceSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.location_preference)));
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
@@ -187,6 +189,13 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 onBackPressed();
             }
         });
+        childDetailsAdapter = new ChildDetailsAdapter(this, R.layout.child_details_list_item, childDetailsArrayList);
+        childDetailsListView.setAdapter(childDetailsAdapter);
+        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayList);
+        addressListView.setAdapter(addressAdapter);
+
+
+
 
         ///ListViewInsideScrollViewHelper.getListViewSize(addressListView);
 
@@ -556,12 +565,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
 
         if (userInfo.getChildren() != null && userInfo.getChildren().size() >= 1) {
-            childDetailsArrayList = new ArrayList<>();
             for (int i = 0; i < userInfo.getChildren().size(); i++) {
                 childDetailsArrayList.add(userInfo.getChildren().get(i));
             }
-            childDetailsAdapter = new ChildDetailsAdapter(this, R.layout.child_details_list_item, childDetailsArrayList);
-            childDetailsListView.setAdapter(childDetailsAdapter);
+           childDetailsAdapter.notifyDataSetChanged();
             setHeight(childDetailsListView);
             childDetailsListView.setVisibility(View.VISIBLE);
             addChildLayout.setVisibility(View.VISIBLE);
@@ -569,12 +576,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         }
 
         if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1) {
-            addressArrayList = new ArrayList<>();
             for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
                 addressArrayList.add(userInfo.getMultipleAddress().get(i));
             }
-            addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayList);
-            addressListView.setAdapter(addressAdapter);
+            addressAdapter.notifyDataSetChanged();
             setHeight(addressListView);
             addressListView.setVisibility(View.VISIBLE);
             addAddress.setVisibility(View.VISIBLE);
@@ -773,7 +778,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             requestParams.add("address", profileAddress.getText().toString());
             requestParams.add("city", profileAddress1.getText().toString());
             requestParams.add("zip", pinCode.getText().toString());
-            requestParams.add("mentor_for", mentorFor.getSelectedItem().toString());
+            requestParams.add("mentor_for", String.valueOf(mentorFor.getSelectedItemPosition()));
 
             String trainLoc = trainingLocation.getText().toString().trim();
             requestParams.add("training_location", trainLoc.length() < 2
