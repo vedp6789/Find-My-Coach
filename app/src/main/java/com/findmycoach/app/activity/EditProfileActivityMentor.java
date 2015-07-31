@@ -151,7 +151,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         needToCheckOnDestroy = false;
         integerArrayList_Of_UpdatedStudentPreference = new ArrayList<>();
         editProfileActivityMentor = this;
-        if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
+        if (userInfo.getMultipleAddress() == null || userInfo.getMultipleAddress().size() == 0)
             getAddress();
 
     }
@@ -625,23 +625,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } catch (Exception ignored) {
             }
             try {
-                profileAddress.setText((String) userInfo.getAddress());
-            } catch (Exception ignored) {
-            }
-            try {
-                profileAddress1.setText((String) userInfo.getCity());
-            } catch (Exception ignored) {
-            }
-            try {
-                city = (String) userInfo.getCity();                 /* city string initially set to the city i.e. earlier get updated*/
-            } catch (Exception ignored) {
-            }
-            try {
                 profileDOB.setText((String) userInfo.getDob());
-            } catch (Exception ignored) {
-            }
-            try {
-                pinCode.setText((String) userInfo.getZip());
             } catch (Exception ignored) {
             }
 
@@ -734,7 +718,47 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
                 getAddress();
 
-            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1) {
+
+            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
+
+                int position = -1;
+                Log.e(TAG, userInfo.getMultipleAddress().size() + " address size");
+                for (Address a : userInfo.getMultipleAddress()) {
+                    Log.e(TAG, "Inside address for loop : " + a.getDefault_yn());
+                    if (a.getDefault_yn() == 1) {
+                        position = userInfo.getMultipleAddress().indexOf(a);
+                        Log.e(TAG, "found at : " + position);
+                        break;
+                    }
+                }
+
+                Address address = null;
+                if (position != -1) {
+                    address = userInfo.getMultipleAddress().get(position);
+                    userInfo.getMultipleAddress().remove(position);
+                } else {
+                    address = userInfo.getMultipleAddress().get(0);
+                    userInfo.getMultipleAddress().remove(0);
+                }
+
+                try {
+                    profileAddress.setText(address.getAddressLine1());
+                } catch (Exception ignored) {
+                }
+                try {
+                    profileAddress1.setText(address.getLocality());
+                } catch (Exception ignored) {
+                }
+                try {
+                    pinCode.setText(address.getZip());
+                } catch (Exception ignored) {
+                }
+                try {
+                    city = address.getLocality();                 /* city string initially set to the city i.e. earlier get updated*/
+                } catch (Exception ignored) {
+                }
+
+
                 addressArrayListMentor.clear();
                 addressAdapter.notifyDataSetChanged();
                 for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
@@ -1074,7 +1098,28 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             }
 
+            Address address = new Address();
+            address.setAddressLine1(profileAddress.getText().toString());
+            address.setLocality(profileAddress1.getText().toString());
+            address.setZip(pinCode.getText().toString());
+            address.setDefault_yn(1);
 
+
+            int position = -1;
+            Log.e(TAG, addressArrayListMentor.size() + " address size");
+            for (Address a : addressArrayListMentor) {
+                Log.e(TAG, "Inside address for loop : " + a.getDefault_yn());
+                if (a.getDefault_yn() == 1) {
+                    position = addressArrayListMentor.indexOf(a);
+                    Log.e(TAG, "found at : " + position);
+                    break;
+                }
+            }
+
+            if (position == -1)
+                addressArrayListMentor.add(address);
+            else
+                addressArrayListMentor.set(position, address);
 
 
             requestParams.add("locations", new Gson().toJson(addressArrayListMentor));
@@ -1092,7 +1137,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 requestParams.add("country", NetworkManager.countryCode.trim());
                 Log.e(TAG, "Country : " + NetworkManager.countryCode);
             }
-Log.e(TAG,"request params: "+requestParams.toString());
+            Log.e(TAG, "request params: " + requestParams.toString());
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
             progressDialog.dismiss();

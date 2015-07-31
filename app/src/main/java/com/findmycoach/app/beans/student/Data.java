@@ -1,5 +1,6 @@
 package com.findmycoach.app.beans.student;
 
+import com.findmycoach.app.beans.authentication.SubCategoryName;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -148,17 +149,17 @@ public class Data {
         this.gender = gender;
     }
 
-    public List<String> getSubCategoryName() {
+    public List<SubCategoryName> getSubCategoryName() {
         return subCategoryName;
     }
 
-    public void setSubCategoryName(List<String> subCategoryName) {
+    public void setSubCategoryName(List<SubCategoryName> subCategoryName) {
         this.subCategoryName = subCategoryName;
     }
 
     @SerializedName("sub_category_name")
     @Expose
-    private List<String> subCategoryName;
+    private List<SubCategoryName> subCategoryName;
 
     /**
      * @return The id

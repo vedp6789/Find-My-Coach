@@ -436,7 +436,10 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             e.printStackTrace();
         }
         GraphPlace location = user.getLocation();
-        requestParams.add("city", location.getName());
+        try {
+            requestParams.add("city", location.getName());
+        } catch (Exception ignored) {
+        }
         try {
             getFbFriends();
             Log.e(TAG, user.getId());
