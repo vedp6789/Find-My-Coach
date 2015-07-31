@@ -150,7 +150,7 @@ public class ProfileFragment extends Fragment implements Callback {
         multipleAddressValRL= (RelativeLayout) view.findViewById(R.id.multiple_Address_Val_RL);
         multipleAddressLV= (ListView) view.findViewById(R.id.multipleAddressLV);
         addressArrayListMentor = new ArrayList<>();
-        addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item, addressArrayListMentor);
+        addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayListMentor);
         multipleAddressLV.setAdapter(addressAdapter);
 
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
