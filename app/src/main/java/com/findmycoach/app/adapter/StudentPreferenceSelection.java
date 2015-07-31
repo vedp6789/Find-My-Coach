@@ -23,12 +23,14 @@ public class StudentPreferenceSelection extends BaseAdapter {
     public ArrayList<Integer> selected_preferences;
     List<AgeGroupPreferences> different_preferences;
     String TAG = "FMC";
+    private boolean willTeachEveryone;
 
 
     public StudentPreferenceSelection(Context context, List<AgeGroupPreferences> different_preferences, ArrayList<Integer> selected_preferences) {
         this.context = context;
         this.different_preferences = different_preferences;
         this.selected_preferences = selected_preferences;
+        willTeachEveryone = false;
         if (this.selected_preferences == null)
             this.selected_preferences = new ArrayList<Integer>();
     }
@@ -103,31 +105,66 @@ public class StudentPreferenceSelection extends BaseAdapter {
 
             textView.setText(stringBuilder);
 
+
             for (int i = 0; i < selected_preferences.size(); i++) {
                 if (selected_preferences.contains(id)) {
                     checkBox.setChecked(true);
+                    if(position == 0)
+                        willTeachEveryone = true;
                 }
             }
 
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            checkBox.setEnabled(true);
 
-                    if (isChecked && !selected_preferences.contains(id)) {
-                        selected_preferences.add(id);
-                    } else if (!isChecked && selected_preferences.contains(id)) {
-                        selected_preferences.remove(selected_preferences.indexOf(id));
+
+            if (!willTeachEveryone) {
+                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                        if (isChecked && !selected_preferences.contains(id)) {
+                            selected_preferences.add(id);
+                        } else if (!isChecked && selected_preferences.contains(id)) {
+                            selected_preferences.remove(selected_preferences.indexOf(id));
+                        }
+
+                        if (position == 0 && isChecked) {
+                            willTeachEveryone = true;
+                            selected_preferences.clear();
+                            selected_preferences.add(id);
+                            notifyDataSetChanged();
+                        }
                     }
+                });
 
-                }
-            });
+                convertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        checkBox.setChecked(!checkBox.isChecked());
+                    }
+                });
+            } else {
+                if (position == 0) {
+                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            selected_preferences.clear();
+                            willTeachEveryone = false;
+                            notifyDataSetChanged();
+                        }
+                    });
 
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    checkBox.setChecked(!checkBox.isChecked());
+                    convertView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            checkBox.setChecked(!checkBox.isChecked());
+                        }
+                    });
+                } else {
+                    checkBox.setChecked(false);
+                    checkBox.setEnabled(false);
                 }
-            });
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
