@@ -803,7 +803,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
     }
 
-    public boolean updateAddress() {
+    public boolean updateAddress() {   // TODO
         if (userInfo != null && (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))) {
             try {
                 userInfo.setAddress(NetworkManager.localityName);
@@ -1000,9 +1000,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 e.printStackTrace();
             }
 
-            requestParams.add("address", profileAddress.getText().toString());
+            /*requestParams.add("address", profileAddress.getText().toString());
             requestParams.add("city", profileAddress1.getText().toString());
-            requestParams.add("zip", pinCode.getText().toString());
+            requestParams.add("zip", pinCode.getText().toString());*/
 
             if (chargesPerUnit.getSelectedItemPosition() == 0) {
                 Log.i(TAG, "select charges unit : " + chargesPerUnit.getSelectedItemPosition());
@@ -1073,8 +1073,17 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 }
 
             }
-            requestParams.add("mutiple_address", new Gson().toJson(addressArrayListMentor));
-            Log.i(TAG, "multiple_Address: " + new Gson().toJson(addressArrayListMentor));
+
+            Address address=new Address();
+            address.setAddressLine1(profileAddress.getText().toString());
+            address.setLocality(profileAddress1.getText().toString());
+            address.setZip(pinCode.getText().toString());
+            address.setDefault_yn(1);
+            addressArrayListMentor.add(address);
+
+
+            requestParams.add("locations", new Gson().toJson(addressArrayListMentor));
+            Log.e(TAG, "locations: " + new Gson().toJson(addressArrayListMentor));
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
@@ -1088,7 +1097,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 requestParams.add("country", NetworkManager.countryCode.trim());
                 Log.e(TAG, "Country : " + NetworkManager.countryCode);
             }
-
+Log.e(TAG,"request params: "+requestParams.toString());
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
             progressDialog.dismiss();

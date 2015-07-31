@@ -77,7 +77,7 @@ public class Data {
     @Expose
     private ArrayList<ChildDetails> children;
 
-    @SerializedName("multiple_address")
+    @SerializedName("locations")
     @Expose
     private ArrayList<Address> multipleAddress;
 

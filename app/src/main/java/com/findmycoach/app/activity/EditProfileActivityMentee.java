@@ -110,7 +110,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private AddressAdapter addressAdapter;
     private RadioGroup radioGroup;
     private RelativeLayout addChildLayout;
-    private CheckBox mutipleAddress;
+    private CheckBox multipleAddress;
 
 
     @Override
@@ -174,7 +174,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         childDetailsListView = (ListView) findViewById(R.id.childDetailsListView);
         addMore = (Button) findViewById(R.id.addMoreButton);
         addAddress = (Button) findViewById(R.id.addAddress);
-        mutipleAddress = (CheckBox) findViewById(R.id.inputMutipleAddresses);
+        multipleAddress = (CheckBox) findViewById(R.id.inputMutipleAddresses);
         addressListView = (ListView) findViewById(R.id.addressesListView);
         addressArrayList = new ArrayList<>();
         radioGroup = (RadioGroup) findViewById(R.id.radioGroupDetails);
@@ -235,7 +235,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         });
 
 
-        mutipleAddress.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        multipleAddress.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -493,7 +493,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 //        }
 //    }
 
-    public void populateUserData() {
+    public void populateUserData() {   //TODO
 
         String[] mentorForArray = getResources().getStringArray(R.array.mentor_for);
 
@@ -575,7 +575,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
         }
 
-        if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1) {
+        if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1) {    //TODO
             addressArrayList.clear();
             addressAdapter.notifyDataSetChanged();
             for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
@@ -587,7 +587,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             addAddress.setVisibility(View.VISIBLE);
             setListViewHeightBasedOnChildren(addressListView);
             //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
-            mutipleAddress.setChecked(true);
+            multipleAddress.setChecked(true);
         }
 
         try {
@@ -646,7 +646,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         }
     }
 
-    public boolean updateAddress() {
+    public boolean updateAddress() {   //TODO
         if (userInfo != null && (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))) {
             try {
                 userInfo.setAddress(NetworkManager.localityName);
@@ -791,9 +791,9 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 e.printStackTrace();
             }
 
-            requestParams.add("address", profileAddress.getText().toString());
+            /*requestParams.add("address", profileAddress.getText().toString());
             requestParams.add("city", profileAddress1.getText().toString());
-            requestParams.add("zip", pinCode.getText().toString());
+            requestParams.add("zip", pinCode.getText().toString());*/
             requestParams.add("mentor_for", mentorFor.getSelectedItem().toString());
 
             String trainLoc = trainingLocation.getText().toString().trim();
@@ -814,7 +814,16 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             //TODO
             requestParams.add("children", new Gson().toJson(childDetailsArrayList));
             Log.e(TAG + " Kids ", new Gson().toJson(childDetailsArrayList));
-            requestParams.add("multiple_address", new Gson().toJson(addressArrayList));
+
+            Address address=new Address();
+            address.setAddressLine1(profileAddress.getText().toString());
+            address.setLocality(profileAddress1.getText().toString());
+            address.setZip(pinCode.getText().toString());
+            address.setDefault_yn(1);
+            addressArrayList.add(address);
+
+
+            requestParams.add("locations", new Gson().toJson(addressArrayList));
             Log.e(TAG, "mul add: " + new Gson().toJson(addressArrayList));
             requestParams.add("location_preference", String.valueOf(locationPreferenceSpinner.getSelectedItemPosition()));
             if (!imageInBinary.equals(""))

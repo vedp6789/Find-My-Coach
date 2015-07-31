@@ -256,7 +256,7 @@ public class ProfileFragment extends Fragment implements Callback {
             }
 
 
-            if (userInfo.getMultipleAddress().size() < 1) {
+            if (userInfo.getMultipleAddress() != null || userInfo.getMultipleAddress().size() < 1) {
                 preferredAddressLayout.setVisibility(View.GONE);
             }
 

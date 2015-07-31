@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
-    @SerializedName("multiple_address")
+    @SerializedName("locations")
     @Expose
     private ArrayList<Address> multipleAddress;
 

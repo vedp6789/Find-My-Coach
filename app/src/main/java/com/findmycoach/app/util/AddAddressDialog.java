@@ -103,6 +103,7 @@ public class AddAddressDialog implements  Callback {
                     address.setAddressLine1(addressLine1.getText().toString());
                     address.setLocality(locality.getText().toString());
                     address.setZip(zip.getText().toString());
+                    address.setDefault_yn(0);
                     onChildDetailsAdded(address);
                     dialog.dismiss();
                 }

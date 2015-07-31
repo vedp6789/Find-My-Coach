@@ -12,6 +12,15 @@ public class Address {
     private String addressLine1;
     private String locality;
     private String zip;
+    private int default_yn;
+
+    public int getDefault_yn() {
+        return default_yn;
+    }
+
+    public void setDefault_yn(int default_yn) {
+        this.default_yn = default_yn;
+    }
 
     public String getAddressLine1() {
         return addressLine1;
