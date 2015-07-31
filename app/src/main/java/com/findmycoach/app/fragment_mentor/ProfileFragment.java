@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
-import android.location.Address;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -27,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
-import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.EditProfileActivityMentee;
 import com.findmycoach.app.activity.EditProfileActivityMentor;
 import com.findmycoach.app.adapter.AddressAdapter;
@@ -37,11 +35,9 @@ import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.authentication.SubCategoryName;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
-import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.views.ChizzleTextView;
 import com.google.gson.Gson;
-import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -106,14 +102,18 @@ public class ProfileFragment extends Fragment implements Callback {
     }
 
     private void getProfileInfo() {
-        progressDialog.show();
-        String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-        RequestParams requestParams = new RequestParams();
-        Log.d(TAG, "Stored User Id:" + StorageHelper.getUserDetails(getActivity(), "user_id"));
-        Log.d(TAG, "auth_token" + authToken);
-        requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
-        NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
+//        progressDialog.show();
+//        String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
+//        RequestParams requestParams = new RequestParams();
+//        Log.d(TAG, "Stored User Id:" + StorageHelper.getUserDetails(getActivity(), "user_id"));
+//        Log.d(TAG, "auth_token" + authToken);
+//        requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
+//        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+//        NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
+
+        Response response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), Response.class);
+        userInfo = response.getData();
+        populateFields();
     }
 
     private void initialize(View view) {
@@ -182,13 +182,13 @@ public class ProfileFragment extends Fragment implements Callback {
         multipleAddressRL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(multiple_address_visible){
-                    multiple_address_visible=false;
+                if (multiple_address_visible) {
+                    multiple_address_visible = false;
                     multipleAddressValRL.setVisibility(View.GONE);
                     arrow_multiple_address.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
-                }else{
+                } else {
                     multipleAddressValRL.setVisibility(View.VISIBLE);
-                    multiple_address_visible=true;
+                    multiple_address_visible = true;
                     arrow_multiple_address.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
 
                 }
@@ -254,11 +254,10 @@ public class ProfileFragment extends Fragment implements Callback {
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-
         progressDialog.hide();
-        Response response = (Response) object;
-        userInfo = response.getData();
-        populateFields();
+//        Response response = (Response) object;
+//        userInfo = response.getData();
+//        populateFields();
     }
 
 

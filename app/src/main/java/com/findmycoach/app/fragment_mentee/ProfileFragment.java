@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
-import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.EditProfileActivityMentee;
 import com.findmycoach.app.adapter.AddressAdapter;
 import com.findmycoach.app.adapter.ChildDetailsAdapter;
@@ -26,12 +25,9 @@ import com.findmycoach.app.beans.student.Data;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
-import com.findmycoach.app.util.ListViewInsideScrollViewHelper;
-import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.views.ChizzleTextView;
 import com.google.gson.Gson;
-import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
 
@@ -61,7 +57,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private ArrayList<ChildDetails> childDetailsArrayList;
 
 
-    private static final String TAG = "TAG";
+    private static final String TAG = "FMC";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -88,15 +84,19 @@ public class ProfileFragment extends Fragment implements Callback {
     }
 
     private void getProfileInfo() {
-        progressDialog.show();
-        String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-        RequestParams requestParams = new RequestParams();
-        Log.d(TAG, "Stored User Id : " + StorageHelper.getUserDetails(getActivity(), "user_id"));
-        Log.d(TAG, "Auth Token : " + authToken);
-        requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
-        Log.d(TAG, "getprofile");
-        NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
+//        progressDialog.show();
+//        String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
+//        RequestParams requestParams = new RequestParams();
+//        Log.d(TAG, "Stored User Id : " + StorageHelper.getUserDetails(getActivity(), "user_id"));
+//        Log.d(TAG, "Auth Token : " + authToken);
+//        requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
+//        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+//        Log.d(TAG, "getprofile");
+//        NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
+
+        ProfileResponse response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), ProfileResponse.class);
+        userInfo = response.getData();
+        populateFields();
     }
 
     private void initialize(View view) {
@@ -118,21 +118,13 @@ public class ProfileFragment extends Fragment implements Callback {
         childDetailsLayout = (RelativeLayout) view.findViewById(R.id.childDetailsProfile);
         preferredAddressLayout = (RelativeLayout) view.findViewById(R.id.preferredAddressLayout);
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
+        addressListView= (ListView) view.findViewById(R.id.addressProfileListView);
+        addressListView.setDivider(null);
+        addressListView.setDividerHeight(0);
 
         childrenDetailsListViewProfile = (ListView) view.findViewById(R.id.childrenDetailsListViewProfile);
         childrenDetailsListViewProfile.setDivider(null);
         childrenDetailsListViewProfile.setDividerHeight(0);
-        childDetailsArrayList = new ArrayList<>();
-        childDetailsAdapter = new ChildDetailsAdapter(getActivity(), R.layout.child_details_list_item_centre_horizontal, childDetailsArrayList);
-        childrenDetailsListViewProfile.setAdapter(childDetailsAdapter);
-
-        addressArrayList=new ArrayList<>();
-        addressListView= (ListView) view.findViewById(R.id.addressProfileListView);
-        addressListView.setDivider(null);
-        addressListView.setDividerHeight(0);
-        addressAdapter=new AddressAdapter(getActivity(),R.layout.muti_address_list_item_centre_horizontal,addressArrayList);
-        addressListView.setAdapter(addressAdapter);
-
 
         view.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,9 +138,11 @@ public class ProfileFragment extends Fragment implements Callback {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "IN onActivity Result" + requestCode + "   " + requestCode);
+        Log.d(TAG, "In onActivity Result" + requestCode + " : " + REQUEST_CODE + " : " + resultCode);
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             String updatedUserJson = data.getStringExtra("user_info");
+            Log.d(TAG, updatedUserJson);
             userInfo = new Gson().fromJson(updatedUserJson, Data.class);
             populateFields();
         }
@@ -167,10 +161,10 @@ public class ProfileFragment extends Fragment implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.hide();
-        Log.d(TAG, "show profile");
-        ProfileResponse response = (ProfileResponse) object;
-        userInfo = response.getData();
-        populateFields();
+//        Log.d(TAG, "show profile");
+//        ProfileResponse response = (ProfileResponse) object;
+//        userInfo = response.getData();
+//        populateFields();
     }
 
     private void populateFields() {
@@ -212,28 +206,30 @@ public class ProfileFragment extends Fragment implements Callback {
             mentorFor.setText(mentor_for1[Integer.parseInt(userInfo.getMentorFor())]);
             trainingLocation.setText((String) userInfo.getTrainingLocation());
 
+            String[] coachingType = getResources().getStringArray(R.array.coaching_type);
             switch (userInfo.getCoachingType()) {
                 case 0:
-                    coachingType.setText("I prefer individual classes");
+                    this.coachingType.setText(coachingType[0]);
                     break;
                 case 1:
-                    coachingType.setText("I prefer group classes");
+                    this.coachingType.setText(coachingType[1]);
                     break;
                 case 2:
-                    coachingType.setText("I am ok with either");
+                    this.coachingType.setText(coachingType[2]);
                     break;
             }
 
 
+            String[] locationPreference = getResources().getStringArray(R.array.location_preference);
             switch (userInfo.getLocationPreference()) {
                 case 0:
-                    locationPreference.setText("I prefer for the mentor to come to my location");
+                    this.locationPreference.setText(locationPreference[0]);
                     break;
                 case 1:
-                    locationPreference.setText("I am ok to go to the mentor location or institute");
+                    this.locationPreference.setText(locationPreference[1]);
                     break;
                 case 2:
-                    locationPreference.setText("I am fine with either");
+                    this.locationPreference.setText(locationPreference[2]);
                     break;
             }
             //      coachingType.setText((String) userInfo.getCoachingType());
@@ -243,13 +239,15 @@ public class ProfileFragment extends Fragment implements Callback {
                 childDetailsLayout.setVisibility(View.GONE);
             }
 
+
+            Log.e(TAG, userInfo.getChildren().size() + " Child size");
             if (userInfo.getChildren() != null && userInfo.getChildren().size() >= 1) {
                 childDetailsLayout.setVisibility(View.VISIBLE);
-                childDetailsAdapter.notifyDataSetChanged();
+                childDetailsArrayList = new ArrayList<>();
                 for (int i = 0; i < userInfo.getChildren().size(); i++) {
                     childDetailsArrayList.add(userInfo.getChildren().get(i));
-
                 }
+                childDetailsAdapter = new ChildDetailsAdapter(getActivity(), R.layout.child_details_list_item_centre_horizontal, childDetailsArrayList);
                 childrenDetailsListViewProfile.setAdapter(childDetailsAdapter);
                 childDetailsAdapter.notifyDataSetChanged();
                 EditProfileActivityMentee.setHeight(childrenDetailsListViewProfile);
@@ -262,12 +260,12 @@ public class ProfileFragment extends Fragment implements Callback {
 
             if(userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1){
                 preferredAddressLayout.setVisibility(View.VISIBLE);
-                addressAdapter.notifyDataSetChanged();
+                addressArrayList=new ArrayList<>();
                 for(int i =0; i<userInfo.getMultipleAddress().size(); i++){
                     addressArrayList.add(userInfo.getMultipleAddress().get(i));
                 }
+                addressAdapter=new AddressAdapter(getActivity(),R.layout.muti_address_list_item_centre_horizontal,addressArrayList);
                 addressListView.setAdapter(addressAdapter);
-                addressAdapter.notifyDataSetChanged();
                 EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListView);
                 //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
             }

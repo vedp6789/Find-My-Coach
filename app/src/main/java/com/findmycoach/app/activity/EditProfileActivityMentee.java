@@ -176,10 +176,11 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         addAddress = (Button) findViewById(R.id.addAddress);
         multipleAddress = (CheckBox) findViewById(R.id.inputMutipleAddresses);
         addressListView = (ListView) findViewById(R.id.addressesListView);
-        addressArrayList = new ArrayList<>();
         radioGroup = (RadioGroup) findViewById(R.id.radioGroupDetails);
         addChildLayout = (RelativeLayout) findViewById(R.id.addChildLayout);
         profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
+        childDetailsArrayList = new ArrayList<>();
+        addressArrayList = new ArrayList<>();
         locationPreferenceSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.location_preference)));
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
@@ -188,12 +189,14 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 onBackPressed();
             }
         });
-
-        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayList);
-        childDetailsArrayList = new ArrayList<>();
         childDetailsAdapter = new ChildDetailsAdapter(this, R.layout.child_details_list_item, childDetailsArrayList);
         childDetailsListView.setAdapter(childDetailsAdapter);
+        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayList);
         addressListView.setAdapter(addressAdapter);
+
+
+
+
         ///ListViewInsideScrollViewHelper.getListViewSize(addressListView);
 
 
@@ -562,25 +565,19 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
 
         if (userInfo.getChildren() != null && userInfo.getChildren().size() >= 1) {
-            childDetailsArrayList.clear();
-            childDetailsAdapter.notifyDataSetChanged();
             for (int i = 0; i < userInfo.getChildren().size(); i++) {
                 childDetailsArrayList.add(userInfo.getChildren().get(i));
-
             }
-            childDetailsAdapter.notifyDataSetChanged();
+           childDetailsAdapter.notifyDataSetChanged();
             setHeight(childDetailsListView);
             childDetailsListView.setVisibility(View.VISIBLE);
             addChildLayout.setVisibility(View.VISIBLE);
 
         }
 
-        if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1) {    //TODO
-            addressArrayList.clear();
-            addressAdapter.notifyDataSetChanged();
+        if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1) {
             for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
                 addressArrayList.add(userInfo.getMultipleAddress().get(i));
-
             }
             addressAdapter.notifyDataSetChanged();
             addressListView.setVisibility(View.VISIBLE);
@@ -775,26 +772,12 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             else
                 requestParams.add("gender", "F");
 
-            try {
-                String[] dob = profileDOB.getText().toString().split("-");
-                int mon = 0;
-                String[] months = getResources().getStringArray(R.array.months_short);
-                for (int i = 0; i < months.length; i++) {
-                    if (months[i].trim().equalsIgnoreCase(dob[1])) {
-                        mon = i + 1;
-                        break;
-                    }
-                }
-                requestParams.add("dob", dob[2] + "-" + mon + "-" + dob[0]);
-                Log.e(TAG + " dob", dob[2] + "-" + mon + "-" + dob[0]);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            requestParams.add("dob", getDobInYyMmDdFormat(profileDOB.getText().toString().trim()));
 
             /*requestParams.add("address", profileAddress.getText().toString());
             requestParams.add("city", profileAddress1.getText().toString());
             requestParams.add("zip", pinCode.getText().toString());*/
-            requestParams.add("mentor_for", mentorFor.getSelectedItem().toString());
+            requestParams.add("mentor_for", String.valueOf(mentorFor.getSelectedItemPosition()));
 
             String trainLoc = trainingLocation.getText().toString().trim();
             requestParams.add("training_location", trainLoc.length() < 2
@@ -842,6 +825,25 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             progressDialog.dismiss();
             Toast.makeText(this, getResources().getString(R.string.enter_necessary_details), Toast.LENGTH_LONG).show();
         }
+    }
+
+    private String getDobInYyMmDdFormat(String dobInDdMmmYyyy) {
+        try {
+            String[] dob = dobInDdMmmYyyy.split("-");
+            int mon = 0;
+            String[] months = getResources().getStringArray(R.array.months_short);
+            for (int i = 0; i < months.length; i++) {
+                if (months[i].trim().equalsIgnoreCase(dob[1])) {
+                    mon = i + 1;
+                    break;
+                }
+            }
+            Log.e(TAG + " dob", dob[2] + "-" + mon + "-" + dob[0]);
+            return dob[2] + "-" + mon + "-" + dob[0];
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     @Override
@@ -945,7 +947,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 StorageHelper.storePreference(this, "user_full_name", name);
             } catch (Exception ignored) {
             }
-
 //            if (newUser != null && newUser.contains(userInfo.getId())) {
 //                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 //                SharedPreferences.Editor editor = preferences.edit();
@@ -955,7 +956,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 //                intent1.putExtra("onBackPress", 1);
 //                startActivity(intent1);
 //            }
-            finish();
 
             /* Saving address, city and zip */
             if (!profileAddress.getText().toString().trim().equals("")) {
@@ -1027,14 +1027,14 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     @Override
     public void onChildDetailsAdded(ChildDetails childDetails) {
         if (childDetails != null) {
+            childDetails.setDob(getDobInYyMmDdFormat(childDetails.getDob().trim()));
+            Log.e(TAG, childDetails.getDob());
             childDetailsArrayList.add(childDetails);
             childDetailsAdapter.notifyDataSetChanged();
             setListViewHeightBasedOnChildren(childDetailsListView);
             childDetailsListView.setVisibility(View.VISIBLE);
             addMore.setVisibility(View.VISIBLE);
         }
-
-
     }
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
