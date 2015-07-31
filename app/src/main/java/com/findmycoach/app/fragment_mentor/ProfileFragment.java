@@ -419,13 +419,20 @@ public class ProfileFragment extends Fragment implements Callback {
 
         if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
             multipleAddressValRL.setVisibility(View.GONE);
-            if (userInfo.getMultipleAddress().size() > 1) {
+
+            if (userInfo.getMultipleAddress().size() > 2) {
+                multipleAddressRL.setVisibility(View.VISIBLE);
                 otherAddressTV.setText(getResources().getString(R.string.other_addresses));
             } else {
-                otherAddressTV.setText(getResources().getString(R.string.other_address));
+                if(userInfo.getMultipleAddress().size() > 1){
+                    multipleAddressRL.setVisibility(View.VISIBLE);
+                    otherAddressTV.setText(getResources().getString(R.string.other_address));
+                }else {
+                    multipleAddressRL.setVisibility(View.GONE);
+                }
             }
             multiple_address_visible = false;
-            multipleAddressRL.setVisibility(View.VISIBLE);
+            
             addressAdapter.notifyDataSetChanged();
             for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
 
