@@ -185,8 +185,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center_horizontal"
-                android:visibility="visible"
-                android:id="@+id/preferredAddressLayout">
+                android:visibility="gone"
+                android:id="@+id/preferredAddressLayout"
+                android:layout_marginTop="@dimen/back_margin">
 
                 <com.findmycoach.app.views.ChizzleTextViewBold
                     android:layout_gravity="center_horizontal"

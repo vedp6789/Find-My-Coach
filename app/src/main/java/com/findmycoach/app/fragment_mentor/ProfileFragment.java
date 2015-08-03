@@ -334,7 +334,7 @@ public class ProfileFragment extends Fragment implements Callback {
 
         profilePhone.setText(userInfo.getPhonenumber());
         List<SubCategoryName> areaOfInterests = userInfo.getSubCategoryName();
-        if (areaOfInterests.get(0) != null && areaOfInterests.size() > 0) {
+        if (areaOfInterests!=null && areaOfInterests.get(0) != null && areaOfInterests.size() > 0) {
             List<View> buttons = new ArrayList<>();
             LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             for (SubCategoryName title : areaOfInterests) {

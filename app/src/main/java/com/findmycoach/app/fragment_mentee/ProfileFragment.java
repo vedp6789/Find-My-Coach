@@ -250,13 +250,10 @@ public class ProfileFragment extends Fragment implements Callback {
             }
 
 
-            if (userInfo.getMultipleAddress() != null || userInfo.getMultipleAddress().size() < 1) {
-                preferredAddressLayout.setVisibility(View.GONE);
-            }
 
             addressArrayList = new ArrayList<>();
 
-            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1) {
+            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 1) {
                 preferredAddressLayout.setVisibility(View.VISIBLE);
                 for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
                     int default_yn = userInfo.getMultipleAddress().get(i).getDefault_yn();
