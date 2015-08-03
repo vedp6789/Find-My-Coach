@@ -847,7 +847,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
 
         if (userInfo != null) {
-            userInfo.setCurrencyCode(NetworkManager.countryCode);
+            userInfo.setCountry(NetworkManager.countryCode);
         }
 
         if (userInfo != null && (userInfo.getZip() == null || userInfo.getZip().toString().trim().equals("") || userInfo.getZip().toString().trim().equals("0"))) {
