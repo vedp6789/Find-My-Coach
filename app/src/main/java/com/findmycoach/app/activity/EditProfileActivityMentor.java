@@ -478,7 +478,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         isGettingAddress = true;
                     } catch (Exception ignored) {
                     }
-                    openAreaOfCoachingActivity();
+//                    openAreaOfCoachingActivity();
                 }
                 return false;
             }
@@ -717,8 +717,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             teachingMediumPreference.setText(StorageHelper.getUserDetails(EditProfileActivityMentor.this, "teaching_medium"));
 
 
-            if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
-                getAddress();
+//            if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
+//                getAddress();
 
 
             Log.e(TAG, userInfo.getMultipleAddress().size() + " address size");
@@ -770,7 +770,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 addMoreAddress.setVisibility(View.VISIBLE);
                 EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListViewMentor);
                 //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
-                multipleAddressMentor.setChecked(true);
+                if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0)
+                    multipleAddressMentor.setChecked(true);
             }
 
 
@@ -810,7 +811,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
                         if (!userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
-                            if (updateAddress());
+                            if (updateAddress()) ;
                         }
 
 //                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
@@ -1008,19 +1009,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             else
                 requestParams.add("gender", "F");
 
-
             try {
                 String[] dob = profileDOB.getText().toString().split("-");
-                int mon = 0;
-                String[] months = getResources().getStringArray(R.array.months_short);
-                for (int i = 0; i < months.length; i++) {
-                    if (months[i].trim().equalsIgnoreCase(dob[1])) {
-                        mon = i + 1;
-                        break;
-                    }
-                }
-                requestParams.add("dob", dob[2] + "-" + mon + "-" + dob[0]);
-                Log.e(TAG + " dob", dob[2] + "-" + mon + "-" + dob[0]);
+                requestParams.add("dob", dob[2] + "-" + dob[1] + "-" + dob[0]);
+                Log.e(TAG + " dob", dob[2] + "-" + dob[1] + "-" + dob[0]);
             } catch (Exception e) {
                 e.printStackTrace();
             }

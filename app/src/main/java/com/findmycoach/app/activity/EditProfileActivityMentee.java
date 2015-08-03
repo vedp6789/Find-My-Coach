@@ -606,7 +606,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             addAddress.setVisibility(View.VISIBLE);
             setListViewHeightBasedOnChildren(addressListView);
             //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
-            multipleAddress.setChecked(true);
+            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0)
+                multipleAddress.setChecked(true);
         }
 
         try {
@@ -626,8 +627,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         } catch (Exception ignored) {
         }
 
-        if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
-            getAddress();
+//        if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
+//            getAddress();
 
     }
 
@@ -646,7 +647,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
                         if (!userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
-                            if (updateAddress());
+                            if (updateAddress()) ;
                         }
 
 //                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
@@ -866,16 +867,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private String getDobInYyMmDdFormat(String dobInDdMmmYyyy) {
         try {
             String[] dob = dobInDdMmmYyyy.split("-");
-            int mon = 0;
-            String[] months = getResources().getStringArray(R.array.months_short);
-            for (int i = 0; i < months.length; i++) {
-                if (months[i].trim().equalsIgnoreCase(dob[1])) {
-                    mon = i + 1;
-                    break;
-                }
-            }
-            Log.e(TAG + " dob", dob[2] + "-" + mon + "-" + dob[0]);
-            return dob[2] + "-" + mon + "-" + dob[0];
+            return dob[2] + "-" + dob[1] + "-" + dob[0];
         } catch (Exception e) {
             e.printStackTrace();
         }

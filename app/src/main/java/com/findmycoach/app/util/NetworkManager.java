@@ -38,6 +38,7 @@ public class NetworkManager {
 
     public static String getCompleteAddressString(Context context, double LATITUDE, double LONGITUDE) {
         String strAdd = "";
+        getNetworkAndGpsStatus(context);
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);

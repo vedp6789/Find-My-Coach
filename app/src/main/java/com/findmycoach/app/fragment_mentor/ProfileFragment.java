@@ -78,7 +78,6 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageButton arrow, arrow_multiple_address;
     private static final String TAG = "FMC:";
     private ScrollView scrollView;
-    private Response response;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -114,7 +113,7 @@ public class ProfileFragment extends Fragment implements Callback {
 //        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
 //        NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
 
-        response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), Response.class);
+        Response response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), Response.class);
         userInfo = response.getData();
         populateFields();
     }
@@ -340,7 +339,7 @@ public class ProfileFragment extends Fragment implements Callback {
                 buttons.add(button);
                 Log.e(TAG, title.getSub_category_name() + " : " + title.isQualified());
             }
-            populateViews(areaOfCoaching, buttons, getActivity(), profileEmail.getHeight());
+            populateViews(areaOfCoaching, buttons, getActivity(), 50);
         }
 
         String agePreferences = userInfo.getAgeGroupPreferences();
@@ -357,7 +356,7 @@ public class ProfileFragment extends Fragment implements Callback {
                 button.setText(title);
                 views.add(button);
             }
-            populateViews(loveToTeachLL, views, getActivity(), profileEmail.getHeight());
+            populateViews(loveToTeachLL, views, getActivity(), 50);
         } else {
             loveToTeachLL.removeAllViews();
         }
@@ -398,6 +397,7 @@ public class ProfileFragment extends Fragment implements Callback {
             @Override
             public void onClick(View v) {
                 if (userInfo != null) {
+                    Response response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), Response.class);
                     Intent intent = new Intent(getActivity(), EditProfileActivityMentor.class);
                     intent.putExtra("user_info", new Gson().toJson(response.getData()));
                     startActivityForResult(intent, REQUEST_CODE);
@@ -419,13 +419,20 @@ public class ProfileFragment extends Fragment implements Callback {
 
         if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
             multipleAddressValRL.setVisibility(View.GONE);
-            if (userInfo.getMultipleAddress().size() > 1) {
+
+            if (userInfo.getMultipleAddress().size() > 2) {
+                multipleAddressRL.setVisibility(View.VISIBLE);
                 otherAddressTV.setText(getResources().getString(R.string.other_addresses));
             } else {
-                otherAddressTV.setText(getResources().getString(R.string.other_address));
+                if(userInfo.getMultipleAddress().size() > 1){
+                    multipleAddressRL.setVisibility(View.VISIBLE);
+                    otherAddressTV.setText(getResources().getString(R.string.other_address));
+                }else {
+                    multipleAddressRL.setVisibility(View.GONE);
+                }
             }
             multiple_address_visible = false;
-            multipleAddressRL.setVisibility(View.VISIBLE);
+
             addressAdapter.notifyDataSetChanged();
             for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
 

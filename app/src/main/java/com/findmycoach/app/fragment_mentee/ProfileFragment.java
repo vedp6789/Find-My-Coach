@@ -55,7 +55,6 @@ public class ProfileFragment extends Fragment implements Callback {
     private AddressAdapter addressAdapter;
     private ChildDetailsAdapter childDetailsAdapter;
     private ArrayList<ChildDetails> childDetailsArrayList;
-    private ProfileResponse response;
 
 
     private static final String TAG = "FMC";
@@ -95,7 +94,7 @@ public class ProfileFragment extends Fragment implements Callback {
 //        Log.d(TAG, "getprofile");
 //        NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
 
-        response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), ProfileResponse.class);
+        ProfileResponse response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), ProfileResponse.class);
         userInfo = response.getData();
         populateFields();
     }
@@ -288,6 +287,7 @@ public class ProfileFragment extends Fragment implements Callback {
                 @Override
                 public void onClick(View v) {
                     if (userInfo != null) {
+                        ProfileResponse response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), ProfileResponse.class);
                         Intent intent = new Intent(getActivity(), EditProfileActivityMentee.class);
                         intent.putExtra("user_info", new Gson().toJson(response.getData()));
                         startActivityForResult(intent, REQUEST_CODE);
