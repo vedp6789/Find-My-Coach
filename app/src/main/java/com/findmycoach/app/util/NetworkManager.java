@@ -28,7 +28,7 @@ public class NetworkManager {
     public static String stateName = "";
     public static String countryName = "";
     public static String postalCodeName = "";
-    public static String countryCode="";
+    public static String countryCode = "";
 
     public static boolean isNetworkConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

@@ -112,6 +112,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private RadioGroup radioGroup;
     private RelativeLayout addChildLayout;
     private CheckBox multipleAddress;
+    private boolean removeProfilePicture;
 
 
     @Override
@@ -120,13 +121,14 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         setContentView(R.layout.activity_edit_profile_mentee);
         initialize();
         applyAction();
-        populateUserData();
-        isGettingAddress = false;
-        needToCheckOnDestroy = false;
 
+        Log.e(TAG, userInfo.getMultipleAddress().size() + "");
         if (userInfo.getMultipleAddress() == null || userInfo.getMultipleAddress().size() == 0)
             getAddress();
 
+        populateUserData();
+        isGettingAddress = false;
+        needToCheckOnDestroy = false;
     }
 
     @Override
@@ -152,6 +154,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private void initialize() {
         coachingTypeOptions = getResources().getStringArray(R.array.coaching_type);
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
+        removeProfilePicture = false;
         profileGender = (Spinner) findViewById(R.id.input_gender);
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
@@ -851,8 +854,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             requestParams.add("locations", new Gson().toJson(addressArrayList));
             Log.e(TAG, "mul add: " + new Gson().toJson(addressArrayList));
             requestParams.add("location_preference", String.valueOf(locationPreferenceSpinner.getSelectedItemPosition()));
-            if (!imageInBinary.equals(""))
+            if (!imageInBinary.equals("") && !removeProfilePicture)
                 requestParams.add("photograph", imageInBinary);
+            else if(removeProfilePicture)
+                requestParams.add("photograph", "");
 
             String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
             requestParams.add("id", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
@@ -883,6 +888,16 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+
+            boolean removeImage = data.getBooleanExtra("removeImage", false);
+            if(removeImage){
+                imageInBinary = "";
+                profilePicture.setImageDrawable(getResources().getDrawable(R.drawable.user_icon));
+                addText.setText(getResources().getString(R.string.add_photo));
+                removeProfilePicture = true;
+                return;
+            }
+
             Bitmap userPic = (Bitmap) data.getParcelableExtra("image");
             profilePicture.setImageBitmap(userPic);
             try {
