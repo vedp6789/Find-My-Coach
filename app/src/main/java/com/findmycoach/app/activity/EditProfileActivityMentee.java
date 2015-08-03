@@ -606,7 +606,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             addAddress.setVisibility(View.VISIBLE);
             setListViewHeightBasedOnChildren(addressListView);
             //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
-            multipleAddress.setChecked(true);
+            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0)
+                multipleAddress.setChecked(true);
         }
 
         try {
@@ -646,7 +647,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
                         if (!userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
-                            if (updateAddress());
+                            if (updateAddress()) ;
                         }
 
 //                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
@@ -875,9 +876,9 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 }
             }
             Log.e(TAG + " dob", dob[2] + "-" + mon + "-" + dob[0]);
-            if(mon == 0){
+            if (mon == 0) {
                 return dobInDdMmmYyyy;
-            }else{
+            } else {
                 return dob[2] + "-" + mon + "-" + dob[0];
             }
         } catch (Exception e) {

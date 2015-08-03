@@ -770,7 +770,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 addMoreAddress.setVisibility(View.VISIBLE);
                 EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListViewMentor);
                 //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
-                multipleAddressMentor.setChecked(true);
+                if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0)
+                    multipleAddressMentor.setChecked(true);
             }
 
 
@@ -810,7 +811,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
                         if (!userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
-                            if (updateAddress());
+                            if (updateAddress()) ;
                         }
 
 //                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
@@ -1019,9 +1020,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         break;
                     }
                 }
-                if(mon == 0){
+                if (mon == 0) {
                     requestParams.add("dob", profileDOB.getText().toString());
-                }else{
+                } else {
                     requestParams.add("dob", dob[2] + "-" + mon + "-" + dob[0]);
                 }
                 Log.e(TAG + " dob", dob[2] + "-" + mon + "-" + dob[0]);
