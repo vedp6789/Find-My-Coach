@@ -770,7 +770,7 @@
     <string name="enter_address">Enter address</string>
     <string name="enter_dob">Enter date of birth</string>
     <string name="select_dob">Select date of birth</string>
-    <string name="enter_pin">Enter zip code</string>
+    <string name="enter_pin">Enter zip/post code</string>
     <string name="prompt_state">State</string>
     <string name="prompt_country">Country</string>
     <string name="prompt_pin">Zip/Post Code</string>
