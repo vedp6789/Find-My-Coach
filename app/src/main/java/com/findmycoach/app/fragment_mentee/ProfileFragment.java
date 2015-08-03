@@ -41,6 +41,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView profileEmail;
     private TextView profileDob;
     private TextView profileAddress;
+    //private TextView profileCountry;
     private TextView trainingLocation;
     private TextView mentorFor;
     private TextView coachingType;
