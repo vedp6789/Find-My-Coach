@@ -8,54 +8,53 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 
 import com.findmycoach.app.activity.ValidatePhoneActivity;
+import com.findmycoach.app.util.MetaData;
 
 /**
  * Created by ShekharKG on 6/2/2015.
  */
 public class IncomingSms extends BroadcastReceiver {
 
-  final String TAG = "IncomingSms";
+    final String TAG = "IncomingSms";
 
-  public void onReceive(Context context, Intent intent) {
+    public void onReceive(Context context, Intent intent) {
 
-    final Bundle bundle = intent.getExtras();
+        final Bundle bundle = intent.getExtras();
 
-    try {
+        try {
 
-      if (bundle != null) {
+            if (bundle != null) {
 
-        final Object[] pdusObj = (Object[]) bundle.get("pdus");
+                final Object[] pdusObj = (Object[]) bundle.get("pdus");
 
-        for (int i = 0; i < pdusObj.length; i++) {
+                for (int i = 0; i < pdusObj.length; i++) {
 
-          SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
-          String phoneNumber = currentMessage.getDisplayOriginatingAddress();
+                    SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
+                    String phoneNumber = currentMessage.getDisplayOriginatingAddress();
 
-          String senderNum = phoneNumber;
-          String message = currentMessage.getDisplayMessageBody();
+                    String senderNum = phoneNumber;
+                    String message = currentMessage.getDisplayMessageBody();
 
-          Log.i(TAG, "senderNum: " + senderNum + "; message: " + message);
+                    Log.i(TAG, "senderNum: " + senderNum + "; message: " + message);
+                    String OTP = "";
 
-          String[] messages = message.split(" ");
-          String OTP = "";
-          for(String otp : messages){
-            try{
-              int temp = Integer.parseInt(otp);
-              OTP = temp + "";
-            }catch (Exception ignored){}
-          }
+                    try {
+                        int temp = Integer.parseInt(message.split(" ")[MetaData.otpPosition(context)]);
+                        OTP = String.valueOf(temp);
+                    } catch (Exception ignored) {
+                    }
 
-          if(OTP.length() == 6 && ValidatePhoneActivity.validatePhoneActivity != null){
-            ValidatePhoneActivity.validatePhoneActivity.getOtpFromMsg(OTP);
-          }
+                    if (OTP.length() == MetaData.otpLength(context) && ValidatePhoneActivity.validatePhoneActivity != null) {
+                        ValidatePhoneActivity.validatePhoneActivity.getOtpFromMsg(OTP);
+                    }
 
+
+                }
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Exception smsReceiver" + e);
 
         }
-      }
-
-    } catch (Exception e) {
-      Log.e(TAG, "Exception smsReceiver" + e);
-
     }
-  }
 }
