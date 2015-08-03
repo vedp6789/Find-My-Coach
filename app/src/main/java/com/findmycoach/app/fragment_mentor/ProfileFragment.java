@@ -36,6 +36,7 @@ import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.authentication.SubCategoryName;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.DateAsPerChizzle;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.views.ChizzleTextView;
 import com.google.gson.Gson;
@@ -280,7 +281,10 @@ public class ProfileFragment extends Fragment implements Callback {
         } catch (Exception e) {
         }
         try {
-            profileDob.setText((String) userInfo.getDob());
+            if(DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()) != null){
+                profileDob.setText(DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()));
+            }
+            //profileDob.setText((String) userInfo.getDob());
         } catch (Exception e) {
         }
         /*String address = "";

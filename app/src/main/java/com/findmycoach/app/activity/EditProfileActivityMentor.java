@@ -59,6 +59,7 @@ import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
+import com.findmycoach.app.util.DateAsPerChizzle;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
@@ -627,7 +628,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } catch (Exception ignored) {
             }
             try {
-                profileDOB.setText((String) userInfo.getDob());
+                if(DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()) != null){
+                    profileDOB.setText(DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()));
+                }
+
             } catch (Exception ignored) {
             }
 
@@ -767,12 +771,14 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     addressArrayListMentor.add(userInfo.getMultipleAddress().get(i));
                 }
                 addressAdapter.notifyDataSetChanged();
-                addressListViewMentor.setVisibility(View.VISIBLE);
-                addMoreAddress.setVisibility(View.VISIBLE);
+
                 EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListViewMentor);
                 //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
-                if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0)
+                if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0){
                     multipleAddressMentor.setChecked(true);
+                    addressListViewMentor.setVisibility(View.VISIBLE);
+                    addMoreAddress.setVisibility(View.VISIBLE);
+                }
             }
 
 
