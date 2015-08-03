@@ -98,6 +98,7 @@ public class ProfileFragment extends Fragment implements Callback {
 
         ProfileResponse response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), ProfileResponse.class);
         userInfo = response.getData();
+        Log.e(TAG, StorageHelper.getUserProfile(getActivity()));
         populateFields();
     }
 
@@ -193,6 +194,8 @@ public class ProfileFragment extends Fragment implements Callback {
             if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
                 imgLoader = new ImageLoader(profileImage);
                 imgLoader.execute((String) userInfo.getPhotograph());
+            } else {
+                profileImage.setImageDrawable(getResources().getDrawable(R.drawable.user_icon));
             }
             String[] mentor_for1 = getResources().getStringArray(R.array.mentor_for);
             try {

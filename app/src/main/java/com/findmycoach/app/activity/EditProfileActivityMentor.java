@@ -139,6 +139,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private ListView addressListViewMentor;
     private ArrayList<Address> addressArrayListMentor;
     private AddressAdapter addressAdapter;
+    private boolean removeProfilePicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,16 +147,17 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         setContentView(R.layout.activity_edit_profile_mentor);
         initialize();
         applyAction();
+
+        Log.e(TAG, userInfo.getMultipleAddress().size() + "");
+        if (userInfo.getMultipleAddress() == null || userInfo.getMultipleAddress().size() == 0)
+            getAddress();
+
         populateUserData();
         isGettingAddress = false;
         isDobForReview = false;
         needToCheckOnDestroy = false;
         integerArrayList_Of_UpdatedStudentPreference = new ArrayList<>();
         editProfileActivityMentor = this;
-
-        Log.e(TAG, userInfo.getMultipleAddress().size() + "");
-        if (userInfo.getMultipleAddress() == null || userInfo.getMultipleAddress().size() == 0)
-            getAddress();
 
     }
 
@@ -187,6 +189,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
         ageAndExperienceErrorCounter = 0;
         Log.e(TAG, getIntent().getStringExtra("user_info"));
+        removeProfilePicture = false;
         profileGender = (Spinner) findViewById(R.id.input_gender);
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
@@ -1036,8 +1039,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             requestParams.add("experience", experienceInput.getSelectedItemPosition() + "");
             requestParams.add("accomplishments", accomplishment.getText().toString());
-            if (!imageInBinary.equals(""))
+            if (!imageInBinary.equals("") && !removeProfilePicture)
                 requestParams.add("photograph", imageInBinary);
+            else if(removeProfilePicture)
+                requestParams.add("photograph", "");
 //            if (isReadyToTravel.isChecked())
 //                requestParams.add("availability_yn", "1");
 //            else
@@ -1150,6 +1155,16 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+
+            boolean removeImage = data.getBooleanExtra("removeImage", false);
+            if(removeImage){
+                imageInBinary = "";
+                profilePicture.setImageDrawable(getResources().getDrawable(R.drawable.user_icon));
+                addPhoto.setText(getResources().getString(R.string.add_photo));
+                removeProfilePicture = true;
+                return;
+            }
+
             Bitmap userPic = (Bitmap) data.getParcelableExtra("image");
             profilePicture.setImageBitmap(userPic);
             try {

@@ -124,6 +124,16 @@ public class ChooseImageActivity extends Activity {
                 finish();
             }
         });
+
+        findViewById(R.id.buttonRemove).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra("removeImage", true);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
     }
 
     /**

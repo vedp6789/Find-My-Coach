@@ -39,6 +39,8 @@ import com.findmycoach.app.adapter.InterestsAdapter;
 import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.category.Datum;
 import com.findmycoach.app.beans.category.DatumSub;
+import com.findmycoach.app.beans.student.Address;
+import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.fragment.TimePickerFragment;
@@ -534,11 +536,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     public void onResume() {
         super.onResume();
 //        if (location == null || location == "") {
-            location = StorageHelper.getUserAddress(getActivity());
-            if (location == null || location.trim().equals(""))
-                location = "";
 
-            updateLocationUI();
+        try {
+            ProfileResponse response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), ProfileResponse.class);
+            for (Address address : response.getData().getMultipleAddress()) {
+                if (address.getDefault_yn() == 1) {
+                    if (address.getAddressLine1() != null)
+                        location = address.getAddressLine1() + " " + address.getLocality() + " " + address.getZip();
+                }
+            }
+
+            if (location == null || location.trim().equals("")) {
+                Address address = response.getData().getMultipleAddress().get(0);
+                location = address.getAddressLine1() + " " + address.getLocality() + " " + address.getZip();
+            }
+        } catch (Exception ignored) {
+        }
+
+        if (location == null)
+            location = "";
+
+        updateLocationUI();
 //        }
     }
 

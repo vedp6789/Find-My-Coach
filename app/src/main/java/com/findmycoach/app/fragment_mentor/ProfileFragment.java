@@ -116,6 +116,7 @@ public class ProfileFragment extends Fragment implements Callback {
 
         Response response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), Response.class);
         userInfo = response.getData();
+        Log.e(TAG, StorageHelper.getUserProfile(getActivity()));
         populateFields();
     }
 
@@ -392,6 +393,8 @@ public class ProfileFragment extends Fragment implements Callback {
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
             imgLoader = new ImageLoader(profileImage);
             imgLoader.execute((String) userInfo.getPhotograph());
+        } else {
+            profileImage.setImageDrawable(getResources().getDrawable(R.drawable.user_icon));
         }
 
         teachingMediumText.setText(StorageHelper.getUserDetails(getActivity(), "teaching_medium"));
@@ -428,10 +431,10 @@ public class ProfileFragment extends Fragment implements Callback {
                 multipleAddressRL.setVisibility(View.VISIBLE);
                 otherAddressTV.setText(getResources().getString(R.string.other_addresses));
             } else {
-                if(userInfo.getMultipleAddress().size() > 1){
+                if (userInfo.getMultipleAddress().size() > 1) {
                     multipleAddressRL.setVisibility(View.VISIBLE);
                     otherAddressTV.setText(getResources().getString(R.string.other_address));
-                }else {
+                } else {
                     multipleAddressRL.setVisibility(View.GONE);
                 }
             }
