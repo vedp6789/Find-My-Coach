@@ -1009,23 +1009,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             else
                 requestParams.add("gender", "F");
 
-
             try {
                 String[] dob = profileDOB.getText().toString().split("-");
-                int mon = 0;
-                String[] months = getResources().getStringArray(R.array.months_short);
-                for (int i = 0; i < months.length; i++) {
-                    if (months[i].trim().equalsIgnoreCase(dob[1])) {
-                        mon = i + 1;
-                        break;
-                    }
-                }
-                if (mon == 0) {
-                    requestParams.add("dob", profileDOB.getText().toString());
-                } else {
-                    requestParams.add("dob", dob[2] + "-" + mon + "-" + dob[0]);
-                }
-                Log.e(TAG + " dob", dob[2] + "-" + mon + "-" + dob[0]);
+                requestParams.add("dob", dob[2] + "-" + dob[1] + "-" + dob[0]);
+                Log.e(TAG + " dob", dob[2] + "-" + dob[1] + "-" + dob[0]);
             } catch (Exception e) {
                 e.printStackTrace();
             }
