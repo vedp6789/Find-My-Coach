@@ -53,6 +53,7 @@ import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.ChildDetailsDialog;
+import com.findmycoach.app.util.DateAsPerChizzle;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
@@ -526,7 +527,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         } catch (Exception ignored) {
         }
         try {
-            profileDOB.setText((String) userInfo.getDob());
+            if(DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()) != null){
+                profileDOB.setText(DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()));
+            }
+            //profileDOB.setText((String) userInfo.getDob());
         } catch (Exception ignored) {
         }
         try {
@@ -602,12 +606,13 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 addressArrayList.add(userInfo.getMultipleAddress().get(i));
             }
             addressAdapter.notifyDataSetChanged();
-            addressListView.setVisibility(View.VISIBLE);
-            addAddress.setVisibility(View.VISIBLE);
-            setListViewHeightBasedOnChildren(addressListView);
             //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
-            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0)
+            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0){
+                addressListView.setVisibility(View.VISIBLE);
+                addAddress.setVisibility(View.VISIBLE);
+                setListViewHeightBasedOnChildren(addressListView);
                 multipleAddress.setChecked(true);
+            }
         }
 
         try {
