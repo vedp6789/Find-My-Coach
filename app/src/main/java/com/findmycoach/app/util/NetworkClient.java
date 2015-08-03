@@ -1977,6 +1977,8 @@ public class NetworkClient {
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
         client.get(context, getAbsoluteURL("currencySymbol", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {

@@ -343,7 +343,7 @@ public class ProfileFragment extends Fragment implements Callback {
                 buttons.add(button);
                 Log.e(TAG, title.getSub_category_name() + " : " + title.isQualified());
             }
-            populateViews(areaOfCoaching, buttons, getActivity(), profileEmail.getHeight());
+            populateViews(areaOfCoaching, buttons, getActivity(), 50);
         }
 
         String agePreferences = userInfo.getAgeGroupPreferences();
@@ -360,7 +360,7 @@ public class ProfileFragment extends Fragment implements Callback {
                 button.setText(title);
                 views.add(button);
             }
-            populateViews(loveToTeachLL, views, getActivity(), profileEmail.getHeight());
+            populateViews(loveToTeachLL, views, getActivity(), 50);
         } else {
             loveToTeachLL.removeAllViews();
         }

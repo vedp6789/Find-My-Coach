@@ -689,14 +689,15 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             teachingPreference.setSelection(Integer.parseInt(userInfo.getAvailabilityYn()));
             classTypeSpinner.setSelection(Integer.parseInt(userInfo.getSlotType()));
-            if (userInfo.getCurrencyCode() != null) {
+            if (userInfo.getCountry() != null) {
+         //       currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
                 String authToken = StorageHelper.getUserDetails(this, "auth_token");
                 RequestParams requestParams = new RequestParams();
-                requestParams.add("country", String.valueOf(userInfo.getCurrencyCode()));
+                requestParams.add("country", String.valueOf(userInfo.getCountry()));
                 NetworkClient.getCurrencySymbol(this, requestParams, authToken, this, 52);
-
-            } else {
-                currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
+            }
+            else {
+                currencySymbol.setText(Html.fromHtml(userInfo.getCurrencyCode()));
             }
 
 
