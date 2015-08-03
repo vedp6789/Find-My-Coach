@@ -432,7 +432,7 @@ public class ProfileFragment extends Fragment implements Callback {
                 }
             }
             multiple_address_visible = false;
-            
+
             addressAdapter.notifyDataSetChanged();
             for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
 
