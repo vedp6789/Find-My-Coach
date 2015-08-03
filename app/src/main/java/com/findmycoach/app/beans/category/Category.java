@@ -21,6 +21,17 @@ public class Category {
     @SerializedName("categories")
     @Expose
     private List<Datum> data = new ArrayList<>();
+    @SerializedName("countries")
+    @Expose
+    private List<Country> countries = new ArrayList<>();
+
+    public List<Country> getCountries() {
+        return countries;
+    }
+
+    public void setCountries(List<Country> countries) {
+        this.countries = countries;
+    }
 
     public int getOtpPosition() {
         return otpPosition;
