@@ -626,8 +626,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         } catch (Exception ignored) {
         }
 
-        if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
-            getAddress();
+//        if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
+//            getAddress();
 
     }
 

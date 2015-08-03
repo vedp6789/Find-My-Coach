@@ -717,8 +717,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             teachingMediumPreference.setText(StorageHelper.getUserDetails(EditProfileActivityMentor.this, "teaching_medium"));
 
 
-            if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
-                getAddress();
+//            if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
+//                getAddress();
 
 
             Log.e(TAG, userInfo.getMultipleAddress().size() + " address size");
