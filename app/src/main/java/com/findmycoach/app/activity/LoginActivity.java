@@ -485,34 +485,40 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     }
 
     private void getFbFriends() {
-        Log.e(TAG, "Method called");
-        Session activeSession = Session.getActiveSession();
-        if (activeSession.getState().isOpened()) {
-            Log.e(TAG, "inside if");
-            Request friendRequest = Request.newMyFriendsRequest(activeSession,
-                    new Request.GraphUserListCallback() {
-                        @Override
-                        public void onCompleted(List<GraphUser> users, com.facebook.Response response) {
-                            Log.e(TAG, "OnComplete : " + users.size());
-                            for (GraphUser user : users) {
-                                try {
-                                    Log.e(TAG, user.getFirstName());
-                                    Log.e(TAG, user.getLastName());
-                                    Log.e(TAG, user.getBirthday());
-                                    Log.e(TAG, (String) user.getProperty("email"));
-                                    Log.e(TAG, (String) user.getProperty("gender"));
-                                    GraphPlace location = user.getLocation();
-                                    Log.e(TAG, location.getName());
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+        try {
+            Log.e(TAG, "Method called");
+            Session activeSession = Session.getActiveSession();
+            if (activeSession.getState().isOpened()) {
+                Log.e(TAG, "inside if");
+                Request friendRequest = Request.newMyFriendsRequest(activeSession,
+                        new Request.GraphUserListCallback() {
+                            @Override
+                            public void onCompleted(List<GraphUser> users, com.facebook.Response response) {
+                                //Log.e(TAG, "OnComplete : " + users.size());
+                                if(users != null) {
+                                    for (GraphUser user : users) {
+                                        try {
+                                            Log.e(TAG, user.getFirstName());
+                                            Log.e(TAG, user.getLastName());
+                                            Log.e(TAG, user.getBirthday());
+                                            Log.e(TAG, (String) user.getProperty("email"));
+                                            Log.e(TAG, (String) user.getProperty("gender"));
+                                            GraphPlace location = user.getLocation();
+                                            Log.e(TAG, location.getName());
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    });
-            Bundle params = new Bundle();
-            params.putString("fields", "id,name,friends");
-            friendRequest.setParameters(params);
-            friendRequest.executeAsync();
+                        });
+                Bundle params = new Bundle();
+                params.putString("fields", "id,name,friends");
+                friendRequest.setParameters(params);
+                friendRequest.executeAsync();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
