@@ -61,6 +61,13 @@ public class HomeFragment extends Fragment implements Callback {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        //Log.e(TAG,"onResume in Home");
+        getNotifications();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         homeFragment = this;
