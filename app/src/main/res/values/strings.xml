@@ -761,6 +761,7 @@
     <string name="prompt_address">Address</string>
     <string name="prompt_flat_street">Flat No./House No./Street</string>
     <string name="prompt_address_line_1">Address</string>
+    <string name="prompt_group_class_location">Group class location</string>
 
     <string name="prompt_address1">City, state, country</string>
     <string name="prompt_city">City</string>
