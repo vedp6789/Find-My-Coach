@@ -1,9 +1,7 @@
 package com.findmycoach.app.util;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,20 +17,14 @@ import android.widget.TextView;
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.category.Country;
 import com.findmycoach.app.beans.student.Address;
-import com.findmycoach.app.beans.student.ChildDetails;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.views.ChizzleAutoCompleteTextView;
 import com.findmycoach.app.views.ChizzleEditText;
-import com.findmycoach.app.views.ChizzleTextView;
-import com.findmycoach.app.views.DobPicker;
 import com.loopj.android.http.RequestParams;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by abhi7 on 27/07/15.
@@ -140,16 +132,9 @@ public class AddAddressDialog implements Callback {
         sp_country = (Spinner) dialog.findViewById(R.id.country);
 
         country_names = new ArrayList<String>();
-        countries = new ArrayList<Country>();
         countries = MetaData.getCountryObject(context);
 
-        updateCountryByLocation();
-
-
         /* Code to set country as per default Country code*/
-
-
-
 
 
         if (countries != null && countries.size() > 0) {
@@ -159,6 +144,8 @@ public class AddAddressDialog implements Callback {
             }
             sp_country.setAdapter(new ArrayAdapter<String>(context, R.layout.textview, country_names));
         }
+
+        updateCountryByLocation();
 
         locality.addTextChangedListener(new TextWatcher() {
             @Override
@@ -192,6 +179,8 @@ public class AddAddressDialog implements Callback {
                         address.setDefault_yn(0);
                         if(countries != null && countries.size() > 0)
                             address.setCountry(countries.get(sp_country.getSelectedItemPosition()).getId());
+
+                        Log.e(TAG, address.getAddressLine1() + " : " + address.getLocality() + " : " + address.getZip() + " : " + address.getCountry());
                         onChildDetailsAdded(address);
                     }catch (Exception e){
                         e.printStackTrace();

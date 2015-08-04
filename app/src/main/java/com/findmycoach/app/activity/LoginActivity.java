@@ -114,6 +114,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         if (userToken != null && phnVerified != null) {
             Log.e(TAG, "Login from onCreate");
             Response response = new Gson().fromJson(StorageHelper.getUserProfile(this), Response.class);
+            Log.e(TAG, StorageHelper.getUserProfile(this));
             int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
             if (response.getData().getMultipleAddress() == null || response.getData().getMultipleAddress().size() == 0) {
                 if (userGroup == 2) {
