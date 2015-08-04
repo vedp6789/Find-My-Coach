@@ -193,13 +193,13 @@ public class ProfileFragment extends Fragment implements Callback {
                 if (multiple_address_visible) {
                     multiple_address_visible = false;
                     multipleAddressValRL.setVisibility(View.GONE);
+                    multipleAddressRL.requestFocus();
                     arrow_multiple_address.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
                 } else {
                     multipleAddressValRL.setVisibility(View.VISIBLE);
                     multiple_address_visible = true;
                     arrow_multiple_address.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
-                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-
+                    summaryHeader.requestFocus();
                 }
 
             }
@@ -211,13 +211,13 @@ public class ProfileFragment extends Fragment implements Callback {
                 if (multiple_address_visible) {
                     multiple_address_visible = false;
                     multipleAddressValRL.setVisibility(View.GONE);
+                    multipleAddressRL.requestFocus();
                     arrow_multiple_address.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
                 } else {
                     multipleAddressValRL.setVisibility(View.VISIBLE);
                     multiple_address_visible = true;
                     arrow_multiple_address.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
-                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-
+                    summaryHeader.requestFocus();
                 }
 
             }
@@ -433,7 +433,8 @@ public class ProfileFragment extends Fragment implements Callback {
 
         if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
             multipleAddressValRL.setVisibility(View.GONE);
-
+            arrow_multiple_address.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
+            multiple_address_visible=false;
             if (userInfo.getMultipleAddress().size() > 2) {
                 multipleAddressRL.setVisibility(View.VISIBLE);
                 otherAddressTV.setText(getResources().getString(R.string.other_addresses));
@@ -445,7 +446,6 @@ public class ProfileFragment extends Fragment implements Callback {
                     multipleAddressRL.setVisibility(View.GONE);
                 }
             }
-            multiple_address_visible = false;
 
             addressAdapter.notifyDataSetChanged();
             for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
