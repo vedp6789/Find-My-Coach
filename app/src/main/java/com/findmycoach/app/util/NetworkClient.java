@@ -1984,6 +1984,8 @@ public class NetworkClient {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
                     String responseJson = new String(responseBody);
+                    Log.d("CurrencyNew",responseJson);
+
                     Currency response = new Gson().fromJson(responseJson, Currency.class);
                     callback.successOperation(response, statusCode, calledApiValue);
                 } catch (Exception e) {
@@ -1996,6 +1998,8 @@ public class NetworkClient {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
                     String responseJson = new String(responseBody);
+                    Log.d("CurrencyNew",responseJson);
+
                     Currency response = new Gson().fromJson(responseJson, Currency.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
