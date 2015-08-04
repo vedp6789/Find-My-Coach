@@ -1598,5 +1598,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         addressAdapter.notifyDataSetChanged();
         EditProfileActivityMentee.setHeight(addressListViewMentor);
         addressListViewMentor.setVisibility(View.VISIBLE);
+        addMoreAddress.requestFocus();
     }
 }
