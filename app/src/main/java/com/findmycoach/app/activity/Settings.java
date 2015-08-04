@@ -44,7 +44,7 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("FMC","onPause");
+        Log.d("FMC", "onPause");
     }
 
     @Override
@@ -115,6 +115,17 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
                 break;
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        Log.e("fmc", "Settings OnBackPressed");
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            Log.e("fmc", "Back stack is empty");
+            startActivity(new Intent(this, DashboardActivity.class));
+        }
+        super.onBackPressed();
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -72,7 +72,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private EditText inputUserName;
     private EditText inputPassword;
     private ProgressDialog progressDialog;
-    private int user_group;
+    public int user_group;
     private TextView countryCodeTV;
     private ArrayList<String> country_code;
     private int retryFbLogin;
@@ -114,6 +114,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         if (userToken != null && phnVerified != null) {
             Log.e(TAG, "Login from onCreate");
             Response response = new Gson().fromJson(StorageHelper.getUserProfile(this), Response.class);
+            Log.e(TAG, StorageHelper.getUserProfile(this));
             int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
             if (response.getData().getMultipleAddress() == null || response.getData().getMultipleAddress().size() == 0) {
                 if (userGroup == 2) {
@@ -424,9 +425,15 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private void callWebservice(GraphUser user) {
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
-        requestParams.add("first_name", user.getFirstName());
-        requestParams.add("middle_name", user.getMiddleName());
-        requestParams.add("last_name", user.getLastName());
+        try{
+            requestParams.add("first_name", user.getFirstName());
+        }catch (Exception ignored){}
+        try{
+            requestParams.add("middle_name", user.getMiddleName());
+        }catch (Exception ignored){}
+        try{
+            requestParams.add("last_name", user.getLastName());
+        }catch (Exception ignored){}
         try {
             String dob = user.getBirthday();
             String[] dobs = dob.split("/");
@@ -451,9 +458,16 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             Log.e(TAG, location.getName());
         } catch (Exception ignored) {
         }
-        requestParams.add("facebook_link", user.getLink());
-        requestParams.add("gender", (String) user.getProperty("gender"));
-        requestParams.add("photograph", "http://graph.facebook.com/" + user.getId() + "/picture?type=large");
+        try{
+            requestParams.add("facebook_link", user.getLink());
+        }catch (Exception ignored){}
+        try{
+            String gender = user.getProperty("gender").toString().toUpperCase();
+            requestParams.add("gender", String.valueOf(gender.charAt(0)));
+        }catch (Exception ignored){}
+        try{
+            requestParams.add("photograph", "http://graph.facebook.com/" + user.getId() + "/picture?type=large");
+        }catch (Exception ignored){}
         requestParams.add("user_group", String.valueOf(user_group));
         saveUserEmail((String) user.getProperty("email"));
         try {
@@ -580,8 +594,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         } catch (Exception ignored) {
         }
         try {
-            Log.e(TAG, currentPerson.getCurrentLocation());
-            Log.e(TAG, currentPerson.getBirthday());
             requestParams.add("dob", currentPerson.getBirthday());
         } catch (Exception ignored) {
         }

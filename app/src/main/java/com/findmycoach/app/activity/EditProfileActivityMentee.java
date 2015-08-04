@@ -706,6 +706,14 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
         }
 
+        if(userInfo.getGroupClassPreference()!=null && userInfo.getGroupClassPreference().equalsIgnoreCase("0")){
+            radioGroup.check(R.id.radioHostingYes);
+        }
+        else  {
+            radioGroup.check(R.id.radioHostingNo);
+
+        }
+
 
 //        if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
 //            getAddress();
