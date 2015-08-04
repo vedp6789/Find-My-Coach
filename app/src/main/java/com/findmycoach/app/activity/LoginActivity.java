@@ -580,8 +580,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         } catch (Exception ignored) {
         }
         try {
-            Log.e(TAG, currentPerson.getCurrentLocation());
-            Log.e(TAG, currentPerson.getBirthday());
             requestParams.add("dob", currentPerson.getBirthday());
         } catch (Exception ignored) {
         }
