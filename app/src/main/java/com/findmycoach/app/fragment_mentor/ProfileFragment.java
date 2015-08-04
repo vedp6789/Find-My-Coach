@@ -80,6 +80,8 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageButton arrow, arrow_multiple_address;
     private static final String TAG = "FMC:";
     private ScrollView scrollView;
+    private ChizzleTextView slotType;
+    private ChizzleTextView gender;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -156,6 +158,8 @@ public class ProfileFragment extends Fragment implements Callback {
         multipleAddressValRL = (RelativeLayout) view.findViewById(R.id.multiple_Address_Val_RL);
         multipleAddressLV = (ListView) view.findViewById(R.id.multipleAddressLV);
         addressArrayListMentor = new ArrayList<>();
+        gender=(ChizzleTextView)view.findViewById(R.id.profile_gender);
+        slotType=(ChizzleTextView)view.findViewById(R.id.classTypeValue);
         addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayListMentor);
         multipleAddressLV.setAdapter(addressAdapter);
 
@@ -484,6 +488,26 @@ public class ProfileFragment extends Fragment implements Callback {
         else {
             multipleAddressRL.setVisibility(View.VISIBLE);
 
+        }
+        String[] slotTypeArray=getActivity().getResources().getStringArray(R.array.mentor_class_type);
+        switch (Integer.parseInt(userInfo.getSlotType())) {
+            case 0:
+                slotType.setText(slotTypeArray[0]);
+                break;
+            case 1:
+                slotType.setText(slotTypeArray[1]);
+                break;
+            case 2:
+                slotType.setText(slotTypeArray[2]);
+                break;
+
+        }
+
+        if(userInfo.getGender().equalsIgnoreCase("M")) {
+            gender.setText("Male");
+        }
+        else  {
+            gender.setText("Female");
         }
 
 
