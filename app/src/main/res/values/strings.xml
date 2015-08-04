@@ -759,8 +759,8 @@
     <string name="prompt_qualified">Select in which area you are qualified?</string>
     <string name="prompt_submit">Submit</string>
     <string name="prompt_address">Address</string>
-    <string name="prompt_flat_street">Flat/house/street no.</string>
-    <string name="prompt_address_line_1">Address line 1</string>
+    <string name="prompt_flat_street">Flat No./House No./Street</string>
+    <string name="prompt_address_line_1">Address</string>
 
     <string name="prompt_address1">City, state, country</string>
     <string name="prompt_city">City</string>
