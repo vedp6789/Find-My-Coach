@@ -47,6 +47,7 @@ import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.authentication.SubCategoryName;
 import com.findmycoach.app.beans.category.Category;
+import com.findmycoach.app.beans.category.Country;
 import com.findmycoach.app.beans.category.Datum;
 import com.findmycoach.app.beans.category.DatumSub;
 import com.findmycoach.app.beans.mentor.Currency;
@@ -60,6 +61,7 @@ import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.DateAsPerChizzle;
+import com.findmycoach.app.util.MetaData;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
@@ -96,7 +98,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private EditText profileFirstName;
     private EditText profileMiddleName;
     private EditText profileLastName;
-    private Spinner profileGender;
+    private Spinner profileGender, profileCountry;
     private TextView profileDOB;
     private EditText profileAddress;
     private AutoCompleteTextView profileAddress1;
@@ -140,6 +142,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private ArrayList<Address> addressArrayListMentor;
     private AddressAdapter addressAdapter;
     private boolean removeProfilePicture;
+    private List<Country> countries;
+    private ArrayList<String> country_names;
+    public static int FLAG_FOR_EDIT_PROFILE_MENTOR=-11;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +167,22 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
     }
 
+    public void updateCountryByLocation() {
+        if (countries != null && countries.size() > 0) {
+            String country_code = NetworkManager.countryCode;
+            Log.e(TAG, "country code 1: " + country_code);
+            if (country_code != null && country_code != "") {
+                for (int i = 0; i < countries.size(); i++) {
+                    Country country = countries.get(i);
+                    String country_code_from_server = country.getIso();
+                    Log.e(TAG, "country code" + i + " " + country_code_from_server);
+                    if (country_code_from_server.equals(country_code)) {
+                        profileCountry.setSelection(i);
+                    }
+                }
+            }
+        }
+    }
 
     @Override
     protected void onResume() {
@@ -224,6 +246,20 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         addressArrayListMentor = new ArrayList<>();
         addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayListMentor);
         addressListViewMentor.setAdapter(addressAdapter);
+
+        profileCountry = (Spinner) findViewById(R.id.country);
+        country_names = new ArrayList<String>();
+        countries = new ArrayList<Country>();
+        countries = MetaData.getCountryObject(this);
+
+        if (countries != null && countries.size() > 0) {
+            for (int i = 0; i < countries.size(); i++) {
+                Country country = countries.get(i);
+                country_names.add(country.getShortName());
+            }
+
+            profileCountry.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, country_names));
+        }
 
         String[] yearOfExperience = new String[51];
         for (int i = 0; i < yearOfExperience.length; i++) {
@@ -478,7 +514,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         || (actionId == EditorInfo.IME_ACTION_DONE
                         || actionId == EditorInfo.IME_ACTION_NEXT)) {
                     try {
-                        new AddressFromZip(EditProfileActivityMentor.this, profileAddress1, profileAddress, currencySymbol, true).execute(pinCode.getText().toString());
+                        new AddressFromZip(EditProfileActivityMentor.this, EditProfileActivityMentor.this, profileAddress1, profileAddress, currencySymbol, true,FLAG_FOR_EDIT_PROFILE_MENTOR).execute(pinCode.getText().toString());
                         isGettingAddress = true;
                     } catch (Exception ignored) {
                     }
@@ -631,7 +667,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } catch (Exception ignored) {
             }
             try {
-                if(DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()) != null){
+                if (DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()) != null) {
                     profileDOB.setText(DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()));
                 }
 
@@ -693,13 +729,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             teachingPreference.setSelection(Integer.parseInt(userInfo.getAvailabilityYn()));
             classTypeSpinner.setSelection(Integer.parseInt(userInfo.getSlotType()));
             if (userInfo.getCountry() != null) {
-         //       currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
+                //       currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
                 String authToken = StorageHelper.getUserDetails(this, "auth_token");
                 RequestParams requestParams = new RequestParams();
                 requestParams.add("country", String.valueOf(userInfo.getCountry()));
                 NetworkClient.getCurrencySymbol(this, requestParams, authToken, this, 52);
-            }
-            else {
+            } else {
                 currencySymbol.setText(Html.fromHtml(userInfo.getCurrencyCode()));
             }
 
@@ -767,6 +802,21 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     city = address.getLocality();                 /* city string initially set to the city i.e. earlier get updated*/
                 } catch (Exception ignored) {
                 }
+                try {
+                    int country_id;
+                    country_id = address.getCountry();
+                    if (countries != null && countries.size() > 0) {
+                        for (int i = 0; i < countries.size(); i++) {
+                            Country country = countries.get(i);
+                            if (country_id == country.getId()) {
+                                profileCountry.setSelection(i);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
 
                 addressArrayListMentor.clear();
                 addressAdapter.notifyDataSetChanged();
@@ -777,6 +827,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
                 EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListViewMentor);
                 //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
+                
                 if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0){
                    // multipleAddressMentor.setChecked(true);
                     addressListViewMentor.setVisibility(View.VISIBLE);
@@ -886,6 +937,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } catch (Exception ignored) {
             }
         }
+
+        updateCountryByLocation();
         return true;
     }
 
@@ -1062,7 +1115,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             requestParams.add("accomplishments", accomplishment.getText().toString());
             if (!imageInBinary.equals("") && !removeProfilePicture)
                 requestParams.add("photograph", imageInBinary);
-            else if(removeProfilePicture)
+            else if (removeProfilePicture)
                 requestParams.add("photograph", "");
 //            if (isReadyToTravel.isChecked())
 //                requestParams.add("availability_yn", "1");
@@ -1125,12 +1178,16 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
 
             Address address = new Address();
-            address.setAddressLine1(profileAddress.getText().toString());
-            address.setLocality(profileAddress1.getText().toString());
-            address.setZip(pinCode.getText().toString());
-            address.setDefault_yn(1);
-
-
+            try {
+                address.setAddressLine1(profileAddress.getText().toString());
+                address.setLocality(profileAddress1.getText().toString());
+                address.setZip(pinCode.getText().toString());
+                address.setDefault_yn(1);
+                Country country = countries.get(profileCountry.getSelectedItemPosition());
+                address.setCountry(country.getId()); /* setting country id from countries list*/
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             int position = -1;
             Log.e(TAG, addressArrayListMentor.size() + " address size");
             for (Address a : addressArrayListMentor) {
@@ -1141,12 +1198,14 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     break;
                 }
             }
-
-            if (position == -1)
-                addressArrayListMentor.add(address);
-            else
-                addressArrayListMentor.set(position, address);
-
+            try {
+                if (position == -1)
+                    addressArrayListMentor.add(address);
+                else
+                    addressArrayListMentor.set(position, address);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             requestParams.add("locations", new Gson().toJson(addressArrayListMentor));
             Log.e(TAG, "locations sending : " + new Gson().toJson(addressArrayListMentor));
@@ -1159,10 +1218,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             requestParams.add("section_3", myExperience.getText().toString());
             requestParams.add("section_4", myTeachingMethodology.getText().toString());
             requestParams.add("section_5", myAwards.getText().toString());
-            if (isGettingAddress && NetworkManager.countryCode != null && !NetworkManager.countryCode.equals("")) {
+            /*if (isGettingAddress && NetworkManager.countryCode != null && !NetworkManager.countryCode.equals("")) {
                 requestParams.add("country", NetworkManager.countryCode.trim());
                 Log.e(TAG, "Country : " + NetworkManager.countryCode);
-            }
+            }*/
             Log.e(TAG, "request params: " + requestParams.toString());
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
@@ -1178,7 +1237,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
 
             boolean removeImage = data.getBooleanExtra("removeImage", false);
-            if(removeImage){
+            if (removeImage) {
                 imageInBinary = "";
                 profilePicture.setImageDrawable(getResources().getDrawable(R.drawable.user_icon));
                 addPhoto.setText(getResources().getString(R.string.add_photo));

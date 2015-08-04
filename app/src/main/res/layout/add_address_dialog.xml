@@ -67,6 +67,38 @@
                 android:textCursorDrawable="@drawable/cursor_purple"
                 android:textSize="@dimen/profile_details" />
 
+            <Spinner
+                android:id="@+id/country"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_button_height"
+                android:background="@android:color/transparent"
+                android:spinnerMode="dropdown"
+                android:layout_below="@+id/zip"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-10dp"
+                android:orientation="vertical"
+                android:layout_below="@+id/country">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginBottom="-1dp"
+                    android:src="@drawable/drop_down_arrow_purple_small" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/purple_light" />
+
+            </LinearLayout>
+
+
+
         </RelativeLayout>
 
         <LinearLayout

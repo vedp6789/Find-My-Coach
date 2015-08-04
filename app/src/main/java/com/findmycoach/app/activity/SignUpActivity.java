@@ -157,10 +157,18 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             finish();
         else if (id == R.id.facebook_login_button && LoginActivity.loginActivity != null) {
             progressDialog.show();
+            if(radioButton_mentee_signup.isChecked())
+                LoginActivity.loginActivity.user_group = 2;
+            else
+                LoginActivity.loginActivity.user_group = 3;
             LoginActivity.loginActivity.actionFacebook.callOnClick();
             finish();
         } else if (id == R.id.sign_in_button && LoginActivity.loginActivity != null) {
             progressDialog.show();
+            if(radioButton_mentee_signup.isChecked())
+                LoginActivity.loginActivity.user_group = 2;
+            else
+                LoginActivity.loginActivity.user_group = 3;
             LoginActivity.loginActivity.mSignInButton.callOnClick();
             finish();
         }

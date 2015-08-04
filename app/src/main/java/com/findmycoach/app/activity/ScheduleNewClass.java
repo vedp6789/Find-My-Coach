@@ -118,6 +118,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     ArrayAdapter<String> arrayAdapter;
     private boolean isGettingAddress;
     private List<Prediction> predictions;
+    public static int FLAG_FOR_SCHEDULE_NEW_CLASS=-7;
 
     @Override
     protected void onDestroy() {
@@ -323,7 +324,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                         || (actionId == EditorInfo.IME_ACTION_DONE)
                         || actionId == EditorInfo.IME_ACTION_NEXT) {
                     try {
-                        new AddressFromZip(ScheduleNewClass.this, city, et_tutorial_location, true).execute(et_pin_code.getText().toString());
+                        new AddressFromZip(ScheduleNewClass.this,ScheduleNewClass.this, city, et_tutorial_location, true,FLAG_FOR_SCHEDULE_NEW_CLASS).execute(et_pin_code.getText().toString());
                         isGettingAddress = true;
                     } catch (Exception ignored) {
                     }
