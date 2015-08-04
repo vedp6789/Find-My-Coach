@@ -827,8 +827,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
                 EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListViewMentor);
                 //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
-                if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
-                    multipleAddressMentor.setChecked(true);
+                
+                if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0){
+                   // multipleAddressMentor.setChecked(true);
                     addressListViewMentor.setVisibility(View.VISIBLE);
                     addMoreAddress.setVisibility(View.VISIBLE);
                 }
@@ -837,6 +838,19 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+
+        if(userInfo.getAddressFlagMentor().equalsIgnoreCase("0")){
+            multipleAddressMentor.setChecked(false);
+            addressListViewMentor.setVisibility(View.GONE);
+            addMoreAddress.setVisibility(View.GONE);
+        }
+        else {
+            multipleAddressMentor.setChecked(true);
+            addMoreAddress.setVisibility(View.VISIBLE);
+            addressListViewMentor.setVisibility(View.VISIBLE);
+
         }
 
 
@@ -906,7 +920,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
 
         if (userInfo != null) {
-            userInfo.setCurrencyCode(NetworkManager.countryCode);
+            userInfo.setCountry(NetworkManager.countryCode);
         }
 
         if (userInfo != null && (userInfo.getZip() == null || userInfo.getZip().toString().trim().equals("") || userInfo.getZip().toString().trim().equals("0"))) {
@@ -1066,6 +1080,14 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             requestParams.add("middle_name", profileMiddleName.getText().toString().trim());
             requestParams.add("last_name", profileLastName.getText().toString().trim());
             String sex = profileGender.getSelectedItem().toString();
+            if(multipleAddressMentor.isChecked()){
+                requestParams.add("multiple_address_flag","1");
+
+            }
+            else {
+                requestParams.add("multiple_address_flag","0");
+
+            }
             if (sex.equals("Male"))
                 requestParams.add("gender", "M");
             else

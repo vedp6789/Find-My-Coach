@@ -144,7 +144,6 @@ public class ProfileFragment extends Fragment implements Callback {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             String updatedUserJson = data.getStringExtra("user_info");
-            Log.d(TAG, updatedUserJson);
             userInfo = new Gson().fromJson(updatedUserJson, Data.class);
             populateFields();
         }
@@ -252,13 +251,10 @@ public class ProfileFragment extends Fragment implements Callback {
             }
 
 
-            if (userInfo.getMultipleAddress() != null || userInfo.getMultipleAddress().size() < 1) {
-                preferredAddressLayout.setVisibility(View.GONE);
-            }
 
             addressArrayList = new ArrayList<>();
 
-            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() >= 1) {
+            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 1) {
                 preferredAddressLayout.setVisibility(View.VISIBLE);
                 for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
                     int default_yn = userInfo.getMultipleAddress().get(i).getDefault_yn();
@@ -305,6 +301,14 @@ public class ProfileFragment extends Fragment implements Callback {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        if(userInfo.getAddressFlag().equalsIgnoreCase("0")){
+            preferredAddressLayout.setVisibility(View.GONE);
+        }
+        else {
+            preferredAddressLayout.setVisibility(View.VISIBLE);
+
+        }
+
     }
 
 

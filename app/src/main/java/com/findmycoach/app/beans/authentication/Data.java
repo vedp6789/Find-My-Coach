@@ -121,6 +121,21 @@ public class Data {
     @Expose
     private String slotType;
 
+    @SerializedName("multiple_address_flag")
+    @Expose
+    private String addressFlagMentor;
+
+
+    public String getAddressFlagMentor() {
+        return addressFlagMentor;
+    }
+
+    public void setAddressFlagMentor(String addressFlagMentor) {
+        this.addressFlagMentor = addressFlagMentor;
+    }
+
+
+
 
     public String getSlotType() {
         return slotType;

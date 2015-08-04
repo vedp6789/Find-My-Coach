@@ -58,6 +58,10 @@ public class Data {
     @Expose
     private String gender;
 
+    @SerializedName("multiple_address_flag")
+    @Expose
+    private String addressFlag;
+
     @SerializedName("connection_id")
     @Expose
     private String connectionId;
@@ -78,11 +82,24 @@ public class Data {
     @Expose
     private ArrayList<ChildDetails> children;
 
+
+    @SerializedName("group_class_preference")
+    @Expose
+    private String groupClassPreference;
+
     @SerializedName("locations")
     @Expose
+
+
     private ArrayList<Address> multipleAddress;
 
+    public String getAddressFlag() {
+        return addressFlag;
+    }
 
+    public void setAddressFlag(String addressFlag) {
+        this.addressFlag = addressFlag;
+    }
 
     public int getLocationPreference() {
         return locationPreference;
@@ -98,6 +115,14 @@ public class Data {
 
     public void setMultipleAddress(ArrayList<Address> multipleAddress) {
         this.multipleAddress = multipleAddress;
+    }
+
+    public String getGroupClassPreference() {
+        return groupClassPreference;
+    }
+
+    public void setGroupClassPreference(String groupClassPreference) {
+        this.groupClassPreference = groupClassPreference;
     }
 
     public ArrayList<ChildDetails> getChildren() {

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.Log;
@@ -79,6 +80,8 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageButton arrow, arrow_multiple_address;
     private static final String TAG = "FMC:";
     private ScrollView scrollView;
+    private ChizzleTextView slotType;
+    private ChizzleTextView gender;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -155,6 +158,8 @@ public class ProfileFragment extends Fragment implements Callback {
         multipleAddressValRL = (RelativeLayout) view.findViewById(R.id.multiple_Address_Val_RL);
         multipleAddressLV = (ListView) view.findViewById(R.id.multipleAddressLV);
         addressArrayListMentor = new ArrayList<>();
+        gender=(ChizzleTextView)view.findViewById(R.id.profile_gender);
+        slotType=(ChizzleTextView)view.findViewById(R.id.classTypeValue);
         addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayListMentor);
         multipleAddressLV.setAdapter(addressAdapter);
 
@@ -174,12 +179,14 @@ public class ProfileFragment extends Fragment implements Callback {
                 if (hiddenFlag) {
                     aboutMeLL.setVisibility(View.GONE);
                     arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
-                    hiddenFlag = false;
+                    hiddenFlag=false;
+                    summaryHeader.requestFocus();
+
                 } else {
                     aboutMeLL.setVisibility(View.VISIBLE);
                     arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
                     hiddenFlag = true;
-                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                    myAwards.requestFocus();
                 }
             }
         });
@@ -226,14 +233,16 @@ public class ProfileFragment extends Fragment implements Callback {
             public void onClick(View v) {
                 if (hiddenFlag) {
                     aboutMeLL.setVisibility(View.GONE);
+                    hiddenFlag=false;
+                    summaryHeader.requestFocus();
                     arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
-                    hiddenFlag = false;
 
                 } else {
                     aboutMeLL.setVisibility(View.VISIBLE);
                     arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
                     hiddenFlag = true;
-                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                    myAwards.requestFocus();
+
                 }
             }
         });
@@ -335,7 +344,7 @@ public class ProfileFragment extends Fragment implements Callback {
 
         profilePhone.setText(userInfo.getPhonenumber());
         List<SubCategoryName> areaOfInterests = userInfo.getSubCategoryName();
-        if (areaOfInterests.get(0) != null && areaOfInterests.size() > 0) {
+        if (areaOfInterests!=null && areaOfInterests.get(0) != null && areaOfInterests.size() > 0) {
             List<View> buttons = new ArrayList<>();
             LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             for (SubCategoryName title : areaOfInterests) {
@@ -422,6 +431,8 @@ public class ProfileFragment extends Fragment implements Callback {
 
         }
 
+
+
         addressArrayListMentor.clear();
 
         if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
@@ -471,6 +482,34 @@ public class ProfileFragment extends Fragment implements Callback {
             multipleAddressRL.setVisibility(View.GONE);
             multipleAddressValRL.setVisibility(View.GONE);
         }
+        if(userInfo.getAddressFlagMentor().equalsIgnoreCase("0")){
+            multipleAddressRL.setVisibility(View.GONE);
+        }
+        else {
+            multipleAddressRL.setVisibility(View.VISIBLE);
+
+        }
+        String[] slotTypeArray=getActivity().getResources().getStringArray(R.array.mentor_class_type);
+        switch (Integer.parseInt(userInfo.getSlotType())) {
+            case 0:
+                slotType.setText(slotTypeArray[0]);
+                break;
+            case 1:
+                slotType.setText(slotTypeArray[1]);
+                break;
+            case 2:
+                slotType.setText(slotTypeArray[2]);
+                break;
+
+        }
+
+        if(userInfo.getGender().equalsIgnoreCase("M")) {
+            gender.setText("Male");
+        }
+        else  {
+            gender.setText("Female");
+        }
+
 
 
     }
