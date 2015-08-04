@@ -965,10 +965,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             requestParams.add("id", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
             requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
             Log.e(TAG, "Country : " + NetworkManager.countryCode);
-            /*if (isGettingAddress && NetworkManager.countryCode != null && !NetworkManager.countryCode.equals("")) {
-                requestParams.add("country", NetworkManager.countryCode.trim());
-            }*/
-
+            requestParams.add("country", String.valueOf(countries.get(profileCountry.getSelectedItemPosition()).getId()));
             Log.e(TAG,"request params in edit profile post: "+requestParams);
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
 

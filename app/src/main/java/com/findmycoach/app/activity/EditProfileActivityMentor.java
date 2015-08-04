@@ -144,7 +144,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private boolean removeProfilePicture;
     private List<Country> countries;
     private ArrayList<String> country_names;
-    public static int FLAG_FOR_EDIT_PROFILE_MENTOR=-11;
+    public static int FLAG_FOR_EDIT_PROFILE_MENTOR = -11;
 
 
     @Override
@@ -251,6 +251,23 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         country_names = new ArrayList<String>();
         countries = new ArrayList<Country>();
         countries = MetaData.getCountryObject(this);
+
+        profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String authToken = StorageHelper.getUserDetails(EditProfileActivityMentor.this, "auth_token");
+          RequestParams requestParams = new RequestParams();
+
+
+                requestParams.add("country", countries.get(position).getIso());
+               NetworkClient.getCurrencySymbol(EditProfileActivityMentor.this, requestParams, authToken, EditProfileActivityMentor.this, 52);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         if (countries != null && countries.size() > 0) {
             for (int i = 0; i < countries.size(); i++) {
@@ -514,7 +531,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         || (actionId == EditorInfo.IME_ACTION_DONE
                         || actionId == EditorInfo.IME_ACTION_NEXT)) {
                     try {
-                        new AddressFromZip(EditProfileActivityMentor.this, EditProfileActivityMentor.this, profileAddress1, profileAddress, currencySymbol, true,FLAG_FOR_EDIT_PROFILE_MENTOR).execute(pinCode.getText().toString());
+                        new AddressFromZip(EditProfileActivityMentor.this, EditProfileActivityMentor.this, profileAddress1, profileAddress, currencySymbol, true, FLAG_FOR_EDIT_PROFILE_MENTOR).execute(pinCode.getText().toString());
                         isGettingAddress = true;
                     } catch (Exception ignored) {
                     }
@@ -728,16 +745,20 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             teachingPreference.setSelection(Integer.parseInt(userInfo.getAvailabilityYn()));
             classTypeSpinner.setSelection(Integer.parseInt(userInfo.getSlotType()));
-            if (userInfo.getCountry() != null) {
-                //       currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
-                String authToken = StorageHelper.getUserDetails(this, "auth_token");
-                RequestParams requestParams = new RequestParams();
-                requestParams.add("country", String.valueOf(userInfo.getCountry()));
-                NetworkClient.getCurrencySymbol(this, requestParams, authToken, this, 52);
-            } else {
+//            if (userInfo.getCountry() != null) {
+//                //       currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
+//                String authToken = StorageHelper.getUserDetails(this, "auth_token");
+//                RequestParams requestParams = new RequestParams();
+//                requestParams.add("country", String.valueOf(userInfo.getCountry()));
+//                NetworkClient.getCurrencySymbol(this, requestParams, authToken, this, 52);
+//            } else {
+//                currencySymbol.setText(Html.fromHtml(userInfo.getCurrencyCode()));
+//            }
+
+            if(userInfo.getCurrencyCode()!=null){
                 currencySymbol.setText(Html.fromHtml(userInfo.getCurrencyCode()));
             }
-
+//
 
             if (!userInfo.getSection1().equalsIgnoreCase("")) {
                 myQualification.setText(userInfo.getSection1());
@@ -827,9 +848,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
                 EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListViewMentor);
                 //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
-                
-                if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0){
-                   // multipleAddressMentor.setChecked(true);
+
+                if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
+                    // multipleAddressMentor.setChecked(true);
                     addressListViewMentor.setVisibility(View.VISIBLE);
                     addMoreAddress.setVisibility(View.VISIBLE);
                 }
@@ -841,12 +862,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
 
 
-        if(userInfo.getAddressFlagMentor().equalsIgnoreCase("0")){
+        if (userInfo.getAddressFlagMentor().equalsIgnoreCase("0")) {
             multipleAddressMentor.setChecked(false);
             addressListViewMentor.setVisibility(View.GONE);
             addMoreAddress.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             multipleAddressMentor.setChecked(true);
             addMoreAddress.setVisibility(View.VISIBLE);
             addressListViewMentor.setVisibility(View.VISIBLE);
@@ -919,9 +939,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
         }
 
-        if (userInfo != null) {
-            userInfo.setCountry(NetworkManager.countryCode);
-        }
+
 
         if (userInfo != null && (userInfo.getZip() == null || userInfo.getZip().toString().trim().equals("") || userInfo.getZip().toString().trim().equals("0"))) {
             try {
@@ -1080,12 +1098,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             requestParams.add("middle_name", profileMiddleName.getText().toString().trim());
             requestParams.add("last_name", profileLastName.getText().toString().trim());
             String sex = profileGender.getSelectedItem().toString();
-            if(multipleAddressMentor.isChecked()){
-                requestParams.add("multiple_address_flag","1");
+            if (multipleAddressMentor.isChecked()) {
+                requestParams.add("multiple_address_flag", "1");
 
-            }
-            else {
-                requestParams.add("multiple_address_flag","0");
+            } else {
+                requestParams.add("multiple_address_flag", "0");
 
             }
             if (sex.equals("Male"))
@@ -1218,10 +1235,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             requestParams.add("section_3", myExperience.getText().toString());
             requestParams.add("section_4", myTeachingMethodology.getText().toString());
             requestParams.add("section_5", myAwards.getText().toString());
-            /*if (isGettingAddress && NetworkManager.countryCode != null && !NetworkManager.countryCode.equals("")) {
-                requestParams.add("country", NetworkManager.countryCode.trim());
-                Log.e(TAG, "Country : " + NetworkManager.countryCode);
-            }*/
+            requestParams.add("country", String.valueOf(countries.get(profileCountry.getSelectedItemPosition()).getId()));
             Log.e(TAG, "request params: " + requestParams.toString());
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
