@@ -58,6 +58,10 @@ public class Data {
     @Expose
     private String gender;
 
+    @SerializedName("multiple_address_flag")
+    @Expose
+    private String addressFlag;
+
     @SerializedName("connection_id")
     @Expose
     private String connectionId;
@@ -82,7 +86,13 @@ public class Data {
     @Expose
     private ArrayList<Address> multipleAddress;
 
+    public String getAddressFlag() {
+        return addressFlag;
+    }
 
+    public void setAddressFlag(String addressFlag) {
+        this.addressFlag = addressFlag;
+    }
 
     public int getLocationPreference() {
         return locationPreference;
