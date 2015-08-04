@@ -563,6 +563,19 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             addChildLayout.setVisibility(View.VISIBLE);
 
         }
+        if(userInfo.getAddressFlag().equalsIgnoreCase("0")){
+           multipleAddress.setChecked(false);
+            addressListView.setVisibility(View.GONE);
+            addAddress.setVisibility(View.GONE);
+        }
+        else {
+            multipleAddress.setChecked(true);
+            addressListView.setVisibility(View.VISIBLE);
+            addAddress.setVisibility(View.VISIBLE);
+
+        }
+
+
 
         Log.e(TAG, userInfo.getMultipleAddress().size() + " address size");
         if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
@@ -614,7 +627,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 addressListView.setVisibility(View.VISIBLE);
                 addAddress.setVisibility(View.VISIBLE);
                 setListViewHeightBasedOnChildren(addressListView);
-                multipleAddress.setChecked(true);
+               // multipleAddress.setChecked(true);
             }
         }
 
@@ -815,6 +828,15 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                     + profileAddress1.getText().toString() + ", "
                     + pinCode.getText().toString() : trainLoc);
             requestParams.add("coaching_type", String.valueOf(coachingType.getSelectedItemPosition()));
+            if(multipleAddress.isChecked()){
+                requestParams.add("multiple_address_flag","1");
+
+            }
+            else {
+                requestParams.add("multiple_address_flag","0");
+
+            }
+
             if (coachingType.getSelectedItemPosition() == 1 || coachingType.getSelectedItemPosition() == 2) {
                 if (radioGroup.getCheckedRadioButtonId() == R.id.radioHostingYes) {
                     requestParams.add("group_class_preference", "0");
@@ -973,6 +995,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             progressDialog.dismiss();
             ProfileResponse response = (ProfileResponse) object;
             userInfo = response.getData();
+            Log.d(TAG, "local_add: " + userInfo);
 
             StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
             StorageHelper.storePreference(this, "user_city_state", profileAddress1.getText().toString());
@@ -980,7 +1003,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 StorageHelper.storePreference(this, "user_country", NetworkManager.countryName);
             StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
 
-            Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentee.this, "user_local_address"));
+
             Log.d(TAG, "city: " + StorageHelper.addressInformation(EditProfileActivityMentee.this, "user_city_state"));
             Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentee.this, "user_zip_code"));
 
