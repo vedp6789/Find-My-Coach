@@ -300,6 +300,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/back_margin"
                 android:gravity="center_horizontal|fill_vertical"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:visibility="gone">
 
                 <com.findmycoach.app.views.ChizzleTextView
@@ -337,13 +339,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/back_margin"
                 android:layout_marginRight="@dimen/back_margin"
-                android:visibility="visible">
+                android:visibility="gone"
+                >
 
                 <ListView
                     android:id="@+id/multipleAddressLV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_centerHorizontal="true"
+                    android:stackFromBottom="false" />
             </RelativeLayout>
 
 

@@ -111,7 +111,7 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
                 break;
 
             case R.id.backButton:
-                finish();
+                onBackPressed();
                 break;
         }
     }

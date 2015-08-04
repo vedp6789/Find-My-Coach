@@ -67,7 +67,7 @@ public class UserListActivity extends Activity implements Callback {
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
     }

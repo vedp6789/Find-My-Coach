@@ -96,6 +96,11 @@ public class ProfileFragment extends Fragment implements Callback {
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
         Log.d(TAG, "getprofile");
         NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
+
+//        ProfileResponse response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), ProfileResponse.class);
+//        userInfo = response.getData();
+//        Log.e(TAG, StorageHelper.getUserProfile(getActivity()));
+//        populateFields();
     }
 
     private void initialize(View view) {
