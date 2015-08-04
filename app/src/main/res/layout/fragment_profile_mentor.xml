@@ -259,7 +259,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/back_margin"
                 android:gravity="center_horizontal|fill_vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/otherAddressesTV"
@@ -312,6 +312,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/back_margin"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:gravity="center_horizontal|fill_vertical">
 
                 <com.findmycoach.app.views.ChizzleTextView
@@ -453,7 +455,11 @@
                     android:layout_marginTop="@dimen/textView_padding_margin"
                     android:gravity="center_vertical"
                     android:textColor="@color/purple"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+
                     android:textSize="@dimen/profile_details" />
+
 
 
             </LinearLayout>

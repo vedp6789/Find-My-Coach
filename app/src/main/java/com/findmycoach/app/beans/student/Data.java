@@ -82,8 +82,15 @@ public class Data {
     @Expose
     private ArrayList<ChildDetails> children;
 
+
+    @SerializedName("group_class_preference")
+    @Expose
+    private String groupClassPreference;
+
     @SerializedName("locations")
     @Expose
+
+
     private ArrayList<Address> multipleAddress;
 
     public String getAddressFlag() {
@@ -108,6 +115,14 @@ public class Data {
 
     public void setMultipleAddress(ArrayList<Address> multipleAddress) {
         this.multipleAddress = multipleAddress;
+    }
+
+    public String getGroupClassPreference() {
+        return groupClassPreference;
+    }
+
+    public void setGroupClassPreference(String groupClassPreference) {
+        this.groupClassPreference = groupClassPreference;
     }
 
     public ArrayList<ChildDetails> getChildren() {

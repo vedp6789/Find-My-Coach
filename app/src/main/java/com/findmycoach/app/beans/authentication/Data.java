@@ -121,6 +121,10 @@ public class Data {
     @Expose
     private String slotType;
 
+    @SerializedName("multiple_address_flag")
+    @Expose
+    private String addressFlagMentor;
+
 
     public String getAddressFlagMentor() {
         return addressFlagMentor;
@@ -130,9 +134,7 @@ public class Data {
         this.addressFlagMentor = addressFlagMentor;
     }
 
-    @SerializedName("multiple_address_flag")
-    @Expose
-    private String addressFlagMentor;
+
 
 
     public String getSlotType() {

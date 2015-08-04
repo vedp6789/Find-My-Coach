@@ -134,7 +134,7 @@ public class AddAddressDialog implements  Callback {
             }
         });
 
-
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
 

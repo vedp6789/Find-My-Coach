@@ -208,23 +208,7 @@
                     android:layout_below="@+id/preferredAddressHeader" />
             </RelativeLayout>
 
-            <com.findmycoach.app.views.ChizzleTextViewBold
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/prompt_coaching_type"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_heading"
-                android:textStyle="bold" />
 
-            <com.findmycoach.app.views.ChizzleTextView
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/coaching_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_details" />
 
             <com.findmycoach.app.views.ChizzleTextViewBold
                 android:layout_gravity="center_horizontal"
@@ -246,6 +230,25 @@
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_details"
                 android:layout_marginBottom="@dimen/back_margin"/>
+
+            <com.findmycoach.app.views.ChizzleTextViewBold
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_coaching_type"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_heading"
+                android:textStyle="bold" />
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/coaching_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details"
+                android:layout_marginBottom="@dimen/back_margin" />
 
         </LinearLayout>
 

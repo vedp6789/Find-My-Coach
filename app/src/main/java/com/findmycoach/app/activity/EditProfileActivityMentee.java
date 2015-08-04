@@ -563,17 +563,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             addChildLayout.setVisibility(View.VISIBLE);
 
         }
-        if(userInfo.getAddressFlag().equalsIgnoreCase("0")){
-           multipleAddress.setChecked(false);
-            addressListView.setVisibility(View.GONE);
-            addAddress.setVisibility(View.GONE);
-        }
-        else {
-            multipleAddress.setChecked(true);
-            addressListView.setVisibility(View.VISIBLE);
-            addAddress.setVisibility(View.VISIBLE);
 
-        }
 
 
 
@@ -641,12 +631,28 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         try {
             String selectedCoachingType = String.valueOf(userInfo.getCoachingType());
             coachingType.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, coachingTypeOptions));
-            if (selectedCoachingType.equalsIgnoreCase(coachingTypeOptions[0]))
+            if (selectedCoachingType.equalsIgnoreCase("0"))
                 coachingType.setSelection(0);
-            else
+            else if(selectedCoachingType.equalsIgnoreCase("1"))
                 coachingType.setSelection(1);
+            else
+                coachingType.setSelection(2);
+
         } catch (Exception ignored) {
         }
+
+        if(userInfo.getAddressFlag().equalsIgnoreCase("0")){
+            multipleAddress.setChecked(false);
+            addressListView.setVisibility(View.GONE);
+            addAddress.setVisibility(View.GONE);
+        }
+        else {
+            multipleAddress.setChecked(true);
+            addressListView.setVisibility(View.VISIBLE);
+            addAddress.setVisibility(View.VISIBLE);
+
+        }
+
 
 //        if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
 //            getAddress();

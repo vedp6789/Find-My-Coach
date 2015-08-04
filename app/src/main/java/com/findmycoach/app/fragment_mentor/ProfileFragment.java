@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.Log;
@@ -174,12 +175,14 @@ public class ProfileFragment extends Fragment implements Callback {
                 if (hiddenFlag) {
                     aboutMeLL.setVisibility(View.GONE);
                     arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
-                    hiddenFlag = false;
+                    hiddenFlag=false;
+                    summaryHeader.requestFocus();
+
                 } else {
                     aboutMeLL.setVisibility(View.VISIBLE);
                     arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
                     hiddenFlag = true;
-                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                    myAwards.requestFocus();
                 }
             }
         });
@@ -226,14 +229,16 @@ public class ProfileFragment extends Fragment implements Callback {
             public void onClick(View v) {
                 if (hiddenFlag) {
                     aboutMeLL.setVisibility(View.GONE);
+                    hiddenFlag=false;
+                    summaryHeader.requestFocus();
                     arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
-                    hiddenFlag = false;
 
                 } else {
                     aboutMeLL.setVisibility(View.VISIBLE);
                     arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
                     hiddenFlag = true;
-                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                    myAwards.requestFocus();
+
                 }
             }
         });
@@ -422,6 +427,8 @@ public class ProfileFragment extends Fragment implements Callback {
 
         }
 
+
+
         addressArrayListMentor.clear();
 
         if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
@@ -471,6 +478,14 @@ public class ProfileFragment extends Fragment implements Callback {
             multipleAddressRL.setVisibility(View.GONE);
             multipleAddressValRL.setVisibility(View.GONE);
         }
+        if(userInfo.getAddressFlagMentor().equalsIgnoreCase("0")){
+            multipleAddressRL.setVisibility(View.GONE);
+        }
+        else {
+            multipleAddressRL.setVisibility(View.VISIBLE);
+
+        }
+
 
 
     }

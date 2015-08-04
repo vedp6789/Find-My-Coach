@@ -131,6 +131,7 @@ public class ChildDetailsDialog {
                 return is_valid;
             }
         });
+        dialog.setCanceledOnTouchOutside(false);
 
         dialog.show();
     }

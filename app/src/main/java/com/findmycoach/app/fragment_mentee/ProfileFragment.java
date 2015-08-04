@@ -145,7 +145,6 @@ public class ProfileFragment extends Fragment implements Callback {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             String updatedUserJson = data.getStringExtra("user_info");
-            Log.d(TAG, updatedUserJson);
             userInfo = new Gson().fromJson(updatedUserJson, Data.class);
             populateFields();
         }
@@ -303,6 +302,14 @@ public class ProfileFragment extends Fragment implements Callback {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        if(userInfo.getAddressFlag().equalsIgnoreCase("0")){
+            preferredAddressLayout.setVisibility(View.GONE);
+        }
+        else {
+            preferredAddressLayout.setVisibility(View.VISIBLE);
+
+        }
+
     }
 
 
