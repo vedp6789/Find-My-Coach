@@ -41,6 +41,7 @@ import com.facebook.Session;
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.AddressAdapter;
 import com.findmycoach.app.adapter.ChildDetailsAdapter;
+import com.findmycoach.app.beans.category.Country;
 import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.student.ChildDetails;
 import com.findmycoach.app.beans.student.Data;
@@ -54,6 +55,7 @@ import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.ChildDetailsDialog;
 import com.findmycoach.app.util.DateAsPerChizzle;
+import com.findmycoach.app.util.MetaData;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
@@ -81,6 +83,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private EditText profileLastName;
     private Spinner profileGender;
     private TextView profileDOB;
+    private Spinner profileCountry;
     private AutoCompleteTextView profileAddress;
     private AutoCompleteTextView profileAddress1;
     private EditText pinCode;
@@ -113,6 +116,9 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private RelativeLayout addChildLayout;
     private CheckBox multipleAddress;
     private boolean removeProfilePicture;
+    private List<Country> countries;
+    private ArrayList<String> country_names;
+    public static int FLAG_FOR_EDIT_PROFILE_MENTEE=-5;
 
 
     @Override
@@ -123,12 +129,31 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         applyAction();
 
         Log.e(TAG, userInfo.getMultipleAddress().size() + "");
-        if (userInfo.getMultipleAddress() == null || userInfo.getMultipleAddress().size() == 0)
+        if (userInfo.getMultipleAddress() == null || userInfo.getMultipleAddress().size() == 0) {
             getAddress();
+        }
 
         populateUserData();
         isGettingAddress = false;
         needToCheckOnDestroy = false;
+    }
+
+    public void updateCountryByLocation(){
+        Log.e(TAG,"updateCountryByLocation method");
+        if(countries != null && countries.size() > 0 ){
+            String country_code = NetworkManager.countryCode;
+            Log.e(TAG,"country code 1: "+ country_code);
+            if(country_code != null && country_code != ""){
+                for(int i=0;i < countries.size(); i++){
+                    Country country=countries.get(i);
+                    String country_code_from_server=country.getIso();
+                    Log.e(TAG,"country code"+ i +" "+country_code_from_server);
+                    if(country_code_from_server.equals(country_code)){
+                        profileCountry.setSelection(i);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -186,6 +211,19 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         childDetailsArrayList = new ArrayList<>();
         addressArrayList = new ArrayList<>();
         locationPreferenceSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.location_preference)));
+        profileCountry = (Spinner) findViewById(R.id.country);
+        country_names = new ArrayList<String>();
+        countries = new ArrayList<Country>();
+        countries = MetaData.getCountryObject(this);
+
+        if(countries != null && countries.size() > 0){
+            for(int i=0; i<countries.size();i++){
+                Country country=countries.get(i);
+                country_names.add(country.getShortName());
+            }
+
+            profileCountry.setAdapter(new ArrayAdapter<String>(this,R.layout.textview,country_names));
+        }
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,6 +231,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 onBackPressed();
             }
         });
+
         childDetailsAdapter = new ChildDetailsAdapter(this, R.layout.child_details_list_item, childDetailsArrayList);
         childDetailsListView.setAdapter(childDetailsAdapter);
         addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayList);
@@ -399,7 +438,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                         || (actionId == EditorInfo.IME_ACTION_DONE)
                         || actionId == EditorInfo.IME_ACTION_NEXT) {
                     try {
-                        new AddressFromZip(EditProfileActivityMentee.this, profileAddress1, profileAddress, true).execute(pinCode.getText().toString());
+                        new AddressFromZip(EditProfileActivityMentee.this,EditProfileActivityMentee.this, profileAddress1, profileAddress, true,FLAG_FOR_EDIT_PROFILE_MENTEE).execute(pinCode.getText().toString());
                         isGettingAddress = true;
                     } catch (Exception ignored) {
                     }
@@ -530,7 +569,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         } catch (Exception ignored) {
         }
         try {
-            if(DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()) != null){
+            if (DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()) != null) {
                 profileDOB.setText(DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()));
             }
             //profileDOB.setText((String) userInfo.getDob());
@@ -602,6 +641,20 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 city = address.getLocality();                 /* city string initially set to the city i.e. earlier get updated*/
             } catch (Exception ignored) {
             }
+            try{
+                int country_id;
+                country_id=address.getCountry();
+                if(countries != null && countries.size() > 0){
+                    for(int i=0; i<countries.size(); i++){
+                        Country country=countries.get(i);
+                        if(country_id == country.getId()){
+                            profileCountry.setSelection(i);
+                        }
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
 
             addressArrayList.clear();
             addressAdapter.notifyDataSetChanged();
@@ -610,7 +663,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
             addressAdapter.notifyDataSetChanged();
             //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
-            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0){
+            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
                 addressListView.setVisibility(View.VISIBLE);
                 addAddress.setVisibility(View.VISIBLE);
                 setListViewHeightBasedOnChildren(addressListView);
@@ -669,6 +722,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             };
             map.setMyLocationEnabled(true);
             map.setOnMyLocationChangeListener(myLocationChangeListener);
+
+
+
+
         } catch (Exception ignored) {
         }
     }
@@ -702,6 +759,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             } catch (Exception ignored) {
             }
         }
+        updateCountryByLocation();
         return true;
     }
 
@@ -827,13 +885,18 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             //TODO
             requestParams.add("children", new Gson().toJson(childDetailsArrayList));
             Log.e(TAG + " Kids ", new Gson().toJson(childDetailsArrayList));
-
-            Address address = new Address();
-            address.setAddressLine1(profileAddress.getText().toString());
-            address.setLocality(profileAddress1.getText().toString());
-            address.setZip(pinCode.getText().toString());
-            address.setDefault_yn(1);
-
+            Address address=null;
+            try {
+                address = new Address();
+                address.setAddressLine1(profileAddress.getText().toString());
+                address.setLocality(profileAddress1.getText().toString());
+                address.setZip(pinCode.getText().toString());
+                address.setDefault_yn(1);
+                Country country = countries.get(profileCountry.getSelectedItemPosition());
+                address.setCountry(country.getId()); /* setting country id from countries list*/
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             int position = -1;
             Log.e(TAG, addressArrayList.size() + " address size");
             for (Address a : addressArrayList) {
@@ -845,29 +908,34 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 }
             }
 
-            if (position == -1)
-                addressArrayList.add(address);
-            else
-                addressArrayList.set(position, address);
-
+            try {
+                if (position == -1)
+                    addressArrayList.add(address);
+                else
+                    addressArrayList.set(position, address);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
 
             requestParams.add("locations", new Gson().toJson(addressArrayList));
             Log.e(TAG, "mul add: " + new Gson().toJson(addressArrayList));
             requestParams.add("location_preference", String.valueOf(locationPreferenceSpinner.getSelectedItemPosition()));
             if (!imageInBinary.equals("") && !removeProfilePicture)
                 requestParams.add("photograph", imageInBinary);
-            else if(removeProfilePicture)
+            else if (removeProfilePicture)
                 requestParams.add("photograph", "");
 
             String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
             requestParams.add("id", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
             requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
             Log.e(TAG, "Country : " + NetworkManager.countryCode);
-            if (isGettingAddress && NetworkManager.countryCode != null && !NetworkManager.countryCode.equals("")) {
+            /*if (isGettingAddress && NetworkManager.countryCode != null && !NetworkManager.countryCode.equals("")) {
                 requestParams.add("country", NetworkManager.countryCode.trim());
-            }
+            }*/
 
+            Log.e(TAG,"request params in edit profile post: "+requestParams);
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
+
         } catch (Exception e) {
             progressDialog.dismiss();
             Toast.makeText(this, getResources().getString(R.string.enter_necessary_details), Toast.LENGTH_LONG).show();
@@ -890,7 +958,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
 
             boolean removeImage = data.getBooleanExtra("removeImage", false);
-            if(removeImage){
+            if (removeImage) {
                 imageInBinary = "";
                 profilePicture.setImageDrawable(getResources().getDrawable(R.drawable.user_icon));
                 addText.setText(getResources().getString(R.string.add_photo));

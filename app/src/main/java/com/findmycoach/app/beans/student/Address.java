@@ -13,6 +13,17 @@ public class Address {
     private String locality;
     private String zip;
     private int default_yn;
+    @SerializedName("country_id")
+    @Expose
+    private int country;   // country id
+
+    public int getCountry() {
+        return country;
+    }
+
+    public void setCountry(int country) {
+        this.country = country;
+    }
 
     public int getDefault_yn() {
         return default_yn;
