@@ -72,6 +72,12 @@ public class UserListActivity extends Activity implements Callback {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, DashboardActivity.class));
+        super.onBackPressed();
+    }
+
     private void getMentorDetails(String id) {
         if (isGettingMentor) {
             Toast.makeText(this, getResources().getString(R.string.get_mentor_is_already_called), Toast.LENGTH_SHORT).show();

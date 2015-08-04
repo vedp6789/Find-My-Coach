@@ -421,6 +421,8 @@ public class NetworkClient {
                             ProfileResponse response = new Gson().fromJson(responseJson, ProfileResponse.class);
                             callback.successOperation(response, statusCode, calledApiValue);
                         }
+                        if (statusCode == 200)
+                            StorageHelper.saveUserProfile(context, responseJson);
                     } catch (Exception e) {
                         e.printStackTrace();
                         onFailure(statusCode, headers, responseBody, null);

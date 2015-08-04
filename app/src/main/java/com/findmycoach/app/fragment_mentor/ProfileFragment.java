@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.Log;
@@ -25,9 +24,9 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.EditProfileActivityMentee;
 import com.findmycoach.app.activity.EditProfileActivityMentor;
 import com.findmycoach.app.adapter.AddressAdapter;
@@ -38,9 +37,11 @@ import com.findmycoach.app.beans.authentication.SubCategoryName;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DateAsPerChizzle;
+import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.views.ChizzleTextView;
 import com.google.gson.Gson;
+import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -108,19 +109,14 @@ public class ProfileFragment extends Fragment implements Callback {
     }
 
     private void getProfileInfo() {
-//        progressDialog.show();
-//        String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-//        RequestParams requestParams = new RequestParams();
-//        Log.d(TAG, "Stored User Id:" + StorageHelper.getUserDetails(getActivity(), "user_id"));
-//        Log.d(TAG, "auth_token" + authToken);
-//        requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
-//        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
-//        NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
-
-        Response response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), Response.class);
-        userInfo = response.getData();
-        Log.e(TAG, StorageHelper.getUserProfile(getActivity()));
-        populateFields();
+        progressDialog.show();
+        String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
+        RequestParams requestParams = new RequestParams();
+        Log.d(TAG, "Stored User Id:" + StorageHelper.getUserDetails(getActivity(), "user_id"));
+        Log.d(TAG, "auth_token" + authToken);
+        requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
+        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+        NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
     }
 
     private void initialize(View view) {
@@ -272,9 +268,9 @@ public class ProfileFragment extends Fragment implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.hide();
-//        Response response = (Response) object;
-//        userInfo = response.getData();
-//        populateFields();
+        Response response = (Response) object;
+        userInfo = response.getData();
+        populateFields();
     }
 
 
@@ -641,7 +637,12 @@ public class ProfileFragment extends Fragment implements Callback {
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.hide();
-        String message = (String) object;
-        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+//        String message = (String) object;
+//        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+
+        Response response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), Response.class);
+        userInfo = response.getData();
+        Log.e(TAG, StorageHelper.getUserProfile(getActivity()));
+        populateFields();
     }
 }
