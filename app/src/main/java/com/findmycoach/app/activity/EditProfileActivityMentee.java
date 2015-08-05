@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -119,6 +120,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private List<Country> countries;
     private ArrayList<String> country_names;
     public static int FLAG_FOR_EDIT_PROFILE_MENTEE=-5;
+    private ChizzleTextView countyHeader;
 
 
     @Override
@@ -215,6 +217,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         country_names = new ArrayList<String>();
         countries = new ArrayList<Country>();
         countries = MetaData.getCountryObject(this);
+        countyHeader=(ChizzleTextView)findViewById(R.id.countryHeader);
+
 
         if(countries != null && countries.size() > 0){
             for(int i=0; i<countries.size();i++){
@@ -434,6 +438,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
         pinCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
                 if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
                         || (actionId == EditorInfo.IME_ACTION_DONE)
                         || actionId == EditorInfo.IME_ACTION_NEXT) {
@@ -442,6 +447,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                         isGettingAddress = true;
                     } catch (Exception ignored) {
                     }
+                    hideKeyboard();
+                    pinCode.clearFocus();
+                    countyHeader.requestFocus();
+                    return  true;
                 }
                 return false;
             }
@@ -536,6 +545,12 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 //            e.printStackTrace();
 //        }
 //    }
+
+    private void hideKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+    }
 
     public void populateUserData() {   //TODO
 

@@ -688,7 +688,7 @@
     <string name="verify_phone">Verify your mobile number</string>
     <string name="sending_code">Sending code</string>
     <string name="already_slot_found">Sorry, there is already a slot between\n</string>
-    <string name="otp_sent_to_registered_number">An Otp has been sent to your registered number</string>
+    <string name="otp_sent_to_registered_number">An Otp has been sent to your registered number,please wait</string>
     <string name="and">\tand\t</string>
     <string name="from1">\tfrom\t</string>
     <string name="to2">\tto\t</string>
