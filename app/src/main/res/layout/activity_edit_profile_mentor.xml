@@ -418,9 +418,10 @@
                     android:orientation="horizontal">
 
                     <com.findmycoach.app.views.ChizzleTextView
+                        android:id="@+id/teachingMediumPreferenceHeader"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Teaching Preference"
+                        android:text='@string/prompt_teaching_preferences'
                         android:textColor="@color/purple_light"
                         android:textSize="@dimen/profile_heading"
                         android:textStyle="bold" />

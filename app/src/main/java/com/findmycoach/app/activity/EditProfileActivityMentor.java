@@ -146,7 +146,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private List<Country> countries;
     private ArrayList<String> country_names;
     public static int FLAG_FOR_EDIT_PROFILE_MENTOR = -11;
-    private ChizzleTextView countryHeader;
+    private ChizzleTextView teachingMediumHeader;
 
 
     @Override
@@ -248,7 +248,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         addressArrayListMentor = new ArrayList<>();
         addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayListMentor);
         addressListViewMentor.setAdapter(addressAdapter);
-        countryHeader=(ChizzleTextView)findViewById(R.id.countryHeaderMentor);
+        teachingMediumHeader =(ChizzleTextView)findViewById(R.id.teachingMediumPreferenceHeader);
         profileCountry = (Spinner) findViewById(R.id.country);
         country_names = new ArrayList<String>();
         countries = new ArrayList<Country>();
@@ -514,6 +514,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 profilePicture.buildDrawingCache();
                 Bitmap bitMap = profilePicture.getDrawingCache();
                 intent.putExtra("BitMap", BinaryForImage.getBinaryStringFromBitmap(bitMap));
+                intent.putExtra("removeImageOption", addPhoto.getText());
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
@@ -539,7 +540,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     }
                     hideKeyboard();
                     pinCode.clearFocus();
-                    countryHeader.requestFocus();
+                    teachingMediumHeader.requestFocus();
                     return  true;
 //                    openAreaOfCoachingActivity();
                 }

@@ -43,6 +43,7 @@ public class ChooseImageActivity extends Activity {
     private CropImageView cropImageView;
     private Button chooseImage;
     private Button rotateButton;
+    private Button removeImageButton;
     private boolean isImageSelected = false;
 
     /**
@@ -125,7 +126,8 @@ public class ChooseImageActivity extends Activity {
             }
         });
 
-        findViewById(R.id.buttonRemove).setOnClickListener(new View.OnClickListener() {
+        removeImageButton = (Button) findViewById(R.id.buttonRemove);
+        removeImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -134,6 +136,9 @@ public class ChooseImageActivity extends Activity {
                 finish();
             }
         });
+
+        if(getIntent().getStringExtra("removeImageOption").equals(getResources().getString(R.string.add_photo)))
+            removeImageButton.setVisibility(View.GONE);
     }
 
     /**
@@ -177,11 +182,13 @@ public class ChooseImageActivity extends Activity {
                 cropImageView.setImageBitmap(decodeFile(new File(imgDecodableString)));
                 isImageSelected = true;
 
+
             } catch (Exception e) {
                 Toast.makeText(this, getResources().getString(R.string.error_picking_image), Toast.LENGTH_SHORT).show();
                 try {
                     cropImageView.setImageBitmap(BinaryForImage.getBitmapFromBinaryString(getIntent().getStringExtra("BitMap")));
                     isImageSelected = true;
+                    removeImageButton.setVisibility(View.VISIBLE);
                 } catch (Exception ignored) {
                 }
             }

@@ -353,6 +353,7 @@
                     android:textSize="@dimen/profile_details" />
 
                 <com.findmycoach.app.views.ChizzleTextView
+                    android:id="@+id/mentorForHeader"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/back_margin"

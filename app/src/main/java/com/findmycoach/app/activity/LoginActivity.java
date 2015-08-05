@@ -721,9 +721,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 startIntentSenderForResult(mSignInIntent.getIntentSender(),
                         RC_SIGN_IN, null, 0, 0, 0);
             } catch (IntentSender.SendIntentException e) {
-                Log.i(TAG, "Sign in intent could not be sent: " + e.getLocalizedMessage());
                 mSignInProgress = STATE_SIGN_IN;
                 mGoogleApiClient.connect();
+                Log.i(TAG, "Sign in intent could not be sent: " + e.getLocalizedMessage());
             }
         } else {
             showDialog(DIALOG_PLAY_SERVICES_ERROR);
@@ -743,8 +743,8 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                             new DialogInterface.OnCancelListener() {
                                 @Override
                                 public void onCancel(DialogInterface dialog) {
-                                    Log.e(TAG, "Google Play services resolution cancelled");
                                     mSignInProgress = STATE_DEFAULT;
+                                    Log.e(TAG, "Google Play services resolution cancelled");
                                 }
                             });
                 } else {
@@ -754,9 +754,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
+                                            mSignInProgress = STATE_DEFAULT;
                                             Log.e(TAG, "Google Play services error could not be "
                                                     + "resolved: " + mSignInError);
-                                            mSignInProgress = STATE_DEFAULT;
                                         }
                                     }).create();
                 }
@@ -807,9 +807,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                     requestParams.add("phone_number", countryCodeTV.getText().toString().trim().replace("+", "") + "-" + phnNum);
                     requestParams.add("user_group", String.valueOf(user_group));
                     saveUserPhoneNumber(phnNum);
-                    Log.e("Login dialog", "phone_number : " + countryCodeTV.getText().toString().trim() + "-" + phnNum);
                     NetworkClient.updatePhoneForSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 26);
                     progressDialog.show();
+                    Log.e("Login dialog", "phone_number : " + countryCodeTV.getText().toString().trim() + "-" + phnNum);
                 }
             }
         });
@@ -938,7 +938,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
         try {
             String currencyCode = StorageHelper.getCurrency(this);
-            if (currencyCode == null || currencyCode.trim().equals("")) {
+            if (currencyCode.trim().equals("")) {
                 StorageHelper.setCurrency(this, response.getData().getCurrencyCode());
                 Log.d(TAG, "Currency code : " + currencyCode);
                 Log.e(TAG, "Currency code : " + response.getData().getCurrencyCode());
@@ -950,13 +950,11 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             /** Saving address, city and zip of user */
             if (response.getData() != null && response.getData().getAddress() != null) {
                 StorageHelper.storePreference(this, "user_local_address", (String) response.getData().getAddress());
-                Log.d(TAG, "address get saved: " + StorageHelper.addressInformation(LoginActivity.this, "user_local_address"));
                 if (response.getData().getCity() != null) {
                     StorageHelper.storePreference(this, "user_city_state", (String) response.getData().getCity());
                     Log.d(TAG, "city get saved: " + StorageHelper.addressInformation(LoginActivity.this, "user_city_state"));
                 }
                 if (response.getData().getZip() != null) {
-
                     StorageHelper.storePreference(this, "user_zip_code", (String) response.getData().getZip());
                     Log.d(TAG, "pin code get saved: " + StorageHelper.addressInformation(LoginActivity.this, "user_zip_code"));
 

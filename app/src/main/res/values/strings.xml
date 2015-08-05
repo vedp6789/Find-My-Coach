@@ -776,6 +776,7 @@
     <string name="prompt_state">State</string>
     <string name="prompt_country">Country</string>
     <string name="prompt_pin">Zip/Post Code</string>
+    <string name="prompt_teaching_preferences">Teaching Preference</string>
     <string name="prompt_passion">Passion</string>
     <string name="prompt_profession">Profession</string>
     <string name="prompt_accomplishment">Qualification</string>
