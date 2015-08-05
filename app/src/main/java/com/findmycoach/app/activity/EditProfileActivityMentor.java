@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -168,18 +169,35 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     }
 
     public void updateCountryByLocation() {
+        Log.e(TAG, "updateCountryByLocation method");
         if (countries != null && countries.size() > 0) {
-            String country_code = NetworkManager.countryCode;
-            Log.e(TAG, "country code 1: " + country_code);
-            if (country_code != null && country_code != "") {
-                for (int i = 0; i < countries.size(); i++) {
-                    Country country = countries.get(i);
-                    String country_code_from_server = country.getIso();
-                    Log.e(TAG, "country code" + i + " " + country_code_from_server);
-                    if (country_code_from_server.equals(country_code)) {
-                        profileCountry.setSelection(i);
-                    }
+
+            String country_code = "";
+            TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+            //getNetworkCountryIso
+            country_code = manager.getSimCountryIso().toUpperCase();
+            if (country_code != "") {
+                Log.e(TAG,"country code from SIM: "+country_code);
+                populateCountry(country_code);
+            } else {
+                country_code = NetworkManager.countryCode;
+                Log.e(TAG, "country code 1: " + country_code);
+                if (country_code != null && country_code != "") {
+                    populateCountry(country_code);
                 }
+            }
+
+        }
+    }
+
+
+    public void populateCountry(String country_code) {
+        for (int i = 0; i < countries.size(); i++) {
+            Country country = countries.get(i);
+            String country_code_from_server = country.getIso();
+            Log.e(TAG, "country code" + i + " " + country_code_from_server);
+            if (country_code_from_server.equalsIgnoreCase(country_code)) {
+                profileCountry.setSelection(i);
             }
         }
     }
@@ -905,7 +923,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
                         if (!userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
-                            if (updateAddress()) ;
+                            if (updateAddress());
+
                         }
 
 //                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();

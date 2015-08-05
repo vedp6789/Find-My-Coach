@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -118,7 +119,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private boolean removeProfilePicture;
     private List<Country> countries;
     private ArrayList<String> country_names;
-    public static int FLAG_FOR_EDIT_PROFILE_MENTEE=-5;
+    public static int FLAG_FOR_EDIT_PROFILE_MENTEE = -5;
 
 
     @Override
@@ -138,20 +139,35 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         needToCheckOnDestroy = false;
     }
 
-    public void updateCountryByLocation(){
-        Log.e(TAG,"updateCountryByLocation method");
-        if(countries != null && countries.size() > 0 ){
-            String country_code = NetworkManager.countryCode;
-            Log.e(TAG,"country code 1: "+ country_code);
-            if(country_code != null && country_code != ""){
-                for(int i=0;i < countries.size(); i++){
-                    Country country=countries.get(i);
-                    String country_code_from_server=country.getIso();
-                    Log.e(TAG,"country code"+ i +" "+country_code_from_server);
-                    if(country_code_from_server.equals(country_code)){
-                        profileCountry.setSelection(i);
-                    }
+    public void updateCountryByLocation() {
+        Log.e(TAG, "updateCountryByLocation method");
+        if (countries != null && countries.size() > 0) {
+
+            String country_code = "";
+            TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+            //getNetworkCountryIso
+            country_code = manager.getSimCountryIso().toUpperCase();
+            if (country_code != "") {
+                Log.e(TAG,"country code from SIM: "+country_code);
+                populateCountry(country_code);
+            } else {
+                country_code = NetworkManager.countryCode;
+                Log.e(TAG, "country code 1: " + country_code);
+                if (country_code != null && country_code != "") {
+                    populateCountry(country_code);
                 }
+            }
+
+        }
+    }
+
+    public void populateCountry(String country_code) {
+        for (int i = 0; i < countries.size(); i++) {
+            Country country = countries.get(i);
+            String country_code_from_server = country.getIso();
+            Log.e(TAG, "country code" + i + " " + country_code_from_server);
+            if (country_code_from_server.equalsIgnoreCase(country_code)) {
+                profileCountry.setSelection(i);
             }
         }
     }
@@ -216,13 +232,13 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         countries = new ArrayList<Country>();
         countries = MetaData.getCountryObject(this);
 
-        if(countries != null && countries.size() > 0){
-            for(int i=0; i<countries.size();i++){
-                Country country=countries.get(i);
+        if (countries != null && countries.size() > 0) {
+            for (int i = 0; i < countries.size(); i++) {
+                Country country = countries.get(i);
                 country_names.add(country.getShortName());
             }
 
-            profileCountry.setAdapter(new ArrayAdapter<String>(this,R.layout.textview,country_names));
+            profileCountry.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, country_names));
         }
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
@@ -438,7 +454,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                         || (actionId == EditorInfo.IME_ACTION_DONE)
                         || actionId == EditorInfo.IME_ACTION_NEXT) {
                     try {
-                        new AddressFromZip(EditProfileActivityMentee.this,EditProfileActivityMentee.this, profileAddress1, profileAddress, true,FLAG_FOR_EDIT_PROFILE_MENTEE).execute(pinCode.getText().toString());
+                        new AddressFromZip(EditProfileActivityMentee.this, EditProfileActivityMentee.this, profileAddress1, profileAddress, true, FLAG_FOR_EDIT_PROFILE_MENTEE).execute(pinCode.getText().toString());
                         isGettingAddress = true;
                     } catch (Exception ignored) {
                     }
@@ -604,8 +620,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         }
 
 
-
-
         Log.e(TAG, userInfo.getMultipleAddress().size() + " address size");
         if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
 
@@ -644,18 +658,18 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 city = address.getLocality();                 /* city string initially set to the city i.e. earlier get updated*/
             } catch (Exception ignored) {
             }
-            try{
+            try {
                 int country_id;
-                country_id=address.getCountry();
-                if(countries != null && countries.size() > 0){
-                    for(int i=0; i<countries.size(); i++){
-                        Country country=countries.get(i);
-                        if(country_id == country.getId()){
+                country_id = address.getCountry();
+                if (countries != null && countries.size() > 0) {
+                    for (int i = 0; i < countries.size(); i++) {
+                        Country country = countries.get(i);
+                        if (country_id == country.getId()) {
                             profileCountry.setSelection(i);
                         }
                     }
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -670,7 +684,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 addressListView.setVisibility(View.VISIBLE);
                 addAddress.setVisibility(View.VISIBLE);
                 setListViewHeightBasedOnChildren(addressListView);
-               // multipleAddress.setChecked(true);
+                // multipleAddress.setChecked(true);
             }
         }
 
@@ -686,7 +700,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             coachingType.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, coachingTypeOptions));
             if (selectedCoachingType.equalsIgnoreCase("0"))
                 coachingType.setSelection(0);
-            else if(selectedCoachingType.equalsIgnoreCase("1"))
+            else if (selectedCoachingType.equalsIgnoreCase("1"))
                 coachingType.setSelection(1);
             else
                 coachingType.setSelection(2);
@@ -694,22 +708,20 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         } catch (Exception ignored) {
         }
 
-        if(userInfo.getAddressFlag().equalsIgnoreCase("0")){
+        if (userInfo.getAddressFlag().equalsIgnoreCase("0")) {
             multipleAddress.setChecked(false);
             addressListView.setVisibility(View.GONE);
             addAddress.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             multipleAddress.setChecked(true);
             addressListView.setVisibility(View.VISIBLE);
             addAddress.setVisibility(View.VISIBLE);
 
         }
 
-        if(userInfo.getGroupClassPreference()!=null && userInfo.getGroupClassPreference().equalsIgnoreCase("0")){
+        if (userInfo.getGroupClassPreference() != null && userInfo.getGroupClassPreference().equalsIgnoreCase("0")) {
             radioGroup.check(R.id.radioHostingYes);
-        }
-        else  {
+        } else {
             radioGroup.check(R.id.radioHostingNo);
 
         }
@@ -735,7 +747,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
                         if (!userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
-                            if (updateAddress()) ;
+                            if (updateAddress());
                         }
 
 //                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
@@ -749,8 +761,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             };
             map.setMyLocationEnabled(true);
             map.setOnMyLocationChangeListener(myLocationChangeListener);
-
-
 
 
         } catch (Exception ignored) {
@@ -900,12 +910,11 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                     + profileAddress1.getText().toString() + ", "
                     + pinCode.getText().toString() : trainLoc);
             requestParams.add("coaching_type", String.valueOf(coachingType.getSelectedItemPosition()));
-            if(multipleAddress.isChecked()){
-                requestParams.add("multiple_address_flag","1");
+            if (multipleAddress.isChecked()) {
+                requestParams.add("multiple_address_flag", "1");
 
-            }
-            else {
-                requestParams.add("multiple_address_flag","0");
+            } else {
+                requestParams.add("multiple_address_flag", "0");
 
             }
 
@@ -921,7 +930,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             //TODO
             requestParams.add("children", new Gson().toJson(childDetailsArrayList));
             Log.e(TAG + " Kids ", new Gson().toJson(childDetailsArrayList));
-            Address address=null;
+            Address address = null;
             try {
                 address = new Address();
                 address.setAddressLine1(profileAddress.getText().toString());
@@ -930,7 +939,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 address.setDefault_yn(1);
                 Country country = countries.get(profileCountry.getSelectedItemPosition());
                 address.setCountry(country.getId()); /* setting country id from countries list*/
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             int position = -1;
@@ -949,7 +958,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                     addressArrayList.add(address);
                 else
                     addressArrayList.set(position, address);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -966,7 +975,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
             Log.e(TAG, "Country : " + NetworkManager.countryCode);
             requestParams.add("country", String.valueOf(countries.get(profileCountry.getSelectedItemPosition()).getId()));
-            Log.e(TAG,"request params in edit profile post: "+requestParams);
+            Log.e(TAG, "request params in edit profile post: " + requestParams);
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
 
         } catch (Exception e) {

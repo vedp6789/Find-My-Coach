@@ -3,6 +3,7 @@ package com.findmycoach.app.util;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -70,32 +71,45 @@ public class AddAddressDialog implements Callback {
         }
     };
 
+    public void populateCountry(String country_code) {
+        for (int i = 0; i < countries.size(); i++) {
+            Country country = countries.get(i);
+            String country_code_from_server = country.getIso();
+            Log.e(TAG, "country code" + i + " " + country_code_from_server);
+            if (country_code_from_server.equalsIgnoreCase(country_code)) {
+                sp_country.setSelection(i);
+            }
+        }
+    }
+
     public void updateCountryByLocation(){
         Log.e(TAG, "updateCountryByLocation method");
         if(countries != null && countries.size() > 0 ){
-            String country_code = NetworkManager.countryCode;
-            if(country_code != "") {
-                Log.e(TAG, "country code 1: " + country_code);
-                if (country_code != null && country_code != "") {
-                    for (int i = 0; i < countries.size(); i++) {
-                        Country country = countries.get(i);
-                        String country_code_from_server = country.getIso();
-                        Log.e(TAG, "country code" + i + " " + country_code_from_server);
-                        if (country_code_from_server.equals(country_code)) {
-                            sp_country.setSelection(i);
-                        }
+            String country_code = "";
+            TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            //getNetworkCountryIso
+            country_code = manager.getSimCountryIso().toUpperCase();
+
+            if(country_code != ""){
+                Log.e(TAG,"country code from SIM: "+country_code);
+                populateCountry(country_code);
+            }else {
+                country_code = NetworkManager.countryCode;
+                if(country_code != ""){
+                    populateCountry(country_code);
+                }else{
+                    GPSTracker gpsTracker = new GPSTracker(context);
+
+                    if (gpsTracker.canGetLocation()) {
+                        stringLatitude = String.valueOf(gpsTracker.latitude);
+                        stringLongitude = String.valueOf(gpsTracker.longitude);
+                        //nameOfLocation = ConvertPointToLocation(stringLatitude,stringLongitude);
+                        new GetAddress().execute();
                     }
                 }
-            }else{
-                GPSTracker gpsTracker = new GPSTracker(context);
-
-                if (gpsTracker.canGetLocation()) {
-                    stringLatitude = String.valueOf(gpsTracker.latitude);
-                    stringLongitude = String.valueOf(gpsTracker.longitude);
-                    //nameOfLocation = ConvertPointToLocation(stringLatitude,stringLongitude);
-                    new GetAddress().execute();
-                }
             }
+
+
         }
     }
 
