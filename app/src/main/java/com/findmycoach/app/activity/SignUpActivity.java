@@ -214,7 +214,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         String middleName = middleNameInput.getText().toString().trim();
         String lastName = lastNameInput.getText().toString().trim();
         String phone = phoneNumberInput.getText().toString();
-        String email = emailInput.getText().toString();
+        String email = emailInput.getText().toString().trim();
         String password = passwordInput.getText().toString();
         String confirmPassword = confirmPasswordInput.getText().toString();
         String countryCode = countryCodeTV.getText().toString().trim().replace("+", "");

@@ -283,7 +283,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
      */
     private void logIn() {
 
-        String userId = inputUserName.getText().toString();              /** Getting user's email id */
+        String userId = inputUserName.getText().toString().trim();              /** Getting user's email id */
         String userPassword = inputPassword.getText().toString();        /** Getting entered password */
         boolean isFormValid = validateLoginForm(userId, userPassword);
         if (isFormValid) {

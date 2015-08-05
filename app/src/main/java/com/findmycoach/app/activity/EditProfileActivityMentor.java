@@ -795,8 +795,17 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 //                currencySymbol.setText(Html.fromHtml(userInfo.getCurrencyCode()));
 //            }
 
-            if (userInfo.getCurrencyCode() != null) {
-                currencySymbol.setText(Html.fromHtml(userInfo.getCurrencyCode()));
+            if (userInfo.getCurrencyCode() != null && !userInfo.getCurrencyCode().equals("")) {
+                try {
+                    String currencyCode = userInfo.getCurrencyCode();
+                    if (currencyCode.charAt(0) == '&')
+                        currencySymbol.setText(Html.fromHtml(currencyCode));
+                    else {
+                        String[] symbols = currencyCode.split("&");
+                        currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
+                    }
+                } catch (Exception ignored) {
+                }
             }
 //
 
@@ -1468,8 +1477,14 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
         if (calledApiValue == 52) {
             Currency currency = (Currency) object;
+            String symbol = currency.getCurrencySymbol();
             StorageHelper.setCurrency(this, currency.getCurrencySymbol());
-            currencySymbol.setText(Html.fromHtml(currency.getCurrencySymbol()));
+            if (symbol.charAt(0) == '&')
+                currencySymbol.setText(Html.fromHtml(symbol));
+            else {
+                String[] symbols = symbol.split("&");
+                currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
+            }
         } else if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
@@ -1480,7 +1495,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             Log.d(TAG, "success response message : in EditProfileActivity : " + response.getMessage());
 
             String currencyCode = StorageHelper.getCurrency(this);
-            if (currencyCode == null || currencyCode.trim().equals("")) {
+            if (currencyCode.trim().equals("")) {
                 StorageHelper.setCurrency(this, userInfo.getCurrencyCode());
                 Log.d(TAG, "Currency code : " + currencyCode);
             } else {

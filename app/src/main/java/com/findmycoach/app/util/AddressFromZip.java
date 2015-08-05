@@ -244,7 +244,13 @@ public class AddressFromZip extends AsyncTask<String, Void, String> implements C
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         Currency currency = (Currency) object;
-        currencySymbol.setText(Html.fromHtml(currency.getCurrencySymbol()));
+        String symbol = currency.getCurrencySymbol();
+        if (symbol.charAt(0) == '&')
+            currencySymbol.setText(Html.fromHtml(symbol));
+        else {
+            String[] symbols = symbol.split("&");
+            currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
+        }
         StorageHelper.setCurrency(context, currency.getCurrencySymbol());
 
     }

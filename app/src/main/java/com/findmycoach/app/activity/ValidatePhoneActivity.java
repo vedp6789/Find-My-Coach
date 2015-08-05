@@ -41,7 +41,7 @@ import java.util.Collections;
 public class ValidatePhoneActivity extends Activity implements View.OnClickListener, Callback {
 
     private EditText verificationCode;
-    private String email;
+    private String email, phnNum;
     private ProgressDialog progressDialog;
     private int user_group;
     private TextView countryCodeTV;
@@ -181,6 +181,8 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
 
         /** Phone number is updated or OTP is resend then response message is shown */
         if (calledApiValue == 26 || calledApiValue == 28) {
+            if(calledApiValue == 26 && response.getStatus() == 1)
+                StorageHelper.storePreference(ValidatePhoneActivity.this, "phone_number", phnNum);
             Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
             return;
         }
@@ -316,7 +318,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
 
                     /** Phone number is provided with country code, updating user's phone number in server and sending OTP to that number */
                     else {
-                        StorageHelper.storePreference(ValidatePhoneActivity.this, "phone_number", phnNum);
+                        ValidatePhoneActivity.this.phnNum = phnNum;
                         requestParams.add("phone_number", countryCodeTV.getText().toString().trim().replace("+", "") + "-" + phnNum);
                         Log.e("Validate phone dialog", "phone_number : " + countryCodeTV.getText().toString().trim() + "-" + phnNum);
                         Log.d(TAG, countryCodeTV.getText().toString().trim() + phnNum);
