@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -146,6 +147,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private List<Country> countries;
     private ArrayList<String> country_names;
     public static int FLAG_FOR_EDIT_PROFILE_MENTOR = -11;
+    private ChizzleTextView teachingMediumHeader;
 
 
     @Override
@@ -264,7 +266,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         addressArrayListMentor = new ArrayList<>();
         addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayListMentor);
         addressListViewMentor.setAdapter(addressAdapter);
-
+        teachingMediumHeader =(ChizzleTextView)findViewById(R.id.teachingMediumPreferenceHeader);
         profileCountry = (Spinner) findViewById(R.id.country);
         country_names = new ArrayList<String>();
         countries = new ArrayList<Country>();
@@ -530,6 +532,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 profilePicture.buildDrawingCache();
                 Bitmap bitMap = profilePicture.getDrawingCache();
                 intent.putExtra("BitMap", BinaryForImage.getBinaryStringFromBitmap(bitMap));
+                intent.putExtra("removeImageOption", addPhoto.getText());
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
@@ -553,6 +556,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         isGettingAddress = true;
                     } catch (Exception ignored) {
                     }
+                    hideKeyboard();
+                    pinCode.clearFocus();
+                    teachingMediumHeader.requestFocus();
+                    return  true;
 //                    openAreaOfCoachingActivity();
                 }
                 return false;
@@ -675,6 +682,14 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     }
 
 
+    private void hideKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+
+
     public void populateUserData() {
         try {
             if (userInfo == null) {
@@ -710,7 +725,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
 
             try {
-                chargeInput.setText(userInfo.getCharges());
+                if(!userInfo.getCharges().equalsIgnoreCase("0"))
+                       chargeInput.setText(userInfo.getCharges());
             } catch (Exception ignored) {
             }
             try {

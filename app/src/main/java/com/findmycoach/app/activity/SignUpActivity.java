@@ -28,6 +28,7 @@ import com.findmycoach.app.beans.authentication.SubCategoryName;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
+import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
@@ -157,7 +158,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             finish();
         else if (id == R.id.facebook_login_button && LoginActivity.loginActivity != null) {
             progressDialog.show();
-            if(radioButton_mentee_signup.isChecked())
+            if (radioButton_mentee_signup.isChecked())
                 LoginActivity.loginActivity.user_group = 2;
             else
                 LoginActivity.loginActivity.user_group = 3;
@@ -165,7 +166,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             finish();
         } else if (id == R.id.sign_in_button && LoginActivity.loginActivity != null) {
             progressDialog.show();
-            if(radioButton_mentee_signup.isChecked())
+            if (radioButton_mentee_signup.isChecked())
                 LoginActivity.loginActivity.user_group = 2;
             else
                 LoginActivity.loginActivity.user_group = 3;
@@ -419,6 +420,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         if (statusCode == 200 && response.getData() != null) {
             /** Saving user group */
 
+            StorageHelper.saveUserProfile(this, new Gson().toJson(response));
 
             String user_group_saved = StorageHelper.getUserGroup(SignUpActivity.this, "user_group");
             if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group))) {
@@ -484,10 +486,31 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             }
 
             saveUserPhn("True");
+            int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
+            if (response.getData().getMultipleAddress() == null || response.getData().getMultipleAddress().size() == 0) {
+                if (userGroup == 2) {
+                    Intent intent = new Intent(this, EditProfileActivityMentee.class);
+                    intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                    intent.putExtra("new_user", true);
+                    startActivity(intent);
+                } else if (userGroup == 3) {
+                    Intent intent = new Intent(this, EditProfileActivityMentor.class);
+                    intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                    intent.putExtra("new_user", true);
+                    startActivity(intent);
+                }
+
+            } else if (userGroup == 3 && (response.getData().getSubCategoryName() == null || response.getData().getSubCategoryName().size() < 1)) {
+                Intent intent = new Intent(this, EditProfileActivityMentor.class);
+                intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                intent.putExtra("new_user", true);
+                startActivity(intent);
+            } else
+                startActivity(new Intent(this, DashboardActivity.class));
             finish();
-            startActivity(new Intent(this, DashboardActivity.class));
 
         }
+
     }
 
 

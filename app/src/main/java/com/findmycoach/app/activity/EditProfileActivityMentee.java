@@ -20,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -101,7 +102,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private static final String TAG = "FMC";
     private boolean isGettingAddress;
     private List<Prediction> predictions;
-    private ChizzleTextView addText;
+    private ChizzleTextView addPhoto;
     public boolean needToCheckOnDestroy;
     private String userCurrentAddress = "";
     private ScrollView scroll_view;
@@ -120,6 +121,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private List<Country> countries;
     private ArrayList<String> country_names;
     public static int FLAG_FOR_EDIT_PROFILE_MENTEE = -5;
+    private ChizzleTextView mentorForHeader;
 
 
     @Override
@@ -213,7 +215,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         updateAction = (Button) findViewById(R.id.button_update);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
-        addText = (ChizzleTextView) findViewById(R.id.addPhotoMentee);
+        addPhoto = (ChizzleTextView) findViewById(R.id.addPhotoMentee);
         scroll_view = (ScrollView) findViewById(R.id.main_scroll_view);
         groupDetailsLayout = (RelativeLayout) findViewById(R.id.groupClassesDetails);
         childDetailsListView = (ListView) findViewById(R.id.childDetailsListView);
@@ -231,6 +233,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         country_names = new ArrayList<String>();
         countries = new ArrayList<Country>();
         countries = MetaData.getCountryObject(this);
+        mentorForHeader = (ChizzleTextView) findViewById(R.id.mentorForHeader);
 
         if (countries != null && countries.size() > 0) {
             for (int i = 0; i < countries.size(); i++) {
@@ -436,6 +439,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 profilePicture.buildDrawingCache();
                 Bitmap bitMap = profilePicture.getDrawingCache();
                 intent.putExtra("BitMap", BinaryForImage.getBinaryStringFromBitmap(bitMap));
+                intent.putExtra("removeImageOption", addPhoto.getText());
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
@@ -450,6 +454,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
         pinCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
                 if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
                         || (actionId == EditorInfo.IME_ACTION_DONE)
                         || actionId == EditorInfo.IME_ACTION_NEXT) {
@@ -458,6 +463,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                         isGettingAddress = true;
                     } catch (Exception ignored) {
                     }
+                    hideKeyboard();
+                    pinCode.clearFocus();
+                    mentorForHeader.requestFocus();
+                    return true;
                 }
                 return false;
             }
@@ -553,6 +562,12 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 //        }
 //    }
 
+    private void hideKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
     public void populateUserData() {   //TODO
 
         String[] mentorForArray = getResources().getStringArray(R.array.mentor_for);
@@ -561,7 +576,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             ImageLoader imgLoader = new ImageLoader(profilePicture);
             imgLoader.execute((String) userInfo.getPhotograph());
         } else {
-            addText.setText(getResources().getString(R.string.add_photo));
+            addPhoto.setText(getResources().getString(R.string.add_photo));
         }
 
         try {
@@ -1003,7 +1018,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             if (removeImage) {
                 imageInBinary = "";
                 profilePicture.setImageDrawable(getResources().getDrawable(R.drawable.user_icon));
-                addText.setText(getResources().getString(R.string.add_photo));
+                addPhoto.setText(getResources().getString(R.string.add_photo));
                 removeProfilePicture = true;
                 return;
             }
@@ -1012,7 +1027,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             profilePicture.setImageBitmap(userPic);
             try {
                 imageInBinary = BinaryForImage.getBinaryStringFromBitmap(userPic);
-                addText.setText(getResources().getString(R.string.change_photo));
+                addPhoto.setText(getResources().getString(R.string.change_photo));
             } catch (Exception e) {
                 e.printStackTrace();
             }

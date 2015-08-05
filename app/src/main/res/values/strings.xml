@@ -688,7 +688,7 @@
     <string name="verify_phone">Verify your mobile number</string>
     <string name="sending_code">Sending code</string>
     <string name="already_slot_found">Sorry, there is already a slot between\n</string>
-    <string name="otp_sent_to_registered_number">An Otp has been sent to your registered number</string>
+    <string name="otp_sent_to_registered_number">An Otp has been sent to your registered number,please wait</string>
     <string name="and">\tand\t</string>
     <string name="from1">\tfrom\t</string>
     <string name="to2">\tto\t</string>
@@ -736,6 +736,7 @@
     <string name="prompt_enter_phone">Enter phone number</string>
     <string name="prompt_email_id">Email Id</string>
     <string name="prompt_password">Password</string>
+    <string name="prompt_password_minimum_5_characters">Password (minimum 5 characters)</string>
     <string name="old_password">Old password:</string>
     <string name="new_password">New password:</string>
     <string name="new_password_re">Re enter new password:</string>
@@ -756,11 +757,11 @@
     <string name="prompt_male">Male</string>
     <string name="prompt_female">Female</string>
     <string name="prompt_phone">Mobile number</string>
-    <string name="prompt_qualified">Select in which area you are qualified?</string>
+    <string name="prompt_qualified">Select in which Areas you have professional qualifications</string>
     <string name="prompt_submit">Submit</string>
     <string name="prompt_address">Address</string>
     <string name="prompt_flat_street">Flat No./House No./Street</string>
-    <string name="prompt_address_line_1">Address</string>
+    <string name="prompt_address_line_1">Street address</string>
     <string name="prompt_group_class_location">Group class location</string>
 
     <string name="prompt_address1">City, state, country</string>
@@ -775,6 +776,7 @@
     <string name="prompt_state">State</string>
     <string name="prompt_country">Country</string>
     <string name="prompt_pin">Zip/Post Code</string>
+    <string name="prompt_teaching_preferences">Teaching Preference</string>
     <string name="prompt_passion">Passion</string>
     <string name="prompt_profession">Profession</string>
     <string name="prompt_accomplishment">Qualification</string>

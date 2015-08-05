@@ -67,7 +67,10 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
             return;
         }
         setContentView(R.layout.activity_validate_phone);
-        Toast.makeText(this, getResources().getString(R.string.otp_sent_to_registered_number), Toast.LENGTH_SHORT).show();
+        Toast toast=Toast.makeText(this, getResources().getString(R.string.otp_sent_to_registered_number), Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 0);
+        toast.show();
+
         initView();
     }
 
