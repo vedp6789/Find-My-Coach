@@ -28,6 +28,7 @@ import com.findmycoach.app.beans.authentication.SubCategoryName;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
+import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
@@ -419,6 +420,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         if (statusCode == 200 && response.getData() != null) {
             /** Saving user group */
 
+        StorageHelper.saveUserProfile(this,new Gson().toJson(response));
 
             String user_group_saved = StorageHelper.getUserGroup(SignUpActivity.this, "user_group");
             if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group))) {
@@ -488,6 +490,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             startActivity(new Intent(this, DashboardActivity.class));
 
         }
+
     }
 
 
