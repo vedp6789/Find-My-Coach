@@ -736,6 +736,7 @@
     <string name="prompt_enter_phone">Enter phone number</string>
     <string name="prompt_email_id">Email Id</string>
     <string name="prompt_password">Password</string>
+    <string name="prompt_password_minimum_5_characters">Password (minimum 5 characters)</string>
     <string name="old_password">Old password:</string>
     <string name="new_password">New password:</string>
     <string name="new_password_re">Re enter new password:</string>
@@ -760,7 +761,7 @@
     <string name="prompt_submit">Submit</string>
     <string name="prompt_address">Address</string>
     <string name="prompt_flat_street">Flat No./House No./Street</string>
-    <string name="prompt_address_line_1">Address</string>
+    <string name="prompt_address_line_1">Street address</string>
     <string name="prompt_group_class_location">Group class location</string>
 
     <string name="prompt_address1">City, state, country</string>

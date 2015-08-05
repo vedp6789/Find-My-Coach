@@ -30,11 +30,12 @@
 
             <com.findmycoach.app.views.ChizzleEditText
                 android:id="@+id/addressLine1"
+                android:layout_below="@+id/county_outline"
                 style="@style/EditTextCustomHoloPurple"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/back_margin"
-                android:hint="@string/prompt_addressline1"
+                android:hint="@string/prompt_flat_street"
                 android:inputType="textCapSentences|textNoSuggestions|textCapWords"
                 android:singleLine="true"
                 android:textCursorDrawable="@drawable/cursor_purple"
@@ -48,7 +49,7 @@
                 android:layout_below="@+id/addressLine1"
                 android:layout_marginBottom="@dimen/back_margin"
                 android:layout_marginTop="@dimen/back_margin"
-                android:hint="@string/prompt_locality"
+                android:hint="@string/prompt_address1"
                 android:inputType="textCapSentences|textNoSuggestions|textCapWords"
                 android:singleLine="true"
                 android:imeOptions="actionNext"
@@ -72,11 +73,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_button_height"
                 android:background="@android:color/transparent"
-                android:spinnerMode="dropdown"
-                android:layout_below="@+id/zip"/>
+                android:spinnerMode="dropdown"/>
 
 
             <LinearLayout
+                android:id="@+id/county_outline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-10dp"
