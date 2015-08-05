@@ -122,6 +122,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private ArrayList<String> country_names;
     public static int FLAG_FOR_EDIT_PROFILE_MENTEE = -5;
     private ChizzleTextView mentorForHeader;
+    boolean country_update;
 
 
     @Override
@@ -133,6 +134,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
         Log.e(TAG, userInfo.getMultipleAddress().size() + "");
         if (userInfo.getMultipleAddress() == null || userInfo.getMultipleAddress().size() == 0) {
+            updateCountryByLocation();
             getAddress();
         }
 
@@ -170,6 +172,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             Log.e(TAG, "country code" + i + " " + country_code_from_server);
             if (country_code_from_server.equalsIgnoreCase(country_code)) {
                 profileCountry.setSelection(i);
+                country_update=true;
             }
         }
     }
@@ -195,6 +198,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     }
 
     private void initialize() {
+        country_update=false;
         coachingTypeOptions = getResources().getStringArray(R.array.coaching_type);
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
         removeProfilePicture = false;
@@ -811,7 +815,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             } catch (Exception ignored) {
             }
         }
+
+        if(!country_update)
         updateCountryByLocation();
+
         return true;
     }
 

@@ -148,6 +148,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private ArrayList<String> country_names;
     public static int FLAG_FOR_EDIT_PROFILE_MENTOR = -11;
     private ChizzleTextView teachingMediumHeader;
+    boolean country_update;
 
 
     @Override
@@ -158,8 +159,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         applyAction();
 
         Log.e(TAG, userInfo.getMultipleAddress().size() + "");
-        if (userInfo.getMultipleAddress() == null || userInfo.getMultipleAddress().size() == 0)
+        if (userInfo.getMultipleAddress() == null || userInfo.getMultipleAddress().size() == 0) {
+            Log.e(TAG, "12");
+            updateCountryByLocation();
             getAddress();
+        }
+
 
         populateUserData();
         isGettingAddress = false;
@@ -179,7 +184,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             //getNetworkCountryIso
             country_code = manager.getSimCountryIso().toUpperCase();
             if (country_code != "") {
-                Log.e(TAG,"country code from SIM: "+country_code);
+                Log.e(TAG, "country code from SIM: " + country_code);
                 populateCountry(country_code);
             } else {
                 country_code = NetworkManager.countryCode;
@@ -199,6 +204,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             String country_code_from_server = country.getIso();
             Log.e(TAG, "country code" + i + " " + country_code_from_server);
             if (country_code_from_server.equalsIgnoreCase(country_code)) {
+                country_update = true;
                 profileCountry.setSelection(i);
             }
         }
@@ -228,6 +234,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     }
 
     private void initialize() {
+        country_update = false;
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
         ageAndExperienceErrorCounter = 0;
         Log.e(TAG, getIntent().getStringExtra("user_info"));
@@ -266,7 +273,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         addressArrayListMentor = new ArrayList<>();
         addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayListMentor);
         addressListViewMentor.setAdapter(addressAdapter);
-        teachingMediumHeader =(ChizzleTextView)findViewById(R.id.teachingMediumPreferenceHeader);
+        teachingMediumHeader = (ChizzleTextView) findViewById(R.id.teachingMediumPreferenceHeader);
         profileCountry = (Spinner) findViewById(R.id.country);
         country_names = new ArrayList<String>();
         countries = new ArrayList<Country>();
@@ -276,11 +283,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String authToken = StorageHelper.getUserDetails(EditProfileActivityMentor.this, "auth_token");
-          RequestParams requestParams = new RequestParams();
+                RequestParams requestParams = new RequestParams();
 
 
                 requestParams.add("country", countries.get(position).getIso());
-               NetworkClient.getCurrencySymbol(EditProfileActivityMentor.this, requestParams, authToken, EditProfileActivityMentor.this, 52);
+                NetworkClient.getCurrencySymbol(EditProfileActivityMentor.this, requestParams, authToken, EditProfileActivityMentor.this, 52);
             }
 
             @Override
@@ -559,7 +566,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     hideKeyboard();
                     pinCode.clearFocus();
                     teachingMediumHeader.requestFocus();
-                    return  true;
+                    return true;
 //                    openAreaOfCoachingActivity();
                 }
                 return false;
@@ -689,7 +696,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     }
 
 
-
     public void populateUserData() {
         try {
             if (userInfo == null) {
@@ -725,8 +731,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
 
             try {
-                if(!userInfo.getCharges().equalsIgnoreCase("0"))
-                       chargeInput.setText(userInfo.getCharges());
+                if (!userInfo.getCharges().equalsIgnoreCase("0"))
+                    chargeInput.setText(userInfo.getCharges());
             } catch (Exception ignored) {
             }
             try {
@@ -789,7 +795,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 //                currencySymbol.setText(Html.fromHtml(userInfo.getCurrencyCode()));
 //            }
 
-            if(userInfo.getCurrencyCode()!=null){
+            if (userInfo.getCurrencyCode() != null) {
                 currencySymbol.setText(Html.fromHtml(userInfo.getCurrencyCode()));
             }
 //
@@ -939,7 +945,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
                         if (!userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
-                            if (updateAddress());
+                            if (updateAddress()) ;
 
                         }
 
@@ -975,7 +981,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
 
 
-
         if (userInfo != null && (userInfo.getZip() == null || userInfo.getZip().toString().trim().equals("") || userInfo.getZip().toString().trim().equals("0"))) {
             try {
                 if (NetworkManager.postalCodeName != null && !NetworkManager.postalCodeName.trim().equals(""))
@@ -991,7 +996,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
         }
 
+        if(!country_update)
         updateCountryByLocation();
+
         return true;
     }
 
