@@ -756,7 +756,7 @@
     <string name="prompt_male">Male</string>
     <string name="prompt_female">Female</string>
     <string name="prompt_phone">Mobile number</string>
-    <string name="prompt_qualified">Select in which area you are qualified?</string>
+    <string name="prompt_qualified">Select in which Areas you have professional qualifications</string>
     <string name="prompt_submit">Submit</string>
     <string name="prompt_address">Address</string>
     <string name="prompt_flat_street">Flat No./House No./Street</string>
