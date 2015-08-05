@@ -422,6 +422,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text='@string/prompt_teaching_preferences'
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:textColor="@color/purple_light"
                         android:textSize="@dimen/profile_heading"
                         android:textStyle="bold" />

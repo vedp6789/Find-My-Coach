@@ -358,6 +358,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/back_margin"
                     android:text="@string/mentor_for"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:textColor="@color/purple_light"
                     android:textSize="@dimen/profile_heading"
                     android:textStyle="bold" />

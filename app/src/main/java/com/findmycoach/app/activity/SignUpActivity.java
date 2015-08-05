@@ -158,7 +158,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             finish();
         else if (id == R.id.facebook_login_button && LoginActivity.loginActivity != null) {
             progressDialog.show();
-            if(radioButton_mentee_signup.isChecked())
+            if (radioButton_mentee_signup.isChecked())
                 LoginActivity.loginActivity.user_group = 2;
             else
                 LoginActivity.loginActivity.user_group = 3;
@@ -166,7 +166,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             finish();
         } else if (id == R.id.sign_in_button && LoginActivity.loginActivity != null) {
             progressDialog.show();
-            if(radioButton_mentee_signup.isChecked())
+            if (radioButton_mentee_signup.isChecked())
                 LoginActivity.loginActivity.user_group = 2;
             else
                 LoginActivity.loginActivity.user_group = 3;
@@ -420,7 +420,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         if (statusCode == 200 && response.getData() != null) {
             /** Saving user group */
 
-        StorageHelper.saveUserProfile(this,new Gson().toJson(response));
+            StorageHelper.saveUserProfile(this, new Gson().toJson(response));
 
             String user_group_saved = StorageHelper.getUserGroup(SignUpActivity.this, "user_group");
             if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group))) {

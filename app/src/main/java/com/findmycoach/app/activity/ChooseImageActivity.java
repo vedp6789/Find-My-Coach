@@ -181,7 +181,7 @@ public class ChooseImageActivity extends Activity {
             try {
                 cropImageView.setImageBitmap(decodeFile(new File(imgDecodableString)));
                 isImageSelected = true;
-
+                removeImageButton.setVisibility(View.VISIBLE);
 
             } catch (Exception e) {
                 Toast.makeText(this, getResources().getString(R.string.error_picking_image), Toast.LENGTH_SHORT).show();
