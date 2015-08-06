@@ -24,6 +24,17 @@ public class Country {
     @SerializedName("numbers_in_phone_number")
     @Expose
     int digitsInPhoneNumber;
+    @SerializedName("unicode")
+    @Expose
+    String currencySymbol;
+
+    public String getCurrencySymbol() {
+        return currencySymbol;
+    }
+
+    public void setCurrencySymbol(String currencySymbol) {
+        this.currencySymbol = currencySymbol;
+    }
 
     public int getId() {
         return id;

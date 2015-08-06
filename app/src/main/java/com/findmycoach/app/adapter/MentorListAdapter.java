@@ -23,6 +23,7 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.beans.search.Datum;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.MetaData;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
@@ -112,7 +113,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
 
         try {
             int charges = Integer.parseInt(user.getChargesClass());
-            String currency = StorageHelper.getCurrency(context);
+            String currency = MetaData.getCurrencySymbol(MetaData.countryCode(context), context);
             if (currency.equals(""))
                 chargesTV.setText(charges == 0 ? user.getChargesHour() + "/hr" : charges + "/cl");
             else

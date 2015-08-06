@@ -40,6 +40,7 @@ import com.findmycoach.app.beans.mentor.Response;
 import com.findmycoach.app.fragment.DatePickerFragment;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.MetaData;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.StorageHelper;
@@ -545,7 +546,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         if (userInfo.getCharges() != null) {
             charges = (userInfo.getCharges().equals("0") ? userInfo.getCharges() + " per hour" : userInfo.getCharges() + " per hour");
             Log.d(TAG, "Charges amount : " + charges.split("per", 2)[0] + "charges unit : " + charges.split("per", 2)[1]);
-            String currency = StorageHelper.getCurrency(this);
+            String currency = MetaData.getCurrencySymbol(MetaData.countryCode(this), this);
             if (currency.equals(""))
                 profileCharges.setText(charges);
             else

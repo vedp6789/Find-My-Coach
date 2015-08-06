@@ -654,8 +654,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
             int position = -1;
             for (Address a : userInfo.getMultipleAddress()) {
-                Log.e(TAG, "Inside address for loop : " + a.getDefault_yn());
-                if (a.getDefault_yn() == 1) {
+                Log.e(TAG, "Inside address for loop : " + a.getIsDefault());
+                if (a.getIsDefault() == 1) {
                     position = userInfo.getMultipleAddress().indexOf(a);
                     Log.e(TAG, "found at : " + position);
                     break;
@@ -672,11 +672,11 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
 
             try {
-                profileAddress.setText(address.getAddressLine1());
+                profileAddress.setText(address.getPhysicalAddress());
             } catch (Exception ignored) {
             }
             try {
-                profileAddress1.setText(address.getLocality());
+                profileAddress1.setText(address.getLocale());
             } catch (Exception ignored) {
             }
             try {
@@ -684,12 +684,12 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             } catch (Exception ignored) {
             }
             try {
-                city = address.getLocality();                 /* city string initially set to the city i.e. earlier get updated*/
+                city = address.getLocale();                 /* city string initially set to the city i.e. earlier get updated*/
             } catch (Exception ignored) {
             }
             try {
                 int country_id;
-                country_id = address.getCountry();
+                country_id = address.getCountryId();
                 if (countries != null && countries.size() > 0) {
                     for (int i = 0; i < countries.size(); i++) {
                         Country country = countries.get(i);
@@ -965,20 +965,20 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             Address address = null;
             try {
                 address = new Address();
-                address.setAddressLine1(profileAddress.getText().toString());
-                address.setLocality(profileAddress1.getText().toString());
+                address.setPhysicalAddress(profileAddress.getText().toString());
+                address.setLocale(profileAddress1.getText().toString());
                 address.setZip(pinCode.getText().toString());
-                address.setDefault_yn(1);
+                address.setIsDefault(1);
                 Country country = countries.get(profileCountry.getSelectedItemPosition());
-                address.setCountry(country.getId()); /* setting country id from countries list*/
+                address.setCountryId(country.getId()); /* setting country id from countries list*/
             } catch (Exception e) {
                 e.printStackTrace();
             }
             int position = -1;
             Log.e(TAG, addressArrayList.size() + " address size");
             for (Address a : addressArrayList) {
-                Log.e(TAG, "Inside address for loop : " + a.getDefault_yn());
-                if (a.getDefault_yn() == 1) {
+                Log.e(TAG, "Inside address for loop : " + a.getIsDefault());
+                if (a.getIsDefault() == 1) {
                     position = addressArrayList.indexOf(a);
                     Log.e(TAG, "found at : " + position);
                     break;
@@ -1129,12 +1129,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
             Log.d(TAG, "city: " + StorageHelper.addressInformation(EditProfileActivityMentee.this, "user_city_state"));
             Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentee.this, "user_zip_code"));
-
-            String currencyCode = StorageHelper.getCurrency(this);
-            if (currencyCode == null || currencyCode.trim().equals("")) {
-                StorageHelper.setCurrency(this, userInfo.getCurrencyCode());
-                Log.d(TAG, "Currency code : " + currencyCode);
-            }
 
             try {
                 String name = profileFirstName.getText().toString() + " " + profileLastName.getText().toString();

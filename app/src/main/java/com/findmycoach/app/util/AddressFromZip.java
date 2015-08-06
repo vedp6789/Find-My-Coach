@@ -251,8 +251,6 @@ public class AddressFromZip extends AsyncTask<String, Void, String> implements C
             String[] symbols = symbol.split("&");
             currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
         }
-        StorageHelper.setCurrency(context, currency.getCurrencySymbol());
-
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.findmycoach.app.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -25,6 +26,7 @@ public class AreaOfInterestSub extends Activity {
     private ListView listView;
     private final String TAG = "AreaOfInterestSub";
     private TextView title;
+    public List<DatumSub> selectedDatumSub;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +34,24 @@ public class AreaOfInterestSub extends Activity {
         setContentView(R.layout.activity_areas_of_interest);
         listView = (ListView) findViewById(R.id.areas_of_interest_list);
         title = (TextView) findViewById(R.id.title);
+        selectedDatumSub = new ArrayList<>();
+    }
 
-        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+    @Override
+    public void onBackPressed() {
+        for (DatumSub sub : selectedDatumSub) {
+            Log.e(TAG, sub.getId() + " : " + sub.getName() + " : " + sub.getPrice()
+                    + " : " + sub.getLevel() + " : " + sub.isSelected());
+
+            if (sub.isSelected()) {
+                sub.setIsSelected(false);
+                updateParentCategorySelectedItems(sub, -1);
+            } else {
+                sub.setIsSelected(true);
+                updateParentCategorySelectedItems(sub, 1);
             }
-        });
+        }
+        super.onBackPressed();
     }
 
     private void initView() {
@@ -46,7 +59,19 @@ public class AreaOfInterestSub extends Activity {
         index = getIntent().getIntExtra("index", -2);
         int level = getIntent().getIntExtra("level", -1);
 
-        findViewById(R.id.buttonSave).setVisibility(View.GONE);
+        findViewById(R.id.buttonSave).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         Datum datum = null;
         if (index != -2 && index != AreasOfInterestActivity.category.getData().size()
@@ -70,6 +95,15 @@ public class AreaOfInterestSub extends Activity {
                 }
                 InterestsAdapter adapter = new InterestsAdapter(this, list);
                 listView.setAdapter(adapter);
+
+                findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
+
+                findViewById(R.id.buttonSave).setVisibility(View.GONE);
 
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -131,6 +165,12 @@ public class AreaOfInterestSub extends Activity {
                     datumSubList.get(position).setIsSelected(false);
                     updateParentCategorySelectedItems(datumSubList.get(position), -1);
                 }
+
+                if (selectedDatumSub.contains(datumSubList.get(position)))
+                    selectedDatumSub.remove(datumSubList.get(position));
+                else
+                    selectedDatumSub.add(datumSubList.get(position));
+
                 adapter.notifyDataSetChanged();
             }
         });

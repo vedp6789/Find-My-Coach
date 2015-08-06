@@ -142,15 +142,6 @@ public class StorageHelper {
 //        Log.e("FMC", "StorageHelper : " + pathVideos.getPath());
     }
 
-    public static String getCurrency(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString("currency_code", "");
-    }
-
-    public static void setCurrency(Context context, String currencyCode) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        preferences.edit().putString("currency_code", currencyCode).apply();
-    }
-
     public static String getUserAddress(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getString("user_local_address", "") + " " + preferences.getString("user_city_state", "")

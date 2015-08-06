@@ -7,46 +7,86 @@ import com.google.gson.annotations.SerializedName;
  * Created by abhi7 on 27/07/15.
  */
 public class Address {
-    @SerializedName("addressline1")
+
+
     @Expose
-    private String addressLine1;
-    private String locality;
-    private String zip;
-    private int default_yn;
+    int id;
+    @Expose
+    String city;
+    @Expose
+    String country;
+    @SerializedName("physical_address")
+    @Expose
+    String physicalAddress;
+    @Expose
+    String locale;
+    @Expose
+    String longitude;
+    @Expose
+    String latitude;
+    @Expose
+    String zip;
+    @SerializedName("default_yn")
+    @Expose
+    int isDefault;
     @SerializedName("country_id")
     @Expose
-    private int country;   // country id
+    int countryId;
 
-    public int getCountry() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
         return country;
     }
 
-    public void setCountry(int country) {
+    public void setCountry(String country) {
         this.country = country;
     }
 
-    public int getDefault_yn() {
-        return default_yn;
+    public String getPhysicalAddress() {
+        return physicalAddress;
     }
 
-    public void setDefault_yn(int default_yn) {
-        this.default_yn = default_yn;
+    public void setPhysicalAddress(String physicalAddress) {
+        this.physicalAddress = physicalAddress;
     }
 
-    public String getAddressLine1() {
-        return addressLine1;
+    public String getLocale() {
+        return locale;
     }
 
-    public void setAddressLine1(String addressLine1) {
-        this.addressLine1 = addressLine1;
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 
-    public String getLocality() {
-        return locality;
+    public String getLongitude() {
+        return longitude;
     }
 
-    public void setLocality(String locality) {
-        this.locality = locality;
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 
     public String getZip() {
@@ -55,5 +95,21 @@ public class Address {
 
     public void setZip(String zip) {
         this.zip = zip;
+    }
+
+    public int getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(int isDefault) {
+        this.isDefault = isDefault;
+    }
+
+    public int getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(int countryId) {
+        this.countryId = countryId;
     }
 }

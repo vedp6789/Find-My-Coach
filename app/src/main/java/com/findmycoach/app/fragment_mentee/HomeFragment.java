@@ -541,15 +541,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         try {
             ProfileResponse response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), ProfileResponse.class);
             for (Address address : response.getData().getMultipleAddress()) {
-                if (address.getDefault_yn() == 1) {
-                    if (address.getAddressLine1() != null)
-                        location = address.getAddressLine1() + " " + address.getLocality() + " " + address.getZip();
+                if (address.getIsDefault() == 1) {
+                    if (address.getPhysicalAddress() != null)
+                        location = address.getPhysicalAddress() + " " + address.getCity() + " " + address.getCountry();
                 }
             }
 
             if (location == null || location.trim().equals("")) {
                 Address address = response.getData().getMultipleAddress().get(0);
-                location = address.getAddressLine1() + " " + address.getLocality() + " " + address.getZip();
+                location = address.getPhysicalAddress() + " " + address.getCity() + " " + address.getCountry();
             }
         } catch (Exception ignored) {
         }
