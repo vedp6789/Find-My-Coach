@@ -88,6 +88,7 @@ import java.util.TimeZone;
     *       saveCardDetails                 53
         *       //Save entered card details
         *   Grades                          54
+        *   CountryConfig                   55
     * */
 
 
@@ -2024,6 +2025,41 @@ public class NetworkClient {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
         client.get(context, getAbsoluteURL("grades", context), new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    String responseJson = new String(responseBody);
+                    callback.successOperation(responseJson, statusCode, calledApiValue);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseBody, null);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    String responseJson = new String(responseBody);
+                    Log.d("CurrencyNew",responseJson);
+                    callback.failureOperation(responseJson, statusCode, calledApiValue);
+                } catch (Exception e) {
+                    try {
+                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        });
+    }
+
+    public static void getCountryConfig(final Context context,RequestParams requestParams,String authToken, final Callback callback, final int calledApiValue) {
+        if (!NetworkManager.isNetworkConnected(context)) {
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.get(context, getAbsoluteURL("countryConfig", context),requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {

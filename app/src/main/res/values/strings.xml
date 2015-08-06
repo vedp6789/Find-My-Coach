@@ -748,7 +748,7 @@
     <string name="prompt_last_name">Last name</string>
     <string name="prompt_date_of_birth">Date of birth</string>
     <string name="prompt_gender">Gender</string>
-    <string name="prompt_grade">Grade</string>
+    <string name="prompt_grade">Grade:</string>
     <string name="prompt_area_of_interest">Area of interests</string>
     <string name="prompt_area_of_coaching">Area of coaching</string>
     <string name="please_add_area_of_interest">Please add area of interest.</string>

@@ -7,9 +7,10 @@
 
     >
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal">
         <com.findmycoach.app.views.ChizzleTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -91,8 +92,7 @@
             android:textSize="14sp"
             android:textIsSelectable="false"
             android:textColor="@color/purple"
-            android:layout_toRightOf="@+id/gradeHeader"
-            android:layout_alignTop="@+id/gradeHeader" />
+            android:layout_alignLeft="@+id/genderText" />
 
     </RelativeLayout>
 

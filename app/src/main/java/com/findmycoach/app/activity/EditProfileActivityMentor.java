@@ -52,6 +52,7 @@ import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.category.Country;
 import com.findmycoach.app.beans.category.Datum;
 import com.findmycoach.app.beans.category.DatumSub;
+import com.findmycoach.app.beans.mentor.CountryConfig;
 import com.findmycoach.app.beans.mentor.Currency;
 import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.suggestion.Prediction;
@@ -77,6 +78,8 @@ import com.findmycoach.app.views.DobPicker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
@@ -149,6 +152,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     public static int FLAG_FOR_EDIT_PROFILE_MENTOR = -11;
     private ChizzleTextView teachingMediumHeader;
     boolean country_update;
+    private ArrayList<CountryConfig> countryConfigArrayList;
+    private RelativeLayout countryConditionLayout;
+    private ChizzleTextView checkBoxCountryConditionText;
+    private CheckBox countryConditionCheckBox;
+    private int countyConfigId;
 
 
     @Override
@@ -277,7 +285,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         profileCountry = (Spinner) findViewById(R.id.country);
         country_names = new ArrayList<String>();
         countries = new ArrayList<Country>();
+        countryConfigArrayList=new ArrayList<>();
+        countryConditionLayout=(RelativeLayout)findViewById(R.id.countryConditionLayout);
         countries = MetaData.getCountryObject(this);
+        checkBoxCountryConditionText=(ChizzleTextView)findViewById(R.id.checkBoxCountryCondition);
+        countryConditionCheckBox=(CheckBox)findViewById(R.id.inputCountryCondition);
 
         profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -322,6 +334,25 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     addressListViewMentor.setVisibility(View.GONE);
                     addMoreAddress.setVisibility(View.GONE);
                 }
+            }
+        });
+
+
+        profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (NetworkManager.isNetworkConnected(EditProfileActivityMentor.this)) {
+                    RequestParams requestParams= new RequestParams();
+                    requestParams.add("country_id", String.valueOf(countries.get(position).getId()));
+                    NetworkClient.getCountryConfig(EditProfileActivityMentor.this,requestParams, StorageHelper.getUserDetails(EditProfileActivityMentor.this, "auth_token"), EditProfileActivityMentor.this,55);
+                } else
+                    Toast.makeText(EditProfileActivityMentor.this, EditProfileActivityMentor.this.getString(R.string.check_network_connection), Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
@@ -1275,6 +1306,24 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 e.printStackTrace();
             }
 
+           try {
+                JSONArray jsonArray=new JSONArray();
+                JSONObject jsonObject=new JSONObject();
+               jsonObject.put("country_config_id",countyConfigId);
+               if(countryConditionCheckBox.isChecked()) {
+                   jsonObject.put("config_value","1");
+
+               }
+               else {
+                   jsonObject.put("config_value","0");
+               }
+               jsonArray.put(0,jsonObject);
+               requestParams.add("country_config",jsonArray.toString());
+           }
+           catch (Exception e) {
+
+           }
+
             requestParams.add("locations", new Gson().toJson(addressArrayListMentor));
             Log.e(TAG, "locations sending : " + new Gson().toJson(addressArrayListMentor));
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
@@ -1488,7 +1537,30 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         } else if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
-        } else {
+        }
+        else if(calledApiValue==55) {
+            String response=(String)object;
+            try {
+                JSONArray jsonArray=new JSONArray(response);
+                if(jsonArray.length()>=1) {
+                    countryConfigArrayList = new Gson().fromJson(jsonArray.toString(), new TypeToken<List<CountryConfig>>() {
+                    }.getType());
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            if(countryConfigArrayList.size()>=1){
+                countyConfigId=countryConfigArrayList.get(0).getId();
+                countryConditionLayout.setVisibility(View.VISIBLE);
+                checkBoxCountryConditionText.setText(countryConfigArrayList.get(0).getConfigTitle());
+            }
+            else {
+                countryConditionLayout.setVisibility(View.GONE);
+            }
+
+        }
+        else {
             progressDialog.dismiss();
             Response response = (Response) object;
             userInfo = response.getData();

@@ -44,9 +44,11 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.AddressAdapter;
 import com.findmycoach.app.adapter.ChildDetailsAdapter;
 import com.findmycoach.app.beans.category.Country;
+import com.findmycoach.app.beans.mentor.CountryConfig;
 import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.student.ChildDetails;
 import com.findmycoach.app.beans.student.Data;
+import com.findmycoach.app.beans.student.Grade;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
@@ -68,7 +70,11 @@ import com.findmycoach.app.views.DobPicker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -123,6 +129,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     public static int FLAG_FOR_EDIT_PROFILE_MENTEE = -5;
     private ChizzleTextView mentorForHeader;
     boolean country_update;
+
+
 
 
 
@@ -263,6 +271,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
 
         ///ListViewInsideScrollViewHelper.getListViewSize(addressListView);
+
 
 
         mentorFor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1102,7 +1111,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
-        } else {
+        }
+
+
+        else {
             progressDialog.dismiss();
             ProfileResponse response = (ProfileResponse) object;
             userInfo = response.getData();
