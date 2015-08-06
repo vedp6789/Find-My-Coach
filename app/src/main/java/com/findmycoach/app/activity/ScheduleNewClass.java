@@ -47,6 +47,7 @@ import com.findmycoach.app.fragment_mentee.ChildDOB;
 import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
+import com.findmycoach.app.util.MetaData;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.ScrollableGridView;
@@ -61,7 +62,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by praka_000 on 3/4/2015.
@@ -118,12 +118,12 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
     ArrayAdapter<String> arrayAdapter;
     private boolean isGettingAddress;
     private List<Prediction> predictions;
-    public static int FLAG_FOR_SCHEDULE_NEW_CLASS=-7;
+    public static int FLAG_FOR_SCHEDULE_NEW_CLASS = -7;
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(SetScheduleActivity.setScheduleActivity != null){
+        if (SetScheduleActivity.setScheduleActivity != null) {
             SetScheduleActivity.setScheduleActivity.makeOnEventClickEnable();
         }
     }
@@ -324,7 +324,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
                         || (actionId == EditorInfo.IME_ACTION_DONE)
                         || actionId == EditorInfo.IME_ACTION_NEXT) {
                     try {
-                        new AddressFromZip(ScheduleNewClass.this,ScheduleNewClass.this, city, et_tutorial_location, true,FLAG_FOR_SCHEDULE_NEW_CLASS).execute(et_pin_code.getText().toString());
+                        new AddressFromZip(ScheduleNewClass.this, ScheduleNewClass.this, city, et_tutorial_location, true, FLAG_FOR_SCHEDULE_NEW_CLASS).execute(et_pin_code.getText().toString());
                         isGettingAddress = true;
                     } catch (Exception ignored) {
                     }
@@ -434,7 +434,6 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         }
 
 
-
         Log.d(TAG, "mentor availability : " + bundle.getString("mentor_availability"));
 
 
@@ -498,20 +497,20 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             week_days[i] = week_days_as_per_calendar_class.get(i);
         }
 
-        for(String i:week_days){
-            Log.d(TAG,"week dya: "+i);
+        for (String i : week_days) {
+            Log.d(TAG, "week dya: " + i);
         }
 
-        List<Integer> week_day_list_as_per_duration= new ArrayList<Integer>();
-        Calendar calendar_start= (Calendar) calendar_schedule_start_date.clone();
+        List<Integer> week_day_list_as_per_duration = new ArrayList<Integer>();
+        Calendar calendar_start = (Calendar) calendar_schedule_start_date.clone();
         Calendar calendar_stop = (Calendar) calendar_stop_date_of_schedule.clone();
         ArrayList<SlotDurationDetailBean> slotDurationDetailBeans1 = slot.calculateNoOfTotalClassDays(calendar_start, calendar_stop, week_days);
-        if(slotDurationDetailBeans1.size() < 7){
-            Log.d(TAG,"week_days size: "+slotDurationDetailBeans1.size());
-            for(int i =0 ; i < slotDurationDetailBeans1.size(); i++){
-                 SlotDurationDetailBean slotDurationDetailBean=slotDurationDetailBeans1.get(i);
-                 int i1=Integer.parseInt(slotDurationDetailBean.getWeek_day());
-                 week_day_list_as_per_duration.add(i1);
+        if (slotDurationDetailBeans1.size() < 7) {
+            Log.d(TAG, "week_days size: " + slotDurationDetailBeans1.size());
+            for (int i = 0; i < slotDurationDetailBeans1.size(); i++) {
+                SlotDurationDetailBean slotDurationDetailBean = slotDurationDetailBeans1.get(i);
+                int i1 = Integer.parseInt(slotDurationDetailBean.getWeek_day());
+                week_day_list_as_per_duration.add(i1);
                  /*boolean match_not_found=true;
                  for(int u=0 ; u < week_days_as_per_calendar_class.size(); u++){
                      int day=week_days_as_per_calendar_class.get(u);
@@ -527,9 +526,9 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
             }
             selectedDays = new ArrayList<>();
-            for(int s=0; s < week_day_list_as_per_duration.size();s++){
+            for (int s = 0; s < week_day_list_as_per_duration.size(); s++) {
                 int i = week_day_list_as_per_duration.get(s);
-                switch (i){
+                switch (i) {
                     case 1:
                         selectedDays.add(6);
                         break;
@@ -556,12 +555,10 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             gridView.setAdapter(new AddSlotAdapter(getResources().getStringArray(R.array.week_days_mon), selectedDays, this));
 
 
-        }else{
+        } else {
             gridView.setAdapter(new AddSlotAdapter(getResources().getStringArray(R.array.week_days_mon), selectedDays, this));
 
         }
-
-
 
 
         Calendar calendar_temp_start_date = Calendar.getInstance();
@@ -722,7 +719,7 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
 
 
                 try {
-                    String currency = StorageHelper.getCurrency(this);
+                    String currency = MetaData.getCurrencySymbol(MetaData.countryCode(this), this);
                     if (currency.equals(""))
                         tv_total_charges.setText(String.valueOf(total_class_duration_amount));
                     else

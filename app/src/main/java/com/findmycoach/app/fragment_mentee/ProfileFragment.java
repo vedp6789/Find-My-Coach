@@ -282,14 +282,14 @@ public class ProfileFragment extends Fragment implements Callback {
             if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
                 preferredAddressLayout.setVisibility(View.VISIBLE);
                 for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
-                    int default_yn = userInfo.getMultipleAddress().get(i).getDefault_yn();
+                    int default_yn = userInfo.getMultipleAddress().get(i).getIsDefault();
                     if (default_yn == 1) {
                         String address = "";
-                        if (userInfo.getMultipleAddress().get(i).getAddressLine1() != null && !userInfo.getMultipleAddress().get(i).getAddressLine1().trim().equals("")) {
-                            address = address + userInfo.getMultipleAddress().get(i).getAddressLine1().trim() + ", ";
+                        if (userInfo.getMultipleAddress().get(i).getPhysicalAddress() != null && !userInfo.getMultipleAddress().get(i).getPhysicalAddress().trim().equals("")) {
+                            address = address + userInfo.getMultipleAddress().get(i).getPhysicalAddress().trim() + ", ";
                         }
-                        if (userInfo.getMultipleAddress().get(i).getLocality() != null) {
-                            address = address + userInfo.getMultipleAddress().get(i).getLocality() + ", ";
+                        if (userInfo.getMultipleAddress().get(i).getLocale() != null) {
+                            address = address + userInfo.getMultipleAddress().get(i).getLocale() + ", ";
                         }
 /*                        if (userInfo.getState() != null) {
                             address = address + userInfo.getState() + ", ";

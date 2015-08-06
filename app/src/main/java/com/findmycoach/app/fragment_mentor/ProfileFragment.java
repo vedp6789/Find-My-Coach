@@ -427,13 +427,10 @@ public class ProfileFragment extends Fragment implements Callback {
         });
 
         if (userInfo.getCharges() != null) {
-//            String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-//            RequestParams requestParams = new RequestParams();
-//            requestParams.add("country", String.valueOf(userInfo.getCountry()));
-//
-//            NetworkClient.getCurrencySymbol(getActivity(),requestParams,authToken,ProfileFragment.this,52);
-            if(userInfo.getCurrencyCode()!=null && !userInfo.getCurrencyCode().isEmpty()) {
+            Log.e(TAG, "Currency : " + userInfo.getCharges() + " : " + userInfo.getCharges());
+            if (userInfo.getCurrencyCode() != null && !userInfo.getCurrencyCode().isEmpty()) {
                 String symbol = userInfo.getCurrencyCode();
+                Log.e(TAG, "Currency : " + symbol);
                 if (symbol.charAt(0) == '&')
                     profileCharges.setText(Html.fromHtml(symbol) + " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
                 else {
@@ -466,14 +463,14 @@ public class ProfileFragment extends Fragment implements Callback {
             addressAdapter.notifyDataSetChanged();
             for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
 
-                int default_yn = userInfo.getMultipleAddress().get(i).getDefault_yn();
+                int default_yn = userInfo.getMultipleAddress().get(i).getIsDefault();
                 if (default_yn == 1) {
                     String address = "";
-                    if (userInfo.getMultipleAddress().get(i).getAddressLine1() != null && !userInfo.getMultipleAddress().get(i).getAddressLine1().trim().equals("")) {
-                        address = address + userInfo.getMultipleAddress().get(i).getAddressLine1().trim() + ", ";
+                    if (userInfo.getMultipleAddress().get(i).getPhysicalAddress() != null && !userInfo.getMultipleAddress().get(i).getPhysicalAddress().trim().equals("")) {
+                        address = address + userInfo.getMultipleAddress().get(i).getPhysicalAddress().trim() + ", ";
                     }
-                    if (userInfo.getMultipleAddress().get(i).getLocality() != null) {
-                        address = address + userInfo.getMultipleAddress().get(i).getLocality() + ", ";
+                    if (userInfo.getMultipleAddress().get(i).getLocale() != null) {
+                        address = address + userInfo.getMultipleAddress().get(i).getLocale() + ", ";
                     }
 /*                        if (userInfo.getState() != null) {
                             address = address + userInfo.getState() + ", ";

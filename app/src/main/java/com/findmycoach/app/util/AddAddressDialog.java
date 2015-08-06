@@ -187,14 +187,14 @@ public class AddAddressDialog implements Callback {
                     try {
 
                         Address address = new Address();
-                        address.setAddressLine1(addressLine1.getText().toString());
-                        address.setLocality(locality.getText().toString());
+                        address.setPhysicalAddress(addressLine1.getText().toString());
+                        address.setLocale(locality.getText().toString());
                         address.setZip(zip.getText().toString());
-                        address.setDefault_yn(0);
+                        address.setIsDefault(0);
                         if(countries != null && countries.size() > 0)
-                            address.setCountry(countries.get(sp_country.getSelectedItemPosition()).getId());
+                            address.setCountryId(countries.get(sp_country.getSelectedItemPosition()).getId());
 
-                        Log.e(TAG, address.getAddressLine1() + " : " + address.getLocality() + " : " + address.getZip() + " : " + address.getCountry());
+                        Log.e(TAG, address.getPhysicalAddress() + " : " + address.getLocale() + " : " + address.getZip() + " : " + address.getCountry());
                         onChildDetailsAdded(address);
                     }catch (Exception e){
                         e.printStackTrace();

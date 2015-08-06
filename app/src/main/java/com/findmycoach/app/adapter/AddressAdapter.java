@@ -58,7 +58,7 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        int id = addressArrayList.get(position).getCountry();
+        int id = addressArrayList.get(position).getCountryId();
         String country_name = "";
         if (countries != null && countries.size() > 0) {
             for (int i = 0; i < countries.size(); i++) {
@@ -71,7 +71,7 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
         }
 
 
-        viewHolder.address.setText(addressArrayList.get(position).getAddressLine1().trim() + ", " + addressArrayList.get(position).getLocality().trim() + ", " + addressArrayList.get(position).getZip().trim());
+        viewHolder.address.setText(addressArrayList.get(position).getPhysicalAddress().trim() + ", " + addressArrayList.get(position).getLocale().trim() + ", " + addressArrayList.get(position).getZip().trim());
         return convertView;
     }
 

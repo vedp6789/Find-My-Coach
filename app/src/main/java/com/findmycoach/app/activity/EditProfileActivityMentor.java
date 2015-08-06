@@ -52,7 +52,6 @@ import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.category.Country;
 import com.findmycoach.app.beans.category.Datum;
 import com.findmycoach.app.beans.category.DatumSub;
-import com.findmycoach.app.beans.mentor.Currency;
 import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
@@ -135,6 +134,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     public static ArrayList<Integer> integerArrayList_Of_UpdatedStudentPreference;
     public EditProfileActivityMentor editProfileActivityMentor;
     private ChizzleEditText myQualification, myAccredition, myExperience, myTeachingMethodology, myAwards;
+    private ChizzleTextView myQualificationLimit, myAccreditionLimit, myExperienceLimit, myTeachingMethodologyLimit, myAwardsLimit;
     private int ageAndExperienceErrorCounter;
     private JSONArray selectedAreaOfCoachingJson;
     private Category category;
@@ -268,6 +268,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         myExperience = (ChizzleEditText) findViewById(R.id.myExperience);
         myTeachingMethodology = (ChizzleEditText) findViewById(R.id.myTeachingMethodology);
         myAwards = (ChizzleEditText) findViewById(R.id.myAwards);
+        myQualificationLimit = (ChizzleTextView) findViewById(R.id.myQualificationLimit);
+        myAccreditionLimit = (ChizzleTextView) findViewById(R.id.myAccreditionsLimit);
+        myExperienceLimit = (ChizzleTextView) findViewById(R.id.myExperienceLimit);
+        myTeachingMethodologyLimit = (ChizzleTextView) findViewById(R.id.myTeachingMethodologyLimit);
+        myAwardsLimit = (ChizzleTextView) findViewById(R.id.myAwardsLimit);
         addMoreAddress = (Button) findViewById(R.id.addAddressMentor);
         addressListViewMentor = (ListView) findViewById(R.id.addressesListViewMentor);
         addressArrayListMentor = new ArrayList<>();
@@ -282,12 +287,16 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String authToken = StorageHelper.getUserDetails(EditProfileActivityMentor.this, "auth_token");
-                RequestParams requestParams = new RequestParams();
-
-
-                requestParams.add("country", countries.get(position).getIso());
-                NetworkClient.getCurrencySymbol(EditProfileActivityMentor.this, requestParams, authToken, EditProfileActivityMentor.this, 52);
+                try {
+                    String currencyCode = MetaData.getCurrencySymbol(countries.get(position).getIso(), EditProfileActivityMentor.this);
+                    if (currencyCode.charAt(0) == '&')
+                        currencySymbol.setText(Html.fromHtml(currencyCode));
+                    else {
+                        String[] symbols = currencyCode.split("&");
+                        currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
+                    }
+                } catch (Exception ignored) {
+                }
             }
 
             @Override
@@ -317,8 +326,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     addMoreAddress.setVisibility(View.VISIBLE);
                     addressListViewMentor.setVisibility(View.VISIBLE);
                 } else {
-                    /*addressArrayListMentor.clear();
-                    addressAdapter.notifyDataSetChanged();*/
                     addressListViewMentor.setVisibility(View.GONE);
                     addMoreAddress.setVisibility(View.GONE);
                 }
@@ -361,26 +368,13 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(getResources().getString(R.string.title_edit_profile_menu));
 
-//        profileFirstName.setOnFocusChangeListener(onFocusChangeListener);
-//        profileFirstName.setOnTouchListener(onTouchListener);
-//        profileLastName.setOnFocusChangeListener(onFocusChangeListener);
-//        profileLastName.setOnTouchListener(onTouchListener);
+
         profileDOB.setOnFocusChangeListener(onFocusChangeListener);
         profileDOB.setOnTouchListener(onTouchListener);
-//        profileAddress.setOnFocusChangeListener(onFocusChangeListener);
-//        profileAddress.setOnTouchListener(onTouchListener);
-//        profileAddress1.setOnFocusChangeListener(onFocusChangeListener);
-//        profileAddress1.setOnTouchListener(onTouchListener);
-//        pinCode.setOnFocusChangeListener(onFocusChangeListener);
-//        pinCode.setOnTouchListener(onTouchListener);
         areaOfCoaching.setOnFocusChangeListener(onFocusChangeListener);
         areaOfCoaching.setOnTouchListener(onTouchListener);
 
         o = userInfo.getAgeGroupPreferences();
-
-//        Log.d(TAG,"selected student pref: "+userInfo.getAgeGroupPreferences());
-//        Log.d(TAG,"all selected student pref: "+userInfo.getAllAgeGroupPreferences().size());
-
 
         arrayList = new ArrayList<Integer>();
         if (o != null && !o.trim().equals("")) {
@@ -522,7 +516,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         profileAddress1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                getPostalFromCity(arrayAdapter.getItem(position));
                 try {
                     NetworkManager.countryName = predictions.get(position).getCountry();
                     isGettingAddress = true;
@@ -567,7 +560,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     pinCode.clearFocus();
                     teachingMediumHeader.requestFocus();
                     return true;
-//                    openAreaOfCoachingActivity();
                 }
                 return false;
             }
@@ -785,15 +777,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             teachingPreference.setSelection(Integer.parseInt(userInfo.getAvailabilityYn()));
             classTypeSpinner.setSelection(Integer.parseInt(userInfo.getSlotType()));
-//            if (userInfo.getCountry() != null) {
-//                //       currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
-//                String authToken = StorageHelper.getUserDetails(this, "auth_token");
-//                RequestParams requestParams = new RequestParams();
-//                requestParams.add("country", String.valueOf(userInfo.getCountry()));
-//                NetworkClient.getCurrencySymbol(this, requestParams, authToken, this, 52);
-//            } else {
-//                currencySymbol.setText(Html.fromHtml(userInfo.getCurrencyCode()));
-//            }
 
             if (userInfo.getCurrencyCode() != null && !userInfo.getCurrencyCode().equals("")) {
                 try {
@@ -826,21 +809,21 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 myAwards.setText(userInfo.getSection5());
             }
 
+            addLimitListener(myQualification, myQualificationLimit);
+            addLimitListener(myAccredition, myAccreditionLimit);
+            addLimitListener(myExperience, myExperienceLimit);
+            addLimitListener(myTeachingMethodology, myTeachingMethodologyLimit);
+            addLimitListener(myAwards, myAwardsLimit);
 
             teachingMediumPreference.setText(StorageHelper.getUserDetails(EditProfileActivityMentor.this, "teaching_medium"));
-
-
-//            if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
-//                getAddress();
-
 
             Log.e(TAG, userInfo.getMultipleAddress().size() + " address size");
             if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
 
                 int position = -1;
                 for (Address a : userInfo.getMultipleAddress()) {
-                    Log.e(TAG, "Inside address for loop : " + a.getDefault_yn());
-                    if (a.getDefault_yn() == 1) {
+                    Log.e(TAG, "Inside address for loop : " + a.getIsDefault());
+                    if (a.getIsDefault() == 1) {
                         position = userInfo.getMultipleAddress().indexOf(a);
                         Log.e(TAG, "found at : " + position);
                         break;
@@ -857,11 +840,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 }
 
                 try {
-                    profileAddress.setText(address.getAddressLine1());
+                    profileAddress.setText(address.getPhysicalAddress());
                 } catch (Exception ignored) {
                 }
                 try {
-                    profileAddress1.setText(address.getLocality());
+                    profileAddress1.setText(address.getLocale());
                 } catch (Exception ignored) {
                 }
                 try {
@@ -869,12 +852,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 } catch (Exception ignored) {
                 }
                 try {
-                    city = address.getLocality();                 /* city string initially set to the city i.e. earlier get updated*/
+                    city = address.getLocale();                 /* city string initially set to the city i.e. earlier get updated*/
                 } catch (Exception ignored) {
                 }
                 try {
                     int country_id;
-                    country_id = address.getCountry();
+                    country_id = address.getCountryId();
                     if (countries != null && countries.size() > 0) {
                         for (int i = 0; i < countries.size(); i++) {
                             Country country = countries.get(i);
@@ -930,6 +913,26 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             teachingMediumPreference.setText(getResources().getString(R.string.select));
     }
 
+    private void addLimitListener(ChizzleEditText editText, final ChizzleTextView textViewForLimit) {
+        textViewForLimit.setText(editText.getText().toString().length() + "/250");
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textViewForLimit.setText(s.length() + "/250");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
     private void openAreaOfCoachingActivity() {
         String interests = areaOfCoaching.getText().toString();
         Log.d("FMC", "Area of Interests:" + interests);
@@ -958,8 +961,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
                         }
 
-//                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
-//                        DashboardActivity.dashboardActivity.longitude = location.getLongitude();
                     } else if (!userCurrentAddress.equals("")) {
                         map.setOnMyLocationChangeListener(null);
                         if (updateAddress())
@@ -1005,8 +1006,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
         }
 
-        if(!country_update)
-        updateCountryByLocation(false);
+        if (!country_update)
+            updateCountryByLocation(false);
 
         return true;
     }
@@ -1022,13 +1023,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             profileAddress1.requestFocus();
             isValid = false;
         }
-
-//        if (profileAddress.getText().toString().trim().equals("")) {
-//            profileAddress.setError(getResources().getString(R.string.enter_address));
-//            if (isValid)
-//                profileAddress.requestFocus();
-//            isValid = false;
-//        }
 
         if (profileDOB.getText().toString().trim().equals("")) {
             profileDOB.setError(getResources().getString(R.string.enter_dob));
@@ -1185,10 +1179,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 requestParams.add("photograph", imageInBinary);
             else if (removeProfilePicture)
                 requestParams.add("photograph", "");
-//            if (isReadyToTravel.isChecked())
-//                requestParams.add("availability_yn", "1");
-//            else
-//                requestParams.add("availability_yn", "0");
 
             requestParams.add("availability_yn", String.valueOf(teachingPreference.getSelectedItemPosition()));
             if (selectedAreaOfCoachingJson != null) {
@@ -1247,20 +1237,20 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             Address address = new Address();
             try {
-                address.setAddressLine1(profileAddress.getText().toString());
-                address.setLocality(profileAddress1.getText().toString());
+                address.setPhysicalAddress(profileAddress.getText().toString());
+                address.setLocale(profileAddress1.getText().toString());
                 address.setZip(pinCode.getText().toString());
-                address.setDefault_yn(1);
+                address.setIsDefault(1);
                 Country country = countries.get(profileCountry.getSelectedItemPosition());
-                address.setCountry(country.getId()); /* setting country id from countries list*/
+                address.setCountryId(country.getId()); /* setting country id from countries list*/
             } catch (Exception e) {
                 e.printStackTrace();
             }
             int position = -1;
             Log.e(TAG, addressArrayListMentor.size() + " address size");
             for (Address a : addressArrayListMentor) {
-                Log.e(TAG, "Inside address for loop : " + a.getDefault_yn());
-                if (a.getDefault_yn() == 1) {
+                Log.e(TAG, "Inside address for loop : " + a.getIsDefault());
+                if (a.getIsDefault() == 1) {
                     position = addressArrayListMentor.indexOf(a);
                     Log.e(TAG, "found at : " + position);
                     break;
@@ -1356,12 +1346,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         final QualifiedAreaOfCoachingAdapter adapter = new QualifiedAreaOfCoachingAdapter(selectedAreaOfCoaching,
                 isSelected, EditProfileActivityMentor.this);
         listView.setAdapter(adapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//            }
-//        });
 
         DataBase dataBase = DataBase.singleton(this);
         try {
@@ -1475,17 +1459,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
 
-        if (calledApiValue == 52) {
-            Currency currency = (Currency) object;
-            String symbol = currency.getCurrencySymbol();
-            StorageHelper.setCurrency(this, currency.getCurrencySymbol());
-            if (symbol.charAt(0) == '&')
-                currencySymbol.setText(Html.fromHtml(symbol));
-            else {
-                String[] symbols = symbol.split("&");
-                currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
-            }
-        } else if (object instanceof Suggestion) {
+        if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
         } else {
@@ -1493,14 +1467,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             Response response = (Response) object;
             userInfo = response.getData();
             Log.d(TAG, "success response message : in EditProfileActivity : " + response.getMessage());
-
-            String currencyCode = StorageHelper.getCurrency(this);
-            if (currencyCode.trim().equals("")) {
-                StorageHelper.setCurrency(this, userInfo.getCurrencyCode());
-                Log.d(TAG, "Currency code : " + currencyCode);
-            } else {
-                currencySymbol.setText(Html.fromHtml(currencyCode));
-            }
 
             Intent intent = new Intent();
             intent.putExtra("user_info", new Gson().toJson(userInfo));
@@ -1511,7 +1477,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } catch (Exception ignored) {
             }
 
-/* Saving mentor address in shared preference */
+            /* Saving mentor address in shared preference */
 
             /* Saving address, city and zip */
             if (!profileAddress.getText().toString().trim().equals("")) {
@@ -1568,14 +1534,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 Log.d(TAG, "string set null");
             }
 
-
-//            if (newUser != null && newUser.contains(userInfo.getId())) {
-//                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-//                SharedPreferences.Editor editor = preferences.edit();
-//                editor.remove(getResources().getString(R.string.new_user));
-//                editor.apply();
-//                DashboardActivity.dashboardActivity.mainLayout.setVisibility(View.VISIBLE);
-
             boolean isAddSlotOpen = false;
             boolean isNewUser = getIntent().getBooleanExtra("new_user", false);
             if (!isDobForReview && isNewUser) {
@@ -1583,7 +1541,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 isAddSlotOpen = true;
                 startActivity(new Intent(this, AddNewSlotActivity.class));
             }
-//            }
 
             if (!isAddSlotOpen && DashboardActivity.dashboardActivity == null)
                 startActivity(new Intent(this, DashboardActivity.class));
