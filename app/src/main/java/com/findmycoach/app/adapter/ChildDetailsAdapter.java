@@ -46,7 +46,7 @@ public class ChildDetailsAdapter extends ArrayAdapter<ChildDetails> {
             viewHolder.childName = (TextView) convertView.findViewById(R.id.childNameEditProfile);
             viewHolder.dobText = (TextView) convertView.findViewById(R.id.dobText);
             viewHolder.genderText = (TextView) convertView.findViewById(R.id.genderText);
-
+            viewHolder.grade = (TextView) convertView.findViewById(R.id.gradeText);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -59,6 +59,8 @@ public class ChildDetailsAdapter extends ArrayAdapter<ChildDetails> {
 //        viewHolder.genderText.setText(childDetailsArrayList.get(position).getGender());
         String sex = childDetailsArrayList.get(position).getGender();
 
+        if(childDetailsArrayList.get(position).getGrade()!=null)
+                viewHolder.grade.setText(childDetailsArrayList.get(position).getGrade());
         if (sex.equalsIgnoreCase("M"))
             viewHolder.genderText.setText(context.getResources().getStringArray(R.array.gender)[0]);
         else if (sex.equalsIgnoreCase("F"))
@@ -68,6 +70,6 @@ public class ChildDetailsAdapter extends ArrayAdapter<ChildDetails> {
 
 
     private class ViewHolder {
-        private TextView childName, dobText, genderText;
+        private TextView childName, dobText, genderText,grade;
     }
 }

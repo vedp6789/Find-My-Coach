@@ -81,6 +81,7 @@ public class Data {
     @SerializedName("new_user")
     @Expose
     private boolean newUser;
+
     @SerializedName("unicode")
     @Expose
     private String currencyCode;
