@@ -236,6 +236,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
                 requestParams.add("last_name", lastName);
                 requestParams.add("email", email);
                 requestParams.add("password", password);
+                StorageHelper.saveLoginDetails(this, email, password);
                 requestParams.add("phone_number", countryCode + "-" + phone);
                 Log.e("Sign up : phone_number", countryCode.trim() + "-" + phone);
                 requestParams.add("user_group", String.valueOf(user_group));

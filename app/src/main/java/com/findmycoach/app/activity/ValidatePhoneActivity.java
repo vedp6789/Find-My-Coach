@@ -29,7 +29,6 @@ import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
-import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
@@ -67,7 +66,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
             return;
         }
         setContentView(R.layout.activity_validate_phone);
-        Toast toast=Toast.makeText(this, getResources().getString(R.string.otp_sent_to_registered_number), Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(this, getResources().getString(R.string.otp_sent_to_registered_number), Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 0);
         toast.show();
 
@@ -181,7 +180,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
 
         /** Phone number is updated or OTP is resend then response message is shown */
         if (calledApiValue == 26 || calledApiValue == 28) {
-            if(calledApiValue == 26 && response.getStatus() == 1)
+            if (calledApiValue == 26 && response.getStatus() == 1)
                 StorageHelper.storePreference(ValidatePhoneActivity.this, "phone_number", phnNum);
             Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
             return;
@@ -198,29 +197,11 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
                 saveUser(response.getAuthToken(), response.getData().getId());
         }
 
-        /** Opens Dashboard activity*/
-        int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
-        if (response.getData().getMultipleAddress() == null || response.getData().getMultipleAddress().size() == 0) {
-            if (userGroup == 2) {
-                Intent intent = new Intent(this, EditProfileActivityMentee.class);
-                intent.putExtra("user_info", new Gson().toJson(response.getData()));
-                intent.putExtra("new_user", true);
-                startActivity(intent);
-            } else if (userGroup == 3) {
-                Intent intent = new Intent(this, EditProfileActivityMentor.class);
-                intent.putExtra("user_info", new Gson().toJson(response.getData()));
-                intent.putExtra("new_user", true);
-                startActivity(intent);
-            }
-
-        } else if (userGroup == 3 && (response.getData().getSubCategoryName() == null || response.getData().getSubCategoryName().size() < 1)) {
-            Intent intent = new Intent(this, EditProfileActivityMentor.class);
-            intent.putExtra("user_info", new Gson().toJson(response.getData()));
-            intent.putExtra("new_user", true);
-            startActivity(intent);
-
-        } else
-            startActivity(new Intent(this, DashboardActivity.class));
+        /** Opens Login activity*/
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra("doLogin", true);
+        logout();
+        startActivity(intent);
         finish();
         Log.e(TAG, "DashBoard");
     }

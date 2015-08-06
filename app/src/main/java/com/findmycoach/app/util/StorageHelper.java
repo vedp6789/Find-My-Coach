@@ -123,6 +123,19 @@ public class StorageHelper {
         editor.apply();
     }
 
+    public static void saveLoginDetails(Context context, String id, String password) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("emailForLogin", id);
+        editor.putString("passwordForLogin", password);
+        editor.apply();
+    }
+
+    public static String getLoginDetails(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString("emailForLogin", "") + "#" + preferences.getString("passwordForLogin", "");
+    }
+
     public static void createAppMediaFolders(Context context) {
         final File path = Environment.getExternalStoragePublicDirectory(context.getString(R.string.stored_path));
         path.mkdirs();
