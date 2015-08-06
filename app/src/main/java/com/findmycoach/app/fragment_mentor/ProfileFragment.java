@@ -159,8 +159,8 @@ public class ProfileFragment extends Fragment implements Callback {
         multipleAddressValRL = (RelativeLayout) view.findViewById(R.id.multiple_Address_Val_RL);
         multipleAddressLV = (ListView) view.findViewById(R.id.multipleAddressLV);
         addressArrayListMentor = new ArrayList<>();
-        gender=(ChizzleTextView)view.findViewById(R.id.profile_gender);
-        slotType=(ChizzleTextView)view.findViewById(R.id.classTypeValue);
+        gender = (ChizzleTextView) view.findViewById(R.id.profile_gender);
+        slotType = (ChizzleTextView) view.findViewById(R.id.classTypeValue);
         addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayListMentor);
         multipleAddressLV.setAdapter(addressAdapter);
 
@@ -180,7 +180,7 @@ public class ProfileFragment extends Fragment implements Callback {
                 if (hiddenFlag) {
                     aboutMeLL.setVisibility(View.GONE);
                     arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
-                    hiddenFlag=false;
+                    hiddenFlag = false;
                     summaryHeader.requestFocus();
 
                 } else {
@@ -234,7 +234,7 @@ public class ProfileFragment extends Fragment implements Callback {
             public void onClick(View v) {
                 if (hiddenFlag) {
                     aboutMeLL.setVisibility(View.GONE);
-                    hiddenFlag=false;
+                    hiddenFlag = false;
                     summaryHeader.requestFocus();
                     arrow.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
 
@@ -292,7 +292,7 @@ public class ProfileFragment extends Fragment implements Callback {
         } catch (Exception e) {
         }
         try {
-            if(DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()) != null){
+            if (DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()) != null) {
                 profileDob.setText(DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()));
             }
             //profileDob.setText((String) userInfo.getDob());
@@ -344,17 +344,21 @@ public class ProfileFragment extends Fragment implements Callback {
 
 
         profilePhone.setText(userInfo.getPhonenumber());
-        List<SubCategoryName> areaOfInterests = userInfo.getSubCategoryName();
-        if (areaOfInterests!=null && areaOfInterests.get(0) != null && areaOfInterests.size() > 0) {
-            List<View> buttons = new ArrayList<>();
-            LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            for (SubCategoryName title : areaOfInterests) {
-                Button button = (Button) inflater.inflate(R.layout.button, null);
-                button.setText(title.getSub_category_name());
-                buttons.add(button);
-                Log.e(TAG, title.getSub_category_name() + " : " + title.isQualified());
+
+        try {
+            List<SubCategoryName> areaOfInterests = userInfo.getSubCategoryName();
+            if (areaOfInterests != null && areaOfInterests.get(0) != null && areaOfInterests.size() > 0) {
+                List<View> buttons = new ArrayList<>();
+                LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                for (SubCategoryName title : areaOfInterests) {
+                    Button button = (Button) inflater.inflate(R.layout.button, null);
+                    button.setText(title.getSub_category_name());
+                    buttons.add(button);
+                    Log.e(TAG, title.getSub_category_name() + " : " + title.isQualified());
+                }
+                populateViews(areaOfCoaching, buttons, getActivity(), 50);
             }
-            populateViews(areaOfCoaching, buttons, getActivity(), 50);
+        } catch (Exception ignored) {
         }
 
         String agePreferences = userInfo.getAgeGroupPreferences();
@@ -388,15 +392,16 @@ public class ProfileFragment extends Fragment implements Callback {
         stars.getDrawable(0).setColorFilter(getResources().getColor(R.color.purple_light), PorterDuff.Mode.SRC_ATOP);
 
 
+        String[] teachingPreferences = getResources().getStringArray(R.array.teaching_preferences);
         switch (Integer.parseInt(userInfo.getAvailabilityYn())) {
             case 0:
-                profileTravelAvailable.setText("I teach at my own location");
+                profileTravelAvailable.setText(teachingPreferences[0]);
                 break;
             case 1:
-                profileTravelAvailable.setText("I travel to student location");
+                profileTravelAvailable.setText(teachingPreferences[1]);
                 break;
             case 2:
-                profileTravelAvailable.setText("I am fine with either");
+                profileTravelAvailable.setText(teachingPreferences[2]);
                 break;
 
         }
@@ -408,7 +413,6 @@ public class ProfileFragment extends Fragment implements Callback {
         }
 
         teachingMediumText.setText(StorageHelper.getUserDetails(getActivity(), "teaching_medium"));
-
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -441,13 +445,12 @@ public class ProfileFragment extends Fragment implements Callback {
         }
 
 
-
         addressArrayListMentor.clear();
 
         if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
             multipleAddressValRL.setVisibility(View.GONE);
             arrow_multiple_address.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
-            multiple_address_visible=false;
+            multiple_address_visible = false;
             if (userInfo.getMultipleAddress().size() > 2) {
                 multipleAddressRL.setVisibility(View.VISIBLE);
                 otherAddressTV.setText(getResources().getString(R.string.other_addresses));
@@ -491,14 +494,13 @@ public class ProfileFragment extends Fragment implements Callback {
             multipleAddressRL.setVisibility(View.GONE);
             multipleAddressValRL.setVisibility(View.GONE);
         }
-        if(userInfo.getAddressFlagMentor().equalsIgnoreCase("0")){
+        if (userInfo.getAddressFlagMentor().equalsIgnoreCase("0")) {
             multipleAddressRL.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             multipleAddressRL.setVisibility(View.VISIBLE);
 
         }
-        String[] slotTypeArray=getActivity().getResources().getStringArray(R.array.mentor_class_type);
+        String[] slotTypeArray = getActivity().getResources().getStringArray(R.array.mentor_class_type);
         switch (Integer.parseInt(userInfo.getSlotType())) {
             case 0:
                 slotType.setText(slotTypeArray[0]);
@@ -512,13 +514,11 @@ public class ProfileFragment extends Fragment implements Callback {
 
         }
 
-        if(userInfo.getGender().equalsIgnoreCase("M")) {
+        if (userInfo.getGender().equalsIgnoreCase("M")) {
             gender.setText("Male");
-        }
-        else  {
+        } else {
             gender.setText("Female");
         }
-
 
 
     }
