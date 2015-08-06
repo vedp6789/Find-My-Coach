@@ -240,6 +240,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         countries = MetaData.getCountryObject(this);
         mentorForHeader = (ChizzleTextView) findViewById(R.id.mentorForHeader);
 
+        country_names.add(getResources().getString(R.string.select));
         if (countries != null && countries.size() > 0) {
             for (int i = 0; i < countries.size(); i++) {
                 Country country = countries.get(i);

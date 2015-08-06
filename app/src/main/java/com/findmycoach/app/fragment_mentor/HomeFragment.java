@@ -39,14 +39,13 @@ public class HomeFragment extends Fragment implements Callback {
     private PagerSlidingTabStrip pagerSlidingTabStrip;
     private MentorNotificationTabsPagerAdapter mentorNotificationTabsPagerAdapter;
     private ProgressDialog progressDialog;
-    MentorNotifications mentorNotifications;
+    private MentorNotifications mentorNotifications;
     private String TAG = "FMC";
     private String tag;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     boolean after_action;  /* using for tab change after reload from action accetp or reject*/
     int move_to_TAB;  /* this will help in moving to different view pager page*/
     public static HomeFragment homeFragment;
-
     private static int tab_to_show = 0;
 
     public HomeFragment() {
@@ -55,7 +54,6 @@ public class HomeFragment extends Fragment implements Callback {
     }
 
     public static HomeFragment newInstance(String param1, String param2) {
-
         HomeFragment fragment = new HomeFragment();
         return fragment;
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.beans.CityDetails;
 import com.findmycoach.app.beans.attachment.Attachment;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.category.Category;
@@ -14,14 +15,18 @@ import com.findmycoach.app.beans.search.SearchResponse;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -86,6 +91,7 @@ import java.util.TimeZone;
     *       availableSlots                  51     // deleteClassSlot
     *       currencySymbol                  52
     *       saveCardDetails                 53     //Save entered card details
+    *       city                            54
     * */
 
 
@@ -168,6 +174,58 @@ public class NetworkClient {
             }
         });
     }
+
+
+    public static void cities(final Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
+        if (!NetworkManager.isNetworkConnected(context)) {
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
+
+
+
+        client.post(context, getAuthAbsoluteURL("city", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    ArrayList<CityDetails> cityDetailsArrayList = new ArrayList<>();
+                    Log.d(TAG, "Success : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success : Response : " + responseJson);
+                    JSONObject jsonObject=new JSONObject(responseJson);
+                    JSONArray jsonArray=jsonObject.getJSONArray("data");
+                    cityDetailsArrayList = new Gson().fromJson(jsonArray.toString(), new TypeToken<List<CityDetails>>(){}.getType());
+                    callback.successOperation(cityDetailsArrayList, statusCode, calledApiValue);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseBody, null);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    Log.d(TAG, "Failure : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    try {
+                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        });
+    }
+
+
+
 
     public static void login(final Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
         if (!NetworkManager.isNetworkConnected(context)) {
