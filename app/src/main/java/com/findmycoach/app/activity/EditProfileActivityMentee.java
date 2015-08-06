@@ -125,6 +125,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     boolean country_update;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,7 +135,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
         Log.e(TAG, userInfo.getMultipleAddress().size() + "");
         if (userInfo.getMultipleAddress() == null || userInfo.getMultipleAddress().size() == 0) {
-            updateCountryByLocation();
+            updateCountryByLocation(false);
             getAddress();
         }
 
@@ -143,7 +144,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         needToCheckOnDestroy = false;
     }
 
-    public void updateCountryByLocation() {
+    public void updateCountryByLocation(boolean country_update_from_zip_code) {
         Log.e(TAG, "updateCountryByLocation method");
         if (countries != null && countries.size() > 0) {
 
@@ -151,7 +152,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
             //getNetworkCountryIso
             country_code = manager.getSimCountryIso().toUpperCase();
-            if (country_code != "") {
+            if (country_code != "" && !country_update_from_zip_code) {
                 Log.e(TAG,"country code from SIM: "+country_code);
                 populateCountry(country_code);
             } else {
@@ -817,7 +818,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         }
 
         if(!country_update)
-        updateCountryByLocation();
+        updateCountryByLocation(false);
 
         return true;
     }

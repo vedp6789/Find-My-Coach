@@ -183,7 +183,7 @@ public class AddressFromZip extends AsyncTask<String, Void, String> implements C
                                 try {
 
                                     EditProfileActivityMentee editProfileActivityMentee = (EditProfileActivityMentee) object;
-                                    editProfileActivityMentee.updateCountryByLocation();
+                                    editProfileActivityMentee.updateCountryByLocation(true);
                                 }
                                 catch (Exception e){
                                     e.printStackTrace();
@@ -194,7 +194,7 @@ public class AddressFromZip extends AsyncTask<String, Void, String> implements C
                         } else {
                             if (USES_FLAG == EditProfileActivityMentor.FLAG_FOR_EDIT_PROFILE_MENTOR) {
                                 EditProfileActivityMentor editProfileActivityMentor = (EditProfileActivityMentor) object;
-                                editProfileActivityMentor.updateCountryByLocation();
+                                editProfileActivityMentor.updateCountryByLocation(true);
                             }
                         }
                     }

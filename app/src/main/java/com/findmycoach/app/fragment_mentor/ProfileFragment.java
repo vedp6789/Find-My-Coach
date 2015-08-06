@@ -428,12 +428,14 @@ public class ProfileFragment extends Fragment implements Callback {
 //            requestParams.add("country", String.valueOf(userInfo.getCountry()));
 //
 //            NetworkClient.getCurrencySymbol(getActivity(),requestParams,authToken,ProfileFragment.this,52);
-            String symbol = StorageHelper.getCurrency(getActivity());
-            if (symbol.charAt(0) == '&')
-                profileCharges.setText(Html.fromHtml(symbol) + " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
-            else {
-                String[] symbols = symbol.split("&");
-                profileCharges.setText(symbols[0] + Html.fromHtml("&" + symbols[1]) + " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
+            if(userInfo.getCurrencyCode()!=null && !userInfo.getCurrencyCode().isEmpty()) {
+                String symbol = userInfo.getCurrencyCode();
+                if (symbol.charAt(0) == '&')
+                    profileCharges.setText(Html.fromHtml(symbol) + " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
+                else {
+                    String[] symbols = symbol.split("&");
+                    profileCharges.setText(symbols[0] + Html.fromHtml("&" + symbols[1]) + " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
+                }
             }
 
         }

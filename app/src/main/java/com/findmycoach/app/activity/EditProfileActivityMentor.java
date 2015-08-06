@@ -161,7 +161,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         Log.e(TAG, userInfo.getMultipleAddress().size() + "");
         if (userInfo.getMultipleAddress() == null || userInfo.getMultipleAddress().size() == 0) {
             Log.e(TAG, "12");
-            updateCountryByLocation();
+            updateCountryByLocation(false);
             getAddress();
         }
 
@@ -175,7 +175,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
     }
 
-    public void updateCountryByLocation() {
+    public void updateCountryByLocation(boolean country_update_from_zip_code) {
         Log.e(TAG, "updateCountryByLocation method");
         if (countries != null && countries.size() > 0) {
 
@@ -183,7 +183,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
             //getNetworkCountryIso
             country_code = manager.getSimCountryIso().toUpperCase();
-            if (country_code != "") {
+            if (country_code != "" && !country_update_from_zip_code) {
                 Log.e(TAG, "country code from SIM: " + country_code);
                 populateCountry(country_code);
             } else {
@@ -1006,7 +1006,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
 
         if(!country_update)
-        updateCountryByLocation();
+        updateCountryByLocation(false);
 
         return true;
     }
