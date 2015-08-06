@@ -828,6 +828,15 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 myAwards.setText(userInfo.getSection5());
             }
 
+
+            if(userInfo.getCountryConfigArrayList().size()>=1) {
+                if(userInfo.getCountryConfigArrayList().get(0).getConfigValue().equals("0"))
+                    countryConditionCheckBox.setChecked(false);
+                else
+                    countryConditionCheckBox.setChecked(true);
+
+            }
+
             addLimitListener(myQualification, myQualificationLimit);
             addLimitListener(myAccredition, myAccreditionLimit);
             addLimitListener(myExperience, myExperienceLimit);
@@ -1501,6 +1510,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             updateAutoSuggestion(suggestion);
         }
         else if(calledApiValue==55) {
+            countryConfigArrayList.clear();
             String response=(String)object;
             try {
                 JSONArray jsonArray=new JSONArray(response);

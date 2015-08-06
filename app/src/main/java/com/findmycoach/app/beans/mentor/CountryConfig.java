@@ -23,6 +23,10 @@ public class CountryConfig {
     @Expose
     private String configDescription;
 
+    @SerializedName("config_value")
+    @Expose
+    private String configValue;
+
     public int getCountryId() {
         return countryId;
     }
@@ -53,5 +57,13 @@ public class CountryConfig {
 
     public void setConfigDescription(String configDescription) {
         this.configDescription = configDescription;
+    }
+
+    public String getConfigValue() {
+        return configValue;
+    }
+
+    public void setConfigValue(String configValue) {
+        this.configValue = configValue;
     }
 }

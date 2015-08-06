@@ -1,5 +1,6 @@
 package com.findmycoach.app.beans.authentication;
 
+import com.findmycoach.app.beans.mentor.CountryConfig;
 import com.findmycoach.app.beans.student.Address;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -127,6 +128,11 @@ public class Data {
     private String addressFlagMentor;
 
 
+    @SerializedName("country_config")
+    @Expose
+    private ArrayList<CountryConfig> countryConfigArrayList;
+
+
     public String getAddressFlagMentor() {
         return addressFlagMentor;
     }
@@ -136,7 +142,13 @@ public class Data {
     }
 
 
+    public ArrayList<CountryConfig> getCountryConfigArrayList() {
+        return countryConfigArrayList;
+    }
 
+    public void setCountryConfigArrayList(ArrayList<CountryConfig> countryConfigArrayList) {
+        this.countryConfigArrayList = countryConfigArrayList;
+    }
 
     public String getSlotType() {
         return slotType;
