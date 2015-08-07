@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:paddingLeft="24dp"
     android:paddingTop="@dimen/back_margin"
     android:paddingRight="@dimen/back_margin"
@@ -68,5 +68,39 @@
         android:textColor="@color/purple"
         android:layout_toRightOf="@+id/textView3"
         android:layout_alignTop="@+id/textView3" />
+
+    <com.findmycoach.app.views.ChizzleTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/prompt_grade"
+        android:id="@+id/gradeHeader"
+        android:layout_marginRight="3dp"
+        android:textSize="14sp"
+        android:textColor="@color/purple_light"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/genderText" />
+
+    <com.findmycoach.app.views.ChizzleTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gradeText"
+        android:layout_alignParentRight="false"
+        android:textSize="14sp"
+        android:textIsSelectable="false"
+        android:textColor="@color/purple"
+        android:layout_toRightOf="@+id/gradeHeader"
+        android:layout_alignTop="@+id/gradeHeader" />
+
+    <ImageButton
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:id="@+id/deleteButton"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/close_icon"
+        android:background="@color/purple"
+        android:padding="12dp"
+        android:scaleType="fitCenter" />
 
 </RelativeLayout>

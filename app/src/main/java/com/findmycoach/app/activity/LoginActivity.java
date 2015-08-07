@@ -159,6 +159,37 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (getIntent().getBooleanExtra("doLogin", false)) {
+            RequestParams requestParams = new RequestParams();
+            try {
+                String loginDetails = StorageHelper.getLoginDetails(this);
+                Log.e(TAG, loginDetails);
+                String userGroup = StorageHelper.getUserGroup(this, "user_group");
+                requestParams.add("email", loginDetails.split("#")[0]);
+                requestParams.add("user_group", userGroup);
+                progressDialog.show();
+                if (loginDetails.split("#")[1].equals("")) {
+                    NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
+                } else {
+                    requestParams.add("password", loginDetails.split("#")[1]);
+                    inputUserName.setText(loginDetails.split("#")[0]);
+                    inputPassword.setText(loginDetails.split("#")[1]);
+
+                    NetworkClient.login(this, requestParams, this, 1);
+                }
+            } catch (IndexOutOfBoundsException ex) {
+                NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (progressDialog.isShowing())
+                    progressDialog.dismiss();
+            }
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         loginActivity = null;
@@ -294,6 +325,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 requestParams.add("email", userId);
                 requestParams.add("password", userPassword);
                 requestParams.add("user_group", String.valueOf(user_group));
+                StorageHelper.saveLoginDetails(this, userId, userPassword);
                 saveUserEmail(userId);
                 NetworkClient.login(this, requestParams, this, 1);
             } else
@@ -425,15 +457,18 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
     private void callWebservice(GraphUser user) {
         progressDialog.show();
         RequestParams requestParams = new RequestParams();
-        try{
+        try {
             requestParams.add("first_name", user.getFirstName());
-        }catch (Exception ignored){}
-        try{
+        } catch (Exception ignored) {
+        }
+        try {
             requestParams.add("middle_name", user.getMiddleName());
-        }catch (Exception ignored){}
-        try{
+        } catch (Exception ignored) {
+        }
+        try {
             requestParams.add("last_name", user.getLastName());
-        }catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
         try {
             String dob = user.getBirthday();
             String[] dobs = dob.split("/");
@@ -458,16 +493,19 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             Log.e(TAG, location.getName());
         } catch (Exception ignored) {
         }
-        try{
+        try {
             requestParams.add("facebook_link", user.getLink());
-        }catch (Exception ignored){}
-        try{
+        } catch (Exception ignored) {
+        }
+        try {
             String gender = user.getProperty("gender").toString().toUpperCase();
             requestParams.add("gender", String.valueOf(gender.charAt(0)));
-        }catch (Exception ignored){}
-        try{
+        } catch (Exception ignored) {
+        }
+        try {
             requestParams.add("photograph", "http://graph.facebook.com/" + user.getId() + "/picture?type=large");
-        }catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
         requestParams.add("user_group", String.valueOf(user_group));
         saveUserEmail((String) user.getProperty("email"));
         try {
@@ -475,8 +513,10 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             if (email == null || email.trim().equals("")) {
                 showEmailDialog(requestParams);
                 return;
-            } else
+            } else {
                 requestParams.add("email", email);
+                StorageHelper.saveLoginDetails(this, email, "");
+            }
         } catch (Exception e) {
             showEmailDialog(requestParams);
             return;
@@ -495,7 +535,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                             @Override
                             public void onCompleted(List<GraphUser> users, com.facebook.Response response) {
                                 //Log.e(TAG, "OnComplete : " + users.size());
-                                if(users != null) {
+                                if (users != null) {
                                     for (GraphUser user : users) {
                                         try {
                                             Log.e(TAG, user.getFirstName());
@@ -517,7 +557,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 friendRequest.setParameters(params);
                 friendRequest.executeAsync();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -560,6 +600,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 else {
                     dialog.dismiss();
                     requestParams.add("email", email);
+                    StorageHelper.saveLoginDetails(LoginActivity.this, email, "");
                     StorageHelper.storePreference(LoginActivity.this, "user_email", email);
                     NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
                     progressDialog.show();
@@ -588,6 +629,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         try {
             String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
             requestParams.add("email", email);
+            StorageHelper.saveLoginDetails(this, email, "");
             Log.e(TAG, email);
             saveUserEmail(email);
         } catch (Exception ignored) {
@@ -877,6 +919,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             String[] g = country_code.get(i).split(",");
             if (g[1].trim().equals(CountryID.trim())) {
                 CountryZipCode = g[0];
+                CountryZipCode = "+" + CountryZipCode;
                 break;
             }
         }
@@ -934,16 +977,6 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         /** Saving auth token and user id of user for further use */
         if (response.getAuthToken() != null && response.getData() != null && response.getData().getId() != null) {
             saveUser(response.getAuthToken(), response.getData().getId());
-        }
-
-        try {
-            String currencyCode = StorageHelper.getCurrency(this);
-            if (currencyCode.trim().equals("")) {
-                StorageHelper.setCurrency(this, response.getData().getCurrencyCode());
-                Log.d(TAG, "Currency code : " + currencyCode);
-                Log.e(TAG, "Currency code : " + response.getData().getCurrencyCode());
-            }
-        } catch (Exception ignored) {
         }
 
         try {

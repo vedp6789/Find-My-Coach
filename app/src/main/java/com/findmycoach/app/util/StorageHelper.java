@@ -123,6 +123,19 @@ public class StorageHelper {
         editor.apply();
     }
 
+    public static void saveLoginDetails(Context context, String id, String password) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("emailForLogin", id);
+        editor.putString("passwordForLogin", password);
+        editor.apply();
+    }
+
+    public static String getLoginDetails(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString("emailForLogin", "") + "#" + preferences.getString("passwordForLogin", "");
+    }
+
     public static void createAppMediaFolders(Context context) {
         final File path = Environment.getExternalStoragePublicDirectory(context.getString(R.string.stored_path));
         path.mkdirs();
@@ -140,15 +153,6 @@ public class StorageHelper {
 //        Log.e("FMC", "StorageHelper : " + pathImages.getPath());
         storePreference(context, "video_path", pathVideos.getPath());
 //        Log.e("FMC", "StorageHelper : " + pathVideos.getPath());
-    }
-
-    public static String getCurrency(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString("currency_code", "");
-    }
-
-    public static void setCurrency(Context context, String currencyCode) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        preferences.edit().putString("currency_code", currencyCode).apply();
     }
 
     public static String getUserAddress(Context context) {

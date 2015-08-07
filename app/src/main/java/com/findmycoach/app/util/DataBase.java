@@ -68,7 +68,11 @@ public class DataBase extends SQLiteOpenHelper {
     public String getAll() {
         Cursor c = db.query(TABLE_NAME, new String[]{CATEGORY}, null, null, null, null, null);
         c.moveToFirst();
-        return c.getString(0);
+        try {
+            return c.getString(0);
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     /**

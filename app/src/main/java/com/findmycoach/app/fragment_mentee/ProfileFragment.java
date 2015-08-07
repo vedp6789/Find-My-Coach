@@ -269,7 +269,7 @@ public class ProfileFragment extends Fragment implements Callback {
                 for (int i = 0; i < userInfo.getChildren().size(); i++) {
                     childDetailsArrayList.add(userInfo.getChildren().get(i));
                 }
-                childDetailsAdapter = new ChildDetailsAdapter(getActivity(), R.layout.child_details_list_item_centre_horizontal, childDetailsArrayList);
+                childDetailsAdapter = new ChildDetailsAdapter(getActivity(), R.layout.child_details_list_item_centre_horizontal, childDetailsArrayList,childrenDetailsListViewProfile);
                 childrenDetailsListViewProfile.setAdapter(childDetailsAdapter);
                 childDetailsAdapter.notifyDataSetChanged();
                 EditProfileActivityMentee.setHeight(childrenDetailsListViewProfile);
@@ -285,17 +285,8 @@ public class ProfileFragment extends Fragment implements Callback {
                     int default_yn = userInfo.getMultipleAddress().get(i).getDefault_yn();
                     if (default_yn == 1) {
                         String address = "";
-                        if (userInfo.getMultipleAddress().get(i).getAddressLine1() != null && !userInfo.getMultipleAddress().get(i).getAddressLine1().trim().equals("")) {
-                            address = address + userInfo.getMultipleAddress().get(i).getAddressLine1().trim() + ", ";
-                        }
-                        if (userInfo.getMultipleAddress().get(i).getLocality() != null) {
-                            address = address + userInfo.getMultipleAddress().get(i).getLocality() + ", ";
-                        }
-/*                        if (userInfo.getState() != null) {
-                            address = address + userInfo.getState() + ", ";
-                        }*/
-                        if (userInfo.getMultipleAddress().get(i).getZip() != null) {
-                            address = address + userInfo.getMultipleAddress().get(i).getZip();
+                        if (userInfo.getMultipleAddress().get(i).getLocale() != null) {
+                            address = address + userInfo.getMultipleAddress().get(i).getLocale() + ", ";
                         }
                         profileAddress.setText(address);
                         continue;
@@ -304,9 +295,10 @@ public class ProfileFragment extends Fragment implements Callback {
                 }
 
 
-                addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayList);
+                addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayList,addressListView);
                 addressListView.setAdapter(addressAdapter);
-                EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListView);
+                addressAdapter.notifyDataSetChanged();
+                EditProfileActivityMentee.setHeight(addressListView);
                 //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
             }
 

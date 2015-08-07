@@ -46,9 +46,11 @@ import com.findmycoach.app.adapter.AddressAdapter;
 import com.findmycoach.app.adapter.ChildDetailsAdapter;
 import com.findmycoach.app.beans.CityDetails;
 import com.findmycoach.app.beans.category.Country;
+import com.findmycoach.app.beans.mentor.CountryConfig;
 import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.student.ChildDetails;
 import com.findmycoach.app.beans.student.Data;
+import com.findmycoach.app.beans.student.Grade;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
@@ -70,7 +72,11 @@ import com.findmycoach.app.views.DobPicker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -126,7 +132,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private String city_name, state_name;
     private ArrayList<CityDetails> list_of_city;
     private int country_id, city_id;
-    private int user_info_multiple_address=0;
+    private int user_info_multiple_address = 0;
     private LinearLayout ll_physical_address;
 
 
@@ -214,7 +220,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         coachingTypeOptions = getResources().getStringArray(R.array.coaching_type);
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
 
-        if(userInfo != null && userInfo.getMultipleAddress() != null){
+        if (userInfo != null && userInfo.getMultipleAddress() != null) {
             user_info_multiple_address = userInfo.getMultipleAddress().size();
         }
 
@@ -280,7 +286,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         });
 
 
-       country_names.add(getResources().getString(R.string.select));
+        country_names.add(getResources().getString(R.string.select));
         if (countries != null && countries.size() > 0) {
             for (int i = 0; i < countries.size(); i++) {
                 Country country = countries.get(i);
@@ -297,9 +303,9 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
         });
 
-        childDetailsAdapter = new ChildDetailsAdapter(this, R.layout.child_details_list_item, childDetailsArrayList);
+        childDetailsAdapter = new ChildDetailsAdapter(this, R.layout.child_details_list_item, childDetailsArrayList, childDetailsListView);
         childDetailsListView.setAdapter(childDetailsAdapter);
-        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayList);
+        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayList, addressListView);
         addressListView.setAdapter(addressAdapter);
 
 
@@ -360,9 +366,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         });
 
 
-
-
-
         coachingType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -393,15 +396,14 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         });
 
 
-
         addAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(country_id != 0 && city_with_states.getText().toString().trim() != "" && locale.getText().toString().trim() != "" ){
+                if (country_id != 0 && !city_with_states.getText().toString().trim().isEmpty() && !locale.getText().toString().trim().isEmpty()) {
                     AddAddressDialog dialog = new AddAddressDialog(EditProfileActivityMentee.this);
                     dialog.setAddressAddedListener(EditProfileActivityMentee.this);
                     dialog.showPopUp();
-                }else{
+                } else {
                     if (country_id == 0) {
                         TextView errorText = (TextView) profileCountry.getSelectedView();
                         errorText.setError(getResources().getString(R.string.error_not_selected));
@@ -524,7 +526,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (userInfo != null && userInfo.getMultipleAddress() != null) {
-                    if (user_info_multiple_address == 0 || user_info_multiple_address == 1){
+                    if (user_info_multiple_address == 0 || user_info_multiple_address == 1) {
                         trainingLocation.setText(locale.getText().toString());
                     }
                 }
@@ -532,14 +534,13 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         });
 
 
-
         locationPreferenceSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 0 || position == 2){
+                if (position == 0 || position == 2) {
                     ll_physical_address.setVisibility(View.VISIBLE);
                     physicalAddress.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     ll_physical_address.setVisibility(View.GONE);
                     physicalAddress.setVisibility(View.GONE);
                 }
@@ -782,10 +783,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
         try {
             locationPreferenceSpinner.setSelection(userInfo.getLocationPreference());
-            if(userInfo.getLocationPreference() == 0 || userInfo.getLocationPreference() == 2){
+            if (userInfo.getLocationPreference() == 0 || userInfo.getLocationPreference() == 2) {
                 physicalAddress.setText(userInfo.getPhysical_address());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -865,12 +866,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         }
 
 
-
-
         try {
             String temp = (String) userInfo.getTrainingLocation();
-            if (temp == null || temp.equals("")){
-                if(locale.getText().toString().trim() != ""){
+            if (temp == null || temp.equals("")) {
+                if (locale.getText().toString().trim() != "") {
                     userInfo.setTrainingLocation(locale.getText().toString());
                 }
             }
@@ -1053,8 +1052,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         }
 
 
-        if(locationPreferenceSpinner.getSelectedItemPosition() == 0 || locationPreferenceSpinner.getSelectedItemPosition() == 2){
-            if(physicalAddress.getText().toString().trim().equals("")){
+        if (locationPreferenceSpinner.getSelectedItemPosition() == 0 || locationPreferenceSpinner.getSelectedItemPosition() == 2) {
+            if (physicalAddress.getText().toString().trim().equals("")) {
                 physicalAddress.setError(getResources().getString(R.string.enter_physical_address));
                 physicalAddress.requestFocus();
                 isValid = false;
@@ -1126,7 +1125,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             requestParams.add("mentor_for", String.valueOf(mentorFor.getSelectedItemPosition()));
 
             String trainLoc = trainingLocation.getText().toString().trim();
-            requestParams.add("training_location",trainingLocation.getText().toString());
+            requestParams.add("training_location", trainingLocation.getText().toString());
             requestParams.add("coaching_type", String.valueOf(coachingType.getSelectedItemPosition()));
             if (multipleAddress.isChecked()) {
                 requestParams.add("multiple_address_flag", "1");
@@ -1184,8 +1183,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             Log.e(TAG, "mul add: " + new Gson().toJson(addressArrayList));
             requestParams.add("location_preference", String.valueOf(locationPreferenceSpinner.getSelectedItemPosition()));
 
-            if(locationPreferenceSpinner.getSelectedItemPosition() == 0 || locationPreferenceSpinner.getSelectedItemPosition() == 2){
-                requestParams.add("physical_address",physicalAddress.getText().toString());
+            if (locationPreferenceSpinner.getSelectedItemPosition() == 0 || locationPreferenceSpinner.getSelectedItemPosition() == 2) {
+                requestParams.add("physical_address", physicalAddress.getText().toString());
             }
 
             if (!imageInBinary.equals("") && !removeProfilePicture)
@@ -1315,11 +1314,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     public void successOperation(Object object, int statusCode, int calledApiValue) {
 
 
-
         if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
-        } else if(calledApiValue == 54 ){
+        } else if (calledApiValue == 54) {
             list_of_city = (ArrayList<CityDetails>) object;
 
             if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() == 0) {
@@ -1352,8 +1350,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
                     }
             }
-        }
-        else {
+        } else {
             progressDialog.dismiss();
             ProfileResponse response = (ProfileResponse) object;
             userInfo = response.getData();
@@ -1369,12 +1366,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             /*Log.d(TAG, "city: " + StorageHelper.addressInformation(EditProfileActivityMentee.this, "user_city_state"));
             Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentee.this, "user_zip_code"));
 */
-            String currencyCode = StorageHelper.getCurrency(this);
-            if (currencyCode == null || currencyCode.trim().equals("")) {
-                StorageHelper.setCurrency(this, userInfo.getCurrencyCode());
-                Log.d(TAG, "Currency code : " + currencyCode);
-            }
-
             try {
                 String name = profileFirstName.getText().toString() + " " + profileLastName.getText().toString();
                 StorageHelper.storePreference(this, "user_full_name", name);

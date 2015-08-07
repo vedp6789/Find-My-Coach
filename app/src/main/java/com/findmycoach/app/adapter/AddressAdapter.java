@@ -5,8 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ListView;
 
 import com.findmycoach.app.R;
+import com.findmycoach.app.activity.EditProfileActivityMentee;
 import com.findmycoach.app.beans.category.Country;
 import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.student.ChildDetails;
@@ -25,8 +28,9 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
     private int resourceId;
     private List<Country> countries;
     private ArrayList<String> country_names;
+    private ListView addressListView;
 
-    public AddressAdapter(Context context, int resource, ArrayList<Address> addressArrayList) {
+    public AddressAdapter(Context context, int resource, ArrayList<Address> addressArrayList,ListView addressListView) {
         super(context, resource);
         this.context = context;
         resourceId = resource;
@@ -35,6 +39,7 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
         country_names = new ArrayList<String>();
         countries = new ArrayList<Country>();
         countries = MetaData.getCountryObject(context);
+        this.addressListView=addressListView;
 
 
     }
@@ -46,13 +51,13 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
 
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
             convertView = inflater.inflate(resourceId, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.address = (ChizzleTextView) convertView.findViewById(R.id.address);
-
+            viewHolder.deleteButton = (ImageButton) convertView.findViewById(R.id.deleteAddressButton);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -70,6 +75,15 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
             }
         }
 
+        viewHolder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addressArrayList.remove(position);
+                notifyDataSetChanged();
+                EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListView);
+            }
+        });
+
 
        // viewHolder.address.setText(addressArrayList.get(position).getAddressLine1().trim() + ", " + addressArrayList.get(position).getLocality().trim() + ", " + addressArrayList.get(position).getZip().trim());
         viewHolder.address.setText(addressArrayList.get(position).getLocale().trim());
@@ -80,6 +94,7 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
 
     private class ViewHolder {
         private ChizzleTextView address;
+        private ImageButton deleteButton;
     }
 }
 

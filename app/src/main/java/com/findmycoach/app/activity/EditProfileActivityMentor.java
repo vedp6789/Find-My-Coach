@@ -14,7 +14,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -54,6 +53,7 @@ import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.category.Country;
 import com.findmycoach.app.beans.category.Datum;
 import com.findmycoach.app.beans.category.DatumSub;
+import com.findmycoach.app.beans.mentor.CountryConfig;
 import com.findmycoach.app.beans.mentor.Currency;
 import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.suggestion.Prediction;
@@ -79,6 +79,7 @@ import com.findmycoach.app.views.DobPicker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
@@ -108,11 +109,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private AutoCompleteTextView city_with_states;
     private AutoCompleteTextView locale;
     private EditText accomplishment;
-    private EditText chargeInput;
-    private Spinner experienceInput, teachingPreference, classTypeSpinner;
+    //    private EditText chargeInput;
+    private Spinner experienceInput, teachingPreference;
+    //        classTypeSpinner;
     // private CheckBox isReadyToTravel;
     private Button updateAction;
-    private Spinner chargesPerUnit;
+    //    private Spinner chargesPerUnit;
     private ProgressDialog progressDialog;
     private Data userInfo;
     private String imageInBinary = "";
@@ -123,12 +125,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     public boolean needToCheckOnDestroy;
     private List<Prediction> predictions;
     private ChizzleTextView addPhoto;
-    private ChizzleTextView currencySymbol;
+    //    private ChizzleTextView currencySymbol;
     private String userCurrentAddress = "";
     private ScrollView scrollView;
     private TextView students_preference;
     private RelativeLayout summaryHeader;
-    private LinearLayout summaryDetailsLayout,ll_physical_address;
+    private LinearLayout summaryDetailsLayout, ll_physical_address;
     private boolean hiddenFlag;
     private ImageButton arrow;
     private ChizzleTextView teachingMediumPreference;
@@ -137,6 +139,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     public static ArrayList<Integer> integerArrayList_Of_UpdatedStudentPreference;
     public EditProfileActivityMentor editProfileActivityMentor;
     private ChizzleEditText myQualification, myAccredition, myExperience, myTeachingMethodology, myAwards;
+    private ChizzleTextView myQualificationLimit, myAccreditionLimit, myExperienceLimit, myTeachingMethodologyLimit, myAwardsLimit;
     private int ageAndExperienceErrorCounter;
     private JSONArray selectedAreaOfCoachingJson;
     private Category category;
@@ -153,6 +156,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private String city_name, state_name;
     private ArrayList<CityDetails> list_of_city;
     private int country_id, city_id;
+    boolean country_update;
+    private ArrayList<CountryConfig> countryConfigArrayList;
+    private RelativeLayout countryConditionLayout;
+    private ChizzleTextView checkBoxCountryConditionText;
+    private CheckBox countryConditionCheckBox;
+    private int countyConfigId;
 
 
     @Override
@@ -167,6 +176,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             Log.e(TAG, "12");
             updateCountryByLocation();
             getAddress();
+
         }
 
 
@@ -258,13 +268,13 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         profileLastName = (EditText) findViewById(R.id.input_last_name);
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         //pinCode = (EditText) findViewById(R.id.input_pin);
-        chargeInput = (EditText) findViewById(R.id.input_charges);
-        currencySymbol = (ChizzleTextView) findViewById(R.id.currencySymbol);
-        chargeInput.setSelectAllOnFocus(true);
+//        chargeInput = (EditText) findViewById(R.id.input_charges);
+//        currencySymbol = (ChizzleTextView) findViewById(R.id.currencySymbol);
+//        chargeInput.setSelectAllOnFocus(true);
         accomplishment = (EditText) findViewById(R.id.input_accomplishment);
         experienceInput = (Spinner) findViewById(R.id.input_experience);
         teachingPreference = (Spinner) findViewById(R.id.teachingPreferencesSpinner);
-        classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
+////        classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
         summaryHeader = (RelativeLayout) findViewById(R.id.summaryHeader);
         scrollView = (ScrollView) findViewById(R.id.main_scroll_view);
         summaryDetailsLayout = (LinearLayout) findViewById(R.id.summaryDetailsLayout);
@@ -277,16 +287,26 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         myExperience = (ChizzleEditText) findViewById(R.id.myExperience);
         myTeachingMethodology = (ChizzleEditText) findViewById(R.id.myTeachingMethodology);
         myAwards = (ChizzleEditText) findViewById(R.id.myAwards);
+        myQualificationLimit = (ChizzleTextView) findViewById(R.id.myQualificationLimit);
+        myAccreditionLimit = (ChizzleTextView) findViewById(R.id.myAccreditionsLimit);
+        myExperienceLimit = (ChizzleTextView) findViewById(R.id.myExperienceLimit);
+        myTeachingMethodologyLimit = (ChizzleTextView) findViewById(R.id.myTeachingMethodologyLimit);
+        myAwardsLimit = (ChizzleTextView) findViewById(R.id.myAwardsLimit);
         addMoreAddress = (Button) findViewById(R.id.addAddressMentor);
         addressListViewMentor = (ListView) findViewById(R.id.addressesListViewMentor);
         addressArrayListMentor = new ArrayList<>();
-        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayListMentor);
+        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayListMentor, addressListViewMentor);
         addressListViewMentor.setAdapter(addressAdapter);
         teachingMediumHeader = (ChizzleTextView) findViewById(R.id.teachingMediumPreferenceHeader);
         profileCountry = (Spinner) findViewById(R.id.country);
         country_names = new ArrayList<String>();
         countries = new ArrayList<Country>();
+        countryConfigArrayList = new ArrayList<>();
+        countryConditionLayout = (RelativeLayout) findViewById(R.id.countryConditionLayout);
         countries = MetaData.getCountryObject(this);
+        checkBoxCountryConditionText = (ChizzleTextView) findViewById(R.id.checkBoxCountryCondition);
+        countryConditionCheckBox = (CheckBox) findViewById(R.id.inputCountryCondition);
+        ll_physical_address= (LinearLayout) findViewById(R.id.ll_physical_address);
 
         profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -299,18 +319,32 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 city_id = 0;
                 if (position != 0) {
                     if (countries != null && countries.size() > 0) {
-                        country_id = countries.get(position).getId();
+                        country_id = countries.get(position - 1).getId();
                         RequestParams requestParams = new RequestParams();
                         requestParams.add("country_id", String.valueOf(country_id));
+                        Log.e(TAG, "country_id: " + country_id);
                         NetworkClient.cities(EditProfileActivityMentor.this, requestParams, EditProfileActivityMentor.this, 54);
                     }
+//                try {
+//                    String currencyCode = MetaData.getCurrencySymbol(countries.get(position).getIso(), EditProfileActivityMentor.this);
+//                    if (currencyCode.charAt(0) == '&')
+//                        currencySymbol.setText(Html.fromHtml(currencyCode));
+//                    else {
+//                        String[] symbols = currencyCode.split("&");
+//                        currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
+//                    }
+//                } catch (Exception ignored) {
+                    if (NetworkManager.isNetworkConnected(EditProfileActivityMentor.this)) {
+                        RequestParams requestParams = new RequestParams();
+                        requestParams.add("country_id", String.valueOf(countries.get(position - 1).getId()));
+                        NetworkClient.getCountryConfig(EditProfileActivityMentor.this, requestParams, StorageHelper.getUserDetails(EditProfileActivityMentor.this, "auth_token"), EditProfileActivityMentor.this, 55);
+                    } else
+                        Toast.makeText(EditProfileActivityMentor.this, EditProfileActivityMentor.this.getString(R.string.check_network_connection), Toast.LENGTH_LONG).show();
+//                }
 
                 }
 
 
-                RequestParams requestParams = new RequestParams();
-                requestParams.add("country", countries.get(position).getIso());
-                NetworkClient.getCurrencySymbol(EditProfileActivityMentor.this, requestParams, authToken, EditProfileActivityMentor.this, 52);
             }
 
             @Override
@@ -341,23 +375,22 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     addMoreAddress.setVisibility(View.VISIBLE);
                     addressListViewMentor.setVisibility(View.VISIBLE);
                 } else {
-                    /*addressArrayListMentor.clear();
-                    addressAdapter.notifyDataSetChanged();*/
                     addressListViewMentor.setVisibility(View.GONE);
                     addMoreAddress.setVisibility(View.GONE);
                 }
             }
         });
 
-
         addMoreAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(country_id != 0 && city_with_states.getText().toString().trim() != "" && locale.getText().toString().trim() != "" ){
+                Log.e(TAG,"country_id, :"+country_id +" city: "+city_with_states.getText().toString().trim()+"locale: "+locale.getText().toString().trim());
+                if (country_id != 0 && !city_with_states.getText().toString().trim().isEmpty() && !locale.getText().toString().trim().isEmpty()) {
+                    Log.e(TAG,"country_id, :"+country_id +" city: "+city_with_states.getText().toString()+"locale: "+locale.getText().toString().trim());
                     AddAddressDialog dialog = new AddAddressDialog(EditProfileActivityMentor.this);
                     dialog.setAddressAddedListener(EditProfileActivityMentor.this);
                     dialog.showPopUp();
-                }else{
+                } else {
                     //Toast.makeText(EditProfileActivityMentor.this,getResources().getString(R.string.))
                     if (country_id == 0) {
                         TextView errorText = (TextView) profileCountry.getSelectedView();
@@ -386,10 +419,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         addPhoto = (ChizzleTextView) findViewById(R.id.addPhotoMentor);
         experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, yearOfExperience));
         teachingPreference.setAdapter(new ArrayAdapter<>(this, R.layout.textview, preferences));
-        classTypeSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.textview, classType));
+//        classTypeSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.textview, classType));
         //  isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
         updateAction = (Button) findViewById(R.id.button_update);
-        chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
+//        chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
         areaOfCoaching = (TextView) findViewById(R.id.input_areas_of_coaching);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
@@ -406,26 +439,13 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(getResources().getString(R.string.title_edit_profile_menu));
 
-//        profileFirstName.setOnFocusChangeListener(onFocusChangeListener);
-//        profileFirstName.setOnTouchListener(onTouchListener);
-//        profileLastName.setOnFocusChangeListener(onFocusChangeListener);
-//        profileLastName.setOnTouchListener(onTouchListener);
+
         profileDOB.setOnFocusChangeListener(onFocusChangeListener);
         profileDOB.setOnTouchListener(onTouchListener);
-//        profileAddress.setOnFocusChangeListener(onFocusChangeListener);
-//        profileAddress.setOnTouchListener(onTouchListener);
-//        profileAddress1.setOnFocusChangeListener(onFocusChangeListener);
-//        profileAddress1.setOnTouchListener(onTouchListener);
-//        pinCode.setOnFocusChangeListener(onFocusChangeListener);
-//        pinCode.setOnTouchListener(onTouchListener);
         areaOfCoaching.setOnFocusChangeListener(onFocusChangeListener);
         areaOfCoaching.setOnTouchListener(onTouchListener);
 
         o = userInfo.getAgeGroupPreferences();
-
-//        Log.d(TAG,"selected student pref: "+userInfo.getAgeGroupPreferences());
-//        Log.d(TAG,"all selected student pref: "+userInfo.getAllAgeGroupPreferences().size());
-
 
         arrayList = new ArrayList<Integer>();
         if (o != null && !o.trim().equals("")) {
@@ -620,7 +640,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         profileAddress1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                getPostalFromCity(arrayAdapter.getItem(position));
                 try {
                     NetworkManager.countryName = predictions.get(position).getCountry();
                     isGettingAddress = true;
@@ -645,8 +664,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         updateAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateUserUpdate())
+                if (validateUserUpdate()){
+                    Log.e(TAG," call validated");
                     callUpdateService();
+
+                }
             }
         });
 
@@ -828,16 +850,16 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } catch (Exception ignored) {
             }
 
-            try {
-                if (!userInfo.getCharges().equalsIgnoreCase("0"))
-                    chargeInput.setText(userInfo.getCharges());
-            } catch (Exception ignored) {
-            }
-            try {
-                chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, new String[]{"hour"}));
-                chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
-            } catch (Exception ignored) {
-            }
+//            try {
+//                if (!userInfo.getCharges().equalsIgnoreCase("0"))
+//                    chargeInput.setText(userInfo.getCharges());
+//            } catch (Exception ignored) {
+//            }
+//            try {
+//                chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, new String[]{"hour"}));
+//                chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
+//            } catch (Exception ignored) {
+//            }
 
             try {
                 int index = Integer.parseInt(userInfo.getExperience());
@@ -882,15 +904,15 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             });
 
             teachingPreference.setSelection(Integer.parseInt(userInfo.getAvailabilityYn()));
-            if(teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2){
+            if (teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2) {
                 ll_physical_address.setVisibility(View.VISIBLE);
                 physicalAddress.setVisibility(View.VISIBLE);
                 physicalAddress.setText(userInfo.getPhysical_address());
-            }else{
+            } else {
                 ll_physical_address.setVisibility(View.GONE);
                 physicalAddress.setVisibility(View.GONE);
             }
-            classTypeSpinner.setSelection(Integer.parseInt(userInfo.getSlotType()));
+//            classTypeSpinner.setSelection(Integer.parseInt(userInfo.getSlotType()));
 //            if (userInfo.getCountry() != null) {
 //                //       currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
 //                String authToken = StorageHelper.getUserDetails(this, "auth_token");
@@ -901,18 +923,18 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 //                currencySymbol.setText(Html.fromHtml(userInfo.getCurrencyCode()));
 //            }
 
-            if (userInfo.getCurrencyCode() != null && !userInfo.getCurrencyCode().equals("")) {
-                try {
-                    String currencyCode = userInfo.getCurrencyCode();
-                    if (currencyCode.charAt(0) == '&')
-                        currencySymbol.setText(Html.fromHtml(currencyCode));
-                    else {
-                        String[] symbols = currencyCode.split("&");
-                        currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
-                    }
-                } catch (Exception ignored) {
-                }
-            }
+//            if (userInfo.getCurrencyCode() != null && !userInfo.getCurrencyCode().equals("")) {
+//                try {
+//                    String currencyCode = userInfo.getCurrencyCode();
+//                    if (currencyCode.charAt(0) == '&')
+//                        currencySymbol.setText(Html.fromHtml(currencyCode));
+//                    else {
+//                        String[] symbols = currencyCode.split("&");
+//                        currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
+//                    }
+//                } catch (Exception ignored) {
+//                }
+//            }
 //
 
             if (!userInfo.getSection1().equalsIgnoreCase("")) {
@@ -933,12 +955,21 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
 
 
+            if (userInfo.getCountryConfigArrayList().size() >= 1) {
+                if (userInfo.getCountryConfigArrayList().get(0).getConfigValue().equals("0"))
+                    countryConditionCheckBox.setChecked(false);
+                else
+                    countryConditionCheckBox.setChecked(true);
+
+            }
+
+            addLimitListener(myQualification, myQualificationLimit);
+            addLimitListener(myAccredition, myAccreditionLimit);
+            addLimitListener(myExperience, myExperienceLimit);
+            addLimitListener(myTeachingMethodology, myTeachingMethodologyLimit);
+            addLimitListener(myAwards, myAwardsLimit);
+
             teachingMediumPreference.setText(StorageHelper.getUserDetails(EditProfileActivityMentor.this, "teaching_medium"));
-
-
-//            if (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))
-//                getAddress();
-
 
             Log.e(TAG, userInfo.getMultipleAddress().size() + " address size");
             if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
@@ -1033,6 +1064,26 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             teachingMediumPreference.setText(getResources().getString(R.string.select));
     }
 
+    private void addLimitListener(ChizzleEditText editText, final ChizzleTextView textViewForLimit) {
+        textViewForLimit.setText(editText.getText().toString().length() + "/250");
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textViewForLimit.setText(s.length() + "/250");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
     private void openAreaOfCoachingActivity() {
         String interests = areaOfCoaching.getText().toString();
         Log.d("FMC", "Area of Interests:" + interests);
@@ -1061,8 +1112,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
                         }
 
-//                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
-//                        DashboardActivity.dashboardActivity.longitude = location.getLongitude();
                     } else if (!userCurrentAddress.equals("")) {
                         map.setOnMyLocationChangeListener(null);
                         if (updateAddress())
@@ -1145,52 +1194,62 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
     // Validate user first name, last name and address
     private boolean validateUserUpdate() {
+        Log.e(TAG,"1");
 
-        boolean isValid = true;
+            boolean isValid = true;
 
-        if (country_id == 0) {
-            TextView errorText = (TextView) profileCountry.getSelectedView();
-            errorText.setError(getResources().getString(R.string.error_not_selected));
-            errorText.setTextColor(Color.RED);//just to highlight that this is an error
-            isValid = false;
+            if (country_id == 0) {
+                TextView errorText = (TextView) profileCountry.getSelectedView();
+                errorText.setError(getResources().getString(R.string.error_not_selected));
+                errorText.setTextColor(Color.RED);//just to highlight that this is an error
+                isValid = false;
 
-        }
+            }
+        Log.e(TAG,"a"+isValid);
 
-        if (city_with_states.getText().toString().trim().equals("")) {
-            city_with_states.setError(getResources().getString(R.string.enter_city));
-            city_with_states.requestFocus();
-            isValid = false;
-        }
+            if (city_with_states.getText().toString().trim().equals("")) {
+                city_with_states.setError(getResources().getString(R.string.enter_city));
+                if (isValid)
+                    city_with_states.requestFocus();
 
-        if (physicalAddress.getText().toString().trim().equals("")) {
-            physicalAddress.setError(getResources().getString(R.string.enter_physical_address));
-            physicalAddress.requestFocus();
-            isValid = false;
-        }
+                isValid = false;
+            }
+        Log.e(TAG,"2"+isValid);
+        Log.e(TAG,"b"+isValid);
 
-        if (locale.getText().toString().trim().equals("")) {
-            locale.setError(getResources().getString(R.string.enter_locale));
-            locale.requestFocus();
-            isValid = false;
-        }
-
-        if (profileDOB.getText().toString().trim().equals("")) {
-            profileDOB.setError(getResources().getString(R.string.enter_dob));
-            scrollView.fullScroll(ScrollView.FOCUS_UP);
-            if (isValid)
-                profileDOB.requestFocus();
-
-            isValid = false;
-        }
-
-
-        if(teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2){
-            if(physicalAddress.getText().toString().trim().equals("")){
+        if(teachingPreference.getSelectedItemPosition() ==0 || teachingPreference.getSelectedItemPosition() == 2){
+            if (physicalAddress.getText().toString().trim().isEmpty()) {
                 physicalAddress.setError(getResources().getString(R.string.enter_physical_address));
-                physicalAddress.requestFocus();
+                if (isValid)
+                    physicalAddress.requestFocus();
+
                 isValid = false;
             }
         }
+
+        Log.e(TAG,"c"+isValid);
+
+            if (locale.getText().toString().trim().equals("")) {
+                locale.setError(getResources().getString(R.string.enter_locale));
+                if (isValid)
+                    locale.requestFocus();
+
+                isValid = false;
+            }
+        Log.e(TAG,"d"+isValid);
+
+            if (profileDOB.getText().toString().trim().equals("")) {
+                profileDOB.setError(getResources().getString(R.string.enter_dob));
+                scrollView.fullScroll(ScrollView.FOCUS_UP);
+                if (isValid)
+                    profileDOB.requestFocus();
+
+                isValid = false;
+            }
+        Log.e(TAG,"e"+isValid);
+
+
+
 
 
         /*if (pinCode.getText().toString().trim().equals("")) {
@@ -1199,87 +1258,96 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 pinCode.requestFocus();
             isValid = false;
         }*/
+        Log.e(TAG,"3");
 
 
-        String firstName = profileFirstName.getText().toString().trim().replaceAll(" ", "");
-        if (firstName.equals("")) {
-            showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
-            if (isValid)
-                profileFirstName.requestFocus();
-            isValid = false;
-        } else {
-            for (int i = 0; i < firstName.length(); i++) {
-                if (!Character.isLetter(firstName.charAt(i))) {
-                    showErrorMessage(profileFirstName, getResources().getString(R.string.error_not_a_name));
-                    if (isValid)
-                        profileFirstName.requestFocus();
-                    isValid = false;
-                }
-            }
-        }
-
-        String lastName = profileLastName.getText().toString().trim().replaceAll(" ", "");
-        if (lastName.equals("")) {
-            showErrorMessage(profileLastName, getResources().getString(R.string.error_field_required));
-            if (isValid)
-                profileLastName.requestFocus();
-            isValid = false;
-        } else {
-            for (int i = 0; i < lastName.length(); i++) {
-                if (!Character.isLetter(lastName.charAt(i))) {
-                    showErrorMessage(profileLastName, getResources().getString(R.string.error_not_a_name));
-                    if (isValid)
-                        profileLastName.requestFocus();
-                    isValid = false;
-                }
-            }
-        }
-
-        if (areaOfCoaching.getText().toString().trim().equals("")) {
-            showErrorMessage(areaOfCoaching, getResources().getString(R.string.error_field_required));
-            if (isValid)
-                areaOfCoaching.requestFocus();
-            isValid = false;
-        }
-
-
-        if (isValid) {
-            int dobYear = 0;
-            try {
-                dobYear = Integer.parseInt(profileDOB.getText().toString().split("-")[2]);
-            } catch (Exception e) {
-                dobYear = 0;
-            }
-
-            int yearsOfExperience = experienceInput.getSelectedItemPosition();
-            int age = Calendar.getInstance().get(Calendar.YEAR) - dobYear;
-            int minExperience = getResources().getInteger(R.integer.mentor_min_age_experience_difference);
-
-            Log.e(TAG, yearsOfExperience + " : " + age + " : " + minExperience);
-            if (dobYear > 0 && age - yearsOfExperience < minExperience) {
-                Toast.makeText(this, getResources().getString(R.string.age_experience_message), Toast.LENGTH_LONG).show();
-                ageAndExperienceErrorCounter++;
+            String firstName = profileFirstName.getText().toString().trim().replaceAll(" ", "");
+            if (firstName.equals("")) {
+                showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
+                if (isValid)
+                    profileFirstName.requestFocus();
                 isValid = false;
-            } else if (dobYear > 0 && (Calendar.getInstance().get(Calendar.YEAR) - (dobYear) < 19)) {
-                Toast.makeText(this, getResources().getString(R.string.age_review_message), Toast.LENGTH_LONG).show();
-                isDobForReview = true;
+            } else {
+                for (int i = 0; i < firstName.length(); i++) {
+                    if (!Character.isLetter(firstName.charAt(i))) {
+                        showErrorMessage(profileFirstName, getResources().getString(R.string.error_not_a_name));
+                        if (isValid)
+                            profileFirstName.requestFocus();
+                        isValid = false;
+                    }
+                }
             }
+        Log.e(TAG,"g"+isValid);
 
-            if (ageAndExperienceErrorCounter > 2) {
-                needToCheckOnDestroy = true;
-                logout();
-                startActivity(new Intent(EditProfileActivityMentor.this, LoginActivity.class));
-                if (Settings.settings != null)
-                    Settings.settings.finish();
-                if (DashboardActivity.dashboardActivity != null)
-                    DashboardActivity.dashboardActivity.finish();
-
-                Toast.makeText(this, getResources().getString(R.string.account_blocked), Toast.LENGTH_LONG).show();
-                finish();
+            String lastName = profileLastName.getText().toString().trim().replaceAll(" ", "");
+            if (lastName.equals("")) {
+                showErrorMessage(profileLastName, getResources().getString(R.string.error_field_required));
+                if (isValid)
+                    profileLastName.requestFocus();
+                isValid = false;
+            } else {
+                for (int i = 0; i < lastName.length(); i++) {
+                    if (!Character.isLetter(lastName.charAt(i))) {
+                        showErrorMessage(profileLastName, getResources().getString(R.string.error_not_a_name));
+                        if (isValid)
+                            profileLastName.requestFocus();
+                        isValid = false;
+                    }
+                }
             }
-        }
+        Log.e(TAG,"g"+isValid);
+
+            if (areaOfCoaching.getText().toString().trim().equals("")) {
+                showErrorMessage(areaOfCoaching, getResources().getString(R.string.error_field_required));
+                if (isValid)
+                    areaOfCoaching.requestFocus();
+                isValid = false;
+            }
+        Log.e(TAG,"4");
+        Log.e(TAG,"h"+isValid);
+
+
+            if (isValid) {
+                int dobYear = 0;
+                try {
+                    dobYear = Integer.parseInt(profileDOB.getText().toString().split("-")[2]);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    dobYear = 0;
+                }
+
+                int yearsOfExperience = experienceInput.getSelectedItemPosition();
+                int age = Calendar.getInstance().get(Calendar.YEAR) - dobYear;
+                int minExperience = getResources().getInteger(R.integer.mentor_min_age_experience_difference);
+
+                Log.e(TAG, yearsOfExperience + " : " + age + " : " + minExperience);
+                if (dobYear > 0 && age - yearsOfExperience < minExperience) {
+                    Toast.makeText(this, getResources().getString(R.string.age_experience_message), Toast.LENGTH_LONG).show();
+                    ageAndExperienceErrorCounter++;
+                    isValid = false;
+                } else if (dobYear > 0 && (Calendar.getInstance().get(Calendar.YEAR) - (dobYear) < 19)) {
+                    Toast.makeText(this, getResources().getString(R.string.age_review_message), Toast.LENGTH_LONG).show();
+                    isDobForReview = true;
+                }
+
+                if (ageAndExperienceErrorCounter > 2) {
+                    needToCheckOnDestroy = true;
+                    logout();
+                    startActivity(new Intent(EditProfileActivityMentor.this, LoginActivity.class));
+                    if (Settings.settings != null)
+                        Settings.settings.finish();
+                    if (DashboardActivity.dashboardActivity != null)
+                        DashboardActivity.dashboardActivity.finish();
+
+                    Toast.makeText(this, getResources().getString(R.string.account_blocked), Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+        Log.e(TAG,"5");
+        Log.e(TAG,"i"+isValid);
 
         return isValid;
+
     }
 
     private void showErrorMessage(final TextView view, String string) {
@@ -1326,11 +1394,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             requestParams.add("city", profileAddress1.getText().toString());
             requestParams.add("zip", pinCode.getText().toString());*/
 
-            if (chargesPerUnit.getSelectedItemPosition() == 0) {
-                Log.i(TAG, "select charges unit : " + chargesPerUnit.getSelectedItemPosition());
-                requestParams.add("charges", chargeInput.getText().toString());
-                requestParams.add("charges_class", "0");
-            }
+//            if (chargesPerUnit.getSelectedItemPosition() == 0) {
+//                Log.i(TAG, "select charges unit : " + chargesPerUnit.getSelectedItemPosition());
+//                requestParams.add("charges", chargeInput.getText().toString());
+//                requestParams.add("charges_class", "0");
+//            }
 
             requestParams.add("experience", experienceInput.getSelectedItemPosition() + "");
             requestParams.add("accomplishments", accomplishment.getText().toString());
@@ -1338,14 +1406,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 requestParams.add("photograph", imageInBinary);
             else if (removeProfilePicture)
                 requestParams.add("photograph", "");
-//            if (isReadyToTravel.isChecked())
-//                requestParams.add("availability_yn", "1");
-//            else
-//                requestParams.add("availability_yn", "0");
 
             requestParams.add("availability_yn", String.valueOf(teachingPreference.getSelectedItemPosition()));
-            if(teachingPreference.getSelectedItemPosition() ==0 || teachingPreference.getSelectedItemPosition() == 2 ){
-                requestParams.add("physical_address",physicalAddress.getText().toString().trim());
+            if (teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2) {
+                requestParams.add("physical_address", physicalAddress.getText().toString().trim());
             }
 
             if (selectedAreaOfCoachingJson != null) {
@@ -1430,12 +1494,31 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 e.printStackTrace();
             }
 
+            if (countryConfigArrayList.size() > 0) {
+
+                try {
+                    JSONArray jsonArray = new JSONArray();
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("country_config_id", countyConfigId);
+                    if (countryConditionCheckBox.isChecked()) {
+                        jsonObject.put("config_value", "1");
+
+                    } else {
+                        jsonObject.put("config_value", "0");
+                    }
+                    jsonArray.put(0, jsonObject);
+                    requestParams.add("country_config", jsonArray.toString());
+                } catch (Exception e) {
+e.printStackTrace();
+                }
+            }
+
             requestParams.add("locations", new Gson().toJson(addressArrayListMentor));
             Log.e(TAG, "locations sending : " + new Gson().toJson(addressArrayListMentor));
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
-            requestParams.add("slot_type", String.valueOf(classTypeSpinner.getSelectedItemPosition()));
+//            requestParams.add("slot_type", String.valueOf(classTypeSpinner.getSelectedItemPosition()));
             requestParams.add("section_1", myQualification.getText().toString());
             requestParams.add("section_2", myAccredition.getText().toString());
             requestParams.add("section_3", myExperience.getText().toString());
@@ -1445,6 +1528,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             Log.e(TAG, "request params: " + requestParams.toString());
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
+            e.printStackTrace();
             progressDialog.dismiss();
             Toast.makeText(this, getResources().getString(R.string.enter_necessary_details), Toast.LENGTH_LONG).show();
         }
@@ -1511,12 +1595,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         final QualifiedAreaOfCoachingAdapter adapter = new QualifiedAreaOfCoachingAdapter(selectedAreaOfCoaching,
                 isSelected, EditProfileActivityMentor.this);
         listView.setAdapter(adapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//            }
-//        });
 
         DataBase dataBase = DataBase.singleton(this);
         try {
@@ -1644,18 +1722,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
 
-        if (calledApiValue == 52) {
-            Currency currency = (Currency) object;
-            String symbol = currency.getCurrencySymbol();
-            StorageHelper.setCurrency(this, currency.getCurrencySymbol());
-            if (symbol.charAt(0) == '&')
-                currencySymbol.setText(Html.fromHtml(symbol));
-            else {
-                String[] symbols = symbol.split("&");
-                currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
-            }
-        } else if (calledApiValue == 54) {
+        if (calledApiValue == 54) {
             list_of_city = (ArrayList<CityDetails>) object;
+
 
             if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() == 0) {
                 if (city_name != "" && list_of_city != null && list_of_city.size() > 0) {
@@ -1665,8 +1734,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         String city = cityDetails.getCity_name();
                         String state = cityDetails.getCity_state();
                         int city_country_id = cityDetails.getCity_country();
-
-                        if (city.equals(city_name) && state.equals(state_name) && (city_country_id == country_id)) {
+                        if (city.equalsIgnoreCase(city_name) && state.equalsIgnoreCase(state_name) && (city_country_id == country_id)) {
                             String s = city.trim() + " (" + state + ")";
                             city_with_states.setText(s);
                         }
@@ -1690,23 +1758,32 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         } else if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
-        } else {
-            /*
-            * This is the response of profile post api
-            * */
+        } else if (calledApiValue == 55) {
+            countryConfigArrayList.clear();
+            String response = (String) object;
+            try {
+                JSONArray jsonArray = new JSONArray(response);
+                if (jsonArray.length() >= 1) {
+                    countryConfigArrayList = new Gson().fromJson(jsonArray.toString(), new TypeToken<List<CountryConfig>>() {
+                    }.getType());
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
+            if (countryConfigArrayList.size() >= 1) {
+                countyConfigId = countryConfigArrayList.get(0).getId();
+                countryConditionLayout.setVisibility(View.VISIBLE);
+                checkBoxCountryConditionText.setText(countryConfigArrayList.get(0).getConfigTitle());
+            } else {
+                countryConditionLayout.setVisibility(View.GONE);
+            }
+
+        } else {
             progressDialog.dismiss();
             Response response = (Response) object;
             userInfo = response.getData();
             Log.d(TAG, "success response message : in EditProfileActivity : " + response.getMessage());
-
-            String currencyCode = StorageHelper.getCurrency(this);
-            if (currencyCode.trim().equals("")) {
-                StorageHelper.setCurrency(this, userInfo.getCurrencyCode());
-                Log.d(TAG, "Currency code : " + currencyCode);
-            } else {
-                currencySymbol.setText(Html.fromHtml(currencyCode));
-            }
 
             Intent intent = new Intent();
             intent.putExtra("user_info", new Gson().toJson(userInfo));
@@ -1772,14 +1849,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 Log.d(TAG, "string set null");
             }
 
-
-//            if (newUser != null && newUser.contains(userInfo.getId())) {
-//                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-//                SharedPreferences.Editor editor = preferences.edit();
-//                editor.remove(getResources().getString(R.string.new_user));
-//                editor.apply();
-//                DashboardActivity.dashboardActivity.mainLayout.setVisibility(View.VISIBLE);
-
             boolean isAddSlotOpen = false;
             boolean isNewUser = getIntent().getBooleanExtra("new_user", false);
             if (!isDobForReview && isNewUser) {
@@ -1787,7 +1856,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 isAddSlotOpen = true;
                 startActivity(new Intent(this, AddNewSlotActivity.class));
             }
-//            }
 
             if (!isAddSlotOpen && DashboardActivity.dashboardActivity == null)
                 startActivity(new Intent(this, DashboardActivity.class));

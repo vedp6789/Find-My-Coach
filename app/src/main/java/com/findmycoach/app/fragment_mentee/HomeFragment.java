@@ -39,7 +39,6 @@ import com.findmycoach.app.adapter.InterestsAdapter;
 import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.category.Datum;
 import com.findmycoach.app.beans.category.DatumSub;
-import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
@@ -540,18 +539,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
         try {
             ProfileResponse response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), ProfileResponse.class);
-            for (Address address : response.getData().getMultipleAddress()) {
-                if (address.getDefault_yn() == 1) {
-                    if (address.getAddressLine1() != null)
-                        location = address.getAddressLine1() + " " + address.getLocality() + " " + address.getZip();
+            com.findmycoach.app.beans.student.Data userInfo = response.getData();
+            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
+                for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
+                    int default_yn = userInfo.getMultipleAddress().get(i).getDefault_yn();
+                    if (default_yn == 1) {
+                        String address = "";
+                        if (userInfo.getMultipleAddress().get(i).getLocale() != null) {
+                            address = address + userInfo.getMultipleAddress().get(i).getLocale() + ", ";
+                        }
+                        location = address;
+                        break;
+                    }
                 }
             }
-
-            if (location == null || location.trim().equals("")) {
-                Address address = response.getData().getMultipleAddress().get(0);
-                location = address.getAddressLine1() + " " + address.getLocality() + " " + address.getZip();
-            }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         if (location == null)
@@ -706,7 +709,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         } else if (object instanceof Category) {
             setTabForCategory(new Gson().fromJson((String) object, Category.class));
             DataBase dataBase = DataBase.singleton(getActivity());
-            dataBase.insertData((String) object);
+            dataBase.insertData(new Gson().toJson(object));
         } else {
             progressDialog.dismiss();
             Intent intent = new Intent(getActivity(), UserListActivity.class);
