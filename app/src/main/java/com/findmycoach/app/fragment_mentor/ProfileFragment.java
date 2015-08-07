@@ -161,7 +161,7 @@ public class ProfileFragment extends Fragment implements Callback {
         addressArrayListMentor = new ArrayList<>();
         gender = (ChizzleTextView) view.findViewById(R.id.profile_gender);
         slotType = (ChizzleTextView) view.findViewById(R.id.classTypeValue);
-        addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayListMentor);
+        addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayListMentor,multipleAddressLV);
         multipleAddressLV.setAdapter(addressAdapter);
 
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
