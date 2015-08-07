@@ -1293,23 +1293,24 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 e.printStackTrace();
             }
 
-           try {
-                JSONArray jsonArray=new JSONArray();
-                JSONObject jsonObject=new JSONObject();
-               jsonObject.put("country_config_id",countyConfigId);
-               if(countryConditionCheckBox.isChecked()) {
-                   jsonObject.put("config_value","1");
+            if(countryConfigArrayList.size()>0) {
 
-               }
-               else {
-                   jsonObject.put("config_value","0");
-               }
-               jsonArray.put(0,jsonObject);
-               requestParams.add("country_config",jsonArray.toString());
-           }
-           catch (Exception e) {
+                try {
+                    JSONArray jsonArray = new JSONArray();
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("country_config_id", countyConfigId);
+                    if (countryConditionCheckBox.isChecked()) {
+                        jsonObject.put("config_value", "1");
 
-           }
+                    } else {
+                        jsonObject.put("config_value", "0");
+                    }
+                    jsonArray.put(0, jsonObject);
+                    requestParams.add("country_config", jsonArray.toString());
+                } catch (Exception e) {
+
+                }
+            }
 
             requestParams.add("locations", new Gson().toJson(addressArrayListMentor));
             Log.e(TAG, "locations sending : " + new Gson().toJson(addressArrayListMentor));
