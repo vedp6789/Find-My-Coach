@@ -22,6 +22,8 @@ import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -101,8 +103,12 @@ public class NetworkClient {
 
     private static String getTimeZone() {
         TimeZone tz = TimeZone.getDefault();
-        Log.e(TAG + "VED", tz.getDisplayName(false, TimeZone.SHORT));
-        return tz.getDisplayName(false, TimeZone.SHORT).replace("GMT", "") + ":00";
+        Calendar cal = GregorianCalendar.getInstance(tz);
+        int offsetInMillis = tz.getOffset(cal.getTimeInMillis());
+        String offset = String.format("%02d:%02d", Math.abs(offsetInMillis / 3600000), Math.abs((offsetInMillis / 60000) % 60));
+        offset = (offsetInMillis >= 0 ? "+" : "-") + offset;
+        Log.e(TAG, "TimeZone : " + offset);
+        return offset;
     }
 
     private static String getSystemLanguage() {
@@ -463,6 +469,7 @@ public class NetworkClient {
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
         requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
         requestParams.add(context.getResources().getString(R.string.device_language), language);
+        Log.e(TAG, "Update Profile : " + requestParams.toString());
         client.post(context, getAbsoluteURL("profile", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -1989,7 +1996,7 @@ public class NetworkClient {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
                     String responseJson = new String(responseBody);
-                    Log.d("CurrencyNew",responseJson);
+                    Log.d("CurrencyNew", responseJson);
 
                     Currency response = new Gson().fromJson(responseJson, Currency.class);
                     callback.successOperation(response, statusCode, calledApiValue);
@@ -2003,7 +2010,7 @@ public class NetworkClient {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
                     String responseJson = new String(responseBody);
-                    Log.d("CurrencyNew",responseJson);
+                    Log.d("CurrencyNew", responseJson);
 
                     Currency response = new Gson().fromJson(responseJson, Currency.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
@@ -2017,7 +2024,7 @@ public class NetworkClient {
         });
     }
 
-    public static void getGrades(final Context context,String authToken, final Callback callback, final int calledApiValue) {
+    public static void getGrades(final Context context, String authToken, final Callback callback, final int calledApiValue) {
         if (!NetworkManager.isNetworkConnected(context)) {
             callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
             return;
@@ -2040,7 +2047,7 @@ public class NetworkClient {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
                     String responseJson = new String(responseBody);
-                    Log.d("CurrencyNew",responseJson);
+                    Log.d("CurrencyNew", responseJson);
                     callback.failureOperation(responseJson, statusCode, calledApiValue);
                 } catch (Exception e) {
                     try {
@@ -2052,14 +2059,14 @@ public class NetworkClient {
         });
     }
 
-    public static void getCountryConfig(final Context context,RequestParams requestParams,String authToken, final Callback callback, final int calledApiValue) {
+    public static void getCountryConfig(final Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
         if (!NetworkManager.isNetworkConnected(context)) {
             callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
             return;
         }
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
-        client.get(context, getAbsoluteURL("countryConfig", context),requestParams, new AsyncHttpResponseHandler() {
+        client.get(context, getAbsoluteURL("countryConfig", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
@@ -2075,7 +2082,7 @@ public class NetworkClient {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
                     String responseJson = new String(responseBody);
-                    Log.d("CurrencyNew",responseJson);
+                    Log.d("CurrencyNew", responseJson);
                     callback.failureOperation(responseJson, statusCode, calledApiValue);
                 } catch (Exception e) {
                     try {
