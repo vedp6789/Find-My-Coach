@@ -39,7 +39,6 @@ import com.findmycoach.app.adapter.InterestsAdapter;
 import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.category.Datum;
 import com.findmycoach.app.beans.category.DatumSub;
-import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
@@ -540,18 +539,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
         try {
             ProfileResponse response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), ProfileResponse.class);
-            for (Address address : response.getData().getMultipleAddress()) {
-                if (address.getIsDefault() == 1) {
-                    if (address.getPhysicalAddress() != null)
-                        location = address.getPhysicalAddress() + " " + address.getCity() + " " + address.getCountry();
+            com.findmycoach.app.beans.student.Data userInfo = response.getData();
+            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
+                for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
+                    int default_yn = userInfo.getMultipleAddress().get(i).getIsDefault();
+                    if (default_yn == 1) {
+                        String address = "";
+                        if (userInfo.getMultipleAddress().get(i).getPhysicalAddress() != null && !userInfo.getMultipleAddress().get(i).getPhysicalAddress().trim().equals("")) {
+                            address = address + userInfo.getMultipleAddress().get(i).getPhysicalAddress().trim() + ", ";
+                        }
+                        if (userInfo.getMultipleAddress().get(i).getLocale() != null) {
+                            address = address + userInfo.getMultipleAddress().get(i).getLocale() + ", ";
+                        }
+                        if (userInfo.getMultipleAddress().get(i).getZip() != null) {
+                            address = address + userInfo.getMultipleAddress().get(i).getZip();
+                        }
+                        location = address;
+                        break;
+                    }
                 }
             }
-
-            if (location == null || location.trim().equals("")) {
-                Address address = response.getData().getMultipleAddress().get(0);
-                location = address.getPhysicalAddress() + " " + address.getCity() + " " + address.getCountry();
-            }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         if (location == null)
