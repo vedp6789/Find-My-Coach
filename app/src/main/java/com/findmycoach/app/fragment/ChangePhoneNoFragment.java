@@ -2,13 +2,11 @@ package com.findmycoach.app.fragment;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +23,11 @@ import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.Settings;
 import com.findmycoach.app.activity.ValidatePhoneActivity;
 import com.findmycoach.app.adapter.CountryCodeAdapter;
+import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
+import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
@@ -118,31 +118,20 @@ public class ChangePhoneNoFragment extends DialogFragment implements View.OnClic
         Collections.addAll(country_code, this.getResources().getStringArray(R.array.country_codes));
 
         countryCodeTV = (TextView) view.findViewById(R.id.countryCodeTV);
-        countryCodeTV.setText(getCountryZipCode());
         phoneEditText = (EditText) view.findViewById(R.id.phoneEditText);
         countryCodeTV.setOnClickListener(this);
         view.findViewById(R.id.okButton).setOnClickListener(this);
         view.findViewById(R.id.cancelButton).setOnClickListener(this);
 
-        return view;
-    }
-
-    /**
-     * Getting country code using TelephonyManager
-     */
-    public String getCountryZipCode() {
-        String CountryID = "";
-        String CountryZipCode = "Select";
-        TelephonyManager manager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-        CountryID = manager.getSimCountryIso().toUpperCase();
-        for (int i = 1; i < country_code.size(); i++) {
-            String[] g = country_code.get(i).split(",");
-            if (g[1].trim().equals(CountryID.trim())) {
-                CountryZipCode = g[0];
-                break;
-            }
+        try {
+            Response response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), Response.class);
+            String[] phone = response.getData().getPhonenumber().split("-");
+            countryCodeTV.setText(phone[0]);
+            phoneEditText.setText(phone[1]);
+        } catch (Exception ignored) {
         }
-        return CountryZipCode;
+
+        return view;
     }
 
     /**

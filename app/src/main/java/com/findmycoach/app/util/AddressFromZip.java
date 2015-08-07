@@ -3,7 +3,6 @@ package com.findmycoach.app.util;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.text.Html;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -11,9 +10,6 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.activity.EditProfileActivityMentee;
 import com.findmycoach.app.activity.EditProfileActivityMentor;
 import com.findmycoach.app.activity.ScheduleNewClass;
-import com.findmycoach.app.beans.mentor.Currency;
-import com.findmycoach.app.views.ChizzleTextView;
-import com.loopj.android.http.RequestParams;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -35,7 +31,7 @@ public class AddressFromZip extends AsyncTask<String, Void, String> implements C
     private Context context;
     private EditText cityET, addressET;
     private String googleApiUrl;
-    private ChizzleTextView currencySymbol = null;
+//    private ChizzleTextView currencySymbol = null;
     private boolean isGettingLatLng;
     Activity object;
     private int USES_FLAG;
@@ -43,17 +39,17 @@ public class AddressFromZip extends AsyncTask<String, Void, String> implements C
     EditProfileActivityMentor editProfileActivityMentor;
     ScheduleNewClass scheduleNewClass;
 
-    public AddressFromZip(Context context, Activity o, EditText cityET, EditText addressET, ChizzleTextView currencySymbol, boolean isGettingLatLng, int USES_FLAG) {
-        this.context = context;
-        this.cityET = cityET;
-        this.addressET = addressET;
-        this.isGettingLatLng = isGettingLatLng;
-        this.currencySymbol = currencySymbol;
-        googleApiUrl = context.getResources().getString(R.string.google_api_lat_lng_from_zip);
-        object = o;
-        this.USES_FLAG = USES_FLAG;
-        Log.e("AddressFromZip", "Constructor");
-    }
+//    public AddressFromZip(Context context, Activity o, EditText cityET, EditText addressET, ChizzleTextView currencySymbol, boolean isGettingLatLng, int USES_FLAG) {
+//        this.context = context;
+//        this.cityET = cityET;
+//        this.addressET = addressET;
+//        this.isGettingLatLng = isGettingLatLng;
+//        this.currencySymbol = currencySymbol;
+//        googleApiUrl = context.getResources().getString(R.string.google_api_lat_lng_from_zip);
+//        object = o;
+//        this.USES_FLAG = USES_FLAG;
+//        Log.e("AddressFromZip", "Constructor");
+//    }
 
     public AddressFromZip(Context context, Activity o, EditText cityET, EditText addressET, boolean isGettingLatLng, int USES_FLAG) {
         this.context = context;
@@ -117,7 +113,7 @@ public class AddressFromZip extends AsyncTask<String, Void, String> implements C
                 JSONObject result = jsonObject.getJSONArray("results").getJSONObject(0);
                 if (isGettingLatLng) {
                     JSONObject location = result.getJSONObject("geometry").getJSONObject("location");
-                    new AddressFromZip(context, object, cityET, addressET, currencySymbol, false, USES_FLAG).execute(location.getString("lat"), location.getString("lng"));
+                    new AddressFromZip(context, object, cityET, addressET, false, USES_FLAG).execute(location.getString("lat"), location.getString("lng"));
                 } else {
                     JSONArray address_components = result.getJSONArray("address_components");
                     String formatted_address = result.getString("formatted_address");
@@ -199,12 +195,12 @@ public class AddressFromZip extends AsyncTask<String, Void, String> implements C
                         }
                     }
 
-                    if (currencySymbol != null) {
-                        String authToken = StorageHelper.getUserDetails(context, "auth_token");
-                        RequestParams requestParams = new RequestParams();
-                        requestParams.add("country", String.valueOf(NetworkManager.countryCode));
-                        NetworkClient.getCurrencySymbol(context, requestParams, authToken, this, 52);
-                    }
+//                    if (currencySymbol != null) {
+//                        String authToken = StorageHelper.getUserDetails(context, "auth_token");
+//                        RequestParams requestParams = new RequestParams();
+//                        requestParams.add("country", String.valueOf(NetworkManager.countryCode));
+//                        NetworkClient.getCurrencySymbol(context, requestParams, authToken, this, 52);
+//                    }
                 }
             }
         } catch (Exception e) {
@@ -243,14 +239,14 @@ public class AddressFromZip extends AsyncTask<String, Void, String> implements C
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        Currency currency = (Currency) object;
-        String symbol = currency.getCurrencySymbol();
-        if (symbol.charAt(0) == '&')
-            currencySymbol.setText(Html.fromHtml(symbol));
-        else {
-            String[] symbols = symbol.split("&");
-            currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
-        }
+//        Currency currency = (Currency) object;
+//        String symbol = currency.getCurrencySymbol();
+//        if (symbol.charAt(0) == '&')
+//            currencySymbol.setText(Html.fromHtml(symbol));
+//        else {
+//            String[] symbols = symbol.split("&");
+//            currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
+//        }
     }
 
     @Override
