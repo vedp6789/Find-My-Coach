@@ -28,7 +28,7 @@
             android:layout_marginLeft="@dimen/back_margin"
             android:layout_marginRight="@dimen/back_margin">
 
-            <com.findmycoach.app.views.ChizzleEditText
+            <!--<com.findmycoach.app.views.ChizzleEditText
                 android:id="@+id/addressLine1"
                 android:layout_below="@+id/county_outline"
                 style="@style/EditTextCustomHoloPurple"
@@ -40,23 +40,22 @@
                 android:singleLine="true"
                 android:textCursorDrawable="@drawable/cursor_purple"
                 android:textSize="@dimen/profile_details" />
-
+-->
             <com.findmycoach.app.views.ChizzleAutoCompleteTextView
-                android:id="@+id/locality"
+                android:id="@+id/locale"
                 style="@style/EditTextCustomHoloPurple"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/addressLine1"
                 android:layout_marginBottom="@dimen/back_margin"
                 android:layout_marginTop="@dimen/back_margin"
-                android:hint="@string/prompt_address1"
+                android:hint="@string/prompt_locale"
                 android:inputType="textCapSentences|textNoSuggestions|textCapWords"
                 android:singleLine="true"
                 android:imeOptions="actionNext"
                 android:textCursorDrawable="@drawable/cursor_purple"
                 android:textSize="@dimen/profile_details" />
 
-            <com.findmycoach.app.views.ChizzleEditText
+            <!--<com.findmycoach.app.views.ChizzleEditText
                 android:id="@+id/zip"
                 style="@style/EditTextCustomHoloPurple"
                 android:layout_width="match_parent"
@@ -97,7 +96,7 @@
                     android:background="@color/purple_light" />
 
             </LinearLayout>
-
+-->
 
 
         </RelativeLayout>

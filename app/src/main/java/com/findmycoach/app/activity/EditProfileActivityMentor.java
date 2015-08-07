@@ -128,7 +128,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private ScrollView scrollView;
     private TextView students_preference;
     private RelativeLayout summaryHeader;
-    private LinearLayout summaryDetailsLayout;
+    private LinearLayout summaryDetailsLayout,ll_physical_address;
     private boolean hiddenFlag;
     private ImageButton arrow;
     private ChizzleTextView teachingMediumPreference;
@@ -241,6 +241,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         list_of_city = new ArrayList<>();
         city_with_states = (AutoCompleteTextView) findViewById(R.id.city_with_state);
         physicalAddress = (EditText) findViewById(R.id.physical_address);
+
         locale = (AutoCompleteTextView) findViewById(R.id.locale);
         city_name = "";
         country_id = 0;
@@ -352,9 +353,30 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         addMoreAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddAddressDialog dialog = new AddAddressDialog(EditProfileActivityMentor.this);
-                dialog.setAddressAddedListener(EditProfileActivityMentor.this);
-                dialog.showPopUp();
+                if(country_id != 0 && city_with_states.getText().toString().trim() != "" && locale.getText().toString().trim() != "" ){
+                    AddAddressDialog dialog = new AddAddressDialog(EditProfileActivityMentor.this);
+                    dialog.setAddressAddedListener(EditProfileActivityMentor.this);
+                    dialog.showPopUp();
+                }else{
+                    //Toast.makeText(EditProfileActivityMentor.this,getResources().getString(R.string.))
+                    if (country_id == 0) {
+                        TextView errorText = (TextView) profileCountry.getSelectedView();
+                        errorText.setError(getResources().getString(R.string.error_not_selected));
+                        errorText.setTextColor(Color.RED);//just to highlight that this is an error
+                    }
+
+                    if (city_with_states.getText().toString().trim().equals("")) {
+                        city_with_states.setError(getResources().getString(R.string.enter_city));
+                        city_with_states.requestFocus();
+                    }
+
+                    if (locale.getText().toString().trim().equals("")) {
+                        locale.setError(getResources().getString(R.string.enter_locale));
+                        locale.requestFocus();
+                    }
+                }
+
+
             }
         });
 
@@ -860,6 +882,14 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             });
 
             teachingPreference.setSelection(Integer.parseInt(userInfo.getAvailabilityYn()));
+            if(teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2){
+                ll_physical_address.setVisibility(View.VISIBLE);
+                physicalAddress.setVisibility(View.VISIBLE);
+                physicalAddress.setText(userInfo.getPhysical_address());
+            }else{
+                ll_physical_address.setVisibility(View.GONE);
+                physicalAddress.setVisibility(View.GONE);
+            }
             classTypeSpinner.setSelection(Integer.parseInt(userInfo.getSlotType()));
 //            if (userInfo.getCountry() != null) {
 //                //       currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
@@ -1153,6 +1183,16 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             isValid = false;
         }
 
+
+        if(teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2){
+            if(physicalAddress.getText().toString().trim().equals("")){
+                physicalAddress.setError(getResources().getString(R.string.enter_physical_address));
+                physicalAddress.requestFocus();
+                isValid = false;
+            }
+        }
+
+
         /*if (pinCode.getText().toString().trim().equals("")) {
             pinCode.setError(getResources().getString(R.string.enter_pin));
             if (isValid)
@@ -1304,6 +1344,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 //                requestParams.add("availability_yn", "0");
 
             requestParams.add("availability_yn", String.valueOf(teachingPreference.getSelectedItemPosition()));
+            if(teachingPreference.getSelectedItemPosition() ==0 || teachingPreference.getSelectedItemPosition() == 2 ){
+                requestParams.add("physical_address",physicalAddress.getText().toString().trim());
+            }
+
             if (selectedAreaOfCoachingJson != null) {
                 requestParams.add("sub_category", selectedAreaOfCoachingJson.toString());
                 Log.e(TAG, selectedAreaOfCoachingJson.toString());
@@ -1361,7 +1405,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             try {
                 address.setCountry(country_id);
                 address.setCity_id(city_id);
-                address.setPhysical_address(physicalAddress.getText().toString());
+                address.setPhysical_address("");
                 address.setLocale(locale.getText().toString());
                 address.setDefault_yn(1);
             } catch (Exception e) {
@@ -1811,10 +1855,13 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
     @Override
     public void onAddressAdded(Address address) {
+
+        address.setCountry(country_id);
+        address.setCity_id(city_id);
+        address.setPhysical_address("");
         addressArrayListMentor.add(address);
         addressAdapter.notifyDataSetChanged();
         EditProfileActivityMentee.setHeight(addressListViewMentor);
-        addressListViewMentor.setVisibility(View.VISIBLE);
-        addMoreAddress.requestFocus();
+        addMoreAddress.setVisibility(View.VISIBLE);
     }
 }

@@ -34,17 +34,15 @@ public class AddAddressDialog implements Callback {
 
     private Context context;
     private Dialog dialog;
-    private ChizzleEditText addressLine1, zip;
-    private ChizzleAutoCompleteTextView locality;
-    private Spinner sp_country;
+    private ChizzleAutoCompleteTextView locale;
     private Button doneButton;
     private Button cancelButton;
     private AddressAddedListener mAddressAddedListener;
     private List<Country> countries;
     private ArrayList<String> country_names;
     public static int FLAG_FOR_ADD_ADDRESS_DIALOG = 0;
-    private String TAG="FMC";
-    private String stringLatitude = "", stringLongitude = "", nameOfLocation="";
+    private String TAG = "FMC";
+    private String stringLatitude = "", stringLongitude = "", nameOfLocation = "";
 
 
     public AddAddressDialog(Context context) {
@@ -71,97 +69,44 @@ public class AddAddressDialog implements Callback {
         }
     };
 
-    public void populateCountry(String country_code) {
-        for (int i = 0; i < countries.size(); i++) {
-            Country country = countries.get(i);
-            String country_code_from_server = country.getIso();
-            Log.e(TAG, "country code" + i + " " + country_code_from_server);
-            if (country_code_from_server.equalsIgnoreCase(country_code)) {
-                sp_country.setSelection(i);
-            }
-        }
-    }
 
-    public void updateCountryByLocation(){
+    public void updateLocale() {
         Log.e(TAG, "updateCountryByLocation method");
-        if(countries != null && countries.size() > 0 ){
-            String country_code = "";
-            TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            //getNetworkCountryIso
-            country_code = manager.getSimCountryIso().toUpperCase();
 
-            if(country_code != ""){
-                Log.e(TAG,"country code from SIM: "+country_code);
-                populateCountry(country_code);
-            }else {
-                country_code = NetworkManager.countryCode;
-                if(country_code != ""){
-                    populateCountry(country_code);
-                }else{
-                    GPSTracker gpsTracker = new GPSTracker(context);
+        String locality = "";
+        locality = NetworkManager.localityName;
+        String state = "";
+        state = NetworkManager.stateName;
+        String city = "";
+        city = NetworkManager.cityName;
 
-                    if (gpsTracker.canGetLocation()) {
-                        stringLatitude = String.valueOf(gpsTracker.latitude);
-                        stringLongitude = String.valueOf(gpsTracker.longitude);
-                        //nameOfLocation = ConvertPointToLocation(stringLatitude,stringLongitude);
-                        new GetAddress().execute();
-                    }
-                }
+        if (locality != "" && state != "" && city != "") {
+            locale.setText(locality + ", " + city + ", " + state);
+        } else {
+            GPSTracker gpsTracker = new GPSTracker(context);
+
+            if (gpsTracker.canGetLocation()) {
+                stringLatitude = String.valueOf(gpsTracker.latitude);
+                stringLongitude = String.valueOf(gpsTracker.longitude);
+                new GetAddress().execute();
             }
-
-
         }
     }
-
-   /* public String ConvertPointToLocation(String Latitude, String Longitude) {
-        String address = "";
-        Geocoder geoCoder = new Geocoder(context, Locale.getDefault());
-        try {
-            List<Address> addresses = geoCoder.getFromLocation(Float.parseFloat(Latitude), Float.parseFloat(Longitude), 1);
-
-            if (addresses.size() > 0) {
-                for (int index = 0; index < addresses.get(0)
-                        .getMaxAddressLineIndex(); index++)
-                    address += addresses.get(0).getAddressLine(index) + " ";
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return address;
-    }*/
 
 
     public void showPopUp() {
         dialog = new Dialog(context, R.style.DialogCustomTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.add_address_dialog);
-        addressLine1 = (ChizzleEditText) dialog.findViewById(R.id.addressLine1);
         doneButton = (Button) dialog.findViewById(R.id.done);
-        zip = (ChizzleEditText) dialog.findViewById(R.id.zip);
         cancelButton = (Button) dialog.findViewById(R.id.cancel);
-        locality = (ChizzleAutoCompleteTextView) dialog.findViewById(R.id.locality);
-        sp_country = (Spinner) dialog.findViewById(R.id.country);
-
-        country_names = new ArrayList<String>();
-        countries = MetaData.getCountryObject(context);
-
+        locale = (ChizzleAutoCompleteTextView) dialog.findViewById(R.id.locale);
+        updateLocale();
         /* Code to set country as per default Country code*/
 
 
-        if (countries != null && countries.size() > 0) {
-            for (int i = 0; i < countries.size(); i++) {
-                Country country = countries.get(i);
-                country_names.add(country.getShortName());
-            }
-            sp_country.setAdapter(new ArrayAdapter<String>(context, R.layout.textview, country_names));
-        }
 
-        updateCountryByLocation();
-
-        locality.addTextChangedListener(new TextWatcher() {
+        locale.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -172,7 +117,7 @@ public class AddAddressDialog implements Callback {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String input = locality.getText().toString().trim();
+                String input = locale.getText().toString().trim();
                 if (input.length() >= 2) {
                     getAutoSuggestions(input);
                 }
@@ -187,16 +132,13 @@ public class AddAddressDialog implements Callback {
                     try {
 
                         Address address = new Address();
-                        address.setAddressLine1(addressLine1.getText().toString());
-                        address.setLocality(locality.getText().toString());
-                        address.setZip(zip.getText().toString());
+                        address.setCountry(0);
+                        address.setCity_id(0);
+                        address.setPhysical_address("");
+                        address.setLocale(locale.getText().toString());
                         address.setDefault_yn(0);
-                        if(countries != null && countries.size() > 0)
-                            address.setCountry(countries.get(sp_country.getSelectedItemPosition()).getId());
-
-                        Log.e(TAG, address.getAddressLine1() + " : " + address.getLocality() + " : " + address.getZip() + " : " + address.getCountry());
                         onChildDetailsAdded(address);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     dialog.dismiss();
@@ -206,18 +148,11 @@ public class AddAddressDialog implements Callback {
 
             private boolean validate() {
                 boolean is_valid = true;
-                if (addressLine1.getText().toString().trim().length() < 1) {
+                if (locale.getText().toString().trim().length() < 1) {
                     is_valid = false;
-                    addressLine1.setError(context.getResources().getString(R.string.error_field_required));
+                    locale.setError(context.getResources().getString(R.string.error_field_required));
                 }
-                if (locality.getText().toString().trim().length() < 1) {
-                    is_valid = false;
-                    locality.setError(context.getResources().getString(R.string.error_field_required));
-                }
-                if (zip.getText().toString().trim().length() < 1) {
-                    is_valid = false;
-                    zip.setError(context.getResources().getString(R.string.error_field_required));
-                }
+
                 return is_valid;
             }
         });
@@ -263,7 +198,7 @@ public class AddAddressDialog implements Callback {
                 list.add(suggestions.get(index).getDescription());
             }
             ArrayAdapter arrayAdapter = new ArrayAdapter<String>(context, R.layout.textview, list);
-            locality.setAdapter(arrayAdapter);
+            locale.setAdapter(arrayAdapter);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -283,30 +218,27 @@ public class AddAddressDialog implements Callback {
         public void onAddressAdded(Address address);
     }
 
-    class GetAddress extends AsyncTask<Void,Void,Void>{
+    class GetAddress extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
-            NetworkManager.getCompleteAddressString(context,Double.parseDouble(stringLatitude),Double.parseDouble(stringLongitude));
+            NetworkManager.getCompleteAddressString(context, Double.parseDouble(stringLatitude), Double.parseDouble(stringLongitude));
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            String country_code = NetworkManager.countryCode;
+            String locality = "";
+            locality = NetworkManager.localityName;
+            String state;
+            state = NetworkManager.stateName;
+            String city = "";
+            city = NetworkManager.cityName;
 
-                Log.e(TAG, "country code 2: " + country_code);
-                if (country_code != null && country_code != "") {
-                    for (int i = 0; i < countries.size(); i++) {
-                        Country country = countries.get(i);
-                        String country_code_from_server = country.getIso();
-                        Log.e(TAG, "country code" + i + " " + country_code_from_server);
-                        if (country_code_from_server.equals(country_code)) {
-                            sp_country.setSelection(i);
-                        }
-                    }
-                }
+            if (locality != "" && state != "" && city != "") {
+                locale.setText(locality + ", " + city + ", " + state);
+            }
         }
     }
 }

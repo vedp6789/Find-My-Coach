@@ -71,7 +71,9 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
         }
 
 
-        viewHolder.address.setText(addressArrayList.get(position).getAddressLine1().trim() + ", " + addressArrayList.get(position).getLocality().trim() + ", " + addressArrayList.get(position).getZip().trim());
+       // viewHolder.address.setText(addressArrayList.get(position).getAddressLine1().trim() + ", " + addressArrayList.get(position).getLocality().trim() + ", " + addressArrayList.get(position).getZip().trim());
+        viewHolder.address.setText(addressArrayList.get(position).getLocale().trim());
+
         return convertView;
     }
 

@@ -91,6 +91,16 @@ public class Data {
     @Expose
 
 
+    private String physical_address;
+
+    public String getPhysical_address() {
+        return physical_address;
+    }
+
+    public void setPhysical_address(String physical_address) {
+        this.physical_address = physical_address;
+    }
+
     private ArrayList<Address> multipleAddress;
 
     public String getAddressFlag() {
