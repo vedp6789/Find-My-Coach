@@ -300,6 +300,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/ll_physical_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/back_margin"
@@ -518,7 +519,7 @@
                     android:textSize="@dimen/profile_heading"
                     android:textStyle="bold" />
 
-                <com.findmycoach.app.views.ChizzleAutoCompleteTextView
+                <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/input_training_location"
                     style="@style/EditTextCustomHoloPurple"
                     android:layout_width="match_parent"

@@ -91,7 +91,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private AutoCompleteTextView city_with_states;
     private AutoCompleteTextView locale;
     private Spinner mentorFor;
-    private AutoCompleteTextView trainingLocation;
+    private TextView trainingLocation;
     private Spinner coachingType;
     private Button updateAction;
     private ProgressDialog progressDialog;
@@ -126,6 +126,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private String city_name, state_name;
     private ArrayList<CityDetails> list_of_city;
     private int country_id, city_id;
+    private int user_info_multiple_address=0;
+    private LinearLayout ll_physical_address;
 
 
     @Override
@@ -203,6 +205,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private void initialize() {
         list_of_city = new ArrayList<>();
         city_with_states = (AutoCompleteTextView) findViewById(R.id.city_with_state);
+        ll_physical_address = (LinearLayout) findViewById(R.id.ll_physical_address);
         physicalAddress = (EditText) findViewById(R.id.physical_address);
         locale = (AutoCompleteTextView) findViewById(R.id.locale);
         city_name = "";
@@ -210,6 +213,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         city_id = 0;
         coachingTypeOptions = getResources().getStringArray(R.array.coaching_type);
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
+
+        if(userInfo != null && userInfo.getMultipleAddress() != null){
+            user_info_multiple_address = userInfo.getMultipleAddress().size();
+        }
         removeProfilePicture = false;
         profileGender = (Spinner) findViewById(R.id.input_gender);
         profilePicture = (ImageView) findViewById(R.id.profile_image);
@@ -220,7 +227,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         mentorFor = (Spinner) findViewById(R.id.input_mentor_for);
         locationPreferenceSpinner = (Spinner) findViewById(R.id.locationPreferenceSpinner);
-        trainingLocation = (AutoCompleteTextView) findViewById(R.id.input_training_location);
+        trainingLocation = (TextView) findViewById(R.id.input_training_location);
         coachingType = (Spinner) findViewById(R.id.input_coaching_type);
         updateAction = (Button) findViewById(R.id.button_update);
         progressDialog = new ProgressDialog(this);
@@ -251,7 +258,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String authToken = StorageHelper.getUserDetails(EditProfileActivityMentee.this, "auth_token");
                 city_with_states.setText("");
-                physicalAddress.setText("");
+                //physicalAddress.setText("");
                 locale.setText("");
                 country_id = 0;
                 city_id = 0;
@@ -271,7 +278,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
         });
 
-        country_names.add(getResources().getString(R.string.select));
+
+       country_names.add(getResources().getString(R.string.select));
         if (countries != null && countries.size() > 0) {
             for (int i = 0; i < countries.size(); i++) {
                 Country country = countries.get(i);
@@ -485,6 +493,29 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 String input = locale.getText().toString().trim();
                 if (input.length() >= 2) {
                     getAutoSuggestions(input);
+                }
+            }
+        });
+
+        locale.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (userInfo != null && userInfo.getMultipleAddress() != null) {
+                    if (user_info_multiple_address == 0 || user_info_multiple_address == 1){
+                        trainingLocation.setText(locale.getText().toString());
+                    }
+                }
+            }
+        });
+
+
+
+        locationPreferenceSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(position == 0 || position == 2){
+                    ll_physical_address.setVisibility(View.VISIBLE);
+                    
                 }
             }
         });
@@ -798,6 +829,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
             trainingLocation.setText((String) userInfo.getTrainingLocation());
         } catch (Exception ignored) {
+            ignored.printStackTrace();
         }
         try {
             String selectedCoachingType = String.valueOf(userInfo.getCoachingType());
@@ -1044,10 +1076,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             requestParams.add("mentor_for", String.valueOf(mentorFor.getSelectedItemPosition()));
 
             String trainLoc = trainingLocation.getText().toString().trim();
-            requestParams.add("training_location", trainLoc.length() < 2
-                    ? profileAddress.getText().toString() + ", "
-                    + profileAddress1.getText().toString() + ", "
-                    + pinCode.getText().toString() : trainLoc);
+            requestParams.add("training_location",trainingLocation.getText().toString());
             requestParams.add("coaching_type", String.valueOf(coachingType.getSelectedItemPosition()));
             if (multipleAddress.isChecked()) {
                 requestParams.add("multiple_address_flag", "1");
@@ -1072,9 +1101,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             Address address = null;
             try {
                 address = new Address();
-                address.setAddressLine1(profileAddress.getText().toString());
-                address.setLocality(profileAddress1.getText().toString());
-                address.setZip(pinCode.getText().toString());
+                address.setCountry(country_id);
+                address.setCity_id(city_id);
+                address.setPhysical_address(physicalAddress.getText().toString());
+                address.setLocale(locale.getText().toString());
                 address.setDefault_yn(1);
                 Country country = countries.get(profileCountry.getSelectedItemPosition());
                 address.setCountry(country.getId()); /* setting country id from countries list*/
@@ -1210,30 +1240,81 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             list.add(predictions.get(index).getDescription());
         }
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.textview, list);
-        profileAddress1.setAdapter(arrayAdapter);
+        locale.setAdapter(arrayAdapter);
     }
+
+
+    private void updateAutoSuggestionForCity(ArrayList<CityDetails> cityDetailses, String input_string) {
+        ArrayList<String> list = new ArrayList<String>();
+        for (int index = 0; index < cityDetailses.size(); index++) {
+            CityDetails cityDetails = cityDetailses.get(index);
+            if (cityDetails.getCity_name().toLowerCase().contains(input_string.toLowerCase())) {
+                list.add(cityDetails.getCity_name() + " (" + cityDetails.getCity_state() + ")");
+            }
+        }
+        arrayAdapter = new ArrayAdapter<String>(this, R.layout.textview, list);
+        city_with_states.setAdapter(arrayAdapter);
+    }
+
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
+
+
+
         if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
-        } else {
+        } else if(calledApiValue == 54 ){
+            list_of_city = (ArrayList<CityDetails>) object;
+
+            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() == 0) {
+                if (city_name != "" && list_of_city != null && list_of_city.size() > 0) {
+                    for (int i = 0; i < list_of_city.size(); i++) {
+                        CityDetails cityDetails = list_of_city.get(i);
+
+                        String city = cityDetails.getCity_name();
+                        String state = cityDetails.getCity_state();
+                        int city_country_id = cityDetails.getCity_country();
+
+                        if (city.equals(city_name) && state.equals(state_name) && (city_country_id == country_id)) {
+                            String s = city.trim() + " (" + state + ")";
+                            city_with_states.setText(s);
+                        }
+                    }
+                }
+            } else {
+                if (list_of_city != null && list_of_city.size() > 0 && city_id != 0)
+
+                    for (int i = 0; i < list_of_city.size(); i++) {
+                        CityDetails cityDetails = list_of_city.get(i);
+                        String city = cityDetails.getCity_name();
+                        String state = cityDetails.getCity_state();
+                        int city_country_id = cityDetails.getCity_country();
+                        if (cityDetails.getCity_id() == city_id && country_id == city_country_id) {
+                            String s = city.trim() + " (" + state + ")";
+                            city_with_states.setText(s);
+                        }
+
+                    }
+            }
+        }
+        else {
             progressDialog.dismiss();
             ProfileResponse response = (ProfileResponse) object;
             userInfo = response.getData();
             Log.d(TAG, "local_add: " + userInfo);
 
-            StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
+            /*StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
             StorageHelper.storePreference(this, "user_city_state", profileAddress1.getText().toString());
             if (isGettingAddress && NetworkManager.countryName != null && !NetworkManager.countryName.equals(""))
                 StorageHelper.storePreference(this, "user_country", NetworkManager.countryName);
             StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
+*/
 
-
-            Log.d(TAG, "city: " + StorageHelper.addressInformation(EditProfileActivityMentee.this, "user_city_state"));
+            /*Log.d(TAG, "city: " + StorageHelper.addressInformation(EditProfileActivityMentee.this, "user_city_state"));
             Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentee.this, "user_zip_code"));
-
+*/
             String currencyCode = StorageHelper.getCurrency(this);
             if (currencyCode == null || currencyCode.trim().equals("")) {
                 StorageHelper.setCurrency(this, userInfo.getCurrencyCode());
@@ -1255,7 +1336,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 //                startActivity(intent1);
 //            }
 
-            /* Saving address, city and zip */
+            /* Saving address, city and zip *//*
             if (!profileAddress.getText().toString().trim().equals("")) {
                 StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
             } else
@@ -1269,7 +1350,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             if (response.getData().getZip() != null) {
                 StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
             } else
-                StorageHelper.removePreference(this, "user_zip_code");
+                StorageHelper.removePreference(this, "user_zip_code");*/
 
 
             if (!trainingLocation.getText().toString().equals("")) {
