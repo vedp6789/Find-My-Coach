@@ -767,7 +767,8 @@
     <string name="prompt_city">City</string>
     <string name="prompt_locality">Locality</string>
     <string name="enter_city">Enter city</string>
-    <string name="enter_locality">Enter locality</string>
+    <string name="enter_physical_address">Enter physical address</string>
+    <string name="enter_locale">Enter locale</string>
     <string name="enter_address">Enter address</string>
     <string name="enter_dob">Enter date of birth</string>
     <string name="select_dob">Select date of birth</string>
@@ -927,6 +928,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+    <string name="error_not_selected">Please select</string>
     <string name="error_not_a_name">Enter valid name</string>
     <string name="error_field_not_match">Your new password(s) don’t match</string>
     <string name="error_password_not_match">Your password(s) don’t match</string>

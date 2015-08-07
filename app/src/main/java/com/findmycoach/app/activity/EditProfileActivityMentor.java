@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -149,10 +150,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private ArrayList<String> country_names;
     public static int FLAG_FOR_EDIT_PROFILE_MENTOR = -11;
     private ChizzleTextView teachingMediumHeader;
-    boolean country_update;
     private String city_name, state_name;
     private ArrayList<CityDetails> list_of_city;
-    private int country_id;
+    private int country_id, city_id;
 
 
     @Override
@@ -208,8 +208,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             String country_code_from_server = country.getIso();
             Log.e(TAG, "country code" + i + " " + country_code_from_server);
             if (country_code_from_server.equalsIgnoreCase(country_code)) {
-                country_update = true;
-                profileCountry.setSelection(i);
+                profileCountry.setSelection(i + 1);  /* i+1 because first item is Select string of spinner*/
             }
         }
     }
@@ -237,13 +236,15 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             startActivity(new Intent(this, DashboardActivity.class));
     }
 
+
     private void initialize() {
         list_of_city = new ArrayList<>();
         city_with_states = (AutoCompleteTextView) findViewById(R.id.city_with_state);
         physicalAddress = (EditText) findViewById(R.id.physical_address);
         locale = (AutoCompleteTextView) findViewById(R.id.locale);
         city_name = "";
-        country_update = false;
+        country_id = 0;
+        city_id = 0;
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
         ageAndExperienceErrorCounter = 0;
         Log.e(TAG, getIntent().getStringExtra("user_info"));
@@ -293,6 +294,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 city_with_states.setText("");
                 physicalAddress.setText("");
                 locale.setText("");
+                country_id = 0;
+                city_id = 0;
                 if (position != 0) {
                     if (countries != null && countries.size() > 0) {
                         country_id = countries.get(position).getId();
@@ -538,6 +541,16 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     if (list_of_city != null && list_of_city.size() > 0) {
                         updateAutoSuggestionForCity(list_of_city, input);
                     }
+                }
+            }
+        });
+
+
+        city_with_states.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (list_of_city != null && list_of_city.size() > 0) {
+                    city_id = list_of_city.get(position).getCity_id();
                 }
             }
         });
@@ -919,35 +932,32 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     userInfo.getMultipleAddress().remove(0);
                 }
 
+
                 try {
-                    profileAddress.setText(address.getAddressLine1());
-                } catch (Exception ignored) {
-                }
-                try {
-                    profileAddress1.setText(address.getLocality());
-                } catch (Exception ignored) {
-                }
-                try {
-                    //  pinCode.setText(address.getZip());
-                } catch (Exception ignored) {
-                }
-                try {
-                    city = address.getLocality();                 /* city string initially set to the city i.e. earlier get updated*/
-                } catch (Exception ignored) {
-                }
-                try {
-                    int country_id;
+
                     country_id = address.getCountry();
                     if (countries != null && countries.size() > 0) {
                         for (int i = 0; i < countries.size(); i++) {
                             Country country = countries.get(i);
                             if (country_id == country.getId()) {
-                                profileCountry.setSelection(i);
+                                profileCountry.setSelection(i + 1);  /* i+1 because first item of profileCountry is Select string */
                             }
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+                try {
+                    city_id = address.getCity_id();
+                } catch (Exception ignored) {
+                }
+                try {
+                    physicalAddress.setText(address.getPhysical_address());
+                } catch (Exception ignored) {
+                }
+                try {
+                    locale.setText(address.getLocale());
+                } catch (Exception ignored) {
                 }
 
 
@@ -1036,6 +1046,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
     }
 
+
     public boolean updateAddress() {   // TODO
         StringBuilder locale_string = new StringBuilder();
 
@@ -1054,8 +1065,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
 
         locale.setText(locale_string);
-        if (!country_update)
-            updateCountryByLocation();
+
+        updateCountryByLocation();
 
         return true;
 
@@ -1107,23 +1118,35 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
         boolean isValid = true;
 
-        if (profileAddress1.getText().toString().trim().equals("")) {
-            profileAddress1.setError(getResources().getString(R.string.enter_locality));
-            profileAddress1.requestFocus();
+        if (country_id == 0) {
+            TextView errorText = (TextView) profileCountry.getSelectedView();
+            errorText.setError(getResources().getString(R.string.error_not_selected));
+            errorText.setTextColor(Color.RED);//just to highlight that this is an error
+            isValid = false;
+
+        }
+
+        if (city_with_states.getText().toString().trim().equals("")) {
+            city_with_states.setError(getResources().getString(R.string.enter_city));
+            city_with_states.requestFocus();
             isValid = false;
         }
 
-//        if (profileAddress.getText().toString().trim().equals("")) {
-//            profileAddress.setError(getResources().getString(R.string.enter_address));
-//            if (isValid)
-//                profileAddress.requestFocus();
-//            isValid = false;
-//        }
+        if (physicalAddress.getText().toString().trim().equals("")) {
+            physicalAddress.setError(getResources().getString(R.string.enter_physical_address));
+            physicalAddress.requestFocus();
+            isValid = false;
+        }
+
+        if (locale.getText().toString().trim().equals("")) {
+            locale.setError(getResources().getString(R.string.enter_locale));
+            locale.requestFocus();
+            isValid = false;
+        }
 
         if (profileDOB.getText().toString().trim().equals("")) {
             profileDOB.setError(getResources().getString(R.string.enter_dob));
             scrollView.fullScroll(ScrollView.FOCUS_UP);
-            //Toast.makeText(EditProfileActivityMentor.this,getResources().getString(R.string.date_of_birth_please),Toast.LENGTH_SHORT).show();
             if (isValid)
                 profileDOB.requestFocus();
 
@@ -1332,17 +1355,15 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     requestParams.add("preferences", "");
                     Log.d(TAG, "preferences else : " + "");
                 }
-
             }
 
             Address address = new Address();
             try {
-                address.setAddressLine1(profileAddress.getText().toString());
-                address.setLocality(profileAddress1.getText().toString());
-                //address.setZip(pinCode.getText().toString());
+                address.setCountry(country_id);
+                address.setCity_id(city_id);
+                address.setPhysical_address(physicalAddress.getText().toString());
+                address.setLocale(locale.getText().toString());
                 address.setDefault_yn(1);
-                Country country = countries.get(profileCountry.getSelectedItemPosition());
-                address.setCountry(country.getId()); /* setting country id from countries list*/
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1593,7 +1614,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             list_of_city = (ArrayList<CityDetails>) object;
 
             if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() == 0) {
-                if (city_name != "") {
+                if (city_name != "" && list_of_city != null && list_of_city.size() > 0) {
                     for (int i = 0; i < list_of_city.size(); i++) {
                         CityDetails cityDetails = list_of_city.get(i);
 
@@ -1607,11 +1628,29 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         }
                     }
                 }
+            } else {
+                if (list_of_city != null && list_of_city.size() > 0 && city_id != 0)
+
+                    for (int i = 0; i < list_of_city.size(); i++) {
+                        CityDetails cityDetails = list_of_city.get(i);
+                        String city = cityDetails.getCity_name();
+                        String state = cityDetails.getCity_state();
+                        int city_country_id = cityDetails.getCity_country();
+                        if (cityDetails.getCity_id() == city_id && country_id == city_country_id) {
+                            String s = city.trim() + " (" + state + ")";
+                            city_with_states.setText(s);
+                        }
+
+                    }
             }
         } else if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
         } else {
+            /*
+            * This is the response of profile post api
+            * */
+
             progressDialog.dismiss();
             Response response = (Response) object;
             userInfo = response.getData();
@@ -1634,9 +1673,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } catch (Exception ignored) {
             }
 
-/* Saving mentor address in shared preference */
+            /* Saving mentor address in shared preference *//*
 
-            /* Saving address, city and zip */
+            *//* Saving address, city and zip *//*
             if (!profileAddress.getText().toString().trim().equals("")) {
                 StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
             } else
@@ -1655,13 +1694,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             if (isGettingAddress && NetworkManager.countryName != null && !NetworkManager.countryName.equals(""))
                 StorageHelper.storePreference(this, "user_country", NetworkManager.countryName);
 
-
-            Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentor.this, "user_local_address"));
+                 Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentor.this, "user_local_address"));
             Log.d(TAG, "city: " + StorageHelper.addressInformation(EditProfileActivityMentor.this, "user_city_state"));
             Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentor.this, "user_zip_code"));
 
-
-
+*/
 
             /* Saving area of coaching in sharedpreference */
             if (areaOfCoaching.getText().toString().length() > 0) {

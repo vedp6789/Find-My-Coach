@@ -518,7 +518,7 @@
                     android:textSize="@dimen/profile_heading"
                     android:textStyle="bold" />
 
-                <com.findmycoach.app.views.ChizzleEditText
+                <com.findmycoach.app.views.ChizzleAutoCompleteTextView
                     android:id="@+id/input_training_location"
                     style="@style/EditTextCustomHoloPurple"
                     android:layout_width="match_parent"
