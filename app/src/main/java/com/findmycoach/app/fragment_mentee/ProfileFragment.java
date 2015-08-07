@@ -269,7 +269,7 @@ public class ProfileFragment extends Fragment implements Callback {
                 for (int i = 0; i < userInfo.getChildren().size(); i++) {
                     childDetailsArrayList.add(userInfo.getChildren().get(i));
                 }
-                childDetailsAdapter = new ChildDetailsAdapter(getActivity(), R.layout.child_details_list_item_centre_horizontal, childDetailsArrayList);
+                childDetailsAdapter = new ChildDetailsAdapter(getActivity(), R.layout.child_details_list_item_centre_horizontal, childDetailsArrayList,childrenDetailsListViewProfile);
                 childrenDetailsListViewProfile.setAdapter(childDetailsAdapter);
                 childDetailsAdapter.notifyDataSetChanged();
                 EditProfileActivityMentee.setHeight(childrenDetailsListViewProfile);

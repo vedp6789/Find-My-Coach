@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:paddingLeft="24dp"
     android:paddingTop="@dimen/back_margin"
     android:paddingRight="@dimen/back_margin"
@@ -90,5 +90,17 @@
         android:textColor="@color/purple"
         android:layout_toRightOf="@+id/gradeHeader"
         android:layout_alignTop="@+id/gradeHeader" />
+
+    <ImageButton
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:id="@+id/deleteButton"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/close_icon"
+        android:background="@color/purple"
+        android:padding="12dp"
+        android:scaleType="fitCenter" />
 
 </RelativeLayout>

@@ -264,7 +264,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
         });
 
-        childDetailsAdapter = new ChildDetailsAdapter(this, R.layout.child_details_list_item, childDetailsArrayList);
+        childDetailsAdapter = new ChildDetailsAdapter(this, R.layout.child_details_list_item, childDetailsArrayList,childDetailsListView);
         childDetailsListView.setAdapter(childDetailsAdapter);
         addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayList);
         addressListView.setAdapter(addressAdapter);
