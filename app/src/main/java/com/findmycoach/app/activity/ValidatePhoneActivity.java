@@ -366,6 +366,7 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
             String[] g = country_code.get(i).split(",");
             if (g[1].trim().equals(CountryID.trim())) {
                 CountryZipCode = g[0];
+                CountryZipCode = "+" + CountryZipCode;
                 break;
             }
         }

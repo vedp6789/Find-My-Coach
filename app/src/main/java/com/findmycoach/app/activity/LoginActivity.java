@@ -919,6 +919,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             String[] g = country_code.get(i).split(",");
             if (g[1].trim().equals(CountryID.trim())) {
                 CountryZipCode = g[0];
+                CountryZipCode = "+" + CountryZipCode;
                 break;
             }
         }
