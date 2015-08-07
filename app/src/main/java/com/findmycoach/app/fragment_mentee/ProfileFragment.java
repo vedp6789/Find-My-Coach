@@ -306,7 +306,8 @@ public class ProfileFragment extends Fragment implements Callback {
 
                 addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayList,addressListView);
                 addressListView.setAdapter(addressAdapter);
-                EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListView);
+                addressAdapter.notifyDataSetChanged();
+                EditProfileActivityMentee.setHeight(addressListView);
                 //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
             }
 
