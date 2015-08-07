@@ -706,7 +706,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         } else if (object instanceof Category) {
             setTabForCategory(new Gson().fromJson((String) object, Category.class));
             DataBase dataBase = DataBase.singleton(getActivity());
-            dataBase.insertData((String) object);
+            dataBase.insertData(new Gson().toJson(object));
         } else {
             progressDialog.dismiss();
             Intent intent = new Intent(getActivity(), UserListActivity.class);

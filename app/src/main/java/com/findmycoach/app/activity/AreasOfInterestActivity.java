@@ -1,6 +1,7 @@
 package com.findmycoach.app.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +33,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     public static Category category;
     public static List<DatumSub> datumSubs;
     private ListView listView;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +113,9 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     }
 
     private void updateMainList() {
+        if (category == null || category.getData().size() < 1)
+            return;
+
         List<InterestsAdapter.SubCategoryItems> list = new ArrayList<>();
         for (Datum datum : category.getData()) {
             Log.e(TAG, "Name : " + datum.getName() + ", Sub category size : "
@@ -165,6 +170,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
      * Calling category api
      */
     private void getSubCategories() {
+        progressDialog.show();
         RequestParams requestParams = new RequestParams();
         String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
         NetworkClient.getCategories(this, requestParams, authToken, this, 34);
@@ -174,6 +180,8 @@ public class AreasOfInterestActivity extends Activity implements Callback {
      * Getting references of views
      */
     private void initialize() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
         category = null;
         datumSubs = new ArrayList<>();
         listView = (ListView) findViewById(R.id.areas_of_interest_list);
@@ -212,15 +220,19 @@ public class AreasOfInterestActivity extends Activity implements Callback {
      */
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        dataBase.insertData((String) object);
+        progressDialog.dismiss();
+        dataBase.insertData(new Gson().toJson(object));
         String categoryData = dataBase.getAll();
+        Log.e(TAG, categoryData);
         category = new Gson().fromJson(categoryData, Category.class);
-        if (category != null)
+        if (category != null) {
+            updateMainList();
             populateData();
+        }
     }
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApi) {
-
+        progressDialog.dismiss();
     }
 }

@@ -8,6 +8,7 @@ import com.findmycoach.app.beans.category.Category;
 import com.findmycoach.app.beans.category.Country;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +20,10 @@ public class MetaData {
         DataBase dataBase = DataBase.singleton(context);
         String categoryData = dataBase.getAll();
         Category categoryFromDb = new Gson().fromJson(categoryData, Category.class);
-        return categoryFromDb.getCountries();
+        if (categoryFromDb != null && categoryFromDb.getCountries() != null)
+            return categoryFromDb.getCountries();
+        else
+            return new ArrayList<Country>();
     }
 
     public static String getCurrencySymbol(String iso, Context context) {
