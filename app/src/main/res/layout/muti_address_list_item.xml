@@ -8,9 +8,23 @@
     android:paddingBottom="23dp">
 
     <com.findmycoach.app.views.ChizzleTextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:textColor="@color/purple"
-        android:id="@+id/address" />
+        android:id="@+id/address"
+        android:layout_toLeftOf="@+id/deleteButton"
+        android:layout_centerVertical="true" />
+
+    <ImageButton
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:id="@+id/deleteAddressButton"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/close_icon"
+        android:background="@color/purple"
+        android:padding="12dp"
+        android:scaleType="fitCenter" />
 </RelativeLayout>
