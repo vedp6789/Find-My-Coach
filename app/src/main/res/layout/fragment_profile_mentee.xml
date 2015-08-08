@@ -118,7 +118,7 @@
                 android:layout_marginTop="@dimen/back_margin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/prompt_address"
+                android:text="@string/profile_address"
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_heading"
                 android:textStyle="bold"

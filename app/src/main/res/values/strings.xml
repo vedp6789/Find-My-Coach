@@ -761,6 +761,7 @@
     <string name="prompt_qualified">Select in which Areas you have professional qualifications</string>
     <string name="prompt_submit">Submit</string>
     <string name="prompt_address">Physical address</string>
+    <string name="profile_address">Address</string>
     <string name="prompt_address_line_1">City</string>
     <string name="prompt_group_class_location">Group class location</string>
 

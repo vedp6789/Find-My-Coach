@@ -158,7 +158,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private ChizzleTextView checkBoxCountryConditionText;
     private CheckBox countryConditionCheckBox;
     private int countyConfigId;
-    private  ArrayList<Integer> city_id_from_suggestion;
+    private ArrayList<Integer> city_id_from_suggestion;
+    private String city_updated;
 
 
     @Override
@@ -253,6 +254,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         city_name = "";
         country_id = 0;
         city_id = 0;
+        city_updated = "";
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
         ageAndExperienceErrorCounter = 0;
         Log.e(TAG, getIntent().getStringExtra("user_info"));
@@ -405,8 +407,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         locale.requestFocus();
                     }
                 }
-
-
             }
         });
 
@@ -578,10 +578,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 String input = city_with_states.getText().toString().trim();
 
                 if (input.length() >= 2) {
-                    if(city_with_states.isPerformingCompletion()) {
-                       return;
-                    }
-                    else {
+                    if (city_with_states.isPerformingCompletion()) {
+                        return;
+                    } else {
                         if (list_of_city != null && list_of_city.size() > 0) {
                             updateAutoSuggestionForCity(list_of_city, input);
                         }
@@ -594,11 +593,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         city_with_states.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e(TAG,"postion: "+position);
+                Log.e(TAG, "postion: " + position);
 
-               // Log.e(TAG,"city id on auto suggestion click: "+city_id_from_suggestion.get(position));
-                Log.e(TAG,"city id with suggestions arraylist: "+city_id_from_suggestion.size());
-              if(city_id_from_suggestion != null && city_id_from_suggestion.size() > 0){
+                // Log.e(TAG,"city id on auto suggestion click: "+city_id_from_suggestion.get(position));
+                Log.e(TAG, "city id with suggestions arraylist: " + city_id_from_suggestion.size());
+                if (city_id_from_suggestion != null && city_id_from_suggestion.size() > 0) {
                     city_id = city_id_from_suggestion.get(position);
                 }
             }
@@ -1677,7 +1676,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 city_id_from_suggestion.add(cityDetails.getCity_id());
             }
         }
-        Log.e(TAG,"city id with suggestions arraylist: "+city_id_from_suggestion.size());
+        Log.e(TAG, "city id with suggestions arraylist: " + city_id_from_suggestion.size());
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.textview, list);
         city_with_states.setAdapter(arrayAdapter);
     }
