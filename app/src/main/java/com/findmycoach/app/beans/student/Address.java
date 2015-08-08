@@ -7,13 +7,37 @@ import com.google.gson.annotations.SerializedName;
  * Created by abhi7 on 27/07/15.
  */
 public class Address {
+    @SerializedName("city_id")
+    @Expose
     private int city_id;
+    @SerializedName("city_name")
+    @Expose
+    private String cityName;
     private String physical_address;
     private String locale;
     private int default_yn;
     @SerializedName("country_id")
     @Expose
     private int country;   // country id
+    @SerializedName("country_name")
+    @Expose
+    private String countryName;   // country id
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
 
     public int getCountry() {
         return country;

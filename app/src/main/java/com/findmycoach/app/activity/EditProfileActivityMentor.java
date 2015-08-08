@@ -1003,12 +1003,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     userInfo.getMultipleAddress().remove(0);
                 }
 
-
-                try {
-                    city_id = address.getCity_id();
-                } catch (Exception ignored) {
-                }
-
                 try {
 
                     country_id = address.getCountry();
@@ -1017,6 +1011,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                             Country country = countries.get(i);
                             if (country_id == country.getId()) {
                                 profileCountry.setSelection(i + 1);  /* i+1 because first item of profileCountry is Select string */
+                                city_id = 0;
+                                city_with_states.setText("");
+                                locale.setText("");
                             }
                         }
                     }
@@ -1025,8 +1022,17 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 }
 
                 try {
-                    Log.e(TAG,"locale for defaultyn 1: "+address.getLocale());
+                    city_id = address.getCity_id();
+                } catch (Exception ignored) {
+                }
+                try {
+                    city_with_states.setText(address.getCityName());
+                } catch (Exception ignored) {
+                }
+
+                try {
                     locale.setText(address.getLocale());
+                    Log.e(TAG, "locale for defaultyn 1: " + address.getLocale());
                 } catch (Exception ignored) {
                 }
 
