@@ -158,7 +158,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private ChizzleTextView checkBoxCountryConditionText;
     private CheckBox countryConditionCheckBox;
     private int countyConfigId;
-    private ArrayList<Integer> city_id_from_suggestion;
+    private  ArrayList<Integer> city_id_from_suggestion;
 
 
     @Override
@@ -248,7 +248,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         list_of_city = new ArrayList<>();
         city_with_states = (AutoCompleteTextView) findViewById(R.id.city_with_state);
         physicalAddress = (EditText) findViewById(R.id.physical_address);
-
+        city_id_from_suggestion = new ArrayList<Integer>();
         locale = (AutoCompleteTextView) findViewById(R.id.locale);
         city_name = "";
         country_id = 0;
@@ -576,9 +576,15 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             public void afterTextChanged(Editable s) {
                 selected_city = null;/* making selected_city null because if user do changes in city and does not select city from suggested city then this selected_city string should be null which is used to validate the city */
                 String input = city_with_states.getText().toString().trim();
+
                 if (input.length() >= 2) {
-                    if (list_of_city != null && list_of_city.size() > 0) {
-                        updateAutoSuggestionForCity(list_of_city, input);
+                    if(city_with_states.isPerformingCompletion()) {
+                       return;
+                    }
+                    else {
+                        if (list_of_city != null && list_of_city.size() > 0) {
+                            updateAutoSuggestionForCity(list_of_city, input);
+                        }
                     }
                 }
             }
@@ -588,9 +594,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         city_with_states.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.e(TAG,"postion: "+position);
 
-
-                if(city_id_from_suggestion != null && city_id_from_suggestion.size() > 0){
+               // Log.e(TAG,"city id on auto suggestion click: "+city_id_from_suggestion.get(position));
+                Log.e(TAG,"city id with suggestions arraylist: "+city_id_from_suggestion.size());
+              if(city_id_from_suggestion != null && city_id_from_suggestion.size() > 0){
                     city_id = city_id_from_suggestion.get(position);
                 }
             }
@@ -1655,7 +1663,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
     private void updateAutoSuggestionForCity(ArrayList<CityDetails> cityDetailses, String input_string) {
         ArrayList<String> list = new ArrayList<String>();
-        city_id_from_suggestion = new ArrayList<Integer>();
+        city_id_from_suggestion.clear();
         for (int index = 0; index < cityDetailses.size(); index++) {
             CityDetails cityDetails = cityDetailses.get(index);
             if (cityDetails.getCity_name().toLowerCase().contains(input_string.toLowerCase())) {
@@ -1663,6 +1671,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 city_id_from_suggestion.add(cityDetails.getCity_id());
             }
         }
+        Log.e(TAG,"city id with suggestions arraylist: "+city_id_from_suggestion.size());
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.textview, list);
         city_with_states.setAdapter(arrayAdapter);
     }

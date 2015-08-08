@@ -496,9 +496,16 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 selected_city = null;/* making selected_city null because if user do changes in city and does not select city from suggested city then this selected_city string should be null which is used to validate the city */
                 String input = city_with_states.getText().toString().trim();
                 if (input.length() >= 2) {
-                    if (list_of_city != null && list_of_city.size() > 0) {
-                        updateAutoSuggestionForCity(list_of_city, input);
+
+                    if(city_with_states.isPerformingCompletion()) {
+                        return;
                     }
+                    else {
+                        if (list_of_city != null && list_of_city.size() > 0) {
+                            updateAutoSuggestionForCity(list_of_city, input);
+                        }
+                    }
+
                 }
             }
         });
