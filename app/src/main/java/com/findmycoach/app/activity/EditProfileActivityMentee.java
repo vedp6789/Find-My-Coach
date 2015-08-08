@@ -126,6 +126,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private int user_info_multiple_address = 0;
     private LinearLayout ll_physical_address;
     private boolean training_location_similar_to_profile_locale;
+    private ArrayList<Integer>  city_id_from_suggestion;
 
 
     @Override
@@ -506,8 +507,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         city_with_states.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (list_of_city != null && list_of_city.size() > 0) {
-                    city_id = list_of_city.get(position).getCity_id();
+                if(city_id_from_suggestion != null && city_id_from_suggestion.size() > 0){
+                    city_id = city_id_from_suggestion.get(position);
                 }
             }
         });
@@ -1317,10 +1318,12 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
     private void updateAutoSuggestionForCity(ArrayList<CityDetails> cityDetailses, String input_string) {
         ArrayList<String> list = new ArrayList<String>();
+        city_id_from_suggestion= new ArrayList<Integer>();
         for (int index = 0; index < cityDetailses.size(); index++) {
             CityDetails cityDetails = cityDetailses.get(index);
             if (cityDetails.getCity_name().toLowerCase().contains(input_string.toLowerCase())) {
                 list.add(cityDetails.getCity_name() + " (" + cityDetails.getCity_state() + ")");
+                city_id_from_suggestion.add(cityDetails.getCity_id());
             }
         }
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.textview, list);
