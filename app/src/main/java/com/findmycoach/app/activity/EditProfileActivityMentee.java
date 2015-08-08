@@ -1050,11 +1050,16 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             errorText.setError(getResources().getString(R.string.error_not_selected));
             errorText.setTextColor(Color.RED);//just to highlight that this is an error
             isValid = false;
-
         }
 
-        if (city_with_states.getText().toString().trim().equals("")) {
+        if (city_with_states.getText().toString().trim().isEmpty()) {
             city_with_states.setError(getResources().getString(R.string.enter_city));
+            city_with_states.requestFocus();
+            isValid = false;
+        }
+
+        if (city_id == 0) {
+            city_with_states.setError(getResources().getString(R.string.enter_city_from_suggestion));
             city_with_states.requestFocus();
             isValid = false;
         }
@@ -1367,6 +1372,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                         if (cityDetails.getCity_id() == city_id && country_id == city_country_id) {
                             String s = city.trim() + " (" + state + ")";
                             city_with_states.setText(s);
+                            break;
                         }
 
                     }
