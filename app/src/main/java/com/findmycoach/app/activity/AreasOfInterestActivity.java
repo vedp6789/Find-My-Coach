@@ -34,6 +34,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
     public static List<DatumSub> datumSubs;
     private ListView listView;
     private ProgressDialog progressDialog;
+    private final int REQUEST_CODE = 1234;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +156,7 @@ public class AreasOfInterestActivity extends Activity implements Callback {
                 Intent intent = new Intent(AreasOfInterestActivity.this, AreaOfInterestSub.class);
                 intent.putExtra("index", position);
                 intent.putExtra("level", 2);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
     }
@@ -214,6 +215,13 @@ public class AreasOfInterestActivity extends Activity implements Callback {
         finish();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            returnResult();
+        }
+    }
 
     /**
      * If subcategories are successfully retried from server, store it into database
