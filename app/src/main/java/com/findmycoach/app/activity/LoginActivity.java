@@ -163,23 +163,26 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         super.onResume();
         if (getIntent().getBooleanExtra("doLogin", false)) {
             RequestParams requestParams = new RequestParams();
+            String userGroup = StorageHelper.getUserGroup(this, "user_group");
             try {
                 String loginDetails = StorageHelper.getLoginDetails(this);
                 Log.e(TAG, loginDetails);
-                String userGroup = StorageHelper.getUserGroup(this, "user_group");
                 requestParams.add("email", loginDetails.split("#")[0]);
                 requestParams.add("user_group", userGroup);
                 progressDialog.show();
                 if (loginDetails.split("#")[1].equals("")) {
+                    user_group = Integer.parseInt(userGroup);
                     NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
                 } else {
                     requestParams.add("password", loginDetails.split("#")[1]);
                     inputUserName.setText(loginDetails.split("#")[0]);
                     inputPassword.setText(loginDetails.split("#")[1]);
 
+                    user_group = Integer.parseInt(userGroup);
                     NetworkClient.login(this, requestParams, this, 1);
                 }
             } catch (IndexOutOfBoundsException ex) {
+                user_group = Integer.parseInt(userGroup);
                 NetworkClient.registerThroughSocialMedia(LoginActivity.this, requestParams, LoginActivity.this, 23);
             } catch (Exception e) {
                 e.printStackTrace();

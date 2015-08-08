@@ -8,7 +8,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -61,7 +60,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private RatingBar profileRatting;
     private TextView profileExperience;
     private TextView profileAccomplishment;
-    private TextView profileCharges;
+//    private TextView profileCharges;
     private LinearLayout areaOfCoaching, loveToTeachLL;
     private TextView profileTravelAvailable;
     private TextView profilePhone;
@@ -81,7 +80,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageButton arrow, arrow_multiple_address;
     private static final String TAG = "FMC:";
     private ScrollView scrollView;
-    private ChizzleTextView slotType;
+//    private ChizzleTextView slotType;
     private ChizzleTextView gender;
 
     public ProfileFragment() {
@@ -134,7 +133,7 @@ public class ProfileFragment extends Fragment implements Callback {
         profileRatting = (RatingBar) view.findViewById(R.id.profile_rating);
         profileExperience = (TextView) view.findViewById(R.id.profile_experience);
         profileAccomplishment = (TextView) view.findViewById(R.id.profile_accomplishment);
-        profileCharges = (TextView) view.findViewById(R.id.profile_charges);
+//        profileCharges = (TextView) view.findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) view.findViewById(R.id.profile_travel_available);
         areaOfCoaching = (LinearLayout) view.findViewById(R.id.areas_of_coaching);
         loveToTeachLL = (LinearLayout) view.findViewById(R.id.loveToTeachLL);
@@ -160,7 +159,7 @@ public class ProfileFragment extends Fragment implements Callback {
         multipleAddressLV = (ListView) view.findViewById(R.id.multipleAddressLV);
         addressArrayListMentor = new ArrayList<>();
         gender = (ChizzleTextView) view.findViewById(R.id.profile_gender);
-        slotType = (ChizzleTextView) view.findViewById(R.id.classTypeValue);
+//        slotType = (ChizzleTextView) view.findViewById(R.id.classTypeValue);
         addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayListMentor,multipleAddressLV);
         multipleAddressLV.setAdapter(addressAdapter);
 
@@ -426,20 +425,20 @@ public class ProfileFragment extends Fragment implements Callback {
             }
         });
 
-        if (userInfo.getCharges() != null) {
-            Log.e(TAG, "Currency : " + userInfo.getCharges() + " : " + userInfo.getCharges());
-            if (userInfo.getCurrencyCode() != null && !userInfo.getCurrencyCode().isEmpty()) {
-                String symbol = userInfo.getCurrencyCode();
-                Log.e(TAG, "Currency : " + symbol);
-                if (symbol.charAt(0) == '&')
-                    profileCharges.setText(Html.fromHtml(symbol) + " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
-                else {
-                    String[] symbols = symbol.split("&");
-                    profileCharges.setText(symbols[0] + Html.fromHtml("&" + symbols[1]) + " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
-                }
-            }
-
-        }
+//        if (userInfo.getCharges() != null) {
+//            Log.e(TAG, "Currency : " + userInfo.getCharges() + " : " + userInfo.getCharges());
+//            if (userInfo.getCurrencyCode() != null && !userInfo.getCurrencyCode().isEmpty()) {
+//                String symbol = userInfo.getCurrencyCode();
+//                Log.e(TAG, "Currency : " + symbol);
+//                if (symbol.charAt(0) == '&')
+//                    profileCharges.setText(Html.fromHtml(symbol) + " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
+//                else {
+//                    String[] symbols = symbol.split("&");
+//                    profileCharges.setText(symbols[0] + Html.fromHtml("&" + symbols[1]) + " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
+//                }
+//            }
+//
+//        }
 
 
         addressArrayListMentor.clear();
@@ -488,19 +487,19 @@ public class ProfileFragment extends Fragment implements Callback {
             multipleAddressRL.setVisibility(View.VISIBLE);
 
         }
-        String[] slotTypeArray = getActivity().getResources().getStringArray(R.array.mentor_class_type);
-        switch (Integer.parseInt(userInfo.getSlotType())) {
-            case 0:
-                slotType.setText(slotTypeArray[0]);
-                break;
-            case 1:
-                slotType.setText(slotTypeArray[1]);
-                break;
-            case 2:
-                slotType.setText(slotTypeArray[2]);
-                break;
-
-        }
+//        String[] slotTypeArray = getActivity().getResources().getStringArray(R.array.mentor_class_type);
+//        switch (Integer.parseInt(userInfo.getSlotType())) {
+//            case 0:
+//                slotType.setText(slotTypeArray[0]);
+//                break;
+//            case 1:
+//                slotType.setText(slotTypeArray[1]);
+//                break;
+//            case 2:
+//                slotType.setText(slotTypeArray[2]);
+//                break;
+//
+//        }
 
         if (userInfo.getGender().equalsIgnoreCase("M")) {
             gender.setText("Male");
