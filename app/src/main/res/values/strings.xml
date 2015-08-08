@@ -768,6 +768,7 @@
     <string name="prompt_city">City</string>
     <string name="prompt_locality">Locality</string>
     <string name="enter_city">Enter city</string>
+    <string name="enter_city_from_suggestion">Please select city from suggestions</string>
     <string name="enter_physical_address">Enter physical address</string>
     <string name="enter_locale">Enter locale</string>
     <string name="enter_address">Enter address</string>

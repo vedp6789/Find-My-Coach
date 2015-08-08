@@ -1175,6 +1175,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             isValid = false;
         }
 
+        if (city_id == 0) {
+            city_with_states.setError(getResources().getString(R.string.enter_city_from_suggestion));
+            city_with_states.requestFocus();
+            isValid = false;
+        }
+
         if (teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2) {
             if (physicalAddress.getText().toString().trim().isEmpty()) {
                 physicalAddress.setError(getResources().getString(R.string.enter_physical_address));
@@ -1688,6 +1694,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         if (cityDetails.getCity_id() == city_id && country_id == city_country_id) {
                             String s = city.trim() + " (" + state + ")";
                             city_with_states.setText(s);
+                            break;
                         }
 
                     }
