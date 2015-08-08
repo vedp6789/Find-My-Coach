@@ -484,13 +484,12 @@
 
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/input_training_location"
-                    style="@style/EditTextCustomHoloPurple"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_training_location"
                     android:inputType="text"
                     android:singleLine="true"
-                    android:textCursorDrawable="@drawable/cursor_purple"
+                    android:textIsSelectable="false"
                     android:textSize="@dimen/profile_details" />
 
 

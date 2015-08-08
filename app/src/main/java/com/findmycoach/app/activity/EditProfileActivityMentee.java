@@ -855,11 +855,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
 
             try {
-                city_id = address.getCity_id();    /* fetching city_id before so that city get selected as per new cities api call */
-            } catch (Exception ignored) {
-            }
-
-            try {
 
                 country_id = address.getCountry();
                 if (countries != null && countries.size() > 0) {
@@ -867,6 +862,9 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                         Country country = countries.get(i);
                         if (country_id == country.getId()) {
                             profileCountry.setSelection(i + 1);  /* i+1 because first item of profileCountry is Select string */
+                            city_id = 0;
+                            city_with_states.setText("");
+                            locale.setText("");
                         }
                     }
                 }
@@ -876,7 +874,17 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
 
             try {
+                city_id = address.getCity_id();
+            } catch (Exception ignored) {
+            }
+            try {
+                    city_with_states.setText(address.getCityName());
+            } catch (Exception ignored) {
+            }
+
+            try {
                 locale.setText(address.getLocale());
+                Log.e(TAG, "locale for defaultyn 1: " + address.getLocale());
             } catch (Exception ignored) {
             }
 
