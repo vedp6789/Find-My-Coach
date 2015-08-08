@@ -13,7 +13,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -53,7 +52,6 @@ import com.findmycoach.app.beans.category.Country;
 import com.findmycoach.app.beans.category.Datum;
 import com.findmycoach.app.beans.category.DatumSub;
 import com.findmycoach.app.beans.mentor.CountryConfig;
-import com.findmycoach.app.beans.mentor.Currency;
 import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
@@ -78,7 +76,6 @@ import com.findmycoach.app.views.DobPicker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
-import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.RequestParams;
 
@@ -109,11 +106,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private AutoCompleteTextView profileAddress1;
     private EditText pinCode;
     private EditText accomplishment;
-    private EditText chargeInput;
-    private Spinner experienceInput, teachingPreference, classTypeSpinner;
+//    private EditText chargeInput;
+    private Spinner experienceInput, teachingPreference;
+//        classTypeSpinner;
     // private CheckBox isReadyToTravel;
     private Button updateAction;
-    private Spinner chargesPerUnit;
+//    private Spinner chargesPerUnit;
     private ProgressDialog progressDialog;
     private Data userInfo;
     private String imageInBinary = "";
@@ -124,7 +122,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     public boolean needToCheckOnDestroy;
     private List<Prediction> predictions;
     private ChizzleTextView addPhoto;
-    private ChizzleTextView currencySymbol;
+//    private ChizzleTextView currencySymbol;
     private String userCurrentAddress = "";
     private ScrollView scrollView;
     private TextView students_preference;
@@ -258,13 +256,13 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         profileAddress1 = (AutoCompleteTextView) findViewById(R.id.input_address1);
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         pinCode = (EditText) findViewById(R.id.input_pin);
-        chargeInput = (EditText) findViewById(R.id.input_charges);
-        currencySymbol = (ChizzleTextView) findViewById(R.id.currencySymbol);
-        chargeInput.setSelectAllOnFocus(true);
+//        chargeInput = (EditText) findViewById(R.id.input_charges);
+//        currencySymbol = (ChizzleTextView) findViewById(R.id.currencySymbol);
+//        chargeInput.setSelectAllOnFocus(true);
         accomplishment = (EditText) findViewById(R.id.input_accomplishment);
         experienceInput = (Spinner) findViewById(R.id.input_experience);
         teachingPreference = (Spinner) findViewById(R.id.teachingPreferencesSpinner);
-        classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
+//        classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
         summaryHeader = (RelativeLayout) findViewById(R.id.summaryHeader);
         scrollView = (ScrollView) findViewById(R.id.main_scroll_view);
         summaryDetailsLayout = (LinearLayout) findViewById(R.id.summaryDetailsLayout);
@@ -300,16 +298,16 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    String currencyCode = MetaData.getCurrencySymbol(countries.get(position).getIso(), EditProfileActivityMentor.this);
-                    if (currencyCode.charAt(0) == '&')
-                        currencySymbol.setText(Html.fromHtml(currencyCode));
-                    else {
-                        String[] symbols = currencyCode.split("&");
-                        currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
-                    }
-                } catch (Exception ignored) {
-                }
+//                try {
+//                    String currencyCode = MetaData.getCurrencySymbol(countries.get(position).getIso(), EditProfileActivityMentor.this);
+//                    if (currencyCode.charAt(0) == '&')
+//                        currencySymbol.setText(Html.fromHtml(currencyCode));
+//                    else {
+//                        String[] symbols = currencyCode.split("&");
+//                        currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
+//                    }
+//                } catch (Exception ignored) {
+//                }
                 if (NetworkManager.isNetworkConnected(EditProfileActivityMentor.this)) {
                     RequestParams requestParams= new RequestParams();
                     requestParams.add("country_id", String.valueOf(countries.get(position).getId()));
@@ -367,10 +365,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         addPhoto = (ChizzleTextView) findViewById(R.id.addPhotoMentor);
         experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, yearOfExperience));
         teachingPreference.setAdapter(new ArrayAdapter<>(this, R.layout.textview, preferences));
-        classTypeSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.textview, classType));
+//        classTypeSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.textview, classType));
         //  isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
         updateAction = (Button) findViewById(R.id.button_update);
-        chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
+//        chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
         areaOfCoaching = (TextView) findViewById(R.id.input_areas_of_coaching);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
@@ -571,7 +569,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         || (actionId == EditorInfo.IME_ACTION_DONE
                         || actionId == EditorInfo.IME_ACTION_NEXT)) {
                     try {
-                        new AddressFromZip(EditProfileActivityMentor.this, EditProfileActivityMentor.this, profileAddress1, profileAddress, currencySymbol, true, FLAG_FOR_EDIT_PROFILE_MENTOR).execute(pinCode.getText().toString());
+                        new AddressFromZip(EditProfileActivityMentor.this, EditProfileActivityMentor.this, profileAddress1, profileAddress, true, FLAG_FOR_EDIT_PROFILE_MENTOR).execute(pinCode.getText().toString());
                         isGettingAddress = true;
                     } catch (Exception ignored) {
                     }
@@ -741,16 +739,16 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } catch (Exception ignored) {
             }
 
-            try {
-                if (!userInfo.getCharges().equalsIgnoreCase("0"))
-                    chargeInput.setText(userInfo.getCharges());
-            } catch (Exception ignored) {
-            }
-            try {
-                chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, new String[]{"hour"}));
-                chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
-            } catch (Exception ignored) {
-            }
+//            try {
+//                if (!userInfo.getCharges().equalsIgnoreCase("0"))
+//                    chargeInput.setText(userInfo.getCharges());
+//            } catch (Exception ignored) {
+//            }
+//            try {
+//                chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, new String[]{"hour"}));
+//                chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
+//            } catch (Exception ignored) {
+//            }
 
             try {
                 int index = Integer.parseInt(userInfo.getExperience());
@@ -795,20 +793,20 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             });
 
             teachingPreference.setSelection(Integer.parseInt(userInfo.getAvailabilityYn()));
-            classTypeSpinner.setSelection(Integer.parseInt(userInfo.getSlotType()));
+//            classTypeSpinner.setSelection(Integer.parseInt(userInfo.getSlotType()));
 
-            if (userInfo.getCurrencyCode() != null && !userInfo.getCurrencyCode().equals("")) {
-                try {
-                    String currencyCode = userInfo.getCurrencyCode();
-                    if (currencyCode.charAt(0) == '&')
-                        currencySymbol.setText(Html.fromHtml(currencyCode));
-                    else {
-                        String[] symbols = currencyCode.split("&");
-                        currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
-                    }
-                } catch (Exception ignored) {
-                }
-            }
+//            if (userInfo.getCurrencyCode() != null && !userInfo.getCurrencyCode().equals("")) {
+//                try {
+//                    String currencyCode = userInfo.getCurrencyCode();
+//                    if (currencyCode.charAt(0) == '&')
+//                        currencySymbol.setText(Html.fromHtml(currencyCode));
+//                    else {
+//                        String[] symbols = currencyCode.split("&");
+//                        currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
+//                    }
+//                } catch (Exception ignored) {
+//                }
+//            }
 //
 
             if (!userInfo.getSection1().equalsIgnoreCase("")) {
@@ -1194,11 +1192,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             requestParams.add("city", profileAddress1.getText().toString());
             requestParams.add("zip", pinCode.getText().toString());*/
 
-            if (chargesPerUnit.getSelectedItemPosition() == 0) {
-                Log.i(TAG, "select charges unit : " + chargesPerUnit.getSelectedItemPosition());
-                requestParams.add("charges", chargeInput.getText().toString());
-                requestParams.add("charges_class", "0");
-            }
+//            if (chargesPerUnit.getSelectedItemPosition() == 0) {
+//                Log.i(TAG, "select charges unit : " + chargesPerUnit.getSelectedItemPosition());
+//                requestParams.add("charges", chargeInput.getText().toString());
+//                requestParams.add("charges_class", "0");
+//            }
 
             requestParams.add("experience", experienceInput.getSelectedItemPosition() + "");
             requestParams.add("accomplishments", accomplishment.getText().toString());
@@ -1316,7 +1314,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
-            requestParams.add("slot_type", String.valueOf(classTypeSpinner.getSelectedItemPosition()));
+//            requestParams.add("slot_type", String.valueOf(classTypeSpinner.getSelectedItemPosition()));
             requestParams.add("section_1", myQualification.getText().toString());
             requestParams.add("section_2", myAccredition.getText().toString());
             requestParams.add("section_3", myExperience.getText().toString());
