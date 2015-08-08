@@ -287,7 +287,7 @@
                 </LinearLayout>
 
                 <com.findmycoach.app.views.ChizzleAutoCompleteTextView
-                    android:id="@+id/input_city_state"
+                    android:id="@+id/city_with_state"
                     style="@style/EditTextCustomHoloPurple"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -327,7 +327,7 @@
 
 
                 <com.findmycoach.app.views.ChizzleAutoCompleteTextView
-                    android:id="@+id/input_locale"
+                    android:id="@+id/locale"
                     style="@style/EditTextCustomHoloPurple"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -30,7 +29,6 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.AddSlotAdapter;
-import com.findmycoach.app.fragment.MyScheduleFragment;
 import com.findmycoach.app.fragment.TimePickerFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
@@ -145,28 +143,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         boo_sun_checked = true;
 
         initialize();
-
-        StringBuilder stringBuilder_address = new StringBuilder();
-        String local_Address = StorageHelper.addressInformation(AddNewSlotActivity.this, "user_local_address");
-        String city = StorageHelper.addressInformation(AddNewSlotActivity.this, "user_city_state");
-        String zip = StorageHelper.addressInformation(AddNewSlotActivity.this, "user_zip_code");
-        if (local_Address != null && (!local_Address.equals(""))) {
-            stringBuilder_address.append(local_Address);
-            if (city != null) {
-                stringBuilder_address.append(", " + city.trim().toString());
-                if (zip != null) {
-                    stringBuilder_address.append(", " + zip.trim().toString());
-                }
-            }
-            et_tutorial_location.setText(stringBuilder_address.toString());
-        } else {
-            String user_current_address = DashboardActivity.dashboardActivity.userCurrentAddress;
-            if (!user_current_address.equals("")) {
-            } else {
-                et_tutorial_location.setText(user_current_address);
-            }
-        }
-
         et_tutorial_location.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
