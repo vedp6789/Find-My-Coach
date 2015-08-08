@@ -561,6 +561,7 @@ training_location_similar_to_profile_locale=false;
         });
 
 
+
         locationPreferenceSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
