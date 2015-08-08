@@ -17,11 +17,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -54,13 +52,11 @@ import com.findmycoach.app.beans.category.Country;
 import com.findmycoach.app.beans.category.Datum;
 import com.findmycoach.app.beans.category.DatumSub;
 import com.findmycoach.app.beans.mentor.CountryConfig;
-import com.findmycoach.app.beans.mentor.Currency;
 import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.AddAddressDialog;
-import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
@@ -312,9 +308,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String authToken = StorageHelper.getUserDetails(EditProfileActivityMentor.this, "auth_token");
-                city_with_states.setText("");
+//                city_with_states.setText("");
                 physicalAddress.setText("");
-                locale.setText("");
+//                locale.setText("");
                 country_id = 0;
                 city_id = 0;
                 if (position != 0) {
@@ -904,14 +900,25 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             });
 
             teachingPreference.setSelection(Integer.parseInt(userInfo.getAvailabilityYn()));
-            if (teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2) {
-                ll_physical_address.setVisibility(View.VISIBLE);
-                physicalAddress.setVisibility(View.VISIBLE);
-                physicalAddress.setText(userInfo.getPhysical_address());
-            } else {
-                ll_physical_address.setVisibility(View.GONE);
-                physicalAddress.setVisibility(View.GONE);
-            }
+
+            teachingPreference.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (position == 0 || position == 2) {
+                        ll_physical_address.setVisibility(View.VISIBLE);
+                        physicalAddress.setVisibility(View.VISIBLE);
+                        physicalAddress.setText(userInfo.getPhysical_address());
+                    } else {
+                        ll_physical_address.setVisibility(View.GONE);
+                        physicalAddress.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
 //            classTypeSpinner.setSelection(Integer.parseInt(userInfo.getSlotType()));
 //            if (userInfo.getCountry() != null) {
 //                //       currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
@@ -995,6 +1002,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
 
                 try {
+                    city_id = address.getCity_id();
+                } catch (Exception ignored) {
+                }
+
+                try {
 
                     country_id = address.getCountry();
                     if (countries != null && countries.size() > 0) {
@@ -1008,15 +1020,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
                 try {
-                    city_id = address.getCity_id();
-                } catch (Exception ignored) {
-                }
-                try {
-                    physicalAddress.setText(address.getPhysical_address());
-                } catch (Exception ignored) {
-                }
-                try {
+                    Log.e(TAG,"locale for defaultyn 1: "+address.getLocale());
                     locale.setText(address.getLocale());
                 } catch (Exception ignored) {
                 }
@@ -1143,51 +1149,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
 
         locale.setText(locale_string);
-
         updateCountryByLocation();
-
         return true;
-
-
-        /*if (userInfo != null && (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))) {
-            try {
-                profileAddress.setText(NetworkManager.localityName);
-                String s = NetworkManager.countryName;
-            } catch (Exception ignored) {
-            }
-        }
-
-        if (userInfo != null && (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))) {
-            try {
-                profileAddress1.setText(NetworkManager.cityName);
-            } catch (Exception ignored) {
-            }
-        }
-        if(userInfo != null && userInfo.getLocale() )
-*/
-
-
-
-
-        
-        
-        
-       /* if (userInfo != null && (userInfo.getZip() == null || userInfo.getZip().toString().trim().equals("") || userInfo.getZip().toString().trim().equals("0"))) {
-            try {
-                if (NetworkManager.postalCodeName != null && !NetworkManager.postalCodeName.trim().equals(""))
-                    userInfo.setZip(NetworkManager.postalCodeName);
-                else {
-                    String address = userCurrentAddress.trim();
-                    if (!address.equals("")) {
-                        String[] temp = address.split(" ");
-                        pinCode.setText(temp[temp.length - 1]);
-                    }
-                }
-            } catch (Exception ignored) {
-            }
-        }*/
-
-
     }
 
 

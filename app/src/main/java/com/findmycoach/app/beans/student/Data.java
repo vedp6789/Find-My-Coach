@@ -89,6 +89,7 @@ public class Data {
 
     @SerializedName("locations")
     @Expose
+    private ArrayList<Address> multipleAddress;
 
 
     private String physical_address;
@@ -100,8 +101,6 @@ public class Data {
     public void setPhysical_address(String physical_address) {
         this.physical_address = physical_address;
     }
-
-    private ArrayList<Address> multipleAddress;
 
     public String getAddressFlag() {
         return addressFlag;

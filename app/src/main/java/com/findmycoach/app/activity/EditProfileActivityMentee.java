@@ -16,11 +16,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -46,17 +44,14 @@ import com.findmycoach.app.adapter.AddressAdapter;
 import com.findmycoach.app.adapter.ChildDetailsAdapter;
 import com.findmycoach.app.beans.CityDetails;
 import com.findmycoach.app.beans.category.Country;
-import com.findmycoach.app.beans.mentor.CountryConfig;
 import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.student.ChildDetails;
 import com.findmycoach.app.beans.student.Data;
-import com.findmycoach.app.beans.student.Grade;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.AddAddressDialog;
-import com.findmycoach.app.util.AddressFromZip;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.ChildDetailsDialog;
@@ -72,11 +67,7 @@ import com.findmycoach.app.views.DobPicker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.RequestParams;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -220,20 +211,20 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         city_id = 0;
         coachingTypeOptions = getResources().getStringArray(R.array.coaching_type);
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
-training_location_similar_to_profile_locale=false;
+        training_location_similar_to_profile_locale = false;
         if (userInfo != null && userInfo.getMultipleAddress() != null) {
             user_info_multiple_address = userInfo.getMultipleAddress().size();
 
             String preffered_training_location = "";
-            if(userInfo.getTrainingLocation() != null){
-                preffered_training_location =userInfo.getTrainingLocation().toString();
+            if (userInfo.getTrainingLocation() != null) {
+                preffered_training_location = userInfo.getTrainingLocation().toString();
             }
-            if(userInfo.getMultipleAddress().size() > 0){
-                for(int i=0; i < userInfo.getMultipleAddress().size() ; i++){
-                    Address address=userInfo.getMultipleAddress().get(i);
-                    if(address.getDefault_yn() == 1){
-                        if(preffered_training_location.equals(address.getLocale())){
-                            training_location_similar_to_profile_locale=true;
+            if (userInfo.getMultipleAddress().size() > 0) {
+                for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
+                    Address address = userInfo.getMultipleAddress().get(i);
+                    if (address.getDefault_yn() == 1) {
+                        if (preffered_training_location.equals(address.getLocale())) {
+                            training_location_similar_to_profile_locale = true;
                         }
                         break;
                     }
@@ -283,14 +274,14 @@ training_location_similar_to_profile_locale=false;
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String authToken = StorageHelper.getUserDetails(EditProfileActivityMentee.this, "auth_token");
-                city_with_states.setText("");
-                //physicalAddress.setText("");
-                locale.setText("");
+//                city_with_states.setText("");
+                physicalAddress.setText("");
+//                locale.setText("");
                 country_id = 0;
                 city_id = 0;
                 if (position != 0) {
                     if (countries != null && countries.size() > 0) {
-                        country_id = countries.get(position-1).getId();
+                        country_id = countries.get(position - 1).getId();
                         RequestParams requestParams = new RequestParams();
                         requestParams.add("country_id", String.valueOf(country_id));
                         NetworkClient.cities(EditProfileActivityMentee.this, requestParams, EditProfileActivityMentee.this, 54);
@@ -561,9 +552,9 @@ training_location_similar_to_profile_locale=false;
         });
 
 
-        locationPreferenceSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        locationPreferenceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0 || position == 2) {
                     ll_physical_address.setVisibility(View.VISIBLE);
                     physicalAddress.setVisibility(View.VISIBLE);
@@ -572,8 +563,12 @@ training_location_similar_to_profile_locale=false;
                     physicalAddress.setVisibility(View.GONE);
                 }
             }
-        });
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         /*profileAddress1.addTextChangedListener(new TextWatcher() {
             @Override
