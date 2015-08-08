@@ -220,20 +220,20 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         city_id = 0;
         coachingTypeOptions = getResources().getStringArray(R.array.coaching_type);
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
-training_location_similar_to_profile_locale=false;
+        training_location_similar_to_profile_locale = false;
         if (userInfo != null && userInfo.getMultipleAddress() != null) {
             user_info_multiple_address = userInfo.getMultipleAddress().size();
 
             String preffered_training_location = "";
-            if(userInfo.getTrainingLocation() != null){
-                preffered_training_location =userInfo.getTrainingLocation().toString();
+            if (userInfo.getTrainingLocation() != null) {
+                preffered_training_location = userInfo.getTrainingLocation().toString();
             }
-            if(userInfo.getMultipleAddress().size() > 0){
-                for(int i=0; i < userInfo.getMultipleAddress().size() ; i++){
-                    Address address=userInfo.getMultipleAddress().get(i);
-                    if(address.getDefault_yn() == 1){
-                        if(preffered_training_location.equals(address.getLocale())){
-                            training_location_similar_to_profile_locale=true;
+            if (userInfo.getMultipleAddress().size() > 0) {
+                for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
+                    Address address = userInfo.getMultipleAddress().get(i);
+                    if (address.getDefault_yn() == 1) {
+                        if (preffered_training_location.equals(address.getLocale())) {
+                            training_location_similar_to_profile_locale = true;
                         }
                         break;
                     }
@@ -284,13 +284,13 @@ training_location_similar_to_profile_locale=false;
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String authToken = StorageHelper.getUserDetails(EditProfileActivityMentee.this, "auth_token");
                 city_with_states.setText("");
-                //physicalAddress.setText("");
+                physicalAddress.setText("");
                 locale.setText("");
                 country_id = 0;
                 city_id = 0;
                 if (position != 0) {
                     if (countries != null && countries.size() > 0) {
-                        country_id = countries.get(position-1).getId();
+                        country_id = countries.get(position - 1).getId();
                         RequestParams requestParams = new RequestParams();
                         requestParams.add("country_id", String.valueOf(country_id));
                         NetworkClient.cities(EditProfileActivityMentee.this, requestParams, EditProfileActivityMentee.this, 54);
@@ -547,7 +547,7 @@ training_location_similar_to_profile_locale=false;
                 if (userInfo != null && userInfo.getMultipleAddress() != null) {
                     if (user_info_multiple_address == 0 || user_info_multiple_address == 1 ||
                             training_location_similar_to_profile_locale) {
-                             /* preferred training location will get populated, similar to profile
+                            /* preferred training location will get populated, similar to profile
                              locale only when profile locale is first time populated or if it is
                               get edited when there is only one locale i.e. user has not not selected multiple addresses */
 
