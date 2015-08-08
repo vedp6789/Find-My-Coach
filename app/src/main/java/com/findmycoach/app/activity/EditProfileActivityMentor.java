@@ -324,15 +324,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         Log.e(TAG, "country_id: " + country_id);
                         NetworkClient.cities(EditProfileActivityMentor.this, requestParams, EditProfileActivityMentor.this, 54);
                     }
-//                try {
-//                    String currencyCode = MetaData.getCurrencySymbol(countries.get(position).getIso(), EditProfileActivityMentor.this);
-//                    if (currencyCode.charAt(0) == '&')
-//                        currencySymbol.setText(Html.fromHtml(currencyCode));
-//                    else {
-//                        String[] symbols = currencyCode.split("&");
-//                        currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
-//                    }
-//                } catch (Exception ignored) {
+
                     if (NetworkManager.isNetworkConnected(EditProfileActivityMentor.this)) {
                         RequestParams requestParams = new RequestParams();
                         requestParams.add("country_id", String.valueOf(countries.get(position - 1).getId()));
@@ -856,16 +848,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } catch (Exception ignored) {
             }
 
-//            try {
-//                if (!userInfo.getCharges().equalsIgnoreCase("0"))
-//                    chargeInput.setText(userInfo.getCharges());
-//            } catch (Exception ignored) {
-//            }
-//            try {
-//                chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, new String[]{"hour"}));
-//                chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
-//            } catch (Exception ignored) {
-//            }
+
 
             try {
                 int index = Integer.parseInt(userInfo.getExperience());
@@ -929,30 +912,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
                 }
             });
-//            classTypeSpinner.setSelection(Integer.parseInt(userInfo.getSlotType()));
-//            if (userInfo.getCountry() != null) {
-//                //       currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
-//                String authToken = StorageHelper.getUserDetails(this, "auth_token");
-//                RequestParams requestParams = new RequestParams();
-//                requestParams.add("country", String.valueOf(userInfo.getCountry()));
-//                NetworkClient.getCurrencySymbol(this, requestParams, authToken, this, 52);
-//            } else {
-//                currencySymbol.setText(Html.fromHtml(userInfo.getCurrencyCode()));
-//            }
 
-//            if (userInfo.getCurrencyCode() != null && !userInfo.getCurrencyCode().equals("")) {
-//                try {
-//                    String currencyCode = userInfo.getCurrencyCode();
-//                    if (currencyCode.charAt(0) == '&')
-//                        currencySymbol.setText(Html.fromHtml(currencyCode));
-//                    else {
-//                        String[] symbols = currencyCode.split("&");
-//                        currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
-//                    }
-//                } catch (Exception ignored) {
-//                }
-//            }
-//
 
             if (!userInfo.getSection1().equalsIgnoreCase("")) {
                 myQualification.setText(userInfo.getSection1());
@@ -1046,17 +1006,18 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
                 addressArrayListMentor.clear();
                 addressAdapter.notifyDataSetChanged();
-                EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListViewMentor);
+                //EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListViewMentor);
                 for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
                     addressArrayListMentor.add(userInfo.getMultipleAddress().get(i));
                 }
                 addressAdapter.notifyDataSetChanged();
-                EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListViewMentor);
 
                 if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
                     // multipleAddressMentor.setChecked(true);
                     addressListViewMentor.setVisibility(View.VISIBLE);
                     addMoreAddress.setVisibility(View.VISIBLE);
+                    EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListViewMentor);
+
                 }
             }
 
@@ -1368,7 +1329,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             requestParams.add("availability_yn", String.valueOf(teachingPreference.getSelectedItemPosition()));
             if (teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2) {
-                requestParams.add("physical_address", physicalAddress.getText().toString().trim());
+                requestParams.add("address", physicalAddress.getText().toString().trim());
             }
 
             if (selectedAreaOfCoachingJson != null) {

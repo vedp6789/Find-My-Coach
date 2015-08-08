@@ -36,8 +36,8 @@ public class Data {
     @SerializedName("middle_name")
     @Expose
     private String middleName;
-    @Expose
-    private Object address;
+   /* @Expose
+    private Object address;*/
     @Expose
     private Object city;
     @Expose
@@ -94,7 +94,7 @@ public class Data {
     @Expose
     private String ageGroupPreferences;
 
-    @SerializedName("all_age_group_preference")
+    @SerializedName("all_age_group_preferences")
     @Expose
     private List<AgeGroupPreferences> allAgeGroupPreferences;
 
@@ -140,8 +140,10 @@ public class Data {
         this.addressFlagMentor = addressFlagMentor;
     }
 
-
+    @SerializedName("address")
+    @Expose
     private String physical_address;
+
     public ArrayList<CountryConfig> getCountryConfigArrayList() {
         return countryConfigArrayList;
     }
@@ -153,6 +155,7 @@ public class Data {
     public void setPhysical_address(String physical_address) {
         this.physical_address = physical_address;
     }
+
     public void setCountryConfigArrayList(ArrayList<CountryConfig> countryConfigArrayList) {
         this.countryConfigArrayList = countryConfigArrayList;
     }
@@ -204,7 +207,6 @@ public class Data {
     public void setSection5(String section5) {
         this.section5 = section5;
     }
-
 
     public String getAgeGroupPreferences() {
         return ageGroupPreferences;
@@ -391,18 +393,18 @@ public class Data {
 
     /**
      * @return The address
-     */
+     *//*
     public Object getAddress() {
         return address;
     }
 
-    /**
+    *//**
      * @param address The address
-     */
+     *//*
     public void setAddress(Object address) {
         this.address = address;
     }
-
+*/
     /**
      * @return The city
      */

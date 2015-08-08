@@ -100,9 +100,9 @@ public class StudentDetailActivity extends Activity implements Callback {
         } catch (Exception e) {
         }
         String address = "";
-        if (studentDetails.getAddress() != null) {
+        /*if (studentDetails.getAddress() != null) {
             address = address + studentDetails.getAddress() + ", ";
-        }
+        }*/
         if (studentDetails.getCity() != null) {
             address = address + studentDetails.getCity() + ", ";
         }

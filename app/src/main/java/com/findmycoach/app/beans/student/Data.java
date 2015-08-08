@@ -24,8 +24,7 @@ public class Data {
     @SerializedName("middle_name")
     @Expose
     private String middleName;
-    @Expose
-    private Object address;
+
     @Expose
     private Object city;
     @Expose
@@ -73,7 +72,7 @@ public class Data {
     @Expose
     private String currencyCode;
 
-    @SerializedName("location_preference")
+    @SerializedName("availability_yn")
     @Expose
     private int locationPreference;
 
@@ -91,7 +90,8 @@ public class Data {
     @Expose
     private ArrayList<Address> multipleAddress;
 
-
+    @SerializedName("address")
+    @Expose
     private String physical_address;
 
     public String getPhysical_address() {
@@ -279,21 +279,7 @@ public class Data {
         this.middleName = middleName;
     }
 
-    /**
-     * @return The address
-     */
-    public Object getAddress() {
-        return address;
-    }
-
-    /**
-     * @param address The address
-     */
-    public void setAddress(Object address) {
-        this.address = address;
-    }
-
-    /**
+       /**
      * @return The city
      */
     public Object getCity() {

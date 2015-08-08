@@ -898,9 +898,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
                 addressListView.setVisibility(View.VISIBLE);
                 addAddress.setVisibility(View.VISIBLE);
-                setListViewHeightBasedOnChildren(addressListView);
                 // multipleAddress.setChecked(true);
             }
+            setListViewHeightBasedOnChildren(addressListView);
+
         }
 
 
@@ -1220,10 +1221,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
             requestParams.add("locations", new Gson().toJson(addressArrayList));
             Log.e(TAG, "mul add: " + new Gson().toJson(addressArrayList));
-            requestParams.add("location_preference", String.valueOf(locationPreferenceSpinner.getSelectedItemPosition()));
+            requestParams.add("availability_yn", String.valueOf(locationPreferenceSpinner.getSelectedItemPosition()));
 
             if (locationPreferenceSpinner.getSelectedItemPosition() == 0 || locationPreferenceSpinner.getSelectedItemPosition() == 2) {
-                requestParams.add("physical_address", physicalAddress.getText().toString());
+                requestParams.add("address", physicalAddress.getText().toString());
             }
 
             if (!imageInBinary.equals("") && !removeProfilePicture)

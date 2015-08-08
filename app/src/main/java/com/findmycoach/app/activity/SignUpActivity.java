@@ -365,33 +365,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
      */
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-//        progressDialog.dismiss();
-//
-//        try {
-//            String name = firstNameInput.getText().toString() + " " + lastNameInput.getText().toString();
-//            StorageHelper.storePreference(this, "user_full_name", name);
-//        } catch (Exception ignored) {
-//        }
-//
-//        try {
-//            Response response = (Response) object;
-//            Toast.makeText(this, response.getMessage(), Toast.LENGTH_LONG).show();
-//            StorageHelper.storePreference(this, getResources().getString(R.string.new_user), "true#" + response.getData().getId());
-//            Log.e("SignUp", StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user)) + "");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        saveUserEmail(email);
-//        saveUserPhoneNumber(phoneNumber);
-//        StorageHelper.storePreference(this, "user_group", String.valueOf(user_group));
-//        Intent intent = new Intent(SignUpActivity.this, ValidatePhoneActivity.class);
-//        intent.putExtra("from", "SignUpActivity");
-//        startActivity(intent);
-//
-//        LoginActivity.loginActivity.finish();
-//        finish();
-//        StorageHelper.storePreference(this, "login_with", "Login");
+
         progressDialog.dismiss();
 
 
@@ -434,30 +408,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
                 saveUser(response.getData().getAuthToken(), response.getData().getId());
             }
 
-            try {
-                /** Saving address, city and zip of user */
-                if (response.getData() != null && response.getData().getAddress() != null) {
-                    StorageHelper.storePreference(this, "user_local_address", (String) response.getData().getAddress());
-                    if (response.getData().getCity() != null) {
-                        StorageHelper.storePreference(this, "user_city_state", (String) response.getData().getCity());
-                    }
-                    if (response.getData().getZip() != null) {
 
-                        StorageHelper.storePreference(this, "user_zip_code", (String) response.getData().getZip());
-
-                    }
-                }
-            } catch (Exception ignored) {
-
-            }
-
-            try {
-             /* Saving training location for mentee type user */
-                if (StorageHelper.getUserGroup(SignUpActivity.this, "user_group").equals("2") && response.getData().isTrainingLocation() != null) {
-                    StorageHelper.storePreference(this, "training_location", (String) response.getData().isTrainingLocation());
-                }
-            } catch (Exception ignored) {
-            }
 
             try {
         /*Saving mentor's area of coaching i.e. subcategories to sharedpreference in string set*/
