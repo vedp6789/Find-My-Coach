@@ -12,6 +12,7 @@
     <include layout="@layout/header_back_name_menu" />
 
     <ScrollView
+        android:id="@+id/parentScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical">

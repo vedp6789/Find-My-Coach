@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.findmycoach.app.R;
@@ -53,13 +54,14 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageView editProfile;
     private TextView title;
     private RelativeLayout childDetailsLayout, preferredAddressLayout;
-    private ChizzleTextView locationPreference,gender,groupClassLocation;
+    private ChizzleTextView locationPreference, gender, groupClassLocation;
     private ListView childrenDetailsListViewProfile, addressListView;
     private ArrayList<Address> addressArrayList;
     private AddressAdapter addressAdapter;
     private ChildDetailsAdapter childDetailsAdapter;
     private ArrayList<ChildDetails> childDetailsArrayList;
     private LinearLayout groupLayout;
+    private ScrollView parentScrollView;
 
 
     private static final String TAG = "FMC";
@@ -110,6 +112,7 @@ public class ProfileFragment extends Fragment implements Callback {
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         profileImage = (ImageView) view.findViewById(R.id.profile_image);
         profileName = (TextView) view.findViewById(R.id.profile_name);
+        parentScrollView = (ScrollView) view.findViewById(R.id.parentScrollView);
         profileAddress = (TextView) view.findViewById(R.id.profile_address);
         trainingLocation = (TextView) view.findViewById(R.id.training_location);
         mentorFor = (TextView) view.findViewById(R.id.mentor_for);
@@ -120,16 +123,16 @@ public class ProfileFragment extends Fragment implements Callback {
         editProfile = (ImageView) view.findViewById(R.id.menuItem);
         title = (TextView) view.findViewById(R.id.title);
         title.setText(getResources().getString(R.string.profile));
-        gender=(ChizzleTextView)view.findViewById(R.id.profile_gender);
+        gender = (ChizzleTextView) view.findViewById(R.id.profile_gender);
         locationPreference = (ChizzleTextView) view.findViewById(R.id.location_preference);
         childDetailsLayout = (RelativeLayout) view.findViewById(R.id.childDetailsProfile);
         preferredAddressLayout = (RelativeLayout) view.findViewById(R.id.preferredAddressLayout);
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
         addressListView = (ListView) view.findViewById(R.id.addressProfileListView);
         addressListView.setDivider(null);
-        groupClassLocation=(ChizzleTextView)view.findViewById(R.id.groupClassLocation);
+        groupClassLocation = (ChizzleTextView) view.findViewById(R.id.groupClassLocation);
         addressListView.setDividerHeight(0);
-        groupLayout=(LinearLayout)view.findViewById(R.id.groupLocationLayout);
+        groupLayout = (LinearLayout) view.findViewById(R.id.groupLocationLayout);
 
         childrenDetailsListViewProfile = (ListView) view.findViewById(R.id.childrenDetailsListViewProfile);
         childrenDetailsListViewProfile.setDivider(null);
@@ -189,7 +192,7 @@ public class ProfileFragment extends Fragment implements Callback {
             } catch (Exception e) {
             }
             try {
-                if(DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()) != null){
+                if (DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()) != null) {
                     profileDob.setText(DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()));
                 }
                 //profileDob.setText((String) userInfo.getDob());
@@ -224,22 +227,20 @@ public class ProfileFragment extends Fragment implements Callback {
             }
 
 
-          if(String.valueOf(userInfo.getCoachingType()).equalsIgnoreCase("1")||String.valueOf(userInfo.getCoachingType()).equalsIgnoreCase("2")) {
-              groupLayout.setVisibility(View.VISIBLE);
-              switch (Integer.parseInt(userInfo.getGroupClassPreference())) {
-                  case 0:
-                      groupClassLocation.setText("I can host group classes at my location");
-                      break;
-                  case 1:
-                      groupClassLocation.setText("I am fine to attend group classes at a nearby fellow students location");
-                      break;
-              }
-          }
-            else{
-              groupLayout.setVisibility(View.GONE);
+            if (String.valueOf(userInfo.getCoachingType()).equalsIgnoreCase("1") || String.valueOf(userInfo.getCoachingType()).equalsIgnoreCase("2")) {
+                groupLayout.setVisibility(View.VISIBLE);
+                switch (Integer.parseInt(userInfo.getGroupClassPreference())) {
+                    case 0:
+                        groupClassLocation.setText("I can host group classes at my location");
+                        break;
+                    case 1:
+                        groupClassLocation.setText("I am fine to attend group classes at a nearby fellow students location");
+                        break;
+                }
+            } else {
+                groupLayout.setVisibility(View.GONE);
 
-          }
-
+            }
 
 
             String[] locationPreference = getResources().getStringArray(R.array.location_preference);
@@ -269,12 +270,11 @@ public class ProfileFragment extends Fragment implements Callback {
                 for (int i = 0; i < userInfo.getChildren().size(); i++) {
                     childDetailsArrayList.add(userInfo.getChildren().get(i));
                 }
-                childDetailsAdapter = new ChildDetailsAdapter(getActivity(), R.layout.child_details_list_item_centre_horizontal, childDetailsArrayList,childrenDetailsListViewProfile);
+                childDetailsAdapter = new ChildDetailsAdapter(getActivity(), R.layout.child_details_list_item_centre_horizontal, childDetailsArrayList, childrenDetailsListViewProfile);
                 childrenDetailsListViewProfile.setAdapter(childDetailsAdapter);
                 childDetailsAdapter.notifyDataSetChanged();
                 EditProfileActivityMentee.setHeight(childrenDetailsListViewProfile);
             }
-
 
 
             addressArrayList = new ArrayList<>();
@@ -295,7 +295,7 @@ public class ProfileFragment extends Fragment implements Callback {
                 }
 
 
-                addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayList,addressListView);
+                addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayList, addressListView);
                 addressListView.setAdapter(addressAdapter);
                 addressAdapter.notifyDataSetChanged();
                 EditProfileActivityMentee.setHeight(addressListView);
@@ -318,21 +318,20 @@ public class ProfileFragment extends Fragment implements Callback {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(userInfo.getAddressFlag().equalsIgnoreCase("0")){
+        if (userInfo.getAddressFlag().equalsIgnoreCase("0")) {
             preferredAddressLayout.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             preferredAddressLayout.setVisibility(View.VISIBLE);
 
         }
 
-        if(userInfo.getGender().equalsIgnoreCase("M")) {
+        if (userInfo.getGender().equalsIgnoreCase("M")) {
             gender.setText("Male");
-        }
-        else {
+        } else {
             gender.setText("Female");
 
         }
+        parentScrollView.fullScroll(ScrollView.FOCUS_UP);
 
     }
 

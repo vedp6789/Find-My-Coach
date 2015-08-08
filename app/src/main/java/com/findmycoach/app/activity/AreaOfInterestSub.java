@@ -3,7 +3,6 @@ package com.findmycoach.app.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -13,6 +12,7 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.InterestsAdapter;
 import com.findmycoach.app.beans.category.Datum;
 import com.findmycoach.app.beans.category.DatumSub;
+import com.findmycoach.app.views.ChizzleButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,8 @@ public class AreaOfInterestSub extends Activity {
     private ListView listView;
     private final String TAG = "AreaOfInterestSub";
     private TextView title;
-    public List<DatumSub> selectedDatumSub;
+    private final int REQUEST_CODE = 1234;
+//    public List<DatumSub> selectedDatumSub;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,25 +35,39 @@ public class AreaOfInterestSub extends Activity {
         setContentView(R.layout.activity_areas_of_interest);
         listView = (ListView) findViewById(R.id.areas_of_interest_list);
         title = (TextView) findViewById(R.id.title);
-        selectedDatumSub = new ArrayList<>();
+
+        //        selectedDatumSub = new ArrayList<>();
     }
 
     @Override
-    public void onBackPressed() {
-        for (DatumSub sub : selectedDatumSub) {
-            Log.e(TAG, sub.getId() + " : " + sub.getName() + " : " + sub.getPrice()
-                    + " : " + sub.getLevel() + " : " + sub.isSelected());
-
-            if (sub.isSelected()) {
-                sub.setIsSelected(false);
-                updateParentCategorySelectedItems(sub, -1);
-            } else {
-                sub.setIsSelected(true);
-                updateParentCategorySelectedItems(sub, 1);
-            }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            setResult(RESULT_OK, null);
+            finish();
         }
-        super.onBackPressed();
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_FIRST_USER) {
+            setResult(RESULT_FIRST_USER, null);
+            finish();
+        }
     }
+
+    //    @Override
+//    public void onBackPressed() {
+//        for (DatumSub sub : selectedDatumSub) {
+//            Log.e(TAG, sub.getId() + " : " + sub.getName() + " : " + sub.getPrice()
+//                    + " : " + sub.getLevel() + " : " + sub.isSelected());
+//
+//            if (sub.isSelected()) {
+//                sub.setIsSelected(false);
+//                updateParentCategorySelectedItems(sub, -1);
+//            } else {
+//                sub.setIsSelected(true);
+//                updateParentCategorySelectedItems(sub, 1);
+//            }
+//        }
+//        super.onBackPressed();
+//    }
 
     private void initView() {
 
@@ -62,6 +77,7 @@ public class AreaOfInterestSub extends Activity {
         findViewById(R.id.buttonSave).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_OK, null);
                 finish();
             }
         });
@@ -69,7 +85,17 @@ public class AreaOfInterestSub extends Activity {
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                finish();
+            }
+        });
+
+        ChizzleButton saveAndAddNew = (ChizzleButton) findViewById(R.id.buttonSaveAndAddAnother);
+        saveAndAddNew.setVisibility(View.VISIBLE);
+        saveAndAddNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_FIRST_USER, null);
+                finish();
             }
         });
 
@@ -96,14 +122,14 @@ public class AreaOfInterestSub extends Activity {
                 InterestsAdapter adapter = new InterestsAdapter(this, list);
                 listView.setAdapter(adapter);
 
-                findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                });
+//                findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        finish();
+//                    }
+//                });
 
-                findViewById(R.id.buttonSave).setVisibility(View.GONE);
+                saveAndAddNew.setVisibility(View.GONE);
 
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -114,7 +140,7 @@ public class AreaOfInterestSub extends Activity {
                         intent.putExtra("index", index);
                         intent.putExtra("level", 3);
                         intent.putExtra("sub_level_index", position);
-                        startActivity(intent);
+                        startActivityForResult(intent, REQUEST_CODE);
                     }
                 });
             }
@@ -166,10 +192,10 @@ public class AreaOfInterestSub extends Activity {
                     updateParentCategorySelectedItems(datumSubList.get(position), -1);
                 }
 
-                if (selectedDatumSub.contains(datumSubList.get(position)))
-                    selectedDatumSub.remove(datumSubList.get(position));
-                else
-                    selectedDatumSub.add(datumSubList.get(position));
+//                if (selectedDatumSub.contains(datumSubList.get(position)))
+//                    selectedDatumSub.remove(datumSubList.get(position));
+//                else
+//                    selectedDatumSub.add(datumSubList.get(position));
 
                 adapter.notifyDataSetChanged();
             }

@@ -885,6 +885,8 @@
     <string name="action_forgot_password">Forgot password</string>
     <string name="action_sign_up">Sign Up</string>
     <string name="action_save">Save</string>
+    <string name="action_save_exit">Save &amp; exit</string>
+    <string name="action_save_add_another">Save &amp; add another subject</string>
     <string name="select_sub_category">Select category</string>
     <string name="select_image">Choose</string>
     <string name="update_image">Update profile picture</string>

@@ -507,6 +507,7 @@ public class ProfileFragment extends Fragment implements Callback {
             gender.setText("Female");
         }
 
+        scrollView.fullScroll(ScrollView.FOCUS_UP);
 
     }
 
