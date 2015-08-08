@@ -134,6 +134,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private int country_id, city_id;
     private int user_info_multiple_address = 0;
     private LinearLayout ll_physical_address;
+    private boolean training_location_similar_to_profile_locale;
 
 
     @Override
@@ -219,9 +220,27 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         city_id = 0;
         coachingTypeOptions = getResources().getStringArray(R.array.coaching_type);
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
-
+training_location_similar_to_profile_locale=false;
         if (userInfo != null && userInfo.getMultipleAddress() != null) {
             user_info_multiple_address = userInfo.getMultipleAddress().size();
+
+            String preffered_training_location = "";
+            if(userInfo.getTrainingLocation() != null){
+                preffered_training_location =userInfo.getTrainingLocation().toString();
+            }
+            if(userInfo.getMultipleAddress().size() > 0){
+                for(int i=0; i < userInfo.getMultipleAddress().size() ; i++){
+                    Address address=userInfo.getMultipleAddress().get(i);
+                    if(address.getDefault_yn() == 1){
+                        if(preffered_training_location.equals(address.getLocale())){
+                            training_location_similar_to_profile_locale=true;
+                        }
+                        break;
+                    }
+                }
+            }
+
+
         }
 
         removeProfilePicture = false;
@@ -271,7 +290,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 city_id = 0;
                 if (position != 0) {
                     if (countries != null && countries.size() > 0) {
-                        country_id = countries.get(position).getId();
+                        country_id = countries.get(position-1).getId();
                         RequestParams requestParams = new RequestParams();
                         requestParams.add("country_id", String.valueOf(country_id));
                         NetworkClient.cities(EditProfileActivityMentee.this, requestParams, EditProfileActivityMentee.this, 54);
@@ -526,7 +545,15 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (userInfo != null && userInfo.getMultipleAddress() != null) {
-                    if (user_info_multiple_address == 0 || user_info_multiple_address == 1) {
+                    if (user_info_multiple_address == 0 || user_info_multiple_address == 1 ||
+                            training_location_similar_to_profile_locale) {
+                             /* preferred training location will get populated, similar to profile
+                             locale only when profile locale is first time populated or if it is
+                              get edited when there is only one locale i.e. user has not not selected multiple addresses */
+
+                            /*
+                             or if training location is similar to locale of the
+                            * */
                         trainingLocation.setText(locale.getText().toString());
                     }
                 }
@@ -1053,7 +1080,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
 
         if (locationPreferenceSpinner.getSelectedItemPosition() == 0 || locationPreferenceSpinner.getSelectedItemPosition() == 2) {
-            if (physicalAddress.getText().toString().trim().equals("")) {
+            if (physicalAddress.getText().toString().trim().isEmpty()) {
                 physicalAddress.setError(getResources().getString(R.string.enter_physical_address));
                 physicalAddress.requestFocus();
                 isValid = false;
@@ -1093,11 +1120,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 }
             }
         }
-
-
         return isValid;
-
-
     }
 
     private void showErrorMessage(final TextView view, String string) {

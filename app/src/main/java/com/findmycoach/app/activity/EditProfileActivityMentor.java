@@ -306,7 +306,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         countries = MetaData.getCountryObject(this);
         checkBoxCountryConditionText = (ChizzleTextView) findViewById(R.id.checkBoxCountryCondition);
         countryConditionCheckBox = (CheckBox) findViewById(R.id.inputCountryCondition);
-        ll_physical_address= (LinearLayout) findViewById(R.id.ll_physical_address);
+        ll_physical_address = (LinearLayout) findViewById(R.id.ll_physical_address);
 
         profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -384,9 +384,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         addMoreAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e(TAG,"country_id, :"+country_id +" city: "+city_with_states.getText().toString().trim()+"locale: "+locale.getText().toString().trim());
+                Log.e(TAG, "country_id, :" + country_id + " city: " + city_with_states.getText().toString().trim() + "locale: " + locale.getText().toString().trim());
                 if (country_id != 0 && !city_with_states.getText().toString().trim().isEmpty() && !locale.getText().toString().trim().isEmpty()) {
-                    Log.e(TAG,"country_id, :"+country_id +" city: "+city_with_states.getText().toString()+"locale: "+locale.getText().toString().trim());
+                    Log.e(TAG, "country_id, :" + country_id + " city: " + city_with_states.getText().toString() + "locale: " + locale.getText().toString().trim());
                     AddAddressDialog dialog = new AddAddressDialog(EditProfileActivityMentor.this);
                     dialog.setAddressAddedListener(EditProfileActivityMentor.this);
                     dialog.showPopUp();
@@ -664,8 +664,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         updateAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateUserUpdate()){
-                    Log.e(TAG," call validated");
+                if (validateUserUpdate()) {
+                    Log.e(TAG, " call validated");
                     callUpdateService();
 
                 }
@@ -1028,7 +1028,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     addressArrayListMentor.add(userInfo.getMultipleAddress().get(i));
                 }
                 addressAdapter.notifyDataSetChanged();
-
                 EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListViewMentor);
                 //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
 
@@ -1194,30 +1193,26 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
     // Validate user first name, last name and address
     private boolean validateUserUpdate() {
-        Log.e(TAG,"1");
 
-            boolean isValid = true;
+        boolean isValid = true;
 
-            if (country_id == 0) {
-                TextView errorText = (TextView) profileCountry.getSelectedView();
-                errorText.setError(getResources().getString(R.string.error_not_selected));
-                errorText.setTextColor(Color.RED);//just to highlight that this is an error
-                isValid = false;
+        if (country_id == 0) {
+            TextView errorText = (TextView) profileCountry.getSelectedView();
+            errorText.setError(getResources().getString(R.string.error_not_selected));
+            errorText.setTextColor(Color.RED);//just to highlight that this is an error
+            isValid = false;
 
-            }
-        Log.e(TAG,"a"+isValid);
+        }
 
-            if (city_with_states.getText().toString().trim().equals("")) {
-                city_with_states.setError(getResources().getString(R.string.enter_city));
-                if (isValid)
-                    city_with_states.requestFocus();
+        if (city_with_states.getText().toString().trim().equals("")) {
+            city_with_states.setError(getResources().getString(R.string.enter_city));
+            if (isValid)
+                city_with_states.requestFocus();
 
-                isValid = false;
-            }
-        Log.e(TAG,"2"+isValid);
-        Log.e(TAG,"b"+isValid);
+            isValid = false;
+        }
 
-        if(teachingPreference.getSelectedItemPosition() ==0 || teachingPreference.getSelectedItemPosition() == 2){
+        if (teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2) {
             if (physicalAddress.getText().toString().trim().isEmpty()) {
                 physicalAddress.setError(getResources().getString(R.string.enter_physical_address));
                 if (isValid)
@@ -1227,124 +1222,103 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
         }
 
-        Log.e(TAG,"c"+isValid);
 
-            if (locale.getText().toString().trim().equals("")) {
-                locale.setError(getResources().getString(R.string.enter_locale));
-                if (isValid)
-                    locale.requestFocus();
-
-                isValid = false;
-            }
-        Log.e(TAG,"d"+isValid);
-
-            if (profileDOB.getText().toString().trim().equals("")) {
-                profileDOB.setError(getResources().getString(R.string.enter_dob));
-                scrollView.fullScroll(ScrollView.FOCUS_UP);
-                if (isValid)
-                    profileDOB.requestFocus();
-
-                isValid = false;
-            }
-        Log.e(TAG,"e"+isValid);
-
-
-
-
-
-        /*if (pinCode.getText().toString().trim().equals("")) {
-            pinCode.setError(getResources().getString(R.string.enter_pin));
+        if (locale.getText().toString().trim().equals("")) {
+            locale.setError(getResources().getString(R.string.enter_locale));
             if (isValid)
-                pinCode.requestFocus();
+                locale.requestFocus();
+
             isValid = false;
-        }*/
-        Log.e(TAG,"3");
+        }
 
 
-            String firstName = profileFirstName.getText().toString().trim().replaceAll(" ", "");
-            if (firstName.equals("")) {
-                showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
-                if (isValid)
-                    profileFirstName.requestFocus();
-                isValid = false;
-            } else {
-                for (int i = 0; i < firstName.length(); i++) {
-                    if (!Character.isLetter(firstName.charAt(i))) {
-                        showErrorMessage(profileFirstName, getResources().getString(R.string.error_not_a_name));
-                        if (isValid)
-                            profileFirstName.requestFocus();
-                        isValid = false;
-                    }
-                }
-            }
-        Log.e(TAG,"g"+isValid);
+        if (profileDOB.getText().toString().trim().equals("")) {
+            profileDOB.setError(getResources().getString(R.string.enter_dob));
+            scrollView.fullScroll(ScrollView.FOCUS_UP);
+            if (isValid)
+                profileDOB.requestFocus();
 
-            String lastName = profileLastName.getText().toString().trim().replaceAll(" ", "");
-            if (lastName.equals("")) {
-                showErrorMessage(profileLastName, getResources().getString(R.string.error_field_required));
-                if (isValid)
-                    profileLastName.requestFocus();
-                isValid = false;
-            } else {
-                for (int i = 0; i < lastName.length(); i++) {
-                    if (!Character.isLetter(lastName.charAt(i))) {
-                        showErrorMessage(profileLastName, getResources().getString(R.string.error_not_a_name));
-                        if (isValid)
-                            profileLastName.requestFocus();
-                        isValid = false;
-                    }
-                }
-            }
-        Log.e(TAG,"g"+isValid);
+            isValid = false;
+        }
 
-            if (areaOfCoaching.getText().toString().trim().equals("")) {
-                showErrorMessage(areaOfCoaching, getResources().getString(R.string.error_field_required));
-                if (isValid)
-                    areaOfCoaching.requestFocus();
-                isValid = false;
-            }
-        Log.e(TAG,"4");
-        Log.e(TAG,"h"+isValid);
-
-
-            if (isValid) {
-                int dobYear = 0;
-                try {
-                    dobYear = Integer.parseInt(profileDOB.getText().toString().split("-")[2]);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    dobYear = 0;
-                }
-
-                int yearsOfExperience = experienceInput.getSelectedItemPosition();
-                int age = Calendar.getInstance().get(Calendar.YEAR) - dobYear;
-                int minExperience = getResources().getInteger(R.integer.mentor_min_age_experience_difference);
-
-                Log.e(TAG, yearsOfExperience + " : " + age + " : " + minExperience);
-                if (dobYear > 0 && age - yearsOfExperience < minExperience) {
-                    Toast.makeText(this, getResources().getString(R.string.age_experience_message), Toast.LENGTH_LONG).show();
-                    ageAndExperienceErrorCounter++;
+        String firstName = profileFirstName.getText().toString().trim().replaceAll(" ", "");
+        if (firstName.equals("")) {
+            showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
+            if (isValid)
+                profileFirstName.requestFocus();
+            isValid = false;
+        } else {
+            for (int i = 0; i < firstName.length(); i++) {
+                if (!Character.isLetter(firstName.charAt(i))) {
+                    showErrorMessage(profileFirstName, getResources().getString(R.string.error_not_a_name));
+                    if (isValid)
+                        profileFirstName.requestFocus();
                     isValid = false;
-                } else if (dobYear > 0 && (Calendar.getInstance().get(Calendar.YEAR) - (dobYear) < 19)) {
-                    Toast.makeText(this, getResources().getString(R.string.age_review_message), Toast.LENGTH_LONG).show();
-                    isDobForReview = true;
-                }
-
-                if (ageAndExperienceErrorCounter > 2) {
-                    needToCheckOnDestroy = true;
-                    logout();
-                    startActivity(new Intent(EditProfileActivityMentor.this, LoginActivity.class));
-                    if (Settings.settings != null)
-                        Settings.settings.finish();
-                    if (DashboardActivity.dashboardActivity != null)
-                        DashboardActivity.dashboardActivity.finish();
-
-                    Toast.makeText(this, getResources().getString(R.string.account_blocked), Toast.LENGTH_LONG).show();
-                    finish();
                 }
             }
-        Log.e(TAG,"5");
-        Log.e(TAG,"i"+isValid);
+        }
+
+        String lastName = profileLastName.getText().toString().trim().replaceAll(" ", "");
+        if (lastName.equals("")) {
+            showErrorMessage(profileLastName, getResources().getString(R.string.error_field_required));
+            if (isValid)
+                profileLastName.requestFocus();
+            isValid = false;
+        } else {
+            for (int i = 0; i < lastName.length(); i++) {
+                if (!Character.isLetter(lastName.charAt(i))) {
+                    showErrorMessage(profileLastName, getResources().getString(R.string.error_not_a_name));
+                    if (isValid)
+                        profileLastName.requestFocus();
+                    isValid = false;
+                }
+            }
+        }
+
+        if (areaOfCoaching.getText().toString().trim().equals("")) {
+            showErrorMessage(areaOfCoaching, getResources().getString(R.string.error_field_required));
+            if (isValid)
+                areaOfCoaching.requestFocus();
+            isValid = false;
+        }
+
+
+        if (isValid) {
+            int dobYear = 0;
+            try {
+                dobYear = Integer.parseInt(profileDOB.getText().toString().split("-")[2]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                dobYear = 0;
+            }
+
+            int yearsOfExperience = experienceInput.getSelectedItemPosition();
+            int age = Calendar.getInstance().get(Calendar.YEAR) - dobYear;
+            int minExperience = getResources().getInteger(R.integer.mentor_min_age_experience_difference);
+
+            Log.e(TAG, yearsOfExperience + " : " + age + " : " + minExperience);
+            if (dobYear > 0 && age - yearsOfExperience < minExperience) {
+                Toast.makeText(this, getResources().getString(R.string.age_experience_message), Toast.LENGTH_LONG).show();
+                ageAndExperienceErrorCounter++;
+                isValid = false;
+            } else if (dobYear > 0 && (Calendar.getInstance().get(Calendar.YEAR) - (dobYear) < 19)) {
+                Toast.makeText(this, getResources().getString(R.string.age_review_message), Toast.LENGTH_LONG).show();
+                isDobForReview = true;
+            }
+
+            if (ageAndExperienceErrorCounter > 2) {
+                needToCheckOnDestroy = true;
+                logout();
+                startActivity(new Intent(EditProfileActivityMentor.this, LoginActivity.class));
+                if (Settings.settings != null)
+                    Settings.settings.finish();
+                if (DashboardActivity.dashboardActivity != null)
+                    DashboardActivity.dashboardActivity.finish();
+
+                Toast.makeText(this, getResources().getString(R.string.account_blocked), Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
 
         return isValid;
 
@@ -1509,7 +1483,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     jsonArray.put(0, jsonObject);
                     requestParams.add("country_config", jsonArray.toString());
                 } catch (Exception e) {
-e.printStackTrace();
+                    e.printStackTrace();
                 }
             }
 
