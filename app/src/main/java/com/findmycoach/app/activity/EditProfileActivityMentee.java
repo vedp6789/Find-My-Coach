@@ -82,7 +82,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private ImageView profilePicture;
     private TextView profileEmail;
     private EditText profileFirstName;
-    private EditText profileMiddleName;
+//    private EditText profileMiddleName;
     private EditText profileLastName;
     private Spinner profileGender, profileCountry;
     private TextView profileDOB;
@@ -242,7 +242,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
         profileFirstName = (EditText) findViewById(R.id.input_first_name);
-        profileMiddleName = (EditText) findViewById(R.id.input_middle_name);
+//        profileMiddleName = (EditText) findViewById(R.id.input_middle_name);
         profileLastName = (EditText) findViewById(R.id.input_last_name);
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         mentorFor = (Spinner) findViewById(R.id.input_mentor_for);
@@ -799,10 +799,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             profileFirstName.setText(userInfo.getFirstName());
         } catch (Exception ignored) {
         }
-        try {
-            profileMiddleName.setText(userInfo.getMiddleName());
-        } catch (Exception ignored) {
-        }
+//        try {
+//            profileMiddleName.setText(userInfo.getMiddleName());
+//        } catch (Exception ignored) {
+//        }
         try {
             profileLastName.setText(userInfo.getLastName());
         } catch (Exception ignored) {
@@ -1166,7 +1166,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         try {
             RequestParams requestParams = new RequestParams();
             requestParams.add("first_name", profileFirstName.getText().toString().trim());
-            requestParams.add("middle_name", profileMiddleName.getText().toString().trim());
+//            requestParams.add("middle_name", profileMiddleName.getText().toString().trim());
             requestParams.add("last_name", profileLastName.getText().toString().trim());
             String sex = profileGender.getSelectedItem().toString();
             if (sex.equals("Male"))

@@ -101,7 +101,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private TextView profileEmail;
     private TextView areaOfCoaching;
     private EditText profileFirstName;
-    private EditText profileMiddleName;
+//    private EditText profileMiddleName;
     private EditText profileLastName;
     private Spinner profileGender, profileCountry;
     private TextView profileDOB;
@@ -267,14 +267,14 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
         profileFirstName = (EditText) findViewById(R.id.input_first_name);
-        profileMiddleName = (EditText) findViewById(R.id.input_middle_name);
+//        profileMiddleName = (EditText) findViewById(R.id.input_middle_name);
         profileLastName = (EditText) findViewById(R.id.input_last_name);
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         //pinCode = (EditText) findViewById(R.id.input_pin);
 //        chargeInput = (EditText) findViewById(R.id.input_charges);
 //        currencySymbol = (ChizzleTextView) findViewById(R.id.currencySymbol);
 //        chargeInput.setSelectAllOnFocus(true);
-        accomplishment = (EditText) findViewById(R.id.input_accomplishment);
+//        accomplishment = (EditText) findViewById(R.id.input_accomplishment);
         experienceInput = (Spinner) findViewById(R.id.input_experience);
         teachingPreference = (Spinner) findViewById(R.id.teachingPreferencesSpinner);
 ////        classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
@@ -791,10 +791,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } catch (Exception ignored) {
             }
 
-            try {
-                profileMiddleName.setText(userInfo.getMiddleName());
-            } catch (Exception ignored) {
-            }
+//            try {
+//                profileMiddleName.setText(userInfo.getMiddleName());
+//            } catch (Exception ignored) {
+//            }
             try {
                 profileLastName.setText(userInfo.getLastName());
             } catch (Exception ignored) {
@@ -822,8 +822,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 else
                     profileGender.setSelection(1);
             }
-            if (userInfo.getAccomplishments() != null) {
-                accomplishment.setText(userInfo.getAccomplishments());
+            try{
+                if (userInfo.getAccomplishments() != null) {
+                    accomplishment.setText(userInfo.getAccomplishments());
+                }
+            }catch (Exception ignored){
             }
 
             try {
@@ -1241,7 +1244,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         try {
             RequestParams requestParams = new RequestParams();
             requestParams.add("first_name", profileFirstName.getText().toString().trim());
-            requestParams.add("middle_name", profileMiddleName.getText().toString().trim());
+//            requestParams.add("middle_name", profileMiddleName.getText().toString().trim());
             requestParams.add("last_name", profileLastName.getText().toString().trim());
             String sex = profileGender.getSelectedItem().toString();
             if (multipleAddressMentor.isChecked()) {
