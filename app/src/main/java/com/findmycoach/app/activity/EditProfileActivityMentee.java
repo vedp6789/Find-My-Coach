@@ -585,6 +585,18 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
         });
 
+        locale.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
+                        || (actionId == EditorInfo.IME_ACTION_DONE) || (actionId == EditorInfo.IME_ACTION_NEXT)) {
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
+                return false;
+            }
+        });
+
+
         locationPreferenceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -1454,21 +1466,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 //                startActivity(intent1);
 //            }
 
-            /* Saving address, city and zip *//*
-            if (!profileAddress.getText().toString().trim().equals("")) {
-                StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
-            } else
-                StorageHelper.removePreference(this, "user_local_address");
-
-            if (!profileAddress1.getText().toString().trim().equals("")) {
-                StorageHelper.storePreference(this, "user_city_state_country_info", profileAddress1.getText().toString());
-            } else
-                StorageHelper.removePreference(this, "user_city_state_country_info");
-
-            if (response.getData().getZip() != null) {
-                StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
-            } else
-                StorageHelper.removePreference(this, "user_zip_code");*/
 
 
             if (!trainingLocation.getText().toString().equals("")) {
