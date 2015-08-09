@@ -16,9 +16,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -80,7 +82,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private ImageView profilePicture;
     private TextView profileEmail;
     private EditText profileFirstName;
-    private EditText profileMiddleName;
+//    private EditText profileMiddleName;
     private EditText profileLastName;
     private Spinner profileGender, profileCountry;
     private TextView profileDOB;
@@ -126,7 +128,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private int user_info_multiple_address = 0;
     private LinearLayout ll_physical_address;
     private boolean training_location_similar_to_profile_locale;
-    private ArrayList<Integer>  city_id_from_suggestion;
+    private ArrayList<Integer> city_id_from_suggestion;
 
 
     @Override
@@ -240,7 +242,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
         profileFirstName = (EditText) findViewById(R.id.input_first_name);
-        profileMiddleName = (EditText) findViewById(R.id.input_middle_name);
+//        profileMiddleName = (EditText) findViewById(R.id.input_middle_name);
         profileLastName = (EditText) findViewById(R.id.input_last_name);
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         mentorFor = (Spinner) findViewById(R.id.input_mentor_for);
@@ -274,12 +276,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String authToken = StorageHelper.getUserDetails(EditProfileActivityMentee.this, "auth_token");
-//                city_with_states.setText("");
-//                physicalAddress.setText("");
-//                locale.setText("");
-//                country_id = 0;
-//                city_id = 0;
                 if (position != 0) {
                     if (countries != null && countries.size() > 0) {
                         country_id = countries.get(position - 1).getId();
@@ -381,7 +377,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // your code here
-                if (position == 1 || position == 2) {
+                if ((position == 1 || position == 2) && (locationPreferenceSpinner.getSelectedItemPosition()==0 || locationPreferenceSpinner.getSelectedItemPosition()==2)) {
                     groupDetailsLayout.setVisibility(View.VISIBLE);
                 } else {
                     groupDetailsLayout.setVisibility(View.GONE);
@@ -396,6 +392,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
 
         });
+
+
 
         addMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -449,6 +447,14 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 //        profileAddress1.setOnTouchListener(onTouchListener);
 //        pinCode.setOnFocusChangeListener(onFocusChangeListener);
 //        pinCode.setOnTouchListener(onTouchListener);
+
+        findViewById(R.id.dobInfo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(EditProfileActivityMentee.this,
+                        getResources().getText(R.string.dob_info_mentee), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     /**
@@ -497,10 +503,9 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 String input = city_with_states.getText().toString().trim();
                 if (input.length() >= 2) {
 
-                    if(city_with_states.isPerformingCompletion()) {
+                    if (city_with_states.isPerformingCompletion()) {
                         return;
-                    }
-                    else {
+                    } else {
                         if (list_of_city != null && list_of_city.size() > 0) {
                             updateAutoSuggestionForCity(list_of_city, input);
                         }
@@ -514,11 +519,22 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         city_with_states.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(city_id_from_suggestion != null && city_id_from_suggestion.size() > 0){
+                if (city_id_from_suggestion != null && city_id_from_suggestion.size() > 0) {
                     city_id = city_id_from_suggestion.get(position);
                 }
             }
         });
+
+        city_with_states.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
+                        || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    locale.requestFocus();
+                }
+                return false;
+            }
+        });
+
 
         locale.addTextChangedListener(new TextWatcher() {
             @Override
@@ -546,16 +562,20 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 if (userInfo != null && userInfo.getMultipleAddress() != null) {
                     if (user_info_multiple_address == 0 || user_info_multiple_address == 1 ||
                             training_location_similar_to_profile_locale) {
-                            /* preferred training location will get populated, similar to profile
-                             locale only when profile locale is first time populated or if it is
-                              get edited when there is only one locale i.e. user has not not selected multiple addresses */
-
-                            /*
-                             or if training location is similar to locale of the
-                            * */
                         trainingLocation.setText(locale.getText().toString());
                     }
                 }
+            }
+        });
+
+        locale.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
+                        || (actionId == EditorInfo.IME_ACTION_DONE) || (actionId == EditorInfo.IME_ACTION_NEXT)) {
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
+                return false;
             }
         });
 
@@ -569,6 +589,14 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 } else {
                     ll_physical_address.setVisibility(View.GONE);
                     physicalAddress.setVisibility(View.GONE);
+                }
+                if (position==1 || coachingType.getSelectedItemPosition()==0) {
+                    groupDetailsLayout.setVisibility(View.GONE);
+
+                }
+                else {
+                    groupDetailsLayout.setVisibility(View.VISIBLE);
+
                 }
             }
 
@@ -779,10 +807,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             profileFirstName.setText(userInfo.getFirstName());
         } catch (Exception ignored) {
         }
-        try {
-            profileMiddleName.setText(userInfo.getMiddleName());
-        } catch (Exception ignored) {
-        }
+//        try {
+//            profileMiddleName.setText(userInfo.getMiddleName());
+//        } catch (Exception ignored) {
+//        }
         try {
             profileLastName.setText(userInfo.getLastName());
         } catch (Exception ignored) {
@@ -878,7 +906,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             } catch (Exception ignored) {
             }
             try {
-                    city_with_states.setText(address.getCityName());
+                city_with_states.setText(address.getCityName());
             } catch (Exception ignored) {
             }
 
@@ -888,19 +916,16 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             } catch (Exception ignored) {
             }
 
-            addressArrayList.clear();
-            addressAdapter.notifyDataSetChanged();
             for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
                 addressArrayList.add(userInfo.getMultipleAddress().get(i));
             }
             addressAdapter.notifyDataSetChanged();
-            //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
+            setHeight(addressListView);
+
             if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
                 addressListView.setVisibility(View.VISIBLE);
                 addAddress.setVisibility(View.VISIBLE);
-                // multipleAddress.setChecked(true);
             }
-            setListViewHeightBasedOnChildren(addressListView);
 
         }
 
@@ -1149,7 +1174,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         try {
             RequestParams requestParams = new RequestParams();
             requestParams.add("first_name", profileFirstName.getText().toString().trim());
-            requestParams.add("middle_name", profileMiddleName.getText().toString().trim());
+//            requestParams.add("middle_name", profileMiddleName.getText().toString().trim());
             requestParams.add("last_name", profileLastName.getText().toString().trim());
             String sex = profileGender.getSelectedItem().toString();
             if (sex.equals("Male"))
@@ -1339,7 +1364,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
     private void updateAutoSuggestionForCity(ArrayList<CityDetails> cityDetailses, String input_string) {
         ArrayList<String> list = new ArrayList<String>();
-        city_id_from_suggestion= new ArrayList<Integer>();
+        city_id_from_suggestion = new ArrayList<Integer>();
         for (int index = 0; index < cityDetailses.size(); index++) {
             CityDetails cityDetails = cityDetailses.get(index);
             if (cityDetails.getCity_name().toLowerCase().contains(input_string.toLowerCase())) {
@@ -1515,19 +1540,20 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
     public static void setHeight(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            // pre-condition
+        if (listAdapter == null)
             return;
-        }
 
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
         int totalHeight = 0;
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
+        View view = null;
         for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += listItem.getMeasuredHeight();
-        }
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, LinearLayout.LayoutParams.WRAP_CONTENT));
 
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);

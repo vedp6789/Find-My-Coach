@@ -15,8 +15,8 @@
             android:layout_height="40dp"
             android:layout_marginBottom="@dimen/back_margin"
             android:background="@color/purple"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="Address Details"
+            android:gravity="center"
+            android:text="@string/add_address_title"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
