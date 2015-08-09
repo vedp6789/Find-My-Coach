@@ -101,7 +101,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private TextView profileEmail;
     private TextView areaOfCoaching;
     private EditText profileFirstName;
-    private EditText profileMiddleName;
+//    private EditText profileMiddleName;
     private EditText profileLastName;
     private Spinner profileGender, profileCountry;
     private TextView profileDOB;
@@ -268,14 +268,14 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
         profileFirstName = (EditText) findViewById(R.id.input_first_name);
-        profileMiddleName = (EditText) findViewById(R.id.input_middle_name);
+//        profileMiddleName = (EditText) findViewById(R.id.input_middle_name);
         profileLastName = (EditText) findViewById(R.id.input_last_name);
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
         //pinCode = (EditText) findViewById(R.id.input_pin);
 //        chargeInput = (EditText) findViewById(R.id.input_charges);
 //        currencySymbol = (ChizzleTextView) findViewById(R.id.currencySymbol);
 //        chargeInput.setSelectAllOnFocus(true);
-        accomplishment = (EditText) findViewById(R.id.input_accomplishment);
+//        accomplishment = (EditText) findViewById(R.id.input_accomplishment);
         experienceInput = (Spinner) findViewById(R.id.input_experience);
         teachingPreference = (Spinner) findViewById(R.id.teachingPreferencesSpinner);
 ////        classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
@@ -724,7 +724,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             @Override
             public void onClick(View v) {
                 ArrayList<String> languagesList = new ArrayList<String>();
-                languagesList.add(0, "Select");
+                languagesList.add(0, getResources().getString(R.string.select_leave_blank));
                 languagesList.add(1, "English");
                 languagesList.add(2, "Mandarin");
                 languagesList.add(3, "Hindi");
@@ -787,10 +787,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } catch (Exception ignored) {
             }
 
-            try {
-                profileMiddleName.setText(userInfo.getMiddleName());
-            } catch (Exception ignored) {
-            }
+//            try {
+//                profileMiddleName.setText(userInfo.getMiddleName());
+//            } catch (Exception ignored) {
+//            }
             try {
                 profileLastName.setText(userInfo.getLastName());
             } catch (Exception ignored) {
@@ -802,7 +802,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             } catch (Exception ignored) {
             }
-
 
 
             try {
@@ -819,8 +818,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 else
                     profileGender.setSelection(1);
             }
-            if (userInfo.getAccomplishments() != null) {
-                accomplishment.setText(userInfo.getAccomplishments());
+            try{
+                if (userInfo.getAccomplishments() != null) {
+                    accomplishment.setText(userInfo.getAccomplishments());
+                }
+            }catch (Exception ignored){
             }
 
             try {
@@ -1250,7 +1252,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         try {
             RequestParams requestParams = new RequestParams();
             requestParams.add("first_name", profileFirstName.getText().toString().trim());
-            requestParams.add("middle_name", profileMiddleName.getText().toString().trim());
+//            requestParams.add("middle_name", profileMiddleName.getText().toString().trim());
             requestParams.add("last_name", profileLastName.getText().toString().trim());
             String sex = profileGender.getSelectedItem().toString();
             if (multipleAddressMentor.isChecked()) {
@@ -1785,17 +1787,18 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     @Override
     public void onTeachingMediumAdded(String language1, String language2, String language3, String language4) {
         teachingMediumPreference.setText("");
+        String select = getResources().getString(R.string.select_leave_blank);
         String finalString = "";
-        if (!language1.equalsIgnoreCase("select")) {
+        if (!language1.equalsIgnoreCase(select)) {
             finalString += language1 + ", ";
         }
-        if (!language2.equalsIgnoreCase("select")) {
+        if (!language2.equalsIgnoreCase(select)) {
             finalString += language2 + ", ";
         }
-        if (!language3.equalsIgnoreCase("select")) {
+        if (!language3.equalsIgnoreCase(select)) {
             finalString += language3 + ", ";
         }
-        if (!language4.equalsIgnoreCase("select")) {
+        if (!language4.equalsIgnoreCase(select)) {
             finalString += language4;
         }
 
@@ -1821,7 +1824,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     }
 
 
-    public static   void setHeight(ListView listView) {
+    public static void setHeight(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null)
             return;
