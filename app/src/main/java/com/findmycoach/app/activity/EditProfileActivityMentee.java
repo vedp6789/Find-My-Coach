@@ -16,9 +16,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -126,7 +128,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private int user_info_multiple_address = 0;
     private LinearLayout ll_physical_address;
     private boolean training_location_similar_to_profile_locale;
-    private ArrayList<Integer>  city_id_from_suggestion;
+    private ArrayList<Integer> city_id_from_suggestion;
 
 
     @Override
@@ -505,10 +507,9 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 String input = city_with_states.getText().toString().trim();
                 if (input.length() >= 2) {
 
-                    if(city_with_states.isPerformingCompletion()) {
+                    if (city_with_states.isPerformingCompletion()) {
                         return;
-                    }
-                    else {
+                    } else {
                         if (list_of_city != null && list_of_city.size() > 0) {
                             updateAutoSuggestionForCity(list_of_city, input);
                         }
@@ -522,11 +523,22 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         city_with_states.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(city_id_from_suggestion != null && city_id_from_suggestion.size() > 0){
+                if (city_id_from_suggestion != null && city_id_from_suggestion.size() > 0) {
                     city_id = city_id_from_suggestion.get(position);
                 }
             }
         });
+
+        city_with_states.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
+                        || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    locale.requestFocus();
+                }
+                return false;
+            }
+        });
+
 
         locale.addTextChangedListener(new TextWatcher() {
             @Override
@@ -886,7 +898,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             } catch (Exception ignored) {
             }
             try {
-                    city_with_states.setText(address.getCityName());
+                city_with_states.setText(address.getCityName());
             } catch (Exception ignored) {
             }
 
@@ -1344,7 +1356,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
     private void updateAutoSuggestionForCity(ArrayList<CityDetails> cityDetailses, String input_string) {
         ArrayList<String> list = new ArrayList<String>();
-        city_id_from_suggestion= new ArrayList<Integer>();
+        city_id_from_suggestion = new ArrayList<Integer>();
         for (int index = 0; index < cityDetailses.size(); index++) {
             CityDetails cityDetails = cityDetailses.get(index);
             if (cityDetails.getCity_name().toLowerCase().contains(input_string.toLowerCase())) {
