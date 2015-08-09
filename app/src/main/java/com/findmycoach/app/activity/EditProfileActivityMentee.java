@@ -1399,46 +1399,13 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             userInfo = response.getData();
             Log.d(TAG, "local_add: " + userInfo);
 
-            /*StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
-            StorageHelper.storePreference(this, "user_city_state", profileAddress1.getText().toString());
-            if (isGettingAddress && NetworkManager.countryName != null && !NetworkManager.countryName.equals(""))
-                StorageHelper.storePreference(this, "user_country", NetworkManager.countryName);
-            StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
-*/
 
-            /*Log.d(TAG, "city: " + StorageHelper.addressInformation(EditProfileActivityMentee.this, "user_city_state"));
-            Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentee.this, "user_zip_code"));
-*/
             try {
                 String name = profileFirstName.getText().toString() + " " + profileLastName.getText().toString();
                 StorageHelper.storePreference(this, "user_full_name", name);
             } catch (Exception ignored) {
             }
-//            if (newUser != null && newUser.contains(userInfo.getId())) {
-//                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-//                SharedPreferences.Editor editor = preferences.edit();
-//                editor.remove(getResources().getString(R.string.new_user));
-//                editor.apply();
-//                Intent intent1 = new Intent(this, PaymentDetailsActivity.class);
-//                intent1.putExtra("onBackPress", 1);
-//                startActivity(intent1);
-//            }
 
-            /* Saving address, city and zip *//*
-            if (!profileAddress.getText().toString().trim().equals("")) {
-                StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
-            } else
-                StorageHelper.removePreference(this, "user_local_address");
-
-            if (!profileAddress1.getText().toString().trim().equals("")) {
-                StorageHelper.storePreference(this, "user_city_state_country_info", profileAddress1.getText().toString());
-            } else
-                StorageHelper.removePreference(this, "user_city_state_country_info");
-
-            if (response.getData().getZip() != null) {
-                StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
-            } else
-                StorageHelper.removePreference(this, "user_zip_code");*/
 
 
             if (!trainingLocation.getText().toString().equals("")) {

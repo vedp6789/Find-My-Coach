@@ -1718,32 +1718,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } catch (Exception ignored) {
             }
 
-            /* Saving mentor address in shared preference *//*
-
-            *//* Saving address, city and zip *//*
-            if (!profileAddress.getText().toString().trim().equals("")) {
-                StorageHelper.storePreference(this, "user_local_address", profileAddress.getText().toString());
-            } else
-                StorageHelper.removePreference(this, "user_local_address");
-
-            if (!profileAddress1.getText().toString().trim().equals("")) {
-                StorageHelper.storePreference(this, "user_city_state_country_info", profileAddress1.getText().toString());
-            } else
-                StorageHelper.removePreference(this, "user_city_state_country_info");
-
-            if (response.getData().getZip() != null) {
-                StorageHelper.storePreference(this, "user_zip_code", pinCode.getText().toString());
-            } else
-                StorageHelper.removePreference(this, "user_zip_code");
-
-            if (isGettingAddress && NetworkManager.countryName != null && !NetworkManager.countryName.equals(""))
-                StorageHelper.storePreference(this, "user_country", NetworkManager.countryName);
-
-                 Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentor.this, "user_local_address"));
-            Log.d(TAG, "city: " + StorageHelper.addressInformation(EditProfileActivityMentor.this, "user_city_state"));
-            Log.d(TAG, "local_add: " + StorageHelper.addressInformation(EditProfileActivityMentor.this, "user_zip_code"));
-
-*/
 
             /* Saving area of coaching in sharedpreference */
             if (areaOfCoaching.getText().toString().length() > 0) {
