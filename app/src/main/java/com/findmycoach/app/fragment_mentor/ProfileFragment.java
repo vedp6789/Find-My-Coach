@@ -461,6 +461,7 @@ public class ProfileFragment extends Fragment implements Callback {
             }
 
             addressAdapter.notifyDataSetChanged();
+            EditProfileActivityMentee.setHeight(multipleAddressLV);
             for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
 
                 int default_yn = userInfo.getMultipleAddress().get(i).getDefault_yn();
@@ -476,7 +477,7 @@ public class ProfileFragment extends Fragment implements Callback {
             }
             multipleAddressLV.setAdapter(addressAdapter);
             addressAdapter.notifyDataSetChanged();
-            EditProfileActivityMentee.setListViewHeightBasedOnChildren(multipleAddressLV);
+            EditProfileActivityMentee.setHeight(multipleAddressLV);
             //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
         } else {
             multipleAddressRL.setVisibility(View.GONE);

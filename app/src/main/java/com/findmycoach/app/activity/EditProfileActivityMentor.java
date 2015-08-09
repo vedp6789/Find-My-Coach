@@ -1047,12 +1047,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
                 addressArrayListMentor.clear();
                 addressAdapter.notifyDataSetChanged();
-                EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListViewMentor);
+                EditProfileActivityMentee.setHeight(addressListViewMentor);
                 for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
                     addressArrayListMentor.add(userInfo.getMultipleAddress().get(i));
                 }
                 addressAdapter.notifyDataSetChanged();
-                EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListViewMentor);
+                EditProfileActivityMentee.setHeight(addressListViewMentor);
 
                 if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
                     // multipleAddressMentor.setChecked(true);
