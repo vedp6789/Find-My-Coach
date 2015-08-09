@@ -71,6 +71,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
+                    android:inputType="textNoSuggestions"
                     android:hint="@string/prompt_location"
                     android:textCursorDrawable="@drawable/cursor_white"
                     android:visibility="gone" />

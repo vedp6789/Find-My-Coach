@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ public class AddAddressDialog implements Callback {
     private ChizzleAutoCompleteTextView locale;
     private Button doneButton;
     private Button cancelButton;
+    private ImageButton deleteAddress;
     private AddressAddedListener mAddressAddedListener;
     private List<Country> countries;
     private ArrayList<String> country_names;
@@ -101,6 +103,8 @@ public class AddAddressDialog implements Callback {
         doneButton = (Button) dialog.findViewById(R.id.done);
         cancelButton = (Button) dialog.findViewById(R.id.cancel);
         locale = (ChizzleAutoCompleteTextView) dialog.findViewById(R.id.locale);
+        deleteAddress= (ImageButton) dialog.findViewById(R.id.deleteAddressButton);
+
         updateLocale();
         /* Code to set country as per default Country code*/
 
@@ -156,6 +160,14 @@ public class AddAddressDialog implements Callback {
                 return is_valid;
             }
         });
+
+        deleteAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                locale.setText("");
+            }
+        });
+
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -84,9 +84,6 @@ public class HomeFragment extends Fragment implements Callback {
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getActivity().getResources().getString(R.string.please_wait));
 
-        getNotifications();
-
-
     }
 
 

@@ -158,7 +158,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private ChizzleTextView checkBoxCountryConditionText;
     private CheckBox countryConditionCheckBox;
     private int countyConfigId;
-    private  ArrayList<Integer> city_id_from_suggestion;
+    private ArrayList<Integer> city_id_from_suggestion;
+    private String city_updated;
 
 
     @Override
@@ -253,6 +254,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         city_name = "";
         country_id = 0;
         city_id = 0;
+        city_updated = "";
         userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
         ageAndExperienceErrorCounter = 0;
         Log.e(TAG, getIntent().getStringExtra("user_info"));
@@ -322,15 +324,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         Log.e(TAG, "country_id: " + country_id);
                         NetworkClient.cities(EditProfileActivityMentor.this, requestParams, EditProfileActivityMentor.this, 54);
                     }
-//                try {
-//                    String currencyCode = MetaData.getCurrencySymbol(countries.get(position).getIso(), EditProfileActivityMentor.this);
-//                    if (currencyCode.charAt(0) == '&')
-//                        currencySymbol.setText(Html.fromHtml(currencyCode));
-//                    else {
-//                        String[] symbols = currencyCode.split("&");
-//                        currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
-//                    }
-//                } catch (Exception ignored) {
+
                     if (NetworkManager.isNetworkConnected(EditProfileActivityMentor.this)) {
                         RequestParams requestParams = new RequestParams();
                         requestParams.add("country_id", String.valueOf(countries.get(position - 1).getId()));
@@ -405,8 +399,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         locale.requestFocus();
                     }
                 }
-
-
             }
         });
 
@@ -578,10 +570,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 String input = city_with_states.getText().toString().trim();
 
                 if (input.length() >= 2) {
-                    if(city_with_states.isPerformingCompletion()) {
-                       return;
-                    }
-                    else {
+                    if (city_with_states.isPerformingCompletion()) {
+                        return;
+                    } else {
                         if (list_of_city != null && list_of_city.size() > 0) {
                             updateAutoSuggestionForCity(list_of_city, input);
                         }
@@ -594,11 +585,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         city_with_states.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e(TAG,"postion: "+position);
+                Log.e(TAG, "postion: " + position);
 
-               // Log.e(TAG,"city id on auto suggestion click: "+city_id_from_suggestion.get(position));
-                Log.e(TAG,"city id with suggestions arraylist: "+city_id_from_suggestion.size());
-              if(city_id_from_suggestion != null && city_id_from_suggestion.size() > 0){
+                // Log.e(TAG,"city id on auto suggestion click: "+city_id_from_suggestion.get(position));
+                Log.e(TAG, "city id with suggestions arraylist: " + city_id_from_suggestion.size());
+                if (city_id_from_suggestion != null && city_id_from_suggestion.size() > 0) {
                     city_id = city_id_from_suggestion.get(position);
                 }
             }
@@ -857,16 +848,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } catch (Exception ignored) {
             }
 
-//            try {
-//                if (!userInfo.getCharges().equalsIgnoreCase("0"))
-//                    chargeInput.setText(userInfo.getCharges());
-//            } catch (Exception ignored) {
-//            }
-//            try {
-//                chargesPerUnit.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, new String[]{"hour"}));
-//                chargesPerUnit.setSelection(userInfo.getCharges().equals("0") ? 0 : 0);
-//            } catch (Exception ignored) {
-//            }
+
 
             try {
                 int index = Integer.parseInt(userInfo.getExperience());
@@ -930,30 +912,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
                 }
             });
-//            classTypeSpinner.setSelection(Integer.parseInt(userInfo.getSlotType()));
-//            if (userInfo.getCountry() != null) {
-//                //       currencySymbol.setText(Html.fromHtml(StorageHelper.getCurrency(this)));
-//                String authToken = StorageHelper.getUserDetails(this, "auth_token");
-//                RequestParams requestParams = new RequestParams();
-//                requestParams.add("country", String.valueOf(userInfo.getCountry()));
-//                NetworkClient.getCurrencySymbol(this, requestParams, authToken, this, 52);
-//            } else {
-//                currencySymbol.setText(Html.fromHtml(userInfo.getCurrencyCode()));
-//            }
 
-//            if (userInfo.getCurrencyCode() != null && !userInfo.getCurrencyCode().equals("")) {
-//                try {
-//                    String currencyCode = userInfo.getCurrencyCode();
-//                    if (currencyCode.charAt(0) == '&')
-//                        currencySymbol.setText(Html.fromHtml(currencyCode));
-//                    else {
-//                        String[] symbols = currencyCode.split("&");
-//                        currencySymbol.setText(symbols[0] + Html.fromHtml("&" + symbols[1]));
-//                    }
-//                } catch (Exception ignored) {
-//                }
-//            }
-//
 
             if (!userInfo.getSection1().equalsIgnoreCase("")) {
                 myQualification.setText(userInfo.getSection1());
@@ -1369,7 +1328,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             requestParams.add("availability_yn", String.valueOf(teachingPreference.getSelectedItemPosition()));
             if (teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2) {
-                requestParams.add("physical_address", physicalAddress.getText().toString().trim());
+                requestParams.add("address", physicalAddress.getText().toString().trim());
             }
 
             if (selectedAreaOfCoachingJson != null) {
@@ -1677,7 +1636,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 city_id_from_suggestion.add(cityDetails.getCity_id());
             }
         }
-        Log.e(TAG,"city id with suggestions arraylist: "+city_id_from_suggestion.size());
+        Log.e(TAG, "city id with suggestions arraylist: " + city_id_from_suggestion.size());
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.textview, list);
         city_with_states.setAdapter(arrayAdapter);
     }
