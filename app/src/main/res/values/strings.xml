@@ -860,12 +860,13 @@
     <string name="prompt_mutiple_address_mentor">I am available at different addresses</string>
     <string name="prompt_location_preference">Location Preference</string>
 
-   <string name="prompt_summary"> I would also like to tell something additional about myself</string>
+   <string name="prompt_summary">More information about me</string>
     <string name="my_qualification">My Qualifications</string>
-    <string name="my_accreditions">My accreditions</string>
-    <string name="my_experience">My experience</string>
-    <string name="my_teaching_methodology">My teaching methodology</string>
-    <string name="my_awards">My awards</string>
+    <string name="my_accreditions">My Accreditions</string>
+    <string name="my_experience">My Experience</string>
+    <string name="my_teaching_methodology">My Teaching Methodology</string>
+    <string name="my_awards">My Awards</string>
+    <string name="language_header">Languages I can communicate in</string>
 
     <!-- Prompting -->
 

@@ -390,7 +390,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/addChildLayout"
                     android:layout_gravity="right"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:layout_marginTop="8dp">
                     <com.findmycoach.app.views.ChizzleTextView
                         android:layout_width="wrap_content"

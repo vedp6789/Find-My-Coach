@@ -14,7 +14,7 @@
             android:layout_height="40dp"
             android:id="@+id/headerTeachingMediumPreference"
             android:background="@color/purple"
-            android:text="Teaching medium"
+            android:text="@string/language_header"
             android:textColor="@color/white"
             android:gravity="center_vertical|center_horizontal"
             android:textSize="18sp"
