@@ -757,6 +757,7 @@
     <string name="prompt_qualified">Select in which Areas you have professional qualifications</string>
     <string name="prompt_submit">Submit</string>
     <string name="prompt_address">Physical address</string>
+    <string name="prompt_complete_address">Complete Street Address</string>
     <string name="profile_address">Address</string>
     <string name="prompt_address_line_1">City</string>
     <string name="prompt_group_class_location">Group class location</string>
@@ -853,7 +854,7 @@
     <string name="prompt_addressline1">House no/street no</string>
     <string name="prompt_fellow_student_location">I am fine to attend group classes at a nearby fellow students location
 </string>
-    <string name="prompt_mutiple_address_mentor">I am available at different addresses</string>
+    <string name="prompt_mutiple_address_mentor">I am available at other location also</string>
     <string name="prompt_location_preference">Location Preference</string>
 
     <string name="prompt_summary"> I would also like to tell something additional about myself</string>
@@ -883,6 +884,7 @@
     <string name="action_save">Save</string>
     <string name="action_save_exit">Save &amp; exit</string>
     <string name="action_save_add_another">Save &amp; add another subject</string>
+    <string name="add_address_title">Enter Locality\n(Landmark, Street, Address)</string>
     <string name="select_sub_category">Select category</string>
     <string name="select_image">Choose</string>
     <string name="update_image">Update profile picture</string>
@@ -990,6 +992,7 @@
     <string name="account_blocked">Your profile has been locked , please logout and we wil be in touch with you on the email ID/phone number provided by you.</string>
     <string name="dob_info_mentor">This is needed as some students may prefer a certain age group of teacher</string>
     <string name="dob_info_mentee">This is needed to ensure we provide you relevant teachers</string>
+    <string name="physical_address_mentor_info">We would need to inform to students where to come for classes</string>
     <string name="view_calendar_by">View schedule calendar by</string>
     <string name="mentor_response_for_schedule_request_message">Your reply to mentee!</string>
 

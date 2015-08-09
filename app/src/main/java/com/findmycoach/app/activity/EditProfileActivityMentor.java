@@ -129,8 +129,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private String userCurrentAddress = "";
     private ScrollView scrollView;
     private TextView students_preference;
-    private RelativeLayout summaryHeader;
-    private LinearLayout summaryDetailsLayout, ll_physical_address;
+    private RelativeLayout summaryHeader, ll_physical_address;
+    private LinearLayout summaryDetailsLayout;
     private boolean hiddenFlag;
     private ImageButton arrow;
     private ChizzleTextView teachingMediumPreference;
@@ -309,7 +309,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         countries = MetaData.getCountryObject(this);
         checkBoxCountryConditionText = (ChizzleTextView) findViewById(R.id.checkBoxCountryCondition);
         countryConditionCheckBox = (CheckBox) findViewById(R.id.inputCountryCondition);
-        ll_physical_address = (LinearLayout) findViewById(R.id.ll_physical_address);
+        ll_physical_address = (RelativeLayout) findViewById(R.id.ll_physical_address);
 
         profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -453,6 +453,14 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             public void onClick(View v) {
                 Toast.makeText(EditProfileActivityMentor.this,
                         getResources().getText(R.string.dob_info_mentor), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        findViewById(R.id.physicalAddressInfo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(EditProfileActivityMentor.this,
+                        getResources().getText(R.string.physical_address_mentor_info), Toast.LENGTH_LONG).show();
             }
         });
 
