@@ -428,6 +428,7 @@
     <string name="prompt_charges">Coaching fee</string>
     <string name="prompt_experience">Experience</string>
     <string name="prompt_experience_in_years">Experience in year</string>
+    <string name="prompt_select_experience_in_years">Select experience in year</string>
     <string name="students_preference">I like to teach</string>
     <string name="about_me">About me</string>
     <string name="other_address">My other address</string>
