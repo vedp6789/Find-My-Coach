@@ -276,12 +276,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String authToken = StorageHelper.getUserDetails(EditProfileActivityMentee.this, "auth_token");
-//                city_with_states.setText("");
-//                physicalAddress.setText("");
-//                locale.setText("");
-//                country_id = 0;
-//                city_id = 0;
                 if (position != 0) {
                     if (countries != null && countries.size() > 0) {
                         country_id = countries.get(position - 1).getId();
@@ -383,7 +377,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // your code here
-                if (position == 1 || position == 2) {
+                if ((position == 1 || position == 2) && (locationPreferenceSpinner.getSelectedItemPosition()==0 || locationPreferenceSpinner.getSelectedItemPosition()==2)) {
                     groupDetailsLayout.setVisibility(View.VISIBLE);
                 } else {
                     groupDetailsLayout.setVisibility(View.GONE);
@@ -398,6 +392,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
 
         });
+
+
 
         addMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -566,13 +562,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 if (userInfo != null && userInfo.getMultipleAddress() != null) {
                     if (user_info_multiple_address == 0 || user_info_multiple_address == 1 ||
                             training_location_similar_to_profile_locale) {
-                            /* preferred training location will get populated, similar to profile
-                             locale only when profile locale is first time populated or if it is
-                              get edited when there is only one locale i.e. user has not not selected multiple addresses */
-
-                            /*
-                             or if training location is similar to locale of the
-                            * */
                         trainingLocation.setText(locale.getText().toString());
                     }
                 }
@@ -589,6 +578,14 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 } else {
                     ll_physical_address.setVisibility(View.GONE);
                     physicalAddress.setVisibility(View.GONE);
+                }
+                if (position==1 || coachingType.getSelectedItemPosition()==0) {
+                    groupDetailsLayout.setVisibility(View.GONE);
+
+                }
+                else {
+                    groupDetailsLayout.setVisibility(View.VISIBLE);
+
                 }
             }
 

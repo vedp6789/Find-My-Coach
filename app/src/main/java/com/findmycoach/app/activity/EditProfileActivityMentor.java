@@ -164,6 +164,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private int countyConfigId;
     private ArrayList<Integer> city_id_from_suggestion;
     private String city_updated;
+    private RelativeLayout multipleAddressLayout;
 
 
     @Override
@@ -310,16 +311,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         checkBoxCountryConditionText = (ChizzleTextView) findViewById(R.id.checkBoxCountryCondition);
         countryConditionCheckBox = (CheckBox) findViewById(R.id.inputCountryCondition);
         ll_physical_address = (RelativeLayout) findViewById(R.id.ll_physical_address);
+        multipleAddressLayout=(RelativeLayout)findViewById(R.id.mutipleAddressCheckBoxLayout);
 
         profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String authToken = StorageHelper.getUserDetails(EditProfileActivityMentor.this, "auth_token");
-//                city_with_states.setText("");
-//                physicalAddress.setText("");
-//                locale.setText("");
-//                country_id = 0;
-//                city_id = 0;
                 if (position != 0) {
                     if (countries != null && countries.size() > 0) {
                         country_id = countries.get(position - 1).getId();
@@ -863,6 +859,18 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     } else {
                         ll_physical_address.setVisibility(View.GONE);
                         physicalAddress.setVisibility(View.GONE);
+                    }
+                    if (position == 1 || position == 2) {
+                        multipleAddressLayout.setVisibility(View.VISIBLE);
+                        addressListViewMentor.setVisibility(View.VISIBLE);
+                        addMoreAddress.setVisibility(View.VISIBLE);
+
+                    }
+                    else {
+                        multipleAddressLayout.setVisibility(View.GONE);
+                        addressListViewMentor.setVisibility(View.GONE);
+                        addMoreAddress.setVisibility(View.GONE);
+
                     }
                 }
 

@@ -750,12 +750,12 @@
     <string name="prompt_area_of_coaching">Area of coaching</string>
     <string name="please_add_area_of_interest">Please add area of interest.</string>
     <string name="please_add_area_of_coaching">Please add area of coaching.</string>
-    <string name="prompt_coaching_type">Coaching type</string>
+    <string name="prompt_coaching_type">Class type</string>
     <string name="prompt_training_location">Preferred trainer location</string>
     <string name="prompt_male">Male</string>
     <string name="prompt_female">Female</string>
     <string name="prompt_phone">Mobile number</string>
-    <string name="prompt_qualified">Select in which Areas you have professional qualifications</string>
+    <string name="prompt_qualified">I have professional qualification for</string>
     <string name="prompt_submit">Submit</string>
     <string name="prompt_address">Physical address</string>
     <string name="prompt_complete_address">Complete Street Address</string>
@@ -775,7 +775,7 @@
     <string name="select_dob">Select date of birth</string>
     <string name="enter_pin">Enter zip/post code</string>
     <string name="prompt_state">State</string>
-    <string name="prompt_country">Country</string>
+    <string name="prompt_country">Country of residence</string>
     <string name="prompt_pin">Zip/Post Code</string>
     <string name="prompt_locale">Locale</string>
     <string name="prompt_teaching_preferences">Teaching Preference</string>
@@ -850,12 +850,11 @@
     <string name="mentee_add">Mentee\'s address:</string>
     <string name="mentor_add">Mentor\'s address:</string>
     <string name="requested_class_details">Requested class detail</string>
-    <string name="prompt_hosting_yes">I can host group classes at my location</string>
-    <string name="prompt_mutiple_address">Are there any other addresses near which you may want to search mentors </string>
+    <string name="prompt_hosting_yes">I can host group classes at My location</string>
+    <string name="prompt_mutiple_address">Add more  Locations  for my search</string>
     <string name="prompt_addressline1">House no/street no</string>
-    <string name="prompt_fellow_student_location">I am fine to attend group classes at a nearby fellow students location
-</string>
-    <string name="prompt_mutiple_address_mentor">I am available at other location also</string>
+    <string name="prompt_fellow_student_location">I can go for a group class to a nearby students location</string>
+    <string name="prompt_mutiple_address_mentor">I can be available near multiple locations</string>
     <string name="prompt_location_preference">Location Preference</string>
 
    <string name="prompt_summary">More information about me</string>

@@ -359,6 +359,7 @@
                     android:inputType="textAutoComplete|textCapWords|textNoSuggestions"
                     android:textColor="@color/purple"
                     android:textColorHint="@color/purple_light"
+                    android:nextFocusDown="@+id/locale"
                     android:textCursorDrawable="@drawable/cursor_purple"
                     android:textSize="@dimen/profile_details" />
 
@@ -511,7 +512,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_button_height"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginTop="@dimen/back_margin">
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:id="@+id/mutipleAddressCheckBoxLayout"
+                    android:visibility="gone">
 
                     <com.findmycoach.app.views.ChizzleTextView
                         android:id="@+id/checkBoxTextAdresses"

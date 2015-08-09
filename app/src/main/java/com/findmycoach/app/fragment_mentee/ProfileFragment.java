@@ -276,7 +276,9 @@ public class ProfileFragment extends Fragment implements Callback {
             }
 
 
-
+            addressArrayList.clear();
+            addressAdapter.notifyDataSetChanged();
+            setHeight(addressListView);
             if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
                 preferredAddressLayout.setVisibility(View.VISIBLE);
                 for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {

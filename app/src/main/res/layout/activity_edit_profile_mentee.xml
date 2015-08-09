@@ -358,7 +358,7 @@
                     style="@style/EditTextCustomHoloPurple"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_pin"
+                    android:hint="@string/prompt_locale"
                     android:inputType="textPostalAddress|textNoSuggestions"
                     android:singleLine="true"
                     android:textCursorDrawable="@drawable/cursor_purple"
