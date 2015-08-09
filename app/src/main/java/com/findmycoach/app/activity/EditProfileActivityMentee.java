@@ -34,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -83,14 +84,14 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private ImageView profilePicture;
     private TextView profileEmail;
     private EditText profileFirstName;
-//    private EditText profileMiddleName;
+    //    private EditText profileMiddleName;
     private EditText profileLastName;
     private Spinner profileGender, profileCountry;
     private TextView profileDOB;
     private EditText physicalAddress;
     private AutoCompleteTextView city_with_states;
     private AutoCompleteTextView locale;
-    private Spinner mentorFor;
+    private RadioButton mentorForSelf, mentorForChild, mentorForBoth;
     private TextView trainingLocation;
     private Spinner coachingType;
     private Button updateAction;
@@ -249,7 +250,9 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 //        profileMiddleName = (EditText) findViewById(R.id.input_middle_name);
         profileLastName = (EditText) findViewById(R.id.input_last_name);
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
-        mentorFor = (Spinner) findViewById(R.id.input_mentor_for);
+        mentorForSelf = (RadioButton) findViewById(R.id.mentorForSelf);
+        mentorForChild = (RadioButton) findViewById(R.id.mentorForChild);
+        mentorForBoth = (RadioButton) findViewById(R.id.mentorForBoth);
         locationPreferenceSpinner = (Spinner) findViewById(R.id.locationPreferenceSpinner);
         trainingLocation = (TextView) findViewById(R.id.input_training_location);
         coachingType = (Spinner) findViewById(R.id.input_coaching_type);
@@ -322,31 +325,35 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
         ///ListViewInsideScrollViewHelper.getListViewSize(addressListView);
 
-
-        mentorFor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mentorForSelf.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                // your code here
-                if (position == 1 || position == 2) {
-//                    childDetailsArrayList.clear();
-//                    childDetailsAdapter.notifyDataSetChanged();
-//                    childDetailsListView.setVisibility(View.VISIBLE);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    childDetailsListView.setVisibility(View.GONE);
+                    addChildLayout.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        mentorForChild.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
                     addChildLayout.setVisibility(View.VISIBLE);
                     childDetailsListView.setVisibility(View.VISIBLE);
 
-                } else {
-                    childDetailsListView.setVisibility(View.GONE);
-                    addChildLayout.setVisibility(View.GONE);
-
                 }
-
             }
+        });
 
+        mentorForBoth.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    addChildLayout.setVisibility(View.VISIBLE);
+                    childDetailsListView.setVisibility(View.VISIBLE);
+                }
             }
-
         });
 
 
@@ -381,7 +388,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // your code here
-                if ((position == 1 || position == 2) && (locationPreferenceSpinner.getSelectedItemPosition()==0 || locationPreferenceSpinner.getSelectedItemPosition()==2)) {
+                if ((position == 1 || position == 2) && (locationPreferenceSpinner.getSelectedItemPosition() == 0 || locationPreferenceSpinner.getSelectedItemPosition() == 2)) {
                     groupDetailsLayout.setVisibility(View.VISIBLE);
                 } else {
                     groupDetailsLayout.setVisibility(View.GONE);
@@ -396,7 +403,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
 
         });
-
 
 
         addMore.setOnClickListener(new View.OnClickListener() {
@@ -607,11 +613,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                     ll_physical_address.setVisibility(View.GONE);
                     physicalAddress.setVisibility(View.GONE);
                 }
-                if (position==1 || coachingType.getSelectedItemPosition()==0) {
+                if (position == 1 || coachingType.getSelectedItemPosition() == 0) {
                     groupDetailsLayout.setVisibility(View.GONE);
 
-                }
-                else {
+                } else {
                     groupDetailsLayout.setVisibility(View.VISIBLE);
 
                 }
@@ -813,10 +818,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         }
 
         try {
-            mentorFor.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, mentorForArray));
-        } catch (Exception ignored) {
-        }
-        try {
             profileEmail.setText(userInfo.getEmail());
         } catch (Exception ignored) {
         }
@@ -840,11 +841,13 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         } catch (Exception ignored) {
         }
         try {
-            /*if (userInfo.getMentorFor().equalsIgnoreCase(mentorForArray[1]))
-                mentorFor.setSelection(1);
-*/
-            mentorFor.setSelection(Integer.parseInt(userInfo.getMentorFor()));
-
+            int mentorFor = Integer.parseInt(userInfo.getMentorFor());
+            if (mentorFor == 0)
+                mentorForSelf.setChecked(true);
+            else if (mentorFor == 1)
+                mentorForChild.setChecked(true);
+            else if (mentorFor == 2)
+                mentorForBoth.setChecked(true);
         } catch (Exception ignored) {
         }
 
@@ -1204,7 +1207,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             /*requestParams.add("address", profileAddress.getText().toString());
             requestParams.add("city", profileAddress1.getText().toString());
             requestParams.add("zip", pinCode.getText().toString());*/
-            requestParams.add("mentor_for", String.valueOf(mentorFor.getSelectedItemPosition()));
+            requestParams.add("mentor_for", mentorForSelf.isChecked() ? "0" : (mentorForChild.isChecked() ? "1" : "2"));
 
             String trainLoc = trainingLocation.getText().toString().trim();
             requestParams.add("training_location", trainingLocation.getText().toString());
