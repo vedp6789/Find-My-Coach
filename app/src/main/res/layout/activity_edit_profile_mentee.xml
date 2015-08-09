@@ -509,7 +509,7 @@
                         android:button="@drawable/custom_check_box"
                         android:paddingLeft="@dimen/radio_button_padding_mentor_for"
                         android:text="@string/self"
-                        android:textColor="@color/custom_button_text_color_click" />
+                        android:textColor="@color/custom_button_text_color_click_purple" />
 
                     <RadioButton
                         android:id="@+id/mentorForChild"
@@ -519,7 +519,7 @@
                         android:button="@drawable/custom_check_box"
                         android:paddingLeft="@dimen/radio_button_padding_mentor_for"
                         android:text="@string/children"
-                        android:textColor="@color/custom_button_text_color_click" />
+                        android:textColor="@color/custom_button_text_color_click_purple" />
 
                     <RadioButton
                         android:id="@+id/mentorForBoth"
@@ -529,7 +529,7 @@
                         android:button="@drawable/custom_check_box"
                         android:paddingLeft="@dimen/radio_button_padding_mentor_for"
                         android:text="@string/both"
-                        android:textColor="@color/custom_button_text_color_click" />
+                        android:textColor="@color/custom_button_text_color_click_purple" />
 
                 </RadioGroup>
 
