@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -129,6 +130,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private LinearLayout ll_physical_address;
     private boolean training_location_similar_to_profile_locale;
     private ArrayList<Integer> city_id_from_suggestion;
+    private ImageButton deleteLocaleButton;
 
 
     @Override
@@ -209,6 +211,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         ll_physical_address = (LinearLayout) findViewById(R.id.ll_physical_address);
         physicalAddress = (EditText) findViewById(R.id.physical_address);
         locale = (AutoCompleteTextView) findViewById(R.id.locale);
+        deleteLocaleButton=(ImageButton)findViewById(R.id.deleteLocaleButton);
         city_name = "";
         country_id = 0;
         city_id = 0;
@@ -236,6 +239,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
 
         }
+
 
         removeProfilePicture = false;
         profileGender = (Spinner) findViewById(R.id.input_gender);
@@ -513,6 +517,15 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
                 }
             }
+
+        });
+
+
+        deleteLocaleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                locale.setText("");
+            }
         });
 
 
@@ -550,6 +563,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             @Override
             public void afterTextChanged(Editable s) {
                 String input = locale.getText().toString().trim();
+                if(!input.isEmpty())
+                     deleteLocaleButton.setVisibility(View.VISIBLE);
+                else
+                    deleteLocaleButton.setVisibility(View.GONE);
                 if (input.length() >= 2) {
                     getAutoSuggestions(input);
                 }
@@ -567,7 +584,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 }
             }
         });
-
 
         locationPreferenceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

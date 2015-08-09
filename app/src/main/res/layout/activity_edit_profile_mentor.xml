@@ -389,16 +389,33 @@
                 </LinearLayout>
 
 
-                <com.findmycoach.app.views.ChizzleAutoCompleteTextView
-                    android:id="@+id/locale"
-                    style="@style/EditTextCustomHoloPurple"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_locale"
-                    android:inputType="textPostalAddress|textNoSuggestions"
-                    android:singleLine="true"
-                    android:textCursorDrawable="@drawable/cursor_purple"
-                    android:textSize="@dimen/profile_details" />
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <com.findmycoach.app.views.ChizzleAutoCompleteTextView
+                        android:id="@+id/locale"
+                        style="@style/EditTextCustomHoloPurple"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_locale"
+                        android:inputType="textPostalAddress|textNoSuggestions"
+                        android:singleLine="true"
+                        android:textCursorDrawable="@drawable/cursor_purple"
+                        android:textSize="@dimen/profile_details" />
+                    <ImageButton
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:id="@+id/deleteLocaleButton"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/close_icon"
+                        android:background="@color/purple"
+                        android:padding="12dp"
+                        android:scaleType="fitCenter"
+                        android:layout_marginTop="-5dp"
+                        android:visibility="gone" />
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
