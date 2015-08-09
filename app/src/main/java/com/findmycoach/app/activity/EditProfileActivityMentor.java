@@ -446,6 +446,15 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         populateSubjectPreference(arrayList, userInfo.getAllAgeGroupPreferences());
 
 
+        findViewById(R.id.dobInfo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(EditProfileActivityMentor.this,
+                        getResources().getText(R.string.dob_info_mentor), Toast.LENGTH_LONG).show();
+            }
+        });
+
+
     }
 
     public void populateSubjectPreference(ArrayList<Integer> arrayList, List<AgeGroupPreferences> allAgeGroupPreferences) {

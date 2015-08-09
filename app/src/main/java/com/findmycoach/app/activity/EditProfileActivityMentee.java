@@ -449,6 +449,14 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 //        profileAddress1.setOnTouchListener(onTouchListener);
 //        pinCode.setOnFocusChangeListener(onFocusChangeListener);
 //        pinCode.setOnTouchListener(onTouchListener);
+
+        findViewById(R.id.dobInfo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(EditProfileActivityMentee.this,
+                        getResources().getText(R.string.dob_info_mentee), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     /**

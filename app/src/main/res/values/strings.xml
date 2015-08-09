@@ -466,7 +466,7 @@
     <string name="set_schedule">Schedule</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_enter_code">Enter 6 digits code here.</string>
-    <string name="resend_code">Resend verification code</string>
+    <string name="resend_code">Resend Verification Code</string>
     <string name="find_mentor">Find mentor</string>
     <string name="trainee">Trainees</string>
     <string name="coinciding_vacation">Class coming with the vacation</string>
@@ -547,7 +547,6 @@
     <string name="address_preference">Address preferences</string>
     <string name="mentor_details">Mentor\'s information</string>
     <string name="tutorial_preference_by_mentee">You will attend this class at the mentor\'s location.</string>
-
 
 
     <!-- end of unique strings block-->
@@ -652,9 +651,6 @@
     <string name="conn_req_push">"Hi, connection request from "</string>
     <string name="up_to">Up to</string>
     <string name="above">above</string>
-    
-
-
 
 
     <!--  Minimum time difference between start time and stop time of a slot   i.e in hours-->
@@ -685,7 +681,7 @@
     <string name="logging_in">Logging in...</string>
     <string name="verifying">Verifying...</string>
     <string name="verify">Verify</string>
-    <string name="verify_phone">Verify your mobile number</string>
+    <string name="verify_phone">Verify your Mobile Number</string>
     <string name="sending_code">Sending code</string>
     <string name="already_slot_found">Sorry, there is already a slot between\n</string>
     <string name="otp_sent_to_registered_number">An Otp has been sent to your registered number,please wait</string>
@@ -860,7 +856,7 @@
     <string name="prompt_mutiple_address_mentor">I am available at different addresses</string>
     <string name="prompt_location_preference">Location Preference</string>
 
-   <string name="prompt_summary"> I would also like to tell something additional about myself</string>
+    <string name="prompt_summary"> I would also like to tell something additional about myself</string>
     <string name="my_qualification">My Qualifications</string>
     <string name="my_accreditions">My accreditions</string>
     <string name="my_experience">My experience</string>
@@ -919,7 +915,7 @@
     <string name="submit_rating">Submit rating</string>
     <string name="comments">Please provide comments</string>
     <string name="view_profile">View profile</string>
-     <string name="beginner">Beginner</string>
+    <string name="beginner">Beginner</string>
     <string name="intermediate">Intermediate</string>
     <string name="advance">Advance</string>
 
@@ -992,9 +988,11 @@
     <string name="sure_to_logout">Going back will log you out from Chizzle!\nAre you sure want to logout?</string>
     <string name="age_experience_message">Your years of experience do not match your age, you will need to correct either the date of birth or years of experience.</string>
     <string name="account_blocked">Your profile has been locked , please logout and we wil be in touch with you on the email ID/phone number provided by you.</string>
+    <string name="dob_info_mentor">This is needed as some students may prefer a certain age group of teacher</string>
+    <string name="dob_info_mentee">This is needed to ensure we provide you relevant teachers</string>
     <string name="view_calendar_by">View schedule calendar by</string>
     <string name="mentor_response_for_schedule_request_message">Your reply to mentee!</string>
-    
+
     <string name="child_name">Name</string>
     <!-- Static Text -->
 
@@ -1016,12 +1014,11 @@
     <string name="f">Fri</string>
     <string name="s">Sat</string>
     <string name="su">Sun</string>
-    
-    
-    
+
+
     <!-- -->
 
-    
+
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~ String related to SharePreferences ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="terms1">terms</string>
     <string name="user_id">user_id</string>
@@ -1089,7 +1086,7 @@
         <item>I teach at my own location</item>
         <item>I travel to student location</item>
         <item>I am fine with either</item>
-       </string-array>
+    </string-array>
 
     <string-array name="mentor_class_type">
         <item>Individual</item>
