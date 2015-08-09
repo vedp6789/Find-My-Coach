@@ -113,6 +113,7 @@ public class ProfileFragment extends Fragment implements Callback {
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         profileImage = (ImageView) view.findViewById(R.id.profile_image);
         profileName = (TextView) view.findViewById(R.id.profile_name);
+        profileName.requestFocus();
         parentScrollView = (ScrollView) view.findViewById(R.id.parentScrollView);
         profileAddress = (TextView) view.findViewById(R.id.profile_address);
         trainingLocation = (TextView) view.findViewById(R.id.training_location);

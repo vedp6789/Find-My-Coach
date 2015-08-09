@@ -39,6 +39,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/purple"
                 android:textStyle="bold"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:textSize="@dimen/profile_name" />
 
             <com.findmycoach.app.views.ChizzleTextViewBold
@@ -209,7 +211,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center_horizontal"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:id="@+id/preferredAddressLayout"
                 android:layout_marginTop="@dimen/back_margin">
 

@@ -407,7 +407,6 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_gravity="right"
-                        android:layout_marginRight="16dp"
                         android:background="@color/purple"
                         android:padding="2dp"
 
@@ -465,7 +464,6 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="right"
-                    android:layout_marginRight="16dp"
                     android:layout_marginTop="8dp"
                     android:background="@color/purple"
                     android:padding="2dp"
