@@ -156,6 +156,8 @@
     <string name="self">Self</string>
     <string name="select_card">Select a card</string>
     <string name="child">Child</string>
+    <string name="both">Both</string>
+    <string name="children">Children</string>
     <string name="child_dob">Child Dob</string>
     <string name="total_charges">Total charges:</string>
     <string name="class_of_type">Class type</string>

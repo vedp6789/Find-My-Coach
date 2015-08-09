@@ -171,16 +171,16 @@
                     android:textSize="@dimen/profile_details" />
 
                 <!--<com.findmycoach.app.views.ChizzleEditText-->
-                    <!--android:id="@+id/input_middle_name"-->
-                    <!--style="@style/EditTextCustomHoloPurple"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginTop="@dimen/back_margin"-->
-                    <!--android:hint="@string/prompt_middle_name"-->
-                    <!--android:inputType="textCapSentences|textNoSuggestions|textCapWords"-->
-                    <!--android:singleLine="true"-->
-                    <!--android:textCursorDrawable="@drawable/cursor_purple"-->
-                    <!--android:textSize="@dimen/profile_details" />-->
+                <!--android:id="@+id/input_middle_name"-->
+                <!--style="@style/EditTextCustomHoloPurple"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="@dimen/back_margin"-->
+                <!--android:hint="@string/prompt_middle_name"-->
+                <!--android:inputType="textCapSentences|textNoSuggestions|textCapWords"-->
+                <!--android:singleLine="true"-->
+                <!--android:textCursorDrawable="@drawable/cursor_purple"-->
+                <!--android:textSize="@dimen/profile_details" />-->
 
                 <com.findmycoach.app.views.ChizzleEditText
                     android:id="@+id/input_last_name"
@@ -489,32 +489,49 @@
                     android:textSize="@dimen/profile_heading"
                     android:textStyle="bold" />
 
-                <Spinner
-                    android:id="@+id/input_mentor_for"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/login_button_height"
-                    android:background="@android:color/transparent"
-                    android:spinnerMode="dropdown" />
-
-                <LinearLayout
+                <RadioGroup
+                    android:id="@+id/radioGroupMentorFor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-10dp"
-                    android:orientation="vertical">
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="3"
+                    android:checkedButton="@+id/radio_button_mentor_signup"
+                    android:gravity="center"
+                    android:minHeight="@dimen/abc_action_bar_stacked_max_height"
+                    android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
+                    <RadioButton
+                        android:checked="true"
+                        android:id="@+id/mentorForSelf"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginBottom="-1dp"
-                        android:src="@drawable/drop_down_arrow_purple_small" />
+                        android:layout_weight="1"
+                        android:button="@drawable/custom_check_box"
+                        android:paddingLeft="@dimen/radio_button_padding_mentor_for"
+                        android:text="@string/self"
+                        android:textColor="@color/custom_button_text_color_click" />
 
-                    <com.findmycoach.app.views.ChizzleTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/purple_light" />
+                    <RadioButton
+                        android:id="@+id/mentorForChild"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@drawable/custom_check_box"
+                        android:paddingLeft="@dimen/radio_button_padding_mentor_for"
+                        android:text="@string/children"
+                        android:textColor="@color/custom_button_text_color_click" />
 
-                </LinearLayout>
+                    <RadioButton
+                        android:id="@+id/mentorForBoth"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@drawable/custom_check_box"
+                        android:paddingLeft="@dimen/radio_button_padding_mentor_for"
+                        android:text="@string/both"
+                        android:textColor="@color/custom_button_text_color_click" />
+
+                </RadioGroup>
 
                 <ListView
                     android:id="@+id/childDetailsListView"
