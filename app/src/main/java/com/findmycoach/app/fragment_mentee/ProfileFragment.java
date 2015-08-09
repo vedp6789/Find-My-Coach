@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -129,14 +130,12 @@ public class ProfileFragment extends Fragment implements Callback {
         preferredAddressLayout = (RelativeLayout) view.findViewById(R.id.preferredAddressLayout);
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
         addressListView = (ListView) view.findViewById(R.id.addressProfileListView);
-        addressListView.setDivider(null);
         groupClassLocation = (ChizzleTextView) view.findViewById(R.id.groupClassLocation);
-        addressListView.setDividerHeight(0);
         groupLayout = (LinearLayout) view.findViewById(R.id.groupLocationLayout);
-
+        addressArrayList = new ArrayList<>();
+        addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayList, addressListView);
+        addressListView.setAdapter(addressAdapter);
         childrenDetailsListViewProfile = (ListView) view.findViewById(R.id.childrenDetailsListViewProfile);
-        childrenDetailsListViewProfile.setDivider(null);
-        childrenDetailsListViewProfile.setDividerHeight(0);
 
         view.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -272,12 +271,10 @@ public class ProfileFragment extends Fragment implements Callback {
                 }
                 childDetailsAdapter = new ChildDetailsAdapter(getActivity(), R.layout.child_details_list_item_centre_horizontal, childDetailsArrayList, childrenDetailsListViewProfile);
                 childrenDetailsListViewProfile.setAdapter(childDetailsAdapter);
-                childDetailsAdapter.notifyDataSetChanged();
                 EditProfileActivityMentee.setHeight(childrenDetailsListViewProfile);
             }
 
 
-            addressArrayList = new ArrayList<>();
 
             if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
                 preferredAddressLayout.setVisibility(View.VISIBLE);
@@ -293,16 +290,9 @@ public class ProfileFragment extends Fragment implements Callback {
                     }
                     addressArrayList.add(userInfo.getMultipleAddress().get(i));
                 }
-
-
-                addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayList, addressListView);
-                addressListView.setAdapter(addressAdapter);
-                addressAdapter.notifyDataSetChanged();
-                EditProfileActivityMentee.setHeight(addressListView);
-                //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
             }
-
-
+            addressAdapter.notifyDataSetChanged();
+            setHeight(addressListView);
             editProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -339,12 +329,31 @@ public class ProfileFragment extends Fragment implements Callback {
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.hide();
-//        String message = (String) object;
-//        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-
         ProfileResponse response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), ProfileResponse.class);
         userInfo = response.getData();
         Log.e(TAG, StorageHelper.getUserProfile(getActivity()));
         populateFields();
+    }
+
+
+    public  void setHeight(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, LinearLayout.LayoutParams.WRAP_CONTENT));
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 }

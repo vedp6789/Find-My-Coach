@@ -888,19 +888,16 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             } catch (Exception ignored) {
             }
 
-            addressArrayList.clear();
-            addressAdapter.notifyDataSetChanged();
             for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
                 addressArrayList.add(userInfo.getMultipleAddress().get(i));
             }
             addressAdapter.notifyDataSetChanged();
-            //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
+            setHeight(addressListView);
+
             if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
                 addressListView.setVisibility(View.VISIBLE);
                 addAddress.setVisibility(View.VISIBLE);
-                // multipleAddress.setChecked(true);
             }
-            setListViewHeightBasedOnChildren(addressListView);
 
         }
 
@@ -1548,19 +1545,20 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
     public static void setHeight(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            // pre-condition
+        if (listAdapter == null)
             return;
-        }
 
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
         int totalHeight = 0;
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
+        View view = null;
         for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += listItem.getMeasuredHeight();
-        }
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, LinearLayout.LayoutParams.WRAP_CONTENT));
 
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);

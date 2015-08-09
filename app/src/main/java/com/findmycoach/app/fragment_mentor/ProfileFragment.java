@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -72,7 +73,8 @@ public class ProfileFragment extends Fragment implements Callback {
     private RelativeLayout summaryHeader;
     private LinearLayout aboutMeLL;
     private boolean hiddenFlag;
-    private RelativeLayout multipleAddressRL, multipleAddressValRL;
+    private RelativeLayout multipleAddressRL;
+    private LinearLayout multipleAddressValRL;
     private ListView multipleAddressLV;
     private ArrayList<com.findmycoach.app.beans.student.Address> addressArrayListMentor;
     private AddressAdapter addressAdapter;
@@ -155,14 +157,13 @@ public class ProfileFragment extends Fragment implements Callback {
         arrow_multiple_address = (ImageButton) view.findViewById(R.id.arrowOtherAddress);
         otherAddressTV = (TextView) view.findViewById(R.id.otherAddressesTV);
         multipleAddressRL = (RelativeLayout) view.findViewById(R.id.multiple_Address_RL);
-        multipleAddressValRL = (RelativeLayout) view.findViewById(R.id.multiple_Address_Val_RL);
+        multipleAddressValRL = (LinearLayout) view.findViewById(R.id.multiple_Address_Val_RL);
         multipleAddressLV = (ListView) view.findViewById(R.id.multipleAddressLV);
         addressArrayListMentor = new ArrayList<>();
         gender = (ChizzleTextView) view.findViewById(R.id.profile_gender);
 //        slotType = (ChizzleTextView) view.findViewById(R.id.classTypeValue);
         addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayListMentor,multipleAddressLV);
         multipleAddressLV.setAdapter(addressAdapter);
-
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
 
         view.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
@@ -297,20 +298,7 @@ public class ProfileFragment extends Fragment implements Callback {
             //profileDob.setText((String) userInfo.getDob());
         } catch (Exception e) {
         }
-        /*String address = "";
-        if (userInfo.getAddress() != null && !userInfo.getAddress().toString().trim().equals("")) {
-            address = address + userInfo.getAddress() + ", ";
-        }
-        if (userInfo.getCity() != null) {
-            address = address + userInfo.getCity() + ", ";
-        }
-        if (userInfo.getState() != null) {
-            address = address + userInfo.getState() + ", ";
-        }
-        if (userInfo.getZip() != null) {
-            address = address + userInfo.getZip();
-        }
-        profileAddress.setText(address);*/
+
         if (userInfo.getAccomplishments() != null) {
             profileAccomplishment.setText(userInfo.getAccomplishments());
         }
@@ -441,7 +429,6 @@ public class ProfileFragment extends Fragment implements Callback {
 //        }
 
 
-        addressArrayListMentor.clear();
 
         if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
             multipleAddressValRL.setVisibility(View.GONE);
@@ -459,10 +446,11 @@ public class ProfileFragment extends Fragment implements Callback {
                 }
             }
 
+            addressArrayListMentor.clear();
             addressAdapter.notifyDataSetChanged();
-            EditProfileActivityMentee.setHeight(multipleAddressLV);
-            for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
+            setHeight(multipleAddressLV);
 
+            for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
                 int default_yn = userInfo.getMultipleAddress().get(i).getDefault_yn();
                 if (default_yn == 1) {
                     String address = "";
@@ -470,13 +458,13 @@ public class ProfileFragment extends Fragment implements Callback {
                         address = address + userInfo.getMultipleAddress().get(i).getLocale() + ", ";
                     }
                     profileAddress.setText(address);
-                    continue;
                 }
-                addressArrayListMentor.add(userInfo.getMultipleAddress().get(i));
+                else {
+                    addressArrayListMentor.add(userInfo.getMultipleAddress().get(i));
+                }
             }
-            multipleAddressLV.setAdapter(addressAdapter);
             addressAdapter.notifyDataSetChanged();
-            EditProfileActivityMentee.setHeight(multipleAddressLV);
+           setHeight(multipleAddressLV);
             //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
         } else {
             multipleAddressRL.setVisibility(View.GONE);
@@ -488,19 +476,6 @@ public class ProfileFragment extends Fragment implements Callback {
             multipleAddressRL.setVisibility(View.VISIBLE);
 
         }
-//        String[] slotTypeArray = getActivity().getResources().getStringArray(R.array.mentor_class_type);
-//        switch (Integer.parseInt(userInfo.getSlotType())) {
-//            case 0:
-//                slotType.setText(slotTypeArray[0]);
-//                break;
-//            case 1:
-//                slotType.setText(slotTypeArray[1]);
-//                break;
-//            case 2:
-//                slotType.setText(slotTypeArray[2]);
-//                break;
-//
-//        }
 
         if (userInfo.getGender().equalsIgnoreCase("M")) {
             gender.setText("Male");
@@ -508,7 +483,6 @@ public class ProfileFragment extends Fragment implements Callback {
             gender.setText("Female");
         }
 
-        scrollView.fullScroll(ScrollView.FOCUS_UP);
 
     }
 
@@ -639,12 +613,29 @@ public class ProfileFragment extends Fragment implements Callback {
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.hide();
-//        String message = (String) object;
-//        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-
         Response response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), Response.class);
         userInfo = response.getData();
         Log.e(TAG, StorageHelper.getUserProfile(getActivity()));
         populateFields();
+    }
+
+    public void setHeight(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 }

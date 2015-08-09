@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -31,6 +32,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -408,8 +410,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         addPhoto = (ChizzleTextView) findViewById(R.id.addPhotoMentor);
         experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, yearOfExperience));
         teachingPreference.setAdapter(new ArrayAdapter<>(this, R.layout.textview, preferences));
-//        classTypeSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.textview, classType));
-        //  isReadyToTravel = (CheckBox) findViewById(R.id.input_willing);
         updateAction = (Button) findViewById(R.id.button_update);
 //        chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
         areaOfCoaching = (TextView) findViewById(R.id.input_areas_of_coaching);
@@ -615,38 +615,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
         });
 
-        /*profileAddress1.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                city = null; *//* making city null because if user do changes in city and does not select city from suggested city then this city string should be null which is used to validate the city *//*
-                String input = profileAddress1.getText().toString().trim();
-                if (input.length() >= 2) {
-                    getAutoSuggestions(input);
-                }
-            }
-        });
-
-
-        profileAddress1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    NetworkManager.countryName = predictions.get(position).getCountry();
-                    isGettingAddress = true;
-                } catch (Exception e) {
-                    NetworkManager.countryName = "";
-                }
-            }
-        });
-*/
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -670,45 +639,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
         });
 
-
-        /*pinCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
-                        || (actionId == EditorInfo.IME_ACTION_DONE
-                        || actionId == EditorInfo.IME_ACTION_NEXT)) {
-                    try {
-                        new AddressFromZip(EditProfileActivityMentor.this, EditProfileActivityMentor.this, profileAddress1, profileAddress, currencySymbol, true, FLAG_FOR_EDIT_PROFILE_MENTOR).execute(pinCode.getText().toString());
-                        isGettingAddress = true;
-                    } catch (Exception ignored) {
-                    }
-                    hideKeyboard();
-                    pinCode.clearFocus();
-                    teachingMediumHeader.requestFocus();
-                    return true;
-//                    openAreaOfCoachingActivity();
-                }
-                return false;
-            }
-        });*/
-
-        /*profileAddress.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
-                    profileAddress1.setFocusable(true);
-                }
-                return false;
-            }
-        });
-
-        profileAddress1.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
-                    pinCode.setFocusable(true);
-                }
-                return false;
-            }
-        });
-*/
         students_preference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1004,14 +934,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 }
 
 
-                addressArrayListMentor.clear();
-                addressAdapter.notifyDataSetChanged();
-                EditProfileActivityMentee.setHeight(addressListViewMentor);
                 for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
                     addressArrayListMentor.add(userInfo.getMultipleAddress().get(i));
                 }
                 addressAdapter.notifyDataSetChanged();
-                EditProfileActivityMentee.setHeight(addressListViewMentor);
+                setHeight(addressListViewMentor);
 
                 if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
                     // multipleAddressMentor.setChecked(true);
@@ -1852,7 +1779,32 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         address.setPhysical_address("");
         addressArrayListMentor.add(address);
         addressAdapter.notifyDataSetChanged();
-        EditProfileActivityMentee.setHeight(addressListViewMentor);
+        setHeight(addressListViewMentor);
         addMoreAddress.setVisibility(View.VISIBLE);
     }
+
+
+    public static   void setHeight(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
+
+
 }
