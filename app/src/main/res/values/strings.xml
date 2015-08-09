@@ -153,11 +153,11 @@
     <string name="payment_details_method">Add payment method</string>
     <string name="not_free">Not free</string>
     <string name="connection_disconnect_warn">Connection will disconnect</string>
-    <string name="self">Self</string>
+    <string name="self">Myself</string>
     <string name="select_card">Select a card</string>
     <string name="child">Child</string>
     <string name="both">Both</string>
-    <string name="children">Children</string>
+    <string name="children">My Children</string>
     <string name="child_dob">Child Dob</string>
     <string name="total_charges">Total charges:</string>
     <string name="class_of_type">Class type</string>
@@ -499,7 +499,7 @@
     <string name="prompt_mutiple_address_mentor">I can be available near multiple locations</string>
     <string name="prompt_location_preference">Location Preference</string>
 
-   <string name="prompt_summary">More information about me</string>
+    <string name="prompt_summary">More information about me</string>
     <string name="my_qualification">My Qualifications</string>
     <string name="my_accreditions">My Accreditions</string>
     <string name="my_experience">My Experience</string>
