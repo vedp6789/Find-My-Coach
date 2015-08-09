@@ -672,6 +672,7 @@
     <string name="phone_number">phone_number</string>
     <string name="reg_id_saved_to_server">reg_id_saved</string>
     <string name="new_user">new_user</string>
+    <string name="my_promotions">My promotions</string>
     <!-- -->
 
 
@@ -744,6 +745,9 @@
         <item>I am ok to go to the mentor location or institute</item>
         <item>I am fine with either</item>
     </string-array>
+    <string name="title_activity_my_promotions">MyPromotions</string>
+
+    <string name="hello_world">Hello world!</string>
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 

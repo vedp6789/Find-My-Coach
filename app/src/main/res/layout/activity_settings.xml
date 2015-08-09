@@ -24,6 +24,33 @@
         android:background="@color/purple_light" />
 
     <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/ll_my_promotions">
+
+        <com.findmycoach.app.views.ChizzleTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/my_promotions"
+            android:padding="@dimen/textView_padding_margin"
+            android:textSize="@dimen/profile_name"
+            android:textColor="@color/purple"
+            android:id="@+id/tv_my_promotions" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:orientation="vertical"
+            android:background="@color/purple_light" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
