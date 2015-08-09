@@ -17,10 +17,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -127,8 +129,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private String userCurrentAddress = "";
     private ScrollView scrollView;
     private TextView students_preference;
-    private RelativeLayout summaryHeader;
-    private LinearLayout summaryDetailsLayout, ll_physical_address;
+    private RelativeLayout summaryHeader, ll_physical_address;
+    private LinearLayout summaryDetailsLayout;
     private boolean hiddenFlag;
     private ImageButton arrow;
     private ChizzleTextView teachingMediumPreference;
@@ -307,7 +309,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         countries = MetaData.getCountryObject(this);
         checkBoxCountryConditionText = (ChizzleTextView) findViewById(R.id.checkBoxCountryCondition);
         countryConditionCheckBox = (CheckBox) findViewById(R.id.inputCountryCondition);
-        ll_physical_address = (LinearLayout) findViewById(R.id.ll_physical_address);
+        ll_physical_address = (RelativeLayout) findViewById(R.id.ll_physical_address);
 
         profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -444,6 +446,23 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
         }
         populateSubjectPreference(arrayList, userInfo.getAllAgeGroupPreferences());
+
+
+        findViewById(R.id.dobInfo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(EditProfileActivityMentor.this,
+                        getResources().getText(R.string.dob_info_mentor), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        findViewById(R.id.physicalAddressInfo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(EditProfileActivityMentor.this,
+                        getResources().getText(R.string.physical_address_mentor_info), Toast.LENGTH_LONG).show();
+            }
+        });
 
 
     }
@@ -592,6 +611,16 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 if (city_id_from_suggestion != null && city_id_from_suggestion.size() > 0) {
                     city_id = city_id_from_suggestion.get(position);
                 }
+            }
+        });
+
+        city_with_states.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
+                        || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    locale.requestFocus();
+                }
+                return false;
             }
         });
 
