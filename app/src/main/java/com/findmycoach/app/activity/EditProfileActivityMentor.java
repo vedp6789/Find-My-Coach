@@ -165,6 +165,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private ArrayList<Integer> city_id_from_suggestion;
     private String city_updated;
     private RelativeLayout multipleAddressLayout;
+    private ImageButton deleteLocaleButton;
+
 
 
     @Override
@@ -256,6 +258,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         physicalAddress = (EditText) findViewById(R.id.physical_address);
         city_id_from_suggestion = new ArrayList<Integer>();
         locale = (AutoCompleteTextView) findViewById(R.id.locale);
+        deleteLocaleButton=(ImageButton)findViewById(R.id.deleteLocaleButtonMentor);
         city_name = "";
         country_id = 0;
         city_id = 0;
@@ -358,6 +361,14 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         for (int i = 0; i < yearOfExperience.length; i++) {
             yearOfExperience[i] = String.valueOf(i);
         }
+
+        deleteLocaleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                locale.setText("");
+            }
+        });
+
 
         multipleAddressMentor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -634,6 +645,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             @Override
             public void afterTextChanged(Editable s) {
                 String input = locale.getText().toString().trim();
+                if(!input.isEmpty())
+                    deleteLocaleButton.setVisibility(View.VISIBLE);
+                else
+                    deleteLocaleButton.setVisibility(View.GONE);
                 if (input.length() >= 2) {
                     getAutoSuggestions(input);
                 }
