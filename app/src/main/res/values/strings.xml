@@ -745,6 +745,10 @@
     <string name="prompt_date_of_birth">D.O.B.</string>
     <string name="prompt_date_of_birth_hint">DD-MM-YYYY</string>
     <string name="prompt_gender">Gender</string>
+    <string name="prompt_language_1">Language 1</string>
+    <string name="prompt_language_2">Language 2</string>
+    <string name="prompt_language_3">Language 3</string>
+    <string name="prompt_language_4">Language 4</string>
     <string name="prompt_grade">Grade:</string>
     <string name="prompt_area_of_interest">Area of interests</string>
     <string name="prompt_area_of_coaching">Area of coaching</string>
@@ -815,6 +819,7 @@
     <string name="class_stop_date">Stop date:</string>
     <string name="till">Until:</string>
     <string name="select">Select</string>
+    <string name="select_leave_blank">Select/Leave blank</string>
     <string name="selected">selected</string>
     <string name="forever">Forever</string>
     <string name="how_long">How long?</string>

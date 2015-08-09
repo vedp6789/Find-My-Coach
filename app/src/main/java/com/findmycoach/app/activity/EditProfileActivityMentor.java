@@ -728,7 +728,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             @Override
             public void onClick(View v) {
                 ArrayList<String> languagesList = new ArrayList<String>();
-                languagesList.add(0, "Select");
+                languagesList.add(0, getResources().getString(R.string.select_leave_blank));
                 languagesList.add(1, "English");
                 languagesList.add(2, "Mandarin");
                 languagesList.add(3, "Hindi");
@@ -806,7 +806,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             } catch (Exception ignored) {
             }
-
 
 
             try {
@@ -1777,17 +1776,18 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     @Override
     public void onTeachingMediumAdded(String language1, String language2, String language3, String language4) {
         teachingMediumPreference.setText("");
+        String select = getResources().getString(R.string.select_leave_blank);
         String finalString = "";
-        if (!language1.equalsIgnoreCase("select")) {
+        if (!language1.equalsIgnoreCase(select)) {
             finalString += language1 + ", ";
         }
-        if (!language2.equalsIgnoreCase("select")) {
+        if (!language2.equalsIgnoreCase(select)) {
             finalString += language2 + ", ";
         }
-        if (!language3.equalsIgnoreCase("select")) {
+        if (!language3.equalsIgnoreCase(select)) {
             finalString += language3 + ", ";
         }
-        if (!language4.equalsIgnoreCase("select")) {
+        if (!language4.equalsIgnoreCase(select)) {
             finalString += language4;
         }
 
@@ -1813,7 +1813,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     }
 
 
-    public static   void setHeight(ListView listView) {
+    public static void setHeight(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null)
             return;
