@@ -106,7 +106,7 @@
     <string name="trainee">Trainees</string>
     <string name="coinciding_vacation">Class coming with the vacation</string>
     <string name="change_location">Change</string>
-    <string name="preferred_time">Preferred Time</string>
+    <string name="preferred_time">Preferred Time and Day</string>
     <string name="search">Search</string>
     <string name="search_result">Search results</string>
     <string name="mentors">Mentors</string>
@@ -742,9 +742,9 @@
 
 
     <string-array name="location_preference">
-        <item>I prefer for the mentor to come to my location </item>
-        <item>I am ok to go to the mentor location or institute</item>
-        <item>I am fine with either</item>
+        <item>My location</item>
+        <item>Mentor location or Institute</item>
+        <item>Either</item>
     </string-array>
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->

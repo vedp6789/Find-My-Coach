@@ -682,7 +682,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             @Override
             public void onClick(View v) {
                 if (validateUserUpdate()) {
-                    Log.e(TAG, " call validated");
                     callUpdateService();
 
                 }
@@ -843,12 +842,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 else
                     profileGender.setSelection(1);
             }
-            try{
-                if (userInfo.getAccomplishments() != null) {
-                    accomplishment.setText(userInfo.getAccomplishments());
-                }
-            }catch (Exception ignored){
-            }
+//            try{
+//                if (userInfo.getAccomplishments() != null) {
+//                    accomplishment.setText(userInfo.getAccomplishments());
+//                }
+//            }catch (Exception ignored){
+//            }
 
             try {
                 List<SubCategoryName> areaOfInterests = userInfo.getSubCategoryName();
@@ -1311,7 +1310,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 //            }
 
             requestParams.add("experience", experienceInput.getSelectedItemPosition() + "");
-            requestParams.add("accomplishments", accomplishment.getText().toString());
+        //    requestParams.add("accomplishments", accomplishment.getText().toString());
             if (!imageInBinary.equals("") && !removeProfilePicture)
                 requestParams.add("photograph", imageInBinary);
             else if (removeProfilePicture)
