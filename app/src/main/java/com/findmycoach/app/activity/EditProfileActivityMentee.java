@@ -135,7 +135,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private ImageButton deleteLocaleButton;
     private ArrayList<String> addressList;
     private PreferredTrainerLocationDialog dialog=null;
-    private String previousValue;
+    private String previousValue="";
     private  int index=-1;
 
 
