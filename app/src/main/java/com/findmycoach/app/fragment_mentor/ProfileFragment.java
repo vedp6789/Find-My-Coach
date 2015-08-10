@@ -27,7 +27,6 @@ import android.widget.TextView;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
-import com.findmycoach.app.activity.EditProfileActivityMentee;
 import com.findmycoach.app.activity.EditProfileActivityMentor;
 import com.findmycoach.app.adapter.AddressAdapter;
 import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
@@ -60,8 +59,6 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView profileAddress;
     private RatingBar profileRatting;
     private TextView profileExperience;
-    private TextView profileAccomplishment;
-//    private TextView profileCharges;
     private LinearLayout areaOfCoaching, loveToTeachLL;
     private TextView profileTravelAvailable;
     private TextView profilePhone;
@@ -82,11 +79,9 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageButton arrow, arrow_multiple_address;
     private static final String TAG = "FMC:";
     private ScrollView scrollView;
-//    private ChizzleTextView slotType;
     private ChizzleTextView gender;
 
     public ProfileFragment() {
-        // Required empty public constructor
     }
 
     public static ProfileFragment newInstance(String param1, String param2) {
@@ -118,11 +113,6 @@ public class ProfileFragment extends Fragment implements Callback {
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
         NetworkClient.getProfile(getActivity(), requestParams, authToken, this, 4);
-
-//        Response response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), Response.class);
-//        userInfo = response.getData();
-//        Log.e(TAG, StorageHelper.getUserProfile(getActivity()));
-//        populateFields();
     }
 
     private void initialize(View view) {
@@ -135,8 +125,6 @@ public class ProfileFragment extends Fragment implements Callback {
         profileAddress = (TextView) view.findViewById(R.id.profile_address);
         profileRatting = (RatingBar) view.findViewById(R.id.profile_rating);
         profileExperience = (TextView) view.findViewById(R.id.profile_experience);
-        profileAccomplishment = (TextView) view.findViewById(R.id.profile_accomplishment);
-//        profileCharges = (TextView) view.findViewById(R.id.profile_charges);
         profileTravelAvailable = (TextView) view.findViewById(R.id.profile_travel_available);
         areaOfCoaching = (LinearLayout) view.findViewById(R.id.areas_of_coaching);
         loveToTeachLL = (LinearLayout) view.findViewById(R.id.loveToTeachLL);
@@ -162,7 +150,6 @@ public class ProfileFragment extends Fragment implements Callback {
         multipleAddressLV = (ListView) view.findViewById(R.id.multipleAddressLV);
         addressArrayListMentor = new ArrayList<>();
         gender = (ChizzleTextView) view.findViewById(R.id.profile_gender);
-//        slotType = (ChizzleTextView) view.findViewById(R.id.classTypeValue);
         addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayListMentor,multipleAddressLV);
         multipleAddressLV.setAdapter(addressAdapter);
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
@@ -296,12 +283,7 @@ public class ProfileFragment extends Fragment implements Callback {
             if (DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()) != null) {
                 profileDob.setText(DateAsPerChizzle.YYYY_MM_DD_into_DD_MM_YYYY((String) userInfo.getDob()));
             }
-            //profileDob.setText((String) userInfo.getDob());
         } catch (Exception e) {
-        }
-
-        if (userInfo.getAccomplishments() != null) {
-            profileAccomplishment.setText(userInfo.getAccomplishments());
         }
         if (userInfo.getExperience() != null) {
             int ex = 0;
@@ -413,23 +395,6 @@ public class ProfileFragment extends Fragment implements Callback {
                 }
             }
         });
-
-//        if (userInfo.getCharges() != null) {
-//            Log.e(TAG, "Currency : " + userInfo.getCharges() + " : " + userInfo.getCharges());
-//            if (userInfo.getCurrencyCode() != null && !userInfo.getCurrencyCode().isEmpty()) {
-//                String symbol = userInfo.getCurrencyCode();
-//                Log.e(TAG, "Currency : " + symbol);
-//                if (symbol.charAt(0) == '&')
-//                    profileCharges.setText(Html.fromHtml(symbol) + " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
-//                else {
-//                    String[] symbols = symbol.split("&");
-//                    profileCharges.setText(symbols[0] + Html.fromHtml("&" + symbols[1]) + " " + (userInfo.getCharges().equals("0") ? userInfo.getCharges() + "/hr" : userInfo.getCharges() + "/hr"));
-//                }
-//            }
-//
-//        }
-
-
 
         if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
             multipleAddressValRL.setVisibility(View.GONE);

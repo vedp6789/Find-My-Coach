@@ -368,6 +368,7 @@
     <string name="prompt_update_profile">Please update your profile</string>
     <string name="prompt_enter_phone">Enter phone number</string>
     <string name="prompt_email_id">Email Id</string>
+    <string name="prompt_email_id_col">Email Id :</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_password_minimum_5_characters">Password (minimum 5 characters)</string>
     <string name="old_password">Old password:</string>
@@ -380,8 +381,10 @@
     <string name="prompt_middle_name">Middle name (optional)</string>
     <string name="prompt_last_name">Last name</string>
     <string name="prompt_date_of_birth">D.O.B.</string>
+    <string name="prompt_date_of_birth_col">D.O.B. :</string>
     <string name="prompt_date_of_birth_hint">DD-MM-YYYY</string>
     <string name="prompt_gender">Gender</string>
+    <string name="prompt_gender_col">Gender :</string>
     <string name="prompt_language_1">Language 1</string>
     <string name="prompt_language_2">Language 2</string>
     <string name="prompt_language_3">Language 3</string>
@@ -396,6 +399,7 @@
     <string name="prompt_male">Male</string>
     <string name="prompt_female">Female</string>
     <string name="prompt_phone">Mobile number</string>
+    <string name="prompt_phone_col">Mobile number :</string>
     <string name="prompt_qualified">I have professional qualification for</string>
     <string name="prompt_submit">Submit</string>
     <string name="prompt_address">Physical address</string>
@@ -427,6 +431,7 @@
     <string name="prompt_willing_to_travel">Teaching location preference </string>
     <string name="prompt_charges">Coaching fee</string>
     <string name="prompt_experience">Experience</string>
+    <string name="prompt_experience_col">Experience :</string>
     <string name="prompt_experience_in_years">Experience in year</string>
     <string name="prompt_select_experience_in_years">Select experience in year</string>
     <string name="students_preference">I like to teach</string>
