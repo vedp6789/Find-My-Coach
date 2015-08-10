@@ -29,14 +29,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <com.findmycoach.app.views.ChizzleTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_top"
+                    android:layout_marginTop="48dp"
                     android:gravity="center_horizontal"
                     android:text="@string/action_register"
                     android:textColor="@color/white"

@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -45,6 +46,7 @@ import android.widget.Toast;
 import com.facebook.Session;
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.AddressAdapter;
+import com.findmycoach.app.adapter.ExperienceAdapter;
 import com.findmycoach.app.adapter.QualifiedAreaOfCoachingAdapter;
 import com.findmycoach.app.beans.CityDetails;
 import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
@@ -100,17 +102,18 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private ImageView profilePicture;
     private TextView profileEmail;
     private TextView areaOfCoaching;
+    private TextView experienceInput;
     private EditText profileFirstName;
-//    private EditText profileMiddleName;
+    //    private EditText profileMiddleName;
     private EditText profileLastName;
     private Spinner profileGender, profileCountry;
     private TextView profileDOB;
     private EditText physicalAddress;
     private AutoCompleteTextView city_with_states;
     private AutoCompleteTextView locale;
-    private EditText accomplishment;
+//    private EditText accomplishment;
     //    private EditText chargeInput;
-    private Spinner experienceInput, teachingPreference;
+    private Spinner teachingPreference;
     //        classTypeSpinner;
     // private CheckBox isReadyToTravel;
     private Button updateAction;
@@ -279,7 +282,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 //        currencySymbol = (ChizzleTextView) findViewById(R.id.currencySymbol);
 //        chargeInput.setSelectAllOnFocus(true);
 //        accomplishment = (EditText) findViewById(R.id.input_accomplishment);
-        experienceInput = (Spinner) findViewById(R.id.input_experience);
+        experienceInput = (TextView) findViewById(R.id.input_experience);
         teachingPreference = (Spinner) findViewById(R.id.teachingPreferencesSpinner);
 ////        classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
         summaryHeader = (RelativeLayout) findViewById(R.id.summaryHeader);
@@ -314,7 +317,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         checkBoxCountryConditionText = (ChizzleTextView) findViewById(R.id.checkBoxCountryCondition);
         countryConditionCheckBox = (CheckBox) findViewById(R.id.inputCountryCondition);
         ll_physical_address = (RelativeLayout) findViewById(R.id.ll_physical_address);
-        multipleAddressLayout=(RelativeLayout)findViewById(R.id.mutipleAddressCheckBoxLayout);
+        multipleAddressLayout = (RelativeLayout) findViewById(R.id.mutipleAddressCheckBoxLayout);
 
         profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -417,7 +420,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         String[] classType = getResources().getStringArray(R.array.mentor_class_type);
 
         addPhoto = (ChizzleTextView) findViewById(R.id.addPhotoMentor);
-        experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, yearOfExperience));
+//        experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, yearOfExperience));
         teachingPreference.setAdapter(new ArrayAdapter<>(this, R.layout.textview, preferences));
         updateAction = (Button) findViewById(R.id.button_update);
 //        chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
@@ -470,7 +473,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         getResources().getText(R.string.physical_address_mentor_info), Toast.LENGTH_LONG).show();
             }
         });
-
 
     }
 
@@ -783,6 +785,21 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         });
 
 
+        experienceInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(EditProfileActivityMentor.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dob_dialog);
+                GridView gridView = (GridView) dialog.findViewById(R.id.dobGrid);
+                TextView title = (TextView) dialog.findViewById(R.id.title);
+                title.setText(getResources().getString(R.string.prompt_select_experience_in_years));
+                gridView.setAdapter(new ExperienceAdapter(1, EditProfileActivityMentor.this, dialog, experienceInput));
+                dialog.show();
+            }
+        });
+
+
     }
 
 
@@ -829,12 +846,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
 
             try {
-                int index = Integer.parseInt(userInfo.getExperience());
-                if (index > 51)
-                    index = 0;
-                experienceInput.setSelection(index);
+                experienceInput.setText(userInfo.getExperience());
             } catch (Exception e) {
-                experienceInput.setSelection(0);
+                experienceInput.setText("");
             }
             if (userInfo.getGender() != null) {
                 if (userInfo.getGender().equals("M"))
@@ -842,11 +856,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 else
                     profileGender.setSelection(1);
             }
-//            try{
+//            try {
 //                if (userInfo.getAccomplishments() != null) {
 //                    accomplishment.setText(userInfo.getAccomplishments());
 //                }
-//            }catch (Exception ignored){
+//            } catch (Exception ignored) {
 //            }
 
             try {
@@ -891,8 +905,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         addressListViewMentor.setVisibility(View.VISIBLE);
                         addMoreAddress.setVisibility(View.VISIBLE);
 
-                    }
-                    else {
+                    } else {
                         multipleAddressLayout.setVisibility(View.GONE);
                         addressListViewMentor.setVisibility(View.GONE);
                         addMoreAddress.setVisibility(View.GONE);
@@ -1227,7 +1240,13 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 dobYear = 0;
             }
 
-            int yearsOfExperience = experienceInput.getSelectedItemPosition();
+
+            int yearsOfExperience = 0;
+            try {
+                yearsOfExperience = Integer.parseInt(experienceInput.getText().toString());
+            } catch (Exception e) {
+                yearsOfExperience = 0;
+            }
             int age = Calendar.getInstance().get(Calendar.YEAR) - dobYear;
             int minExperience = getResources().getInteger(R.integer.mentor_min_age_experience_difference);
 
@@ -1309,8 +1328,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 //                requestParams.add("charges_class", "0");
 //            }
 
-            requestParams.add("experience", experienceInput.getSelectedItemPosition() + "");
-        //    requestParams.add("accomplishments", accomplishment.getText().toString());
+            if (!experienceInput.getText().toString().equals(""))
+                requestParams.add("experience", experienceInput.getText().toString());
+//            requestParams.add("accomplishments", accomplishment.getText().toString());
             if (!imageInBinary.equals("") && !removeProfilePicture)
                 requestParams.add("photograph", imageInBinary);
             else if (removeProfilePicture)

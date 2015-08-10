@@ -702,27 +702,27 @@
                         android:background="@color/purple_light" />
                 </LinearLayout>
 
-                <com.findmycoach.app.views.ChizzleTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/back_margin"
-                    android:text="@string/prompt_accomplishment"
-                    android:textColor="@color/purple_light"
-                    android:textSize="@dimen/profile_heading"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
+                <!--<com.findmycoach.app.views.ChizzleTextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="@dimen/back_margin"-->
+                    <!--android:text="@string/prompt_accomplishment"-->
+                    <!--android:textColor="@color/purple_light"-->
+                    <!--android:textSize="@dimen/profile_heading"-->
+                    <!--android:textStyle="bold"-->
+                    <!--android:visibility="gone" />-->
 
-                <com.findmycoach.app.views.ChizzleEditText
-                    android:id="@+id/input_accomplishment"
-                    style="@style/EditTextCustomHoloPurple"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/enter_accomplishment"
-                    android:inputType="text"
-                    android:singleLine="true"
-                    android:textCursorDrawable="@drawable/cursor_purple"
-                    android:textSize="@dimen/profile_details"
-                    android:visibility="gone" />
+                <!--<com.findmycoach.app.views.ChizzleEditText-->
+                    <!--android:id="@+id/input_accomplishment"-->
+                    <!--style="@style/EditTextCustomHoloPurple"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:hint="@string/enter_accomplishment"-->
+                    <!--android:inputType="text"-->
+                    <!--android:singleLine="true"-->
+                    <!--android:textCursorDrawable="@drawable/cursor_purple"-->
+                    <!--android:textSize="@dimen/profile_details"-->
+                    <!--android:visibility="gone" />-->
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -839,16 +839,18 @@
                     android:textSize="@dimen/profile_heading"
                     android:textStyle="bold" />
 
-                <Spinner
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_marginTop="@dimen/textView_padding_margin"
                     android:id="@+id/input_experience"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/login_button_height"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/purple"
                     android:background="@android:color/transparent" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-10dp"
+                    android:layout_marginTop="-5dp"
                     android:orientation="vertical">
 
                     <ImageView
@@ -949,7 +951,7 @@
                     android:layout_height="fill_parent"
                     android:layout_marginTop="16dp"
                     android:orientation="vertical"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:orientation="horizontal"
