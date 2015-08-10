@@ -134,7 +134,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private ArrayList<Integer> city_id_from_suggestion;
     private ImageButton deleteLocaleButton;
     private ArrayList<String> addressList;
-    private PreferredTrainerLocationDialog dialog;
+    private PreferredTrainerLocationDialog dialog=null;
     private String previousValue;
     private  int index=-1;
 
@@ -592,12 +592,19 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                     if (user_info_multiple_address == 0 || user_info_multiple_address == 1 ||
                             training_location_similar_to_profile_locale) {
                        }
-                    else {
+                    if(addressArrayList.size()>0){
                         addressList.remove(0);
                         addressList.add(0,locale.getText().toString());
-                        dialog.changeAddresses(addressList);
-                        trainingLocation.setText(locale.getText().toString());
                     }
+                    else {
+                        addressList.add(0,locale.getText().toString());
+
+                    }
+                    if(dialog!=null) {
+                        dialog.changeAddresses(addressList);
+                    }
+                    trainingLocation.setText(locale.getText().toString());
+
                 }
             }
         });
@@ -1424,7 +1431,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.textview, list);
         city_with_states.setAdapter(arrayAdapter);
     }
-
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
