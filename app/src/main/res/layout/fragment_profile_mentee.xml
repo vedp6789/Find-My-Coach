@@ -52,7 +52,7 @@
                 <com.findmycoach.app.views.ChizzleTextViewBold
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/prompt_email_id"
+                    android:text="@string/prompt_email_id_col"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_heading"
                     android:textStyle="bold"
@@ -80,7 +80,7 @@
                 <com.findmycoach.app.views.ChizzleTextViewBold
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/prompt_gender"
+                    android:text="@string/prompt_gender_col"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_heading"
                     android:textStyle="bold"
@@ -109,7 +109,7 @@
                 <com.findmycoach.app.views.ChizzleTextViewBold
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/prompt_phone"
+                    android:text="@string/prompt_phone_col"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_heading"
                     android:textStyle="bold"
@@ -137,7 +137,7 @@
                 <com.findmycoach.app.views.ChizzleTextViewBold
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/prompt_date_of_birth"
+                    android:text="@string/prompt_date_of_birth_col"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_heading"
                     android:textStyle="bold"
@@ -207,7 +207,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/mentor_for"
+                    android:text="@string/mentor_for_col"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_heading"
                     android:textStyle="bold"

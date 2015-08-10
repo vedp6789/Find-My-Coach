@@ -622,6 +622,7 @@
     <string name="vacations">Vacation</string>
     <string name="address">Address please</string>
     <string name="mentor_for">Mentor for</string>
+    <string name="mentor_for_col">Mentor for :</string>
     <string name="pay_now">Pay now</string>
     <string name="personally">I\'ll pay the mentor personally</string>
     <string name="check_availability">Check for availability</string>

@@ -626,7 +626,7 @@
 
                     <CheckBox
                         android:id="@+id/inputMutipleAddresses"
-                        android:layout_width="@dimen/activity_vertical_margin"
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/activity_vertical_margin"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
