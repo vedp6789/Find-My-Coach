@@ -104,20 +104,14 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private TextView areaOfCoaching;
     private TextView experienceInput;
     private EditText profileFirstName;
-    //    private EditText profileMiddleName;
     private EditText profileLastName;
     private Spinner profileGender, profileCountry;
     private TextView profileDOB;
     private EditText physicalAddress;
     private AutoCompleteTextView city_with_states;
     private AutoCompleteTextView locale;
-//    private EditText accomplishment;
-    //    private EditText chargeInput;
     private Spinner teachingPreference;
-    //        classTypeSpinner;
-    // private CheckBox isReadyToTravel;
     private Button updateAction;
-    //    private Spinner chargesPerUnit;
     private ProgressDialog progressDialog;
     private Data userInfo;
     private String imageInBinary = "";
@@ -128,7 +122,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     public boolean needToCheckOnDestroy;
     private List<Prediction> predictions;
     private ChizzleTextView addPhoto;
-    //    private ChizzleTextView currencySymbol;
     private String userCurrentAddress = "";
     private ScrollView scrollView;
     private TextView students_preference;
@@ -274,17 +267,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
         profileFirstName = (EditText) findViewById(R.id.input_first_name);
-//        profileMiddleName = (EditText) findViewById(R.id.input_middle_name);
         profileLastName = (EditText) findViewById(R.id.input_last_name);
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
-        //pinCode = (EditText) findViewById(R.id.input_pin);
-//        chargeInput = (EditText) findViewById(R.id.input_charges);
-//        currencySymbol = (ChizzleTextView) findViewById(R.id.currencySymbol);
-//        chargeInput.setSelectAllOnFocus(true);
-//        accomplishment = (EditText) findViewById(R.id.input_accomplishment);
         experienceInput = (TextView) findViewById(R.id.input_experience);
         teachingPreference = (Spinner) findViewById(R.id.teachingPreferencesSpinner);
-////        classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
         summaryHeader = (RelativeLayout) findViewById(R.id.summaryHeader);
         scrollView = (ScrollView) findViewById(R.id.main_scroll_view);
         summaryDetailsLayout = (LinearLayout) findViewById(R.id.summaryDetailsLayout);
@@ -337,8 +323,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         NetworkClient.getCountryConfig(EditProfileActivityMentor.this, requestParams, StorageHelper.getUserDetails(EditProfileActivityMentor.this, "auth_token"), EditProfileActivityMentor.this, 55);
                     } else
                         Toast.makeText(EditProfileActivityMentor.this, EditProfileActivityMentor.this.getString(R.string.check_network_connection), Toast.LENGTH_LONG).show();
-//                }
-
                 }
 
 
@@ -420,10 +404,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         String[] classType = getResources().getStringArray(R.array.mentor_class_type);
 
         addPhoto = (ChizzleTextView) findViewById(R.id.addPhotoMentor);
-//        experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, yearOfExperience));
         teachingPreference.setAdapter(new ArrayAdapter<>(this, R.layout.textview, preferences));
         updateAction = (Button) findViewById(R.id.button_update);
-//        chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
         areaOfCoaching = (TextView) findViewById(R.id.input_areas_of_coaching);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
@@ -828,10 +810,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } catch (Exception ignored) {
             }
 
-//            try {
-//                profileMiddleName.setText(userInfo.getMiddleName());
-//            } catch (Exception ignored) {
-//            }
             try {
                 profileLastName.setText(userInfo.getLastName());
             } catch (Exception ignored) {
@@ -856,12 +834,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 else
                     profileGender.setSelection(1);
             }
-//            try {
-//                if (userInfo.getAccomplishments() != null) {
-//                    accomplishment.setText(userInfo.getAccomplishments());
-//                }
-//            } catch (Exception ignored) {
-//            }
 
             try {
                 List<SubCategoryName> areaOfInterests = userInfo.getSubCategoryName();
@@ -1295,7 +1267,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         try {
             RequestParams requestParams = new RequestParams();
             requestParams.add("first_name", profileFirstName.getText().toString().trim());
-//            requestParams.add("middle_name", profileMiddleName.getText().toString().trim());
             requestParams.add("last_name", profileLastName.getText().toString().trim());
             String sex = profileGender.getSelectedItem().toString();
             if (multipleAddressMentor.isChecked()) {
@@ -1318,19 +1289,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 e.printStackTrace();
             }
 
-            /*requestParams.add("address", profileAddress.getText().toString());
-            requestParams.add("city", profileAddress1.getText().toString());
-            requestParams.add("zip", pinCode.getText().toString());*/
-
-//            if (chargesPerUnit.getSelectedItemPosition() == 0) {
-//                Log.i(TAG, "select charges unit : " + chargesPerUnit.getSelectedItemPosition());
-//                requestParams.add("charges", chargeInput.getText().toString());
-//                requestParams.add("charges_class", "0");
-//            }
-
             if (!experienceInput.getText().toString().equals(""))
                 requestParams.add("experience", experienceInput.getText().toString());
-//            requestParams.add("accomplishments", accomplishment.getText().toString());
             if (!imageInBinary.equals("") && !removeProfilePicture)
                 requestParams.add("photograph", imageInBinary);
             else if (removeProfilePicture)
@@ -1447,7 +1407,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
-//            requestParams.add("slot_type", String.valueOf(classTypeSpinner.getSelectedItemPosition()));
             requestParams.add("section_1", myQualification.getText().toString());
             requestParams.add("section_2", myAccredition.getText().toString());
             requestParams.add("section_3", myExperience.getText().toString());
