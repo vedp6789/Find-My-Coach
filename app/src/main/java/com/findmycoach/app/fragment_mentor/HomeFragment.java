@@ -126,7 +126,6 @@ public class HomeFragment extends Fragment implements Callback {
         pagerSlidingTabStrip.setViewPager(notifications_on_viewpager);
         if (tag != null && tag.equalsIgnoreCase("Schedule")) {
             notifications_on_viewpager.setCurrentItem(1);
-
         }
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.purple);
@@ -208,8 +207,6 @@ public class HomeFragment extends Fragment implements Callback {
                                 scheduleRequest.setMessage(jsonObject_notification.getString("message"));
                                 scheduleRequest.setFirst_name(jsonObject_notification.getString("first_name"));
                                 scheduleRequest.setLast_name(jsonObject_notification.getString("last_name"));
-                                /*scheduleRequest.setStart_date(jsonObject_notification.getString("start_date"));   Commented as we are getting start date and stop date from duratons jsonarray. This durations array made as there are vacations inbetween slot duration.
-                                scheduleRequest.setStop_date(jsonObject_notification.getString("stop_date"));*/
                                 scheduleRequest.setStart_time(jsonObject_notification.getString("start_time"));
                                 scheduleRequest.setStop_time(jsonObject_notification.getString("stop_time"));
                                 scheduleRequest.setSubject(jsonObject_notification.getString("subject"));

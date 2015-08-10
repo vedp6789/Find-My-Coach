@@ -98,6 +98,7 @@ import java.util.TimeZone;
     *       //Save entered card details
     *   CountryConfig                       55
     *   Grades                              56
+    *   promotion                           58
     * */
 
 
@@ -414,6 +415,56 @@ public class NetworkClient {
             }
         });
     }
+
+
+    public static void getAllPromotions(final Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
+        if (!NetworkManager.isNetworkConnected(context)) {
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.get(context, getAbsoluteURL("promotion", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    if (statusCode == 200) {
+                        StorageHelper.checkGcmRegIdSentToSever(context, context.getResources().getString(R.string.reg_id_saved_to_server), true);
+                    }
+                    Log.d(TAG, "Success: Response Code:" + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success: Response:" + responseJson);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                StorageHelper.checkGcmRegIdSentToSever(context, context.getResources().getString(R.string.reg_id_saved_to_server), false);
+                try {
+                    Log.d(TAG, "Failure: Response Code:" + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure: Response:" + responseJson);
+                } catch (Exception e) {
+                    try {
+                        Log.d(TAG, "Failure: Error:" + e.getMessage());
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        });
+    }
+
+
+
+
+
+
+
+
 
     public static void forgetPassword(final Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
         if (!NetworkManager.isNetworkConnected(context)) {

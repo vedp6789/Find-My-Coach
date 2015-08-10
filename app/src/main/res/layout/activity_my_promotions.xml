@@ -1,14 +1,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context="com.findmycoach.app.activity.LoginActivity">
 
-    <include layout="@layout/header_back_name_menu"
-    android:id="@+id/ll_title"/>
+
+    <include
+        android:id="@+id/ll_title"
+        layout="@layout/header_back_name_menu" />
+
 
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/promotionsTab"
@@ -28,15 +31,11 @@
 
 
         <com.findmycoach.app.util.CustomViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/vp_mentor_notifications"
+            android:id="@+id/vp_promotions"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
-
-
-
-
 
 
 </RelativeLayout>
