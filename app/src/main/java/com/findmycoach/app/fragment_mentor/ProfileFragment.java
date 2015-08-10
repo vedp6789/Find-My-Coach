@@ -66,9 +66,9 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageLoader imgLoader;
     private ImageView editProfile;
     private TextView title, otherAddressTV;
-    private ChizzleTextView teachingMediumText, myQualification, myAccreditions, myExperience, myTeachingMethodology, myAwards;
+    private ChizzleTextView myQualification, myAccreditions, myExperience, myTeachingMethodology, myAwards;
     private RelativeLayout summaryHeader;
-    private LinearLayout aboutMeLL;
+    private LinearLayout aboutMeLL, teachingMediumText;
     private boolean hiddenFlag;
     private RelativeLayout multipleAddressRL;
     private LinearLayout multipleAddressValRL;
@@ -134,7 +134,7 @@ public class ProfileFragment extends Fragment implements Callback {
         editProfile = (ImageView) view.findViewById(R.id.menuItem);
         title = (TextView) view.findViewById(R.id.title);
         title.setText(getResources().getString(R.string.profile));
-        teachingMediumText = (ChizzleTextView) view.findViewById(R.id.teachingMediumText);
+        teachingMediumText = (LinearLayout) view.findViewById(R.id.teachingMediumText);
         myQualification = (ChizzleTextView) view.findViewById(R.id.myQualificationText);
         myAccreditions = (ChizzleTextView) view.findViewById(R.id.myAccreditionsText);
         myExperience = (ChizzleTextView) view.findViewById(R.id.myExperienceText);
@@ -150,7 +150,7 @@ public class ProfileFragment extends Fragment implements Callback {
         multipleAddressLV = (ListView) view.findViewById(R.id.multipleAddressLV);
         addressArrayListMentor = new ArrayList<>();
         gender = (ChizzleTextView) view.findViewById(R.id.profile_gender);
-        addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayListMentor,multipleAddressLV);
+        addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayListMentor, multipleAddressLV);
         multipleAddressLV.setAdapter(addressAdapter);
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
 
@@ -350,6 +350,23 @@ public class ProfileFragment extends Fragment implements Callback {
             loveToTeachLL.removeAllViews();
         }
 
+        try {
+            String mediumOfTeaching = StorageHelper.getUserDetails(getActivity(), "teaching_medium");
+            if (mediumOfTeaching != null && !mediumOfTeaching.trim().equals("")){
+                String[] array = mediumOfTeaching.split(",");
+                List<View> views = new ArrayList<>();
+                LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                for (String title : array) {
+                    Button button = (Button) inflater.inflate(R.layout.button, null);
+                    button.setText(title);
+                    views.add(button);
+                }
+                populateViews(teachingMediumText, views, getActivity(), 50);
+            }
+        } catch (Exception e) {
+            teachingMediumText.removeAllViews();
+        }
+
 
         try {
             profileRatting.setRating(Float.parseFloat(userInfo.getRating()));
@@ -381,8 +398,6 @@ public class ProfileFragment extends Fragment implements Callback {
         } else {
             profileImage.setImageDrawable(getResources().getDrawable(R.drawable.user_icon));
         }
-
-        teachingMediumText.setText(StorageHelper.getUserDetails(getActivity(), "teaching_medium"));
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -424,13 +439,12 @@ public class ProfileFragment extends Fragment implements Callback {
                         address = address + userInfo.getMultipleAddress().get(i).getLocale() + ", ";
                     }
                     profileAddress.setText(address);
-                }
-                else {
+                } else {
                     addressArrayListMentor.add(userInfo.getMultipleAddress().get(i));
                 }
             }
             addressAdapter.notifyDataSetChanged();
-           setHeight(multipleAddressLV);
+            setHeight(multipleAddressLV);
             //ListViewInsideScrollViewHelper.getListViewSize(addressListView);
         } else {
             multipleAddressRL.setVisibility(View.GONE);
