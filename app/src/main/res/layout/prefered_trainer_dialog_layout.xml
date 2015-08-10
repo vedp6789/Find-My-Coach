@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/back_margin"
+        android:background="@color/white">
+
+        <com.findmycoach.app.views.ChizzleTextView
+            android:id="@+id/headerSummary"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/purple"
+            android:gravity="center"
+            android:text="@string/prompt_training_location"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/preferredAddressList"
+            android:layout_below="@+id/headerSummary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/preferredAddressList"
+            android:layout_marginBottom="@dimen/back_margin"
+            android:layout_marginLeft="@dimen/back_margin"
+            android:layout_marginRight="@dimen/back_margin"
+            android:layout_marginTop="@dimen/back_margin"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/cancel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@color/purple"
+                android:text="Cancel"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/done"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="3dp"
+                android:layout_weight="0.5"
+                android:background="@color/purple"
+                android:text="Done"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

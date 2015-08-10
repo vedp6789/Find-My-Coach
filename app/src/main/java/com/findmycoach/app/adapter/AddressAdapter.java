@@ -14,6 +14,7 @@ import com.findmycoach.app.beans.category.Country;
 import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.student.ChildDetails;
 import com.findmycoach.app.util.MetaData;
+import com.findmycoach.app.util.PreferredTrainerLocationDialog;
 import com.findmycoach.app.views.ChizzleTextView;
 
 import java.util.ArrayList;
@@ -80,14 +81,12 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
             public void onClick(View v) {
                 addressArrayList.remove(position);
                 notifyDataSetChanged();
+                PreferredTrainerLocationDialog.changeDeletedAddress(addressArrayList);
                 EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListView);
             }
         });
 
-
-       // viewHolder.address.setText(addressArrayList.get(position).getAddressLine1().trim() + ", " + addressArrayList.get(position).getLocality().trim() + ", " + addressArrayList.get(position).getZip().trim());
         viewHolder.address.setText(addressArrayList.get(position).getLocale().trim());
-
         return convertView;
     }
 

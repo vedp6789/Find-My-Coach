@@ -63,6 +63,7 @@ import com.findmycoach.app.util.DateAsPerChizzle;
 import com.findmycoach.app.util.MetaData;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
+import com.findmycoach.app.util.PreferredTrainerLocationDialog;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.util.TermsAndCondition;
 import com.findmycoach.app.views.ChizzleTextView;
@@ -77,7 +78,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class EditProfileActivityMentee extends Activity implements Callback, ChildDetailsDialog.ChildDetailsAddedListener, AddAddressDialog.AddressAddedListener {
+public class EditProfileActivityMentee extends Activity implements Callback, ChildDetailsDialog.ChildDetailsAddedListener, AddAddressDialog.AddressAddedListener,PreferredTrainerLocationDialog.PreferredAddressSelectedListener {
 
 
     int REQUEST_CODE = 100;
@@ -92,7 +93,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private AutoCompleteTextView city_with_states;
     private AutoCompleteTextView locale;
     private RadioButton mentorForSelf, mentorForChild, mentorForBoth;
-    private TextView trainingLocation;
+    private ChizzleTextView trainingLocation;
     private Spinner coachingType;
     private Button updateAction;
     private ProgressDialog progressDialog;
@@ -132,6 +133,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private boolean training_location_similar_to_profile_locale;
     private ArrayList<Integer> city_id_from_suggestion;
     private ImageButton deleteLocaleButton;
+    private ArrayList<String> addressList;
+    private PreferredTrainerLocationDialog dialog;
+    private String previousValue;
+    private  int index=-1;
 
 
     @Override
@@ -213,6 +218,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         physicalAddress = (EditText) findViewById(R.id.physical_address);
         locale = (AutoCompleteTextView) findViewById(R.id.locale);
         deleteLocaleButton=(ImageButton)findViewById(R.id.deleteLocaleButton);
+        addressList=new ArrayList<>();
         city_name = "";
         country_id = 0;
         city_id = 0;
@@ -254,7 +260,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         mentorForChild = (RadioButton) findViewById(R.id.mentorForChild);
         mentorForBoth = (RadioButton) findViewById(R.id.mentorForBoth);
         locationPreferenceSpinner = (Spinner) findViewById(R.id.locationPreferenceSpinner);
-        trainingLocation = (TextView) findViewById(R.id.input_training_location);
+        trainingLocation = (ChizzleTextView) findViewById(R.id.input_training_location);
         coachingType = (Spinner) findViewById(R.id.input_coaching_type);
         updateAction = (Button) findViewById(R.id.button_update);
         progressDialog = new ProgressDialog(this);
@@ -585,12 +591,28 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 if (userInfo != null && userInfo.getMultipleAddress() != null) {
                     if (user_info_multiple_address == 0 || user_info_multiple_address == 1 ||
                             training_location_similar_to_profile_locale) {
+                       }
+                    else {
+                        addressList.remove(0);
+                        addressList.add(0,locale.getText().toString());
+                        dialog.changeAddresses(addressList);
                         trainingLocation.setText(locale.getText().toString());
                     }
                 }
             }
         });
 
+        if(userInfo.getTrainingLocation()!=null) {
+            previousValue=(String)userInfo.getTrainingLocation();
+        }
+        trainingLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog=new PreferredTrainerLocationDialog(EditProfileActivityMentee.this,addressList,previousValue,index);
+                dialog.setAddressSelectedListener(EditProfileActivityMentee.this);
+                dialog.showPopUp();
+            }
+        });
         locale.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
@@ -662,12 +684,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         });
 */
 
-        trainingLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
 
         profilePicture.setOnClickListener(new View.OnClickListener() {
@@ -881,17 +897,21 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
 
         Log.e(TAG, userInfo.getMultipleAddress().size() + " address size");
+
         if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
+
 
             int position = -1;
             for (Address a : userInfo.getMultipleAddress()) {
                 Log.e(TAG, "Inside address for loop : " + a.getDefault_yn());
                 if (a.getDefault_yn() == 1) {
                     position = userInfo.getMultipleAddress().indexOf(a);
-                    Log.e(TAG, "found at : " + position);
                     break;
                 }
+
             }
+
+
 
             Address address = null;
             if (position != -1) {
@@ -901,6 +921,15 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 address = userInfo.getMultipleAddress().get(0);
                 userInfo.getMultipleAddress().remove(0);
             }
+
+
+            for (Address a : userInfo.getMultipleAddress()) {
+                addressList.add(a.getLocale());
+            }
+
+            addressList.add(0,address.getLocale());
+
+
 
             try {
 
@@ -920,6 +949,11 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 e.printStackTrace();
             }
 
+            try {
+                locale.setText(address.getLocale());
+            } catch (Exception ignored) {
+            }
+
 
             try {
                 city_id = address.getCity_id();
@@ -930,11 +964,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             } catch (Exception ignored) {
             }
 
-            try {
-                locale.setText(address.getLocale());
-                Log.e(TAG, "locale for defaultyn 1: " + address.getLocale());
-            } catch (Exception ignored) {
-            }
+
 
             for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
                 addressArrayList.add(userInfo.getMultipleAddress().get(i));
@@ -948,6 +978,12 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
 
         }
+        else {
+            if (locale.getText().toString().trim() != "") {
+                addressList.add(locale.getText().toString());
+            }
+        }
+
 
 
         try {
@@ -1034,28 +1070,21 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     }
 
     public boolean updateAddress() {   //TODO
-
         StringBuilder locale_string = new StringBuilder();
-
         if (NetworkManager.localityName != "") {
             locale_string.append(NetworkManager.localityName);
         }
-
         if (NetworkManager.cityName != "") {
             city_name = NetworkManager.cityName;
             state_name = NetworkManager.stateName;
             locale_string.append(", " + NetworkManager.cityName);
         }
-
         if (NetworkManager.postalCodeName != "") {
             locale_string.append(", " + NetworkManager.postalCodeName);
         }
-
         locale.setText(locale_string);
         trainingLocation.setText(locale_string);
-
         updateCountryByLocation();
-
         return true;
 
 
@@ -1572,6 +1601,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         addressAdapter.notifyDataSetChanged();
         setHeight(addressListView);
         addressListView.setVisibility(View.VISIBLE);
+        addressList.add(address.getLocale());
+        dialog.changeAddresses(addressList);
 
 
     }
@@ -1599,4 +1630,9 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     }
 
 
+    @Override
+    public void onAddressSelected(String address,int index) {
+        this.index=index;
+        trainingLocation.setText(address);
+    }
 }
