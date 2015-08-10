@@ -767,6 +767,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/back_margin"
                     android:hint="@string/select"
+                    android:textColorHint="@color/purple_light"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_heading"
                     android:textStyle="bold" />

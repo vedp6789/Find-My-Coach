@@ -838,7 +838,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     profileGender.setSelection(1);
             }
             try {
-                teachingMediumPreference.setText(userInfo.getMediumOfTeaching());
+                teachingMediumPreference.setText(userInfo.getMediumOfEducation());
             } catch (Exception ignored) {
             }
 
@@ -1297,8 +1297,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             requestParams.add("availability_yn", String.valueOf(teachingPreference.getSelectedItemPosition()));
 
-            if(teachingMediumPreference.getText().toString().trim().equals(""))
-                requestParams.add("medium_of_language", teachingMediumPreference.getText().toString());
+            if(!teachingMediumPreference.getText().toString().trim().equals("")) {
+                requestParams.add("medium_of_education", teachingMediumPreference.getText().toString());
+                Log.e(TAG, "medium_of_education : " + teachingMediumPreference.getText().toString());
+            }
 
             if (teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2) {
                 requestParams.add("address", physicalAddress.getText().toString().trim());

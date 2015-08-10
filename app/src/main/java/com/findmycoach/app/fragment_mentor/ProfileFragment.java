@@ -351,7 +351,7 @@ public class ProfileFragment extends Fragment implements Callback {
         }
 
         try {
-            String mediumOfTeaching = StorageHelper.getUserDetails(getActivity(), "teaching_medium");
+            String mediumOfTeaching = userInfo.getMediumOfEducation();
             if (mediumOfTeaching != null && !mediumOfTeaching.trim().equals("")){
                 String[] array = mediumOfTeaching.split(",");
                 List<View> views = new ArrayList<>();
