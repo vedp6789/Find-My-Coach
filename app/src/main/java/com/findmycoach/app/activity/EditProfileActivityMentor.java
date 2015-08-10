@@ -162,7 +162,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private String city_updated;
     private RelativeLayout multipleAddressLayout;
     private ImageButton deleteLocaleButton;
-
+    private List<String> mediumOfTeaching;
 
 
     @Override
@@ -250,11 +250,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
     private void initialize() {
         list_of_city = new ArrayList<>();
+        mediumOfTeaching = new ArrayList<>();
         city_with_states = (AutoCompleteTextView) findViewById(R.id.city_with_state);
         physicalAddress = (EditText) findViewById(R.id.physical_address);
         city_id_from_suggestion = new ArrayList<Integer>();
         locale = (AutoCompleteTextView) findViewById(R.id.locale);
-        deleteLocaleButton=(ImageButton)findViewById(R.id.deleteLocaleButtonMentor);
+        deleteLocaleButton = (ImageButton) findViewById(R.id.deleteLocaleButtonMentor);
         city_name = "";
         country_id = 0;
         city_id = 0;
@@ -629,7 +630,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             @Override
             public void afterTextChanged(Editable s) {
                 String input = locale.getText().toString().trim();
-                if(!input.isEmpty())
+                if (!input.isEmpty())
                     deleteLocaleButton.setVisibility(View.VISIBLE);
                 else
                     deleteLocaleButton.setVisibility(View.GONE);
@@ -727,42 +728,17 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
         });
 
-
         teachingMediumPreference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<String> languagesList = new ArrayList<String>();
-                languagesList.add(0, getResources().getString(R.string.select_leave_blank));
-                languagesList.add(1, "English");
-                languagesList.add(2, "Mandarin");
-                languagesList.add(3, "Hindi");
-                languagesList.add(4, "Malay");
-                languagesList.add(5, "Marathi");
-                languagesList.add(6, "Spanish");
-
-                int lng1 = 0;
-                int lng2 = 0;
-                int lng3 = 0;
-                int lng4 = 0;
-
-                String mediumSelected = teachingMediumPreference.getText().toString().trim();
-                if (!mediumSelected.equals("") && !mediumSelected.equalsIgnoreCase(getResources().getString(R.string.select))) {
-                    String[] arr = mediumSelected.split(",");
-                    for (int i = 0; i < arr.length; i++) {
-                        if (i == 0) {
-                            lng1 = languagesList.indexOf(arr[i].trim());
-                        } else if (i == 1) {
-                            lng2 = languagesList.indexOf(arr[i].trim());
-                        } else if (i == 2) {
-                            lng3 = languagesList.indexOf(arr[i].trim());
-                        } else if (i == 3) {
-                            lng4 = languagesList.indexOf(arr[i].trim());
-                        }
-                    }
-                }
-                TeachingMediumPreferenceDialog dialog = new TeachingMediumPreferenceDialog(EditProfileActivityMentor.this, languagesList, lng1, lng2, lng3, lng4);
-                dialog.setTeachingMediumAddedListener(EditProfileActivityMentor.this);
-                dialog.showPopUp();
+                if (mediumOfTeaching == null || mediumOfTeaching.size() < 1) {
+                    progressDialog.show();
+                    RequestParams requestParams = new RequestParams();
+                    requestParams.add("user_group", StorageHelper.getUserGroup(EditProfileActivityMentor.this, "user_group"));
+                    NetworkClient.getMediumOfEducation(EditProfileActivityMentor.this, requestParams,
+                            StorageHelper.getUserDetails(EditProfileActivityMentor.this, "auth_token"), EditProfileActivityMentor.this, 57);
+                } else
+                    showMediumOfTeachingDialog(mediumOfTeaching);
             }
         });
 
@@ -782,6 +758,33 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         });
 
 
+    }
+
+    private void showMediumOfTeachingDialog(List<String> mediumOfTeaching) {
+
+        int lng1 = 0;
+        int lng2 = 0;
+        int lng3 = 0;
+        int lng4 = 0;
+
+        String mediumSelected = teachingMediumPreference.getText().toString().trim();
+        if (!mediumSelected.equals("") && !mediumSelected.equalsIgnoreCase(getResources().getString(R.string.select))) {
+            String[] arr = mediumSelected.split(",");
+            for (int i = 0; i < arr.length; i++) {
+                if (i == 0) {
+                    lng1 = mediumOfTeaching.indexOf(arr[i].trim());
+                } else if (i == 1) {
+                    lng2 = mediumOfTeaching.indexOf(arr[i].trim());
+                } else if (i == 2) {
+                    lng3 = mediumOfTeaching.indexOf(arr[i].trim());
+                } else if (i == 3) {
+                    lng4 = mediumOfTeaching.indexOf(arr[i].trim());
+                }
+            }
+        }
+        TeachingMediumPreferenceDialog dialog = new TeachingMediumPreferenceDialog(EditProfileActivityMentor.this, mediumOfTeaching, lng1, lng2, lng3, lng4);
+        dialog.setTeachingMediumAddedListener(EditProfileActivityMentor.this);
+        dialog.showPopUp();
     }
 
 
@@ -833,6 +836,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     profileGender.setSelection(0);
                 else
                     profileGender.setSelection(1);
+            }
+            try {
+                teachingMediumPreference.setText(userInfo.getMediumOfTeaching());
+            } catch (Exception ignored) {
             }
 
             try {
@@ -924,8 +931,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             addLimitListener(myTeachingMethodology, myTeachingMethodologyLimit);
             addLimitListener(myAwards, myAwardsLimit);
 
-            teachingMediumPreference.setText(StorageHelper.getUserDetails(EditProfileActivityMentor.this, "teaching_medium"));
-
             Log.e(TAG, userInfo.getMultipleAddress().size() + " address size");
             if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
 
@@ -1012,12 +1017,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
         }
 
-
-        if (teachingMediumPreference.getText().toString().trim().equals(""))
-            teachingMediumPreference.setText(StorageHelper.getUserGroup(this, "teaching_medium"));
-
-        if (teachingMediumPreference.getText().toString().trim().equals(""))
-            teachingMediumPreference.setText(getResources().getString(R.string.select));
     }
 
     private void addLimitListener(ChizzleEditText editText, final ChizzleTextView textViewForLimit) {
@@ -1297,6 +1296,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 requestParams.add("photograph", "");
 
             requestParams.add("availability_yn", String.valueOf(teachingPreference.getSelectedItemPosition()));
+
+            if(teachingMediumPreference.getText().toString().trim().equals(""))
+                requestParams.add("medium_of_language", teachingMediumPreference.getText().toString());
+
             if (teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2) {
                 requestParams.add("address", physicalAddress.getText().toString().trim());
             }
@@ -1590,7 +1593,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             list.add(predictions.get(index).getDescription());
         }
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.textview, list);
-        //profileAddress1.setAdapter(arrayAdapter);
         locale.setAdapter(arrayAdapter);
 
     }
@@ -1612,8 +1614,22 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
+        Log.e(TAG, calledApiValue + " : ===");
+        if (calledApiValue == 57) {
+            progressDialog.dismiss();
+            try {
+                JSONObject jsonObject = new JSONObject((String) object);
+                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                mediumOfTeaching.add(getResources().getString(R.string.select_leave_blank));
+                for (int i = 0; i < jsonArray.length(); i++)
+                    mediumOfTeaching.add(jsonArray.getJSONObject(i).getString("name"));
+                showMediumOfTeachingDialog(mediumOfTeaching);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                mediumOfTeaching.clear();
+            }
 
-        if (calledApiValue == 54) {
+        } else if (calledApiValue == 54) {
             list_of_city = (ArrayList<CityDetails>) object;
 
 
@@ -1785,7 +1801,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
 
         teachingMediumPreference.setText(finalString);
-        StorageHelper.storePreference(EditProfileActivityMentor.this, "teaching_medium", finalString);
     }
 
     @Override

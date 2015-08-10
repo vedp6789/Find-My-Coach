@@ -126,6 +126,17 @@ public class Data {
     @Expose
     private String addressFlagMentor;
 
+    @SerializedName("medium_of_language")
+    @Expose
+    private String mediumOfTeaching;
+
+    public String getMediumOfTeaching() {
+        return mediumOfTeaching;
+    }
+
+    public void setMediumOfTeaching(String mediumOfTeaching) {
+        this.mediumOfTeaching = mediumOfTeaching;
+    }
 
     @SerializedName("country_config")
     @Expose

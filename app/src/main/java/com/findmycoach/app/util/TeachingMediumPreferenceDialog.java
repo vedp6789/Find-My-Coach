@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 public class TeachingMediumPreferenceDialog {
@@ -21,11 +21,11 @@ public class TeachingMediumPreferenceDialog {
     private Context context;
     private Dialog dialog;
     private Spinner language1, language2, language3, language4;
-    private ArrayList<String> languageList;
+    private List<String> languageList;
     private TeachingMediumAddedListener mTeachingMediumAddedListener;
     private int selectedLng1, selectedLng2, selectedLng3, selectedLng4;
 
-    public TeachingMediumPreferenceDialog(Context context, ArrayList<String> languageList, int lng1, int lng2, int lng3, int lng4) {
+    public TeachingMediumPreferenceDialog(Context context, List<String> languageList, int lng1, int lng2, int lng3, int lng4) {
         this.context = context;
         this.languageList = languageList;
         selectedLng1 = lng1;
