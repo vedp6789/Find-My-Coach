@@ -292,7 +292,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
         addMoreAddress = (Button) findViewById(R.id.addAddressMentor);
         addressListViewMentor = (ListView) findViewById(R.id.addressesListViewMentor);
         addressArrayListMentor = new ArrayList<>();
-        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayListMentor, addressListViewMentor,false);
+        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayListMentor, addressListViewMentor, false);
         addressListViewMentor.setAdapter(addressAdapter);
         teachingMediumHeader = (ChizzleTextView) findViewById(R.id.teachingMediumPreferenceHeader);
         profileCountry = (Spinner) findViewById(R.id.country);
@@ -1396,8 +1396,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
             requestParams.add("section_3", myExperience.getText().toString());
             requestParams.add("section_4", myTeachingMethodology.getText().toString());
             requestParams.add("section_5", myAwards.getText().toString());
-            requestParams.add("country", String.valueOf(countries.get(profileCountry.getSelectedItemPosition()).getId()));
             Log.e(TAG, "request params: " + requestParams.toString());
+            try {
+                requestParams.add("country", String.valueOf(countries.get(profileCountry.getSelectedItemPosition() - 1).getId()));
+            } catch (Exception ignored) {
+            }
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
             e.printStackTrace();
