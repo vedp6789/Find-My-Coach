@@ -244,6 +244,7 @@ public class ProfileFragment extends Fragment implements Callback {
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             String updatedUserJson = data.getStringExtra("user_info");
             userInfo = new Gson().fromJson(updatedUserJson, Data.class);
+            scrollView.fullScroll(View.FOCUS_UP);
             populateFields();
         }
     }
@@ -613,6 +614,5 @@ public class ProfileFragment extends Fragment implements Callback {
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
-        listView.requestLayout();
     }
 }

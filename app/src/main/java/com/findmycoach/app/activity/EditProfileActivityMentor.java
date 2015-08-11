@@ -1624,7 +1624,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
                     city_with_states.setText(list_of_city.get(0).getCity_name());
                     llCity.setVisibility(View.GONE);
                 } else {
-                    city_with_states.setText("");
                     llCity.setVisibility(View.VISIBLE);
                 }
             } catch (Exception ignored) {
