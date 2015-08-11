@@ -325,7 +325,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
         childDetailsAdapter = new ChildDetailsAdapter(this, R.layout.child_details_list_item, childDetailsArrayList, childDetailsListView);
         childDetailsListView.setAdapter(childDetailsAdapter);
-        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayList, addressListView);
+        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayList, addressListView,true);
         addressListView.setAdapter(addressAdapter);
 
 
@@ -1573,6 +1573,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             setListViewHeightBasedOnChildren(childDetailsListView);
             childDetailsListView.setVisibility(View.VISIBLE);
             addMore.setVisibility(View.VISIBLE);
+            childDetailsListView.requestFocus();
         }
     }
 

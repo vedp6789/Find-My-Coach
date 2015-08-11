@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -99,12 +100,12 @@ public class AddAddressDialog implements Callback {
     public void showPopUp() {
         dialog = new Dialog(context, R.style.DialogCustomTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialog.setContentView(R.layout.add_address_dialog);
         doneButton = (Button) dialog.findViewById(R.id.done);
         cancelButton = (Button) dialog.findViewById(R.id.cancel);
         locale = (ChizzleAutoCompleteTextView) dialog.findViewById(R.id.locale);
         deleteAddress= (ImageButton) dialog.findViewById(R.id.deleteAddressButton);
-
         updateLocale();
         /* Code to set country as per default Country code*/
 

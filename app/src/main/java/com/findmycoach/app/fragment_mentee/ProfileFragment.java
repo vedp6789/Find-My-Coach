@@ -134,7 +134,7 @@ public class ProfileFragment extends Fragment implements Callback {
         groupClassLocation = (ChizzleTextView) view.findViewById(R.id.groupClassLocation);
         groupLayout = (LinearLayout) view.findViewById(R.id.groupLocationLayout);
         addressArrayList = new ArrayList<>();
-        addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayList, addressListView);
+        addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayList, addressListView,false);
         addressListView.setAdapter(addressAdapter);
         childrenDetailsListViewProfile = (ListView) view.findViewById(R.id.childrenDetailsListViewProfile);
 

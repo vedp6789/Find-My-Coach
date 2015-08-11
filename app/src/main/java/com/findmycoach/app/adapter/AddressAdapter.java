@@ -30,8 +30,9 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
     private List<Country> countries;
     private ArrayList<String> country_names;
     private ListView addressListView;
+    private boolean menteeFlag; //false for mentor
 
-    public AddressAdapter(Context context, int resource, ArrayList<Address> addressArrayList,ListView addressListView) {
+    public AddressAdapter(Context context, int resource, ArrayList<Address> addressArrayList,ListView addressListView,boolean menteeFlag) {
         super(context, resource);
         this.context = context;
         resourceId = resource;
@@ -41,6 +42,7 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
         countries = new ArrayList<Country>();
         countries = MetaData.getCountryObject(context);
         this.addressListView=addressListView;
+        this.menteeFlag=menteeFlag;
 
 
     }
@@ -81,7 +83,8 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
             public void onClick(View v) {
                 addressArrayList.remove(position);
                 notifyDataSetChanged();
-                PreferredTrainerLocationDialog.changeDeletedAddress(addressArrayList);
+                if(menteeFlag)
+                     PreferredTrainerLocationDialog.changeDeletedAddress(addressArrayList);
                 EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListView);
             }
         });

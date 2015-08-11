@@ -292,7 +292,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         addMoreAddress = (Button) findViewById(R.id.addAddressMentor);
         addressListViewMentor = (ListView) findViewById(R.id.addressesListViewMentor);
         addressArrayListMentor = new ArrayList<>();
-        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayListMentor, addressListViewMentor);
+        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayListMentor, addressListViewMentor,false);
         addressListViewMentor.setAdapter(addressAdapter);
         teachingMediumHeader = (ChizzleTextView) findViewById(R.id.teachingMediumPreferenceHeader);
         profileCountry = (Spinner) findViewById(R.id.country);

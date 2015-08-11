@@ -150,7 +150,7 @@ public class ProfileFragment extends Fragment implements Callback {
         multipleAddressLV = (ListView) view.findViewById(R.id.multipleAddressLV);
         addressArrayListMentor = new ArrayList<>();
         gender = (ChizzleTextView) view.findViewById(R.id.profile_gender);
-        addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayListMentor, multipleAddressLV);
+        addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayListMentor, multipleAddressLV,false);
         multipleAddressLV.setAdapter(addressAdapter);
         editProfile.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.edit_profile));
 

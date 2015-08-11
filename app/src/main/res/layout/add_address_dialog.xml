@@ -12,13 +12,14 @@
         <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/headerSummary"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/back_margin"
             android:background="@color/purple"
             android:gravity="center"
             android:text="@string/add_address_title"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:padding="@dimen/textView_padding_margin" />
 
         <RelativeLayout
             android:id="@+id/addressLayout"
