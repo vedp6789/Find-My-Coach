@@ -592,7 +592,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                     if (user_info_multiple_address == 0 || user_info_multiple_address == 1 ||
                             training_location_similar_to_profile_locale) {
                        }
-                    if(addressArrayList.size()>0){
+                    if(addressList.size()>0){
                         addressList.remove(0);
                         addressList.add(0,locale.getText().toString());
                     }
@@ -1091,6 +1091,13 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         }
         locale.setText(locale_string);
         trainingLocation.setText(locale_string);
+        if(addressList.size()>=0) {
+            addressList.remove(0);
+            addressList.add(0,locale.getText().toString());
+        }
+        else {
+            addressList.add(0,locale.getText().toString());
+        }
         updateCountryByLocation();
         return true;
 
