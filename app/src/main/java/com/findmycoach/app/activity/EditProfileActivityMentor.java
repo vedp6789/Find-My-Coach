@@ -96,7 +96,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class EditProfileActivityMentor extends Activity implements Callback, TeachingMediumPreferenceDialog.TeachingMediumAddedListener, AddAddressDialog.AddressAddedListener {
+public class EditProfileActivityMentor extends Activity implements Callback, AddAddressDialog.AddressAddedListener {
 
     int REQUEST_CODE = 100;
     private ImageView profilePicture;
@@ -764,28 +764,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
     private void showMediumOfTeachingDialog(List<String> mediumOfTeaching) {
 
-        int lng1 = 0;
-        int lng2 = 0;
-        int lng3 = 0;
-        int lng4 = 0;
-
-        String mediumSelected = teachingMediumPreference.getText().toString().trim();
-        if (!mediumSelected.equals("") && !mediumSelected.equalsIgnoreCase(getResources().getString(R.string.select))) {
-            String[] arr = mediumSelected.split(",");
-            for (int i = 0; i < arr.length; i++) {
-                if (i == 0) {
-                    lng1 = mediumOfTeaching.indexOf(arr[i].trim());
-                } else if (i == 1) {
-                    lng2 = mediumOfTeaching.indexOf(arr[i].trim());
-                } else if (i == 2) {
-                    lng3 = mediumOfTeaching.indexOf(arr[i].trim());
-                } else if (i == 3) {
-                    lng4 = mediumOfTeaching.indexOf(arr[i].trim());
-                }
-            }
-        }
-        TeachingMediumPreferenceDialog dialog = new TeachingMediumPreferenceDialog(EditProfileActivityMentor.this, mediumOfTeaching, lng1, lng2, lng3, lng4);
-        dialog.setTeachingMediumAddedListener(EditProfileActivityMentor.this);
+        TeachingMediumPreferenceDialog dialog = new TeachingMediumPreferenceDialog(EditProfileActivityMentor.this, mediumOfTeaching, teachingMediumPreference.getText().toString().trim());
         dialog.showPopUp();
     }
 
@@ -1299,10 +1278,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             requestParams.add("availability_yn", String.valueOf(teachingPreference.getSelectedItemPosition()));
 
-            if (!teachingMediumPreference.getText().toString().trim().equals("")) {
-                requestParams.add("medium_of_education", teachingMediumPreference.getText().toString());
-                Log.e(TAG, "medium_of_education : " + teachingMediumPreference.getText().toString());
-            }
+            requestParams.add("medium_of_education", teachingMediumPreference.getText().toString());
+            Log.e(TAG, "medium_of_education : " + teachingMediumPreference.getText().toString());
 
             if (teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2) {
                 requestParams.add("address", physicalAddress.getText().toString().trim());
@@ -1627,7 +1604,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             try {
                 JSONObject jsonObject = new JSONObject((String) object);
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
-                mediumOfTeaching.add(getResources().getString(R.string.select_leave_blank));
                 for (int i = 0; i < jsonArray.length(); i++)
                     mediumOfTeaching.add(jsonArray.getJSONObject(i).getString("name"));
                 showMediumOfTeachingDialog(mediumOfTeaching);
@@ -1644,7 +1620,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     city_id = list_of_city.get(0).getCity_id();
                     city_with_states.setText(list_of_city.get(0).getCity_name());
                     llCity.setVisibility(View.GONE);
-                }else{
+                } else {
                     city_with_states.setText("");
                     llCity.setVisibility(View.VISIBLE);
                 }
@@ -1677,7 +1653,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 if (list_of_city != null && list_of_city.size() > 0 && city_id != 0)
 
                     for (int i = 0; i < list_of_city.size(); i++) {
-                        try{
+                        try {
                             CityDetails cityDetails = list_of_city.get(i);
                             String city = cityDetails.getCity_name();
                             String state = cityDetails.getCity_state();
@@ -1691,7 +1667,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                                 city_with_states.setText(s);
                                 break;
                             }
-                        }catch (Exception ignored){
+                        } catch (Exception ignored) {
                         }
 
                     }
@@ -1810,30 +1786,13 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
     }
 
-    @Override
-    public void onTeachingMediumAdded(String language1, String language2, String language3, String language4) {
+    public void onTeachingMediumAdded(List<String> mediumOfTeachingSelected) {
         teachingMediumPreference.setText("");
-        String select = getResources().getString(R.string.select_leave_blank);
-        String finalString = "";
-        if (!language1.equalsIgnoreCase(select)) {
-            finalString += language1 + ", ";
-        }
-        if (!language2.equalsIgnoreCase(select)) {
-            finalString += language2 + ", ";
-        }
-        if (!language3.equalsIgnoreCase(select)) {
-            finalString += language3 + ", ";
-        }
-        if (!language4.equalsIgnoreCase(select)) {
-            finalString += language4;
-        }
-
-
-        if (finalString.length() > 0 && finalString.charAt(finalString.length() - 1) == ' ') {
-            finalString = finalString.substring(0, finalString.length() - 2);
-        }
-
-        teachingMediumPreference.setText(finalString);
+        String temp = "";
+        for (String s : mediumOfTeachingSelected)
+            temp = temp + ", " + s;
+        temp = temp.replaceFirst(", ", "");
+        teachingMediumPreference.setText(temp.trim());
     }
 
     @Override

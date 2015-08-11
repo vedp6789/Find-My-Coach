@@ -5,12 +5,6 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
         <com.findmycoach.app.views.ChizzleTextView
             android:id="@+id/headerTeachingMediumPreference"
             android:layout_width="match_parent"
@@ -22,191 +16,24 @@
             android:textColor="@color/white"
             android:textSize="18sp" />
 
-        <com.findmycoach.app.views.ChizzleTextView
+        <ListView
+            android:id="@+id/mediumOfEducationLV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/back_margin"
-            android:layout_marginRight="@dimen/back_margin"
-            android:layout_marginTop="@dimen/back_margin"
-            android:text="@string/prompt_language_1"
-            android:textColor="@color/purple_light"
-            android:textSize="@dimen/profile_heading"
-            android:textStyle="bold" />
-
-        <Spinner
-            android:id="@+id/language1"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/login_button_height"
-            android:layout_marginLeft="@dimen/back_margin"
-            android:layout_marginRight="@dimen/back_margin"
-            android:background="@android:color/transparent"
-            android:prompt="@string/prompt_gender"
-            android:spinnerMode="dropdown" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/back_margin"
-            android:layout_marginRight="@dimen/back_margin"
-            android:layout_marginTop="-10dp"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginBottom="-1dp"
-                android:src="@drawable/drop_down_arrow_purple_small" />
-
-            <com.findmycoach.app.views.ChizzleTextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentLeft="true"
-                android:background="@color/purple_light" />
-
-        </LinearLayout>
-
-        <com.findmycoach.app.views.ChizzleTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/back_margin"
-            android:layout_marginRight="@dimen/back_margin"
-            android:layout_marginTop="@dimen/back_margin"
-            android:text="@string/prompt_language_2"
-            android:textColor="@color/purple_light"
-            android:textSize="@dimen/profile_heading"
-            android:textStyle="bold" />
-
-        <Spinner
-            android:id="@+id/language2"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/login_button_height"
-            android:layout_marginLeft="@dimen/back_margin"
-            android:layout_marginRight="@dimen/back_margin"
-            android:background="@android:color/transparent"
-            android:prompt="@string/prompt_gender"
-            android:spinnerMode="dropdown" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/back_margin"
-            android:layout_marginRight="@dimen/back_margin"
-            android:layout_marginTop="-10dp"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginBottom="-1dp"
-                android:src="@drawable/drop_down_arrow_purple_small" />
-
-            <com.findmycoach.app.views.ChizzleTextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentLeft="true"
-                android:background="@color/purple_light" />
-
-        </LinearLayout>
-
-        <com.findmycoach.app.views.ChizzleTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/back_margin"
-            android:layout_marginRight="@dimen/back_margin"
-            android:layout_marginTop="@dimen/back_margin"
-            android:text="@string/prompt_language_3"
-            android:textColor="@color/purple_light"
-            android:textSize="@dimen/profile_heading"
-            android:textStyle="bold" />
-
-        <Spinner
-            android:id="@+id/language3"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/login_button_height"
-            android:layout_marginLeft="@dimen/back_margin"
-            android:layout_marginRight="@dimen/back_margin"
-            android:background="@android:color/transparent"
-            android:prompt="@string/prompt_gender"
-            android:spinnerMode="dropdown" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/back_margin"
-            android:layout_marginRight="@dimen/back_margin"
-            android:layout_marginTop="-10dp"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginBottom="-1dp"
-                android:src="@drawable/drop_down_arrow_purple_small" />
-
-            <com.findmycoach.app.views.ChizzleTextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentLeft="true"
-                android:background="@color/purple_light" />
-
-        </LinearLayout>
-
-        <com.findmycoach.app.views.ChizzleTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/back_margin"
-            android:layout_marginRight="@dimen/back_margin"
-            android:layout_marginTop="@dimen/back_margin"
-            android:text="@string/prompt_language_4"
-            android:textColor="@color/purple_light"
-            android:textSize="@dimen/profile_heading"
-            android:textStyle="bold" />
-
-        <Spinner
-            android:id="@+id/language4"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/login_button_height"
-            android:layout_marginLeft="@dimen/back_margin"
-            android:layout_marginRight="@dimen/back_margin"
-            android:background="@android:color/transparent"
-            android:prompt="@string/prompt_gender"
-            android:spinnerMode="dropdown" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/back_margin"
-            android:layout_marginRight="@dimen/back_margin"
-            android:layout_marginTop="-10dp"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginBottom="-1dp"
-                android:src="@drawable/drop_down_arrow_purple_small" />
-
-            <com.findmycoach.app.views.ChizzleTextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentLeft="true"
-                android:background="@color/purple_light" />
-
-        </LinearLayout>
+            android:padding="5dp"
+            android:layout_below="@+id/headerTeachingMediumPreference"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/linearLayout4" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_below="@+id/addressLayout"
-            android:layout_marginBottom="@dimen/back_margin"
-            android:layout_marginLeft="@dimen/back_margin"
-            android:layout_marginRight="@dimen/back_margin"
-            android:layout_marginTop="@dimen/back_margin"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/linearLayout4">
 
             <Button
                 android:id="@+id/cancel"
@@ -227,7 +54,6 @@
                 android:text="Done"
                 android:textColor="@color/white" />
         </LinearLayout>
-    </LinearLayout>
 
 
 </RelativeLayout>

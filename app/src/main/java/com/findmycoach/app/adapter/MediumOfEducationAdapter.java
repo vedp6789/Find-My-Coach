@@ -9,39 +9,44 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.findmycoach.app.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by ShekharKG on 28/7/15.
  */
-public class QualifiedAreaOfCoachingAdapter extends BaseAdapter {
+public class MediumOfEducationAdapter extends BaseAdapter {
 
-    public List<String> selectedAreaOfCoaching;
+    public List<String> mediumOfEducationList;
     public List<String> isSelected;
+    public List<String> selectedLanguages;
     private Context context;
     private LayoutInflater layoutInflater;
+    private int counter;
     private Drawable checked, unchecked;
 
-    public QualifiedAreaOfCoachingAdapter(List<String> selectedAreaOfCoaching, List<String> isSelected, Context context) {
-        this.selectedAreaOfCoaching = selectedAreaOfCoaching;
+    public MediumOfEducationAdapter(List<String> mediumOfEducationList, List<String> isSelected, Context context) {
+        this.mediumOfEducationList = mediumOfEducationList;
         this.isSelected = isSelected;
         this.context = context;
         checked = context.getResources().getDrawable(R.drawable.radio_btn_selected);
         unchecked = context.getResources().getDrawable(R.drawable.radio_btn_unselected);
         layoutInflater = LayoutInflater.from(context);
+        selectedLanguages = new ArrayList<>();
     }
 
     @Override
     public int getCount() {
-        return selectedAreaOfCoaching.size();
+        return mediumOfEducationList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return selectedAreaOfCoaching.get(position);
+        return mediumOfEducationList.get(position);
     }
 
     @Override
@@ -50,27 +55,46 @@ public class QualifiedAreaOfCoachingAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent) {
         View v = layoutInflater.inflate(R.layout.qualified_coaching_single_row, null);
         TextView textView = (TextView) v.findViewById(R.id.textView);
-        textView.setText(selectedAreaOfCoaching.get(position));
+        textView.setText(mediumOfEducationList.get(position));
         final ImageView cb = (ImageView) v.findViewById(R.id.checkbox);
 
         if (isSelected.get(position).equalsIgnoreCase("true")) {
             cb.setImageDrawable(checked);
+            if (!selectedLanguages.contains(mediumOfEducationList.get(position))) {
+                selectedLanguages.add(mediumOfEducationList.get(position));
+                counter++;
+            }
+            Log.e("fmc", mediumOfEducationList.get(position));
         }
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String isSelect = isSelected.get(position);
-                if(isSelect.equalsIgnoreCase("true")){
+                if (isSelect.equalsIgnoreCase("true"))
+                    counter--;
+                else
+                    counter++;
+
+                if (counter > 4) {
+                    counter--;
+                    Toast.makeText(context, context.getResources().getString(R.string.max_four_medium_of_education), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if (isSelect.equalsIgnoreCase("true")) {
                     cb.setImageDrawable(unchecked);
                     isSelected.set(position, "false");
-                    Log.e("fmc", "false : " + selectedAreaOfCoaching.get(position));
-                }else {
+                    selectedLanguages.remove(selectedLanguages.indexOf(mediumOfEducationList.get(position)));
+                    Log.e("fmc", "false : " + mediumOfEducationList.get(position));
+                } else {
                     cb.setImageDrawable(checked);
                     isSelected.set(position, "true");
-                    Log.e("fmc", "true : " + selectedAreaOfCoaching.get(position));
+                    if (!selectedLanguages.contains(mediumOfEducationList.get(position)))
+                        selectedLanguages.add(mediumOfEducationList.get(position));
+                    Log.e("fmc", "true : " + mediumOfEducationList.get(position));
                 }
             }
         });
