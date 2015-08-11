@@ -326,7 +326,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
         childDetailsAdapter = new ChildDetailsAdapter(this, R.layout.child_details_list_item, childDetailsArrayList, childDetailsListView);
         childDetailsListView.setAdapter(childDetailsAdapter);
-        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayList, addressListView,true);
+        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayList, addressListView, true);
         addressListView.setAdapter(addressAdapter);
 
 
@@ -616,12 +616,11 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         trainingLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!locale.getText().toString().isEmpty()) {
+                if (!locale.getText().toString().isEmpty()) {
                     dialog = new PreferredTrainerLocationDialog(EditProfileActivityMentee.this, addressList, previousValue, index);
                     dialog.setAddressSelectedListener(EditProfileActivityMentee.this);
                     dialog.showPopUp();
-                }
-                else {
+                } else {
                     locale.setError(getResources().getString(R.string.enter_locale));
                     locale.requestFocus();
                 }
@@ -1324,7 +1323,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             requestParams.add("id", StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id)));
             requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
             Log.e(TAG, "Country : " + NetworkManager.countryCode);
-            requestParams.add("country", String.valueOf(countries.get(profileCountry.getSelectedItemPosition()).getId()));
+            try {
+                requestParams.add("country", String.valueOf(countries.get(profileCountry.getSelectedItemPosition() - 1).getId()));
+            } catch (Exception ignored) {
+            }
             Log.e(TAG, "request params in edit profile post: " + requestParams);
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
 
@@ -1457,7 +1459,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                     city_id = list_of_city.get(0).getCity_id();
                     city_with_states.setText(list_of_city.get(0).getCity_name());
                     llCity.setVisibility(View.GONE);
-                }else{
+                } else {
                     city_with_states.setText("");
                     llCity.setVisibility(View.VISIBLE);
                 }
