@@ -181,10 +181,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private void populateFields() {
         try {
             try {
-                if (userInfo.getMiddleName() == null || userInfo.getMiddleName().trim().equals(""))
-                    profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
-                else
-                    profileName.setText(userInfo.getFirstName() + " " + userInfo.getMiddleName() + " " + userInfo.getLastName());
+                profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
             } catch (Exception e) {
             }
             try {
@@ -339,7 +336,7 @@ public class ProfileFragment extends Fragment implements Callback {
     }
 
 
-    public  void setHeight(ListView listView) {
+    public void setHeight(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null)
             return;

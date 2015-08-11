@@ -126,7 +126,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private ScrollView scrollView;
     private TextView students_preference;
     private RelativeLayout summaryHeader, ll_physical_address;
-    private LinearLayout summaryDetailsLayout;
+    private LinearLayout summaryDetailsLayout, llCity;
     private boolean hiddenFlag;
     private ImageButton arrow;
     private ChizzleTextView teachingMediumPreference;
@@ -305,6 +305,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         countryConditionCheckBox = (CheckBox) findViewById(R.id.inputCountryCondition);
         ll_physical_address = (RelativeLayout) findViewById(R.id.ll_physical_address);
         multipleAddressLayout = (RelativeLayout) findViewById(R.id.mutipleAddressCheckBoxLayout);
+        llCity = (LinearLayout) findViewById(R.id.llCity);
 
         profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -735,6 +736,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                     progressDialog.show();
                     RequestParams requestParams = new RequestParams();
                     requestParams.add("user_group", StorageHelper.getUserGroup(EditProfileActivityMentor.this, "user_group"));
+                    requestParams.add("city_id", String.valueOf(city_id));
                     NetworkClient.getMediumOfEducation(EditProfileActivityMentor.this, requestParams,
                             StorageHelper.getUserDetails(EditProfileActivityMentor.this, "auth_token"), EditProfileActivityMentor.this, 57);
                 } else
@@ -1297,7 +1299,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
             requestParams.add("availability_yn", String.valueOf(teachingPreference.getSelectedItemPosition()));
 
-            if(!teachingMediumPreference.getText().toString().trim().equals("")) {
+            if (!teachingMediumPreference.getText().toString().trim().equals("")) {
                 requestParams.add("medium_of_education", teachingMediumPreference.getText().toString());
                 Log.e(TAG, "medium_of_education : " + teachingMediumPreference.getText().toString());
             }
@@ -1605,7 +1607,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         for (int index = 0; index < cityDetailses.size(); index++) {
             CityDetails cityDetails = cityDetailses.get(index);
             if (cityDetails.getCity_name().toLowerCase().contains(input_string.toLowerCase())) {
-                list.add(cityDetails.getCity_name() + " (" + cityDetails.getCity_state() + ")");
+                if (cityDetails.getCity_state() != null && !cityDetails.getCity_state().trim().equals(""))
+                    list.add(cityDetails.getCity_name() + " (" + cityDetails.getCity_state() + ")");
+                else
+                    list.add(cityDetails.getCity_name());
                 city_id_from_suggestion.add(cityDetails.getCity_id());
             }
         }
@@ -1634,18 +1639,37 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         } else if (calledApiValue == 54) {
             list_of_city = (ArrayList<CityDetails>) object;
 
+            try {
+                if (list_of_city.size() == 1) {
+                    city_id = list_of_city.get(0).getCity_id();
+                    city_with_states.setText(list_of_city.get(0).getCity_name());
+                    llCity.setVisibility(View.GONE);
+                }else{
+                    city_with_states.setText("");
+                    llCity.setVisibility(View.VISIBLE);
+                }
+            } catch (Exception ignored) {
+                llCity.setVisibility(View.VISIBLE);
+            }
 
             if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() == 0) {
                 if (city_name != "" && list_of_city != null && list_of_city.size() > 0) {
                     for (int i = 0; i < list_of_city.size(); i++) {
-                        CityDetails cityDetails = list_of_city.get(i);
+                        try {
+                            CityDetails cityDetails = list_of_city.get(i);
 
-                        String city = cityDetails.getCity_name();
-                        String state = cityDetails.getCity_state();
-                        int city_country_id = cityDetails.getCity_country();
-                        if (city.equalsIgnoreCase(city_name) && state.equalsIgnoreCase(state_name) && (city_country_id == country_id)) {
-                            String s = city.trim() + " (" + state + ")";
-                            city_with_states.setText(s);
+                            String city = cityDetails.getCity_name();
+                            String state = cityDetails.getCity_state();
+                            int city_country_id = cityDetails.getCity_country();
+                            if (city.equalsIgnoreCase(city_name) && state.equalsIgnoreCase(state_name) && (city_country_id == country_id)) {
+                                String s = "";
+                                if (!state.trim().equals(""))
+                                    s = city.trim() + " (" + state + ")";
+                                else
+                                    s = city.trim();
+                                city_with_states.setText(s);
+                            }
+                        } catch (Exception ignored) {
                         }
                     }
                 }
@@ -1653,14 +1677,21 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 if (list_of_city != null && list_of_city.size() > 0 && city_id != 0)
 
                     for (int i = 0; i < list_of_city.size(); i++) {
-                        CityDetails cityDetails = list_of_city.get(i);
-                        String city = cityDetails.getCity_name();
-                        String state = cityDetails.getCity_state();
-                        int city_country_id = cityDetails.getCity_country();
-                        if (cityDetails.getCity_id() == city_id && country_id == city_country_id) {
-                            String s = city.trim() + " (" + state + ")";
-                            city_with_states.setText(s);
-                            break;
+                        try{
+                            CityDetails cityDetails = list_of_city.get(i);
+                            String city = cityDetails.getCity_name();
+                            String state = cityDetails.getCity_state();
+                            int city_country_id = cityDetails.getCity_country();
+                            if (cityDetails.getCity_id() == city_id && country_id == city_country_id) {
+                                String s = "";
+                                if (!state.trim().equals(""))
+                                    s = city.trim() + " (" + state + ")";
+                                else
+                                    s = city.trim();
+                                city_with_states.setText(s);
+                                break;
+                            }
+                        }catch (Exception ignored){
                         }
 
                     }

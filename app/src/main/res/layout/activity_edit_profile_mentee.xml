@@ -306,6 +306,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/llCity"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_marginTop="@dimen/back_margin">
@@ -333,17 +334,10 @@
                             android:textSize="@dimen/profile_heading"
                             android:textStyle="bold" />
 
-                        <!--<com.findmycoach.app.views.ChizzleTextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text=" *"-->
-                        <!--android:textColor="@color/purple"-->
-                        <!--android:textSize="@dimen/profile_heading"-->
-                        <!--android:textStyle="bold" />-->
-
                     </LinearLayout>
 
                     <com.findmycoach.app.views.ChizzleAutoCompleteTextView
+                        android:layout_marginLeft="@dimen/back_margin"
                         android:id="@+id/city_with_state"
                         style="@style/EditTextCustomHoloPurple"
                         android:layout_width="match_parent"

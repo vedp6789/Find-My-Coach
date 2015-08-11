@@ -78,7 +78,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class EditProfileActivityMentee extends Activity implements Callback, ChildDetailsDialog.ChildDetailsAddedListener, AddAddressDialog.AddressAddedListener,PreferredTrainerLocationDialog.PreferredAddressSelectedListener {
+public class EditProfileActivityMentee extends Activity implements Callback, ChildDetailsDialog.ChildDetailsAddedListener, AddAddressDialog.AddressAddedListener, PreferredTrainerLocationDialog.PreferredAddressSelectedListener {
 
 
     int REQUEST_CODE = 100;
@@ -110,7 +110,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private String userCurrentAddress = "";
     private ScrollView scroll_view;
     private Spinner locationPreferenceSpinner;
-    private RelativeLayout groupDetailsLayout;
+    private RelativeLayout groupDetailsLayout, llCity;
     private ArrayList<ChildDetails> childDetailsArrayList;
     private ListView childDetailsListView, addressListView;
     private ChildDetailsAdapter childDetailsAdapter;
@@ -134,9 +134,9 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private ArrayList<Integer> city_id_from_suggestion;
     private ImageButton deleteLocaleButton;
     private ArrayList<String> addressList;
-    private PreferredTrainerLocationDialog dialog=null;
-    private String previousValue="";
-    private  int index=-1;
+    private PreferredTrainerLocationDialog dialog = null;
+    private String previousValue = "";
+    private int index = -1;
 
 
     @Override
@@ -217,8 +217,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         ll_physical_address = (LinearLayout) findViewById(R.id.ll_physical_address);
         physicalAddress = (EditText) findViewById(R.id.physical_address);
         locale = (AutoCompleteTextView) findViewById(R.id.locale);
-        deleteLocaleButton=(ImageButton)findViewById(R.id.deleteLocaleButton);
-        addressList=new ArrayList<>();
+        deleteLocaleButton = (ImageButton) findViewById(R.id.deleteLocaleButton);
+        addressList = new ArrayList<>();
         city_name = "";
         country_id = 0;
         city_id = 0;
@@ -268,6 +268,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         addPhoto = (ChizzleTextView) findViewById(R.id.addPhotoMentee);
         scroll_view = (ScrollView) findViewById(R.id.main_scroll_view);
         groupDetailsLayout = (RelativeLayout) findViewById(R.id.groupClassesDetails);
+        llCity = (RelativeLayout) findViewById(R.id.llCity);
         childDetailsListView = (ListView) findViewById(R.id.childDetailsListView);
         addMore = (Button) findViewById(R.id.addMoreButton);
         addAddress = (Button) findViewById(R.id.addAddress);
@@ -576,8 +577,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             @Override
             public void afterTextChanged(Editable s) {
                 String input = locale.getText().toString().trim();
-                if(!input.isEmpty())
-                     deleteLocaleButton.setVisibility(View.VISIBLE);
+                if (!input.isEmpty())
+                    deleteLocaleButton.setVisibility(View.VISIBLE);
                 else
                     deleteLocaleButton.setVisibility(View.GONE);
                 if (input.length() >= 2) {
@@ -592,16 +593,15 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 if (userInfo != null && userInfo.getMultipleAddress() != null) {
                     if (user_info_multiple_address == 0 || user_info_multiple_address == 1 ||
                             training_location_similar_to_profile_locale) {
-                       }
-                    if(addressList.size()>0){
-                        addressList.remove(0);
-                        addressList.add(0,locale.getText().toString());
                     }
-                    else {
-                        addressList.add(0,locale.getText().toString());
+                    if (addressList.size() > 0) {
+                        addressList.remove(0);
+                        addressList.add(0, locale.getText().toString());
+                    } else {
+                        addressList.add(0, locale.getText().toString());
 
                     }
-                    if(dialog!=null) {
+                    if (dialog != null) {
                         dialog.changeAddresses(addressList);
                     }
                     trainingLocation.setText(locale.getText().toString());
@@ -610,8 +610,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
         });
 
-        if(userInfo.getTrainingLocation()!=null) {
-            previousValue=(String)userInfo.getTrainingLocation();
+        if (userInfo.getTrainingLocation() != null) {
+            previousValue = (String) userInfo.getTrainingLocation();
         }
         trainingLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -697,7 +697,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
         });
 */
-
 
 
         profilePicture.setOnClickListener(new View.OnClickListener() {
@@ -926,7 +925,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
 
 
-
             Address address = null;
             if (position != -1) {
                 address = userInfo.getMultipleAddress().get(position);
@@ -941,8 +939,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 addressList.add(a.getLocale());
             }
 
-            addressList.add(0,address.getLocale());
-
+            addressList.add(0, address.getLocale());
 
 
             try {
@@ -979,7 +976,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
 
 
-
             for (int i = 0; i < userInfo.getMultipleAddress().size(); i++) {
                 addressArrayList.add(userInfo.getMultipleAddress().get(i));
             }
@@ -991,13 +987,11 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 addAddress.setVisibility(View.VISIBLE);
             }
 
-        }
-        else {
+        } else {
             if (locale.getText().toString().trim() != "") {
                 addressList.add(locale.getText().toString());
             }
         }
-
 
 
         try {
@@ -1098,12 +1092,11 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         }
         locale.setText(locale_string);
         trainingLocation.setText(locale_string);
-        if(addressList.size()>=0) {
+        if (addressList.size() >= 0) {
             addressList.remove(0);
-            addressList.add(0,locale.getText().toString());
-        }
-        else {
-            addressList.add(0,locale.getText().toString());
+            addressList.add(0, locale.getText().toString());
+        } else {
+            addressList.add(0, locale.getText().toString());
         }
         updateCountryByLocation();
         return true;
@@ -1438,7 +1431,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         for (int index = 0; index < cityDetailses.size(); index++) {
             CityDetails cityDetails = cityDetailses.get(index);
             if (cityDetails.getCity_name().toLowerCase().contains(input_string.toLowerCase())) {
-                list.add(cityDetails.getCity_name() + " (" + cityDetails.getCity_state() + ")");
+                if (cityDetails.getCity_state() != null && !cityDetails.getCity_state().trim().equals(""))
+                    list.add(cityDetails.getCity_name() + " (" + cityDetails.getCity_state() + ")");
+                else
+                    list.add(cityDetails.getCity_name());
                 city_id_from_suggestion.add(cityDetails.getCity_id());
             }
         }
@@ -1456,18 +1452,37 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         } else if (calledApiValue == 54) {
             list_of_city = (ArrayList<CityDetails>) object;
 
+            try {
+                if (list_of_city.size() == 1) {
+                    city_id = list_of_city.get(0).getCity_id();
+                    city_with_states.setText(list_of_city.get(0).getCity_name());
+                    llCity.setVisibility(View.GONE);
+                }else{
+                    city_with_states.setText("");
+                    llCity.setVisibility(View.VISIBLE);
+                }
+            } catch (Exception ignored) {
+                llCity.setVisibility(View.VISIBLE);
+            }
+
             if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() == 0) {
                 if (city_name != "" && list_of_city != null && list_of_city.size() > 0) {
                     for (int i = 0; i < list_of_city.size(); i++) {
-                        CityDetails cityDetails = list_of_city.get(i);
+                        try {
+                            CityDetails cityDetails = list_of_city.get(i);
 
-                        String city = cityDetails.getCity_name();
-                        String state = cityDetails.getCity_state();
-                        int city_country_id = cityDetails.getCity_country();
-
-                        if (city.equals(city_name) && state.equals(state_name) && (city_country_id == country_id)) {
-                            String s = city.trim() + " (" + state + ")";
-                            city_with_states.setText(s);
+                            String city = cityDetails.getCity_name();
+                            String state = cityDetails.getCity_state();
+                            int city_country_id = cityDetails.getCity_country();
+                            if (city.equalsIgnoreCase(city_name) && state.equalsIgnoreCase(state_name) && (city_country_id == country_id)) {
+                                String s = "";
+                                if (!state.trim().equals(""))
+                                    s = city.trim() + " (" + state + ")";
+                                else
+                                    s = city.trim();
+                                city_with_states.setText(s);
+                            }
+                        } catch (Exception ignored) {
                         }
                     }
                 }
@@ -1475,16 +1490,22 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 if (list_of_city != null && list_of_city.size() > 0 && city_id != 0)
 
                     for (int i = 0; i < list_of_city.size(); i++) {
-                        CityDetails cityDetails = list_of_city.get(i);
-                        String city = cityDetails.getCity_name();
-                        String state = cityDetails.getCity_state();
-                        int city_country_id = cityDetails.getCity_country();
-                        if (cityDetails.getCity_id() == city_id && country_id == city_country_id) {
-                            String s = city.trim() + " (" + state + ")";
-                            city_with_states.setText(s);
-                            break;
+                        try {
+                            CityDetails cityDetails = list_of_city.get(i);
+                            String city = cityDetails.getCity_name();
+                            String state = cityDetails.getCity_state();
+                            int city_country_id = cityDetails.getCity_country();
+                            if (cityDetails.getCity_id() == city_id && country_id == city_country_id) {
+                                String s = "";
+                                if (!state.trim().equals(""))
+                                    s = city.trim() + " (" + state + ")";
+                                else
+                                    s = city.trim();
+                                city_with_states.setText(s);
+                                break;
+                            }
+                        } catch (Exception ignored) {
                         }
-
                     }
             }
         } else {
@@ -1517,7 +1538,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 //                intent1.putExtra("onBackPress", 1);
 //                startActivity(intent1);
 //            }
-
 
 
             if (!trainingLocation.getText().toString().equals("")) {
@@ -1652,8 +1672,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
 
     @Override
-    public void onAddressSelected(String address,int index) {
-        this.index=index;
+    public void onAddressSelected(String address, int index) {
+        this.index = index;
         trainingLocation.setText(address);
     }
 }

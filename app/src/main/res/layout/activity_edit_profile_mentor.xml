@@ -336,6 +336,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/llCity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/back_margin"
@@ -555,7 +556,7 @@
                         android:layout_toLeftOf="@+id/inputMutipleAddresses"
                         android:layout_toStartOf="@+id/inputMutipleAddresses"
                         android:gravity="center_vertical"
-                        android:text="@string/prompt_mutiple_address_mentor"
+                        android:text="@string/prompt_multiple_address_mentor"
                         android:textColor="@color/purple"
                         android:textSize="@dimen/profile_details" />
 

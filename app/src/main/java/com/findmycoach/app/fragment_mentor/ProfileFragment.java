@@ -269,10 +269,7 @@ public class ProfileFragment extends Fragment implements Callback {
 
     private void populateFields() {
         try {
-            if (userInfo.getMiddleName() == null || userInfo.getMiddleName().trim().equals(""))
-                profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
-            else
-                profileName.setText(userInfo.getFirstName() + " " + userInfo.getMiddleName() + " " + userInfo.getLastName());
+            profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
         } catch (Exception e) {
         }
         try {
@@ -352,7 +349,7 @@ public class ProfileFragment extends Fragment implements Callback {
 
         try {
             String mediumOfTeaching = userInfo.getMediumOfEducation();
-            if (mediumOfTeaching != null && !mediumOfTeaching.trim().equals("")){
+            if (mediumOfTeaching != null && !mediumOfTeaching.trim().equals("")) {
                 String[] array = mediumOfTeaching.split(",");
                 List<View> views = new ArrayList<>();
                 LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
