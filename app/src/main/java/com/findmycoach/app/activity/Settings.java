@@ -114,6 +114,7 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
                 break;
 
             case R.id.tv_my_promotions:
+                startActivity(new Intent(this,MyPromotions.class));
                 break;
 
             case R.id.backButton:

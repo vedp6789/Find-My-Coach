@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.CityDetails;
+import com.findmycoach.app.beans.Promotions.Promotions;
 import com.findmycoach.app.beans.attachment.Attachment;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.category.Category;
@@ -98,7 +99,8 @@ import java.util.TimeZone;
     *       //Save entered card details
     *   CountryConfig                       55
     *   Grades                              56
-    *   promotion                           58
+    *   promotion (get all )                          58
+    *   promotion (add )                              59
     * */
 
 
@@ -197,7 +199,6 @@ public class NetworkClient {
         requestParams.add(context.getResources().getString(R.string.device_language), language);
 
 
-
         client.get(context, getAuthAbsoluteURL("city", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -206,9 +207,10 @@ public class NetworkClient {
                     Log.d(TAG, "Success : Status code 766: " + statusCode);
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Success : Response 766: " + responseJson);
-                    JSONObject jsonObject=new JSONObject(responseJson);
-                    JSONArray jsonArray=jsonObject.getJSONArray("data");
-                    cityDetailsArrayList = new Gson().fromJson(jsonArray.toString(), new TypeToken<List<CityDetails>>(){}.getType());
+                    JSONObject jsonObject = new JSONObject(responseJson);
+                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    cityDetailsArrayList = new Gson().fromJson(jsonArray.toString(), new TypeToken<List<CityDetails>>() {
+                    }.getType());
                     callback.successOperation(cityDetailsArrayList, statusCode, calledApiValue);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -219,9 +221,9 @@ public class NetworkClient {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
-                    Log.d(TAG, "Failure : Status code 766: " + statusCode);
+                    Log.d(TAG, "Failure : Status code city api: " + statusCode);
                     String responseJson = new String(responseBody);
-                    Log.d(TAG, "Failure : Response 66: " + responseJson);
+                    Log.d(TAG, "Failure : Response: " + responseJson);
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
@@ -234,8 +236,6 @@ public class NetworkClient {
             }
         });
     }
-
-
 
 
     public static void login(final Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
@@ -430,12 +430,20 @@ public class NetworkClient {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
-                    if (statusCode == 200) {
-                        StorageHelper.checkGcmRegIdSentToSever(context, context.getResources().getString(R.string.reg_id_saved_to_server), true);
-                    }
                     Log.d(TAG, "Success: Response Code:" + statusCode);
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Success: Response:" + responseJson);
+
+                    /*ArrayList<Promotion> promotionsArrayList = new ArrayList<>();
+                    Log.d(TAG, "Success : Status code promotion get all: " + statusCode);
+                    JSONObject jsonObject=new JSONObject(responseJson);
+                    JSONArray jsonArray=jsonObject.getJSONArray("data");
+                    promotionsArrayList = new Gson().fromJson(jsonArray.toString(), new TypeToken<List<Promoti>>(){}.getType());
+                    callback.successOperation(cityDetailsArrayList, statusCode, calledApiValue);*/
+
+                    Promotions promotions = new Gson().fromJson(responseJson, Promotions.class);
+                    callback.successOperation(promotions, statusCode, calledApiValue);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -445,12 +453,14 @@ public class NetworkClient {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 StorageHelper.checkGcmRegIdSentToSever(context, context.getResources().getString(R.string.reg_id_saved_to_server), false);
                 try {
-                    Log.d(TAG, "Failure: Response Code:" + statusCode);
+                    Log.d(TAG, "Failure : Status code : " + statusCode);
                     String responseJson = new String(responseBody);
-                    Log.d(TAG, "Failure: Response:" + responseJson);
+                    Log.d(TAG, "Failure : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
                     try {
-                        Log.d(TAG, "Failure: Error:" + e.getMessage());
+                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
                     } catch (Exception ignored) {
                     }
                 }
@@ -459,9 +469,56 @@ public class NetworkClient {
     }
 
 
+    public static void addPromotion(final Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
+        if (!NetworkManager.isNetworkConnected(context)) {
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.post(context, getAbsoluteURL("promotion", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    Log.d(TAG, "Success: Response Code:" + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success: Response:" + responseJson);
 
+                    /*ArrayList<Promotion> promotionsArrayList = new ArrayList<>();
+                    Log.d(TAG, "Success : Status code promotion get all: " + statusCode);
+                    JSONObject jsonObject=new JSONObject(responseJson);
+                    JSONArray jsonArray=jsonObject.getJSONArray("data");
+                    promotionsArrayList = new Gson().fromJson(jsonArray.toString(), new TypeToken<List<Promoti>>(){}.getType());
+                    callback.successOperation(cityDetailsArrayList, statusCode, calledApiValue);*/
 
+                    JSONObject jsonObject = new JSONObject(responseJson);
+                    callback.successOperation(jsonObject, statusCode, calledApiValue);
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                StorageHelper.checkGcmRegIdSentToSever(context, context.getResources().getString(R.string.reg_id_saved_to_server), false);
+                try {
+                    Log.d(TAG, "Failure : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    try {
+                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        });
+    }
 
 
 

@@ -1,7 +1,6 @@
 package com.findmycoach.app.adapter;
 
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +9,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.findmycoach.app.beans.Promotions.Offer;
+
+
 import com.findmycoach.app.R;
-import com.findmycoach.app.beans.Promotions;
-import com.findmycoach.app.beans.UserNotifications.ConnectionRequest;
-import com.google.android.gms.analytics.ecommerce.Promotion;
+import com.findmycoach.app.beans.Promotions.Promotions;
 
 import java.util.ArrayList;
 
@@ -21,13 +21,13 @@ import java.util.ArrayList;
  * Created by ved on 10/8/15.
  */
 public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<PromotionsRecyclerViewAdapter.ViewHolder> {
-    private ArrayList<Promotions> promotionsArrayList;
+    private ArrayList<Offer> promotionsArrayList;
     boolean promotionsYN = false;
     Context context;
     boolean active_promotions;
 
 
-    public PromotionsRecyclerViewAdapter(Context context, ArrayList<Promotions> promotionsArrayList, boolean activePromotions) {
+    public PromotionsRecyclerViewAdapter(Context context, ArrayList<Offer> promotionsArrayList, boolean activePromotions) {
         promotionsYN = false;
         this.promotionsArrayList = promotionsArrayList;
         if (promotionsArrayList != null && promotionsArrayList.size() > 0) {
@@ -51,11 +51,10 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
             holder.tv_no_promotions_message.setVisibility(View.GONE);
             holder.rlPromotionDetails.setVisibility(View.VISIBLE);
             holder.iv_delete_promotion.setVisibility(View.VISIBLE);
-            if(active_promotions){
-                populatePromotions(holder,position,true);
-            }else{
-                populatePromotions(holder,position,false);
-
+            if (active_promotions) {
+                populatePromotions(holder, position, true);
+            } else {
+                populatePromotions(holder, position, false);
             }
 
 
@@ -76,9 +75,40 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
 
     }
 
-    private void populatePromotions(ViewHolder viewHolder,int position,boolean activePromotions) {
+    private void populatePromotions(ViewHolder holder, int position, boolean active_promotions) {
+        try {
+
+                Offer offer = promotionsArrayList.get(position);
+                holder.tv_promotions_title.setText(offer.getPromotion_title());
+                String promotion_type = offer.getPromotion_type();
+
+                if (promotion_type.equals("discount")) {
+                    holder.rlPromotionFreeClass.setVisibility(View.GONE);
+                    holder.rlPromotionMandatoryClasses.setVisibility(View.GONE);
+                    holder.tv_promotions_type.setText(context.getResources().getString(R.string.discount_type_promotion));
+                    holder.tv_promotions_discount.setText(offer.getDiscount_percentage());
+
+                } else {
+                    if (promotion_type.equals("trial")) {
+                        holder.rlPromotionDiscount.setVisibility(View.GONE);
+                        holder.tv_promotions_type.setText(context.getResources().getString(R.string.free_classes_promotion));
+                        holder.tv_promotions_free_classes.setText(offer.getFree_classes());   /* This is the number of classes mentor will give as free to mentee*/
+                        holder.tv_promotions_mandatory_classes.setText(offer.getFree_min_classes());  /* This is number of mandatory classes which mentee have to join to get free classes */
+
+                    }
+                }
+
+                holder.iv_delete_promotion.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
 
+                    }
+                });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

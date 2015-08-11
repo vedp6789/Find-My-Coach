@@ -196,8 +196,11 @@
 
         <activity
             android:name=".activity.MyPromotions"
-            android:label="@string/title_activity_my_promotions" >
+           android:screenOrientation="portrait">
         </activity>
+
+        <activity android:name=".activity.AddPromotion"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

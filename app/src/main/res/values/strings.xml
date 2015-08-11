@@ -90,6 +90,7 @@
         <item>12 PM</item>
     </string-array>
 
+
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String array block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
@@ -571,6 +572,8 @@
     <string name="beginner">Beginner</string>
     <string name="intermediate">Intermediate</string>
     <string name="advance">Advance</string>
+    <string name="discount_type_promotion">Discount</string>
+    <string name="free_classes_promotion">Free class</string>
 
 
     <!-- Actions -->
@@ -758,6 +761,14 @@
     <string name="title_activity_my_promotions">MyPromotions</string>
     <string name="no_active_promotions">No active promotions!</string>
     <string name="no_inactive_promotions">No inactive promotions!</string>
+    <string name="add_promotion">Add</string>
+    <string name="create_promotion">Add new promotion</string>
+    <string name="noOfMandatoryClasses">No. of mandatory classes</string>
+    <string name="noOfFreeClasses">No. of free classes</string>
+    <string name="add_promotion_title">Add promotion title!</string>
+    <string name="add_dicount_percentage">Add discount percentage!</string>
+    <string name="add_free_classes">Add number of free class you will provide to mentee!</string>
+    <string name="add_mandatory_classes">Add number of mandatory classes for mentee!</string>
 
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->

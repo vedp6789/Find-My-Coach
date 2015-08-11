@@ -12,9 +12,11 @@ import android.view.ViewGroup;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.PromotionsRecyclerViewAdapter;
-import com.findmycoach.app.beans.Promotions;
+import com.findmycoach.app.beans.Promotions.Promotions;
 import com.findmycoach.app.util.DividerItemDecoration;
 import com.findmycoach.app.util.RecyclerItemClickListener;
+import com.findmycoach.app.beans.Promotions.Offer;
+
 
 import java.util.ArrayList;
 
@@ -22,56 +24,50 @@ import java.util.ArrayList;
  * Created by ved on 10/8/15.
  */
 public class ActiveInactivePromotions extends Fragment {
-    ArrayList<Promotions> promotionsArrayList;
-    private ActiveInactivePromotions activeInactivePromotions;
+    ArrayList<Offer> promotionsArrayList;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private int selectedPosition = -1;
+    private boolean activePromotions;
 
     public ActiveInactivePromotions() {
 
     }
 
-    public ActiveInactivePromotions newInstance(ArrayList<Promotions> promotions) {
+    public static ActiveInactivePromotions newInstance(ArrayList<Offer> promotionsArrayList, boolean forActivePromotions) {
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("activePromotions", promotions);
+        bundle.putParcelableArrayList("promotions", promotionsArrayList);
+        bundle.putBoolean("activePromotions", forActivePromotions);
         ActiveInactivePromotions activeInactivePromotions = new ActiveInactivePromotions();
         activeInactivePromotions.setArguments(bundle);
-
         return activeInactivePromotions;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activeInactivePromotions = this;
-        promotionsArrayList = new ArrayList<>();
         if (getArguments() != null) {
-            promotionsArrayList = getArguments().getParcelableArrayList("activePromotions");
+            promotionsArrayList = getArguments().getParcelableArrayList("promotions");
+            activePromotions = getArguments().getBoolean("activePromotions");
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        activeInactivePromotions = null;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_promotions, container, false);
-
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_promotions);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         recyclerView.setHasFixedSize(true);
-
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        adapter = new PromotionsRecyclerViewAdapter(getActivity(), promotionsArrayList);
+        adapter = new PromotionsRecyclerViewAdapter(getActivity(), promotionsArrayList, activePromotions);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
@@ -79,27 +75,10 @@ public class ActiveInactivePromotions extends Fragment {
                     public void onItemClick(View view, int position) {
                         if (promotionsArrayList != null && promotionsArrayList.size() > 0) {
 
-                            /*Intent intent = new Intent(getActivity(), MentorNotificationActions.class);
-
-
-                            Bundle bundle = new Bundle();
-                            ConnectionRequest connectionRequest = arrayList_of_connection_request.get(position);
-                            selectedPosition = position;
-                            bundle.putParcelable("conn_req_data", connectionRequest);
-
-                            intent.putExtra("for", "connection_request");
-                            intent.putExtra("conn_req_bundle", bundle);
-                            if (connectionRequest.getStatus().equals("unread"))
-                                startActivityForResult(intent, 12345);*/
                         }
                     }
                 })
         );
-
-
         return view;
-
-
-
     }
 }

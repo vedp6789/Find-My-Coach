@@ -1,68 +1,23 @@
-package com.findmycoach.app.beans;
+package com.findmycoach.app.beans.Promotions;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.android.gms.analytics.ecommerce.Promotion;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Created by ved on 10/8/15.
+ * Created by ved on 11/8/15.
  */
-public class Promotions implements Parcelable {
-
-    List<Offer> promotions;
-
-
-    public Promotions(Parcel parcel) {
-        parcel.readTypedList(this.promotions, Offer.CREATOR);
-    }
-
-    public List<Offer> getPromotions() {
-        return promotions;
-    }
-
-    public void setPromotions(List<Offer> promotions) {
-        this.promotions = promotions;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(this.promotions);
-    }
-
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Promotions createFromParcel(Parcel in) {
-            return new Promotions(in);
-        }
-
-        public Promotions[] newArray(int size) {
-            return new Promotions[size];
-        }
-    };
-
-}
-
-
 /*
 * Offer class is used for different Promotions
 *
 * */
-class Offer implements Parcelable {
+public class Offer implements Parcelable {
 
     private String id;
     private String promotion_title;
     private String promotion_type;
     private String discount_percentage;
-    private String trial_classes;
-    private String trial_min_classes;
+    private String free_classes;/* This is actually number of free classes*/
+    private String free_min_classes;  /* This is the number of classes mentee have to attend to get free classes*/
     private String user_id;
     private String is_active;
 
@@ -71,8 +26,8 @@ class Offer implements Parcelable {
         promotion_title = parcel.readString();
         promotion_type = parcel.readString();
         discount_percentage = parcel.readString();
-        trial_classes = parcel.readString();
-        trial_min_classes = parcel.readString();
+        free_classes = parcel.readString();
+        free_min_classes = parcel.readString();
         user_id = parcel.readString();
         is_active = parcel.readString();
     }
@@ -109,20 +64,20 @@ class Offer implements Parcelable {
         this.discount_percentage = discount_percentage;
     }
 
-    public String getTrial_classes() {
-        return trial_classes;
+    public String getFree_classes() {
+        return free_classes;
     }
 
-    public void setTrial_classes(String trial_classes) {
-        this.trial_classes = trial_classes;
+    public void setFree_classes(String free_classes) {
+        this.free_classes = free_classes;
     }
 
-    public String getTrial_min_classes() {
-        return trial_min_classes;
+    public String getFree_min_classes() {
+        return free_min_classes;
     }
 
-    public void setTrial_min_classes(String trial_min_classes) {
-        this.trial_min_classes = trial_min_classes;
+    public void setFree_min_classes(String free_min_classes) {
+        this.free_min_classes = free_min_classes;
     }
 
     public String getUser_id() {
@@ -152,8 +107,8 @@ class Offer implements Parcelable {
         dest.writeString(this.promotion_title);
         dest.writeString(this.promotion_type);
         dest.writeString(this.discount_percentage);
-        dest.writeString(this.trial_classes);
-        dest.writeString(this.trial_min_classes);
+        dest.writeString(this.free_classes);
+        dest.writeString(this.free_min_classes);
         dest.writeString(this.user_id);
         dest.writeString(this.is_active);
     }
@@ -170,3 +125,4 @@ class Offer implements Parcelable {
 
 
 }
+
