@@ -994,10 +994,10 @@
                         android:orientation="horizontal">
 
                         <com.findmycoach.app.views.ChizzleTextView
-                            android:layout_width="0.5dp"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:layout_weight="0.5"
+                            android:layout_weight="0.8"
                             android:text="@string/my_teaching_methodology"
                             android:textColor="@color/purple_light"
                             android:textSize="@dimen/profile_heading"
@@ -1009,7 +1009,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical|right"
                             android:layout_marginTop="8dp"
-                            android:layout_weight="0.5"
+                            android:layout_weight="0.2"
                             android:gravity="center_vertical|right"
                             android:textColor="@color/purple_light"
                             android:textSize="@dimen/time_stamp" />
