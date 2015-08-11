@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:orientation="vertical"
+    android:padding="@dimen/textView_padding_margin">
+
+    <com.findmycoach.app.views.ChizzleTextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/checkbox"
+        android:layout_toStartOf="@+id/checkbox"
+        android:background="@android:color/transparent"
+        android:gravity="center_vertical"
+        android:textColor="@color/purple"
+        android:textSize="@dimen/profile_details" />
+
+
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:button="@drawable/custom_check_box_square"
+        android:textColor="@color/purple"
+        android:textSize="@dimen/profile_details" />
+
+
+</RelativeLayout>

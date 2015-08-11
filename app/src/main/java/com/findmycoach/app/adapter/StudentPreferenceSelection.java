@@ -61,7 +61,7 @@ public class StudentPreferenceSelection extends BaseAdapter {
         StudentViewHolder studentViewHolder = null;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.qualified_coaching_single_row, parent, false);
+            convertView = inflater.inflate(R.layout.student_preferences_single_row, parent, false);
             studentViewHolder = new StudentViewHolder();
             studentViewHolder.student_selection = (CheckBox) convertView.findViewById(R.id.checkbox);
             studentViewHolder.textView = (TextView) convertView.findViewById(R.id.textView);
