@@ -537,6 +537,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             @Override
             public void onClick(View v) {
                 locale.setText("");
+                trainingLocation.setText("");
             }
         });
 
@@ -615,9 +616,15 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         trainingLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog=new PreferredTrainerLocationDialog(EditProfileActivityMentee.this,addressList,previousValue,index);
-                dialog.setAddressSelectedListener(EditProfileActivityMentee.this);
-                dialog.showPopUp();
+                if(!locale.getText().toString().isEmpty()) {
+                    dialog = new PreferredTrainerLocationDialog(EditProfileActivityMentee.this, addressList, previousValue, index);
+                    dialog.setAddressSelectedListener(EditProfileActivityMentee.this);
+                    dialog.showPopUp();
+                }
+                else {
+                    locale.setError(getResources().getString(R.string.enter_locale));
+                    locale.requestFocus();
+                }
             }
         });
         locale.setOnEditorActionListener(new TextView.OnEditorActionListener() {
