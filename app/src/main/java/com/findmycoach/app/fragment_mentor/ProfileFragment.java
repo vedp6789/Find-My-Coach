@@ -434,7 +434,7 @@ public class ProfileFragment extends Fragment implements Callback {
                 if (default_yn == 1) {
                     String address = "";
                     if (userInfo.getMultipleAddress().get(i).getLocale() != null) {
-                        address = address + userInfo.getMultipleAddress().get(i).getLocale() + ", ";
+                        address = address + userInfo.getMultipleAddress().get(i).getLocale();
                     }
                     profileAddress.setText(address);
                 } else {
