@@ -960,7 +960,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
                 } catch (Exception ignored) {
                 }
                 try {
-                    city_with_states.setText(address.getCityName());
+                    if(address.getStateName()!=null && !address.getStateName().isEmpty())
+                        city_with_states.setText(address.getCityName()+" ("+address.getStateName()+")");
+                    else {
+                        city_with_states.setText(address.getCityName());
+                    }
                 } catch (Exception ignored) {
                 }
 
