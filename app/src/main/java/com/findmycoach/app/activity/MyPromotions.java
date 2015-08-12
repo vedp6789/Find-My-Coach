@@ -220,6 +220,7 @@ public class MyPromotions extends FragmentActivity implements Callback {
                 }
                 activePromotionsTabRefreshed = true;
                 if (newPromotionAdded) {
+                    Log.e(TAG,"new promotion added");
                     newPromotionAdded = false;
                     promotionsViewpager.setCurrentItem(0);  /* when new promotion added then showing updated values as active promotion*/
 
@@ -227,6 +228,12 @@ public class MyPromotions extends FragmentActivity implements Callback {
             } else {
                 inactivePromotionArrayList = (ArrayList<Offer>) promotions.getPromotions();
                 inactivePromotionsTabRefreshed = true;
+                if (newPromotionAdded) {
+                    Log.e(TAG,"new promotion added");
+                    newPromotionAdded = false;
+                    promotionsViewpager.setCurrentItem(0);  /* when new promotion added then showing updated values as active promotion*/
+
+                }
             }
 
             promotionsViewPagerAdapter.setArrayList(activePromotionArrayList,inactivePromotionArrayList);

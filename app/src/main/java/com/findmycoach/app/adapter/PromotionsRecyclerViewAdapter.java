@@ -35,7 +35,7 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
     ActiveInactivePromotions activeInactivePromotions;
 
 
-    public PromotionsRecyclerViewAdapter(Context context, ArrayList<Offer> promotionsArrayList, boolean activePromotions,ActiveInactivePromotions activeInactivePromotions) {
+    public PromotionsRecyclerViewAdapter(Context context, ArrayList<Offer> promotionsArrayList, boolean activePromotions, ActiveInactivePromotions activeInactivePromotions) {
         promotionsYN = false;
         this.promotionsArrayList = promotionsArrayList;
         if (promotionsArrayList != null && promotionsArrayList.size() > 0) {
@@ -43,7 +43,7 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
         }
         this.active_promotions = activePromotions;
         this.context = context;
-        this.activeInactivePromotions=activeInactivePromotions;
+        this.activeInactivePromotions = activeInactivePromotions;
     }
 
     @Override
@@ -54,8 +54,8 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
 
     }
 
-    void updateOfferArrayList(ArrayList<Offer> offers){
-        promotionsArrayList =offers;
+    void updateOfferArrayList(ArrayList<Offer> offers) {
+        promotionsArrayList = offers;
     }
 
     @Override
@@ -111,13 +111,14 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
                 }
             }
 
+            holder.iv_delete_promotion.setOnClickListener(null);
             holder.iv_delete_promotion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (active_promotions) {
                         showDialog(offer_id, true);
                     } else {
-                        showDialog(offer_id, true);
+                        showDialog(offer_id, false);
 
                     }
 
@@ -135,31 +136,32 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
                                 holder.dialog.dismiss();
                             }
                         });
-
+                        holder.b1.setOnClickListener(null);
                         holder.b1.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                RequestParams requestParams=new RequestParams();
-                                requestParams.add("promotion_id",offer_id);
-                                if(activeInactivePromotions != null){
-                                    activeInactivePromotions.deletePromotion(requestParams,position,holder.dialog);
-                                }else{
-                                    Log.e("FMC","ActiveInactivePromotions instance null");
+                                RequestParams requestParams = new RequestParams();
+                                requestParams.add("promotion_id", offer_id);
+                                if (activeInactivePromotions != null) {
+                                    activeInactivePromotions.deletePromotion(requestParams, position, holder.dialog);
+                                } else {
+                                    Log.e("FMC", "ActiveInactivePromotions instance null");
                                 }
                             }
                         });
+                        holder.b2.setOnClickListener(null);
 
                         holder.b2.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                RequestParams requestParams=new RequestParams();
-                                requestParams.add("promotion_id",offer_id);
-                                requestParams.add("promotion_type",promotion_type);
-                                requestParams.add("is_active","0");  /* activate to inactive*/
-                                if(activeInactivePromotions != null){
-                                    activeInactivePromotions.updatePromotion(requestParams, position,holder.dialog);
-                                }else{
-                                    Log.e("FMC","ActiveInactivePromotions instance null");
+                                RequestParams requestParams = new RequestParams();
+                                requestParams.add("promotion_id", offer_id);
+                                requestParams.add("promotion_type", promotion_type);
+                                requestParams.add("is_active", "0");  /* activate to inactive*/
+                                if (activeInactivePromotions != null) {
+                                    activeInactivePromotions.updatePromotion(requestParams, position, holder.dialog);
+                                } else {
+                                    Log.e("FMC", "ActiveInactivePromotions instance null");
                                 }
                             }
                         });
@@ -177,12 +179,12 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
                         holder.b1.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                RequestParams requestParams=new RequestParams();
-                                requestParams.add("promotion_id",offer_id);
-                                if(activeInactivePromotions != null){
-                                    activeInactivePromotions.deletePromotion(requestParams,position,holder.dialog);
-                                }else{
-                                    Log.e("FMC","ActiveInactivePromotions instance null");
+                                RequestParams requestParams = new RequestParams();
+                                requestParams.add("promotion_id", offer_id);
+                                if (activeInactivePromotions != null) {
+                                    activeInactivePromotions.deletePromotion(requestParams, position, holder.dialog);
+                                } else {
+                                    Log.e("FMC", "ActiveInactivePromotions instance null");
                                 }
                             }
                         });
@@ -190,14 +192,14 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
                         holder.b2.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                RequestParams requestParams=new RequestParams();
-                                requestParams.add("promotion_id",offer_id);
-                                requestParams.add("promotion_type",promotion_type);
-                                requestParams.add("is_active","1");  /* Inactivate to activate*/
-                                if(activeInactivePromotions != null){
-                                    activeInactivePromotions.updatePromotion(requestParams, position,holder.dialog);
-                                }else{
-                                    Log.e("FMC","ActiveInactivePromotions instance null");
+                                RequestParams requestParams = new RequestParams();
+                                requestParams.add("promotion_id", offer_id);
+                                requestParams.add("promotion_type", promotion_type);
+                                requestParams.add("is_active", "1");  /* Inactivate to activate*/
+                                if (activeInactivePromotions != null) {
+                                    activeInactivePromotions.updatePromotion(requestParams, position, holder.dialog);
+                                } else {
+                                    Log.e("FMC", "ActiveInactivePromotions instance null");
                                 }
                             }
                         });
@@ -227,7 +229,7 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
         ImageView iv_delete_promotion;
         Dialog dialog;
         TextView tv_message, tv_title;
-        Button  b1, b2;
+        Button b1, b2;
         ImageView b_back;
 
         public ViewHolder(View itemView) {
