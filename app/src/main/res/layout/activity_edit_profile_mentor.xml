@@ -165,7 +165,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/back_margin"
-                    android:hint="@string/prompt_first_name"
+                    android:hint="@string/prompt_first_middle_name"
                     android:inputType="textCapSentences|textNoSuggestions|textCapWords"
                     android:singleLine="true"
                     android:textCursorDrawable="@drawable/cursor_purple"
