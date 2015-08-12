@@ -1187,13 +1187,18 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
         if (city_id == 0) {
             city_with_states.setError(getResources().getString(R.string.enter_city_from_suggestion));
+            if (city_with_states.hasFocus()) {
+                city_with_states.clearFocus();
+            }
             city_with_states.requestFocus();
             isValid = false;
         }
 
         if (city_with_states.getText().toString().trim().isEmpty()) {
-            city_with_states.setError(getResources().getString(R.string.enter_city));
-            city_with_states.requestFocus();
+            if(isValid){
+                city_with_states.setError(getResources().getString(R.string.enter_city));
+                city_with_states.requestFocus();
+            }
             isValid = false;
         }
 
