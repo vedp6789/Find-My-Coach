@@ -222,6 +222,7 @@ public class MyPromotions extends FragmentActivity implements Callback {
                 if (newPromotionAdded) {
                     newPromotionAdded = false;
                     promotionsViewpager.setCurrentItem(0);  /* when new promotion added then showing updated values as active promotion*/
+
                 }
             } else {
                 inactivePromotionArrayList = (ArrayList<Offer>) promotions.getPromotions();

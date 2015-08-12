@@ -1,10 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content" android:layout_height="wrap_content">
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    >
 
-    <include
+
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/ll_title"
-        layout="@layout/header_back_name_menu" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/purple">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back_small"
+            android:layout_gravity="center"
+            android:padding="@dimen/textView_padding_margin"
+            android:id="@+id/backButton"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+        <com.findmycoach.app.views.ChizzleTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/profile_name"
+            android:layout_toRightOf="@+id/backButton"
+            android:layout_toEndOf="@+id/backButton"
+            android:layout_toStartOf="@+id/menuItem"
+            android:layout_toLeftOf="@+id/menuItem" />
+
+        <ImageView
+            android:padding="@dimen/textView_padding_margin"
+            android:layout_alignParentRight="true"
+            android:id="@+id/menuItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/textView_padding_margin"
+            android:paddingRight="@dimen/textView_padding_margin"
+            android:layout_alignBottom="@+id/backButton"
+            android:layout_alignTop="@+id/backButton" />
+
+    </RelativeLayout>
 
     <com.findmycoach.app.views.ChizzleTextView
     android:id="@+id/tv_message"
@@ -15,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/profile_heading"
-        android:textColor="@color/purple_light"/>
+        android:textColor="@color/purple"/>
 
     <LinearLayout
         android:layout_marginTop="@dimen/back_margin"
@@ -23,7 +68,8 @@
         android:layout_below="@+id/tv_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/time_stamp">
 
         <com.findmycoach.app.views.ChizzleButton
             android:id="@+id/b1"
@@ -33,7 +79,7 @@
             android:background="@drawable/custom_button_click_white_bg"
             android:textAllCaps="false"
             android:textColor="@color/custom_button_text_color_click_white_bg"
-            android:textSize="@dimen/button_text_size"
+            android:textSize="@dimen/profile_heading"
             android:layout_marginLeft="@dimen/days_margin"
             android:layout_marginRight="@dimen/underline"/>
 
@@ -45,7 +91,7 @@
             android:background="@drawable/custom_button_click_white_bg"
             android:textAllCaps="false"
             android:textColor="@color/custom_button_text_color_click_white_bg"
-            android:textSize="@dimen/button_text_size"
+            android:textSize="@dimen/profile_heading"
             android:layout_marginLeft="@dimen/underline"
             android:layout_marginRight="@dimen/days_margin"/>
 
