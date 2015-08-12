@@ -24,6 +24,7 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
@@ -239,12 +240,12 @@ public class ProfileFragment extends Fragment implements Callback {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "IN onActivity Result" + requestCode + "   " + requestCode);
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             String updatedUserJson = data.getStringExtra("user_info");
             userInfo = new Gson().fromJson(updatedUserJson, Data.class);
             scrollView.fullScroll(View.FOCUS_UP);
+            Toast.makeText(getActivity(),getResources().getString(R.string.profile_update),Toast.LENGTH_LONG).show();
             populateFields();
         }
     }

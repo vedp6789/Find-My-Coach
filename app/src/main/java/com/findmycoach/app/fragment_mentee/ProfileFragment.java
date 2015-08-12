@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
@@ -156,6 +157,7 @@ public class ProfileFragment extends Fragment implements Callback {
             String updatedUserJson = data.getStringExtra("user_info");
             userInfo = new Gson().fromJson(updatedUserJson, Data.class);
             parentScrollView.fullScroll(View.FOCUS_UP);
+            Toast.makeText(getActivity(), getResources().getString(R.string.profile_update), Toast.LENGTH_LONG).show();
             populateFields();
         }
     }

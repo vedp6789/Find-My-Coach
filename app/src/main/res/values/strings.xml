@@ -360,6 +360,8 @@
     <string name="title_calender_preferences">Calendar preferences</string>
 
     <string name="title_activity_areas_of_interest">AreasOfInterestActivity</string>
+    <string name="profile_update">Profile updated</string>
+
 
     <!-- Strings related to login -->
 
