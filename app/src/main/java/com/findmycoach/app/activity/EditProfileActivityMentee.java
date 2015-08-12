@@ -468,7 +468,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         findViewById(R.id.dobInfo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast =  Toast.makeText(EditProfileActivityMentee.this,
+                Toast toast = Toast.makeText(EditProfileActivityMentee.this,
                         getResources().getText(R.string.dob_info_mentee), Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 0);
                 toast.show();
@@ -521,6 +521,11 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 selected_city = null;/* making selected_city null because if user do changes in city and does not select city from suggested city then this selected_city string should be null which is used to validate the city */
                 city_id = 0;
                 String input = city_with_states.getText().toString().trim();
+                try {
+                    if (input.contains("("))
+                        input = input.split("\\(")[0].trim();
+                } catch (Exception ignored) {
+                }
                 if (input.length() >= 2) {
 
                     if (city_with_states.isPerformingCompletion()) {
@@ -716,13 +721,13 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         updateAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateUserUpdate()){
+                if (validateUserUpdate()) {
                     if (city_id != 0)
                         callUpdateService();
                     else
                         Toast.makeText(EditProfileActivityMentee.this, "Please select a city from suggestions", Toast.LENGTH_LONG).show();
+                }
             }
-        }
         });
 
         /*pinCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -1173,7 +1178,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             city_with_states.requestFocus();
             isValid = false;
         }
-
 
 
         if (locale.getText().toString().trim().equals("")) {

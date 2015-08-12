@@ -582,6 +582,13 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
             public void afterTextChanged(Editable s) {
                 selected_city = null;/* making selected_city null because if user do changes in city and does not select city from suggested city then this selected_city string should be null which is used to validate the city */
                 String input = city_with_states.getText().toString().trim();
+
+                try {
+                    if (input.contains("("))
+                        input = input.split("\\(")[0].trim();
+                } catch (Exception ignored) {
+                }
+
                 city_id = 0;
                 if (input.length() >= 2) {
                     if (city_with_states.isPerformingCompletion()) {
