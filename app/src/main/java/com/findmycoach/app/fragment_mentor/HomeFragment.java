@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.findmycoach.app.R;
@@ -101,8 +100,8 @@ public class HomeFragment extends Fragment implements Callback {
         Log.d(TAG, "Notification data for: " + " user_id: " + StorageHelper.getUserDetails(getActivity(), "user_id") + " user_group: " + StorageHelper.getUserGroup(getActivity(), "user_group"));
 
 
-        if (mSwipeRefreshLayout != null && !mSwipeRefreshLayout.isRefreshing())
-            progressDialog.show();
+//        if (mSwipeRefreshLayout != null && !mSwipeRefreshLayout.isRefreshing())
+//            progressDialog.show();
         NetworkClient.getUserNotifications(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 19);
 
 
@@ -158,7 +157,7 @@ public class HomeFragment extends Fragment implements Callback {
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        progressDialog.dismiss();
+//        progressDialog.dismiss();
         String mentor_notifications = (String) object;
         if (calledApiValue == 19) {
             try {
@@ -284,9 +283,9 @@ public class HomeFragment extends Fragment implements Callback {
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
-        progressDialog.dismiss();
+//        progressDialog.dismiss();
         if (mSwipeRefreshLayout != null)
             mSwipeRefreshLayout.setRefreshing(false);
-        Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
     }
 }
