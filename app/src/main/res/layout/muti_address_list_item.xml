@@ -24,8 +24,8 @@
             android:layout_weight="0.7" />
 
         <ImageButton
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:id="@+id/deleteAddressButton"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"

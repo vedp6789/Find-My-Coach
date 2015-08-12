@@ -350,7 +350,7 @@
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_chat_widget">Chat widget</string>
     <string name="title_activity_signup">SignupActivity</string>
-    <string name="title_edit_profile_menu">Update profile</string>
+    <string name="title_edit_profile_menu">Update Profile</string>
     <string name="title_validate_phone">Verify phone number</string>
     <string name="title_activity_user_list">Mentors</string>
     <string name="title_mentor_details">Mentor detail</string>
@@ -370,12 +370,12 @@
     <string name="prompt_email_id">Email Id</string>
     <string name="prompt_email_id_col">Email Id :</string>
     <string name="prompt_password">Password</string>
-    <string name="prompt_password_minimum_5_characters">Password (minimum 5 characters)</string>
+    <string name="prompt_password_minimum_5_characters">Password (min. 5 characters)</string>
     <string name="old_password">Old password:</string>
     <string name="new_password">New password:</string>
     <string name="new_password_re">Re enter new password:</string>
     <string name="new_phone_no">Mobile number:</string>
-    <string name="prompt_confirm_password">Confirm password</string>
+    <string name="prompt_confirm_password">Confirm new password</string>
     <string name="prompt_commit">Commit</string>
     <string name="prompt_first_name">First name</string>
     <string name="prompt_middle_name">Middle name (optional)</string>
@@ -400,7 +400,7 @@
     <string name="prompt_female">Female</string>
     <string name="prompt_phone">Mobile number</string>
     <string name="prompt_phone_col">Mobile number :</string>
-    <string name="prompt_qualified">I have professional qualification for</string>
+    <string name="prompt_qualified">I have Professional Qualifications in</string>
     <string name="prompt_submit">Submit</string>
     <string name="prompt_address">Physical address</string>
     <string name="prompt_complete_address">Complete Street Address</string>
@@ -502,8 +502,8 @@
     <string name="prompt_mutiple_address">Add more  Locations  for my search</string>
     <string name="prompt_addressline1">House no/street no</string>
     <string name="prompt_fellow_student_location">I can go for a group class to a nearby students location</string>
-    <string name="prompt_multiple_address_mentor">I am available at Other location also</string>
-    <string name="prompt_location_preference">Location Preference</string>
+    <string name="prompt_multiple_address_mentor">I am available at Other Locations also</string>
+    <string name="prompt_location_preference">Teaching Location Preference</string>
 
     <string name="prompt_summary">More information about me</string>
     <string name="my_qualification">My Qualifications</string>
@@ -755,7 +755,7 @@
         <item>Either</item>
     </string-array>
 
-    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
 
 
 </resources>

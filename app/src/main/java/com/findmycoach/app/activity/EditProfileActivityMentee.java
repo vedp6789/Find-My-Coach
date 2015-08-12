@@ -517,6 +517,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             @Override
             public void afterTextChanged(Editable s) {
                 selected_city = null;/* making selected_city null because if user do changes in city and does not select city from suggested city then this selected_city string should be null which is used to validate the city */
+                city_id = 0;
                 String input = city_with_states.getText().toString().trim();
                 if (input.length() >= 2) {
 
@@ -713,9 +714,13 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         updateAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateUserUpdate())
-                    callUpdateService();
+                if (validateUserUpdate()){
+                    if (city_id != 0)
+                        callUpdateService();
+                    else
+                        Toast.makeText(EditProfileActivityMentee.this, "Please select a city from suggestions", Toast.LENGTH_LONG).show();
             }
+        }
         });
 
         /*pinCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -1155,17 +1160,19 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             isValid = false;
         }
 
+        if (city_id == 0) {
+            city_with_states.setError(getResources().getString(R.string.enter_city_from_suggestion));
+            city_with_states.requestFocus();
+            isValid = false;
+        }
+
         if (city_with_states.getText().toString().trim().isEmpty()) {
             city_with_states.setError(getResources().getString(R.string.enter_city));
             city_with_states.requestFocus();
             isValid = false;
         }
 
-        if (city_id == 0) {
-            city_with_states.setError(getResources().getString(R.string.enter_city_from_suggestion));
-            city_with_states.requestFocus();
-            isValid = false;
-        }
+
 
         if (locale.getText().toString().trim().equals("")) {
             locale.setError(getResources().getString(R.string.enter_locale));
@@ -1457,10 +1464,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             try {
                 if (list_of_city.size() == 1) {
                     city_id = list_of_city.get(0).getCity_id();
-                    city_with_states.setText(list_of_city.get(0).getCity_name());
-                    llCity.setVisibility(View.GONE);
-                } else {
-                    llCity.setVisibility(View.VISIBLE);
                 }
             } catch (Exception ignored) {
                 llCity.setVisibility(View.VISIBLE);

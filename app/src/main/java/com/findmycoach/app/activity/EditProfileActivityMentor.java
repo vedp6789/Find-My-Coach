@@ -14,6 +14,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -163,6 +164,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
     private RelativeLayout multipleAddressLayout;
     private ImageButton deleteLocaleButton;
     private List<String> mediumOfTeaching;
+
 
 
     @Override
@@ -580,7 +582,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
             public void afterTextChanged(Editable s) {
                 selected_city = null;/* making selected_city null because if user do changes in city and does not select city from suggested city then this selected_city string should be null which is used to validate the city */
                 String input = city_with_states.getText().toString().trim();
-
+                city_id=0;
                 if (input.length() >= 2) {
                     if (city_with_states.isPerformingCompletion()) {
                         return;
@@ -597,10 +599,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
         city_with_states.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e(TAG, "postion: " + position);
 
-                // Log.e(TAG,"city id on auto suggestion click: "+city_id_from_suggestion.get(position));
-                Log.e(TAG, "city id with suggestions arraylist: " + city_id_from_suggestion.size());
                 if (city_id_from_suggestion != null && city_id_from_suggestion.size() > 0) {
                     city_id = city_id_from_suggestion.get(position);
                 }
@@ -668,8 +667,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
             @Override
             public void onClick(View v) {
                 if (validateUserUpdate()) {
-                    callUpdateService();
-
+                    if(city_id!=0)
+                        callUpdateService();
+                    else
+                        Toast.makeText(EditProfileActivityMentor.this,"Please select a city from suggestions",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -1098,6 +1099,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
 
         }
 
+        if (city_id == 0) {
+            city_with_states.setError(getResources().getString(R.string.enter_city_from_suggestion));
+            city_with_states.requestFocus();
+            isValid = false;
+        }
+
         if (city_with_states.getText().toString().trim().equals("")) {
             city_with_states.setError(getResources().getString(R.string.enter_city));
             if (isValid)
@@ -1106,11 +1113,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
             isValid = false;
         }
 
-        if (city_id == 0) {
-            city_with_states.setError(getResources().getString(R.string.enter_city_from_suggestion));
-            city_with_states.requestFocus();
-            isValid = false;
-        }
+
 
         if (teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2) {
             if (physicalAddress.getText().toString().trim().isEmpty()) {
@@ -1181,6 +1184,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
                 areaOfCoaching.requestFocus();
             isValid = false;
         }
+
+
 
 
         if (isValid) {
@@ -1621,10 +1626,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
             try {
                 if (list_of_city.size() == 1) {
                     city_id = list_of_city.get(0).getCity_id();
-                    city_with_states.setText(list_of_city.get(0).getCity_name());
-                    llCity.setVisibility(View.GONE);
-                } else {
-                    llCity.setVisibility(View.VISIBLE);
                 }
             } catch (Exception ignored) {
                 llCity.setVisibility(View.VISIBLE);

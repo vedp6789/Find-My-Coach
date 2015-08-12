@@ -137,7 +137,7 @@ public class ChooseImageActivity extends Activity {
             }
         });
 
-        if(getIntent().getStringExtra("removeImageOption").equals(getResources().getString(R.string.add_photo)))
+        if(getIntent().getStringExtra("removeImageOption")!=null && getIntent().getStringExtra("removeImageOption").equals(getResources().getString(R.string.add_photo)))
             removeImageButton.setVisibility(View.GONE);
         else
             isImageSelected = true;
