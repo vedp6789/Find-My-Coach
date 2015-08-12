@@ -491,7 +491,7 @@
                         android:id="@+id/physicalAddressInfoMentee"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:layout_alignParentRight="false"
+                        android:layout_alignParentRight="true"
                         android:background="@null"
                         android:src="@drawable/notification25"
                         android:textColor="@color/custom_button_text_color_click_white_bg"
