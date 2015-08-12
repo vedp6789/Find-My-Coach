@@ -21,32 +21,27 @@
     <!--api urls-->
 
 
-    <!--                                                                         Demo server for our internal use                                                                          -->
+    <!--Demo server for our internal use-->
     <!--<string name="BASE_URL_WITH_AUTH">http://demo.iglulabs.com/fmcweb/www/api/auth/</string>
     <string name="BASE_URL">http://demo.iglulabs.com/fmcweb/www/api/v1/</string>-->
-
-
-
-    <!--                                                                                AWS server 1 for Ankit                                                                      -->
-    <!--<string name="BASE_URL_WITH_AUTH">http://54.169.233.2/api/auth/</string>
-    <string name="BASE_URL">http://54.169.233.2/api/v1/</string>
--->
-
-
-    <!--                                                                AWS server 2 for testing apk from other users, We will update this IP apk's on Play store                   -->
-    <string name="BASE_URL_WITH_AUTH">http://52.74.155.74/api/auth/</string>
-    <string name="BASE_URL">http://52.74.155.74/api/v1/</string>
-
-
-
-    <!--<string name="BASE_URL_WITH_AUTH">http://10.1.1.158/fmcweb/www/api/auth/</string>-->
-    <!--<string name="BASE_URL">http://10.1.1.158/fmcweb/www/api/v1/</string>-->
-
-    <!--  Production URL http://54.169.233.2/api/v1-->
-
     <!--WEB SOCKET URL-->
     <!--<string name="CHAT_SOCKET_URL">ws://192.241.196.244:9302</string>-->
-    <string name="CHAT_SOCKET_URL">ws://54.169.233.2:9302</string>
+
+
+    <!--AWS server 1 for Ankit-->
+    <!--<string name="BASE_URL_WITH_AUTH">http://54.169.233.2/api/auth/</string>
+    <string name="BASE_URL">http://54.169.233.2/api/v1/</string>-->
+    <!--WEB SOCKET URL-->
+    <!--<string name="CHAT_SOCKET_URL">ws://54.169.233.2:9302</string>-->
+
+
+    <!--AWS server 2 for testing apk from other users, We will update this IP apk's on Play store-->
+    <string name="BASE_URL_WITH_AUTH">http://52.74.155.74/api/auth/</string>
+    <string name="BASE_URL">http://52.74.155.74/api/v1/</string>
+    <!--WEB SOCKET URL-->
+    <string name="CHAT_SOCKET_URL">ws://52.74.155.74:9302</string>
+
+
 
     <!--Root path of media storage Folder-->
     <string name="stored_path">FindMyCoach</string>

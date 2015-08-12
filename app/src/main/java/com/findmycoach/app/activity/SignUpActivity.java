@@ -25,6 +25,7 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.CountryCodeAdapter;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.authentication.SubCategoryName;
+import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -391,7 +392,8 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
         if (statusCode == 200 && response.getData() != null) {
             /** Saving user group */
 
-            StorageHelper.saveUserProfile(this, new Gson().toJson(response));
+            String profile = new Gson().toJson(response);
+            StorageHelper.saveUserProfile(this, profile);
 
             String user_group_saved = StorageHelper.getUserGroup(SignUpActivity.this, "user_group");
             if (user_group_saved == null || !user_group_saved.equals(String.valueOf(user_group))) {
@@ -403,7 +405,6 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             if (response.getData().getAuthToken() != null && response.getData() != null && response.getData().getId() != null) {
                 saveUser(response.getData().getAuthToken(), response.getData().getId());
             }
-
 
 
             try {
@@ -426,6 +427,7 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
             }
 
             saveUserPhn("True");
+            ProfileResponse profileResponse = new Gson().fromJson(profile, ProfileResponse.class);
             int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
             if (response.getData().getMultipleAddress() == null || response.getData().getMultipleAddress().size() == 0) {
                 if (userGroup == 2) {
@@ -442,6 +444,11 @@ public class SignUpActivity extends Activity implements View.OnClickListener, Ca
 
             } else if (userGroup == 3 && (response.getData().getSubCategoryName() == null || response.getData().getSubCategoryName().size() < 1)) {
                 Intent intent = new Intent(this, EditProfileActivityMentor.class);
+                intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                intent.putExtra("new_user", true);
+                startActivity(intent);
+            } else if (userGroup == 2 && (profileResponse.getData().getTrainingLocation() == null || ((String) profileResponse.getData().getTrainingLocation()).trim().equals(""))) {
+                Intent intent = new Intent(this, EditProfileActivityMentee.class);
                 intent.putExtra("user_info", new Gson().toJson(response.getData()));
                 intent.putExtra("new_user", true);
                 startActivity(intent);
