@@ -447,8 +447,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
         findViewById(R.id.dobInfo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(EditProfileActivityMentor.this,
-                        getResources().getText(R.string.dob_info_mentor), Toast.LENGTH_LONG).show();
+                Toast toast =  Toast.makeText(EditProfileActivityMentor.this,
+                        getResources().getText(R.string.dob_info_mentor), Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 0);
+                toast.show();
             }
         });
 

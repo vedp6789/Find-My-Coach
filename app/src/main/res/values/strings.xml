@@ -378,6 +378,7 @@
     <string name="prompt_confirm_password">Confirm new password</string>
     <string name="prompt_commit">Commit</string>
     <string name="prompt_first_name">First name</string>
+    <string name="prompt_first_middle_name">First name Middle name</string>
     <string name="prompt_middle_name">Middle name (optional)</string>
     <string name="prompt_last_name">Last name</string>
     <string name="prompt_date_of_birth">D.O.B.</string>
@@ -391,7 +392,7 @@
     <string name="prompt_language_4">Language 4</string>
     <string name="prompt_grade">Grade:</string>
     <string name="prompt_area_of_interest">Area of interests</string>
-    <string name="prompt_area_of_coaching">Area of coaching</string>
+    <string name="prompt_area_of_coaching">Area of Coaching</string>
     <string name="please_add_area_of_interest">Please add area of interest.</string>
     <string name="please_add_area_of_coaching">Please add area of coaching.</string>
     <string name="prompt_coaching_type">Class type</string>
