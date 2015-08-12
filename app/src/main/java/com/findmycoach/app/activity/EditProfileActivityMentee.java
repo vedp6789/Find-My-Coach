@@ -129,7 +129,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private ArrayList<CityDetails> list_of_city;
     private int country_id, city_id;
     private int user_info_multiple_address = 0;
-    private LinearLayout ll_physical_address;
+    private RelativeLayout ll_physical_address;
     private boolean training_location_similar_to_profile_locale;
     private ArrayList<Integer> city_id_from_suggestion;
     private ImageButton deleteLocaleButton;
@@ -214,7 +214,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private void initialize() {
         list_of_city = new ArrayList<>();
         city_with_states = (AutoCompleteTextView) findViewById(R.id.city_with_state);
-        ll_physical_address = (LinearLayout) findViewById(R.id.ll_physical_address);
+        ll_physical_address = (RelativeLayout) findViewById(R.id.ll_physical_address);
         physicalAddress = (EditText) findViewById(R.id.physical_address);
         locale = (AutoCompleteTextView) findViewById(R.id.locale);
         deleteLocaleButton = (ImageButton) findViewById(R.id.deleteLocaleButton);
@@ -698,7 +698,19 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 }
             }
         });
+
+
+
 */
+
+        findViewById(R.id.physicalAddressInfoMentee).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(EditProfileActivityMentee.this,
+                        getResources().getText(R.string.physical_address_mentee_info), Toast.LENGTH_LONG).show();
+            }
+        });
+
 
 
         profilePicture.setOnClickListener(new View.OnClickListener() {
@@ -977,7 +989,11 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             } catch (Exception ignored) {
             }
             try {
-                city_with_states.setText(address.getCityName());
+                if(address.getStateName()!=null && !address.getStateName().isEmpty())
+                        city_with_states.setText(address.getCityName()+" ("+address.getStateName()+")");
+                else {
+                    city_with_states.setText(address.getCityName());
+                }
             } catch (Exception ignored) {
             }
 
@@ -1648,6 +1664,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         addressAdapter.notifyDataSetChanged();
         setHeight(addressListView);
         addressListView.setVisibility(View.VISIBLE);
+        addressListView.requestFocus();
         addressList.add(address.getLocale());
         dialog.changeAddresses(addressList);
 

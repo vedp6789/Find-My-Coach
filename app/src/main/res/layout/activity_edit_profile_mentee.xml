@@ -459,7 +459,7 @@
                 </LinearLayout>
 
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/ll_physical_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -473,7 +473,9 @@
                         android:text="@string/prompt_complete_address"
                         android:textColor="@color/purple_light"
                         android:textSize="@dimen/profile_heading"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:id="@+id/completeAddressText"
+                        android:layout_centerVertical="true" />
 
                     <com.findmycoach.app.views.ChizzleTextView
                         android:layout_width="wrap_content"
@@ -481,9 +483,22 @@
                         android:text=" *"
                         android:textColor="@color/purple"
                         android:textSize="@dimen/profile_heading"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_toRightOf="@+id/completeAddressText"
+                        android:layout_centerVertical="true" />
 
-                </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/physicalAddressInfoMentee"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentRight="false"
+                        android:background="@null"
+                        android:src="@drawable/notification25"
+                        android:textColor="@color/custom_button_text_color_click_white_bg"
+                        android:layout_alignParentEnd="true" />
+
+
+                </RelativeLayout>
 
                 <com.findmycoach.app.views.ChizzleEditText
                     android:id="@+id/physical_address"

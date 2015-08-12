@@ -139,8 +139,8 @@
 
                         <ImageButton
                             android:id="@+id/dobInfo"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
                             android:layout_alignParentRight="true"
                             android:background="@null"
                             android:src="@drawable/notification25"
@@ -501,7 +501,8 @@
                         android:text="@string/prompt_complete_address"
                         android:textColor="@color/purple_light"
                         android:textSize="@dimen/profile_heading"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_centerVertical="true" />
 
                     <com.findmycoach.app.views.ChizzleTextView
                         android:layout_width="wrap_content"
@@ -510,17 +511,18 @@
                         android:text=" *"
                         android:textColor="@color/purple"
                         android:textSize="@dimen/profile_heading"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_centerVertical="true" />
 
                     <ImageButton
                         android:id="@+id/physicalAddressInfo"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_alignParentRight="true"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentRight="false"
                         android:background="@null"
                         android:src="@drawable/notification25"
                         android:textColor="@color/custom_button_text_color_click_white_bg"
-                        android:layout_marginTop="-5dp" />
+                        android:layout_alignParentEnd="true" />
 
                 </RelativeLayout>
 
@@ -537,8 +539,7 @@
                     android:textColorHint="@color/purple_light"
                     android:textCursorDrawable="@drawable/cursor_purple"
                     android:textSize="@dimen/profile_details"
-                    android:visibility="gone"
-                    android:layout_marginTop="-10dp" />
+                    android:visibility="gone" />
 
                 <RelativeLayout
                     android:id="@+id/mutipleAddressCheckBoxLayout"

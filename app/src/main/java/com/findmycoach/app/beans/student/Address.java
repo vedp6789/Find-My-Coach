@@ -23,6 +23,20 @@ public class Address {
     @Expose
     private String countryName;   // country id
 
+    @SerializedName("state_name")
+    @Expose
+    private String stateName;
+
+
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
     public String getCityName() {
         return cityName;
     }

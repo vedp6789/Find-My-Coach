@@ -646,6 +646,7 @@
     <string name="dob_info_mentor">This is needed as some students may prefer a certain age group of teacher</string>
     <string name="dob_info_mentee">This is needed to ensure we provide you relevant teachers</string>
     <string name="physical_address_mentor_info">We would need to inform to students where to come for classes</string>
+    <string name="physical_address_mentee_info">We would need to inform to mentors where to come for classes</string>
     <string name="view_calendar_by">View schedule calendar by</string>
     <string name="max_four_medium_of_education">You can select at most 4 languages</string>
     <string name="mentor_response_for_schedule_request_message">Your reply to mentee!</string>

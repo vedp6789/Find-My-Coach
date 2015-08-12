@@ -25,6 +25,8 @@ public class Data {
     @Expose
     private String middleName;
 
+
+
     @Expose
     private Object city;
     @Expose
@@ -190,6 +192,8 @@ public class Data {
     public void setSubCategoryName(List<SubCategoryName> subCategoryName) {
         this.subCategoryName = subCategoryName;
     }
+
+
 
     @SerializedName("sub_category_name")
     @Expose

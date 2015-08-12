@@ -116,7 +116,6 @@
             android:name="com.findmycoach.app.activity.AddNewSlotActivity"
             android:label="@string/add_new_slot"
             android:screenOrientation="portrait" />
-        android:label="@string/add_new_slot" />
         <activity
             android:name="com.findmycoach.app.activity.StudentDetailActivity"
             android:screenOrientation="portrait" />
