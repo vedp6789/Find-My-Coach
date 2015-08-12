@@ -37,6 +37,7 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.CountryCodeAdapter;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.authentication.SubCategoryName;
+import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
@@ -113,7 +114,9 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
         /** If user is already logged-in in app then open Dashboard Activity */
         if (userToken != null && phnVerified != null) {
             Log.e(TAG, "Login from onCreate");
-            Response response = new Gson().fromJson(StorageHelper.getUserProfile(this), Response.class);
+            String profile = StorageHelper.getUserProfile(this);
+            Response response = new Gson().fromJson(profile, Response.class);
+            ProfileResponse profileResponse = new Gson().fromJson(profile, ProfileResponse.class);
             Log.e(TAG, StorageHelper.getUserProfile(this));
             int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
             if (response.getData().getMultipleAddress() == null || response.getData().getMultipleAddress().size() == 0) {
@@ -131,6 +134,11 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
 
             } else if (userGroup == 3 && (response.getData().getSubCategoryName() == null || response.getData().getSubCategoryName().size() < 1)) {
                 Intent intent = new Intent(this, EditProfileActivityMentor.class);
+                intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                intent.putExtra("new_user", true);
+                startActivity(intent);
+            } else if (userGroup == 2 && (profileResponse.getData().getTrainingLocation() == null || ((String) profileResponse.getData().getTrainingLocation()).trim().equals(""))) {
+                Intent intent = new Intent(this, EditProfileActivityMentee.class);
                 intent.putExtra("user_info", new Gson().toJson(response.getData()));
                 intent.putExtra("new_user", true);
                 startActivity(intent);
@@ -1042,6 +1050,7 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
             saveUserPhn("True");
             Log.e(TAG, "Login from Success");
 
+            ProfileResponse profileResponse = new Gson().fromJson(StorageHelper.getUserProfile(this), ProfileResponse.class);
             int userGroup = Integer.parseInt(StorageHelper.getUserGroup(this, "user_group"));
             if (response.getData().getMultipleAddress() == null || response.getData().getMultipleAddress().size() == 0) {
                 if (userGroup == 2) {
@@ -1062,6 +1071,11 @@ public class LoginActivity extends Activity implements OnClickListener, Callback
                 intent.putExtra("new_user", true);
                 startActivity(intent);
 
+            } else if (userGroup == 2 && (profileResponse.getData().getTrainingLocation() == null || ((String) profileResponse.getData().getTrainingLocation()).trim().equals(""))) {
+                Intent intent = new Intent(this, EditProfileActivityMentee.class);
+                intent.putExtra("user_info", new Gson().toJson(response.getData()));
+                intent.putExtra("new_user", true);
+                startActivity(intent);
             } else
                 startActivity(new Intent(this, DashboardActivity.class));
 

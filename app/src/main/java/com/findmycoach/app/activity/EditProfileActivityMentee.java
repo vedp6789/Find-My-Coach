@@ -468,7 +468,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         findViewById(R.id.dobInfo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast =  Toast.makeText(EditProfileActivityMentee.this,
+                Toast toast = Toast.makeText(EditProfileActivityMentee.this,
                         getResources().getText(R.string.dob_info_mentee), Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 0);
                 toast.show();
@@ -521,6 +521,11 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 selected_city = null;/* making selected_city null because if user do changes in city and does not select city from suggested city then this selected_city string should be null which is used to validate the city */
                 city_id = 0;
                 String input = city_with_states.getText().toString().trim();
+                try {
+                    if (input.contains("("))
+                        input = input.split("\\(")[0].trim();
+                } catch (Exception ignored) {
+                }
                 if (input.length() >= 2) {
 
                     if (city_with_states.isPerformingCompletion()) {
@@ -728,13 +733,14 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         updateAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateUserUpdate()){
+                if (validateUserUpdate()) {
                     if (city_id != 0)
                         callUpdateService();
                     else
                         Toast.makeText(EditProfileActivityMentee.this, "Please select a city from suggestions", Toast.LENGTH_LONG).show();
+                }
             }
-        }
+        
         });
 
         /*pinCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -985,15 +991,16 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
 
             try {
-                city_id = address.getCity_id();
-            } catch (Exception ignored) {
-            }
-            try {
                 if(address.getStateName()!=null && !address.getStateName().isEmpty())
-                        city_with_states.setText(address.getCityName()+" ("+address.getStateName()+")");
+                    city_with_states.setText(address.getCityName()+" ("+address.getStateName()+")");
                 else {
                     city_with_states.setText(address.getCityName());
                 }
+            } catch (Exception ignored) {
+            }
+            try {
+              
+                city_id = address.getCity_id();
             } catch (Exception ignored) {
             }
 
@@ -1189,7 +1196,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             city_with_states.requestFocus();
             isValid = false;
         }
-
 
 
         if (locale.getText().toString().trim().equals("")) {
@@ -1478,58 +1484,57 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             updateAutoSuggestion(suggestion);
         } else if (calledApiValue == 54) {
             list_of_city = (ArrayList<CityDetails>) object;
-
-            try {
-                if (list_of_city.size() == 1) {
-                    city_id = list_of_city.get(0).getCity_id();
-                }
-            } catch (Exception ignored) {
-                llCity.setVisibility(View.VISIBLE);
-            }
-
-            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() == 0) {
-                if (city_name != "" && list_of_city != null && list_of_city.size() > 0) {
-                    for (int i = 0; i < list_of_city.size(); i++) {
-                        try {
-                            CityDetails cityDetails = list_of_city.get(i);
-
-                            String city = cityDetails.getCity_name();
-                            String state = cityDetails.getCity_state();
-                            int city_country_id = cityDetails.getCity_country();
-                            if (city.equalsIgnoreCase(city_name) && state.equalsIgnoreCase(state_name) && (city_country_id == country_id)) {
-                                String s = "";
-                                if (!state.trim().equals(""))
-                                    s = city.trim() + " (" + state + ")";
-                                else
-                                    s = city.trim();
-                                city_with_states.setText(s);
-                            }
-                        } catch (Exception ignored) {
-                        }
-                    }
-                }
-            } else {
-                if (list_of_city != null && list_of_city.size() > 0 && city_id != 0)
-
-                    for (int i = 0; i < list_of_city.size(); i++) {
-                        try {
-                            CityDetails cityDetails = list_of_city.get(i);
-                            String city = cityDetails.getCity_name();
-                            String state = cityDetails.getCity_state();
-                            int city_country_id = cityDetails.getCity_country();
-                            if (cityDetails.getCity_id() == city_id && country_id == city_country_id) {
-                                String s = "";
-                                if (!state.trim().equals(""))
-                                    s = city.trim() + " (" + state + ")";
-                                else
-                                    s = city.trim();
-                                city_with_states.setText(s);
-                                break;
-                            }
-                        } catch (Exception ignored) {
-                        }
-                    }
-            }
+//            try {
+//                if (list_of_city.size() == 1) {
+//                    city_id = list_of_city.get(0).getCity_id();
+//                }
+//            } catch (Exception ignored) {
+//                llCity.setVisibility(View.VISIBLE);
+//            }
+//
+//            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() == 0) {
+//                if (city_name != "" && list_of_city != null && list_of_city.size() > 0) {
+//                    for (int i = 0; i < list_of_city.size(); i++) {
+//                        try {
+//                            CityDetails cityDetails = list_of_city.get(i);
+//
+//                            String city = cityDetails.getCity_name();
+//                            String state = cityDetails.getCity_state();
+//                            int city_country_id = cityDetails.getCity_country();
+//                            if (city.equalsIgnoreCase(city_name) && state.equalsIgnoreCase(state_name) && (city_country_id == country_id)) {
+//                                String s = "";
+//                                if (!state.trim().equals(""))
+//                                    s = city.trim() + " (" + state + ")";
+//                                else
+//                                    s = city.trim();
+//                                city_with_states.setText(s);
+//                            }
+//                        } catch (Exception ignored) {
+//                        }
+//                    }
+//                }
+//            } else {
+//                if (list_of_city != null && list_of_city.size() > 0 && city_id != 0)
+//
+//                    for (int i = 0; i < list_of_city.size(); i++) {
+//                        try {
+//                            CityDetails cityDetails = list_of_city.get(i);
+//                            String city = cityDetails.getCity_name();
+//                            String state = cityDetails.getCity_state();
+//                            int city_country_id = cityDetails.getCity_country();
+//                            if (cityDetails.getCity_id() == city_id && country_id == city_country_id) {
+//                                String s = "";
+//                                if (!state.trim().equals(""))
+//                                    s = city.trim() + " (" + state + ")";
+//                                else
+//                                    s = city.trim();
+//                                city_with_states.setText(s);
+//                                break;
+//                            }
+//                        } catch (Exception ignored) {
+//                        }
+//                    }
+//            }
         } else {
             progressDialog.dismiss();
             ProfileResponse response = (ProfileResponse) object;
