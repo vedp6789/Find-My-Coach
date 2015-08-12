@@ -22,6 +22,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -101,6 +103,7 @@ import java.util.TimeZone;
     *   Grades                              56
     *   promotion (get all )                          58
     *   promotion (add )                              59
+    *   promoton(delete)                              60
     * */
 
 
@@ -519,6 +522,67 @@ public class NetworkClient {
             }
         });
     }
+
+
+    public static void deletePromotion(final Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
+        if (!NetworkManager.isNetworkConnected(context)) {
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
+       client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+
+        Header[] headers = {
+                new BasicHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value))
+                ,new BasicHeader(context.getResources().getString(R.string.auth_key),authToken),
+                new BasicHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded")
+        };
+
+        client.delete(context, getAbsoluteURL("promotion", context), headers, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    Log.d(TAG, "Success: Response Code:" + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success: Response:" + responseJson);
+
+                    /*ArrayList<Promotion> promotionsArrayList = new ArrayList<>();
+                    Log.d(TAG, "Success : Status code promotion get all: " + statusCode);
+                    JSONObject jsonObject=new JSONObject(responseJson);
+                    JSONArray jsonArray=jsonObject.getJSONArray("data");
+                    promotionsArrayList = new Gson().fromJson(jsonArray.toString(), new TypeToken<List<Promoti>>(){}.getType());
+                    callback.successOperation(cityDetailsArrayList, statusCode, calledApiValue);*/
+
+                    JSONObject jsonObject = new JSONObject(responseJson);
+                    callback.successOperation(jsonObject, statusCode, calledApiValue);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                StorageHelper.checkGcmRegIdSentToSever(context, context.getResources().getString(R.string.reg_id_saved_to_server), false);
+                try {
+                    Log.d(TAG, "Failure : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    try {
+                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        });
+    }
+
+
 
 
 

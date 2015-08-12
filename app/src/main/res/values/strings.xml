@@ -769,6 +769,11 @@
     <string name="add_dicount_percentage">Add discount percentage!</string>
     <string name="add_free_classes">Add number of free class you will provide to mentee!</string>
     <string name="add_mandatory_classes">Add number of mandatory classes for mentee!</string>
+    <string name="promotion">Promotion</string>
+    <string name="either_inactivate_or_delete">You can either inactivate or delete your promotion!</string>
+    <string name="inactivate">Inactivate</string>
+    <string name="either_activate_or_delete">You can either activate or delete your promotion!</string>
+    <string name="activate">Activate</string>
 
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->

@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_no_promotion_val"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/menuItem">
+        android:layout_toLeftOf="@+id/iv_cancel">
 
         <RelativeLayout
             android:id="@+id/rlPromotionTitle"
@@ -162,16 +162,14 @@
         android:id="@+id/iv_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/backButton"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/backButton"
         android:layout_centerVertical="true"
         android:background="@color/purple"
         android:padding="@dimen/textView_padding_margin"
         android:paddingLeft="@dimen/textView_padding_margin"
         android:paddingRight="@dimen/textView_padding_margin"
         android:scaleType="fitCenter"
-        android:src="@drawable/close_icon" />
+        android:src="@drawable/close_icon1" />
 
 
 </RelativeLayout>

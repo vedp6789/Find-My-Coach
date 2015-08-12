@@ -70,7 +70,7 @@ public class MyPromotions extends FragmentActivity implements Callback {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         tv_title.setText(getResources().getString(R.string.my_promotions));
-        iv_add_promotions.setImageDrawable(getResources().getDrawable(R.drawable.edit_profile));
+        iv_add_promotions.setImageDrawable(getResources().getDrawable(R.drawable.add_icon1));
         promotionsViewPagerAdapter = new PromotionsViewPagerAdapter(getSupportFragmentManager(), this, myPromotions, activePromotionArrayList, inactivePromotionArrayList);
         promotionsViewpager.setAdapter(promotionsViewPagerAdapter);
         pagerSlidingTabStrip.setShouldExpand(true);
