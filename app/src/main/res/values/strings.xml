@@ -452,6 +452,7 @@
     <string name="class_day">day</string>
     <string name="select_days">Select days</string>
     <string name="from">From :</string>
+    <string name="around">Around :</string>
     <string name="all">All</string>
     <string name="timing">Timing</string>
     <string name="class_timing">Timing:</string>

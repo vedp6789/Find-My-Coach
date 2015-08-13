@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -65,9 +67,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private ProgressDialog progressDialog;
     private TextView currentLocationText;
     private TextView fromTimingInput;
-    private TextView toTimingInput;
-    private Button changeLocation;
-    private RelativeLayout locationLayout;
+    private RelativeLayout editLocation, selectLocation;
     private LinearLayout timeBarrierLayout;
     public static String[] subCategoryIds;
     private View fragmentView;
@@ -85,7 +85,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private String type;
 
     public HomeFragment() {
-        // Required empty public constructor
         subCategoryIds = null;
     }
 
@@ -128,10 +127,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         }
 
         homeFragmentMentee = this;
-
-        if (!DashboardActivity.dashboardActivity.userCurrentAddress.equals("")) {
-            updateLocationFromAsync(DashboardActivity.dashboardActivity.userCurrentAddress);
-        }
 
         NetworkManager.getNetworkAndGpsStatus(getActivity());
     }
@@ -359,6 +354,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             }
         });
 
+        final Drawable clearInputField = getActivity().getResources().getDrawable(android.R.drawable.ic_menu_close_clear_cancel);
+        clearInputField.setBounds(0, 0, 50, 50);
+
         locationInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -371,17 +369,31 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             @Override
             public void afterTextChanged(Editable s) {
                 String input = locationInput.getText().toString().trim();
-                if (input.length() >= 2) {
+                if (s.length() > 0) {
+                    locationInput.setCompoundDrawables(null, null, clearInputField, null);
                     getAutoSuggestions(input);
-//                    if (input.length() > 4 && input.length() < 8) {
-//                        try {
-//                            new AddressFromZip(getActivity(), locationInput,null, true).execute(input);
-//                        } catch (Exception e) {
-//                        }
-//                    }
                 }
             }
         });
+
+
+        locationInput.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                try {
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        if (event.getRawX() >= (locationInput.getRight() - locationInput.getCompoundDrawables()[2].getBounds().width())) {
+                            locationInput.setText("");
+                            locationInput.setCompoundDrawables(null, null, null, null);
+                            return true;
+                        }
+                    }
+                } catch (Exception ignored) {
+                }
+                return false;
+            }
+        });
+
         locationInput.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -422,9 +434,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                     hour = 1;
                 else
                     hour++;
-                toTimingInput.setText(" " + (hour < 10 ? ("0" + hour) : hour) + ":" + min
-                        + (hourOfDay > 11 ? " PM" : " AM"));
-                toTimingInput.setTag(toTimingInput.getId(), hourOfDay + ":" + min);
 
                 getSelectedButtons();
             }
@@ -458,28 +467,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 timePicker.show();
             }
         });
-
-        fragmentView.findViewById(R.id.toTime).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                int hour = Integer.parseInt(fromTimingInput.getText().toString().split(" ")[1]
-                        .split(":")[0]);
-                if (fromTimingInput.getText().toString().contains("PM"))
-                    hour = hour + 12;
-                int min = getSettingMinute((Integer.parseInt(fromTimingInput.getText().toString()
-                        .split(" ")[1].split(":")[0])) + 14);
-                if (min == 0)
-                    hour++;
-
-                TimePickerFragment timePicker = new TimePickerFragment(getActivity(),
-                        HomeFragment.this, hour, min, false);
-                textView = toTimingInput;
-                timePicker.isMinTimeEnabled = true;
-                timePicker.show();
-            }
-        });
-
     }
 
     private int getSettingMinute(int i) {
@@ -535,8 +522,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     @Override
     public void onResume() {
         super.onResume();
-//        if (location == null || location == "") {
-
         try {
             ProfileResponse response = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), ProfileResponse.class);
             com.findmycoach.app.beans.student.Data userInfo = response.getData();
@@ -546,7 +531,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                     if (default_yn == 1) {
                         String address = "";
                         if (userInfo.getMultipleAddress().get(i).getLocale() != null) {
-                            address = address + userInfo.getMultipleAddress().get(i).getLocale() + ", ";
+                            address = address + userInfo.getMultipleAddress().get(i).getLocale();
                         }
                         location = address;
                         break;
@@ -561,17 +546,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             location = "";
 
         updateLocationUI();
-//        }
     }
 
     private void initialize(View view) {
         locationInput = (AutoCompleteTextView) view.findViewById(R.id.input_location);
         currentLocationText = (TextView) view.findViewById(R.id.current_location_text_view);
         searchButton = (Button) view.findViewById(R.id.action_search);
-        changeLocation = (Button) view.findViewById(R.id.change_location);
-        changeLocation.setOnClickListener(this);
+        editLocation = (RelativeLayout) view.findViewById(R.id.edit_location);
+        selectLocation = (RelativeLayout) view.findViewById(R.id.select_location);
+        editLocation.setOnClickListener(this);
+        selectLocation.setOnClickListener(this);
         searchButton.setOnClickListener(this);
-        locationLayout = (RelativeLayout) view.findViewById(R.id.current_location_layout);
         timeBarrierLayout = (LinearLayout) view.findViewById(R.id.time_barrier_layout);
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
@@ -580,7 +565,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         subCategoryLayout = (LinearLayout) fragmentView.findViewById(R.id.subCategoryLayout);
         subCategoryTextView = (TextView) fragmentView.findViewById(R.id.subCategoryTextView);
 
-        toTimingInput = (TextView) fragmentView.findViewById(R.id.to_timing);
         fromTimingInput = (TextView) fragmentView.findViewById(R.id.from_timing);
 
         if (view instanceof ViewGroup) {
@@ -595,13 +579,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         if (location.trim().equals("")) {
             flag_change_location = true;
             locationInput.setVisibility(View.VISIBLE);
-            locationLayout.setVisibility(View.GONE);
+            currentLocationText.setVisibility(View.GONE);
+            editLocation.setVisibility(View.GONE);
         } else {
             currentLocationText.setText(location);
             locationInput.setText(location);
             flag_change_location = false;
             locationInput.setVisibility(View.GONE);
-            locationLayout.setVisibility(View.VISIBLE);
+            editLocation.setVisibility(View.VISIBLE);
+            currentLocationText.setVisibility(View.VISIBLE);
         }
     }
 
@@ -609,19 +595,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         RequestParams requestParams = new RequestParams();
         requestParams.add("input", input);
         requestParams.add("key", getResources().getString(R.string.google_location_api_key));
-//        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group+"");
         NetworkClient.autoComplete(getActivity(), requestParams, this, 32);
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.action_search) {
+        int id = v.getId();
+        if (id == R.id.action_search) {
             callSearchApi();
-        }
-        if (v.getId() == R.id.change_location) {
+        } else if (id == R.id.edit_location) {
             flag_change_location = true;
             locationInput.setVisibility(View.VISIBLE);
-            locationLayout.setVisibility(View.GONE);
+            editLocation.setVisibility(View.GONE);
+            currentLocationText.setVisibility(View.GONE);
+        } else if (id == R.id.select_location) {
+            locationInput.setVisibility(View.GONE);
+            currentLocationText.setVisibility(View.VISIBLE);
+            editLocation.setVisibility(View.VISIBLE);
+            Toast.makeText(getActivity(), "Dialog to pick location will open", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -657,10 +648,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
         if (timeBarrier) {
             String fromTiming = (String) fromTimingInput.getTag(fromTimingInput.getId());
-            String toTiming = (String) toTimingInput.getTag(toTimingInput.getId());
             requestParams.add("timing_from", fromTiming + ":00");
-            requestParams.add("timing_to", toTiming + ":00");
-            Log.e(TAG, fromTiming + "- " + toTiming);
+            Log.e(TAG, fromTiming);
             String week = "";
 
             String[] daysArray = new String[]{"Su", "M", "T", "W", "Th", "F", "S"};
@@ -677,8 +666,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             } catch (Exception ignored) {
             }
             requestParams.add("weeks", week);
-            Log.d(TAG, "Selected weekdays : " + week + ", from time : "
-                    + fromTiming + ", to time : " + toTiming);
+            Log.d(TAG, "Selected weekdays : " + week + ", from time : " + fromTiming);
         }
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
@@ -774,26 +762,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                     + (hourOfDay > 11 ? " PM" : " AM"));
             textView.setTag(textView.getId(), hourOfDay + ":" + min);
 
-            if (textView == fromTimingInput) {
-                int hour1 = Integer.parseInt(fromTimingInput.getText().toString().split(" ")[1]
-                        .split(":")[0]);
-                if (fromTimingInput.getText().toString().contains("PM"))
-                    hour1 = hour1 + 12;
-                int min1 = getSettingMinute((Integer.parseInt(fromTimingInput.getText().toString()
-                        .split(" ")[1].split(":")[0])) + 14);
-                if (min1 == 0)
-                    hour1++;
-
-                textView = toTimingInput;
-                onTimeSet(null, hour1, min1);
-            }
-
             textView = null;
         }
     }
 
-    public void updateLocationFromAsync(String userCurrentAddress) {
-        location = userCurrentAddress;
-        updateLocationUI();
-    }
 }
