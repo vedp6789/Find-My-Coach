@@ -788,9 +788,15 @@
     <string name="inactivate">Make inactive</string>
     <string name="either_activate_or_delete">You can either delete or make your promotion active!</string>
     <string name="activate">Make active</string>
-
-
-
-
+    <string name="flexibility_on_class_duration">I am flexible on class duration?</string>
+    <string name="min_class_time">Minimum class duration(min.)</string>
+    <string name="class_time_variance">Classes can vary in the duration of(min.)</string>
+    <string name="class_duration">Classes of duration(min.)</string>
+    <string name="max_class_week">Maximum number of classes for a student in week</string>
+    <string name="pricing_per_hour_individual">Pricing per hour for an individual class</string>
+    <string name="pricing_per_class_individual">Pricing per class for an individual class</string>
+    <string name="pricing_per_hour_group">Pricing per hour for a group class</string>
+    <string name="pricing_per_class_group">Pricing per class for a group class</string>
+    <string name="max_hour_in_a_day">Maximum duration of class for a day</string>
 
 </resources>
