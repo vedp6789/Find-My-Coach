@@ -37,6 +37,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -163,7 +165,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
     private RelativeLayout multipleAddressLayout;
     private ImageButton deleteLocaleButton;
     private List<String> mediumOfTeaching;
-
+    private RadioGroup radioGroup_class_type, radioGroup_flexibility;
+    private RadioButton rb_individual, rb_group, rb_both_class_type, rb_flexible, rb_not_flexible;
+    private LinearLayout ll_when_flexible, ll_fix_class_duration, ll_individual_pricing, ll_group_pricing;
+    private Spinner sp_minimum_time, sp_time_window, sp_max_hour_of_day, sp_fixed_duration, sp_max_class_in_week;
+    private TextView tv_individual_pricing_text, tv_group_pricing_text, tv_price_currency_individual, tv_price_currency_group;
+    private EditText et_individual_class_price, et_group_class_price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -307,6 +314,29 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
         multipleAddressLayout = (RelativeLayout) findViewById(R.id.mutipleAddressCheckBoxLayout);
         llCity = (LinearLayout) findViewById(R.id.llCity);
 
+        radioGroup_class_type = (RadioGroup) findViewById(R.id.radioGroupClassType);
+        radioGroup_flexibility = (RadioGroup) findViewById(R.id.radioGroupClassFlexibility);
+        rb_individual = (RadioButton) findViewById(R.id.radio_button_individual);
+        rb_group = (RadioButton) findViewById(R.id.radio_button_group);
+        rb_both_class_type = (RadioButton) findViewById(R.id.radio_button_both_class);
+        rb_flexible = (RadioButton) findViewById(R.id.radio_button_yes);
+        rb_not_flexible = (RadioButton) findViewById(R.id.radio_button_no);
+        ll_when_flexible = (LinearLayout) findViewById(R.id.ll_when_flexible);
+        ll_fix_class_duration = (LinearLayout) findViewById(R.id.ll_fix_class_duration);
+        ll_individual_pricing = (LinearLayout) findViewById(R.id.ll_individual_pricing);
+        ll_group_pricing = (LinearLayout) findViewById(R.id.ll_group_pricing);
+        sp_minimum_time = (Spinner) findViewById(R.id.sp_min_time_duration);
+        sp_time_window = (Spinner) findViewById(R.id.sp_class_variance);
+        sp_max_hour_of_day = (Spinner) findViewById(R.id.sp_max_hour_in_a_day);
+        sp_fixed_duration = (Spinner) findViewById(R.id.sp_fixed_class_duration);
+        sp_max_class_in_week = (Spinner) findViewById(R.id.sp_max_class_week);
+        tv_individual_pricing_text = (TextView) findViewById(R.id.tv_pricing_individual);
+        tv_group_pricing_text = (TextView) findViewById(R.id.tv_pricing_group);
+        tv_price_currency_individual = (TextView) findViewById(R.id.tv_individual_price_and_currency_suggestion);
+        tv_price_currency_group = (TextView) findViewById(R.id.tv_group_price_and_currency_suggestion);
+        et_individual_class_price = (EditText) findViewById(R.id.et_price_individual);
+        et_group_class_price = (EditText) findViewById(R.id.et_price_group);
+
         profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -326,8 +356,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
                     } else
                         Toast.makeText(EditProfileActivityMentor.this, EditProfileActivityMentor.this.getString(R.string.check_network_connection), Toast.LENGTH_LONG).show();
                 }
-
-
             }
 
             @Override
@@ -961,8 +989,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
                 }
 
                 try {
-                    if(address.getStateName()!=null && !address.getStateName().isEmpty())
-                        city_with_states.setText(address.getCityName()+" ("+address.getStateName()+")");
+                    if (address.getStateName() != null && !address.getStateName().isEmpty())
+                        city_with_states.setText(address.getCityName() + " (" + address.getStateName() + ")");
                     else {
                         city_with_states.setText(address.getCityName());
                     }
@@ -970,7 +998,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
                 }
                 try {
                     city_id = address.getCity_id();
-                    
+
                 } catch (Exception ignored) {
                 }
 

@@ -791,7 +791,7 @@
     <string name="flexibility_on_class_duration">I am flexible on class duration?</string>
     <string name="min_class_time">Minimum class duration(min.)</string>
     <string name="class_time_variance">Classes can vary in the duration of(min.)</string>
-    <string name="class_duration">Classes of duration(min.)</string>
+    <string name="class_duration">Classes duration(min.)</string>
     <string name="max_class_week">Maximum number of classes for a student in week</string>
     <string name="pricing_per_hour_individual">Pricing per hour for an individual class</string>
     <string name="pricing_per_class_individual">Pricing per class for an individual class</string>

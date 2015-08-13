@@ -885,7 +885,7 @@
                         android:textColor="@color/custom_button_text_color_click_purple" />
 
                     <RadioButton
-                        android:id="@+id/mentorForBoth"
+                        android:id="@+id/radio_button_both_class"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.3"
@@ -978,16 +978,11 @@
                             android:layout_marginLeft="@dimen/back_margin"
                             android:orientation="vertical">
 
-                            <com.findmycoach.app.views.ChizzleEditText
-                                android:id="@+id/et_min_time_duration"
-                                style="@style/EditTextCustomHoloPurple"
+                            <Spinner
+                                android:id="@+id/sp_min_time_duration"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/back_margin"
-                                android:hint=""
-                                android:inputType="number"
-                                android:singleLine="true"
-                                android:textCursorDrawable="@drawable/cursor_purple"
                                 android:textSize="@dimen/profile_details" />
                         </LinearLayout>
                     </LinearLayout>
@@ -1023,16 +1018,11 @@
                             android:layout_marginLeft="@dimen/back_margin"
                             android:orientation="vertical">
 
-                            <com.findmycoach.app.views.ChizzleEditText
-                                android:id="@+id/et_class_variance"
-                                style="@style/EditTextCustomHoloPurple"
+                            <Spinner
+                                android:id="@+id/sp_class_variance"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/back_margin"
-                                android:hint=""
-                                android:inputType="number"
-                                android:singleLine="true"
-                                android:textCursorDrawable="@drawable/cursor_purple"
                                 android:textSize="@dimen/profile_details" />
                         </LinearLayout>
                     </LinearLayout>
@@ -1087,7 +1077,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/back_margin"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <com.findmycoach.app.views.ChizzleTextView
                         android:layout_width="wrap_content"
@@ -1113,16 +1104,11 @@
                         android:layout_marginLeft="@dimen/back_margin"
                         android:orientation="vertical">
 
-                        <com.findmycoach.app.views.ChizzleEditText
-                            android:id="@+id/et_fixed_class_duration"
-                            style="@style/EditTextCustomHoloPurple"
+                        <Spinner
+                            android:id="@+id/sp_fixed_class_duration"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/back_margin"
-                            android:hint=""
-                            android:inputType="number"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@drawable/cursor_purple"
                             android:textSize="@dimen/profile_details" />
                     </LinearLayout>
                 </LinearLayout>
@@ -1159,15 +1145,10 @@
                     android:layout_marginTop="@dimen/back_margin"
                     android:orientation="vertical">
 
-                    <com.findmycoach.app.views.ChizzleEditText
-                        android:id="@+id/et_max_class_week"
-                        style="@style/EditTextCustomHoloPurple"
-                        android:layout_width="match_parent"
+                    <Spinner
+                        android:id="@+id/sp_max_class_week"
                         android:layout_height="wrap_content"
-                        android:hint=""
-                        android:inputType="number"
-                        android:singleLine="true"
-                        android:textCursorDrawable="@drawable/cursor_purple"
+                        android:layout_width="match_parent"
                         android:textSize="@dimen/profile_details" />
                 </LinearLayout>
 
@@ -1197,9 +1178,9 @@
                         android:orientation="horizontal">
 
                         <com.findmycoach.app.views.ChizzleTextView
+                            android:id="@+id/tv_individual_price_and_currency_suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=""
                             android:textColor="@color/purple_light"
                             android:textSize="@dimen/profile_heading"
                             android:textStyle="bold" />
@@ -1260,6 +1241,7 @@
                         android:orientation="horizontal">
 
                         <com.findmycoach.app.views.ChizzleTextView
+                            android:id="@+id/tv_group_price_and_currency_suggestion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
