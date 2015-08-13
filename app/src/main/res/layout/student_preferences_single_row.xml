@@ -18,13 +18,17 @@
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_details" />
 
-    <ImageView
+
+    <CheckBox
         android:id="@+id/checkbox"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/radio_btn_unselected"/>
+        android:button="@drawable/custom_check_box_square"
+        android:textColor="@color/purple"
+        android:textSize="@dimen/profile_details" />
+
 
 </RelativeLayout>

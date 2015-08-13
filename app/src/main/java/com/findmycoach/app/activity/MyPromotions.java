@@ -131,10 +131,10 @@ public class MyPromotions extends FragmentActivity implements Callback {
         RequestParams requestParams = new RequestParams();
         if (activePromotions) {
             requestParams.add("is_active", "1");
-      /*      gettingPromotionsForActive = 1;*/
+            /*       gettingPromotionsForActive = 1;*/
         } else {
             requestParams.add("is_active", "0");
-  /*          gettingPromotionsForActive = 0;*/
+            /*       gettingPromotionsForActive = 0;*/
         }
 
         Log.e(TAG, "requestParams: " + requestParams.toString());
@@ -147,7 +147,7 @@ public class MyPromotions extends FragmentActivity implements Callback {
     protected void onResume() {
         super.onResume();
 
-        if (promotionsViewpager.getCurrentItem() == 0) {
+        if (promotionsViewpager.getCurrentItem() == 0  || newPromotionAdded) {
             Log.e(TAG,"onResume");
             getAllPromotions(true);
         } else {

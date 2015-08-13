@@ -29,14 +29,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <com.findmycoach.app.views.ChizzleTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_top"
+                    android:layout_marginTop="32dp"
                     android:gravity="center_horizontal"
                     android:text="@string/action_register"
                     android:textColor="@color/white"
@@ -71,7 +70,8 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingTop="4dp">
 
                     <RadioGroup
                         android:id="@+id/radio_group_user_signup"
@@ -108,7 +108,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/back_margin"
+                        android:layout_marginTop="20dp"
                         android:weightSum="2">
 
                         <ImageButton
@@ -145,7 +145,7 @@
                         style="@style/EditTextCustomHolo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_first_name"
+                        android:hint="@string/prompt_first_middle_name"
                         android:inputType="textCapSentences|textNoSuggestions|textCapWords"
                         android:minHeight="@dimen/abc_action_bar_stacked_max_height"
                         android:padding="4dp"

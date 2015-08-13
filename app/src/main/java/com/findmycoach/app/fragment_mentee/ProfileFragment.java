@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
@@ -134,7 +135,7 @@ public class ProfileFragment extends Fragment implements Callback {
         groupClassLocation = (ChizzleTextView) view.findViewById(R.id.groupClassLocation);
         groupLayout = (LinearLayout) view.findViewById(R.id.groupLocationLayout);
         addressArrayList = new ArrayList<>();
-        addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayList, addressListView);
+        addressAdapter = new AddressAdapter(getActivity(), R.layout.muti_address_list_item_centre_horizontal, addressArrayList, addressListView,false);
         addressListView.setAdapter(addressAdapter);
         childrenDetailsListViewProfile = (ListView) view.findViewById(R.id.childrenDetailsListViewProfile);
 
@@ -155,6 +156,8 @@ public class ProfileFragment extends Fragment implements Callback {
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             String updatedUserJson = data.getStringExtra("user_info");
             userInfo = new Gson().fromJson(updatedUserJson, Data.class);
+            parentScrollView.fullScroll(View.FOCUS_UP);
+            Toast.makeText(getActivity(), getResources().getString(R.string.profile_update), Toast.LENGTH_LONG).show();
             populateFields();
         }
     }
@@ -181,10 +184,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private void populateFields() {
         try {
             try {
-                if (userInfo.getMiddleName() == null || userInfo.getMiddleName().trim().equals(""))
-                    profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
-                else
-                    profileName.setText(userInfo.getFirstName() + " " + userInfo.getMiddleName() + " " + userInfo.getLastName());
+                profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
             } catch (Exception e) {
             }
             try {
@@ -286,7 +286,7 @@ public class ProfileFragment extends Fragment implements Callback {
                     if (default_yn == 1) {
                         String address = "";
                         if (userInfo.getMultipleAddress().get(i).getLocale() != null) {
-                            address = address + userInfo.getMultipleAddress().get(i).getLocale() + ", ";
+                            address = address + userInfo.getMultipleAddress().get(i).getLocale();
                         }
                         profileAddress.setText(address);
                         continue;
@@ -339,7 +339,7 @@ public class ProfileFragment extends Fragment implements Callback {
     }
 
 
-    public  void setHeight(ListView listView) {
+    public void setHeight(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null)
             return;

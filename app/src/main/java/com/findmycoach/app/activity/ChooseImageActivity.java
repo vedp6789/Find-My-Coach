@@ -137,8 +137,10 @@ public class ChooseImageActivity extends Activity {
             }
         });
 
-        if(getIntent().getStringExtra("removeImageOption").equals(getResources().getString(R.string.add_photo)))
+        if(getIntent().getStringExtra("removeImageOption")!=null && getIntent().getStringExtra("removeImageOption").equals(getResources().getString(R.string.add_photo)))
             removeImageButton.setVisibility(View.GONE);
+        else
+            isImageSelected = true;
     }
 
     /**
@@ -199,21 +201,20 @@ public class ChooseImageActivity extends Activity {
     }
 
     public static String getRealPathFromURI(Context context, Uri uri) {
-        Cursor cursor = null;
-        try {
-            Uri newUri = handleImageUri(uri);
-            String[] proj = {MediaStore.Images.Media.DATA};
-            cursor = context.getContentResolver().query(newUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } catch (Exception e) {
-            return null;
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
+        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":")+1);
+        cursor.close();
+
+        cursor = context.getContentResolver().query(
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+        cursor.moveToFirst();
+        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+        cursor.close();
+
+        return path;
     }
 
     private Bitmap decodeFile(File f) {

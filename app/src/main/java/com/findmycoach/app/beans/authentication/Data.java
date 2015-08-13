@@ -36,8 +36,8 @@ public class Data {
     @SerializedName("middle_name")
     @Expose
     private String middleName;
-   /* @Expose
-    private Object address;*/
+    /* @Expose
+     private Object address;*/
     @Expose
     private Object city;
     @Expose
@@ -126,6 +126,17 @@ public class Data {
     @Expose
     private String addressFlagMentor;
 
+    @SerializedName("medium_of_education")
+    @Expose
+    private String mediumOfEducation;
+
+    public String getMediumOfEducation() {
+        return mediumOfEducation;
+    }
+
+    public void setMediumOfEducation(String mediumOfEducation) {
+        this.mediumOfEducation = mediumOfEducation;
+    }
 
     @SerializedName("country_config")
     @Expose
@@ -405,6 +416,7 @@ public class Data {
         this.address = address;
     }
 */
+
     /**
      * @return The city
      */

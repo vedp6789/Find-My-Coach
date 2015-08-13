@@ -43,79 +43,118 @@
                 android:focusableInTouchMode="true"
                 android:textSize="@dimen/profile_name" />
 
-            <com.findmycoach.app.views.ChizzleTextViewBold
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/back_margin">
+
+                <com.findmycoach.app.views.ChizzleTextViewBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/prompt_email_id_col"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/emailText" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_gravity="center"
+                    android:id="@+id/profile_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_details"
+                    android:layout_toRightOf="@+id/emailText"
+                    android:layout_alignBottom="@+id/emailText"
+                    android:layout_marginLeft="@dimen/textView_padding_margin" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_marginTop="@dimen/back_margin"
+                android:layout_gravity="center_horizontal">
+
+                <com.findmycoach.app.views.ChizzleTextViewBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/prompt_gender_col"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/genderHeader" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_gravity="center"
+                    android:id="@+id/profile_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_details"
+                    android:layout_toRightOf="@+id/genderHeader"
+                    android:layout_alignBottom="@+id/genderHeader"
+                    android:layout_marginLeft="@dimen/textView_padding_margin" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/prompt_email_id"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_heading"
-                android:textStyle="bold"
-                android:layout_gravity="center_horizontal" />
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/back_margin">
 
-            <com.findmycoach.app.views.ChizzleTextView
-                android:layout_gravity="center"
-                android:id="@+id/profile_email"
+                <com.findmycoach.app.views.ChizzleTextViewBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/prompt_phone_col"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/phoneHeader" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_gravity="center"
+                    android:id="@+id/profile_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_details"
+                    android:layout_toRightOf="@+id/phoneHeader"
+                    android:layout_marginLeft="@dimen/textView_padding_margin" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_details" />
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/back_margin">
 
-            <com.findmycoach.app.views.ChizzleTextViewBold
-                android:layout_marginTop="@dimen/back_margin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/prompt_gender"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_heading"
-                android:textStyle="bold"
-                android:layout_gravity="center_horizontal" />
+                <com.findmycoach.app.views.ChizzleTextViewBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/prompt_date_of_birth_col"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/dobHeader" />
 
-
-            <com.findmycoach.app.views.ChizzleTextView
-                android:layout_gravity="center"
-                android:id="@+id/profile_gender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_details" />
-
-            <com.findmycoach.app.views.ChizzleTextViewBold
-                android:layout_marginTop="@dimen/back_margin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/prompt_phone"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_heading"
-                android:textStyle="bold"
-                android:layout_gravity="center_horizontal" />
-
-
-            <com.findmycoach.app.views.ChizzleTextView
-                android:layout_gravity="center"
-                android:id="@+id/profile_phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_details" />
-
-            <com.findmycoach.app.views.ChizzleTextViewBold
-                android:layout_marginTop="@dimen/back_margin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/prompt_date_of_birth"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_heading"
-                android:textStyle="bold"
-                android:layout_gravity="center_horizontal" />
-
-            <com.findmycoach.app.views.ChizzleTextView
-                android:layout_gravity="center"
-                android:id="@+id/profile_dob"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_details" />
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_gravity="center"
+                    android:id="@+id/profile_dob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_details"
+                    android:layout_toRightOf="@+id/dobHeader"
+                    android:layout_alignBottom="@+id/dobHeader"
+                    android:layout_marginLeft="@dimen/textView_padding_margin" />
+            </RelativeLayout>
 
             <com.findmycoach.app.views.ChizzleTextViewBold
                 android:layout_marginTop="@dimen/back_margin"
@@ -158,26 +197,34 @@
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_details" />
 
-            <com.findmycoach.app.views.ChizzleTextViewBold
-                android:layout_marginTop="@dimen/back_margin"
-                android:layout_gravity="center_horizontal"
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mentor_for"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_heading"
-                android:textStyle="bold" />
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/back_margin">
 
-            <com.findmycoach.app.views.ChizzleTextView
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/mentor_for"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:gravity="center_vertical"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_details" />
+                <com.findmycoach.app.views.ChizzleTextViewBold
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mentor_for_col"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold"
+                    android:id="@+id/mentorForHeader" />
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/mentor_for"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_details"
+                    android:layout_toRightOf="@+id/mentorForHeader"
+                    android:layout_alignBottom="@+id/mentorForHeader"
+                    android:layout_marginLeft="@dimen/textView_padding_margin" />
+            </RelativeLayout>
 
 
             <RelativeLayout

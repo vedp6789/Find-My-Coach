@@ -107,7 +107,7 @@
     <string name="trainee">Trainees</string>
     <string name="coinciding_vacation">Class coming with the vacation</string>
     <string name="change_location">Change</string>
-    <string name="preferred_time">Preferred Time</string>
+    <string name="preferred_time">Preferred Time and Day</string>
     <string name="search">Search</string>
     <string name="search_result">Search results</string>
     <string name="mentors">Mentors</string>
@@ -154,9 +154,11 @@
     <string name="payment_details_method">Add payment method</string>
     <string name="not_free">Not free</string>
     <string name="connection_disconnect_warn">Connection will disconnect</string>
-    <string name="self">Self</string>
+    <string name="self">Myself</string>
     <string name="select_card">Select a card</string>
     <string name="child">Child</string>
+    <string name="both">Both</string>
+    <string name="children">My Children</string>
     <string name="child_dob">Child Dob</string>
     <string name="total_charges">Total charges:</string>
     <string name="class_of_type">Class type</string>
@@ -349,7 +351,7 @@
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_chat_widget">Chat widget</string>
     <string name="title_activity_signup">SignupActivity</string>
-    <string name="title_edit_profile_menu">Update profile</string>
+    <string name="title_edit_profile_menu">Update Profile</string>
     <string name="title_validate_phone">Verify phone number</string>
     <string name="title_activity_user_list">Mentors</string>
     <string name="title_mentor_details">Mentor detail</string>
@@ -359,6 +361,8 @@
     <string name="title_calender_preferences">Calendar preferences</string>
 
     <string name="title_activity_areas_of_interest">AreasOfInterestActivity</string>
+    <string name="profile_update">Profile updated</string>
+
 
     <!-- Strings related to login -->
 
@@ -372,27 +376,31 @@
     <string name="prompt_update_profile">Please update your profile</string>
     <string name="prompt_enter_phone">Enter phone number</string>
     <string name="prompt_email_id">Email Id</string>
+    <string name="prompt_email_id_col">Email Id :</string>
     <string name="prompt_password">Password</string>
-    <string name="prompt_password_minimum_5_characters">Password (minimum 5 characters)</string>
+    <string name="prompt_password_minimum_5_characters">Password (min. 5 characters)</string>
     <string name="old_password">Old password:</string>
     <string name="new_password">New password:</string>
     <string name="new_password_re">Re enter new password:</string>
     <string name="new_phone_no">Mobile number:</string>
-    <string name="prompt_confirm_password">Confirm password</string>
+    <string name="prompt_confirm_password">Confirm new password</string>
     <string name="prompt_commit">Commit</string>
     <string name="prompt_first_name">First name</string>
+    <string name="prompt_first_middle_name">First name Middle name</string>
     <string name="prompt_middle_name">Middle name (optional)</string>
     <string name="prompt_last_name">Last name</string>
     <string name="prompt_date_of_birth">D.O.B.</string>
+    <string name="prompt_date_of_birth_col">D.O.B. :</string>
     <string name="prompt_date_of_birth_hint">DD-MM-YYYY</string>
     <string name="prompt_gender">Gender</string>
+    <string name="prompt_gender_col">Gender :</string>
     <string name="prompt_language_1">Language 1</string>
     <string name="prompt_language_2">Language 2</string>
     <string name="prompt_language_3">Language 3</string>
     <string name="prompt_language_4">Language 4</string>
     <string name="prompt_grade">Grade:</string>
     <string name="prompt_area_of_interest">Area of interests</string>
-    <string name="prompt_area_of_coaching">Area of coaching</string>
+    <string name="prompt_area_of_coaching">Area of Coaching</string>
     <string name="please_add_area_of_interest">Please add area of interest.</string>
     <string name="please_add_area_of_coaching">Please add area of coaching.</string>
     <string name="prompt_coaching_type">Class type</string>
@@ -400,7 +408,8 @@
     <string name="prompt_male">Male</string>
     <string name="prompt_female">Female</string>
     <string name="prompt_phone">Mobile number</string>
-    <string name="prompt_qualified">I have professional qualification for</string>
+    <string name="prompt_phone_col">Mobile number :</string>
+    <string name="prompt_qualified">I have Professional Qualifications in</string>
     <string name="prompt_submit">Submit</string>
     <string name="prompt_address">Physical address</string>
     <string name="prompt_complete_address">Complete Street Address</string>
@@ -431,14 +440,16 @@
     <string name="prompt_willing_to_travel">Teaching location preference </string>
     <string name="prompt_charges">Coaching fee</string>
     <string name="prompt_experience">Experience</string>
+    <string name="prompt_experience_col">Experience :</string>
     <string name="prompt_experience_in_years">Experience in year</string>
+    <string name="prompt_select_experience_in_years">Select experience in year</string>
     <string name="students_preference">I like to teach</string>
     <string name="about_me">About me</string>
     <string name="other_address">My other address</string>
     <string name="other_addresses">My other addresses</string>
     <string name="change_photo">Change photo</string>
     <string name="add_photo">Add photo</string>
-    <string name="teaching_medium_preferences">I can communicate with students in these languages</string>
+    <string name="teaching_medium_preferences">Languages I can communicate in</string>
     <string name="prompt_facebook">Facebook</string>
     <string name="prompt_google_plus">Google +</string>
     <string name="days">Days</string>
@@ -500,8 +511,8 @@
     <string name="prompt_mutiple_address">Add more  Locations  for my search</string>
     <string name="prompt_addressline1">House no/street no</string>
     <string name="prompt_fellow_student_location">I can go for a group class to a nearby students location</string>
-    <string name="prompt_mutiple_address_mentor">I can be available near multiple locations</string>
-    <string name="prompt_location_preference">Location Preference</string>
+    <string name="prompt_multiple_address_mentor">I am available at Other Locations also</string>
+    <string name="prompt_location_preference">Teaching Location Preference</string>
 
     <string name="prompt_summary">More information about me</string>
     <string name="my_qualification">My Qualifications</string>
@@ -627,6 +638,7 @@
     <string name="vacations">Vacation</string>
     <string name="address">Address please</string>
     <string name="mentor_for">Mentor for</string>
+    <string name="mentor_for_col">Mentor for :</string>
     <string name="pay_now">Pay now</string>
     <string name="personally">I\'ll pay the mentor personally</string>
     <string name="check_availability">Check for availability</string>
@@ -647,7 +659,9 @@
     <string name="dob_info_mentor">This is needed as some students may prefer a certain age group of teacher</string>
     <string name="dob_info_mentee">This is needed to ensure we provide you relevant teachers</string>
     <string name="physical_address_mentor_info">We would need to inform to students where to come for classes</string>
+    <string name="physical_address_mentee_info">We would need to inform to mentors where to come for classes</string>
     <string name="view_calendar_by">View schedule calendar by</string>
+    <string name="max_four_medium_of_education">You can select at most 4 languages</string>
     <string name="mentor_response_for_schedule_request_message">Your reply to mentee!</string>
 
     <string name="child_name">Name</string>
@@ -754,9 +768,9 @@
 
 
     <string-array name="location_preference">
-        <item>I prefer for the mentor to come to my location </item>
-        <item>I am ok to go to the mentor location or institute</item>
-        <item>I am fine with either</item>
+        <item>My location</item>
+        <item>Mentor location or Institute</item>
+        <item>Either</item>
     </string-array>
     <string name="title_activity_my_promotions">MyPromotions</string>
     <string name="no_active_promotions">No active promotions!</string>
@@ -776,7 +790,7 @@
     <string name="activate">Make active</string>
 
 
-    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
 
 
 </resources>

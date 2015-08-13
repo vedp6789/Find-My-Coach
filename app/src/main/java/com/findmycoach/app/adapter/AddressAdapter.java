@@ -14,6 +14,7 @@ import com.findmycoach.app.beans.category.Country;
 import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.student.ChildDetails;
 import com.findmycoach.app.util.MetaData;
+import com.findmycoach.app.util.PreferredTrainerLocationDialog;
 import com.findmycoach.app.views.ChizzleTextView;
 
 import java.util.ArrayList;
@@ -29,8 +30,9 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
     private List<Country> countries;
     private ArrayList<String> country_names;
     private ListView addressListView;
+    private boolean menteeFlag; //false for mentor
 
-    public AddressAdapter(Context context, int resource, ArrayList<Address> addressArrayList,ListView addressListView) {
+    public AddressAdapter(Context context, int resource, ArrayList<Address> addressArrayList,ListView addressListView,boolean menteeFlag) {
         super(context, resource);
         this.context = context;
         resourceId = resource;
@@ -40,6 +42,7 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
         countries = new ArrayList<Country>();
         countries = MetaData.getCountryObject(context);
         this.addressListView=addressListView;
+        this.menteeFlag=menteeFlag;
 
 
     }
@@ -80,14 +83,13 @@ public class AddressAdapter extends ArrayAdapter<ChildDetails> {
             public void onClick(View v) {
                 addressArrayList.remove(position);
                 notifyDataSetChanged();
+                if(menteeFlag)
+                     PreferredTrainerLocationDialog.changeDeletedAddress(addressArrayList);
                 EditProfileActivityMentee.setListViewHeightBasedOnChildren(addressListView);
             }
         });
 
-
-       // viewHolder.address.setText(addressArrayList.get(position).getAddressLine1().trim() + ", " + addressArrayList.get(position).getLocality().trim() + ", " + addressArrayList.get(position).getZip().trim());
         viewHolder.address.setText(addressArrayList.get(position).getLocale().trim());
-
         return convertView;
     }
 

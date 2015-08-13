@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -45,6 +46,7 @@ import android.widget.Toast;
 import com.facebook.Session;
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.AddressAdapter;
+import com.findmycoach.app.adapter.ExperienceAdapter;
 import com.findmycoach.app.adapter.QualifiedAreaOfCoachingAdapter;
 import com.findmycoach.app.beans.CityDetails;
 import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
@@ -94,27 +96,22 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class EditProfileActivityMentor extends Activity implements Callback, TeachingMediumPreferenceDialog.TeachingMediumAddedListener, AddAddressDialog.AddressAddedListener {
+public class EditProfileActivityMentor extends Activity implements Callback, AddAddressDialog.AddressAddedListener {
 
     int REQUEST_CODE = 100;
     private ImageView profilePicture;
     private TextView profileEmail;
     private TextView areaOfCoaching;
+    private TextView experienceInput;
     private EditText profileFirstName;
-//    private EditText profileMiddleName;
     private EditText profileLastName;
     private Spinner profileGender, profileCountry;
     private TextView profileDOB;
     private EditText physicalAddress;
     private AutoCompleteTextView city_with_states;
     private AutoCompleteTextView locale;
-    private EditText accomplishment;
-    //    private EditText chargeInput;
-    private Spinner experienceInput, teachingPreference;
-    //        classTypeSpinner;
-    // private CheckBox isReadyToTravel;
+    private Spinner teachingPreference;
     private Button updateAction;
-    //    private Spinner chargesPerUnit;
     private ProgressDialog progressDialog;
     private Data userInfo;
     private String imageInBinary = "";
@@ -125,12 +122,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     public boolean needToCheckOnDestroy;
     private List<Prediction> predictions;
     private ChizzleTextView addPhoto;
-    //    private ChizzleTextView currencySymbol;
     private String userCurrentAddress = "";
     private ScrollView scrollView;
     private TextView students_preference;
     private RelativeLayout summaryHeader, ll_physical_address;
-    private LinearLayout summaryDetailsLayout;
+    private LinearLayout summaryDetailsLayout, llCity;
     private boolean hiddenFlag;
     private ImageButton arrow;
     private ChizzleTextView teachingMediumPreference;
@@ -165,6 +161,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
     private ArrayList<Integer> city_id_from_suggestion;
     private String city_updated;
     private RelativeLayout multipleAddressLayout;
+    private ImageButton deleteLocaleButton;
+    private List<String> mediumOfTeaching;
 
 
     @Override
@@ -252,10 +250,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
     private void initialize() {
         list_of_city = new ArrayList<>();
+        mediumOfTeaching = new ArrayList<>();
         city_with_states = (AutoCompleteTextView) findViewById(R.id.city_with_state);
         physicalAddress = (EditText) findViewById(R.id.physical_address);
         city_id_from_suggestion = new ArrayList<Integer>();
         locale = (AutoCompleteTextView) findViewById(R.id.locale);
+        deleteLocaleButton = (ImageButton) findViewById(R.id.deleteLocaleButtonMentor);
         city_name = "";
         country_id = 0;
         city_id = 0;
@@ -268,17 +268,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         profilePicture = (ImageView) findViewById(R.id.profile_image);
         profileEmail = (TextView) findViewById(R.id.profile_email);
         profileFirstName = (EditText) findViewById(R.id.input_first_name);
-//        profileMiddleName = (EditText) findViewById(R.id.input_middle_name);
         profileLastName = (EditText) findViewById(R.id.input_last_name);
         profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
-        //pinCode = (EditText) findViewById(R.id.input_pin);
-//        chargeInput = (EditText) findViewById(R.id.input_charges);
-//        currencySymbol = (ChizzleTextView) findViewById(R.id.currencySymbol);
-//        chargeInput.setSelectAllOnFocus(true);
-//        accomplishment = (EditText) findViewById(R.id.input_accomplishment);
-        experienceInput = (Spinner) findViewById(R.id.input_experience);
+        experienceInput = (TextView) findViewById(R.id.input_experience);
         teachingPreference = (Spinner) findViewById(R.id.teachingPreferencesSpinner);
-////        classTypeSpinner = (Spinner) findViewById(R.id.classTypeSpinner);
         summaryHeader = (RelativeLayout) findViewById(R.id.summaryHeader);
         scrollView = (ScrollView) findViewById(R.id.main_scroll_view);
         summaryDetailsLayout = (LinearLayout) findViewById(R.id.summaryDetailsLayout);
@@ -299,7 +292,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         addMoreAddress = (Button) findViewById(R.id.addAddressMentor);
         addressListViewMentor = (ListView) findViewById(R.id.addressesListViewMentor);
         addressArrayListMentor = new ArrayList<>();
-        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayListMentor, addressListViewMentor);
+        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayListMentor, addressListViewMentor, false);
         addressListViewMentor.setAdapter(addressAdapter);
         teachingMediumHeader = (ChizzleTextView) findViewById(R.id.teachingMediumPreferenceHeader);
         profileCountry = (Spinner) findViewById(R.id.country);
@@ -311,7 +304,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         checkBoxCountryConditionText = (ChizzleTextView) findViewById(R.id.checkBoxCountryCondition);
         countryConditionCheckBox = (CheckBox) findViewById(R.id.inputCountryCondition);
         ll_physical_address = (RelativeLayout) findViewById(R.id.ll_physical_address);
-        multipleAddressLayout=(RelativeLayout)findViewById(R.id.mutipleAddressCheckBoxLayout);
+        multipleAddressLayout = (RelativeLayout) findViewById(R.id.mutipleAddressCheckBoxLayout);
+        llCity = (LinearLayout) findViewById(R.id.llCity);
 
         profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -331,8 +325,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         NetworkClient.getCountryConfig(EditProfileActivityMentor.this, requestParams, StorageHelper.getUserDetails(EditProfileActivityMentor.this, "auth_token"), EditProfileActivityMentor.this, 55);
                     } else
                         Toast.makeText(EditProfileActivityMentor.this, EditProfileActivityMentor.this.getString(R.string.check_network_connection), Toast.LENGTH_LONG).show();
-//                }
-
                 }
 
 
@@ -358,6 +350,14 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         for (int i = 0; i < yearOfExperience.length; i++) {
             yearOfExperience[i] = String.valueOf(i);
         }
+
+        deleteLocaleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                locale.setText("");
+            }
+        });
+
 
         multipleAddressMentor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -406,10 +406,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         String[] classType = getResources().getStringArray(R.array.mentor_class_type);
 
         addPhoto = (ChizzleTextView) findViewById(R.id.addPhotoMentor);
-        experienceInput.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, yearOfExperience));
         teachingPreference.setAdapter(new ArrayAdapter<>(this, R.layout.textview, preferences));
         updateAction = (Button) findViewById(R.id.button_update);
-//        chargesPerUnit = (Spinner) findViewById(R.id.chargesPerUnit);
         areaOfCoaching = (TextView) findViewById(R.id.input_areas_of_coaching);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
@@ -447,8 +445,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         findViewById(R.id.dobInfo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(EditProfileActivityMentor.this,
-                        getResources().getText(R.string.dob_info_mentor), Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(EditProfileActivityMentor.this,
+                        getResources().getText(R.string.dob_info_mentor), Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 0);
+                toast.show();
             }
         });
 
@@ -459,7 +459,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         getResources().getText(R.string.physical_address_mentor_info), Toast.LENGTH_LONG).show();
             }
         });
-
 
     }
 
@@ -584,6 +583,13 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 selected_city = null;/* making selected_city null because if user do changes in city and does not select city from suggested city then this selected_city string should be null which is used to validate the city */
                 String input = city_with_states.getText().toString().trim();
 
+                try {
+                    if (input.contains("("))
+                        input = input.split("\\(")[0].trim();
+                } catch (Exception ignored) {
+                }
+
+                city_id = 0;
                 if (input.length() >= 2) {
                     if (city_with_states.isPerformingCompletion()) {
                         return;
@@ -600,10 +606,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         city_with_states.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e(TAG, "postion: " + position);
 
-                // Log.e(TAG,"city id on auto suggestion click: "+city_id_from_suggestion.get(position));
-                Log.e(TAG, "city id with suggestions arraylist: " + city_id_from_suggestion.size());
                 if (city_id_from_suggestion != null && city_id_from_suggestion.size() > 0) {
                     city_id = city_id_from_suggestion.get(position);
                 }
@@ -634,6 +637,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             @Override
             public void afterTextChanged(Editable s) {
                 String input = locale.getText().toString().trim();
+                if (!input.isEmpty())
+                    deleteLocaleButton.setVisibility(View.VISIBLE);
+                else
+                    deleteLocaleButton.setVisibility(View.GONE);
                 if (input.length() >= 2) {
                     getAutoSuggestions(input);
                 }
@@ -667,9 +674,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             @Override
             public void onClick(View v) {
                 if (validateUserUpdate()) {
-                    Log.e(TAG, " call validated");
-                    callUpdateService();
-
+                    if (city_id != 0)
+                        callUpdateService();
+                    else
+                        Toast.makeText(EditProfileActivityMentor.this, "Please select a city from suggestions", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -729,46 +737,43 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             }
         });
 
-
         teachingMediumPreference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<String> languagesList = new ArrayList<String>();
-                languagesList.add(0, getResources().getString(R.string.select_leave_blank));
-                languagesList.add(1, "English");
-                languagesList.add(2, "Mandarin");
-                languagesList.add(3, "Hindi");
-                languagesList.add(4, "Malay");
-                languagesList.add(5, "Marathi");
-                languagesList.add(6, "Spanish");
-
-                int lng1 = 0;
-                int lng2 = 0;
-                int lng3 = 0;
-                int lng4 = 0;
-
-                String mediumSelected = teachingMediumPreference.getText().toString().trim();
-                if (!mediumSelected.equals("") && !mediumSelected.equalsIgnoreCase(getResources().getString(R.string.select))) {
-                    String[] arr = mediumSelected.split(",");
-                    for (int i = 0; i < arr.length; i++) {
-                        if (i == 0) {
-                            lng1 = languagesList.indexOf(arr[i].trim());
-                        } else if (i == 1) {
-                            lng2 = languagesList.indexOf(arr[i].trim());
-                        } else if (i == 2) {
-                            lng3 = languagesList.indexOf(arr[i].trim());
-                        } else if (i == 3) {
-                            lng4 = languagesList.indexOf(arr[i].trim());
-                        }
-                    }
-                }
-                TeachingMediumPreferenceDialog dialog = new TeachingMediumPreferenceDialog(EditProfileActivityMentor.this, languagesList, lng1, lng2, lng3, lng4);
-                dialog.setTeachingMediumAddedListener(EditProfileActivityMentor.this);
-                dialog.showPopUp();
+                if (mediumOfTeaching == null || mediumOfTeaching.size() < 1) {
+                    progressDialog.show();
+                    RequestParams requestParams = new RequestParams();
+                    requestParams.add("user_group", StorageHelper.getUserGroup(EditProfileActivityMentor.this, "user_group"));
+                    requestParams.add("city_id", String.valueOf(city_id));
+                    NetworkClient.getMediumOfEducation(EditProfileActivityMentor.this, requestParams,
+                            StorageHelper.getUserDetails(EditProfileActivityMentor.this, "auth_token"), EditProfileActivityMentor.this, 57);
+                } else
+                    showMediumOfTeachingDialog(mediumOfTeaching);
             }
         });
 
 
+        experienceInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(EditProfileActivityMentor.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dob_dialog);
+                GridView gridView = (GridView) dialog.findViewById(R.id.dobGrid);
+                TextView title = (TextView) dialog.findViewById(R.id.title);
+                title.setText(getResources().getString(R.string.prompt_select_experience_in_years));
+                gridView.setAdapter(new ExperienceAdapter(1, EditProfileActivityMentor.this, dialog, experienceInput));
+                dialog.show();
+            }
+        });
+
+
+    }
+
+    private void showMediumOfTeachingDialog(List<String> mediumOfTeaching) {
+
+        TeachingMediumPreferenceDialog dialog = new TeachingMediumPreferenceDialog(EditProfileActivityMentor.this, mediumOfTeaching, teachingMediumPreference.getText().toString().trim());
+        dialog.showPopUp();
     }
 
 
@@ -797,10 +802,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             } catch (Exception ignored) {
             }
 
-//            try {
-//                profileMiddleName.setText(userInfo.getMiddleName());
-//            } catch (Exception ignored) {
-//            }
             try {
                 profileLastName.setText(userInfo.getLastName());
             } catch (Exception ignored) {
@@ -815,12 +816,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
 
             try {
-                int index = Integer.parseInt(userInfo.getExperience());
-                if (index > 51)
-                    index = 0;
-                experienceInput.setSelection(index);
+                experienceInput.setText(userInfo.getExperience());
             } catch (Exception e) {
-                experienceInput.setSelection(0);
+                experienceInput.setText("");
             }
             if (userInfo.getGender() != null) {
                 if (userInfo.getGender().equals("M"))
@@ -828,11 +826,9 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 else
                     profileGender.setSelection(1);
             }
-            try{
-                if (userInfo.getAccomplishments() != null) {
-                    accomplishment.setText(userInfo.getAccomplishments());
-                }
-            }catch (Exception ignored){
+            try {
+                teachingMediumPreference.setText(userInfo.getMediumOfEducation());
+            } catch (Exception ignored) {
             }
 
             try {
@@ -877,8 +873,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                         addressListViewMentor.setVisibility(View.VISIBLE);
                         addMoreAddress.setVisibility(View.VISIBLE);
 
-                    }
-                    else {
+                    } else {
                         multipleAddressLayout.setVisibility(View.GONE);
                         addressListViewMentor.setVisibility(View.GONE);
                         addMoreAddress.setVisibility(View.GONE);
@@ -925,8 +920,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             addLimitListener(myTeachingMethodology, myTeachingMethodologyLimit);
             addLimitListener(myAwards, myAwardsLimit);
 
-            teachingMediumPreference.setText(StorageHelper.getUserDetails(EditProfileActivityMentor.this, "teaching_medium"));
-
             Log.e(TAG, userInfo.getMultipleAddress().size() + " address size");
             if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
 
@@ -968,11 +961,16 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 }
 
                 try {
-                    city_id = address.getCity_id();
+                    if(address.getStateName()!=null && !address.getStateName().isEmpty())
+                        city_with_states.setText(address.getCityName()+" ("+address.getStateName()+")");
+                    else {
+                        city_with_states.setText(address.getCityName());
+                    }
                 } catch (Exception ignored) {
                 }
                 try {
-                    city_with_states.setText(address.getCityName());
+                    city_id = address.getCity_id();
+                    
                 } catch (Exception ignored) {
                 }
 
@@ -1013,12 +1011,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
         }
 
-
-        if (teachingMediumPreference.getText().toString().trim().equals(""))
-            teachingMediumPreference.setText(StorageHelper.getUserGroup(this, "teaching_medium"));
-
-        if (teachingMediumPreference.getText().toString().trim().equals(""))
-            teachingMediumPreference.setText(getResources().getString(R.string.select));
     }
 
     private void addLimitListener(ChizzleEditText editText, final ChizzleTextView textViewForLimit) {
@@ -1119,19 +1111,24 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
         }
 
-        if (city_with_states.getText().toString().trim().equals("")) {
-            city_with_states.setError(getResources().getString(R.string.enter_city));
-            if (isValid)
-                city_with_states.requestFocus();
-
-            isValid = false;
-        }
-
         if (city_id == 0) {
             city_with_states.setError(getResources().getString(R.string.enter_city_from_suggestion));
+            if (city_with_states.hasFocus()) {
+                city_with_states.clearFocus();
+            }
             city_with_states.requestFocus();
             isValid = false;
         }
+
+        if (city_with_states.getText().toString().trim().equals("")) {
+            if (isValid) {
+                city_with_states.setError(getResources().getString(R.string.enter_city));
+                city_with_states.requestFocus();
+            }
+
+            isValid = false;
+        }
+
 
         if (teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2) {
             if (physicalAddress.getText().toString().trim().isEmpty()) {
@@ -1213,7 +1210,13 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 dobYear = 0;
             }
 
-            int yearsOfExperience = experienceInput.getSelectedItemPosition();
+
+            int yearsOfExperience = 0;
+            try {
+                yearsOfExperience = Integer.parseInt(experienceInput.getText().toString());
+            } catch (Exception e) {
+                yearsOfExperience = 0;
+            }
             int age = Calendar.getInstance().get(Calendar.YEAR) - dobYear;
             int minExperience = getResources().getInteger(R.integer.mentor_min_age_experience_difference);
 
@@ -1262,7 +1265,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         try {
             RequestParams requestParams = new RequestParams();
             requestParams.add("first_name", profileFirstName.getText().toString().trim());
-//            requestParams.add("middle_name", profileMiddleName.getText().toString().trim());
             requestParams.add("last_name", profileLastName.getText().toString().trim());
             String sex = profileGender.getSelectedItem().toString();
             if (multipleAddressMentor.isChecked()) {
@@ -1285,24 +1287,18 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
                 e.printStackTrace();
             }
 
-            /*requestParams.add("address", profileAddress.getText().toString());
-            requestParams.add("city", profileAddress1.getText().toString());
-            requestParams.add("zip", pinCode.getText().toString());*/
-
-//            if (chargesPerUnit.getSelectedItemPosition() == 0) {
-//                Log.i(TAG, "select charges unit : " + chargesPerUnit.getSelectedItemPosition());
-//                requestParams.add("charges", chargeInput.getText().toString());
-//                requestParams.add("charges_class", "0");
-//            }
-
-            requestParams.add("experience", experienceInput.getSelectedItemPosition() + "");
-            requestParams.add("accomplishments", accomplishment.getText().toString());
+            if (!experienceInput.getText().toString().equals(""))
+                requestParams.add("experience", experienceInput.getText().toString());
             if (!imageInBinary.equals("") && !removeProfilePicture)
                 requestParams.add("photograph", imageInBinary);
             else if (removeProfilePicture)
                 requestParams.add("photograph", "");
 
             requestParams.add("availability_yn", String.valueOf(teachingPreference.getSelectedItemPosition()));
+
+            requestParams.add("medium_of_education", teachingMediumPreference.getText().toString());
+            Log.e(TAG, "medium_of_education : " + teachingMediumPreference.getText().toString());
+
             if (teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2) {
                 requestParams.add("address", physicalAddress.getText().toString().trim());
             }
@@ -1413,14 +1409,16 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             String authToken = StorageHelper.getUserDetails(this, "auth_token");
             requestParams.add("id", StorageHelper.getUserDetails(this, "user_id"));
             requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
-//            requestParams.add("slot_type", String.valueOf(classTypeSpinner.getSelectedItemPosition()));
             requestParams.add("section_1", myQualification.getText().toString());
             requestParams.add("section_2", myAccredition.getText().toString());
             requestParams.add("section_3", myExperience.getText().toString());
             requestParams.add("section_4", myTeachingMethodology.getText().toString());
             requestParams.add("section_5", myAwards.getText().toString());
-            requestParams.add("country", String.valueOf(countries.get(profileCountry.getSelectedItemPosition()).getId()));
             Log.e(TAG, "request params: " + requestParams.toString());
+            try {
+                requestParams.add("country", String.valueOf(countries.get(profileCountry.getSelectedItemPosition() - 1).getId()));
+            } catch (Exception ignored) {
+            }
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1597,7 +1595,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
             list.add(predictions.get(index).getDescription());
         }
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.textview, list);
-        //profileAddress1.setAdapter(arrayAdapter);
         locale.setAdapter(arrayAdapter);
 
     }
@@ -1608,7 +1605,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         for (int index = 0; index < cityDetailses.size(); index++) {
             CityDetails cityDetails = cityDetailses.get(index);
             if (cityDetails.getCity_name().toLowerCase().contains(input_string.toLowerCase())) {
-                list.add(cityDetails.getCity_name() + " (" + cityDetails.getCity_state() + ")");
+                if (cityDetails.getCity_state() != null && !cityDetails.getCity_state().trim().equals(""))
+                    list.add(cityDetails.getCity_name() + " (" + cityDetails.getCity_state() + ")");
+                else
+                    list.add(cityDetails.getCity_name());
                 city_id_from_suggestion.add(cityDetails.getCity_id());
             }
         }
@@ -1619,41 +1619,75 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
+        Log.e(TAG, calledApiValue + " : ===");
+        if (calledApiValue == 57) {
+            progressDialog.dismiss();
+            try {
+                JSONObject jsonObject = new JSONObject((String) object);
+                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                for (int i = 0; i < jsonArray.length(); i++)
+                    mediumOfTeaching.add(jsonArray.getJSONObject(i).getString("name"));
+                showMediumOfTeachingDialog(mediumOfTeaching);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                mediumOfTeaching.clear();
+            }
 
-        if (calledApiValue == 54) {
+        } else if (calledApiValue == 54) {
             list_of_city = (ArrayList<CityDetails>) object;
 
-
-            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() == 0) {
-                if (city_name != "" && list_of_city != null && list_of_city.size() > 0) {
-                    for (int i = 0; i < list_of_city.size(); i++) {
-                        CityDetails cityDetails = list_of_city.get(i);
-
-                        String city = cityDetails.getCity_name();
-                        String state = cityDetails.getCity_state();
-                        int city_country_id = cityDetails.getCity_country();
-                        if (city.equalsIgnoreCase(city_name) && state.equalsIgnoreCase(state_name) && (city_country_id == country_id)) {
-                            String s = city.trim() + " (" + state + ")";
-                            city_with_states.setText(s);
-                        }
-                    }
-                }
-            } else {
-                if (list_of_city != null && list_of_city.size() > 0 && city_id != 0)
-
-                    for (int i = 0; i < list_of_city.size(); i++) {
-                        CityDetails cityDetails = list_of_city.get(i);
-                        String city = cityDetails.getCity_name();
-                        String state = cityDetails.getCity_state();
-                        int city_country_id = cityDetails.getCity_country();
-                        if (cityDetails.getCity_id() == city_id && country_id == city_country_id) {
-                            String s = city.trim() + " (" + state + ")";
-                            city_with_states.setText(s);
-                            break;
-                        }
-
-                    }
-            }
+//            try {
+//                if (list_of_city.size() == 1) {
+//                    city_id = list_of_city.get(0).getCity_id();
+//                }
+//            } catch (Exception ignored) {
+//                llCity.setVisibility(View.VISIBLE);
+//            }
+//
+//            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() == 0) {
+//                if (city_name != "" && list_of_city != null && list_of_city.size() > 0) {
+//                    for (int i = 0; i < list_of_city.size(); i++) {
+//                        try {
+//                            CityDetails cityDetails = list_of_city.get(i);
+//
+//                            String city = cityDetails.getCity_name();
+//                            String state = cityDetails.getCity_state();
+//                            int city_country_id = cityDetails.getCity_country();
+//                            if (city.equalsIgnoreCase(city_name) && state.equalsIgnoreCase(state_name) && (city_country_id == country_id)) {
+//                                String s = "";
+//                                if (!state.trim().equals(""))
+//                                    s = city.trim() + " (" + state + ")";
+//                                else
+//                                    s = city.trim();
+//                                city_with_states.setText(s);
+//                            }
+//                        } catch (Exception ignored) {
+//                        }
+//                    }
+//                }
+//            } else {
+//                if (list_of_city != null && list_of_city.size() > 0 && city_id != 0)
+//
+//                    for (int i = 0; i < list_of_city.size(); i++) {
+//                        try {
+//                            CityDetails cityDetails = list_of_city.get(i);
+//                            String city = cityDetails.getCity_name();
+//                            String state = cityDetails.getCity_state();
+//                            int city_country_id = cityDetails.getCity_country();
+//                            if (cityDetails.getCity_id() == city_id && country_id == city_country_id) {
+//                                String s = "";
+//                                if (!state.trim().equals(""))
+//                                    s = city.trim() + " (" + state + ")";
+//                                else
+//                                    s = city.trim();
+//                                city_with_states.setText(s);
+//                                break;
+//                            }
+//                        } catch (Exception ignored) {
+//                        }
+//
+//                    }
+//            }
         } else if (object instanceof Suggestion) {
             Suggestion suggestion = (Suggestion) object;
             updateAutoSuggestion(suggestion);
@@ -1768,31 +1802,13 @@ public class EditProfileActivityMentor extends Activity implements Callback, Tea
         }
     }
 
-    @Override
-    public void onTeachingMediumAdded(String language1, String language2, String language3, String language4) {
+    public void onTeachingMediumAdded(List<String> mediumOfTeachingSelected) {
         teachingMediumPreference.setText("");
-        String select = getResources().getString(R.string.select_leave_blank);
-        String finalString = "";
-        if (!language1.equalsIgnoreCase(select)) {
-            finalString += language1 + ", ";
-        }
-        if (!language2.equalsIgnoreCase(select)) {
-            finalString += language2 + ", ";
-        }
-        if (!language3.equalsIgnoreCase(select)) {
-            finalString += language3 + ", ";
-        }
-        if (!language4.equalsIgnoreCase(select)) {
-            finalString += language4;
-        }
-
-
-        if (finalString.length() > 0 && finalString.charAt(finalString.length() - 1) == ' ') {
-            finalString = finalString.substring(0, finalString.length() - 2);
-        }
-
-        teachingMediumPreference.setText(finalString);
-        StorageHelper.storePreference(EditProfileActivityMentor.this, "teaching_medium", finalString);
+        String temp = "";
+        for (String s : mediumOfTeachingSelected)
+            temp = temp + ", " + s;
+        temp = temp.replaceFirst(", ", "");
+        teachingMediumPreference.setText(temp.trim());
     }
 
     @Override

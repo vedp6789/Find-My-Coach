@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="32dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -50,7 +50,9 @@
                 android:layout_centerVertical="true"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_below="@+id/heading"
+                android:layout_marginTop="@dimen/back_margin">
 
                 <LinearLayout
                     android:id="@+id/email_login_form"
@@ -60,7 +62,6 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="36dp"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
 
@@ -228,7 +229,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/authentication_layout"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/category_button_padding"
+                android:layout_marginTop="36dp"
                 android:clickable="true"
                 android:drawableLeft="@drawable/forget_password_small"
                 android:drawablePadding="@dimen/textView_padding_margin"

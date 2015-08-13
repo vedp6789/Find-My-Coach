@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     android:paddingLeft="24dp"
     android:paddingTop="@dimen/back_margin"
-    android:paddingRight="@dimen/back_margin"
     android:paddingBottom="@dimen/back_margin">
 
     <com.findmycoach.app.views.ChizzleTextView
@@ -92,14 +91,13 @@
         android:layout_alignTop="@+id/gradeHeader" />
 
     <ImageButton
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:id="@+id/deleteButton"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
         android:src="@drawable/close_icon"
-        android:background="@color/purple"
+        android:background="@drawable/circular_border_purple"
         android:padding="12dp"
         android:scaleType="fitCenter" />
 

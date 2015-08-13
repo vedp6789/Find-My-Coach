@@ -200,7 +200,14 @@ public class ValidatePhoneActivity extends Activity implements View.OnClickListe
         /** Opens Login activity*/
         Intent intent = new Intent(this, LoginActivity.class);
         intent.putExtra("doLogin", true);
-        logout();
+        StorageHelper.clearUser(this);
+        fbClearToken();
+
+        /** Setting flag is G+ user signing out */
+        String loginWith = StorageHelper.getUserDetails(this, "login_with");
+        if (loginWith == null || loginWith.equals("G+")) {
+            LoginActivity.doLogout = true;
+        }
         startActivity(intent);
         finish();
         Log.e(TAG, "DashBoard");

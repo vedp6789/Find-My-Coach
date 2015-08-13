@@ -29,9 +29,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -101,9 +101,11 @@ import java.util.TimeZone;
     *       //Save entered card details
     *   CountryConfig                       55
     *   Grades                              56
+    *   MediumOfEducation                   57
     *   promotion (get all )                          58
     *   promotion (add/update)                              59
     *   promoton(delete)                              60
+    *   
     * */
 
 
@@ -119,7 +121,7 @@ public class NetworkClient {
         Calendar cal = GregorianCalendar.getInstance(tz);
         int offsetInMillis = tz.getOffset(cal.getTimeInMillis());
         String offset = String.format("%02d:%02d", Math.abs(offsetInMillis / 3600000), Math.abs((offsetInMillis / 60000) % 60));
-        offset = (offsetInMillis >= 0 ? "+" : "-") + offset;
+        offset = (offsetInMillis >= 0 ? "+" : "-") + offset + ":00";
         Log.e(TAG, "TimeZone : " + offset);
         return offset;
     }
@@ -2313,6 +2315,43 @@ public class NetworkClient {
                 try {
                     String responseJson = new String(responseBody);
                     Log.d("CurrencyNew", responseJson);
+                    callback.failureOperation(responseJson, statusCode, calledApiValue);
+                } catch (Exception e) {
+                    try {
+                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        });
+    }
+
+
+    public static void getMediumOfEducation(final Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
+        if (!NetworkManager.isNetworkConnected(context)) {
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.get(context, getAbsoluteURL("mediumOfEducation", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    String responseJson = new String(responseBody);
+                    Log.e(TAG, "Success : " + responseJson);
+                    callback.successOperation(responseJson, statusCode, calledApiValue);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseBody, null);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                try {
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure : " + responseJson);
                     callback.failureOperation(responseJson, statusCode, calledApiValue);
                 } catch (Exception e) {
                     try {

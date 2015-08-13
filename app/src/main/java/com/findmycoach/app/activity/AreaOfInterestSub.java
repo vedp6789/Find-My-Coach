@@ -46,10 +46,10 @@ public class AreaOfInterestSub extends Activity {
             setResult(RESULT_OK, null);
             finish();
         }
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_FIRST_USER) {
-            setResult(RESULT_FIRST_USER, null);
-            finish();
-        }
+//        if (requestCode == REQUEST_CODE && resultCode == RESULT_FIRST_USER) {
+//            setResult(RESULT_FIRST_USER, null);
+//            finish();
+//        }
     }
 
     //    @Override
@@ -165,6 +165,7 @@ public class AreaOfInterestSub extends Activity {
             }
             title.setText(getResources().getString(R.string.all));
             populateListAddListener(list, AreasOfInterestActivity.datumSubs);
+            saveAndAddNew.setVisibility(View.GONE);
         }
     }
 
