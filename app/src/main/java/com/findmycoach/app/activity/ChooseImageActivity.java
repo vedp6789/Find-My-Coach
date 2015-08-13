@@ -1,7 +1,6 @@
 package com.findmycoach.app.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -9,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -22,8 +22,7 @@ import com.findmycoach.app.util.BinaryForImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.InputStream;
 
 public class ChooseImageActivity extends Activity {
 
@@ -111,11 +110,10 @@ public class ChooseImageActivity extends Activity {
         chooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK);
-                galleryIntent.setType("image/*");
-                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(galleryIntent, REQUEST_CODE);
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent, "Select File"), REQUEST_CODE);
             }
         });
 
@@ -137,7 +135,7 @@ public class ChooseImageActivity extends Activity {
             }
         });
 
-        if(getIntent().getStringExtra("removeImageOption")!=null && getIntent().getStringExtra("removeImageOption").equals(getResources().getString(R.string.add_photo)))
+        if (getIntent().getStringExtra("removeImageOption") != null && getIntent().getStringExtra("removeImageOption").equals(getResources().getString(R.string.add_photo)))
             removeImageButton.setVisibility(View.GONE);
         else
             isImageSelected = true;
@@ -170,15 +168,36 @@ public class ChooseImageActivity extends Activity {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK
                 && null != data) {
             Uri selectedImage = data.getData();
-//            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-//            Cursor cursor = getContentResolver().query(selectedImage,
-//                    filePathColumn, null, null, null);
-//            cursor.moveToFirst();
-//            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String imgDecodableString = getRealPathFromURI(this, selectedImage);
-            //  cursor.close();
+            Log.e("Image URI :", selectedImage.getPath());
+            String imgDecodableString = "";
 
+           try{
+               String url = data.getData().toString();
+               Bitmap bm = null;
+               if (url.startsWith("content://com.google.android.apps.photos.content")){
+                   try {
+                       InputStream is = getContentResolver().openInputStream(Uri.parse(url));
+                       bm = BitmapFactory.decodeStream(is);
+                   } catch (FileNotFoundException e) {
+                       e.printStackTrace();
+                   }
+               }
 
+               if(bm != null){
+                   cropImageView.setImageBitmap(getResizedBitmap(bm, 500));
+                   isImageSelected = true;
+                   removeImageButton.setVisibility(View.VISIBLE);
+                   return;
+               }
+           }catch (Exception ignored){
+           }
+
+            try{
+                imgDecodableString = getRealPathFromURI(selectedImage);
+            }catch (Exception e){
+                Toast.makeText(this, getResources().getString(R.string.error_picking_image), Toast.LENGTH_SHORT).show();
+            }
+            Log.e("Absolute path :", imgDecodableString);
             /** Set the Image in ImageView after decoding the String */
             try {
                 cropImageView.setImageBitmap(decodeFile(new File(imgDecodableString)));
@@ -200,21 +219,27 @@ public class ChooseImageActivity extends Activity {
         }
     }
 
-    public static String getRealPathFromURI(Context context, Uri uri) {
-        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        String document_id = cursor.getString(0);
-        document_id = document_id.substring(document_id.lastIndexOf(":")+1);
-        cursor.close();
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
 
-        cursor = context.getContentResolver().query(
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
-        cursor.moveToFirst();
-        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-        cursor.close();
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 0) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
 
-        return path;
+    public String getRealPathFromURI(Uri uri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = managedQuery(uri, proj, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
 
     private Bitmap decodeFile(File f) {
@@ -225,7 +250,7 @@ public class ChooseImageActivity extends Activity {
             BitmapFactory.decodeStream(new FileInputStream(f), null, o);
 
             //The new size we want to scale to
-            final int REQUIRED_SIZE = 225;
+            final int REQUIRED_SIZE = 500;
 
             //Find the correct scale value. It should be the power of 2.
             int scale = 1;
@@ -239,18 +264,6 @@ public class ChooseImageActivity extends Activity {
         } catch (FileNotFoundException e) {
         }
         return null;
-    }
-
-    public static Uri handleImageUri(Uri uri) {
-        Pattern pattern = Pattern.compile("(content://media/.*\\d)");
-        if (uri.getPath().contains("content")) {
-            Matcher matcher = pattern.matcher(uri.getPath());
-            if (matcher.find())
-                return Uri.parse(matcher.group(1));
-            else
-                throw new IllegalArgumentException("Cannot handle this URI");
-        } else
-            return uri;
     }
 }
 
