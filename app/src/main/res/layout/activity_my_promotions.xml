@@ -12,7 +12,6 @@
         android:id="@+id/ll_title"
         layout="@layout/header_back_name_menu" />
 
-
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/promotionsTab"
         android:layout_width="match_parent"
@@ -22,20 +21,12 @@
         app:pstsIndicatorColor="@color/purple"
         app:pstsIndicatorHeight="@dimen/days_margin" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+
+    <com.findmycoach.app.util.CustomViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/vp_promotions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/promotionsTab"
-        android:layout_marginTop="@dimen/days_margin">
-
-
-        <com.findmycoach.app.util.CustomViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/vp_promotions"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_below="@+id/promotionsTab" />
 
 
 </RelativeLayout>

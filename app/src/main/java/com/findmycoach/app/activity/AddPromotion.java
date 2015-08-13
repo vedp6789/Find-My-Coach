@@ -68,6 +68,7 @@ public class AddPromotion extends Activity implements Callback {
                 if (validate()) {
                     RequestParams requestParams = new RequestParams();
                     requestParams.add("promotion_title", et_promotion_title.getText().toString());
+                    requestParams.add("is_active","1");
                     if (rb_discount_type.isChecked()) {
                         requestParams.add("promotion_type", "discount");
                         requestParams.add("discount_percentage", et_promotion_discount.getText().toString());
@@ -159,6 +160,7 @@ public class AddPromotion extends Activity implements Callback {
         progressDialog.dismiss();
         try {
             JSONObject jsonObject = (JSONObject) object;
+            Log.e("FMC: ","added promotion response: "+jsonObject.toString());
             if (jsonObject.getInt("data") > 0) {
                 Toast.makeText(AddPromotion.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                 if(MyPromotions.myPromotions != null ){

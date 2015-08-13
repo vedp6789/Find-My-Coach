@@ -102,7 +102,7 @@ import java.util.TimeZone;
     *   CountryConfig                       55
     *   Grades                              56
     *   promotion (get all )                          58
-    *   promotion (add )                              59
+    *   promotion (add/update)                              59
     *   promoton(delete)                              60
     * */
 

@@ -770,10 +770,10 @@
     <string name="add_free_classes">Add number of free class you will provide to mentee!</string>
     <string name="add_mandatory_classes">Add number of mandatory classes for mentee!</string>
     <string name="promotion">Promotion</string>
-    <string name="either_inactivate_or_delete">You can either inactive or delete your promotion!</string>
-    <string name="inactivate">Inactive</string>
-    <string name="either_activate_or_delete">You can either activate or delete your promotion!</string>
-    <string name="activate">Active</string>
+    <string name="either_inactivate_or_delete">You can either delete or make your promotion inactive!</string>
+    <string name="inactivate">Make inactive</string>
+    <string name="either_activate_or_delete">You can either delete or make your promotion active!</string>
+    <string name="activate">Make active</string>
 
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->

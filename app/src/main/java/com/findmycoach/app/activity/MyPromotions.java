@@ -32,7 +32,6 @@ public class MyPromotions extends FragmentActivity implements Callback {
     private ViewPager promotionsViewpager;
     private PromotionsViewPagerAdapter promotionsViewPagerAdapter;
     private ProgressDialog progressDialog;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private String TAG = "FMC";
     //private String tag;
     //boolean after_action;  /* using for tab change after reload from action accetp or reject*/
@@ -43,8 +42,7 @@ public class MyPromotions extends FragmentActivity implements Callback {
     private TextView tv_title;
     private ArrayList<Offer> activePromotionArrayList, inactivePromotionArrayList;
     public boolean activePromotions, activePromotionsTabRefreshed, inactivePromotionsTabRefreshed;   /* activePromotionsTabRefreshed,inactivePromotionsTabRefreshed are used to get the status that whether api call for these conditions get successed or not*/
-    int promotions_tab_state;  /* SharedPreference will state its value*/
-    private int REQUEST = -1, RESULT = 1;
+    int promotions_tab_state/*, gettingPromotionsForActive*/;  /* SharedPreference will state its value,   gettingPromotionsForActive is using to get the right arrayListPopulated */
     boolean newPromotionAdded = false;
 
 
@@ -60,15 +58,12 @@ public class MyPromotions extends FragmentActivity implements Callback {
         iv_add_promotions = (ImageView) findViewById(R.id.menuItem);
         iv_back_button = (ImageView) findViewById(R.id.backButton);
         pagerSlidingTabStrip = (PagerSlidingTabStrip) findViewById(R.id.promotionsTab);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         promotionsViewpager = (ViewPager) findViewById(R.id.vp_promotions);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         myPromotions = this;
         activePromotionArrayList = new ArrayList<>();
         inactivePromotionArrayList = new ArrayList<>();
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getResources().getString(R.string.please_wait));
         tv_title.setText(getResources().getString(R.string.my_promotions));
         iv_add_promotions.setImageDrawable(getResources().getDrawable(R.drawable.add_icon1));
         promotionsViewPagerAdapter = new PromotionsViewPagerAdapter(getSupportFragmentManager(), this, myPromotions, activePromotionArrayList, inactivePromotionArrayList);
@@ -76,6 +71,7 @@ public class MyPromotions extends FragmentActivity implements Callback {
         pagerSlidingTabStrip.setShouldExpand(true);
         pagerSlidingTabStrip.setViewPager(promotionsViewpager);
         promotions_tab_state = StorageHelper.getPromotionsTabState(this);
+        /*gettingPromotionsForActive = -1;*/
         if (promotions_tab_state == 0 || promotions_tab_state == 1) {
             promotionsViewpager.setCurrentItem(0);
         } else {
@@ -107,18 +103,6 @@ public class MyPromotions extends FragmentActivity implements Callback {
         });
 
 
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.purple);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                move_to_TAB = promotionsViewpager.getCurrentItem();
-                Log.e(TAG, "swipe onRefresh" + move_to_TAB);
-                if (move_to_TAB == 0)
-                    getAllPromotions(true);
-                else
-                    getAllPromotions(false);
-            }
-        });
         iv_back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,7 +113,7 @@ public class MyPromotions extends FragmentActivity implements Callback {
         iv_add_promotions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(MyPromotions.this, AddPromotion.class), REQUEST);
+                startActivity(new Intent(MyPromotions.this, AddPromotion.class));
             }
         });
     }
@@ -137,22 +121,24 @@ public class MyPromotions extends FragmentActivity implements Callback {
 
     public void onActivityCompletion() {
         newPromotionAdded = true;
-        getAllPromotions(true);
+       // getAllPromotions(true);
     }
 
 
     public void getAllPromotions(boolean activePromotions) {
         this.activePromotions = activePromotions;
-        RequestParams requestParams = new RequestParams();
-        if (activePromotions)
-            requestParams.add("is_active", "1");
-        else
-            requestParams.add("is_active", "0");
 
-        if (mSwipeRefreshLayout != null && !mSwipeRefreshLayout.isRefreshing())
-            progressDialog.show();
+        RequestParams requestParams = new RequestParams();
+        if (activePromotions) {
+            requestParams.add("is_active", "1");
+      /*      gettingPromotionsForActive = 1;*/
+        } else {
+            requestParams.add("is_active", "0");
+  /*          gettingPromotionsForActive = 0;*/
+        }
 
         Log.e(TAG, "requestParams: " + requestParams.toString());
+        progressDialog.show();
         NetworkClient.getAllPromotions(this, requestParams, StorageHelper.getUserGroup(MyPromotions.this, "auth_token"), this, 58);
     }
 
@@ -161,9 +147,10 @@ public class MyPromotions extends FragmentActivity implements Callback {
     protected void onResume() {
         super.onResume();
 
-        if(promotionsViewpager.getCurrentItem() == 0){
+        if (promotionsViewpager.getCurrentItem() == 0) {
+            Log.e(TAG,"onResume");
             getAllPromotions(true);
-        }else{
+        } else {
             getAllPromotions(false);
         }
 
@@ -212,36 +199,43 @@ public class MyPromotions extends FragmentActivity implements Callback {
             // Log.e(TAG,"response 58: "+(String) object);
             Promotions promotions = (Promotions) object;
 
-            if (activePromotions) {
+            if (activePromotions /*|| gettingPromotionsForActive == 1*/) {
+
                 activePromotionArrayList = (ArrayList<Offer>) promotions.getPromotions();
-                Log.e(TAG, "size fo arraylist: " + activePromotionArrayList.size());
+                /*Log.e(TAG, "size fo arraylist: " + activePromotionArrayList.size());
                 for(Offer offer:activePromotionArrayList ){
                     Log.e(TAG,offer.getId()+", "+offer.getUser_id()+", "+offer.getPromotion_title()+", "+offer.getPromotion_type()+", "+offer.getDiscount_percentage()+", "+offer.getFree_classes()+", "+offer.getFree_min_classes());
                 }
+                */
                 activePromotionsTabRefreshed = true;
                 if (newPromotionAdded) {
-                    Log.e(TAG,"new promotion added");
+                    Log.e(TAG, "new promotion added");
                     newPromotionAdded = false;
                     promotionsViewpager.setCurrentItem(0);  /* when new promotion added then showing updated values as active promotion*/
 
                 }
             } else {
-                inactivePromotionArrayList = (ArrayList<Offer>) promotions.getPromotions();
-                inactivePromotionsTabRefreshed = true;
-                if (newPromotionAdded) {
-                    Log.e(TAG,"new promotion added");
-                    newPromotionAdded = false;
-                    promotionsViewpager.setCurrentItem(0);  /* when new promotion added then showing updated values as active promotion*/
 
-                }
+                    if (newPromotionAdded) {
+                        Log.e(TAG, "new promotion added");
+                        activePromotionArrayList = (ArrayList<Offer>) promotions.getPromotions();
+                        newPromotionAdded = false;
+                        promotionsViewpager.setCurrentItem(0);  /* when new promotion added then showing updated values as active promotion*/
+
+                    } else {
+                        inactivePromotionArrayList = (ArrayList<Offer>) promotions.getPromotions();
+                        inactivePromotionsTabRefreshed = true;
+                    }
+
+
             }
 
-            promotionsViewPagerAdapter.setArrayList(activePromotionArrayList,inactivePromotionArrayList);
 
-          promotionsViewPagerAdapter.notifyDataSetChanged();
+            promotionsViewPagerAdapter.setArrayList(activePromotionArrayList, inactivePromotionArrayList);
+
+            promotionsViewPagerAdapter.notifyDataSetChanged();
         }
 
-        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -252,8 +246,7 @@ public class MyPromotions extends FragmentActivity implements Callback {
                 newPromotionAdded = false;  /* Making newPromotionAdded flag false in the condition, when promotion get added but getting all active promotion is having some problem*/
             }
 
-            if (mSwipeRefreshLayout != null)
-                mSwipeRefreshLayout.setRefreshing(false);
+
         }
 
 
