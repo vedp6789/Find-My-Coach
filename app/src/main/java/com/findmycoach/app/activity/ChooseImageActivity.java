@@ -197,6 +197,12 @@ public class ChooseImageActivity extends Activity {
             }catch (Exception e){
                 Toast.makeText(this, getResources().getString(R.string.error_picking_image), Toast.LENGTH_SHORT).show();
             }
+
+            if(imgDecodableString.startsWith("http")){
+                Toast.makeText(this, getResources().getString(R.string.pick_local_image), Toast.LENGTH_LONG).show();
+                return;
+            }
+
             Log.e("Absolute path :", imgDecodableString);
             /** Set the Image in ImageView after decoding the String */
             try {

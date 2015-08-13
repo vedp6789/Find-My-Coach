@@ -194,6 +194,7 @@
     <string name="attach_video_clicked">Attach video is clicked</string>
     <string name="too_big_image">Image is too big, Please choose smaller one</string>
     <string name="image_not_picked">You have not picked image</string>
+    <string name="pick_local_image">Please select image from local storage</string>
     <string name="choose_suggested_copy">Choose a suggested city</string>
     <string name="enter_necessary_details">Please enter necessary details</string>
     <string name="check_network_connection">Please check network connection</string>
