@@ -62,9 +62,9 @@ public class NetworkManager {
 
         for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
             if (returnedAddress.getAddressLine(i) != null && !returnedAddress.getAddressLine(i).equals("null") && !returnedAddress.getAddressLine(i).trim().equals(""))
-                strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                strReturnedAddress.append(", ").append(returnedAddress.getAddressLine(i));
         }
-        strAdd = strReturnedAddress.toString();
+        strAdd = strReturnedAddress.toString().replaceFirst(", ", "");
         try {
             if (returnedAddress.getPostalCode() != null && !returnedAddress.getPostalCode().equals("null") && !returnedAddress.getPostalCode().trim().equals(""))
                 postalCodeName = returnedAddress.getPostalCode();

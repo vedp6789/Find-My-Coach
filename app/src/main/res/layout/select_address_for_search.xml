@@ -1,0 +1,24 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.findmycoach.student.activity.AreasOfInterestActivity">
+
+    <com.findmycoach.app.views.ChizzleTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_button_height"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:background="@color/purple"
+        android:text="@string/prompt_select_locality_for_search"
+        android:textSize="@dimen/profile_heading"/>
+
+    <ListView
+        android:id="@+id/localityListView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title" />
+
+</RelativeLayout>

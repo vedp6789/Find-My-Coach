@@ -11,9 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/action_search"
         android:layout_alignParentTop="true"
-        android:paddingLeft="@dimen/activity_vertical_margin"
-        android:paddingRight="@dimen/activity_vertical_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/back_margin"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
         android:scrollbars="vertical">
 
         <LinearLayout
@@ -54,7 +54,7 @@
                     android:inputType="textNoSuggestions"
                     android:maxLines="2"
                     android:textCursorDrawable="@drawable/cursor_white"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
@@ -202,8 +202,8 @@
                     android:id="@+id/fromTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
                     android:background="@drawable/custom_rounded_corner_white"
+                    android:gravity="center_horizontal"
                     android:orientation="horizontal"
                     android:padding="@dimen/textView_padding_margin">
 

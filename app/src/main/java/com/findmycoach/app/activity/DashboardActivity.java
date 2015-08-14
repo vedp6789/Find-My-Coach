@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -34,11 +35,14 @@ import com.findmycoach.app.reside_menu.ResideMenu;
 import com.findmycoach.app.reside_menu.ResideMenuItem;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
+import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.util.TermsAndCondition;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
@@ -62,6 +66,7 @@ public class DashboardActivity extends FragmentActivity
     private static String REG_ID_SAVED_TO_SERVER;
     private FragmentManager fragmentManager;
     String regid;
+    public String userCurrentAddressFromGPS;
     boolean regid_saved_to_server = false;
     boolean onNewIntentCalled = false;
     int fragment_to_open; /* will get value from onNewIntent method */
@@ -99,6 +104,8 @@ public class DashboardActivity extends FragmentActivity
     private ResideMenuItem itemSettings;
     private ResideMenuItem itemLogout;
     private HashMap<String, Integer> resideMenuItemIcons;
+    private HomeFragment homeFragmentMentee;
+    private GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +113,8 @@ public class DashboardActivity extends FragmentActivity
 
         if (LoginActivity.loginActivity != null)
             LoginActivity.loginActivity.finish();
+
+        userCurrentAddressFromGPS = "";
 
         dashboardActivity = this;
         fragmentManager = getSupportFragmentManager();
@@ -122,6 +131,8 @@ public class DashboardActivity extends FragmentActivity
         }
         Log.e("FMC - user_group", "" + user_group);
         setContentView(R.layout.activity_dashboard);
+
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
         container = (RelativeLayout) findViewById(R.id.container);
         mainLayout = (RelativeLayout) findViewById(R.id.drawer_layout);
@@ -677,7 +688,8 @@ public class DashboardActivity extends FragmentActivity
                     if (!fragmentManager.getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals("Home")) {
                     }
                 } catch (Exception e) {
-                    fragmentTransaction.add(R.id.container, new HomeFragment()).addToBackStack("Home");
+                    homeFragmentMentee = new HomeFragment();
+                    fragmentTransaction.add(R.id.container, homeFragmentMentee).addToBackStack("Home");
                 }
                 position = 0;
             } else if (view == itemNotification) {
@@ -830,6 +842,38 @@ public class DashboardActivity extends FragmentActivity
                 }
 
             });
+        }
+    }
+
+    public void getAddress() {
+
+        NetworkManager.getNetworkAndGpsStatus(this);
+
+        try {
+
+            GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+                @Override
+                public void onMyLocationChange(Location location) {
+                    if (userCurrentAddressFromGPS.equals("")) {
+                        userCurrentAddressFromGPS = NetworkManager.getCompleteAddressString(DashboardActivity.this, location.getLatitude(), location.getLongitude());
+
+                        if (!userCurrentAddressFromGPS.equals(""))
+                            map.setOnMyLocationChangeListener(null);
+
+                        homeFragmentMentee.currentLocationText.setText(userCurrentAddressFromGPS);
+
+
+                    } else if (!userCurrentAddressFromGPS.equals(""))
+                        map.setOnMyLocationChangeListener(null);
+                    homeFragmentMentee.currentLocationText.setText(userCurrentAddressFromGPS);
+
+                }
+            };
+            map.setMyLocationEnabled(true);
+            map.setOnMyLocationChangeListener(myLocationChangeListener);
+
+
+        } catch (Exception ignored) {
         }
     }
 }
