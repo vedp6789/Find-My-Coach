@@ -3,8 +3,6 @@ package com.findmycoach.app.adapter;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.LayerDrawable;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +13,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +39,6 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     private String studentId;
     private ProgressDialog progressDialog;
     private int clickedPosition = -1;
-    private String searchFor = "";
 
     private static final String TAG = "FMC";
 
@@ -51,11 +47,6 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         this.users = users;
         this.progressDialog = progressDialog;
         studentId = StorageHelper.getUserDetails(context, "user_id");
-        try {
-            this.searchFor = searchFor.split("-")[0];
-        } catch (Exception e) {
-            this.searchFor = "";
-        }
     }
 
     @Override
@@ -79,17 +70,23 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.user_list_item, null);
-        }
-        final Datum user = users.get(position);
 
-        TextView nameTV = (TextView) view.findViewById(R.id.mentor_name);
-        TextView chargesTV = (TextView) view.findViewById(R.id.chargesTV);
-        TextView subCategoryTV = (TextView) view.findViewById(R.id.subCatTV);
-        TextView daysTV = (TextView) view.findViewById(R.id.daysTV);
-        TextView distanceTV = (TextView) view.findViewById(R.id.distanceTV);
-        RatingBar ratingBar = (RatingBar) view.findViewById(R.id.mentor_rating);
-        ImageView imageView = (ImageView) view.findViewById(R.id.mentor_image);
-        final ImageView imageConnect = (ImageView) view.findViewById(R.id.connect_mentor);
+            ViewHolder holder = new ViewHolder();
+            holder.userImage = (ImageView) view.findViewById(R.id.mentor_image);
+            holder.nameTV = (TextView) view.findViewById(R.id.mentor_name);
+            holder.ageTV = (TextView) view.findViewById(R.id.age);
+            holder.daysTV = (TextView) view.findViewById(R.id.daysTV);
+            holder.noOfStudentsTV = (TextView) view.findViewById(R.id.numberOfStudents);
+            holder.ratingTV = (TextView) view.findViewById(R.id.rating);
+            holder.distanceTV = (TextView) view.findViewById(R.id.distanceTV);
+            holder.experienceTV = (TextView) view.findViewById(R.id.experience);
+            holder.chargesTV = (TextView) view.findViewById(R.id.charges);
+            holder.imageConnect = (ImageView) view.findViewById(R.id.connect_mentor);
+            view.setTag(holder);
+        }
+
+        ViewHolder holder = (ViewHolder) view.getTag();
+        final Datum user = users.get(position);
 
 
         try {
@@ -106,7 +103,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
                 } else
                     daysAsString = daysAsString + " " + fontPurpleLight + d + fontEnd;
             }
-            daysTV.setText(Html.fromHtml(daysAsString));
+            holder.daysTV.setText(Html.fromHtml(daysAsString));
         } catch (Exception ignored) {
         }
 
@@ -115,44 +112,36 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
             int charges = Integer.parseInt(user.getChargesClass());
             String currency = MetaData.getCurrencySymbol(MetaData.countryCode(context), context);
             if (currency.equals(""))
-                chargesTV.setText(charges == 0 ? user.getChargesHour() + "/hr" : charges + "/cl");
+                holder.chargesTV.setText(charges == 0 ? user.getChargesHour() + "/hr" : charges + "/cl");
             else
-                chargesTV.setText(Html.fromHtml(currency + " " + (charges == 0 ? user.getChargesHour() + "/hr" : charges + "/cl")));
+                holder.chargesTV.setText(Html.fromHtml(currency + " " + (charges == 0 ? user.getChargesHour() + "/hr" : charges + "/cl")));
         } catch (Exception ignored) {
         }
 
 
-        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
-        stars.getDrawable(2).setColorFilter(context.getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);
-        stars.getDrawable(1).setColorFilter(context.getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);
-        stars.getDrawable(0).setColorFilter(context.getResources().getColor(R.color.purple_light), PorterDuff.Mode.SRC_ATOP);
-
-        nameTV.setText(user.getFirstName());
-        subCategoryTV.setText(searchFor);
+        holder.nameTV.setText(user.getFirstName());
         try {
-            distanceTV.setText(String.format("%.2f", Double.parseDouble(user.getDistance())) + " km");
+            holder.distanceTV.setText(String.format("%.1f", Double.parseDouble(user.getDistance())) + " km");
         } catch (Exception e) {
-            distanceTV.setText("");
         }
         try {
-            ratingBar.setRating(Float.parseFloat(user.getRating()));
+            holder.ratingTV.setText(user.getRating());
         } catch (Exception e) {
-            ratingBar.setRating(0);
         }
         if (user.getPhotograph() != null && !(user.getPhotograph()).equals("")) {
             Picasso.with(context)
                     .load((String) user.getPhotograph())
                     .placeholder(R.drawable.user_icon)
                     .error(R.drawable.user_icon)
-                    .into(imageView);
+                    .into(holder.userImage);
         }
         if (user.getConnectionStatus() != null && !user.getConnectionStatus().equals("broken") && !user.getConnectionStatus().equals("rejected")) {
             if (user.getConnectionStatus().equals("accepted") || user.getConnectionStatus().contains("mentor_mentee")) {
-                imageConnect.setImageDrawable(context.getResources().getDrawable(R.drawable.disconnect));
+                holder.imageConnect.setImageDrawable(context.getResources().getDrawable(R.drawable.disconnect));
             } else if (user.getConnectionStatus().equals("pending")) {
-                imageConnect.setImageDrawable(context.getResources().getDrawable(R.drawable.pending));
+                holder.imageConnect.setImageDrawable(context.getResources().getDrawable(R.drawable.pending));
             }
-            imageConnect.setOnClickListener(new View.OnClickListener() {
+            holder.imageConnect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     clickedPosition = position;
@@ -160,8 +149,8 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
                 }
             });
         } else {
-            imageConnect.setImageDrawable(context.getResources().getDrawable(R.drawable.connect));
-            imageConnect.setOnClickListener(new View.OnClickListener() {
+            holder.imageConnect.setImageDrawable(context.getResources().getDrawable(R.drawable.connect));
+            holder.imageConnect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     clickedPosition = position;
@@ -273,5 +262,18 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
         Toast.makeText(context, (String) object, Toast.LENGTH_LONG).show();
+    }
+
+    private class ViewHolder {
+        ImageView userImage;
+        TextView nameTV;
+        TextView ageTV;
+        TextView daysTV;
+        TextView noOfStudentsTV;
+        TextView ratingTV;
+        TextView distanceTV;
+        TextView experienceTV;
+        TextView chargesTV;
+        ImageView imageConnect;
     }
 }

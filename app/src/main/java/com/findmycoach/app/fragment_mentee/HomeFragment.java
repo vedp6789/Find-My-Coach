@@ -54,6 +54,7 @@ import com.findmycoach.app.views.ChizzleButton;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -87,6 +88,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     public static HomeFragment homeFragmentMentee;
     private String type;
     private ProfileResponse profileResponse;
+    public int mentorFor, coachingType, numberOfTabsToBeShown, ageGroup;
 
     public HomeFragment() {
         subCategoryIds = null;
@@ -523,10 +525,37 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         super.onResume();
         try {
             profileResponse = new Gson().fromJson(StorageHelper.getUserProfile(getActivity()), ProfileResponse.class);
+            Log.e(TAG, StorageHelper.getUserProfile(getActivity()));
             com.findmycoach.app.beans.student.Data userInfo = profileResponse.getData();
 
             if (userInfo.getTrainingLocation() != null && !userInfo.getTrainingLocation().toString().isEmpty())
                 location = userInfo.getTrainingLocation().toString();
+
+            coachingType = profileResponse.getData().getCoachingType();
+            mentorFor = Integer.parseInt(profileResponse.getData().getMentorFor());
+
+            if (mentorFor == 0) {
+                getAgeToSearchMentorFor(profileResponse.getData().getDob().toString());
+            } else if (mentorFor == 1) {
+                try {
+                    numberOfTabsToBeShown = profileResponse.getData().getChildren().size();
+                    getAgeToSearchMentorFor(profileResponse.getData().getChildren().get(0).getDob());
+                } catch (Exception e) {
+                    numberOfTabsToBeShown = 1;
+                    mentorFor = 0;
+                    getAgeToSearchMentorFor(profileResponse.getData().getDob().toString());
+                }
+            } else if (mentorFor == 2) {
+                try {
+                    numberOfTabsToBeShown = profileResponse.getData().getChildren().size();
+                    numberOfTabsToBeShown++;
+                    getAgeToSearchMentorFor(profileResponse.getData().getChildren().get(0).getDob());
+                } catch (Exception e) {
+                    numberOfTabsToBeShown = 1;
+                    mentorFor = 0;
+                    getAgeToSearchMentorFor(profileResponse.getData().getDob().toString());
+                }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -538,8 +567,31 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         updateLocationUI();
     }
 
+    private void getAgeToSearchMentorFor(String dobString) {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = format.parse(dobString);
+            Calendar dob = Calendar.getInstance();
+            dob.setTime(date);
+
+            Calendar today = Calendar.getInstance();
+            int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+            if (today.get(Calendar.MONTH) < dob.get(Calendar.MONTH)) {
+                age--;
+            } else if (today.get(Calendar.MONTH) == dob.get(Calendar.MONTH)
+                    && today.get(Calendar.DAY_OF_MONTH) < dob.get(Calendar.DAY_OF_MONTH)) {
+                age--;
+            }
+            ageGroup = age;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private void initialize(View view) {
         isEditLocationEnabled = false;
+        numberOfTabsToBeShown = 1;
         locationInput = (AutoCompleteTextView) view.findViewById(R.id.input_location);
         currentLocationText = (TextView) view.findViewById(R.id.current_location_text_view);
         searchButton = (Button) view.findViewById(R.id.action_search);
@@ -626,7 +678,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    if(DashboardActivity.dashboardActivity.userCurrentAddressFromGPS.trim().isEmpty())
+                    if (DashboardActivity.dashboardActivity.userCurrentAddressFromGPS.trim().isEmpty())
                         DashboardActivity.dashboardActivity.getAddress();
                     else {
                         currentLocationText.setText(DashboardActivity.dashboardActivity.userCurrentAddressFromGPS.trim());
@@ -674,6 +726,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         RequestParams requestParams = new RequestParams();
         requestParams.add("location", location);
         requestParams.add("subcategory_id", subCategoryTextView.getTag() + "");
+        requestParams.add("class_type", String.valueOf(coachingType));
+//        requestParams.add("age_group", String.valueOf(ageGroup));
         Log.e(TAG, "subcategory_id : " + subCategoryTextView.getTag() + " == " + location);
 
         if (timeBarrier) {
