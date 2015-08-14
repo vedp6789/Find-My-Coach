@@ -27,6 +27,7 @@ import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -106,11 +107,12 @@ public class ActiveInactivePromotions extends Fragment implements Callback {
     }
 
 
-    public void deletePromotion(RequestParams requestParams, int position,Dialog dialog) {
+    public void deletePromotion(RequestParams requestParams, int position,Dialog dialog,JSONArray jsonArray) {
         this.dialog =dialog;
         progressDialog.show();
         position_which_got_deleted_or_updated = position;
         NetworkClient.deletePromotion(getActivity(), requestParams, StorageHelper.getUserGroup(getActivity(), "auth_token"), this, 60);
+        NetworkClient.deletePromotionHttpClient(getActivity(),StorageHelper.getUserGroup(getActivity(), "auth_token"),jsonArray,this,60);
     }
 
     public void updatePromotion(RequestParams requestParams, int position,Dialog dialog) {

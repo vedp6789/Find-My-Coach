@@ -22,6 +22,10 @@ import com.findmycoach.app.beans.Promotions.Promotions;
 import com.findmycoach.app.fragment.ActiveInactivePromotions;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -142,8 +146,16 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
                             public void onClick(View v) {
                                 RequestParams requestParams = new RequestParams();
                                 requestParams.add("promotion_id", offer_id);
+                                JSONArray jsonArray = new JSONArray();
+                                JSONObject jsonObject = new JSONObject();
+                                try {
+                                    jsonObject.put("promotion_id", offer_id);
+                                    jsonArray.put(jsonObject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                                 if (activeInactivePromotions != null) {
-                                    activeInactivePromotions.deletePromotion(requestParams, position, holder.dialog);
+                                    activeInactivePromotions.deletePromotion(requestParams, position, holder.dialog,jsonArray);
                                 } else {
                                     Log.e("FMC", "ActiveInactivePromotions instance null");
                                 }
@@ -181,8 +193,18 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
                             public void onClick(View v) {
                                 RequestParams requestParams = new RequestParams();
                                 requestParams.add("promotion_id", offer_id);
+                                JSONArray jsonArray = new JSONArray();
+                                JSONObject jsonObject = new JSONObject();
+                                try {
+                                    jsonObject.put("promotion_id", offer_id);
+                                    jsonArray.put(jsonObject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+
                                 if (activeInactivePromotions != null) {
-                                    activeInactivePromotions.deletePromotion(requestParams, position, holder.dialog);
+                                    activeInactivePromotions.deletePromotion(requestParams, position, holder.dialog, jsonArray);
                                 } else {
                                     Log.e("FMC", "ActiveInactivePromotions instance null");
                                 }

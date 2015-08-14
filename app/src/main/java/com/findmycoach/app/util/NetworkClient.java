@@ -1,6 +1,7 @@
 package com.findmycoach.app.util;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.findmycoach.app.R;
@@ -28,6 +29,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -115,6 +121,7 @@ public class NetworkClient {
 
     private static final String TAG = "FMC";
     public static String timeZone, language;
+    private Context context;
 
     private static String getTimeZone() {
         TimeZone tz = TimeZone.getDefault();
@@ -2373,4 +2380,64 @@ public class NetworkClient {
         }
     }
 
+ //   NetworkClient.deletePromotionHttpClient(getActivity(),StorageHelper.getUserGroup(getActivity(), "auth_token"),jsonArray,this,60);
+    public void deletePromotionHttpClient(Context context,String auth_token,JSONArray jsonArray,Callback callback,int called_api) throws JSONException {
+        jsonArray.put(new JSONObject().put(context.getResources().getString(R.string.time_zone), timeZone));
+        jsonArray.put(new JSONObject().put(context.getResources().getString(R.string.device_language), language));
+        DeleteAsyncTask.execute();
+    }
+
+
+    class DeleteAsyncTask extends AsyncTask<String,Void,String>{
+
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+
+                URL url_http1 = new URL(getAbsoluteURL("promotion", context));
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url_http1.openConnection();
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setRequestMethod("DELETE");
+                httpURLConnection.setRequestProperty("Content-Type", "application/json");
+
+                OutputStream os = httpURLConnection.getOutputStream();
+                String a = params[0];  /* JSon array as string */
+
+                os.write(a.getBytes());
+                os.close();
+                os.flush();
+
+                BufferedReader br = new BufferedReader(new InputStreamReader((httpURLConnection.getInputStream())));
+
+
+                String sr = "";
+                System.out.println("Output from Server .... \n");
+                String line = "";
+
+                while ((line = br.readLine()) != null)
+                    sr += line;
+                                   /* while ((sr = br.readLine()) != null) {
+                                        sr=br.readLine();
+                                        System.out.println("Response:"+sr);
+                                    }*/
+                System.out.println("Validation response from server:" + sr);
+                Integer ip = Integer.parseInt(sr);
+                System.out.println("Output from Server \n" + sr);
+                httpURLConnection.disconnect();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
+
+
+    }
+
 }
+
+
+
