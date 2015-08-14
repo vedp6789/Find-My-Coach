@@ -1185,6 +1185,14 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             isValid = false;
         }
 
+        if(profileCountry.getSelectedItemPosition() == 0){
+            TextView errorText = (TextView) profileCountry.getSelectedView();
+            errorText.setError(getResources().getString(R.string.error_not_selected));
+            errorText.setTextColor(Color.RED);//just to highlight that this is an error
+            isValid = false;
+
+        }
+
         if (city_id == 0) {
             city_with_states.setError(getResources().getString(R.string.enter_city_from_suggestion));
             if (city_with_states.hasFocus()) {

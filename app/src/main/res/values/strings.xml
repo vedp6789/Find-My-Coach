@@ -798,5 +798,6 @@
     <string name="pricing_per_hour_group">Pricing per hour for a group class</string>
     <string name="pricing_per_class_group">Pricing per class for a group class</string>
     <string name="max_hour_in_a_day">Maximum duration of class for a day</string>
+    <string name="price">Price</string>
 
 </resources>

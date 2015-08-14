@@ -12,15 +12,19 @@ public class Category {
 
     @Expose
     private String message;
+
     @SerializedName("otp_position")
     @Expose
     private int otpPosition;
+
     @SerializedName("otp_length")
     @Expose
     private int otpLength;
+
     @SerializedName("categories")
     @Expose
     private List<Datum> data = new ArrayList<>();
+
     @SerializedName("countries")
     @Expose
     private List<Country> countries = new ArrayList<>();

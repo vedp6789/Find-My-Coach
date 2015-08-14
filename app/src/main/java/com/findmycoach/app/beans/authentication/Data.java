@@ -1,5 +1,6 @@
 package com.findmycoach.app.beans.authentication;
 
+import com.findmycoach.app.beans.Price;
 import com.findmycoach.app.beans.mentor.CountryConfig;
 import com.findmycoach.app.beans.student.Address;
 import com.google.gson.annotations.Expose;
@@ -154,6 +155,75 @@ public class Data {
     @SerializedName("address")
     @Expose
     private String physical_address;
+
+
+
+
+    private int flexible_yn;
+    private int min_class_duration;
+    private int flexibility_window;
+    private int max_class_duration;
+    private int max_classes_per_week;
+    private int fixed_class_duration;
+    private List<Price> prices;
+
+
+
+    public int getFlexible_yn() {
+        return flexible_yn;
+    }
+
+    public void setFlexible_yn(int flexible_yn) {
+        this.flexible_yn = flexible_yn;
+    }
+
+    public int getMin_class_duration() {
+        return min_class_duration;
+    }
+
+    public void setMin_class_duration(int min_class_duration) {
+        this.min_class_duration = min_class_duration;
+    }
+
+    public int getFlexibility_window() {
+        return flexibility_window;
+    }
+
+    public void setFlexibility_window(int flexibility_window) {
+        this.flexibility_window = flexibility_window;
+    }
+
+    public int getMax_class_duration() {
+        return max_class_duration;
+    }
+
+    public void setMax_class_duration(int max_class_duration) {
+        this.max_class_duration = max_class_duration;
+    }
+
+    public int getMax_classes_per_week() {
+        return max_classes_per_week;
+    }
+
+    public void setMax_classes_per_week(int max_classes_per_week) {
+        this.max_classes_per_week = max_classes_per_week;
+    }
+
+    public int getFixed_class_duration() {
+        return fixed_class_duration;
+    }
+
+    public void setFixed_class_duration(int fixed_class_duration) {
+        this.fixed_class_duration = fixed_class_duration;
+    }
+
+    public List<Price> getPrices() {
+        return prices;
+    }
+
+    public void setPrices(List<Price> prices) {
+        this.prices = prices;
+    }
 
     public ArrayList<CountryConfig> getCountryConfigArrayList() {
         return countryConfigArrayList;
