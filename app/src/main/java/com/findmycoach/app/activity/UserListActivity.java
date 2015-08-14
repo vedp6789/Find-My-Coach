@@ -1,21 +1,25 @@
 package com.findmycoach.app.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.MentorListAdapter;
 import com.findmycoach.app.beans.search.Datum;
 import com.findmycoach.app.beans.search.SearchResponse;
+import com.findmycoach.app.fragment.SearchResultsFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
@@ -24,9 +28,9 @@ import com.loopj.android.http.RequestParams;
 
 import java.util.List;
 
-public class UserListActivity extends Activity implements Callback {
+public class UserListActivity extends FragmentActivity implements Callback {
 
-    private ListView listView;
+    //private ListView listView;
     private List<Datum> users;
     private ProgressDialog progressDialog;
     private Datum datum;
@@ -38,6 +42,10 @@ public class UserListActivity extends Activity implements Callback {
     private String connection_status_for_Selected_mentor;
     private String searchFor;
     private ImageView menuItem;
+    private PagerSlidingTabStrip pagerSlidingTabStrip;
+    private ViewPager searchViewPager;
+    private SearchPagerAdapter searchPagerAdapter;
+
 
 
     @Override
@@ -49,20 +57,20 @@ public class UserListActivity extends Activity implements Callback {
     }
 
     private void applyActions() {
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                connection_status_for_Selected_mentor = null;
-                if (users != null) {
-//                    Log.d(TAG, "ListView click");
-//                    selectedPosition = position;
-//                    datum = users.get(position);
-//                    connection_status_for_Selected_mentor = datum.getConnectionStatus();
-//                    getMentorDetails(datum.getId());
-                    Toast.makeText(UserListActivity.this, "Please use connection button to send connection. Mentor Profile is under construction.", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                connection_status_for_Selected_mentor = null;
+//                if (users != null) {
+////                    Log.d(TAG, "ListView click");
+////                    selectedPosition = position;
+////                    datum = users.get(position);
+////                    connection_status_for_Selected_mentor = datum.getConnectionStatus();
+////                    getMentorDetails(datum.getId());
+//                    Toast.makeText(UserListActivity.this, "Please use connection button to send connection. Mentor Profile is under construction.", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +114,11 @@ public class UserListActivity extends Activity implements Callback {
     }
 
     private void initialize() {
-        listView = (ListView) findViewById(R.id.user_list);
+       // listView = (ListView) findViewById(R.id.user_list);
+        pagerSlidingTabStrip=(PagerSlidingTabStrip)findViewById(R.id.search_tabs);
+        searchViewPager=(ViewPager)findViewById(R.id.search_view_pager);
+
+
         String json = getIntent().getStringExtra("list");
         searchFor = getIntent().getStringExtra("search_for");
         Log.d(TAG, "Intent String:" + json);
@@ -117,7 +129,10 @@ public class UserListActivity extends Activity implements Callback {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         mentorListAdapter = new MentorListAdapter(this, users, progressDialog, searchFor);
-        listView.setAdapter(mentorListAdapter);
+       // listView.setAdapter(mentorListAdapter);
+        searchPagerAdapter=new SearchPagerAdapter(getSupportFragmentManager(),3);
+        searchViewPager.setAdapter(searchPagerAdapter);
+        pagerSlidingTabStrip.setViewPager(searchViewPager);
 
         TextView title = (TextView) findViewById(R.id.title);
         String titleName = users.size() > 1 ? getResources().getString(R.string.mentors) : getResources().getString(R.string.mentor);
@@ -166,6 +181,30 @@ public class UserListActivity extends Activity implements Callback {
         progressDialog.dismiss();
         isGettingMentor = false;
         Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
+    }
+
+
+    private class SearchPagerAdapter extends FragmentStatePagerAdapter {
+
+        private  int count;
+        public SearchPagerAdapter(FragmentManager fm,int count) {
+            super(fm);
+            this.count=count;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return SearchResultsFragment.newInstance(position);
+        }
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return "Child"+position;
+        }
+
+        @Override
+        public int getCount() {
+            return count;
+        }
     }
 
 }
