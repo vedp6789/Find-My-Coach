@@ -121,7 +121,13 @@ public class NetworkClient {
 
     private static final String TAG = "FMC";
     public static String timeZone, language;
-    private Context context;
+    private static Context context;
+    private static String API_KEY;
+    private static String API_KEY_VALUE;
+    private static String AUTH_TOKEN;
+    private static String AUTH_TOKEN_VALUE;
+    public static Callback callback;
+    public static int calledAPIValue;
 
     private static String getTimeZone() {
         TimeZone tz = TimeZone.getDefault();
@@ -541,11 +547,11 @@ public class NetworkClient {
         client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
         requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
         requestParams.add(context.getResources().getString(R.string.device_language), language);
-       client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
 
         Header[] headers = {
                 new BasicHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value))
-                ,new BasicHeader(context.getResources().getString(R.string.auth_key),authToken),
+                , new BasicHeader(context.getResources().getString(R.string.auth_key), authToken),
                 new BasicHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded")
         };
 
@@ -590,10 +596,6 @@ public class NetworkClient {
             }
         });
     }
-
-
-
-
 
 
     public static void forgetPassword(final Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
@@ -2380,53 +2382,89 @@ public class NetworkClient {
         }
     }
 
- //   NetworkClient.deletePromotionHttpClient(getActivity(),StorageHelper.getUserGroup(getActivity(), "auth_token"),jsonArray,this,60);
-    public void deletePromotionHttpClient(Context context,String auth_token,JSONArray jsonArray,Callback callback,int called_api) throws JSONException {
+    //   NetworkClient.deletePromotionHttpClient(getActivity(),StorageHelper.getUserGroup(getActivity(), "auth_token"),jsonArray,this,60);
+    public static void deletePromotionHttpClient(Context context, String auth_token, JSONArray jsonArray, Callback callback, int called_api) throws JSONException {
+        Log.e(TAG,"deletePromotionsHttpClient");
         jsonArray.put(new JSONObject().put(context.getResources().getString(R.string.time_zone), timeZone));
         jsonArray.put(new JSONObject().put(context.getResources().getString(R.string.device_language), language));
-        DeleteAsyncTask.execute();
+        DeleteAsyncTask deleteAsyncTask = new DeleteAsyncTask();
+        ArrayList<String> stringArrayList = new ArrayList<>();
+
+        stringArrayList.add(String.valueOf(jsonArray));  /* data to communicate*/
+        stringArrayList.add(getAbsoluteURL("promotion", context));  /* URL*/
+
+        NetworkClient.context = context;
+        NetworkClient.API_KEY = context.getResources().getString(R.string.api_key);
+        API_KEY_VALUE = context.getResources().getString(R.string.api_key_value);
+        AUTH_TOKEN = context.getResources().getString(R.string.auth_key);
+        AUTH_TOKEN_VALUE = auth_token;
+        NetworkClient.callback = callback;
+        calledAPIValue = called_api;
+
+        deleteAsyncTask.execute(stringArrayList);
+
+
     }
 
 
-    class DeleteAsyncTask extends AsyncTask<String,Void,String>{
-
-
+    static class DeleteAsyncTask extends AsyncTask<ArrayList<String>, Void, String> {
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String doInBackground(ArrayList<String>... params) {
             try {
 
-                URL url_http1 = new URL(getAbsoluteURL("promotion", context));
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url_http1.openConnection();
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setRequestMethod("DELETE");
-                httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                ArrayList<String> stringArrayList = new ArrayList<>();
+                stringArrayList = params[0];
+                for (String s : stringArrayList) {
+                    Log.e(TAG, "string in doInBackground: " + s);
+                }
+                URL url_http1 = null;
+                if (stringArrayList.size() > 0) {
+                    url_http1 = new URL(stringArrayList.get(1));
+                }
+                if (url_http1 != null) {
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url_http1.openConnection();
+                    httpURLConnection.setDoOutput(true);
+                    httpURLConnection.setRequestMethod("DELETE");
+                    httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                    if (NetworkClient.API_KEY != null && NetworkClient.API_KEY_VALUE != null) {
+                        httpURLConnection.setRequestProperty(NetworkClient.API_KEY, NetworkClient.API_KEY_VALUE);
+                    }
+                    if (NetworkClient.AUTH_TOKEN != null && NetworkClient.AUTH_TOKEN_VALUE != null) {
+                        httpURLConnection.setRequestProperty(NetworkClient.AUTH_TOKEN, NetworkClient.AUTH_TOKEN_VALUE);
 
-                OutputStream os = httpURLConnection.getOutputStream();
-                String a = params[0];  /* JSon array as string */
-
-                os.write(a.getBytes());
-                os.close();
-                os.flush();
-
-                BufferedReader br = new BufferedReader(new InputStreamReader((httpURLConnection.getInputStream())));
+                    }
 
 
-                String sr = "";
-                System.out.println("Output from Server .... \n");
-                String line = "";
+                    OutputStream os = httpURLConnection.getOutputStream();
+                    String sending_data_to_server = stringArrayList.get(0);
 
-                while ((line = br.readLine()) != null)
-                    sr += line;
+                    os.write(sending_data_to_server.getBytes());
+                    os.close();
+                    os.flush();
+
+                    BufferedReader br = new BufferedReader(new InputStreamReader((httpURLConnection.getInputStream())));
+
+
+                    String sr = "";
+                    System.out.println("Output from Server .... \n");
+                    String line = "";
+
+                    while ((line = br.readLine()) != null)
+                        sr += line;
                                    /* while ((sr = br.readLine()) != null) {
                                         sr=br.readLine();
                                         System.out.println("Response:"+sr);
                                     }*/
-                System.out.println("Validation response from server:" + sr);
-                Integer ip = Integer.parseInt(sr);
-                System.out.println("Output from Server \n" + sr);
-                httpURLConnection.disconnect();
-            }catch (Exception e){
+                    Log.e(TAG, "Validation response from server:" + sr);
+                    //Integer ip = Integer.parseInt(sr);
+                    System.out.println("Output from Server \n" + sr);
+                    httpURLConnection.disconnect();
+
+                    return sr;
+                }
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -2434,7 +2472,16 @@ public class NetworkClient {
             return null;
         }
 
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s != null) {
 
+            } else {
+                Log.e(TAG, "Problem connecting to server!");
+            }
+
+        }
     }
 
 }
