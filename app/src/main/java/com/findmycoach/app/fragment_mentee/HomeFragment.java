@@ -44,6 +44,7 @@ import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
+import com.findmycoach.app.fragment.SearchResultsFragment;
 import com.findmycoach.app.fragment.TimePickerFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
@@ -771,8 +772,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-        NetworkClient.search(getActivity(), requestParams, authToken, this, 6);
+        Intent intent=new Intent(getActivity(),UserListActivity.class);
+        intent.putExtra("request_params",requestParams.toString());
+        intent.putExtra("no_of_tabs",3);
+        intent.putExtra("search_for", subCategoryTextView.getText().toString());
+        isSearching = false;
+        startActivity(intent);
+
+     //   NetworkClient.search(getActivity(), requestParams, authToken, this, 6);
     }
+
+
 
     boolean validateLocation() {
         if (locationInput.getText().toString().trim().equalsIgnoreCase("")) {
@@ -795,14 +805,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             setTabForCategory(new Gson().fromJson((String) object, Category.class));
             DataBase dataBase = DataBase.singleton(getActivity());
             dataBase.insertData(new Gson().toJson(object));
-        } else {
-            progressDialog.dismiss();
-            Intent intent = new Intent(getActivity(), UserListActivity.class);
-            intent.putExtra("list", (String) object);
-            // intent.putExtra("searched_keyword", -1);
-            intent.putExtra("search_for", subCategoryTextView.getText().toString());
-            startActivity(intent);
-            isSearching = false;
         }
     }
 

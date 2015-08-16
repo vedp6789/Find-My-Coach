@@ -37,15 +37,13 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     private Context context;
     private List<Datum> users;
     private String studentId;
-    private ProgressDialog progressDialog;
     private int clickedPosition = -1;
 
     private static final String TAG = "FMC";
 
-    public MentorListAdapter(Context context, List<Datum> users, ProgressDialog progressDialog, String searchFor) {
+    public MentorListAdapter(Context context, List<Datum> users, String searchFor) {
         this.context = context;
         this.users = users;
-        this.progressDialog = progressDialog;
         studentId = StorageHelper.getUserDetails(context, "user_id");
     }
 
@@ -216,7 +214,6 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     }
 
     private void sendConnectionRequest(String message, String userId) {
-        progressDialog.show();
         Log.d(TAG, "\n" + message + "\nMentor id : " + userId + "\nStudent id : " + studentId);
         RequestParams requestParams = new RequestParams();
         requestParams.add("owner", studentId);
@@ -227,7 +224,6 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     }
 
     private void disconnect(String connectionId, String oppositeUSerId) {
-        progressDialog.show();
         Log.d(TAG, "id : " + connectionId + ", user_id : " + oppositeUSerId +
                 ", user_group : " + DashboardActivity.dashboardActivity.user_group);
         RequestParams requestParams = new RequestParams();
@@ -239,7 +235,6 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-        progressDialog.dismiss();
         if (clickedPosition != -1) {
             if (calledApiValue == 17) {
                 users.get(clickedPosition).setConnectionStatus("pending");
@@ -260,7 +255,6 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
-        progressDialog.dismiss();
         Toast.makeText(context, (String) object, Toast.LENGTH_LONG).show();
     }
 
