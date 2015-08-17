@@ -44,7 +44,6 @@ import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
-import com.findmycoach.app.fragment.SearchResultsFragment;
 import com.findmycoach.app.fragment.TimePickerFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
@@ -55,7 +54,6 @@ import com.findmycoach.app.views.ChizzleButton;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -89,7 +87,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     public static HomeFragment homeFragmentMentee;
     private String type;
     private ProfileResponse profileResponse;
-    public int mentorFor, coachingType, numberOfTabsToBeShown, ageGroup;
+    public int mentorFor, coachingType, numberOfTabsToBeShown;
 
     public HomeFragment() {
         subCategoryIds = null;
@@ -536,25 +534,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             mentorFor = Integer.parseInt(profileResponse.getData().getMentorFor());
 
             if (mentorFor == 0) {
-                getAgeToSearchMentorFor(profileResponse.getData().getDob().toString());
+                numberOfTabsToBeShown = 1;
             } else if (mentorFor == 1) {
                 try {
                     numberOfTabsToBeShown = profileResponse.getData().getChildren().size();
-                    getAgeToSearchMentorFor(profileResponse.getData().getChildren().get(0).getDob());
                 } catch (Exception e) {
                     numberOfTabsToBeShown = 1;
                     mentorFor = 0;
-                    getAgeToSearchMentorFor(profileResponse.getData().getDob().toString());
                 }
             } else if (mentorFor == 2) {
                 try {
                     numberOfTabsToBeShown = profileResponse.getData().getChildren().size();
                     numberOfTabsToBeShown++;
-                    getAgeToSearchMentorFor(profileResponse.getData().getChildren().get(0).getDob());
                 } catch (Exception e) {
                     numberOfTabsToBeShown = 1;
                     mentorFor = 0;
-                    getAgeToSearchMentorFor(profileResponse.getData().getDob().toString());
                 }
             }
 
@@ -566,28 +560,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             location = "";
 
         updateLocationUI();
-    }
-
-    private void getAgeToSearchMentorFor(String dobString) {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date date = format.parse(dobString);
-            Calendar dob = Calendar.getInstance();
-            dob.setTime(date);
-
-            Calendar today = Calendar.getInstance();
-            int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
-            if (today.get(Calendar.MONTH) < dob.get(Calendar.MONTH)) {
-                age--;
-            } else if (today.get(Calendar.MONTH) == dob.get(Calendar.MONTH)
-                    && today.get(Calendar.DAY_OF_MONTH) < dob.get(Calendar.DAY_OF_MONTH)) {
-                age--;
-            }
-            ageGroup = age;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private void initialize(View view) {
@@ -718,7 +690,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     void goForSearch() {
         isSearching = true;
-     //   progressDialog.show();
         String location = "";
         if (isEditLocationEnabled)
             location = locationInput.getText().toString();
@@ -728,7 +699,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         requestParams.add("location", location);
         requestParams.add("subcategory_id", subCategoryTextView.getTag() + "");
         requestParams.add("class_type", String.valueOf(coachingType));
-//        requestParams.add("age_group", String.valueOf(ageGroup));
         Log.e(TAG, "subcategory_id : " + subCategoryTextView.getTag() + " == " + location);
 
         if (timeBarrier) {
@@ -771,17 +741,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         }
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
-        String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
-        Intent intent=new Intent(getActivity(),UserListActivity.class);
-        intent.putExtra("request_params",requestParams.toString());
-        intent.putExtra("no_of_tabs",2);
+        Intent intent = new Intent(getActivity(), UserListActivity.class);
+        intent.putExtra("request_params", requestParams.toString());
+        intent.putExtra("no_of_tabs", numberOfTabsToBeShown <= 0 ? 1 : numberOfTabsToBeShown);
+        intent.putExtra("mentor_for", mentorFor);
         intent.putExtra("search_for", subCategoryTextView.getText().toString());
         isSearching = false;
         startActivity(intent);
-
-     //   NetworkClient.search(getActivity(), requestParams, authToken, this, 6);
     }
-
 
 
     boolean validateLocation() {
@@ -825,7 +792,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
-     //   progressDialog.dismiss();
+        //   progressDialog.dismiss();
         isSearching = false;
         if (calledApiValue != 34)
             Toast.makeText(getActivity(), (String) object, Toast.LENGTH_LONG).show();

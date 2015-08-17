@@ -1216,6 +1216,7 @@ public class NetworkClient {
         client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
         requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
         requestParams.add(context.getResources().getString(R.string.device_language), language);
+        Log.e(TAG, requestParams.toString());
         client.get(context, getAbsoluteURL("mentorDetails", context), requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {

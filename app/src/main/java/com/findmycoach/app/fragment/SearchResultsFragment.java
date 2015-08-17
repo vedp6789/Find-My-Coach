@@ -40,16 +40,13 @@ public class SearchResultsFragment extends Fragment implements Callback {
     private String connection_status_for_Selected_mentor;
     private static final int NEED_TO_REFRESH = 100;
 
-
-
-
-
-    public static SearchResultsFragment newInstance(int position,String requestParams,String searchFor) {
+    public static SearchResultsFragment newInstance(int position, String requestParams, String searchFor, int age) {
         SearchResultsFragment fragment = new SearchResultsFragment();
         Bundle args = new Bundle();
         args.putInt("position", position);
         args.putString("request_params", requestParams);
         args.putString("search_for", searchFor);
+        args.putInt("age_group", age);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,17 +60,18 @@ public class SearchResultsFragment extends Fragment implements Callback {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             position = getArguments().getInt("position");
-            requestParams=new RequestParams(convert(getArguments().getString("request_params")));
+            requestParams = new RequestParams(convert(getArguments().getString("request_params")));
             searchFor = getArguments().getString("search_for");
-
+            //TODO need to uncomment the below line after search api got fixed for age_group
+//            requestParams.add("age_group", String.valueOf(getArguments().getInt("age_group")));
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v=inflater.inflate(R.layout.fragment_search_results, container, false);
-        searchResultsListView=(ListView)v.findViewById(R.id.user_list);
+        View v = inflater.inflate(R.layout.fragment_search_results, container, false);
+        searchResultsListView = (ListView) v.findViewById(R.id.user_list);
         if (NetworkManager.isNetworkConnected(getActivity())) {
             NetworkClient.search(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 6);
         }
@@ -95,7 +93,7 @@ public class SearchResultsFragment extends Fragment implements Callback {
     public static Map<String, String> convert(String str) {
         String[] tokens = str.split("=|&");
         Map<String, String> map = new HashMap<>();
-        for (int i=0; i<tokens.length-1; ) map.put(tokens[i++], tokens[i++]);
+        for (int i = 0; i < tokens.length - 1; ) map.put(tokens[i++], tokens[i++]);
         return map;
     }
 
@@ -112,7 +110,7 @@ public class SearchResultsFragment extends Fragment implements Callback {
             requestParams.add("user_group", StorageHelper.getUserGroup(getActivity(), "user_group"));
             NetworkClient.getMentorDetails(getActivity(), requestParams, authToken, this, 24);
         } else {
-            Toast.makeText(getActivity(),getResources().getString(R.string.check_network_connection), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.check_network_connection), Toast.LENGTH_SHORT).show();
         }
 
 
@@ -120,19 +118,18 @@ public class SearchResultsFragment extends Fragment implements Callback {
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
-       if(calledApiValue==24) {
-               Intent intent = new Intent(getActivity(), MentorDetailsActivity.class);
-               intent.putExtra("mentorDetails", (String) object);
-               intent.putExtra("connection_status", connection_status_for_Selected_mentor);
-               datum = null;
-               startActivityForResult(intent, NEED_TO_REFRESH);
-       }
-        else {
-           SearchResponse searchResponse = new Gson().fromJson((String) object, SearchResponse.class);
-           users = searchResponse.getData();
-           mentorListAdapter = new MentorListAdapter(getActivity(), users, searchFor);
-           searchResultsListView.setAdapter(mentorListAdapter);
-       }
+        if (calledApiValue == 24) {
+            Intent intent = new Intent(getActivity(), MentorDetailsActivity.class);
+            intent.putExtra("mentorDetails", (String) object);
+            intent.putExtra("connection_status", connection_status_for_Selected_mentor);
+            datum = null;
+            startActivityForResult(intent, NEED_TO_REFRESH);
+        } else {
+            SearchResponse searchResponse = new Gson().fromJson((String) object, SearchResponse.class);
+            users = searchResponse.getData();
+            mentorListAdapter = new MentorListAdapter(getActivity(), users, searchFor);
+            searchResultsListView.setAdapter(mentorListAdapter);
+        }
 
     }
 
