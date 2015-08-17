@@ -718,7 +718,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     void goForSearch() {
         isSearching = true;
-        progressDialog.show();
+     //   progressDialog.show();
         String location = "";
         if (isEditLocationEnabled)
             location = locationInput.getText().toString();
@@ -774,7 +774,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         String authToken = StorageHelper.getUserDetails(getActivity(), "auth_token");
         Intent intent=new Intent(getActivity(),UserListActivity.class);
         intent.putExtra("request_params",requestParams.toString());
-        intent.putExtra("no_of_tabs",3);
+        intent.putExtra("no_of_tabs",2);
         intent.putExtra("search_for", subCategoryTextView.getText().toString());
         isSearching = false;
         startActivity(intent);
@@ -825,7 +825,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
-        progressDialog.dismiss();
+     //   progressDialog.dismiss();
         isSearching = false;
         if (calledApiValue != 34)
             Toast.makeText(getActivity(), (String) object, Toast.LENGTH_LONG).show();
