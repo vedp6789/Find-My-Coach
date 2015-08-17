@@ -2386,7 +2386,7 @@ public class NetworkClient {
 
     //   NetworkClient.deletePromotionHttpClient(getActivity(),StorageHelper.getUserGroup(getActivity(), "auth_token"),jsonArray,this,60);
     public static void deletePromotionHttpClient(Context context, String auth_token, JSONArray jsonArray, Callback callback, int called_api) throws JSONException {
-        Log.e(TAG,"deletePromotionsHttpClient");
+        Log.e(TAG, "deletePromotionsHttpClient");
         jsonArray.put(new JSONObject().put(context.getResources().getString(R.string.time_zone), timeZone));
         jsonArray.put(new JSONObject().put(context.getResources().getString(R.string.device_language), language));
         DeleteAsyncTask deleteAsyncTask = new DeleteAsyncTask();
@@ -2426,16 +2426,22 @@ public class NetworkClient {
                 }
                 if (url_http1 != null) {
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url_http1.openConnection();
-                    httpURLConnection.setDoOutput(true);
+                    //httpURLConnection.setDoOutput(true);
                     httpURLConnection.setRequestMethod("DELETE");
-                    httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                    // httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                    httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
                     if (NetworkClient.API_KEY != null && NetworkClient.API_KEY_VALUE != null) {
                         httpURLConnection.setRequestProperty(NetworkClient.API_KEY, NetworkClient.API_KEY_VALUE);
                     }
                     if (NetworkClient.AUTH_TOKEN != null && NetworkClient.AUTH_TOKEN_VALUE != null) {
                         httpURLConnection.setRequestProperty(NetworkClient.AUTH_TOKEN, NetworkClient.AUTH_TOKEN_VALUE);
-
                     }
+
+                    httpURLConnection.setRequestProperty("DATA", stringArrayList.get(0));
+                    httpURLConnection.connect();
+
+/*
 
 
                     OutputStream os = httpURLConnection.getOutputStream();
@@ -2444,6 +2450,7 @@ public class NetworkClient {
                     os.write(sending_data_to_server.getBytes());
                     os.close();
                     os.flush();
+*/
 
                     BufferedReader br = new BufferedReader(new InputStreamReader((httpURLConnection.getInputStream())));
 

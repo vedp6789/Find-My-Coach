@@ -34,10 +34,6 @@ import java.util.List;
 public class UserListActivity extends FragmentActivity implements Callback {
 
     private ProgressDialog progressDialog;
-    //    private Datum datum;
-//    private boolean isGettingMentor = false;
-//    private static final String TAG = "FMC";
-//    private int selectedPosition = -1;
     private String searchFor;
     private ImageView menuItem;
     private PagerSlidingTabStrip pagerSlidingTabStrip;
@@ -45,13 +41,9 @@ public class UserListActivity extends FragmentActivity implements Callback {
     private SearchPagerAdapter searchPagerAdapter;
     private List<String> pagerTitleList;
     private List<Integer> currentPagerUserAge;
-
-
     //new logic
-
     private String requestParams;
     private int noOfTabs, mentorFor;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

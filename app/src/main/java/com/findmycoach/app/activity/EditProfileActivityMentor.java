@@ -1155,6 +1155,10 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
                     }
 
                     if (userInfo.getFlexible_yn() >= 0 && userInfo.getFlexible_yn() == 0) {
+                        sp_fixed_duration.setSelection(fixed_class_duration.indexOf(userInfo.getFixed_class_duration()));
+
+                    } else {
+
                         if (userInfo.getMax_class_duration() > 0)
                             max_hour_from_server = userInfo.getMax_class_duration();
 
@@ -1166,8 +1170,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
                         if (userInfo.getFlexibility_window() > 0) {
                             sp_time_window.setSelection(time_variance_window.indexOf(userInfo.getFlexibility_window()));
                         }
-                    } else {
-                        sp_fixed_duration.setSelection(fixed_class_duration.indexOf(userInfo.getFixed_class_duration()));
                     }
 
 Log.e(TAG,"max class week"+userInfo.getMax_classes_per_week());
@@ -1691,13 +1693,14 @@ Log.e(TAG,"price size: "+priceArrayList.size());
 
             String unit = null;
             if (flexible_yn == 0) {
+                requestParams.add("fixed_class_duration", String.valueOf(sp_fixed_duration.getSelectedItem()));
+                unit = "class";
+            } else if (flexible_yn == 1) {
                 requestParams.add("min_class_duration", String.valueOf(sp_minimum_time.getSelectedItem()));
                 requestParams.add("flexibility_window", String.valueOf(sp_time_window.getSelectedItem()));
                 requestParams.add("max_class_duration", String.valueOf(sp_max_hour_of_day.getSelectedItem()));
                 unit = "hour";
-            } else if (flexible_yn == 1) {
-                requestParams.add("fixed_class_duration", String.valueOf(sp_fixed_duration.getSelectedItem()));
-                unit = "class";
+
             }
 
             requestParams.add("max_classes_per_week", String.valueOf(sp_max_class_in_week.getSelectedItem()));
@@ -1708,6 +1711,7 @@ Log.e(TAG,"price size: "+priceArrayList.size());
                 jsonObject.put("price", Integer.parseInt(et_individual_class_price.getText().toString()));
                 if (unit != null)
                     jsonObject.put("unit", unit);
+                Log.e(TAG,"currency_id: "+currency_id);
                 jsonObject.put("currency_id", currency_id);
                 jsonObject.put("type", "individual");
                 jsonArray_prices.put(jsonObject);

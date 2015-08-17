@@ -798,28 +798,27 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/back_margin"
-                    >
+                    android:layout_marginTop="@dimen/back_margin">
 
                     <com.findmycoach.app.views.ChizzleTextView
                         android:id="@+id/tv_student_preference"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/students_preference"
                         android:layout_centerVertical="true"
+                        android:text="@string/students_preference"
                         android:textColor="@color/purple_light"
                         android:textSize="@dimen/profile_heading"
                         android:textStyle="bold" />
 
                     <com.findmycoach.app.views.ChizzleTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:layout_toRightOf="@+id/tv_student_preference"
-                                    android:text=" *"
-                                    android:textColor="@color/purple"
-                                    android:textSize="@dimen/profile_heading"
-                                    android:textStyle="bold" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/tv_student_preference"
+                        android:text=" *"
+                        android:textColor="@color/purple"
+                        android:textSize="@dimen/profile_heading"
+                        android:textStyle="bold" />
 
                 </RelativeLayout>
 
@@ -875,7 +874,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_gravity="center_horizontal"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:checkedButton="@+id/radio_button_mentor_signup"
                     android:gravity="center"
                     android:minHeight="@dimen/abc_action_bar_stacked_max_height"
@@ -885,7 +884,7 @@
                         android:id="@+id/radio_button_individual"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.3"
+                        android:layout_weight="1.2"
                         android:button="@drawable/custom_check_box"
                         android:checked="true"
                         android:paddingLeft="@dimen/radio_button_padding_mentor_for"
@@ -896,7 +895,7 @@
                         android:id="@+id/radio_button_group"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.4"
+                        android:layout_weight="1"
                         android:button="@drawable/custom_check_box"
                         android:paddingLeft="@dimen/radio_button_padding_mentor_for"
                         android:text="@string/group"
@@ -906,7 +905,7 @@
                         android:id="@+id/radio_button_both_class"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.3"
+                        android:layout_weight="1"
                         android:button="@drawable/custom_check_box"
                         android:paddingLeft="@dimen/radio_button_padding_mentor_for"
                         android:text="@string/both"
@@ -937,6 +936,16 @@
                     android:orientation="horizontal">
 
                     <RadioButton
+                        android:id="@+id/radio_button_not_flexible"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.4"
+                        android:button="@drawable/custom_check_box"
+                        android:paddingLeft="@dimen/radio_button_padding_mentor_for"
+                        android:text="@string/no"
+                        android:textColor="@color/custom_button_text_color_click_purple" />
+
+                    <RadioButton
                         android:id="@+id/radio_button_flexible"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -947,15 +956,6 @@
                         android:text="@string/yes"
                         android:textColor="@color/custom_button_text_color_click_purple" />
 
-                    <RadioButton
-                        android:id="@+id/radio_button_not_flexible"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.4"
-                        android:button="@drawable/custom_check_box"
-                        android:paddingLeft="@dimen/radio_button_padding_mentor_for"
-                        android:text="@string/no"
-                        android:textColor="@color/custom_button_text_color_click_purple" />
                 </RadioGroup>
 
                 <LinearLayout

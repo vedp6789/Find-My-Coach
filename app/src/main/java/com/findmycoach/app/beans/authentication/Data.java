@@ -156,7 +156,9 @@ public class Data {
     @Expose
     private String physical_address;
 
-
+    @SerializedName("currency")
+    @Expose
+    private CurrencyOfUpdatedProfile currencyOfUpdatedProfile;
 
 
     private int flexible_yn;
@@ -166,7 +168,6 @@ public class Data {
     private int max_classes_per_week;
     private int fixed_class_duration;
     private List<Price> prices;
-
 
 
     public int getFlexible_yn() {

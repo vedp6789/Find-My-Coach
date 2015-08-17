@@ -119,7 +119,7 @@ public class AddPromotion extends Activity implements Callback {
     private boolean validate() {
 
         boolean isValid = true;
-        if (et_promotion_title.getText().toString().trim() == "") {
+        if (et_promotion_title.getText().toString().trim().isEmpty()) {
             et_promotion_title.setError(getResources().getString(R.string.add_promotion_title));
             if (isValid)
                 et_promotion_title.requestFocus();
@@ -127,7 +127,7 @@ public class AddPromotion extends Activity implements Callback {
 
         }
         if (rb_discount_type.isSelected()) {
-            if (et_promotion_discount.getText().toString().trim() == "") {
+            if (et_promotion_discount.getText().toString().trim().isEmpty()) {
                 et_promotion_discount.setError(getResources().getString(R.string.add_dicount_percentage));
                 if (isValid)
                     et_promotion_discount.requestFocus();
@@ -135,7 +135,7 @@ public class AddPromotion extends Activity implements Callback {
             }
 
         } else {
-            if (et_free_classes.getText().toString().trim() == "") {
+            if (et_free_classes.getText().toString().trim().isEmpty()) {
                 et_free_classes.setError(getResources().getString(R.string.add_free_classes));
                 if (isValid)
                     et_free_classes.requestFocus();
@@ -143,7 +143,7 @@ public class AddPromotion extends Activity implements Callback {
 
             }
 
-            if (et_mandatory_classes.getText().toString().trim() == "") {
+            if (et_mandatory_classes.getText().toString().trim().isEmpty()) {
                 et_mandatory_classes.setError(getResources().getString(R.string.add_mandatory_classes));
                 if (isValid)
                     et_mandatory_classes.requestFocus();

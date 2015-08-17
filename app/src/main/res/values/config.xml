@@ -34,7 +34,7 @@
 
 
     <!--AWS server 1 for Ankit-->
-    <!--<string name="BASE_URL_WITH_AUTH">http://54.169.233.2/api/auth/</string>
+ <!--   <string name="BASE_URL_WITH_AUTH">http://54.169.233.2/api/auth/</string>
     <string name="BASE_URL">http://54.169.233.2/api/v1/</string>-->
     <!--WEB SOCKET URL-->
     <!--<string name="CHAT_SOCKET_URL">ws://54.169.233.2:9302</string>-->
