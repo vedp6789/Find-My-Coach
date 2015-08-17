@@ -527,7 +527,7 @@ public class DashboardActivity extends FragmentActivity
         itemConnection = new ResideMenuItem(this, resideMenuItemIcons.get("ConnectionOutLined"), navigationTitle[2]);
         itemSchedule = new ResideMenuItem(this, resideMenuItemIcons.get("ScheduleOutLined"), navigationTitle[3]);
         itemSettings = new ResideMenuItem(this, R.drawable.settings_outlined, navigationTitle[4]);
-        itemSupportAndFAQ = new ResideMenuItem(this, android.R.drawable.ic_dialog_email, navigationTitle[5]);
+        itemSupportAndFAQ = new ResideMenuItem(this, R.drawable.email_outlined, navigationTitle[5]);
         itemLogout = new ResideMenuItem(this, R.drawable.logout, navigationTitle[6]);
 
         itemHome.setOnClickListener(this);
