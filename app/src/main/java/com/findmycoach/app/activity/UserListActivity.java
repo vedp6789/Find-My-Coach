@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,37 +15,42 @@ import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.findmycoach.app.R;
-import com.findmycoach.app.adapter.MentorListAdapter;
-import com.findmycoach.app.beans.search.Datum;
-import com.findmycoach.app.beans.search.SearchResponse;
+import com.findmycoach.app.beans.student.ChildDetails;
+import com.findmycoach.app.beans.student.Data;
+import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.fragment.SearchResultsFragment;
 import com.findmycoach.app.util.Callback;
-import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.google.gson.Gson;
-import com.loopj.android.http.RequestParams;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class UserListActivity extends FragmentActivity implements Callback {
 
     private ProgressDialog progressDialog;
-    private Datum datum;
-    private boolean isGettingMentor = false;
-    private static final String TAG = "FMC";
-    private int selectedPosition = -1;
+    //    private Datum datum;
+//    private boolean isGettingMentor = false;
+//    private static final String TAG = "FMC";
+//    private int selectedPosition = -1;
     private String searchFor;
     private ImageView menuItem;
     private PagerSlidingTabStrip pagerSlidingTabStrip;
     private ViewPager searchViewPager;
     private SearchPagerAdapter searchPagerAdapter;
+    private List<String> pagerTitleList;
+    private List<Integer> currentPagerUserAge;
 
 
     //new logic
 
     private String requestParams;
-    private int noOfTabs;
-
+    private int noOfTabs, mentorFor;
 
 
     @Override
@@ -88,26 +92,47 @@ public class UserListActivity extends FragmentActivity implements Callback {
     }
 
 
-
     private void initialize() {
-       // listView = (ListView) findViewById(R.id.user_list);
-        pagerSlidingTabStrip=(PagerSlidingTabStrip)findViewById(R.id.search_tabs);
-        searchViewPager=(ViewPager)findViewById(R.id.search_view_pager);
+        // listView = (ListView) findViewById(R.id.user_list);
+        pagerSlidingTabStrip = (PagerSlidingTabStrip) findViewById(R.id.search_tabs);
+        searchViewPager = (ViewPager) findViewById(R.id.search_view_pager);
 
 
         //String json = getIntent().getStringExtra("list");
         searchFor = getIntent().getStringExtra("search_for");
 
-       // Log.d(TAG, "Intent String:" + json);
-       // Log.e(TAG, json);
-        noOfTabs=getIntent().getIntExtra("no_of_tabs", 1);
-        requestParams=getIntent().getStringExtra("request_params");
+        // Log.d(TAG, "Intent String:" + json);
+        // Log.e(TAG, json);
+        noOfTabs = getIntent().getIntExtra("no_of_tabs", 1);
+        mentorFor = getIntent().getIntExtra("mentor_for", 0);
+        requestParams = getIntent().getStringExtra("request_params");
 
-     //   SearchResponse searchResponse = new Gson().fromJson(json, SearchResponse.class);
+        pagerTitleList = new ArrayList<>();
+        currentPagerUserAge = new ArrayList<>();
+        ProfileResponse profileResponse = new Gson().fromJson(StorageHelper.getUserProfile(this), ProfileResponse.class);
+        Data userInfo = profileResponse.getData();
+        if (mentorFor == 0) {
+            pagerTitleList.add(userInfo.getFirstName());
+            currentPagerUserAge.add(getAgeToSearchMentorFor(userInfo.getDob().toString()));
+        }
+        if (mentorFor > 0) {
+            for (ChildDetails childDetails : userInfo.getChildren()) {
+                pagerTitleList.add(childDetails.getName());
+                currentPagerUserAge.add(getAgeToSearchMentorFor(childDetails.getDob()));
+            }
+
+            if (mentorFor == 2) {
+                pagerTitleList.add(userInfo.getFirstName());
+                currentPagerUserAge.add(getAgeToSearchMentorFor(userInfo.getDob().toString()));
+            }
+        }
+
+
+        //   SearchResponse searchResponse = new Gson().fromJson(json, SearchResponse.class);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
 
-        searchPagerAdapter=new SearchPagerAdapter(getSupportFragmentManager(),noOfTabs);
+        searchPagerAdapter = new SearchPagerAdapter(getSupportFragmentManager(), noOfTabs);
         searchViewPager.setAdapter(searchPagerAdapter);
         pagerSlidingTabStrip.setViewPager(searchViewPager);
 
@@ -117,6 +142,28 @@ public class UserListActivity extends FragmentActivity implements Callback {
         menuItem = (ImageView) findViewById(R.id.menuItem);
 //        menuItem.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_sort_by_size));
 
+    }
+
+    private int getAgeToSearchMentorFor(String dobString) {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = format.parse(dobString);
+            Calendar dob = Calendar.getInstance();
+            dob.setTime(date);
+
+            Calendar today = Calendar.getInstance();
+            int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+            if (today.get(Calendar.MONTH) < dob.get(Calendar.MONTH)) {
+                age--;
+            } else if (today.get(Calendar.MONTH) == dob.get(Calendar.MONTH)
+                    && today.get(Calendar.DAY_OF_MONTH) < dob.get(Calendar.DAY_OF_MONTH)) {
+                age--;
+            }
+            return age;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     @Override
@@ -146,26 +193,28 @@ public class UserListActivity extends FragmentActivity implements Callback {
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
         progressDialog.dismiss();
-        isGettingMentor = false;
+//        isGettingMentor = false;
         Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
     }
 
 
     private class SearchPagerAdapter extends FragmentStatePagerAdapter {
 
-        private  int count;
-        public SearchPagerAdapter(FragmentManager fm,int count) {
+        private int count;
+
+        public SearchPagerAdapter(FragmentManager fm, int count) {
             super(fm);
-            this.count=count;
+            this.count = count;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return SearchResultsFragment.newInstance(position,requestParams,searchFor);
+            return SearchResultsFragment.newInstance(position, requestParams, searchFor, currentPagerUserAge.get(position));
         }
+
         @Override
         public CharSequence getPageTitle(int position) {
-            return "Child"+position;
+            return pagerTitleList.get(position);
         }
 
         @Override
