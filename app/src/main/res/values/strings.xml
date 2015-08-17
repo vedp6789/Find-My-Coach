@@ -195,6 +195,8 @@
     <string name="attach_video_clicked">Attach video is clicked</string>
     <string name="too_big_image">Image is too big, Please choose smaller one</string>
     <string name="image_not_picked">You have not picked image</string>
+    <string name="pick_local_image">Select an image from your phone</string>
+    <string name="pick_current_location">Pick current location</string>
     <string name="choose_suggested_copy">Choose a suggested city</string>
     <string name="enter_necessary_details">Please enter necessary details</string>
     <string name="check_network_connection">Please check network connection</string>
@@ -457,6 +459,7 @@
     <string name="class_day">day</string>
     <string name="select_days">Select days</string>
     <string name="from">From :</string>
+    <string name="around">Around :</string>
     <string name="all">All</string>
     <string name="timing">Timing</string>
     <string name="class_timing">Timing:</string>
@@ -513,6 +516,7 @@
     <string name="prompt_fellow_student_location">I can go for a group class to a nearby students location</string>
     <string name="prompt_multiple_address_mentor">I am available at Other Locations also</string>
     <string name="prompt_location_preference">Teaching Location Preference</string>
+    <string name="prompt_select_locality_for_search">Select locality to start search</string>
 
     <string name="prompt_summary">More information about me</string>
     <string name="my_qualification">My Qualifications</string>

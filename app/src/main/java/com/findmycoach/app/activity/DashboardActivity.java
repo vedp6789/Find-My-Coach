@@ -66,6 +66,7 @@ public class DashboardActivity extends FragmentActivity
     private static String REG_ID_SAVED_TO_SERVER;
     private FragmentManager fragmentManager;
     String regid;
+    public String userCurrentAddressFromGPS;
     boolean regid_saved_to_server = false;
     boolean onNewIntentCalled = false;
     int fragment_to_open; /* will get value from onNewIntent method */
@@ -103,13 +104,8 @@ public class DashboardActivity extends FragmentActivity
     private ResideMenuItem itemSettings;
     private ResideMenuItem itemLogout;
     private HashMap<String, Integer> resideMenuItemIcons;
-
-
+    private HomeFragment homeFragmentMentee;
     private GoogleMap map;
-    public String userCurrentAddress;
-    public double latitude;
-    public double longitude;
-    private GoogleMap.OnMyLocationChangeListener myLocationChangeListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,33 +114,16 @@ public class DashboardActivity extends FragmentActivity
         if (LoginActivity.loginActivity != null)
             LoginActivity.loginActivity.finish();
 
+        userCurrentAddressFromGPS = "";
+
         dashboardActivity = this;
         fragmentManager = getSupportFragmentManager();
         isProfileOpen = false;
 
         Log.e(TAG, StorageHelper.getUserProfile(this));
 
-//        String userId = StorageHelper.getUserDetails(this, getResources().getString(R.string.user_id));
-//        String newUser = StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user));
-//
-//        Log.e("SignUp", StorageHelper.getUserDetails(this, getResources().getString(R.string.new_user)) + "");
-
         try {
             user_group = Integer.parseInt(StorageHelper.getUserGroup(DashboardActivity.this, "user_group"));
-//            if (userId != null && newUser != null && userId.equals(newUser.split("#")[1])) {
-//                String authToken = StorageHelper.getUserDetails(this, getResources().getString(R.string.auth_token));
-//                RequestParams requestParams = new RequestParams();
-//                Log.d(TAG2, "Stored User Id:" + userId);
-//                Log.d(TAG2, "auth_token" + authToken);
-//                requestParams.add("id", userId);
-//                requestParams.add("user_group", user_group + "");
-//                isProfileOpen = true;
-//                if (!NetworkManager.isNetworkConnected(this)) {
-//                    logout();
-//                } else {
-//                    NetworkClient.getProfile(this, requestParams, authToken, this, 4);
-//                }
-//            }
         } catch (Exception e) {
             e.printStackTrace();
             logout();
@@ -153,14 +132,7 @@ public class DashboardActivity extends FragmentActivity
         Log.e("FMC - user_group", "" + user_group);
         setContentView(R.layout.activity_dashboard);
 
-        try {
-            map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-            map.setMyLocationEnabled(true);
-            userCurrentAddress = "";
-            map.setOnMyLocationChangeListener(myLocationChangeListener);
-        } catch (Exception e) {
-            userCurrentAddress = "";
-        }
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
         container = (RelativeLayout) findViewById(R.id.container);
         mainLayout = (RelativeLayout) findViewById(R.id.drawer_layout);
@@ -178,10 +150,7 @@ public class DashboardActivity extends FragmentActivity
         group_push_notification = getIntent().getIntExtra("group", 0);
 
         if (fragment_to_launch_from_notification == 0) {
-            // Check device for Play Services APK.
             if (checkPlayServices()) {
-                // If this check succeeds, proceed with normal processing.
-                // Otherwise, prompt user to get valid Play Services APK.
                 gcm = GoogleCloudMessaging.getInstance(this);
                 regid = getRegistrationId(context);
 
@@ -199,10 +168,6 @@ public class DashboardActivity extends FragmentActivity
         } else {
             initialize();
         }
-    }
-
-    public void getCurrentLocation() {
-        new GetLocation().execute();
     }
 
     @Override
@@ -412,12 +377,6 @@ public class DashboardActivity extends FragmentActivity
         }
 
         try {
-            if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
-                HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
-                HomeFragment.homeFragmentMentee = null;
-                map.setOnMyLocationChangeListener(null);
-                map = null;
-            }
             if (onNewIntentCalled) {
                 onNewIntentCalled = false;
                 fragment_to_launch_from_notification = fragment_to_open;
@@ -469,12 +428,10 @@ public class DashboardActivity extends FragmentActivity
                         setUpMenu(item);
                         Log.e(TAG, "reside null");
                     } else if (item != null) {
-//                    item.callOnClick();
                         updateUI(item);
                         Log.e(TAG, "reside menu item not null");
                     }
                 } else {
-//                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.switch_login), Toast.LENGTH_SHORT).show();
                 }
             }
         } catch (Exception ignored) {
@@ -494,7 +451,6 @@ public class DashboardActivity extends FragmentActivity
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
                 Log.i(TAG, "This device is not google play services supported.");
-                //finish();
             }
             return false;
         }
@@ -732,7 +688,8 @@ public class DashboardActivity extends FragmentActivity
                     if (!fragmentManager.getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals("Home")) {
                     }
                 } catch (Exception e) {
-                    fragmentTransaction.add(R.id.container, new HomeFragment()).addToBackStack("Home");
+                    homeFragmentMentee = new HomeFragment();
+                    fragmentTransaction.add(R.id.container, homeFragmentMentee).addToBackStack("Home");
                 }
                 position = 0;
             } else if (view == itemNotification) {
@@ -888,37 +845,35 @@ public class DashboardActivity extends FragmentActivity
         }
     }
 
-    /**
-     * Getting user current location
-     */
-    private class GetLocation extends AsyncTask<Void, Void, Void> {
+    public void getAddress() {
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+        NetworkManager.getNetworkAndGpsStatus(this);
+
+        try {
+
+            GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
                 @Override
                 public void onMyLocationChange(Location location) {
-                    Log.e("MapTest", location.getLatitude() + " : " + location.getLongitude() + " : " + userCurrentAddress);
-                    if (userCurrentAddress.equals("")) {
-                        userCurrentAddress = NetworkManager.getCompleteAddressString(DashboardActivity.this, location.getLatitude(), location.getLongitude());
-                        Log.e("MapTest", userCurrentAddress);
+                    if (userCurrentAddressFromGPS.equals("")) {
+                        userCurrentAddressFromGPS = NetworkManager.getCompleteAddressString(DashboardActivity.this, location.getLatitude(), location.getLongitude());
 
-                        if (HomeFragment.homeFragmentMentee != null && !userCurrentAddress.equals("") && user_group == 2) {
-                            HomeFragment.homeFragmentMentee.updateLocationFromAsync(userCurrentAddress);
-                            HomeFragment.homeFragmentMentee = null;
+                        if (!userCurrentAddressFromGPS.equals(""))
                             map.setOnMyLocationChangeListener(null);
-                            map = null;
-                        } else if (!userCurrentAddress.equals("")) {
-                            map.setOnMyLocationChangeListener(null);
-                            map = null;
-                        }
 
-                        latitude = location.getLatitude();
-                        longitude = location.getLongitude();
-                    }
+                        homeFragmentMentee.currentLocationText.setText(userCurrentAddressFromGPS);
+
+
+                    } else if (!userCurrentAddressFromGPS.equals(""))
+                        map.setOnMyLocationChangeListener(null);
+                    homeFragmentMentee.currentLocationText.setText(userCurrentAddressFromGPS);
+
                 }
             };
-            return null;
+            map.setMyLocationEnabled(true);
+            map.setOnMyLocationChangeListener(myLocationChangeListener);
+
+
+        } catch (Exception ignored) {
         }
     }
 }

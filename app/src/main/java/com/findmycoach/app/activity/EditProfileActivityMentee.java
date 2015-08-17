@@ -1089,8 +1089,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                             if (updateAddress()) ;
                         }
 
-//                        DashboardActivity.dashboardActivity.latitude = location.getLatitude();
-//                        DashboardActivity.dashboardActivity.longitude = location.getLongitude();
                     } else if (!userCurrentAddress.equals("")) {
                         map.setOnMyLocationChangeListener(null);
                         if (updateAddress())
@@ -1100,7 +1098,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             };
             map.setMyLocationEnabled(true);
             map.setOnMyLocationChangeListener(myLocationChangeListener);
-
 
         } catch (Exception ignored) {
         }
@@ -1129,41 +1126,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         }
         updateCountryByLocation();
         return true;
-
-
-        /*if (userInfo != null && (userInfo.getAddress() == null || userInfo.getAddress().toString().trim().equals(""))) {
-            try {
-                profileAddress.setText(NetworkManager.localityName);
-            } catch (Exception ignored) {
-            }
-        }
-
-        if (userInfo != null && (userInfo.getCity() == null || userInfo.getCity().toString().trim().equals(""))) {
-            try {
-                profileAddress1.setText(NetworkManager.cityName);
-            } catch (Exception ignored) {
-            }
-        }
-
-        if (userInfo != null && (userInfo.getZip() == null || userInfo.getZip().toString().trim().equals("") || userInfo.getZip().toString().trim().equals("0"))) {
-            try {
-                if (NetworkManager.postalCodeName != null && !NetworkManager.postalCodeName.trim().equals(""))
-                    userInfo.setZip(NetworkManager.postalCodeName);
-                else {
-                    String address = userCurrentAddress.trim();
-                    if (!address.equals("")) {
-                        String[] temp = address.split(" ");
-                        pinCode.setText(temp[temp.length - 1]);
-                    }
-                }
-            } catch (Exception ignored) {
-            }
-        }
-
-
-            updateCountryByLocation();
-
-        return true;*/
     }
 
     private void getAutoSuggestions(String input) {
