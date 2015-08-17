@@ -396,6 +396,18 @@ public class ProfileFragment extends Fragment implements Callback {
                 rl_fixed_class_duration.setVisibility(View.VISIBLE);
                 tv_fixed_class_duration.setText("" + userInfo.getFixed_class_duration());
 
+                if(userInfo.getSlotType().equals("0")){
+                    rl_individual_class_price.setVisibility(View.VISIBLE);
+                    rl_group_class_price.setVisibility(View.GONE);
+                    tv_individual_class_price_label.setText(getResources().getString(R.string.pricing_per_class_individual)+);
+
+
+                }else if(userInfo.getSlotType().equals("1")){
+
+                }else if(userInfo.getSlotType().equals("2")){
+
+                }
+
 
             } else if (userInfo.getFlexible_yn() == 1) {
                 tv_flexibility_on_class_duration.setText(getResources().getString(R.string.yes));
@@ -404,6 +416,15 @@ public class ProfileFragment extends Fragment implements Callback {
                 tv_min_class_time.setText(""+userInfo.getMin_class_duration());
                 tv_flexibility_window.setText(""+userInfo.getFlexibility_window());
                 tv_max_class_time.setText("" + userInfo.getMax_class_duration());
+
+                if(userInfo.getSlotType().equals("0")){
+
+                }else if(userInfo.getSlotType().equals("1")){
+
+                }else if(userInfo.getSlotType().equals("2")){
+
+                }
+
             }
         }
 
