@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -102,6 +103,7 @@ public class DashboardActivity extends FragmentActivity
     private ResideMenuItem itemConnection;
     public ResideMenuItem itemSchedule;
     private ResideMenuItem itemSettings;
+    private ResideMenuItem itemSupportAndFAQ;
     private ResideMenuItem itemLogout;
     private HashMap<String, Integer> resideMenuItemIcons;
     private HomeFragment homeFragmentMentee;
@@ -525,13 +527,15 @@ public class DashboardActivity extends FragmentActivity
         itemConnection = new ResideMenuItem(this, resideMenuItemIcons.get("ConnectionOutLined"), navigationTitle[2]);
         itemSchedule = new ResideMenuItem(this, resideMenuItemIcons.get("ScheduleOutLined"), navigationTitle[3]);
         itemSettings = new ResideMenuItem(this, R.drawable.settings_outlined, navigationTitle[4]);
-        itemLogout = new ResideMenuItem(this, R.drawable.logout, navigationTitle[5]);
+        itemSupportAndFAQ = new ResideMenuItem(this, android.R.drawable.ic_dialog_email, navigationTitle[5]);
+        itemLogout = new ResideMenuItem(this, R.drawable.logout, navigationTitle[6]);
 
         itemHome.setOnClickListener(this);
         itemNotification.setOnClickListener(this);
         itemConnection.setOnClickListener(this);
         itemSchedule.setOnClickListener(this);
         itemSettings.setOnClickListener(this);
+        itemSupportAndFAQ.setOnClickListener(this);
         itemLogout.setOnClickListener(this);
         resideMenu.setOnClickListener(this);
 
@@ -541,6 +545,7 @@ public class DashboardActivity extends FragmentActivity
         resideMenu.addMenuItem(itemConnection, ResideMenu.DIRECTION_RIGHT);
         resideMenu.addMenuItem(itemSchedule, ResideMenu.DIRECTION_RIGHT);
         resideMenu.addMenuItem(itemSettings, ResideMenu.DIRECTION_RIGHT);
+        resideMenu.addMenuItem(itemSupportAndFAQ, ResideMenu.DIRECTION_RIGHT);
         resideMenu.addMenuItem(itemLogout, ResideMenu.DIRECTION_RIGHT);
 
         // You can disable a direction by setting ->
@@ -741,6 +746,13 @@ public class DashboardActivity extends FragmentActivity
 
         if (view == itemSettings)
             startActivity(new Intent(this, Settings.class));
+        else if(view == itemSupportAndFAQ){
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                    "mailto", getResources().getString(R.string.email_to_support_at_chizzle), null));
+//            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+//            emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+            startActivity(Intent.createChooser(emailIntent, "Send email..."));
+        }
         else if (view == itemLogout)
             logout();
 

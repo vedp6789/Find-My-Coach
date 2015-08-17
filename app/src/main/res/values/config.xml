@@ -69,4 +69,7 @@
     <!--Minimum length of digits for mobile number-->
     <integer name="min_phone_length">7</integer>
 
+    <!--Minimum length of digits for mobile number-->
+    <string name="email_to_support_at_chizzle">support@chizzle.com</string>
+
 </resources>
