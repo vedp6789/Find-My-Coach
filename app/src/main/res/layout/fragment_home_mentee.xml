@@ -25,6 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/textView_padding_margin"
+                android:layout_marginBottom="@dimen/back_margin"
                 android:gravity="center_horizontal"
                 android:text="@string/find_mentor"
                 android:textColor="@color/white"
