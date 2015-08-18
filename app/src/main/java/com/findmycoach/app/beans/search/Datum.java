@@ -49,6 +49,38 @@ public class Datum {
     @SerializedName("dob")
     @Expose
     private String dateOfBirth;
+    @SerializedName("number_of_students")
+    @Expose
+    private String numberOfStudents;
+    @SerializedName("price_for")
+    @Expose
+    private String priceFor;
+    @Expose
+    private boolean qualified;
+
+    public String getNumberOfStudents() {
+        return numberOfStudents;
+    }
+
+    public void setNumberOfStudents(String numberOfStudents) {
+        this.numberOfStudents = numberOfStudents;
+    }
+
+    public String getPriceFor() {
+        return priceFor;
+    }
+
+    public void setPriceFor(String priceFor) {
+        this.priceFor = priceFor;
+    }
+
+    public boolean isQualified() {
+        return qualified;
+    }
+
+    public void setQualified(boolean qualified) {
+        this.qualified = qualified;
+    }
 
     @Expose
     private String experience;

@@ -33,14 +33,14 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     private List<Datum> users;
     private String year, years;
     private int clickedPosition = -1;
-    private Drawable defaultDrawable;
-
-    private static final String TAG = "FMC";
+    private Drawable defaultDrawable, qualified, notQualified;
 
     public MentorListAdapter(Context context, List<Datum> users, String searchFor) {
         this.context = context;
         this.users = users;
         defaultDrawable = context.getResources().getDrawable(R.drawable.user_icon);
+        qualified = context.getResources().getDrawable(R.drawable.radio_btn_selected);
+        notQualified = context.getResources().getDrawable(R.drawable.radio_btn_unselected);
         year = context.getResources().getString(R.string.yr);
         years = context.getResources().getString(R.string.yrs);
     }
@@ -134,7 +134,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
 
         //Set Mentor current student count
         try {
-//            holder.noOfStudentsTV.setText(user.hetNoOfStudent);
+            holder.noOfStudentsTV.setText(user.getNumberOfStudents());
         } catch (Exception e) {
         }
 
@@ -160,16 +160,17 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
 
         //Set Mentor is qualified or not in current subject
         try {
-//            if(user.isQualified)
-//                holder.qualifiedIV.setImageDrawable(qualified);
-//            else
-//                holder.qualifiedIV.setImageDrawable(notQualified);
+            if (user.isQualified())
+                holder.qualifiedIV.setImageDrawable(qualified);
+            else
+                holder.qualifiedIV.setImageDrawable(notQualified);
         } catch (Exception e) {
         }
 
         //Set Mentor charges
         try {
-//            holder.chargesTV.setText(user.getPrice());
+            if (user.getPrice() != null)
+                holder.chargesTV.setText(user.getPrice() + user.getPriceFor());
         } catch (Exception ignored) {
         }
 

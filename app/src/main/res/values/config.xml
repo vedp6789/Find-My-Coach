@@ -20,32 +20,24 @@
 
     <!--api urls-->
 
-    <!--<string name="BASE_URL_WITH_AUTH">http://54.169.233.2/api/auth/</string>
-    <string name="BASE_URL">http://54.169.233.2/api/v1/</string>-->
-    <!--<string name="BASE_URL_WITH_AUTH">http://10.1.1.158/fmcweb/www/api/auth/</string>-->
-<!--
-    <string name="BASE_URL">http://10.1.1.158/fmcweb/www/api/v1/</string>
--->
-
 
     <!--Demo server for our internal use-->
 
 
-    <string name="BASE_URL_WITH_AUTH">http://demo.iglulabs.com/fmcweb/www/api/auth/</string>
-    <string name="BASE_URL">http://demo.iglulabs.com/fmcweb/www/api/v1/</string>
-    <!--WEB SOCKET URL-->
-    <string name="CHAT_SOCKET_URL">ws://192.241.196.244:9302</string>
+    <!--<string name="BASE_URL_WITH_AUTH">http://demo.iglulabs.com/fmcweb/www/api/auth/</string>-->
+    <!--<string name="BASE_URL">http://demo.iglulabs.com/fmcweb/www/api/v1/</string>-->
+    <!--&lt;!&ndash;WEB SOCKET URL&ndash;&gt;-->
+    <!--<string name="CHAT_SOCKET_URL">ws://192.241.196.244:9302</string>-->
 
 
-    <!--AWS server 1 for Ankit-->
-<!--
+    <!--AWS server 1 for Master-->
+
 
     <string name="BASE_URL_WITH_AUTH">http://54.169.233.2/api/auth/</string>
     <string name="BASE_URL">http://54.169.233.2/api/v1/</string>
-    &lt;!&ndash;WEB SOCKET URL&ndash;&gt;
+    <!--WEB SOCKET URL-->
     <string name="CHAT_SOCKET_URL">ws://54.169.233.2:9302</string>
 
--->
 
 
     <!--AWS server 2 for testing apk from other users, We will update this IP apk's on Play store-->
