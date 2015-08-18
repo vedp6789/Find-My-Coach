@@ -20,24 +20,37 @@
 
     <!--api urls-->
 
+    <!--<string name="BASE_URL_WITH_AUTH">http://54.169.233.2/api/auth/</string>
+    <string name="BASE_URL">http://54.169.233.2/api/v1/</string>-->
+    <!--<string name="BASE_URL_WITH_AUTH">http://10.1.1.158/fmcweb/www/api/auth/</string>-->
+<!--
+    <string name="BASE_URL">http://10.1.1.158/fmcweb/www/api/v1/</string>
+-->
+
 
     <!--Demo server for our internal use-->
-    <!--<string name="BASE_URL_WITH_AUTH">http://demo.iglulabs.com/fmcweb/www/api/auth/</string>
-    <string name="BASE_URL">http://demo.iglulabs.com/fmcweb/www/api/v1/</string>-->
+
+
+    <string name="BASE_URL_WITH_AUTH">http://demo.iglulabs.com/fmcweb/www/api/auth/</string>
+    <string name="BASE_URL">http://demo.iglulabs.com/fmcweb/www/api/v1/</string>
     <!--WEB SOCKET URL-->
-    <!--<string name="CHAT_SOCKET_URL">ws://192.241.196.244:9302</string>-->
+    <string name="CHAT_SOCKET_URL">ws://192.241.196.244:9302</string>
 
 
-    <!--AWS server 1 for Ankit/Master-->
+    <!--AWS server 1 for Ankit-->
+<!--
+
     <string name="BASE_URL_WITH_AUTH">http://54.169.233.2/api/auth/</string>
     <string name="BASE_URL">http://54.169.233.2/api/v1/</string>
-    <!--WEB SOCKET URL-->
+    &lt;!&ndash;WEB SOCKET URL&ndash;&gt;
     <string name="CHAT_SOCKET_URL">ws://54.169.233.2:9302</string>
 
+-->
 
-    <!--AWS server 2 for testing apk from other users, We will update this IP apk's on Play store/Release-->
-    <!--<string name="BASE_URL_WITH_AUTH">http://52.74.155.74/api/auth/</string>-->
-    <!--<string name="BASE_URL">http://52.74.155.74/api/v1/</string>-->
+
+    <!--AWS server 2 for testing apk from other users, We will update this IP apk's on Play store-->
+    <!--<string name="BASE_URL_WITH_AUTH">http://52.74.155.74/api/auth/</string>
+    <string name="BASE_URL">http://52.74.155.74/api/v1/</string>-->
     <!--WEB SOCKET URL-->
     <!--<string name="CHAT_SOCKET_URL">ws://52.74.155.74:9302</string>-->
 
@@ -68,6 +81,26 @@
 
     <!--Minimum length of digits for mobile number-->
     <integer name="min_phone_length">7</integer>
+
+
+    <!-- Time bounds for classes in minutes-->
+    <integer name="start_time">15</integer><!-- Assuming lower bound of minimum time in minute-->
+    <integer name="stop_time">180</integer><!-- Assuming upper bound of maximum time -->
+    <integer name="maximum_hour_of_class_in_a_day">180</integer><!-- Assuming max time can vary upto 180 min from minimum time selected for a class by mentor-->
+    <integer name="maximum_time_window">60</integer>
+    <integer name="fixed_duration_minimum_class">15</integer><!-- Fixed duration class minimum time-->
+    <integer name="fixed_duration_max_time">180</integer><!-- Fixed duration class maximum time-->
+    <string-array name="max_number_of_classes_week">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array>
+    <integer name="max_number_of_week">26</integer>
+
 
     <!--Minimum length of digits for mobile number-->
     <string name="email_to_support_at_chizzle">support@chizzle.com</string>

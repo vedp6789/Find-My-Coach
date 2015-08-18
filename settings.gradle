@@ -1,1 +1,1 @@
-include ':app', ':facebook', ':cropper', ':mytimepicker', 'tabStripLibrary', ':tabStripLibrary'
+include ':app', ':facebook', ':cropper', ':mytimepicker', ':tabStripLibrary'

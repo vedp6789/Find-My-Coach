@@ -29,6 +29,7 @@ import java.util.List;
 
 public class UserListActivity extends FragmentActivity {
 
+    private ProgressDialog progressDialog;
     private String searchFor;
     private PagerSlidingTabStrip pagerSlidingTabStrip;
     private ViewPager searchViewPager;
@@ -53,7 +54,6 @@ public class UserListActivity extends FragmentActivity {
             }
         });
     }
-
 
     @Override
     public void onBackPressed() {

@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.findmycoach.app.activity.LoginActivity">
+
+
+    <include
+        android:id="@+id/ll_title"
+        layout="@layout/header_back_name_menu" />
+
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/promotionsTab"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sliding_tab_height"
+        android:layout_below="@+id/ll_title"
+        app:pstsDividerColor="@color/purple"
+        app:pstsIndicatorColor="@color/purple"
+        app:pstsIndicatorHeight="@dimen/days_margin" />
+
+
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_promotions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/promotionsTab"
+        />
+
+
+</RelativeLayout>
+
+
+
+

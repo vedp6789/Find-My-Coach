@@ -103,6 +103,7 @@ public class StorageHelper {
         editor.remove("user_profile_whole_data");
 //        editor.remove("terms");
         editor.remove("currency_code");
+        editor.remove("promotions_tab_state");
 
         if (StorageHelper.getUserGroup(context, "user_group").equals("2")) {
             editor.remove("training_location");
@@ -171,4 +172,17 @@ public class StorageHelper {
         return PreferenceManager.getDefaultSharedPreferences(context).getString("user_profile_whole_data", null);
     }
 
+
+    /*
+    * promotions tab state can be 1 for active promotions, 2 for inactive state and by default 0
+    * */
+    public static int getPromotionsTabState(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getInt("promotions_tab_state",0);
+    }
+
+    public void setPromotionsTabState(Context context,int promotions_tab_state){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.edit().putInt("promotions_tab_state", promotions_tab_state).apply();
+
+    }
 }

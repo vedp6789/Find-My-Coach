@@ -1,10 +1,12 @@
 package com.findmycoach.app.util;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.CityDetails;
+import com.findmycoach.app.beans.Promotions.Promotions;
 import com.findmycoach.app.beans.attachment.Attachment;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.category.Category;
@@ -21,10 +23,17 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -99,6 +108,10 @@ import java.util.TimeZone;
     *   CountryConfig                       55
     *   Grades                              56
     *   MediumOfEducation                   57
+    *   promotion (get all )                          58
+    *   promotion (add/update)                              59
+    *   promoton(delete)                              60
+    *   
     * */
 
 
@@ -108,6 +121,13 @@ public class NetworkClient {
 
     private static final String TAG = "FMC";
     public static String timeZone, language;
+    private static Context context;
+    private static String API_KEY;
+    private static String API_KEY_VALUE;
+    private static String AUTH_TOKEN;
+    private static String AUTH_TOKEN_VALUE;
+    public static Callback callback;
+    public static int calledAPIValue;
 
     private static String getTimeZone() {
         TimeZone tz = TimeZone.getDefault();
@@ -219,9 +239,9 @@ public class NetworkClient {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 try {
-                    Log.d(TAG, "Failure : Status code 766: " + statusCode);
+                    Log.d(TAG, "Failure : Status code city api: " + statusCode);
                     String responseJson = new String(responseBody);
-                    Log.d(TAG, "Failure : Response 66: " + responseJson);
+                    Log.d(TAG, "Failure : Response: " + responseJson);
                     Response response = new Gson().fromJson(responseJson, Response.class);
                     callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
                 } catch (Exception e) {
@@ -413,6 +433,170 @@ public class NetworkClient {
             }
         });
     }
+
+
+    public static void getAllPromotions(final Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
+        if (!NetworkManager.isNetworkConnected(context)) {
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.get(context, getAbsoluteURL("promotion", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    Log.d(TAG, "Success: Response Code:" + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success: Response:" + responseJson);
+
+                    /*ArrayList<Promotion> promotionsArrayList = new ArrayList<>();
+                    Log.d(TAG, "Success : Status code promotion get all: " + statusCode);
+                    JSONObject jsonObject=new JSONObject(responseJson);
+                    JSONArray jsonArray=jsonObject.getJSONArray("data");
+                    promotionsArrayList = new Gson().fromJson(jsonArray.toString(), new TypeToken<List<Promoti>>(){}.getType());
+                    callback.successOperation(cityDetailsArrayList, statusCode, calledApiValue);*/
+
+                    Promotions promotions = new Gson().fromJson(responseJson, Promotions.class);
+                    callback.successOperation(promotions, statusCode, calledApiValue);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                StorageHelper.checkGcmRegIdSentToSever(context, context.getResources().getString(R.string.reg_id_saved_to_server), false);
+                try {
+                    Log.d(TAG, "Failure : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    try {
+                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        });
+    }
+
+
+    public static void addPromotion(final Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
+        if (!NetworkManager.isNetworkConnected(context)) {
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+        client.post(context, getAbsoluteURL("promotion", context), requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    Log.d(TAG, "Success: Response Code:" + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success: Response:" + responseJson);
+
+                    /*ArrayList<Promotion> promotionsArrayList = new ArrayList<>();
+                    Log.d(TAG, "Success : Status code promotion get all: " + statusCode);
+                    JSONObject jsonObject=new JSONObject(responseJson);
+                    JSONArray jsonArray=jsonObject.getJSONArray("data");
+                    promotionsArrayList = new Gson().fromJson(jsonArray.toString(), new TypeToken<List<Promoti>>(){}.getType());
+                    callback.successOperation(cityDetailsArrayList, statusCode, calledApiValue);*/
+
+                    JSONObject jsonObject = new JSONObject(responseJson);
+                    callback.successOperation(jsonObject, statusCode, calledApiValue);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                StorageHelper.checkGcmRegIdSentToSever(context, context.getResources().getString(R.string.reg_id_saved_to_server), false);
+                try {
+                    Log.d(TAG, "Failure : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    try {
+                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        });
+    }
+
+
+    public static void deletePromotion(final Context context, RequestParams requestParams, String authToken, final Callback callback, final int calledApiValue) {
+        if (!NetworkManager.isNetworkConnected(context)) {
+            callback.failureOperation(context.getResources().getString(R.string.check_network_connection), -1, calledApiValue);
+            return;
+        }
+        client.addHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value));
+        requestParams.add(context.getResources().getString(R.string.time_zone), timeZone);
+        requestParams.add(context.getResources().getString(R.string.device_language), language);
+        client.addHeader(context.getResources().getString(R.string.auth_key), authToken);
+
+        Header[] headers = {
+                new BasicHeader(context.getResources().getString(R.string.api_key), context.getResources().getString(R.string.api_key_value))
+                , new BasicHeader(context.getResources().getString(R.string.auth_key), authToken),
+                new BasicHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded")
+        };
+
+        client.delete(context, getAbsoluteURL("promotion", context), headers, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    Log.d(TAG, "Success: Response Code:" + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Success: Response:" + responseJson);
+
+                    /*ArrayList<Promotion> promotionsArrayList = new ArrayList<>();
+                    Log.d(TAG, "Success : Status code promotion get all: " + statusCode);
+                    JSONObject jsonObject=new JSONObject(responseJson);
+                    JSONArray jsonArray=jsonObject.getJSONArray("data");
+                    promotionsArrayList = new Gson().fromJson(jsonArray.toString(), new TypeToken<List<Promoti>>(){}.getType());
+                    callback.successOperation(cityDetailsArrayList, statusCode, calledApiValue);*/
+
+                    JSONObject jsonObject = new JSONObject(responseJson);
+                    callback.successOperation(jsonObject, statusCode, calledApiValue);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                StorageHelper.checkGcmRegIdSentToSever(context, context.getResources().getString(R.string.reg_id_saved_to_server), false);
+                try {
+                    Log.d(TAG, "Failure : Status code : " + statusCode);
+                    String responseJson = new String(responseBody);
+                    Log.d(TAG, "Failure : Response : " + responseJson);
+                    Response response = new Gson().fromJson(responseJson, Response.class);
+                    callback.failureOperation(response.getMessage(), statusCode, calledApiValue);
+                } catch (Exception e) {
+                    try {
+                        callback.failureOperation(context.getResources().getString(R.string.problem_in_connection_server), statusCode, calledApiValue);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        });
+    }
+
 
     public static void forgetPassword(final Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
         if (!NetworkManager.isNetworkConnected(context)) {
@@ -2200,4 +2384,116 @@ public class NetworkClient {
         }
     }
 
+    //   NetworkClient.deletePromotionHttpClient(getActivity(),StorageHelper.getUserGroup(getActivity(), "auth_token"),jsonArray,this,60);
+    public static void deletePromotionHttpClient(Context context, String auth_token, JSONArray jsonArray, Callback callback, int called_api) throws JSONException {
+        Log.e(TAG, "deletePromotionsHttpClient");
+        jsonArray.put(new JSONObject().put(context.getResources().getString(R.string.time_zone), timeZone));
+        jsonArray.put(new JSONObject().put(context.getResources().getString(R.string.device_language), language));
+        DeleteAsyncTask deleteAsyncTask = new DeleteAsyncTask();
+        ArrayList<String> stringArrayList = new ArrayList<>();
+
+        stringArrayList.add(String.valueOf(jsonArray));  /* data to communicate*/
+        stringArrayList.add(getAbsoluteURL("promotion", context));  /* URL*/
+
+        NetworkClient.context = context;
+        NetworkClient.API_KEY = context.getResources().getString(R.string.api_key);
+        API_KEY_VALUE = context.getResources().getString(R.string.api_key_value);
+        AUTH_TOKEN = context.getResources().getString(R.string.auth_key);
+        AUTH_TOKEN_VALUE = auth_token;
+        NetworkClient.callback = callback;
+        calledAPIValue = called_api;
+
+        deleteAsyncTask.execute(stringArrayList);
+
+
+    }
+
+
+    static class DeleteAsyncTask extends AsyncTask<ArrayList<String>, Void, String> {
+
+        @Override
+        protected String doInBackground(ArrayList<String>... params) {
+            try {
+
+                ArrayList<String> stringArrayList = new ArrayList<>();
+                stringArrayList = params[0];
+                for (String s : stringArrayList) {
+                    Log.e(TAG, "string in doInBackground: " + s);
+                }
+                URL url_http1 = null;
+                if (stringArrayList.size() > 0) {
+                    url_http1 = new URL(stringArrayList.get(1));
+                }
+                if (url_http1 != null) {
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url_http1.openConnection();
+                    //httpURLConnection.setDoOutput(true);
+                    httpURLConnection.setRequestMethod("DELETE");
+                    // httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                    httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+                    if (NetworkClient.API_KEY != null && NetworkClient.API_KEY_VALUE != null) {
+                        httpURLConnection.setRequestProperty(NetworkClient.API_KEY, NetworkClient.API_KEY_VALUE);
+                    }
+                    if (NetworkClient.AUTH_TOKEN != null && NetworkClient.AUTH_TOKEN_VALUE != null) {
+                        httpURLConnection.setRequestProperty(NetworkClient.AUTH_TOKEN, NetworkClient.AUTH_TOKEN_VALUE);
+                    }
+
+                    httpURLConnection.setRequestProperty("DATA", stringArrayList.get(0));
+                    httpURLConnection.connect();
+
+/*
+
+
+                    OutputStream os = httpURLConnection.getOutputStream();
+                    String sending_data_to_server = stringArrayList.get(0);
+
+                    os.write(sending_data_to_server.getBytes());
+                    os.close();
+                    os.flush();
+*/
+
+                    BufferedReader br = new BufferedReader(new InputStreamReader((httpURLConnection.getInputStream())));
+
+
+                    String sr = "";
+                    System.out.println("Output from Server .... \n");
+                    String line = "";
+
+                    while ((line = br.readLine()) != null)
+                        sr += line;
+                                   /* while ((sr = br.readLine()) != null) {
+                                        sr=br.readLine();
+                                        System.out.println("Response:"+sr);
+                                    }*/
+                    Log.e(TAG, "Validation response from server:" + sr);
+                    //Integer ip = Integer.parseInt(sr);
+                    System.out.println("Output from Server \n" + sr);
+                    httpURLConnection.disconnect();
+
+                    return sr;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s != null) {
+
+            } else {
+                Log.e(TAG, "Problem connecting to server!");
+            }
+
+        }
+    }
+
 }
+
+
+

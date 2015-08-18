@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/textView_padding_margin"
+    android:paddingLeft="@dimen/back_margin"
+    android:paddingRight="@dimen/back_margin"
+    android:paddingTop="@dimen/textView_padding_margin">
+
+
+    <com.findmycoach.app.views.ChizzleTextView
+        android:id="@+id/tv_no_promotion_val"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/purple"
+        android:textSize="@dimen/profile_details"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/rlPromotionsDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_no_promotion_val"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/iv_cancel">
+
+        <RelativeLayout
+            android:id="@+id/rlPromotionTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true">
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tv_promotion_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/promotionTitle"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details"
+                android:textStyle="bold"/>
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tv_promotion_title_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_promotion_title"
+                android:layout_centerHorizontal="true"
+                android:paddingLeft="@dimen/back_margin"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rlPromotionType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlPromotionTitle">
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tv_promotion_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/promotionType"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details"
+                android:textStyle="bold" />
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tv_promotion_type_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:paddingLeft="@dimen/back_margin"
+                android:layout_toRightOf="@+id/tv_promotion_type"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlDiscountPercentage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlPromotionType">
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tvDiscountPercentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/discountPercentage"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details"
+                android:textStyle="bold" />
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tvDiscountPercentageVal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tvDiscountPercentage"
+                android:textColor="@color/purple"
+                android:paddingLeft="@dimen/back_margin"
+                android:layout_centerHorizontal="true"
+                android:textSize="@dimen/profile_details" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlFreeClasses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlDiscountPercentage">
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tvFreeClasses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/freeClasses"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details"
+                android:textStyle="bold" />
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tvFreeClassesVal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tvFreeClasses"
+                android:layout_centerHorizontal="true"
+                android:paddingLeft="@dimen/back_margin"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlMandatoryClasses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlFreeClasses">
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tvMandatoryClasses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/mandatoryClasses"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details"
+                android:textStyle="bold" />
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tvMandatoryClassesVal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:paddingLeft="@dimen/back_margin"
+                android:layout_toRightOf="@+id/tvMandatoryClasses"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_cancel"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@null"
+        android:padding="@dimen/textView_padding_margin"
+        android:scaleType="fitCenter"
+        android:src="@drawable/close_icon1" />
+
+
+</RelativeLayout>

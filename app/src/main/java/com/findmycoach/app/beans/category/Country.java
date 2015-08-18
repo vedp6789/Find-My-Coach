@@ -28,6 +28,16 @@ public class Country {
     @Expose
     String currencySymbol;
 
+    String currency_id;
+
+    public String getCurrency_id() {
+        return currency_id;
+    }
+
+    public void setCurrency_id(String currency_id) {
+        this.currency_id = currency_id;
+    }
+
     public String getCurrencySymbol() {
         return currencySymbol;
     }

@@ -14,6 +14,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,6 +38,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -49,6 +52,7 @@ import com.findmycoach.app.adapter.AddressAdapter;
 import com.findmycoach.app.adapter.ExperienceAdapter;
 import com.findmycoach.app.adapter.QualifiedAreaOfCoachingAdapter;
 import com.findmycoach.app.beans.CityDetails;
+import com.findmycoach.app.beans.Price;
 import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
@@ -96,7 +100,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class EditProfileActivityMentor extends Activity implements Callback, AddAddressDialog.AddressAddedListener {
+public class EditProfileActivityMentor extends Activity implements Callback, AddAddressDialog.AddressAddedListener, RadioGroup.OnCheckedChangeListener {
 
     int REQUEST_CODE = 100;
     private ImageView profilePicture;
@@ -149,7 +153,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
     private ArrayList<String> country_names;
     public static int FLAG_FOR_EDIT_PROFILE_MENTOR = -11;
     private ChizzleTextView teachingMediumHeader;
-    private String city_name, state_name;
+    private String city_name, state_name, currency_id, currency_unicode;
     private ArrayList<CityDetails> list_of_city;
     private int country_id, city_id;
     boolean country_update;
@@ -163,7 +167,17 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
     private RelativeLayout multipleAddressLayout;
     private ImageButton deleteLocaleButton;
     private List<String> mediumOfTeaching;
-
+    private RadioGroup radioGroup_class_type, radioGroup_flexibility;
+    private RadioButton rb_individual, rb_group, rb_both_class_type, rb_flexible, rb_not_flexible;
+    private LinearLayout ll_when_flexible, ll_fix_class_duration, ll_individual_pricing, ll_group_pricing, ll_max_hour_a_day;
+    private Spinner sp_minimum_time, sp_time_window, sp_max_hour_of_day, sp_fixed_duration, sp_max_class_in_week;
+    private TextView tv_individual_pricing_text, tv_group_pricing_text, tv_price_currency_individual, tv_price_currency_group;
+    private EditText et_individual_class_price, et_group_class_price;
+    private ArrayList<Integer> min_time_selection, time_variance_window, max_time_selection, fixed_class_duration;
+    private int start_of_min_time, stop_of_min_time;
+    private ArrayAdapter arrayAdapter_max_hour;
+    private int max_hour_from_server;
+    private ArrayList<Price> priceArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -249,216 +263,352 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
 
 
     private void initialize() {
-        list_of_city = new ArrayList<>();
-        mediumOfTeaching = new ArrayList<>();
-        city_with_states = (AutoCompleteTextView) findViewById(R.id.city_with_state);
-        physicalAddress = (EditText) findViewById(R.id.physical_address);
-        city_id_from_suggestion = new ArrayList<Integer>();
-        locale = (AutoCompleteTextView) findViewById(R.id.locale);
-        deleteLocaleButton = (ImageButton) findViewById(R.id.deleteLocaleButtonMentor);
-        city_name = "";
-        country_id = 0;
-        city_id = 0;
-        city_updated = "";
-        userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
-        ageAndExperienceErrorCounter = 0;
-        Log.e(TAG, getIntent().getStringExtra("user_info"));
-        removeProfilePicture = false;
-        profileGender = (Spinner) findViewById(R.id.input_gender);
-        profilePicture = (ImageView) findViewById(R.id.profile_image);
-        profileEmail = (TextView) findViewById(R.id.profile_email);
-        profileFirstName = (EditText) findViewById(R.id.input_first_name);
-        profileLastName = (EditText) findViewById(R.id.input_last_name);
-        profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
-        experienceInput = (TextView) findViewById(R.id.input_experience);
-        teachingPreference = (Spinner) findViewById(R.id.teachingPreferencesSpinner);
-        summaryHeader = (RelativeLayout) findViewById(R.id.summaryHeader);
-        scrollView = (ScrollView) findViewById(R.id.main_scroll_view);
-        summaryDetailsLayout = (LinearLayout) findViewById(R.id.summaryDetailsLayout);
-        students_preference = (TextView) findViewById(R.id.students_preference);
-        teachingMediumPreference = (ChizzleTextView) findViewById(R.id.teaching_medium_preference);
-        arrow = (ImageButton) findViewById(R.id.arrow);
-        multipleAddressMentor = (CheckBox) findViewById(R.id.inputMutipleAddressesMentor);
-        myQualification = (ChizzleEditText) findViewById(R.id.myQualification);
-        myAccredition = (ChizzleEditText) findViewById(R.id.myAccreditions);
-        myExperience = (ChizzleEditText) findViewById(R.id.myExperience);
-        myTeachingMethodology = (ChizzleEditText) findViewById(R.id.myTeachingMethodology);
-        myAwards = (ChizzleEditText) findViewById(R.id.myAwards);
-        myQualificationLimit = (ChizzleTextView) findViewById(R.id.myQualificationLimit);
-        myAccreditionLimit = (ChizzleTextView) findViewById(R.id.myAccreditionsLimit);
-        myExperienceLimit = (ChizzleTextView) findViewById(R.id.myExperienceLimit);
-        myTeachingMethodologyLimit = (ChizzleTextView) findViewById(R.id.myTeachingMethodologyLimit);
-        myAwardsLimit = (ChizzleTextView) findViewById(R.id.myAwardsLimit);
-        addMoreAddress = (Button) findViewById(R.id.addAddressMentor);
-        addressListViewMentor = (ListView) findViewById(R.id.addressesListViewMentor);
-        addressArrayListMentor = new ArrayList<>();
-        addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayListMentor, addressListViewMentor, false);
-        addressListViewMentor.setAdapter(addressAdapter);
-        teachingMediumHeader = (ChizzleTextView) findViewById(R.id.teachingMediumPreferenceHeader);
-        profileCountry = (Spinner) findViewById(R.id.country);
-        country_names = new ArrayList<String>();
-        countries = new ArrayList<Country>();
-        countryConfigArrayList = new ArrayList<>();
-        countryConditionLayout = (RelativeLayout) findViewById(R.id.countryConditionLayout);
-        countries = MetaData.getCountryObject(this);
-        checkBoxCountryConditionText = (ChizzleTextView) findViewById(R.id.checkBoxCountryCondition);
-        countryConditionCheckBox = (CheckBox) findViewById(R.id.inputCountryCondition);
-        ll_physical_address = (RelativeLayout) findViewById(R.id.ll_physical_address);
-        multipleAddressLayout = (RelativeLayout) findViewById(R.id.mutipleAddressCheckBoxLayout);
-        llCity = (LinearLayout) findViewById(R.id.llCity);
+        try {
+            priceArrayList = new ArrayList<>();
+            list_of_city = new ArrayList<>();
+            mediumOfTeaching = new ArrayList<>();
+            city_with_states = (AutoCompleteTextView) findViewById(R.id.city_with_state);
+            physicalAddress = (EditText) findViewById(R.id.physical_address);
+            city_id_from_suggestion = new ArrayList<Integer>();
+            locale = (AutoCompleteTextView) findViewById(R.id.locale);
+            deleteLocaleButton = (ImageButton) findViewById(R.id.deleteLocaleButtonMentor);
+            max_hour_from_server = -1;
+            city_name = "";
+            country_id = 0;
+            city_id = 0;
+            city_updated = "";
+            userInfo = new Gson().fromJson(getIntent().getStringExtra("user_info"), Data.class);
+            ageAndExperienceErrorCounter = 0;
+            Log.e(TAG, getIntent().getStringExtra("user_info"));
+            removeProfilePicture = false;
+            profileGender = (Spinner) findViewById(R.id.input_gender);
+            profilePicture = (ImageView) findViewById(R.id.profile_image);
+            profileEmail = (TextView) findViewById(R.id.profile_email);
+            profileFirstName = (EditText) findViewById(R.id.input_first_name);
+            profileLastName = (EditText) findViewById(R.id.input_last_name);
+            profileDOB = (TextView) findViewById(R.id.input_date_of_birth);
+            experienceInput = (TextView) findViewById(R.id.input_experience);
+            teachingPreference = (Spinner) findViewById(R.id.teachingPreferencesSpinner);
+            summaryHeader = (RelativeLayout) findViewById(R.id.summaryHeader);
+            scrollView = (ScrollView) findViewById(R.id.main_scroll_view);
+            summaryDetailsLayout = (LinearLayout) findViewById(R.id.summaryDetailsLayout);
+            students_preference = (TextView) findViewById(R.id.students_preference);
+            teachingMediumPreference = (ChizzleTextView) findViewById(R.id.teaching_medium_preference);
+            arrow = (ImageButton) findViewById(R.id.arrow);
+            multipleAddressMentor = (CheckBox) findViewById(R.id.inputMutipleAddressesMentor);
+            myQualification = (ChizzleEditText) findViewById(R.id.myQualification);
+            myAccredition = (ChizzleEditText) findViewById(R.id.myAccreditions);
+            myExperience = (ChizzleEditText) findViewById(R.id.myExperience);
+            myTeachingMethodology = (ChizzleEditText) findViewById(R.id.myTeachingMethodology);
+            myAwards = (ChizzleEditText) findViewById(R.id.myAwards);
+            myQualificationLimit = (ChizzleTextView) findViewById(R.id.myQualificationLimit);
+            myAccreditionLimit = (ChizzleTextView) findViewById(R.id.myAccreditionsLimit);
+            myExperienceLimit = (ChizzleTextView) findViewById(R.id.myExperienceLimit);
+            myTeachingMethodologyLimit = (ChizzleTextView) findViewById(R.id.myTeachingMethodologyLimit);
+            myAwardsLimit = (ChizzleTextView) findViewById(R.id.myAwardsLimit);
+            addMoreAddress = (Button) findViewById(R.id.addAddressMentor);
+            addressListViewMentor = (ListView) findViewById(R.id.addressesListViewMentor);
+            addressArrayListMentor = new ArrayList<>();
+            addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayListMentor, addressListViewMentor, false);
+            addressListViewMentor.setAdapter(addressAdapter);
+            teachingMediumHeader = (ChizzleTextView) findViewById(R.id.teachingMediumPreferenceHeader);
+            profileCountry = (Spinner) findViewById(R.id.country);
+            country_names = new ArrayList<String>();
+            countries = new ArrayList<Country>();
+            countryConfigArrayList = new ArrayList<>();
+            countryConditionLayout = (RelativeLayout) findViewById(R.id.countryConditionLayout);
+            countries = MetaData.getCountryObject(this);
+            checkBoxCountryConditionText = (ChizzleTextView) findViewById(R.id.checkBoxCountryCondition);
+            countryConditionCheckBox = (CheckBox) findViewById(R.id.inputCountryCondition);
+            ll_physical_address = (RelativeLayout) findViewById(R.id.ll_physical_address);
+            multipleAddressLayout = (RelativeLayout) findViewById(R.id.mutipleAddressCheckBoxLayout);
+            llCity = (LinearLayout) findViewById(R.id.llCity);
 
-        profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    if (countries != null && countries.size() > 0) {
-                        country_id = countries.get(position - 1).getId();
-                        RequestParams requestParams = new RequestParams();
-                        requestParams.add("country_id", String.valueOf(country_id));
-                        Log.e(TAG, "country_id: " + country_id);
-                        NetworkClient.cities(EditProfileActivityMentor.this, requestParams, EditProfileActivityMentor.this, 54);
-                    }
+            radioGroup_class_type = (RadioGroup) findViewById(R.id.radioGroupClassType);
+            radioGroup_flexibility = (RadioGroup) findViewById(R.id.radioGroupClassFlexibility);
+            rb_individual = (RadioButton) findViewById(R.id.radio_button_individual);
+            rb_group = (RadioButton) findViewById(R.id.radio_button_group);
+            rb_both_class_type = (RadioButton) findViewById(R.id.radio_button_both_class);
+            rb_flexible = (RadioButton) findViewById(R.id.radio_button_flexible);
+            rb_not_flexible = (RadioButton) findViewById(R.id.radio_button_not_flexible);
+            ll_when_flexible = (LinearLayout) findViewById(R.id.ll_when_flexible);
+            ll_fix_class_duration = (LinearLayout) findViewById(R.id.ll_fix_class_duration);
+            ll_individual_pricing = (LinearLayout) findViewById(R.id.ll_individual_pricing);
+            ll_group_pricing = (LinearLayout) findViewById(R.id.ll_group_pricing);
+            ll_max_hour_a_day = (LinearLayout) findViewById(R.id.ll_max_hour_a_day);
+            sp_minimum_time = (Spinner) findViewById(R.id.sp_min_time_duration);
+            sp_time_window = (Spinner) findViewById(R.id.sp_class_variance);
+            sp_max_hour_of_day = (Spinner) findViewById(R.id.sp_max_hour_in_a_day);
+            sp_fixed_duration = (Spinner) findViewById(R.id.sp_fixed_class_duration);
+            sp_max_class_in_week = (Spinner) findViewById(R.id.sp_max_class_week);
+            tv_individual_pricing_text = (TextView) findViewById(R.id.tv_pricing_individual);
+            tv_group_pricing_text = (TextView) findViewById(R.id.tv_pricing_group);
+            tv_price_currency_individual = (TextView) findViewById(R.id.tv_individual_price_and_currency_suggestion);
+            tv_price_currency_group = (TextView) findViewById(R.id.tv_group_price_and_currency_suggestion);
+            et_individual_class_price = (EditText) findViewById(R.id.et_price_individual);
+            et_group_class_price = (EditText) findViewById(R.id.et_price_group);
 
-                    if (NetworkManager.isNetworkConnected(EditProfileActivityMentor.this)) {
-                        RequestParams requestParams = new RequestParams();
-                        requestParams.add("country_id", String.valueOf(countries.get(position - 1).getId()));
-                        NetworkClient.getCountryConfig(EditProfileActivityMentor.this, requestParams, StorageHelper.getUserDetails(EditProfileActivityMentor.this, "auth_token"), EditProfileActivityMentor.this, 55);
-                    } else
-                        Toast.makeText(EditProfileActivityMentor.this, EditProfileActivityMentor.this.getString(R.string.check_network_connection), Toast.LENGTH_LONG).show();
+            radioGroup_class_type.setOnCheckedChangeListener(this);
+            radioGroup_flexibility.setOnCheckedChangeListener(this);
+
+            start_of_min_time = getResources().getInteger(R.integer.start_time);
+            stop_of_min_time = getResources().getInteger(R.integer.stop_time);
+            min_time_selection = new ArrayList<>();
+            min_time_selection.clear();
+            int start_time = start_of_min_time;
+            while (start_time <= stop_of_min_time) {
+                min_time_selection.add(start_time);
+                start_time += 15;
+            }
+
+            time_variance_window = new ArrayList<>();
+            int max_time_variance_window = getResources().getInteger(R.integer.maximum_time_window);
+            int start_time_window = start_of_min_time;
+            while (start_time_window <= max_time_variance_window) {
+                time_variance_window.add(start_time_window);
+                start_time_window += 15;
+            }
+            sp_minimum_time.setAdapter(new ArrayAdapter<Integer>(this, R.layout.textview, min_time_selection));
+            sp_time_window.setAdapter(new ArrayAdapter<Integer>(this, R.layout.textview, time_variance_window));
+
+
+            max_time_selection = new ArrayList<>();
+            max_time_selection.clear();
+            if ((Integer) sp_minimum_time.getSelectedItem() == 15 && (Integer) sp_time_window.getSelectedItem() == 15) {
+                int start_of_maximum_time_selection = (Integer) sp_minimum_time.getSelectedItem() + (Integer) sp_time_window.getSelectedItem();
+                int stop_of_max_time_selection = (Integer) sp_minimum_time.getSelectedItem() + getResources().getInteger(R.integer.maximum_hour_of_class_in_a_day);
+
+                while (start_of_maximum_time_selection <= stop_of_max_time_selection) {
+                    max_time_selection.add(start_of_maximum_time_selection);
+                    start_of_maximum_time_selection += (Integer) sp_time_window.getSelectedItem();
+                }
+
+            }
+            arrayAdapter_max_hour = new ArrayAdapter<Integer>(this, R.layout.textview, max_time_selection);
+            sp_max_hour_of_day.setAdapter(arrayAdapter_max_hour);
+
+            fixed_class_duration = new ArrayList<>();
+            int fixed_min_class = getResources().getInteger(R.integer.fixed_duration_minimum_class);
+            int fixed_max_class = getResources().getInteger(R.integer.fixed_duration_max_time);
+            while (fixed_min_class <= fixed_max_class) {
+                fixed_class_duration.add(fixed_min_class);
+                fixed_min_class += 15;
+            }
+            sp_fixed_duration.setAdapter(new ArrayAdapter<Integer>(this, R.layout.textview, fixed_class_duration));
+
+            sp_max_class_in_week.setAdapter(new ArrayAdapter<>(this, R.layout.textview, getResources().getStringArray(R.array.max_number_of_classes_week)));
+
+            sp_minimum_time.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    updateMaxHourSpinner();
+
                 }
 
 
-            }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        country_names.add(getResources().getString(R.string.select));
-        if (countries != null && countries.size() > 0) {
-            for (int i = 0; i < countries.size(); i++) {
-                Country country = countries.get(i);
-                country_names.add(country.getShortName());
-            }
-
-            profileCountry.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, country_names));
-        }
-
-        String[] yearOfExperience = new String[51];
-        for (int i = 0; i < yearOfExperience.length; i++) {
-            yearOfExperience[i] = String.valueOf(i);
-        }
-
-        deleteLocaleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                locale.setText("");
-            }
-        });
-
-
-        multipleAddressMentor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    addMoreAddress.setVisibility(View.VISIBLE);
-                    addressListViewMentor.setVisibility(View.VISIBLE);
-                } else {
-                    addressListViewMentor.setVisibility(View.GONE);
-                    addMoreAddress.setVisibility(View.GONE);
                 }
-            }
-        });
+            });
+            sp_time_window.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    updateMaxHourSpinner();
+                }
 
-        addMoreAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e(TAG, "country_id, :" + country_id + " city: " + city_with_states.getText().toString().trim() + "locale: " + locale.getText().toString().trim());
-                if (country_id != 0 && !city_with_states.getText().toString().trim().isEmpty() && !locale.getText().toString().trim().isEmpty()) {
-                    Log.e(TAG, "country_id, :" + country_id + " city: " + city_with_states.getText().toString() + "locale: " + locale.getText().toString().trim());
-                    AddAddressDialog dialog = new AddAddressDialog(EditProfileActivityMentor.this);
-                    dialog.setAddressAddedListener(EditProfileActivityMentor.this);
-                    dialog.showPopUp();
-                } else {
-                    //Toast.makeText(EditProfileActivityMentor.this,getResources().getString(R.string.))
-                    if (country_id == 0) {
-                        TextView errorText = (TextView) profileCountry.getSelectedView();
-                        errorText.setError(getResources().getString(R.string.error_not_selected));
-                        errorText.setTextColor(Color.RED);//just to highlight that this is an error
-                    }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-                    if (city_with_states.getText().toString().trim().equals("")) {
-                        city_with_states.setError(getResources().getString(R.string.enter_city));
-                        city_with_states.requestFocus();
-                    }
+                }
 
-                    if (locale.getText().toString().trim().equals("")) {
-                        locale.setError(getResources().getString(R.string.enter_locale));
-                        locale.requestFocus();
+
+            });
+
+
+            profileCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    if (position != 0) {
+                        if (countries != null && countries.size() > 0) {
+                            country_id = countries.get(position - 1).getId();
+                            currency_id = countries.get(position - 1).getCurrency_id();
+                            currency_unicode = countries.get(position - 1).getCurrencySymbol();
+
+                            tv_price_currency_individual.setText(getResources().getString(R.string.price) + " " + Html.fromHtml(currency_unicode));
+                            tv_price_currency_group.setText(getResources().getString(R.string.price) + " " + Html.fromHtml(currency_unicode));
+
+                            RequestParams requestParams = new RequestParams();
+                            requestParams.add("country_id", String.valueOf(country_id));
+                            Log.e(TAG, "country_id: " + country_id);
+                            NetworkClient.cities(EditProfileActivityMentor.this, requestParams, EditProfileActivityMentor.this, 54);
+                        }
+
+                        if (NetworkManager.isNetworkConnected(EditProfileActivityMentor.this)) {
+                            RequestParams requestParams = new RequestParams();
+                            requestParams.add("country_id", String.valueOf(countries.get(position - 1).getId()));
+                            NetworkClient.getCountryConfig(EditProfileActivityMentor.this, requestParams, StorageHelper.getUserDetails(EditProfileActivityMentor.this, "auth_token"), EditProfileActivityMentor.this, 55);
+                        } else
+                            Toast.makeText(EditProfileActivityMentor.this, EditProfileActivityMentor.this.getString(R.string.check_network_connection), Toast.LENGTH_LONG).show();
                     }
                 }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+
+            country_names.add(getResources().getString(R.string.select));
+            if (countries != null && countries.size() > 0) {
+                for (int i = 0; i < countries.size(); i++) {
+                    Country country = countries.get(i);
+                    country_names.add(country.getShortName());
+                }
+
+                profileCountry.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, country_names));
             }
-        });
 
-        String[] preferences = getResources().getStringArray(R.array.teaching_preferences);
-        String[] classType = getResources().getStringArray(R.array.mentor_class_type);
-
-        addPhoto = (ChizzleTextView) findViewById(R.id.addPhotoMentor);
-        teachingPreference.setAdapter(new ArrayAdapter<>(this, R.layout.textview, preferences));
-        updateAction = (Button) findViewById(R.id.button_update);
-        areaOfCoaching = (TextView) findViewById(R.id.input_areas_of_coaching);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getResources().getString(R.string.please_wait));
-
-        profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
-
-        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
+            String[] yearOfExperience = new String[51];
+            for (int i = 0; i < yearOfExperience.length; i++) {
+                yearOfExperience[i] = String.valueOf(i);
             }
-        });
 
-        TextView title = (TextView) findViewById(R.id.title);
-        title.setText(getResources().getString(R.string.title_edit_profile_menu));
+            deleteLocaleButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    locale.setText("");
+                }
+            });
 
 
-        profileDOB.setOnFocusChangeListener(onFocusChangeListener);
-        profileDOB.setOnTouchListener(onTouchListener);
-        areaOfCoaching.setOnFocusChangeListener(onFocusChangeListener);
-        areaOfCoaching.setOnTouchListener(onTouchListener);
+            multipleAddressMentor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        addMoreAddress.setVisibility(View.VISIBLE);
+                        addressListViewMentor.setVisibility(View.VISIBLE);
+                    } else {
+                        addressListViewMentor.setVisibility(View.GONE);
+                        addMoreAddress.setVisibility(View.GONE);
+                    }
+                }
+            });
 
-        o = userInfo.getAgeGroupPreferences();
+            addMoreAddress.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e(TAG, "country_id, :" + country_id + " city: " + city_with_states.getText().toString().trim() + "locale: " + locale.getText().toString().trim());
+                    if (country_id != 0 && !city_with_states.getText().toString().trim().isEmpty() && !locale.getText().toString().trim().isEmpty()) {
+                        Log.e(TAG, "country_id, :" + country_id + " city: " + city_with_states.getText().toString() + "locale: " + locale.getText().toString().trim());
+                        AddAddressDialog dialog = new AddAddressDialog(EditProfileActivityMentor.this);
+                        dialog.setAddressAddedListener(EditProfileActivityMentor.this);
+                        dialog.showPopUp();
+                    } else {
+                        //Toast.makeText(EditProfileActivityMentor.this,getResources().getString(R.string.))
+                        if (country_id == 0) {
+                            TextView errorText = (TextView) profileCountry.getSelectedView();
+                            errorText.setError(getResources().getString(R.string.error_not_selected));
+                            errorText.setTextColor(Color.RED);//just to highlight that this is an error
+                        }
 
-        arrayList = new ArrayList<Integer>();
-        if (o != null && !o.trim().equals("")) {
-            String array_of_id[] = o.split(",");
-            for (String id : array_of_id) {
-                arrayList.add((Integer.parseInt(id)));
+                        if (city_with_states.getText().toString().trim().equals("")) {
+                            city_with_states.setError(getResources().getString(R.string.enter_city));
+                            city_with_states.requestFocus();
+                        }
+
+                        if (locale.getText().toString().trim().equals("")) {
+                            locale.setError(getResources().getString(R.string.enter_locale));
+                            locale.requestFocus();
+                        }
+                    }
+                }
+            });
+
+            String[] preferences = getResources().getStringArray(R.array.teaching_preferences);
+            String[] classType = getResources().getStringArray(R.array.mentor_class_type);
+
+            addPhoto = (ChizzleTextView) findViewById(R.id.addPhotoMentor);
+            teachingPreference.setAdapter(new ArrayAdapter<>(this, R.layout.textview, preferences));
+            updateAction = (Button) findViewById(R.id.button_update);
+            areaOfCoaching = (TextView) findViewById(R.id.input_areas_of_coaching);
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage(getResources().getString(R.string.please_wait));
+
+            profileGender.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, getResources().getStringArray(R.array.gender)));
+
+            findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+
+            TextView title = (TextView) findViewById(R.id.title);
+            title.setText(getResources().getString(R.string.title_edit_profile_menu));
+
+
+            profileDOB.setOnFocusChangeListener(onFocusChangeListener);
+            profileDOB.setOnTouchListener(onTouchListener);
+            areaOfCoaching.setOnFocusChangeListener(onFocusChangeListener);
+            areaOfCoaching.setOnTouchListener(onTouchListener);
+
+            o = userInfo.getAgeGroupPreferences();
+
+            arrayList = new ArrayList<Integer>();
+            if (o != null && !o.trim().equals("")) {
+                String array_of_id[] = o.split(",");
+                for (String id : array_of_id) {
+                    arrayList.add((Integer.parseInt(id)));
+                }
             }
+            populateSubjectPreference(arrayList, userInfo.getAllAgeGroupPreferences());
+
+
+            findViewById(R.id.dobInfo).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast toast = Toast.makeText(EditProfileActivityMentor.this,
+                            getResources().getText(R.string.dob_info_mentor), Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 0);
+                    toast.show();
+                }
+            });
+
+            findViewById(R.id.physicalAddressInfo).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(EditProfileActivityMentor.this,
+                            getResources().getText(R.string.physical_address_mentor_info), Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        populateSubjectPreference(arrayList, userInfo.getAllAgeGroupPreferences());
+
+    }
+
+    private void updateMaxHourSpinner() {
+
+        max_time_selection.clear();
+        int start_of_maximum_time_selection = (Integer) sp_minimum_time.getSelectedItem() + (Integer) sp_time_window.getSelectedItem();
+        int stop_of_max_time_selection = (Integer) sp_minimum_time.getSelectedItem() + getResources().getInteger(R.integer.maximum_hour_of_class_in_a_day);
+
+        while (start_of_maximum_time_selection <= stop_of_max_time_selection) {
+            max_time_selection.add(start_of_maximum_time_selection);
+            start_of_maximum_time_selection += (Integer) sp_time_window.getSelectedItem();
+        }
+        arrayAdapter_max_hour.notifyDataSetChanged();
 
 
-        findViewById(R.id.dobInfo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast toast = Toast.makeText(EditProfileActivityMentor.this,
-                        getResources().getText(R.string.dob_info_mentor), Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 0);
-                toast.show();
-            }
-        });
+        if (max_hour_from_server > 0) {
 
-        findViewById(R.id.physicalAddressInfo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(EditProfileActivityMentor.this,
-                        getResources().getText(R.string.physical_address_mentor_info), Toast.LENGTH_LONG).show();
-            }
-        });
+            if (max_time_selection.contains(max_hour_from_server))
+                sp_max_hour_of_day.setSelection(max_time_selection.indexOf(max_hour_from_server));
+            max_hour_from_server = -1;
+        }
 
     }
 
@@ -961,8 +1111,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
                 }
 
                 try {
-                    if(address.getStateName()!=null && !address.getStateName().isEmpty())
-                        city_with_states.setText(address.getCityName()+" ("+address.getStateName()+")");
+                    if (address.getStateName() != null && !address.getStateName().isEmpty())
+                        city_with_states.setText(address.getCityName() + " (" + address.getStateName() + ")");
                     else {
                         city_with_states.setText(address.getCityName());
                     }
@@ -970,7 +1120,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
                 }
                 try {
                     city_id = address.getCity_id();
-                    
+
                 } catch (Exception ignored) {
                 }
 
@@ -992,6 +1142,69 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
                     addressListViewMentor.setVisibility(View.VISIBLE);
                     addMoreAddress.setVisibility(View.VISIBLE);
                 }
+
+                try {
+
+                    if (Integer.parseInt(userInfo.getSlotType()) >= 0) {
+                        ((RadioButton) radioGroup_class_type.getChildAt(Integer.parseInt(userInfo.getSlotType()))).setChecked(true);
+                    }
+
+                    if (userInfo.getFlexible_yn() >= 0) {
+                        ((RadioButton) radioGroup_flexibility.getChildAt(userInfo.getFlexible_yn())).setChecked(true);
+
+                    }
+
+                    if (userInfo.getFlexible_yn() >= 0 && userInfo.getFlexible_yn() == 0) {
+                        sp_fixed_duration.setSelection(fixed_class_duration.indexOf(userInfo.getFixed_class_duration()));
+
+                    } else {
+
+                        if (userInfo.getMax_class_duration() > 0)
+                            max_hour_from_server = userInfo.getMax_class_duration();
+
+                        if (userInfo.getMin_class_duration() > 0) {
+                            sp_minimum_time.setSelection(min_time_selection.indexOf(userInfo.getMin_class_duration()));
+                        }
+
+
+                        if (userInfo.getFlexibility_window() > 0) {
+                            sp_time_window.setSelection(time_variance_window.indexOf(userInfo.getFlexibility_window()));
+                        }
+                    }
+
+                    Log.e(TAG, "max class week" + userInfo.getMax_classes_per_week());
+                    String[] array_of_max_classes_in_week = getResources().getStringArray(R.array.max_number_of_classes_week);
+                    int index = -1;
+                    for (int y = 0; y < array_of_max_classes_in_week.length; y++) {
+                        if (Integer.parseInt(array_of_max_classes_in_week[y]) == userInfo.getMax_classes_per_week()) {
+                            index = y;
+                        }
+                    }
+                    if (index >= 0)
+                        sp_max_class_in_week.setSelection(index);
+
+                    priceArrayList = (ArrayList<Price>) userInfo.getPrices();
+                    Log.e(TAG, "price size: " + priceArrayList.size());
+                    if (priceArrayList.size() > 0) {
+                        for (int i = 0; i < priceArrayList.size(); i++) {
+                            Price price = priceArrayList.get(i);
+                            String type = price.getType();
+                            if (type.equals("group")) {
+                                et_group_class_price.setText("" + price.getPrice());
+                            } else {
+                                if (type.equals("individual")) {
+                                    et_individual_class_price.setText("" + price.getPrice());
+                                }
+                            }
+                        }
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
             }
 
 
@@ -1111,6 +1324,14 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
 
         }
 
+        if (profileCountry.getSelectedItemPosition() == 0) {
+            TextView errorText = (TextView) profileCountry.getSelectedView();
+            errorText.setError(getResources().getString(R.string.error_not_selected));
+            errorText.setTextColor(Color.RED);//just to highlight that this is an error
+            isValid = false;
+
+        }
+
         if (city_id == 0) {
             city_with_states.setError(getResources().getString(R.string.enter_city_from_suggestion));
             if (city_with_states.hasFocus()) {
@@ -1198,6 +1419,49 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
             if (isValid)
                 areaOfCoaching.requestFocus();
             isValid = false;
+        }
+
+        if (students_preference.getText().toString().trim().equals(getResources().getString(R.string.select))) {
+            showErrorMessage(students_preference, getResources().getString(R.string.error_field_required));
+            if (isValid) {
+                students_preference.requestFocus();
+            }
+            isValid = false;
+        }
+
+
+        if (rb_both_class_type.isChecked()) {
+            if (et_individual_class_price.getText().toString().trim().isEmpty()) {
+                showErrorMessage(et_individual_class_price, getResources().getString(R.string.error_field_required));
+                if (isValid) {
+                    et_individual_class_price.requestFocus();
+                }
+                isValid = false;
+            }
+            if (et_group_class_price.getText().toString().trim().isEmpty()) {
+                showErrorMessage(et_group_class_price, getResources().getString(R.string.error_field_required));
+                if (isValid) {
+                    et_group_class_price.requestFocus();
+                }
+                isValid = false;
+            }
+
+        } else if (rb_individual.isChecked()) {
+            if (et_individual_class_price.getText().toString().trim().isEmpty()) {
+                showErrorMessage(et_individual_class_price, getResources().getString(R.string.error_field_required));
+                if (isValid) {
+                    et_individual_class_price.requestFocus();
+                }
+                isValid = false;
+            }
+        } else if (rb_group.isChecked()) {
+            if (et_group_class_price.getText().toString().trim().isEmpty()) {
+                showErrorMessage(et_group_class_price, getResources().getString(R.string.error_field_required));
+                if (isValid) {
+                    et_group_class_price.requestFocus();
+                }
+                isValid = false;
+            }
         }
 
 
@@ -1414,11 +1678,82 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
             requestParams.add("section_3", myExperience.getText().toString());
             requestParams.add("section_4", myTeachingMethodology.getText().toString());
             requestParams.add("section_5", myAwards.getText().toString());
-            Log.e(TAG, "request params: " + requestParams.toString());
             try {
                 requestParams.add("country", String.valueOf(countries.get(profileCountry.getSelectedItemPosition() - 1).getId()));
             } catch (Exception ignored) {
+
             }
+            int selected_class_type = radioGroup_class_type.indexOfChild(findViewById(radioGroup_class_type.getCheckedRadioButtonId()));
+            requestParams.add("slot_type", String.valueOf(selected_class_type));
+
+            int flexible_yn = radioGroup_flexibility.indexOfChild(findViewById(radioGroup_flexibility.getCheckedRadioButtonId()));
+            requestParams.add("flexible_yn", String.valueOf(flexible_yn));
+
+
+            String unit = null;
+            if (flexible_yn == 0) {
+                requestParams.add("fixed_class_duration", String.valueOf(sp_fixed_duration.getSelectedItem()));
+                unit = "class";
+            } else if (flexible_yn == 1) {
+                requestParams.add("min_class_duration", String.valueOf(sp_minimum_time.getSelectedItem()));
+                requestParams.add("flexibility_window", String.valueOf(sp_time_window.getSelectedItem()));
+                requestParams.add("max_class_duration", String.valueOf(sp_max_hour_of_day.getSelectedItem()));
+                unit = "hour";
+
+            }
+
+            requestParams.add("max_classes_per_week", String.valueOf(sp_max_class_in_week.getSelectedItem()));
+
+            JSONArray jsonArray_prices = new JSONArray();
+            if (selected_class_type == 0) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("price", Integer.parseInt(et_individual_class_price.getText().toString()));
+                if (unit != null)
+                    jsonObject.put("unit", unit);
+                Log.e(TAG, "currency_id: " + currency_id);
+                jsonObject.put("currency_id", currency_id);
+                jsonObject.put("type", "individual");
+                jsonArray_prices.put(jsonObject);
+            } else if (selected_class_type == 1) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("price", Integer.parseInt(et_group_class_price.getText().toString()));
+                if (unit != null)
+                    jsonObject.put("unit", unit);
+                jsonObject.put("currency_id", currency_id);
+                jsonObject.put("type", "group");
+                jsonArray_prices.put(jsonObject);
+            } else if (selected_class_type == 2) {
+                JSONObject jsonObject1 = new JSONObject();
+                jsonObject1.put("price", Integer.parseInt(et_individual_class_price.getText().toString()));
+                if (unit != null)
+                    jsonObject1.put("unit", unit);
+                jsonObject1.put("currency_id", currency_id);
+                jsonObject1.put("type", "individual");
+                jsonArray_prices.put(jsonObject1);
+
+                JSONObject jsonObject2 = new JSONObject();
+                jsonObject2.put("price", Integer.parseInt(et_group_class_price.getText().toString()));
+                if (unit != null)
+                    jsonObject2.put("unit", unit);
+                jsonObject2.put("currency_id", currency_id);
+                jsonObject2.put("type", "group");
+                jsonArray_prices.put(jsonObject2);
+            }
+
+            requestParams.add("prices", jsonArray_prices.toString());
+
+
+/*
+if(rb_individual.isChecked())
+            requestParams.add("slot_type","0");
+            else if(rb_group.isChecked())
+    requestParams.add("slot_type","1");
+            else if(rb_both_class_type.isChecked())
+    requestParams.add("slot_type","2");
+*/
+
+            Log.e(TAG, "request params: " + requestParams.toString());
+
             NetworkClient.updateProfile(this, requestParams, authToken, this, 4);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1844,6 +2179,74 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
         listView.requestLayout();
+    }
+
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        if (group == radioGroup_class_type) {
+
+            switch (checkedId) {
+                case R.id.radio_button_individual:
+                    ll_group_pricing.setVisibility(View.GONE);
+                    ll_individual_pricing.setVisibility(View.VISIBLE);
+                    if (rb_flexible.isChecked()) {
+                        tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_individual));
+                    } else {
+                        tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_class_individual));
+                    }
+                    break;
+                case R.id.radio_button_group:
+                    ll_individual_pricing.setVisibility(View.GONE);
+                    ll_group_pricing.setVisibility(View.VISIBLE);
+                    if (rb_flexible.isChecked()) {
+                        tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_group));
+                    } else {
+                        tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_class_group));
+                    }
+                    break;
+                case R.id.radio_button_both_class:
+                    ll_individual_pricing.setVisibility(View.VISIBLE);
+                    ll_group_pricing.setVisibility(View.VISIBLE);
+                    if (rb_flexible.isChecked()) {
+                        tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_individual));
+                        tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_group));
+                    } else {
+                        tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_class_individual));
+                        tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_class_group));
+                    }
+                    break;
+            }
+        } else if (group == radioGroup_flexibility) {
+            switch (checkedId) {
+                case R.id.radio_button_flexible:
+                    ll_fix_class_duration.setVisibility(View.GONE);
+                    ll_when_flexible.setVisibility(View.VISIBLE);
+                    if (rb_individual.isChecked()) {
+                        tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_individual));
+                    } else if (rb_group.isChecked()) {
+                        tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_group));
+                    } else if (rb_both_class_type.isChecked()) {
+                        tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_individual));
+                        tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_group));
+                    }
+                    break;
+                case R.id.radio_button_not_flexible:
+                    ll_when_flexible.setVisibility(View.GONE);
+                    ll_fix_class_duration.setVisibility(View.VISIBLE);
+                    if (rb_individual.isChecked()) {
+                        tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_class_individual));
+                    } else if (rb_group.isChecked()) {
+                        tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_class_group));
+                    } else if (rb_both_class_type.isChecked()) {
+                        tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_class_individual));
+                        tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_class_group));
+                    }
+                    break;
+            }
+        }
+
+
     }
 
 

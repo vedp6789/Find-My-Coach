@@ -91,6 +91,7 @@
         <item>12 PM</item>
     </string-array>
 
+
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end of String array block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~String block~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
@@ -369,6 +370,11 @@
     <!-- Strings related to login -->
 
     <!-- String s related to Prompting -->
+    <string name="promotionTitle">Promotion title</string>
+    <string name="promotionType">Promotion type</string>
+    <string name="discountPercentage">Discount percentage</string>
+    <string name="freeClasses">Free classes</string>
+    <string name="mandatoryClasses">Mandatory classes</string>
     <string name="prompt_email">User Id</string>
     <string name="prompt_update_profile">Please update your profile</string>
     <string name="prompt_enter_phone">Enter phone number</string>
@@ -528,6 +534,11 @@
         <item>Schedules</item>
     </string-array>
 
+    <string-array name="promotions_pager_titles">
+        <item>Active</item>
+        <item>Inactive</item>
+    </string-array>
+
     <!-- String s related to Actions -->
     <string name="action_sign_in">Login</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -577,6 +588,8 @@
     <string name="beginner">Beginner</string>
     <string name="intermediate">Intermediate</string>
     <string name="advance">Advance</string>
+    <string name="discount_type_promotion">Discount</string>
+    <string name="free_classes_promotion">Free class</string>
 
 
     <!-- Actions -->
@@ -693,6 +706,7 @@
     <string name="phone_number">phone_number</string>
     <string name="reg_id_saved_to_server">reg_id_saved</string>
     <string name="new_user">new_user</string>
+    <string name="my_promotions">My promotions</string>
     <!-- -->
 
 
@@ -765,6 +779,41 @@
         <item>Mentor Location or Institute</item>
         <item>Either</item>
     </string-array>
+    <string name="title_activity_my_promotions">MyPromotions</string>
+    <string name="no_active_promotions">No active promotions!</string>
+    <string name="no_inactive_promotions">No inactive promotions!</string>
+    <string name="add_promotion">Add</string>
+    <string name="create_promotion">Add new promotion</string>
+    <string name="noOfMandatoryClasses">No. of mandatory classes</string>
+    <string name="noOfFreeClasses">No. of free classes</string>
+    <string name="add_promotion_title">Add promotion title!</string>
+    <string name="add_dicount_percentage">Add discount percentage!</string>
+    <string name="add_free_classes">Add number of free class you will provide to mentee!</string>
+    <string name="add_mandatory_classes">Add number of mandatory classes for mentee!</string>
+    <string name="promotion">Promotion</string>
+    <string name="either_inactivate_or_delete">You can either delete or make your promotion inactive!</string>
+    <string name="inactivate">Make it inactive</string>
+    <string name="either_activate_or_delete">You can either delete or make your promotion active!</string>
+    <string name="activate">Make it active</string>
+    <string name="flexibility_on_class_duration">I am flexible on class duration?</string>
+    <string name="min_class_time">Minimum class duration(min.)</string>
+    <string name="min_class_time_label">Minimum class duration(min.):</string>
+    <string name="class_time_variance">Classes can vary in the duration of(min.)</string>
+    <string name="class_time_variance1">Classes can vary in the duration of(min.):</string>
+    <string name="class_duration">Classes duration(min.)</string>
+    <string name="class_duration1">Classes duration(min.):</string>
+    <string name="max_class_week">Maximum number of classes for a student in week</string>
+    <string name="max_class_week1">Maximum number of classes for a student in week:</string>
+    <string name="pricing_per_hour_individual">Pricing per hour for an individual class</string>
+    <string name="pricing_per_class_individual">Pricing per class for an individual class</string>
+    <string name="pricing_per_hour_group">Pricing per hour for a group class</string>
+    <string name="pricing_per_class_group">Pricing per class for a group class</string>
+    <string name="max_hour_in_a_day">Maximum class duration for a day(min.)</string>
+    <string name="max_hour_in_a_day1">Maximum class duration for a day(min.):</string>
+
+    <string name="price">Price</string>
+    <string name="individual_class_price">Individual class price:</string>
+    <string name="group_class_price">Group class price:</string>
 
 
 </resources>
