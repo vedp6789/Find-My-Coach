@@ -507,7 +507,6 @@
                     android:layout_marginLeft="@dimen/textView_padding_margin"
                     android:layout_toEndOf="@+id/individual_class_price"
                     android:layout_toRightOf="@+id/individual_class_price"
-                    android:paddingLeft="@dimen/days_margin"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_details" />
             </RelativeLayout>
@@ -538,7 +537,6 @@
                     android:layout_marginLeft="@dimen/textView_padding_margin"
                     android:layout_toEndOf="@+id/group_class_price"
                     android:layout_toRightOf="@+id/group_class_price"
-                    android:paddingLeft="@dimen/days_margin"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_details" />
             </RelativeLayout>

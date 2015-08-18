@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -30,6 +31,7 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.activity.EditProfileActivityMentor;
 import com.findmycoach.app.adapter.AddressAdapter;
+import com.findmycoach.app.beans.Price;
 import com.findmycoach.app.beans.authentication.AgeGroupPreferences;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
@@ -167,6 +169,10 @@ public class ProfileFragment extends Fragment implements Callback {
         rl_fixed_class_duration = (RelativeLayout) view.findViewById(R.id.rl_fixed_class_duration);
         rl_individual_class_price = (RelativeLayout) view.findViewById(R.id.rl_individual_class_price);
         rl_group_class_price = (RelativeLayout) view.findViewById(R.id.rl_group_class_price);
+        tv_individual_class_price= (TextView) view.findViewById(R.id.tv_individual_class_price);
+        tv_group_class_price= (TextView) view.findViewById(R.id.tv_group_class_price);
+        tv_individual_class_price_label= (TextView) view.findViewById(R.id.individual_class_price);
+        tv_group_class_price_label= (TextView) view.findViewById(R.id.group_class_price);
 
         view.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -396,15 +402,42 @@ public class ProfileFragment extends Fragment implements Callback {
                 rl_fixed_class_duration.setVisibility(View.VISIBLE);
                 tv_fixed_class_duration.setText("" + userInfo.getFixed_class_duration());
 
-                if(userInfo.getSlotType().equals("0")){
+                if (userInfo.getSlotType().equals("0")) {
                     rl_individual_class_price.setVisibility(View.VISIBLE);
                     rl_group_class_price.setVisibility(View.GONE);
-                    tv_individual_class_price_label.setText(getResources().getString(R.string.pricing_per_class_individual)+);
+                    tv_individual_class_price_label.setText(getResources().getString(R.string.pricing_per_class_individual) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
+                    for (int price = 0; price < userInfo.getPrices().size(); price++) {
+                        Price price1 = userInfo.getPrices().get(price);
+                        if (price1.getType().equals("individual")) {
+                            tv_individual_class_price.setText("" + price1.getPrice());
+                        }
+                    }
 
 
-                }else if(userInfo.getSlotType().equals("1")){
+                } else if (userInfo.getSlotType().equals("1")) {
+                    rl_individual_class_price.setVisibility(View.GONE);
+                    rl_group_class_price.setVisibility(View.VISIBLE);
+                    tv_group_class_price_label.setText(getResources().getString(R.string.pricing_per_class_group) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
+                    for (int price = 0; price < userInfo.getPrices().size(); price++) {
+                        Price price1 = userInfo.getPrices().get(price);
+                        if (price1.getType().equals("group")) {
+                            tv_group_class_price.setText("" + price1.getPrice());
+                        }
+                    }
 
-                }else if(userInfo.getSlotType().equals("2")){
+                } else if (userInfo.getSlotType().equals("2")) {
+                    rl_individual_class_price.setVisibility(View.VISIBLE);
+                    rl_group_class_price.setVisibility(View.VISIBLE);
+                    tv_individual_class_price_label.setText(getResources().getString(R.string.pricing_per_class_individual) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
+                    tv_group_class_price_label.setText(getResources().getString(R.string.pricing_per_class_group) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
+                    for (int price = 0; price < userInfo.getPrices().size(); price++) {
+                        Price price1 = userInfo.getPrices().get(price);
+                        if (price1.getType().equals("individual")) {
+                            tv_individual_class_price.setText("" + price1.getPrice());
+                        }else if(price1.getType().equals("group")){
+                            tv_group_class_price.setText(""+price1.getPrice());
+                        }
+                    }
 
                 }
 
@@ -413,23 +446,51 @@ public class ProfileFragment extends Fragment implements Callback {
                 tv_flexibility_on_class_duration.setText(getResources().getString(R.string.yes));
                 ll_flexible_class_duration.setVisibility(View.VISIBLE);
                 rl_fixed_class_duration.setVisibility(View.GONE);
-                tv_min_class_time.setText(""+userInfo.getMin_class_duration());
-                tv_flexibility_window.setText(""+userInfo.getFlexibility_window());
+                tv_min_class_time.setText("" + userInfo.getMin_class_duration());
+                tv_flexibility_window.setText("" + userInfo.getFlexibility_window());
                 tv_max_class_time.setText("" + userInfo.getMax_class_duration());
 
-                if(userInfo.getSlotType().equals("0")){
+                if (userInfo.getSlotType().equals("0")) {
+                    rl_individual_class_price.setVisibility(View.VISIBLE);
+                    rl_group_class_price.setVisibility(View.GONE);
+                    tv_individual_class_price_label.setText(getResources().getString(R.string.pricing_per_hour_individual) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
+                    for (int price = 0; price < userInfo.getPrices().size(); price++) {
+                        Price price1 = userInfo.getPrices().get(price);
+                        if (price1.getType().equals("individual")) {
+                            tv_individual_class_price.setText("" + price1.getPrice());
+                        }
+                    }
 
-                }else if(userInfo.getSlotType().equals("1")){
-
-                }else if(userInfo.getSlotType().equals("2")){
-
+                } else if (userInfo.getSlotType().equals("1")) {
+                    rl_individual_class_price.setVisibility(View.GONE);
+                    rl_group_class_price.setVisibility(View.VISIBLE);
+                    tv_group_class_price_label.setText(getResources().getString(R.string.pricing_per_hour_group) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
+                    for (int price = 0; price < userInfo.getPrices().size(); price++) {
+                        Price price1 = userInfo.getPrices().get(price);
+                        if (price1.getType().equals("group")) {
+                            tv_group_class_price.setText("" + price1.getPrice());
+                        }
+                    }
+                } else if (userInfo.getSlotType().equals("2")) {
+                    rl_individual_class_price.setVisibility(View.VISIBLE);
+                    rl_group_class_price.setVisibility(View.VISIBLE);
+                    tv_individual_class_price_label.setText(getResources().getString(R.string.pricing_per_hour_individual) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
+                    tv_group_class_price_label.setText(getResources().getString(R.string.pricing_per_hour_group) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
+                    for (int price = 0; price < userInfo.getPrices().size(); price++) {
+                        Price price1 = userInfo.getPrices().get(price);
+                        if (price1.getType().equals("individual")) {
+                            tv_individual_class_price.setText("" + price1.getPrice());
+                        }else if(price1.getType().equals("group")){
+                            tv_group_class_price.setText(""+price1.getPrice());
+                        }
+                    }
                 }
 
             }
         }
 
         if (userInfo.getMax_classes_per_week() > 0) {
-            tv_max_classes_in_week.setText(""+userInfo.getMax_classes_per_week());
+            tv_max_classes_in_week.setText("" + userInfo.getMax_classes_per_week());
         }
 
 

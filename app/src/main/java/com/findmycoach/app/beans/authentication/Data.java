@@ -160,6 +160,13 @@ public class Data {
     @Expose
     private CurrencyOfUpdatedProfile currencyOfUpdatedProfile;
 
+    public CurrencyOfUpdatedProfile getCurrencyOfUpdatedProfile() {
+        return currencyOfUpdatedProfile;
+    }
+
+    public void setCurrencyOfUpdatedProfile(CurrencyOfUpdatedProfile currencyOfUpdatedProfile) {
+        this.currencyOfUpdatedProfile = currencyOfUpdatedProfile;
+    }
 
     private int flexible_yn;
     private int min_class_duration;
