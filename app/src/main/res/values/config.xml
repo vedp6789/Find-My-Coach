@@ -28,18 +28,18 @@
     <!--<string name="CHAT_SOCKET_URL">ws://192.241.196.244:9302</string>-->
 
 
-    <!--AWS server 1 for Ankit-->
-    <!--<string name="BASE_URL_WITH_AUTH">http://54.169.233.2/api/auth/</string>
-    <string name="BASE_URL">http://54.169.233.2/api/v1/</string>-->
+    <!--AWS server 1 for Ankit/Master-->
+    <string name="BASE_URL_WITH_AUTH">http://54.169.233.2/api/auth/</string>
+    <string name="BASE_URL">http://54.169.233.2/api/v1/</string>
     <!--WEB SOCKET URL-->
-    <!--<string name="CHAT_SOCKET_URL">ws://54.169.233.2:9302</string>-->
+    <string name="CHAT_SOCKET_URL">ws://54.169.233.2:9302</string>
 
 
-    <!--AWS server 2 for testing apk from other users, We will update this IP apk's on Play store-->
-    <string name="BASE_URL_WITH_AUTH">http://52.74.155.74/api/auth/</string>
-    <string name="BASE_URL">http://52.74.155.74/api/v1/</string>
+    <!--AWS server 2 for testing apk from other users, We will update this IP apk's on Play store/Release-->
+    <!--<string name="BASE_URL_WITH_AUTH">http://52.74.155.74/api/auth/</string>-->
+    <!--<string name="BASE_URL">http://52.74.155.74/api/v1/</string>-->
     <!--WEB SOCKET URL-->
-    <string name="CHAT_SOCKET_URL">ws://52.74.155.74:9302</string>
+    <!--<string name="CHAT_SOCKET_URL">ws://52.74.155.74:9302</string>-->
 
 
 
@@ -71,5 +71,8 @@
 
     <!--Minimum length of digits for mobile number-->
     <string name="email_to_support_at_chizzle">support@chizzle.com</string>
+
+    <!--Time gap used for Time navigation in hours-->
+    <integer name="time_gap_for_search">2</integer>
 
 </resources>

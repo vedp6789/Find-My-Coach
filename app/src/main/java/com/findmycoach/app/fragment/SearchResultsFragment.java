@@ -47,6 +47,7 @@ public class SearchResultsFragment extends Fragment implements Callback {
     private static final int NEED_TO_REFRESH = 100;
     private boolean showTimeNavigation;
     private TextView currentTime;
+    private int timeNavigationGap;
 
     public static SearchResultsFragment newInstance(int position, String requestParams, String searchFor, int age, boolean showTimeNavigation, String aroundTime) {
         SearchResultsFragment fragment = new SearchResultsFragment();
@@ -77,6 +78,8 @@ public class SearchResultsFragment extends Fragment implements Callback {
             //TODO need to uncomment the below line after search api got fixed for age_group
 //            requestParams.add("age_group", String.valueOf(getArguments().getInt("age_group")));
         }
+
+        timeNavigationGap = getActivity().getResources().getInteger(R.integer.time_gap_for_search);
     }
 
     @Override
@@ -114,7 +117,7 @@ public class SearchResultsFragment extends Fragment implements Callback {
         v.findViewById(R.id.prevTimeIB).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestParams.add("time_around", String.valueOf(getTimeInUnixTimeStamp(currentTime.getText().toString().trim(), -2)));
+                requestParams.add("time_around", String.valueOf(getTimeInUnixTimeStamp(currentTime.getText().toString().trim(), -timeNavigationGap)));
                 NetworkClient.search(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), SearchResultsFragment.this, 6);
             }
         });
@@ -122,7 +125,7 @@ public class SearchResultsFragment extends Fragment implements Callback {
         v.findViewById(R.id.nextTimeIB).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestParams.add("time_around", String.valueOf(getTimeInUnixTimeStamp(currentTime.getText().toString().trim(), 2)));
+                requestParams.add("time_around", String.valueOf(getTimeInUnixTimeStamp(currentTime.getText().toString().trim(), timeNavigationGap)));
                 NetworkClient.search(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), SearchResultsFragment.this, 6);
             }
         });

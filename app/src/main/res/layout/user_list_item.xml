@@ -15,7 +15,6 @@
 
 
     <com.findmycoach.app.views.ChizzleTextViewBold
-        android:text="name"
         android:id="@+id/mentor_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,7 +39,6 @@
         android:src="@drawable/students" />
 
     <com.findmycoach.app.views.ChizzleTextViewBold
-        android:text="12"
         android:id="@+id/numberOfStudents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,7 +60,6 @@
         android:src="@drawable/rating" />
 
     <com.findmycoach.app.views.ChizzleTextViewBold
-        android:text="4.5"
         android:id="@+id/rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,14 +71,14 @@
         android:textSize="@dimen/profile_details" />
 
     <!--<ImageView-->
-        <!--android:id="@+id/connect_mentor"-->
-        <!--android:layout_width="@dimen/connection_button"-->
-        <!--android:layout_height="@dimen/connection_button"-->
-        <!--android:padding="@dimen/connection_button_padding"-->
-        <!--android:src="@drawable/connect"-->
-        <!--android:layout_alignBottom="@+id/imageView4"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignParentEnd="true" />-->
+    <!--android:id="@+id/connect_mentor"-->
+    <!--android:layout_width="@dimen/connection_button"-->
+    <!--android:layout_height="@dimen/connection_button"-->
+    <!--android:padding="@dimen/connection_button_padding"-->
+    <!--android:src="@drawable/connect"-->
+    <!--android:layout_alignBottom="@+id/imageView4"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentEnd="true" />-->
 
 
     <ImageView
@@ -95,7 +92,6 @@
         android:src="@drawable/location" />
 
     <com.findmycoach.app.views.ChizzleTextView
-        android:text="12km"
         android:id="@+id/distanceTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -107,43 +103,39 @@
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_heading" />
 
-
     <ImageView
+        android:id="@+id/imageView4"
         android:layout_width="@dimen/search_icons"
         android:layout_height="@dimen/search_icons"
         android:layout_alignBottom="@+id/distanceTV"
         android:layout_marginLeft="@dimen/calender_header_margin_arrow"
         android:layout_toRightOf="@+id/distanceTV"
-        android:src="@drawable/radio_btn_selected"
-        android:id="@+id/imageView4" />
+        android:src="@drawable/radio_btn_selected" />
 
     <com.findmycoach.app.views.ChizzleTextView
-        android:text="5yrs"
         android:id="@+id/experience"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView4"
+        android:layout_marginLeft="@dimen/calender_header_margin_arrow"
+        android:layout_toEndOf="@+id/imageView4"
+        android:layout_toRightOf="@+id/imageView4"
         android:singleLine="true"
         android:textColor="@color/purple"
-        android:textSize="@dimen/profile_heading"
-        android:layout_alignBottom="@+id/imageView4"
-        android:layout_toRightOf="@+id/imageView4"
-        android:layout_toEndOf="@+id/imageView4" />
+        android:textSize="@dimen/profile_heading" />
 
     <com.findmycoach.app.views.ChizzleTextView
-        android:text="$25"
         android:id="@+id/charges"
-        android:layout_marginLeft="@dimen/back_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
         android:layout_alignBottom="@+id/experience"
+        android:layout_marginLeft="@dimen/back_margin"
+        android:layout_toEndOf="@+id/experience"
         android:layout_toRightOf="@+id/experience"
-        android:layout_toEndOf="@+id/experience" />
-
+        android:singleLine="true" />
 
 
     <com.findmycoach.app.views.ChizzleTextView
-        android:text="age"
         android:id="@+id/age"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -160,12 +152,12 @@
         android:id="@+id/daysTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/mentor_name"
         android:singleLine="true"
         android:text="M T W T F S S"
         android:textColor="@color/purple_light"
         android:textSize="@dimen/profile_heading"
-        android:textStyle="bold"
-        android:layout_alignTop="@+id/mentor_name"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:textStyle="bold" />
 </RelativeLayout>
