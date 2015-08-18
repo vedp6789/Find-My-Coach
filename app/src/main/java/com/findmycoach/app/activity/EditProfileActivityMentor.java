@@ -1172,36 +1172,35 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
                         }
                     }
 
-Log.e(TAG,"max class week"+userInfo.getMax_classes_per_week());
-                    String  [] array_of_max_classes_in_week=getResources().getStringArray(R.array.max_number_of_classes_week);
-                    int index=-1;
-                    for(int y=0; y < array_of_max_classes_in_week.length; y++){
-                        if(Integer.parseInt(array_of_max_classes_in_week[y]) == userInfo.getMax_classes_per_week()){
-                            index=y;
+                    Log.e(TAG, "max class week" + userInfo.getMax_classes_per_week());
+                    String[] array_of_max_classes_in_week = getResources().getStringArray(R.array.max_number_of_classes_week);
+                    int index = -1;
+                    for (int y = 0; y < array_of_max_classes_in_week.length; y++) {
+                        if (Integer.parseInt(array_of_max_classes_in_week[y]) == userInfo.getMax_classes_per_week()) {
+                            index = y;
                         }
                     }
-                    if(index >=0)
-                    sp_max_class_in_week.setSelection(index);
+                    if (index >= 0)
+                        sp_max_class_in_week.setSelection(index);
 
                     priceArrayList = (ArrayList<Price>) userInfo.getPrices();
-Log.e(TAG,"price size: "+priceArrayList.size());
-                    if(priceArrayList.size() > 0){
-                        for(int i=0;i < priceArrayList.size(); i++){
-                            Price price=priceArrayList.get(i);
-                            String type=price.getType();
-                            if(type.equals("group")){
-                                et_group_class_price.setText(""+price.getPrice());
-                            }else{
-                                if(type.equals("individual")){
-                                    et_individual_class_price.setText(""+price.getPrice());
+                    Log.e(TAG, "price size: " + priceArrayList.size());
+                    if (priceArrayList.size() > 0) {
+                        for (int i = 0; i < priceArrayList.size(); i++) {
+                            Price price = priceArrayList.get(i);
+                            String type = price.getType();
+                            if (type.equals("group")) {
+                                et_group_class_price.setText("" + price.getPrice());
+                            } else {
+                                if (type.equals("individual")) {
+                                    et_individual_class_price.setText("" + price.getPrice());
                                 }
                             }
                         }
                     }
 
 
-
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -1711,7 +1710,7 @@ Log.e(TAG,"price size: "+priceArrayList.size());
                 jsonObject.put("price", Integer.parseInt(et_individual_class_price.getText().toString()));
                 if (unit != null)
                     jsonObject.put("unit", unit);
-                Log.e(TAG,"currency_id: "+currency_id);
+                Log.e(TAG, "currency_id: " + currency_id);
                 jsonObject.put("currency_id", currency_id);
                 jsonObject.put("type", "individual");
                 jsonArray_prices.put(jsonObject);

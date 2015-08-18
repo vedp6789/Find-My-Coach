@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +38,7 @@ public class AddPromotion extends Activity implements Callback {
     RadioGroup rg_promotion_type;
     RadioButton rb_discount_type, rb_free_classes;
     ProgressDialog progressDialog;
+    private String TAG = "FMC";
 
 
     @Override
@@ -68,7 +71,7 @@ public class AddPromotion extends Activity implements Callback {
                 if (validate()) {
                     RequestParams requestParams = new RequestParams();
                     requestParams.add("promotion_title", et_promotion_title.getText().toString());
-                    requestParams.add("is_active","1");
+                    requestParams.add("is_active", "1");
                     if (rb_discount_type.isChecked()) {
                         requestParams.add("promotion_type", "discount");
                         requestParams.add("discount_percentage", et_promotion_discount.getText().toString());
@@ -114,6 +117,8 @@ public class AddPromotion extends Activity implements Callback {
             }
         });
 
+
+
     }
 
     private boolean validate() {
@@ -126,7 +131,9 @@ public class AddPromotion extends Activity implements Callback {
             isValid = false;
 
         }
-        if (rb_discount_type.isSelected()) {
+        int selectedRadioGroupChild = rg_promotion_type.indexOfChild(findViewById(rg_promotion_type.getCheckedRadioButtonId()));
+        if (selectedRadioGroupChild == 0) {
+            Log.e(TAG, "Radio button discount selection");
             if (et_promotion_discount.getText().toString().trim().isEmpty()) {
                 et_promotion_discount.setError(getResources().getString(R.string.add_dicount_percentage));
                 if (isValid)
@@ -134,13 +141,14 @@ public class AddPromotion extends Activity implements Callback {
                 isValid = false;
             }
 
-        } else {
+        } else if (selectedRadioGroupChild == 1) {
+            Log.e(TAG, "Radio button free class selection");
+
             if (et_free_classes.getText().toString().trim().isEmpty()) {
                 et_free_classes.setError(getResources().getString(R.string.add_free_classes));
                 if (isValid)
                     et_free_classes.requestFocus();
                 isValid = false;
-
             }
 
             if (et_mandatory_classes.getText().toString().trim().isEmpty()) {
@@ -160,10 +168,10 @@ public class AddPromotion extends Activity implements Callback {
         progressDialog.dismiss();
         try {
             JSONObject jsonObject = (JSONObject) object;
-            Log.e("FMC: ","added promotion response: "+jsonObject.toString());
+            Log.e("FMC: ", "added promotion response: " + jsonObject.toString());
             if (jsonObject.getInt("data") > 0) {
                 Toast.makeText(AddPromotion.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                if(MyPromotions.myPromotions != null ){
+                if (MyPromotions.myPromotions != null) {
                     MyPromotions.myPromotions.onActivityCompletion();
                 }
 

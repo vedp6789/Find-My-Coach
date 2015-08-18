@@ -102,12 +102,15 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
             if (promotion_type.equals("discount")) {
                 holder.rlPromotionFreeClass.setVisibility(View.GONE);
                 holder.rlPromotionMandatoryClasses.setVisibility(View.GONE);
+                holder.rlPromotionDiscount.setVisibility(View.VISIBLE);
                 holder.tv_promotions_type.setText(context.getResources().getString(R.string.discount_type_promotion));
                 holder.tv_promotions_discount.setText(offer.getDiscount_percentage());
 
             } else {
                 if (promotion_type.equals("trial")) {
                     holder.rlPromotionDiscount.setVisibility(View.GONE);
+                    holder.rlPromotionFreeClass.setVisibility(View.VISIBLE);
+                    holder.rlPromotionMandatoryClasses.setVisibility(View.VISIBLE);
                     holder.tv_promotions_type.setText(context.getResources().getString(R.string.free_classes_promotion));
                     holder.tv_promotions_free_classes.setText(offer.getFree_classes());   /* This is the number of classes mentor will give as free to mentee*/
                     holder.tv_promotions_mandatory_classes.setText(offer.getFree_min_classes());  /* This is number of mandatory classes which mentee have to join to get free classes */

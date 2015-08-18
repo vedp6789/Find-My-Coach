@@ -62,6 +62,7 @@ public class ActiveInactivePromotions extends Fragment implements Callback {
         ActiveInactivePromotions activeInactivePromotions = new ActiveInactivePromotions();
         activeInactivePromotions.setArguments(bundle);
         return activeInactivePromotions;
+
     }
 
     @Override
@@ -73,7 +74,8 @@ public class ActiveInactivePromotions extends Fragment implements Callback {
         }
         activeInactivePromotions = this;
         progressDialog = new ProgressDialog(getActivity());
-    dialog=null;
+        dialog = null;
+
     }
 
     @Override
@@ -94,6 +96,7 @@ public class ActiveInactivePromotions extends Fragment implements Callback {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         adapter = new PromotionsRecyclerViewAdapter(getActivity(), promotionsArrayList, activePromotions, activeInactivePromotions);
         recyclerView.setAdapter(adapter);
+        recyclerView.scrollToPosition(0);
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
@@ -107,20 +110,25 @@ public class ActiveInactivePromotions extends Fragment implements Callback {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        recyclerView.scrollToPosition(0);
+    }
 
-    public void deletePromotion(RequestParams requestParams, int position,Dialog dialog,JSONArray jsonArray) {
-       // this.dialog =dialog;
+    public void deletePromotion(RequestParams requestParams, int position, Dialog dialog, JSONArray jsonArray) {
+        // this.dialog =dialog;
         //progressDialog.show();
         position_which_got_deleted_or_updated = position;
-    //    NetworkClient.deletePromotion(getActivity(), requestParams, StorageHelper.getUserGroup(getActivity(), "auth_token"), this, 60);
+        //    NetworkClient.deletePromotion(getActivity(), requestParams, StorageHelper.getUserGroup(getActivity(), "auth_token"), this, 60);
         try {
-            NetworkClient.deletePromotionHttpClient(getActivity(),StorageHelper.getUserGroup(getActivity(), "auth_token"),jsonArray,this,60);
+            NetworkClient.deletePromotionHttpClient(getActivity(), StorageHelper.getUserGroup(getActivity(), "auth_token"), jsonArray, this, 60);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public void updatePromotion(RequestParams requestParams, int position,Dialog dialog) {
+    public void updatePromotion(RequestParams requestParams, int position, Dialog dialog) {
         this.dialog = dialog;
         progressDialog.show();
         position_which_got_deleted_or_updated = position;
@@ -131,9 +139,9 @@ public class ActiveInactivePromotions extends Fragment implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         try {
-            if(dialog != null) {
+            if (dialog != null) {
                 dialog.dismiss();
-            dialog=null;
+                dialog = null;
             }
             progressDialog.dismiss();
             if (calledApiValue == 60) {
@@ -151,10 +159,10 @@ public class ActiveInactivePromotions extends Fragment implements Callback {
                     promotionsArrayList.remove(position_which_got_deleted_or_updated);
                 adapter.notifyDataSetChanged();
                 position_which_got_deleted_or_updated = -1;
-                if(MyPromotions.myPromotions != null){
-                    if(activePromotions){
+                if (MyPromotions.myPromotions != null) {
+                    if (activePromotions) {
                         MyPromotions.myPromotions.getAllPromotions(false);
-                    }else {
+                    } else {
                         MyPromotions.myPromotions.getAllPromotions(true);
                     }
                 }

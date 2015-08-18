@@ -75,7 +75,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private Data userInfo = null;
     private String connectionStatus;
 
-
     private TextView tv_currentMonth;
     private ImageView iv_prevMonth;
     private ImageView iv_nextMonth;
@@ -161,8 +160,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 datePickerDialog.show(getFragmentManager(), "monthPicker");
                 month_from_dialog = 0;
                 year_from_dialog = 0;
-
-
 
 /*                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
                 CustomDatePickerFragment customDatePickerFragment = new CustomDatePickerFragment();
@@ -989,11 +986,11 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             previousMonthYearInfo = getMonthYearForThis(previous_month, previous_month_year, finalizeDaysInMonth(previous_month, previous_month_year));
             currentMonthYearInfo = getMonthYearForThis(current_month, current_year, finalizeDaysInMonth(current_month, current_year));
             comingMonthYearInfo = getMonthYearForThis(coming_month, coming_year, finalizeDaysInMonth(coming_month, coming_year));
-            previousMonthMentorInfos =getMentorInfo(jsonArray_mentor);
-            currentMonthMentorInfos =getMentorInfo(jsonArray_mentor);
-            comingMonthMentorInfos =getMentorInfo(jsonArray_mentor);
+            previousMonthMentorInfos = getMentorInfo(jsonArray_mentor);
+            currentMonthMentorInfos = getMentorInfo(jsonArray_mentor);
+            comingMonthMentorInfos = getMentorInfo(jsonArray_mentor);
 
-            Log.d(TAG,"previous month mentor info size: "+previousMonthMentorInfos.size()+", current : "+currentMonthMentorInfos.size()+", coming: "+comingMonthMentorInfos.size());
+            Log.d(TAG, "previous month mentor info size: " + previousMonthMentorInfos.size() + ", current : " + currentMonthMentorInfos.size() + ", coming: " + comingMonthMentorInfos.size());
 
             Log.d(TAG, "Mentors slots info for mentee,  previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
             if (b_three_months_data) {   /*  program will come in this scope when user selects date from dialog i.e. user randomly selects a year and month */
@@ -1007,7 +1004,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
             } else {
                 Log.d(TAG, "three months data population");
-                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos,currentMonthMentorInfos,comingMonthMentorInfos,userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
+                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
                 calendarView.setAdapter(adapter1);
                 adapter1.notifyDataSetChanged();
             }
@@ -1022,11 +1019,11 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     }
 
     private ArrayList<MentorInfo> getMentorInfo(JSONArray jsonArray_mentor) {
-        ArrayList<MentorInfo>  mentorInfos = new ArrayList<MentorInfo>();
-        for(int array_index =0; array_index < jsonArray_mentor.length() ; array_index++){
+        ArrayList<MentorInfo> mentorInfos = new ArrayList<MentorInfo>();
+        for (int array_index = 0; array_index < jsonArray_mentor.length(); array_index++) {
             try {
                 JSONObject jsonObject = jsonArray_mentor.getJSONObject(array_index);
-                MentorInfo mentorInfo =new MentorInfo();
+                MentorInfo mentorInfo = new MentorInfo();
                 mentorInfo.setMentor_id(jsonObject.getString("mentor_id"));
                 mentorInfo.setFirst_name(jsonObject.getString("first_name"));
                 mentorInfo.setLast_name(jsonObject.getString("last_name"));
@@ -1089,9 +1086,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             long month_end_date_in_millis = calendar_end_of_month.getTimeInMillis();
 
             if (((vacation_start_date_in_millis < month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis > month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
-                    ((vacation_start_date_in_millis < month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis > month_start_date_in_millis || vacation_stop_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis < month_end_date_in_millis ||vacation_stop_date_in_millis == month_end_date_in_millis)) ||
+                    ((vacation_start_date_in_millis < month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis > month_start_date_in_millis || vacation_stop_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis < month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
                     ((vacation_start_date_in_millis > month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_start_date_in_millis < month_end_date_in_millis || vacation_start_date_in_millis == month_end_date_in_millis) && (vacation_stop_date_in_millis > month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
-                    ((vacation_start_date_in_millis > month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_start_date_in_millis < month_end_date_in_millis || vacation_start_date_in_millis == month_end_date_in_millis) && (vacation_stop_date_in_millis > month_start_date_in_millis  || vacation_stop_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis < month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
+                    ((vacation_start_date_in_millis > month_start_date_in_millis || vacation_start_date_in_millis == month_start_date_in_millis) && (vacation_start_date_in_millis < month_end_date_in_millis || vacation_start_date_in_millis == month_end_date_in_millis) && (vacation_stop_date_in_millis > month_start_date_in_millis || vacation_stop_date_in_millis == month_start_date_in_millis) && (vacation_stop_date_in_millis < month_end_date_in_millis || vacation_stop_date_in_millis == month_end_date_in_millis)) ||
                     (vacation_start_date_in_millis == month_start_date_in_millis && vacation_stop_date_in_millis == month_end_date_in_millis)) {
 
                 vacationArrayList.add(vacation);
@@ -1237,11 +1234,11 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                         }
 
                         mentee.setEventDurations(eventDurations);
-                        if(StorageHelper.getUserGroup(MentorDetailsActivity.this,"user_group").equals("2")){
+                        if (StorageHelper.getUserGroup(MentorDetailsActivity.this, "user_group").equals("2")) {
                             /* first name and last name is not coming , We have full in shared preference from PaymentDetailsActivity */
                             mentee.setFirst_name("");
                             mentee.setLast_name("");
-                        }else{
+                        } else {
                             mentee.setFirst_name(mentee_jsonObject.getString("first_name"));
                             mentee.setLast_name(mentee_jsonObject.getString("last_name"));
                         }
@@ -1295,7 +1292,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         progressDialog.dismiss();
         try {
             JSONObject jsonObject = new JSONObject((String) object);
-            JSONObject jsonObject_data =jsonObject.getJSONObject("data");
+            JSONObject jsonObject_data = jsonObject.getJSONObject("data");
             JSONArray jsonArray_mentor = jsonObject_data.getJSONArray("mentor");
             JSONArray jsonArray_data = jsonObject_data.getJSONArray("slots");
             JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");
@@ -1354,7 +1351,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         progressDialog.dismiss();
         try {
             JSONObject jsonObject = new JSONObject((String) object);
-            JSONObject jsonObject_data =jsonObject.getJSONObject("data");
+            JSONObject jsonObject_data = jsonObject.getJSONObject("data");
             JSONArray jsonArray_mentor = jsonObject_data.getJSONArray("mentor");
             JSONArray jsonArray_data = jsonObject_data.getJSONArray("slots");
             JSONArray jsonArray_vacation_non_coinciding = jsonObject_data.getJSONArray("vacations");
@@ -1392,7 +1389,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             previousMonthMentorInfos = new ArrayList<MentorInfo>();
             previousMonthMentorInfos = getMentorInfo(jsonArray_mentor);
 
-            adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo,previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
+            adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
             _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
             tv_currentMonth.setText(DateFormat.format(dateTemplate,
                     _calendar.getTime()));

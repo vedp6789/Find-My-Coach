@@ -459,28 +459,32 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
+
                 <com.findmycoach.app.views.ChizzleTextViewBold
                     android:id="@+id/max_classes_in_week"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:layout_marginTop="@dimen/back_margin"
                     android:text="@string/max_class_week1"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_heading"
                     android:textStyle="bold" />
+                <!--android:text="@string/max_class_week1"-->
 
-                <com.findmycoach.app.views.ChizzleTextView
-                    android:id="@+id/tv_max_classes_in_week"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="@dimen/textView_padding_margin"
-                    android:layout_toEndOf="@+id/max_classes_in_week"
-                    android:layout_toRightOf="@+id/max_classes_in_week"
-                    android:paddingLeft="@dimen/days_margin"
-                    android:textColor="@color/purple"
-                    android:textSize="@dimen/profile_details" />
+
             </RelativeLayout>
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tv_max_classes_in_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/textView_padding_margin"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/time_stamp"
+                android:paddingLeft="@dimen/days_margin"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
 
             <RelativeLayout
                 android:id="@+id/rl_individual_class_price"
