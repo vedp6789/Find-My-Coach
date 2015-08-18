@@ -54,7 +54,7 @@
         android:layout_width="@dimen/search_icons"
         android:layout_height="@dimen/search_icons"
         android:layout_alignBottom="@+id/numberOfStudents"
-        android:layout_marginLeft="@dimen/calender_header_margin_arrow"
+        android:layout_marginLeft="@dimen/search_icon_margin_left"
         android:layout_toEndOf="@+id/numberOfStudents"
         android:layout_toRightOf="@+id/numberOfStudents"
         android:src="@drawable/rating" />
@@ -86,7 +86,7 @@
         android:layout_width="@dimen/search_icons"
         android:layout_height="@dimen/search_icons"
         android:layout_alignBottom="@+id/rating"
-        android:layout_marginLeft="@dimen/calender_header_margin_arrow"
+        android:layout_marginLeft="@dimen/search_icon_margin_left"
         android:layout_toEndOf="@+id/rating"
         android:layout_toRightOf="@+id/rating"
         android:src="@drawable/location" />
@@ -108,7 +108,7 @@
         android:layout_width="@dimen/search_icons"
         android:layout_height="@dimen/search_icons"
         android:layout_alignBottom="@+id/distanceTV"
-        android:layout_marginLeft="@dimen/calender_header_margin_arrow"
+        android:layout_marginLeft="@dimen/search_icon_margin_left"
         android:layout_toRightOf="@+id/distanceTV"
         android:src="@drawable/radio_btn_selected" />
 
