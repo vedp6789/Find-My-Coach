@@ -38,8 +38,6 @@
     <!--WEB SOCKET URL-->
     <string name="CHAT_SOCKET_URL">ws://54.169.233.2:9302</string>
 
--->
-
 
     <!--AWS server 2 for testing apk from other users, We will update this IP apk's on Play store-->
     <!--<string name="BASE_URL_WITH_AUTH">http://52.74.155.74/api/auth/</string>
