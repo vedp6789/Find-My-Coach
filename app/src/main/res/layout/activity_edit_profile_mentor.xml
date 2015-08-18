@@ -958,6 +958,7 @@
 
                 </RadioGroup>
 
+
                 <LinearLayout
                     android:id="@+id/ll_when_flexible"
                     android:layout_width="match_parent"
@@ -997,40 +998,38 @@
                                 android:textStyle="bold" />
 -->
                         </RelativeLayout>
+                    </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <Spinner
+                            android:id="@+id/sp_min_time_duration"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/login_button_height"
+                            android:background="@android:color/transparent"
+                            android:spinnerMode="dropdown" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/back_margin"
+                            android:layout_marginTop="-10dp"
                             android:orientation="vertical">
 
-                            <Spinner
-                                android:id="@+id/sp_min_time_duration"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/login_button_height"
-                                android:background="@android:color/transparent"
-                                android:spinnerMode="dropdown" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <ImageView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="-10dp"
-                                android:orientation="vertical">
+                                android:layout_gravity="end"
+                                android:layout_marginBottom="-1dp"
+                                android:src="@drawable/drop_down_arrow_purple_small" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="end"
-                                    android:layout_marginBottom="-1dp"
-                                    android:src="@drawable/drop_down_arrow_purple_small" />
+                            <com.findmycoach.app.views.ChizzleTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/purple_light" />
 
-                                <com.findmycoach.app.views.ChizzleTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:background="@color/purple_light" />
-
-                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -1068,40 +1067,38 @@
                             -->
 
                         </RelativeLayout>
+                    </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <Spinner
+                            android:id="@+id/sp_class_variance"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/login_button_height"
+                            android:background="@android:color/transparent"
+                            android:spinnerMode="dropdown" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/back_margin"
+                            android:layout_marginTop="-10dp"
                             android:orientation="vertical">
 
-                            <Spinner
-                                android:id="@+id/sp_class_variance"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/login_button_height"
-                                android:background="@android:color/transparent"
-                                android:spinnerMode="dropdown" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <ImageView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="-10dp"
-                                android:orientation="vertical">
+                                android:layout_gravity="end"
+                                android:layout_marginBottom="-1dp"
+                                android:src="@drawable/drop_down_arrow_purple_small" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="end"
-                                    android:layout_marginBottom="-1dp"
-                                    android:src="@drawable/drop_down_arrow_purple_small" />
+                            <com.findmycoach.app.views.ChizzleTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/purple_light" />
 
-                                <com.findmycoach.app.views.ChizzleTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:background="@color/purple_light" />
-
-                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -1141,40 +1138,41 @@
                         </RelativeLayout>
 
 
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <Spinner
+                            android:id="@+id/sp_max_hour_in_a_day"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/login_button_height"
+                            android:background="@android:color/transparent"
+                            android:spinnerMode="dropdown" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/back_margin"
+                            android:layout_marginTop="-10dp"
                             android:orientation="vertical">
 
-                            <Spinner
-                                android:id="@+id/sp_max_hour_in_a_day"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/login_button_height"
-                                android:background="@android:color/transparent"
-                                android:spinnerMode="dropdown" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <ImageView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="-10dp"
-                                android:orientation="vertical">
+                                android:layout_gravity="end"
+                                android:layout_marginBottom="-1dp"
+                                android:src="@drawable/drop_down_arrow_purple_small" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="end"
-                                    android:layout_marginBottom="-1dp"
-                                    android:src="@drawable/drop_down_arrow_purple_small" />
+                            <com.findmycoach.app.views.ChizzleTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/purple_light" />
 
-                                <com.findmycoach.app.views.ChizzleTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:background="@color/purple_light" />
-
-                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
+
                 </LinearLayout>
 
 
@@ -1183,8 +1181,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/back_margin"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
@@ -1218,7 +1216,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/back_margin"
                         android:orientation="vertical">
 
                         <Spinner
@@ -1319,7 +1316,6 @@
                     </LinearLayout>
 
                 </LinearLayout>
-
 
                 <LinearLayout
                     android:id="@+id/ll_individual_pricing"
