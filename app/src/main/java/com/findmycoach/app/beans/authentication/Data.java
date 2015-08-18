@@ -130,6 +130,28 @@ public class Data {
     @SerializedName("medium_of_education")
     @Expose
     private String mediumOfEducation;
+    @SerializedName("connection_status")
+    @Expose
+    private String connectionStatus;
+    @SerializedName("connection_id")
+    @Expose
+    private String connectionId;
+
+    public String getConnectionStatus() {
+        return connectionStatus;
+    }
+
+    public void setConnectionStatus(String connectionStatus) {
+        this.connectionStatus = connectionStatus;
+    }
+
+    public String getConnectionId() {
+        return connectionId;
+    }
+
+    public void setConnectionId(String connectionId) {
+        this.connectionId = connectionId;
+    }
 
     public String getMediumOfEducation() {
         return mediumOfEducation;

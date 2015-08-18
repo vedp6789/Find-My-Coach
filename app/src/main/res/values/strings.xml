@@ -29,6 +29,7 @@
         <item>My connections</item>
         <item>My schedules</item>
         <item>Settings</item>
+        <item>Support and FAQ</item>
         <item>Logout</item>
     </string-array>
     <string-array name="gender">
@@ -124,10 +125,10 @@
     <string name="enter_valid_phone_no">Enter valid phone number</string>
     <string name="error">Error :</string>
     <string name="profile">Profile</string>
-    <string name="change_password">Change password</string>
-    <string name="change_phone">Change phone number</string>
+    <string name="change_password">Change Password</string>
+    <string name="change_phone">Change Phone Number</string>
     <string name="payment">Payment</string>
-    <string name="calendar_preference">Calendar preferences</string>
+    <string name="calendar_preference">Calendar Preferences</string>
     <string name="no_new_request">No new request for you.</string>
     <string name="not_connected">Not connected to anyone.</string>
     <string name="yes">Yes</string>
@@ -181,8 +182,8 @@
     <string name="vacation_schedule">Vacations</string>
 
 
-    <string name="children_details">Children details</string>
-    <string name="address_preference">Address preferences</string>
+    <string name="children_details">Children Details</string>
+    <string name="address_preference">Address Preferences</string>
     <string name="mentor_details">Mentor\'s information</string>
     <string name="tutorial_preference_by_mentee">You will attend this class at the mentor\'s location.</string>
 
@@ -381,14 +382,14 @@
     <string name="prompt_email_id_col">Email Id :</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_password_minimum_5_characters">Password (min. 5 characters)</string>
-    <string name="old_password">Old password:</string>
-    <string name="new_password">New password:</string>
-    <string name="new_password_re">Re enter new password:</string>
+    <string name="old_password">Old Password:</string>
+    <string name="new_password">New Password:</string>
+    <string name="new_password_re">Re Enter New Password:</string>
     <string name="new_phone_no">Mobile number:</string>
-    <string name="prompt_confirm_password">Confirm new password</string>
+    <string name="prompt_confirm_password">Confirm New Password</string>
     <string name="prompt_commit">Commit</string>
     <string name="prompt_first_name">First name</string>
-    <string name="prompt_first_middle_name">First name Middle name</string>
+    <string name="prompt_first_middle_name">First Name Middle Name</string>
     <string name="prompt_middle_name">Middle name (optional)</string>
     <string name="prompt_last_name">Last name</string>
     <string name="prompt_date_of_birth">D.O.B.</string>
@@ -400,17 +401,17 @@
     <string name="prompt_language_2">Language 2</string>
     <string name="prompt_language_3">Language 3</string>
     <string name="prompt_language_4">Language 4</string>
-    <string name="prompt_grade">Grade:</string>
+    <string name="prompt_grade">Grade</string>
     <string name="prompt_area_of_interest">Area of interests</string>
     <string name="prompt_area_of_coaching">Area of Coaching</string>
     <string name="please_add_area_of_interest">Please add area of interest.</string>
     <string name="please_add_area_of_coaching">Please add area of coaching.</string>
-    <string name="prompt_coaching_type">Class type</string>
-    <string name="prompt_training_location">Preferred trainer location</string>
+    <string name="prompt_coaching_type">Class Type</string>
+    <string name="prompt_training_location">Preferred Trainer Location</string>
     <string name="prompt_male">Male</string>
     <string name="prompt_female">Female</string>
-    <string name="prompt_phone">Mobile number</string>
-    <string name="prompt_phone_col">Mobile number :</string>
+    <string name="prompt_phone">Mobile Number</string>
+    <string name="prompt_phone_col">Mobile Number :</string>
     <string name="prompt_qualified">I have Professional Qualifications in</string>
     <string name="prompt_submit">Submit</string>
     <string name="prompt_address">Physical address</string>
@@ -431,7 +432,7 @@
     <string name="select_dob">Select date of birth</string>
     <string name="enter_pin">Enter zip/post code</string>
     <string name="prompt_state">State</string>
-    <string name="prompt_country">Country of residence</string>
+    <string name="prompt_country">Country of Residence</string>
     <string name="prompt_pin">Zip/Post Code</string>
     <string name="prompt_locale">Locale</string>
     <string name="prompt_teaching_preferences">Teaching Preference</string>
@@ -772,8 +773,8 @@
 
 
     <string-array name="location_preference">
-        <item>My location</item>
-        <item>Mentor location or Institute</item>
+        <item>My Location</item>
+        <item>Mentor Location or Institute</item>
         <item>Either</item>
     </string-array>
     <string name="title_activity_my_promotions">MyPromotions</string>

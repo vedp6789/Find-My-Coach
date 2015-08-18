@@ -35,8 +35,9 @@ import com.findmycoach.app.beans.CalendarSchedule.MentorInfo;
 import com.findmycoach.app.beans.CalendarSchedule.MonthYearInfo;
 import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.beans.CalendarSchedule.Vacation;
-import com.findmycoach.app.beans.mentor.Data;
-import com.findmycoach.app.beans.mentor.Response;
+import com.findmycoach.app.beans.authentication.Data;
+import com.findmycoach.app.beans.authentication.Response;
+import com.findmycoach.app.beans.authentication.SubCategoryName;
 import com.findmycoach.app.fragment.DatePickerFragment;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
@@ -105,7 +106,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     public boolean populate_calendar_from_adapter;
 
     private static final String TAG = "MentorDetailsActivity";
-    private ArrayList<String> array_list_subCategory = null;
+    private List<SubCategoryName> array_list_subCategory;
     private String previous_month_start_date;/* this will get initialized when api is requested for three months (previous, current, coming)*/
     private String next_month_requested_date;
     private String prev_month_requested_date;
@@ -122,7 +123,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mentor_details);
         Log.d(TAG, "inside mentor details acitivity");
-        array_list_subCategory = new ArrayList<String>();
         initialize();
         mentorDetailsActivity = this;
         Log.d(TAG, "connection status : " + connectionStatus);
@@ -160,6 +160,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 datePickerDialog.show(getFragmentManager(), "monthPicker");
                 month_from_dialog = 0;
                 year_from_dialog = 0;
+
+
 
 /*                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
                 CustomDatePickerFragment customDatePickerFragment = new CustomDatePickerFragment();
@@ -421,7 +423,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 //            userInfo.setSubCategoryName(newSubCategory);
 //        }
 
-        array_list_subCategory = (ArrayList<String>) userInfo.getSubCategoryName();
+        array_list_subCategory = userInfo.getSubCategoryName();
 
         profileImage = (ImageView) findViewById(R.id.profile_image);
         profileName = (TextView) findViewById(R.id.profile_name);
@@ -511,8 +513,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 //        } catch (Exception e) {
 //        }
         String address = "";
-        if (userInfo.getAddress() != null) {
-            address = address + userInfo.getAddress() + ", ";
+        if (userInfo.getMultipleAddress() != null && !userInfo.getMultipleAddress().isEmpty()) {
+            address = address + userInfo.getMultipleAddress().get(0).getLocale() + ", ";
         }
         if (userInfo.getCity() != null) {
             address = address + userInfo.getCity() + ", ";
@@ -569,13 +571,12 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             imgLoader.execute((String) userInfo.getPhotograph());
         }
 
-        List<String> areaOfInterests = userInfo.getSubCategoryName();
-        if (areaOfInterests.size() > 0 && areaOfInterests.get(0) != null && !areaOfInterests.get(0).trim().equals("")) {
+        if (array_list_subCategory != null && array_list_subCategory.size() > 0 && array_list_subCategory.get(0) != null && !array_list_subCategory.get(0).getSub_category_name().trim().equals("")) {
             List<com.findmycoach.app.views.ChizzleButton> buttons = new ArrayList<>();
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            for (String areaOfInterest : areaOfInterests) {
+            for (SubCategoryName areaOfInterest : array_list_subCategory) {
                 Button button = (Button) inflater.inflate(R.layout.button, null);
-                button.setText(areaOfInterest);
+                button.setText(areaOfInterest.getSub_category_name());
                 buttons.add((ChizzleButton) button);
             }
             populateViews(areaOfCoaching, buttons, this);
@@ -752,21 +753,25 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
         }
 
+        ArrayList<String> tempAreaOfCategory = new ArrayList<>();
+        for (SubCategoryName subCategoryName : array_list_subCategory)
+            tempAreaOfCategory.add(subCategoryName.getSub_category_name());
+
         switch (calledApiValue) {
             case 37:
                 Log.d(TAG, " API 37 success");
                 Log.d(TAG, "call for api 37");
-                threeMonthsData(object);
+                threeMonthsData(object, tempAreaOfCategory);
                 break;
             case 38:
                 Log.d(TAG, " API 38 success");
                 updateMonthAndYearOnNextMonthClick();
-                nextMonthData(object);
+                nextMonthData(object, tempAreaOfCategory);
                 break;
             case 39:
                 Log.d(TAG, " API 39 success");
                 updateMonthAndYearOnPreviousMonthClick();
-                previousMonthData(object);
+                previousMonthData(object, tempAreaOfCategory);
                 break;
         }
 
@@ -926,7 +931,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     }
 
 
-    private void threeMonthsData(Object object) {
+    private void threeMonthsData(Object object, ArrayList<String> tempAreaOfCategory) {
 
 
         Log.d(TAG, "inside three months data population");
@@ -995,7 +1000,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             Log.d(TAG, "Mentors slots info for mentee,  previousMonthArrayList size :" + previousMonthArrayList.size() + "currentMonthArrayList size :" + currentMonthArrayList.size() + ", comingMonthArrayList size :" + comingMonthArrayList.size());
             if (b_three_months_data) {   /*  program will come in this scope when user selects date from dialog i.e. user randomly selects a year and month */
                 Log.d(TAG, "Three months data get changed");
-                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
+                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos, userInfo.getId(), userInfo.getAvailabilityYn(), charges, tempAreaOfCategory, connectionStatus);
                 calendarView.setAdapter(adapter1);
                 adapter1.notifyDataSetChanged();
                 if (month_from_dialog == 0 && year_from_dialog == 0) {
@@ -1004,7 +1009,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
             } else {
                 Log.d(TAG, "three months data population");
-                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
+                adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos, userInfo.getId(), userInfo.getAvailabilityYn(), charges, tempAreaOfCategory, connectionStatus);
                 calendarView.setAdapter(adapter1);
                 adapter1.notifyDataSetChanged();
             }
@@ -1286,7 +1291,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         }
     }
 
-    private void nextMonthData(Object object) {
+    private void nextMonthData(Object object, ArrayList<String> tempAreaOfCategory) {
 
 
         progressDialog.dismiss();
@@ -1330,7 +1335,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             Log.d(TAG, "comingMonthArrayList size" + comingMonthArrayList.size());
 
 
-            adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
+            adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos, userInfo.getId(), userInfo.getAvailabilityYn(), charges, tempAreaOfCategory, connectionStatus);
             _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
             tv_currentMonth.setText(DateFormat.format(dateTemplate,
                     _calendar.getTime()));
@@ -1345,7 +1350,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
     }
 
-    private void previousMonthData(Object object) {
+    private void previousMonthData(Object object, ArrayList<String> tempAreaOfCategory) {
 
 
         progressDialog.dismiss();
@@ -1389,7 +1394,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             previousMonthMentorInfos = new ArrayList<MentorInfo>();
             previousMonthMentorInfos = getMentorInfo(jsonArray_mentor);
 
-            adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
+            adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos, userInfo.getId(), userInfo.getAvailabilityYn(), charges, tempAreaOfCategory, connectionStatus);
+            //adapter1 = new CalendarGridAdapter(getApplicationContext(), month, year, mentorDetailsActivity, previousMonthArrayList, currentMonthArrayList, comingMonthArrayList, previousMonthNonCoincidingVacation, currentMonthNonCoincidingVacation, comingMonthNonCoincidingVacation, previousMonthYearInfo, currentMonthYearInfo, comingMonthYearInfo, previousMonthMentorInfos, currentMonthMentorInfos, comingMonthMentorInfos, userInfo.getId(), userInfo.getAvailabilityYn(), charges, array_list_subCategory, connectionStatus);
             _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
             tv_currentMonth.setText(DateFormat.format(dateTemplate,
                     _calendar.getTime()));

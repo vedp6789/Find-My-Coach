@@ -19,7 +19,7 @@
     <string name="gcm_project_number">944443780210</string>
 
     <!--api urls-->
-    
+
     <!--<string name="BASE_URL_WITH_AUTH">http://54.169.233.2/api/auth/</string>
     <string name="BASE_URL">http://54.169.233.2/api/v1/</string>-->
     <!--<string name="BASE_URL_WITH_AUTH">http://10.1.1.158/fmcweb/www/api/auth/</string>-->
@@ -101,5 +101,8 @@
     </string-array>
     <integer name="max_number_of_week">26</integer>
 
+
+    <!--Minimum length of digits for mobile number-->
+    <string name="email_to_support_at_chizzle">support@chizzle.com</string>
 
 </resources>
