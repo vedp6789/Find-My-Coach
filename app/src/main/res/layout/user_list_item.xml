@@ -15,6 +15,7 @@
 
 
     <com.findmycoach.app.views.ChizzleTextViewBold
+        android:text="name"
         android:id="@+id/mentor_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,9 +37,10 @@
         android:layout_alignBottom="@+id/mentor_image"
         android:layout_toEndOf="@+id/mentor_image"
         android:layout_toRightOf="@+id/mentor_image"
-        android:src="@drawable/connections_selected" />
+        android:src="@drawable/students" />
 
     <com.findmycoach.app.views.ChizzleTextViewBold
+        android:text="12"
         android:id="@+id/numberOfStudents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -57,9 +59,10 @@
         android:layout_marginLeft="@dimen/calender_header_margin_arrow"
         android:layout_toEndOf="@+id/numberOfStudents"
         android:layout_toRightOf="@+id/numberOfStudents"
-        android:src="@drawable/star_selected" />
+        android:src="@drawable/rating" />
 
     <com.findmycoach.app.views.ChizzleTextViewBold
+        android:text="4.5"
         android:id="@+id/rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -70,15 +73,15 @@
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_details" />
 
-    <ImageView
-        android:id="@+id/connect_mentor"
-        android:layout_width="@dimen/connection_button"
-        android:layout_height="@dimen/connection_button"
-        android:padding="@dimen/connection_button_padding"
-        android:src="@drawable/connect"
-        android:layout_alignBottom="@+id/imageView4"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+    <!--<ImageView-->
+        <!--android:id="@+id/connect_mentor"-->
+        <!--android:layout_width="@dimen/connection_button"-->
+        <!--android:layout_height="@dimen/connection_button"-->
+        <!--android:padding="@dimen/connection_button_padding"-->
+        <!--android:src="@drawable/connect"-->
+        <!--android:layout_alignBottom="@+id/imageView4"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true" />-->
 
 
     <ImageView
@@ -89,9 +92,10 @@
         android:layout_marginLeft="@dimen/calender_header_margin_arrow"
         android:layout_toEndOf="@+id/rating"
         android:layout_toRightOf="@+id/rating"
-        android:src="@drawable/send" />
+        android:src="@drawable/location" />
 
     <com.findmycoach.app.views.ChizzleTextView
+        android:text="12km"
         android:id="@+id/distanceTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -114,6 +118,7 @@
         android:id="@+id/imageView4" />
 
     <com.findmycoach.app.views.ChizzleTextView
+        android:text="5yrs"
         android:id="@+id/experience"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -125,6 +130,7 @@
         android:layout_toEndOf="@+id/imageView4" />
 
     <com.findmycoach.app.views.ChizzleTextView
+        android:text="$25"
         android:id="@+id/charges"
         android:layout_marginLeft="@dimen/back_margin"
         android:layout_width="wrap_content"
@@ -137,6 +143,7 @@
 
 
     <com.findmycoach.app.views.ChizzleTextView
+        android:text="age"
         android:id="@+id/age"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -159,6 +166,6 @@
         android:textSize="@dimen/profile_heading"
         android:textStyle="bold"
         android:layout_alignTop="@+id/mentor_name"
-        android:layout_alignRight="@+id/connect_mentor"
-        android:layout_alignEnd="@+id/connect_mentor" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

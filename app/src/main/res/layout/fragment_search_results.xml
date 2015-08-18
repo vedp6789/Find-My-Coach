@@ -1,13 +1,65 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.findmycoach.app.fragment.SearchResultsFragment">
 
+    <RelativeLayout
+        android:layout_marginTop="@dimen/underline"
+        android:id="@+id/timeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/calender_header_height"
+        android:layout_below="@+id/search_tabs"
+        android:background="@color/purple"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <ImageButton
+            android:layout_marginTop="@dimen/textView_padding_margin"
+            android:layout_marginBottom="@dimen/textView_padding_margin"
+            android:layout_marginLeft="@dimen/back_margin"
+            android:background="@drawable/custom_button_click"
+            android:id="@+id/prevTimeIB"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="start"
+            android:padding="@dimen/calender_header_margin_arrow"
+            android:src="@drawable/calender_prev_arrow_purple"
+            android:layout_centerVertical="true" />
+
+        <com.findmycoach.app.views.ChizzleTextView
+            android:textColor="@color/white"
+            android:textSize="@dimen/profile_details"
+            android:textStyle="bold"
+            android:id="@+id/currentTimeTV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_toRightOf="@+id/prevTimeIB"
+            android:layout_toLeftOf="@+id/nextTimeIB"
+            android:layout_toStartOf="@+id/nextTimeIB" />
+
+        <ImageButton
+            android:layout_marginTop="@dimen/textView_padding_margin"
+            android:layout_marginBottom="@dimen/textView_padding_margin"
+            android:layout_marginRight="@dimen/back_margin"
+            android:background="@drawable/custom_button_click"
+            android:id="@+id/nextTimeIB"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:padding="@dimen/calender_header_margin_arrow"
+            android:src="@drawable/calender_next_arrow_purple"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
     <ListView
-    android:padding="@dimen/textView_padding_margin"
         android:id="@+id/user_list"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/textView_padding_margin"
+        android:layout_below="@+id/timeLayout" />
 
 
-</FrameLayout>
+</RelativeLayout>

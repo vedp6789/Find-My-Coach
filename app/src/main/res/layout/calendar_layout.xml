@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_days_availability"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/timeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/calender_header_height"
+        android:background="@color/purple"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/prevTimeIB"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_centerVertical="true"
+            android:layout_gravity="start"
+            android:layout_marginBottom="@dimen/textView_padding_margin"
+            android:layout_marginLeft="@dimen/back_margin"
+            android:layout_marginTop="@dimen/textView_padding_margin"
+            android:background="@color/white"
+            android:padding="@dimen/calender_header_margin_arrow"
+            android:src="@drawable/calender_prev_arrow_purple" />
+
+        <com.findmycoach.app.views.ChizzleTextView
+            android:id="@+id/currentTimeTV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/nextTimeIB"
+            android:layout_toRightOf="@+id/prevTimeIB"
+            android:layout_toStartOf="@+id/nextTimeIB"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/profile_details"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/nextTimeIB"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="@dimen/textView_padding_margin"
+            android:layout_marginRight="@dimen/back_margin"
+            android:layout_marginTop="@dimen/textView_padding_margin"
+            android:background="@color/white"
+            android:padding="@dimen/calender_header_margin_arrow"
+            android:src="@drawable/calender_next_arrow_purple" />
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/cal"
+        layout="@layout/calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timeLayout" />
+
+    <com.findmycoach.app.views.ChizzleTextView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/cal"
+        android:background="@color/purple_light" />
+
+</RelativeLayout>

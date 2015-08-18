@@ -6,7 +6,7 @@
         android:id="@+id/ll_calendar_week_days"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/login_button_height"
-        android:layout_below="@+id/buttonlayout"
+        android:layout_below="@+id/timeLayout"
         android:orientation="horizontal"
         android:layout_gravity="center"
         android:weightSum="7">

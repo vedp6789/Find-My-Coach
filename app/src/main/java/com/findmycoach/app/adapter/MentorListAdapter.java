@@ -1,28 +1,19 @@
 package com.findmycoach.app.adapter;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
-import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.beans.search.Datum;
 import com.findmycoach.app.util.Callback;
-import com.findmycoach.app.util.NetworkClient;
-import com.findmycoach.app.util.StorageHelper;
-import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -40,7 +31,7 @@ import java.util.List;
 public class MentorListAdapter extends BaseAdapter implements Callback {
     private Context context;
     private List<Datum> users;
-    private String studentId, year, years;
+    private String year, years;
     private int clickedPosition = -1;
     private Drawable defaultDrawable;
 
@@ -49,7 +40,6 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     public MentorListAdapter(Context context, List<Datum> users, String searchFor) {
         this.context = context;
         this.users = users;
-        studentId = StorageHelper.getUserDetails(context, "user_id");
         defaultDrawable = context.getResources().getDrawable(R.drawable.user_icon);
         year = context.getResources().getString(R.string.yr);
         years = context.getResources().getString(R.string.yrs);
@@ -88,7 +78,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
             holder.experienceTV = (TextView) view.findViewById(R.id.experience);
             holder.chargesTV = (TextView) view.findViewById(R.id.charges);
             holder.qualifiedIV = (ImageView) view.findViewById(R.id.imageView4);
-            holder.connectionIV = (ImageView) view.findViewById(R.id.connect_mentor);
+//            holder.connectionIV = (ImageView) view.findViewById(R.id.connect_mentor);
             view.setTag(holder);
         }
 
@@ -179,111 +169,111 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
 
         //Set Mentor charges
         try {
-            holder.chargesTV.setText(user.getPrice());
+//            holder.chargesTV.setText(user.getPrice());
         } catch (Exception ignored) {
         }
 
 
-        //Set Connection button depending on current connection status
-        if (user.getConnectionStatus() != null && !user.getConnectionStatus().equals("broken") && !user.getConnectionStatus().equals("rejected")) {
-            if (user.getConnectionStatus().equals("accepted") || user.getConnectionStatus().contains("mentor_mentee")) {
-                holder.connectionIV.setImageDrawable(context.getResources().getDrawable(R.drawable.disconnect));
-            } else if (user.getConnectionStatus().equals("pending")) {
-                holder.connectionIV.setImageDrawable(context.getResources().getDrawable(R.drawable.pending));
-            }
-            holder.connectionIV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    clickedPosition = position;
-                    showDisconnectDialog(user.getConnectionId(), user.getId());
-                }
-            });
-        } else {
-            holder.connectionIV.setImageDrawable(context.getResources().getDrawable(R.drawable.connect));
-            holder.connectionIV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    clickedPosition = position;
-                    showAlert(user.getId());
-                }
-            });
-        }
+//        //Set Connection button depending on current connection status
+//        if (user.getConnectionStatus() != null && !user.getConnectionStatus().equals("broken") && !user.getConnectionStatus().equals("rejected")) {
+//            if (user.getConnectionStatus().equals("accepted") || user.getConnectionStatus().contains("mentor_mentee")) {
+//                holder.connectionIV.setImageDrawable(context.getResources().getDrawable(R.drawable.disconnect));
+//            } else if (user.getConnectionStatus().equals("pending")) {
+//                holder.connectionIV.setImageDrawable(context.getResources().getDrawable(R.drawable.pending));
+//            }
+//            holder.connectionIV.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    clickedPosition = position;
+//                    showDisconnectDialog(user.getConnectionId(), user.getId());
+//                }
+//            });
+//        } else {
+//            holder.connectionIV.setImageDrawable(context.getResources().getDrawable(R.drawable.connect));
+//            holder.connectionIV.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    clickedPosition = position;
+//                    showAlert(user.getId());
+//                }
+//            });
+//        }
         return view;
     }
 
-    private void showDisconnectDialog(final String connectionId, final String id) {
-        final Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.disconnect_confirmation_dialog);
+//    private void showDisconnectDialog(final String connectionId, final String id) {
+//        final Dialog dialog = new Dialog(context);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.disconnect_confirmation_dialog);
+//
+//        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                disconnect(connectionId, id);
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.show();
+//    }
 
-        dialog.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                disconnect(connectionId, id);
-                dialog.dismiss();
-            }
-        });
 
-        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+//    private void showAlert(final String userId) {
+//        final Dialog dialog = new Dialog(context);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.send_connection_request_dialog);
+//        final EditText editText = (EditText) dialog.findViewById(R.id.editText);
+//        final Button cancelButton = (Button) dialog.findViewById(R.id.cancelButton);
+//        Button okButton = (Button) dialog.findViewById(R.id.okButton);
+//
+//        okButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String message = editText.getText().toString();
+//                if (message.trim().length() < 1)
+//                    message = context.getResources().getString(R.string.connection_request_msg);
+//                sendConnectionRequest(message, userId);
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        cancelButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.setCancelable(false);
+//        dialog.show();
+//    }
 
-        dialog.show();
-    }
-
-
-    private void showAlert(final String userId) {
-        final Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.send_connection_request_dialog);
-        final EditText editText = (EditText) dialog.findViewById(R.id.editText);
-        final Button cancelButton = (Button) dialog.findViewById(R.id.cancelButton);
-        Button okButton = (Button) dialog.findViewById(R.id.okButton);
-
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String message = editText.getText().toString();
-                if (message.trim().length() < 1)
-                    message = context.getResources().getString(R.string.connection_request_msg);
-                sendConnectionRequest(message, userId);
-                dialog.dismiss();
-            }
-        });
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.setCancelable(false);
-        dialog.show();
-    }
-
-    private void sendConnectionRequest(String message, String userId) {
-        Log.d(TAG, "\n" + message + "\nMentor id : " + userId + "\nStudent id : " + studentId);
-        RequestParams requestParams = new RequestParams();
-        requestParams.add("owner", studentId);
-        requestParams.add("invitee", userId);
-        requestParams.add("message", message);
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
-        NetworkClient.sendConnectionRequest(context, requestParams, this, 17);
-    }
-
-    private void disconnect(String connectionId, String oppositeUSerId) {
-        Log.d(TAG, "id : " + connectionId + ", user_id : " + oppositeUSerId +
-                ", user_group : " + DashboardActivity.dashboardActivity.user_group);
-        RequestParams requestParams = new RequestParams();
-        requestParams.add("id", connectionId);
-        requestParams.add("user_id", oppositeUSerId);
-        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
-        NetworkClient.breakConnection(context, requestParams, this, 21);
-    }
+//    private void sendConnectionRequest(String message, String userId) {
+//        Log.d(TAG, "\n" + message + "\nMentor id : " + userId + "\nStudent id : " + studentId);
+//        RequestParams requestParams = new RequestParams();
+//        requestParams.add("owner", studentId);
+//        requestParams.add("invitee", userId);
+//        requestParams.add("message", message);
+//        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+//        NetworkClient.sendConnectionRequest(context, requestParams, this, 17);
+//    }
+//
+//    private void disconnect(String connectionId, String oppositeUSerId) {
+//        Log.d(TAG, "id : " + connectionId + ", user_id : " + oppositeUSerId +
+//                ", user_group : " + DashboardActivity.dashboardActivity.user_group);
+//        RequestParams requestParams = new RequestParams();
+//        requestParams.add("id", connectionId);
+//        requestParams.add("user_id", oppositeUSerId);
+//        requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
+//        NetworkClient.breakConnection(context, requestParams, this, 21);
+//    }
 
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
@@ -321,7 +311,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         TextView experienceTV;
         TextView chargesTV;
         ImageView qualifiedIV;
-        ImageView connectionIV;
+//        ImageView connectionIV;
     }
 
 

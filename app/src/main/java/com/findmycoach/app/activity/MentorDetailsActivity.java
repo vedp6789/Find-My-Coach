@@ -81,6 +81,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private ImageView iv_prevMonth;
     private ImageView iv_nextMonth;
     private ScrollableGridView calendarView;
+    private Dialog calendarDialog;
+
+
     private CalendarGridAdapter adapter1;
     private Calendar _calendar;
     public static int month, year;
@@ -139,7 +142,11 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     }
 
     private void initializeCalendar() {
-        iv_prevMonth = (ImageView) findViewById(R.id.iv_prevMonth);
+        calendarDialog = new Dialog(this);
+        calendarDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        calendarDialog.setContentView(R.layout.calendar_layout);
+
+        iv_prevMonth = (ImageView) calendarDialog.findViewById(R.id.prevTimeIB);
         iv_prevMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,7 +155,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             }
         });
 
-        tv_currentMonth = (TextView) findViewById(R.id.tv_currentMonth);
+        tv_currentMonth = (TextView) calendarDialog.findViewById(R.id.currentTimeTV);
         tv_currentMonth.setText(DateFormat.format(dateTemplate, _calendar.getTime()));
         tv_currentMonth.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,7 +183,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             }
         });
 
-        iv_nextMonth = (ImageView) findViewById(R.id.iv_nextMonth);
+        iv_nextMonth = (ImageView) calendarDialog.findViewById(R.id.nextTimeIB);
         iv_nextMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,7 +191,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             }
         });
 
-        calendarView = (ScrollableGridView) findViewById(R.id.calendar_mentor_availability);
+        calendarView = (ScrollableGridView) calendarDialog.findViewById(R.id.calendar_mentor_availability);
         getCalendarDetailsAPICall();    /* API call for 3 months data */
 
 
@@ -439,9 +446,9 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 //        profileEmail = (TextView) findViewById(R.id.profile_email);
         profileDob = (TextView) findViewById(R.id.profile_dob);
 
-        tv_currentMonth = (TextView) findViewById(R.id.tv_currentMonth);
-        iv_nextMonth = (ImageView) findViewById(R.id.iv_nextMonth);
-        iv_prevMonth = (ImageView) findViewById(R.id.iv_prevMonth);
+        tv_currentMonth = (TextView) findViewById(R.id.currentTimeTV);
+        iv_nextMonth = (ImageView) findViewById(R.id.nextTimeIB);
+        iv_prevMonth = (ImageView) findViewById(R.id.prevTimeIB);
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -509,6 +516,12 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
     private void populateFields() {
         profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
+        profileName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calendarDialog.show();
+            }
+        });
 //        try {
 //            profileEmail.setText(userInfo.getEmail());
 //        } catch (Exception e) {
@@ -921,7 +934,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
 
     private void updateCalendarOnFailure() {
-
         adapter1 = new CalendarGridAdapter(MentorDetailsActivity.this, month, year, this);
         _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
         tv_currentMonth.setText(DateFormat.format(dateTemplate,

@@ -36,7 +36,6 @@
             android:id="@+id/buttonlayout"
             android:layout_width="0dp"
             android:layout_height="@dimen/login_button_height"
-            android:layout_below="@id/tv_classes_abailability"
             android:layout_margin="@dimen/calender_margin"
             android:layout_weight="1.3"
             android:background="@color/white"

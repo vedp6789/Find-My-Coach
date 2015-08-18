@@ -746,6 +746,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         intent.putExtra("no_of_tabs", numberOfTabsToBeShown <= 0 ? 1 : numberOfTabsToBeShown);
         intent.putExtra("mentor_for", mentorFor);
         intent.putExtra("search_for", subCategoryTextView.getText().toString());
+        if(timeBarrier) {
+            intent.putExtra("show_time_navigation", true);
+            intent.putExtra("around_time", fromTimingInput.getText().toString().trim());
+        }
         isSearching = false;
         startActivity(intent);
     }
