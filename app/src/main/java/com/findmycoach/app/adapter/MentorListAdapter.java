@@ -1,8 +1,8 @@
 package com.findmycoach.app.adapter;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,14 +20,18 @@ import com.findmycoach.app.R;
 import com.findmycoach.app.activity.DashboardActivity;
 import com.findmycoach.app.beans.search.Datum;
 import com.findmycoach.app.util.Callback;
-import com.findmycoach.app.util.MetaData;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.StorageHelper;
 import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,8 +40,9 @@ import java.util.List;
 public class MentorListAdapter extends BaseAdapter implements Callback {
     private Context context;
     private List<Datum> users;
-    private String studentId;
+    private String studentId, year, years;
     private int clickedPosition = -1;
+    private Drawable defaultDrawable;
 
     private static final String TAG = "FMC";
 
@@ -45,6 +50,9 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         this.context = context;
         this.users = users;
         studentId = StorageHelper.getUserDetails(context, "user_id");
+        defaultDrawable = context.getResources().getDrawable(R.drawable.user_icon);
+        year = context.getResources().getString(R.string.yr);
+        years = context.getResources().getString(R.string.yrs);
     }
 
     @Override
@@ -70,7 +78,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
             view = inflater.inflate(R.layout.user_list_item, null);
 
             ViewHolder holder = new ViewHolder();
-            holder.userImage = (ImageView) view.findViewById(R.id.mentor_image);
+            holder.userIV = (ImageView) view.findViewById(R.id.mentor_image);
             holder.nameTV = (TextView) view.findViewById(R.id.mentor_name);
             holder.ageTV = (TextView) view.findViewById(R.id.age);
             holder.daysTV = (TextView) view.findViewById(R.id.daysTV);
@@ -79,14 +87,43 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
             holder.distanceTV = (TextView) view.findViewById(R.id.distanceTV);
             holder.experienceTV = (TextView) view.findViewById(R.id.experience);
             holder.chargesTV = (TextView) view.findViewById(R.id.charges);
-            holder.imageConnect = (ImageView) view.findViewById(R.id.connect_mentor);
+            holder.qualifiedIV = (ImageView) view.findViewById(R.id.imageView4);
+            holder.connectionIV = (ImageView) view.findViewById(R.id.connect_mentor);
             view.setTag(holder);
         }
 
         ViewHolder holder = (ViewHolder) view.getTag();
         final Datum user = users.get(position);
 
+        //Set Mentor image
+        holder.userIV.setImageDrawable(defaultDrawable);
+        if (user.getPhotograph() != null && !(user.getPhotograph()).equals("")) {
+            Picasso.with(context)
+                    .load((String) user.getPhotograph())
+                    .placeholder(R.drawable.user_icon)
+                    .error(R.drawable.user_icon)
+                    .into(holder.userIV);
+        }
 
+        //Set Mentor name
+        try {
+            holder.nameTV.setText(user.getFirstName().split(" ")[0]);
+        } catch (Exception e) {
+            holder.nameTV.setText(user.getFirstName());
+        }
+
+        //Set Mentor age
+        try {
+            int age = getAgeInyearsFromDOB(user.getDateOfBirth());
+            if (age > 1)
+                holder.ageTV.setText(age + years);
+            else if (age == 0)
+                holder.ageTV.setText(age + years);
+        } catch (Exception e) {
+            holder.ageTV.setText("");
+        }
+
+        //Set Mentor available days
         try {
             ArrayList<String> days = new ArrayList<>();
             Collections.addAll(days, user.getAvailableDays().split(","));
@@ -105,41 +142,56 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         } catch (Exception ignored) {
         }
 
-
+        //Set Mentor current student count
         try {
-            int charges = Integer.parseInt(user.getChargesClass());
-            String currency = MetaData.getCurrencySymbol(MetaData.countryCode(context), context);
-            if (currency.equals(""))
-                holder.chargesTV.setText(charges == 0 ? user.getChargesHour() + "/hr" : charges + "/cl");
-            else
-                holder.chargesTV.setText(Html.fromHtml(currency + " " + (charges == 0 ? user.getChargesHour() + "/hr" : charges + "/cl")));
-        } catch (Exception ignored) {
-        }
-
-
-        holder.nameTV.setText(user.getFirstName());
-        try {
-            holder.distanceTV.setText(String.format("%.1f", Double.parseDouble(user.getDistance())) + " km");
+//            holder.noOfStudentsTV.setText(user.hetNoOfStudent);
         } catch (Exception e) {
         }
+
+        //Set Mentor rating
         try {
             holder.ratingTV.setText(user.getRating());
         } catch (Exception e) {
         }
-        if (user.getPhotograph() != null && !(user.getPhotograph()).equals("")) {
-            Picasso.with(context)
-                    .load((String) user.getPhotograph())
-                    .placeholder(R.drawable.user_icon)
-                    .error(R.drawable.user_icon)
-                    .into(holder.userImage);
+
+        //Set Mentor distance in KM
+        try {
+            holder.distanceTV.setText(String.format("%.1f", Double.parseDouble(user.getDistance())) + " km");
+        } catch (Exception e) {
         }
+
+        //Set Mentor Experience in years
+        try {
+            int experience = Integer.parseInt(user.getExperience());
+            holder.experienceTV.setText(experience + (experience > 1 ? years : year));
+        } catch (Exception e) {
+            holder.experienceTV.setText("0" + year);
+        }
+
+        //Set Mentor is qualified or not in current subject
+        try {
+//            if(user.isQualified)
+//                holder.qualifiedIV.setImageDrawable(qualified);
+//            else
+//                holder.qualifiedIV.setImageDrawable(notQualified);
+        } catch (Exception e) {
+        }
+
+        //Set Mentor charges
+        try {
+            holder.chargesTV.setText(user.getPrice());
+        } catch (Exception ignored) {
+        }
+
+
+        //Set Connection button depending on current connection status
         if (user.getConnectionStatus() != null && !user.getConnectionStatus().equals("broken") && !user.getConnectionStatus().equals("rejected")) {
             if (user.getConnectionStatus().equals("accepted") || user.getConnectionStatus().contains("mentor_mentee")) {
-                holder.imageConnect.setImageDrawable(context.getResources().getDrawable(R.drawable.disconnect));
+                holder.connectionIV.setImageDrawable(context.getResources().getDrawable(R.drawable.disconnect));
             } else if (user.getConnectionStatus().equals("pending")) {
-                holder.imageConnect.setImageDrawable(context.getResources().getDrawable(R.drawable.pending));
+                holder.connectionIV.setImageDrawable(context.getResources().getDrawable(R.drawable.pending));
             }
-            holder.imageConnect.setOnClickListener(new View.OnClickListener() {
+            holder.connectionIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     clickedPosition = position;
@@ -147,8 +199,8 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
                 }
             });
         } else {
-            holder.imageConnect.setImageDrawable(context.getResources().getDrawable(R.drawable.connect));
-            holder.imageConnect.setOnClickListener(new View.OnClickListener() {
+            holder.connectionIV.setImageDrawable(context.getResources().getDrawable(R.drawable.connect));
+            holder.connectionIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     clickedPosition = position;
@@ -259,7 +311,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     }
 
     private class ViewHolder {
-        ImageView userImage;
+        ImageView userIV;
         TextView nameTV;
         TextView ageTV;
         TextView daysTV;
@@ -268,6 +320,30 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         TextView distanceTV;
         TextView experienceTV;
         TextView chargesTV;
-        ImageView imageConnect;
+        ImageView qualifiedIV;
+        ImageView connectionIV;
+    }
+
+
+    private int getAgeInyearsFromDOB(String dobString) {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = format.parse(dobString);
+            Calendar dob = Calendar.getInstance();
+            dob.setTime(date);
+
+            Calendar today = Calendar.getInstance();
+            int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+            if (today.get(Calendar.MONTH) < dob.get(Calendar.MONTH)) {
+                age--;
+            } else if (today.get(Calendar.MONTH) == dob.get(Calendar.MONTH)
+                    && today.get(Calendar.DAY_OF_MONTH) < dob.get(Calendar.DAY_OF_MONTH)) {
+                age--;
+            }
+            return age;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }

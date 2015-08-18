@@ -46,7 +46,39 @@ public class Datum {
     @SerializedName("dates")
     @Expose
     private String availableDays;
+    @SerializedName("dob")
+    @Expose
+    private String dateOfBirth;
 
+    @Expose
+    private String experience;
+
+    @Expose
+    private String price;
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getExperience() {
+        return experience;
+    }
+
+    public void setExperience(String experience) {
+        this.experience = experience;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
     public String getChargesHour() {
         return chargesHour;
     }

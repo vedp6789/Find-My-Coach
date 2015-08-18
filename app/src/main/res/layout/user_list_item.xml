@@ -25,7 +25,6 @@
         android:layout_toLeftOf="@+id/age"
         android:layout_toRightOf="@+id/mentor_image"
         android:singleLine="true"
-        android:text="Name"
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_title"
         android:textStyle="bold" />
@@ -47,7 +46,6 @@
         android:layout_toEndOf="@+id/imageView"
         android:layout_toRightOf="@+id/imageView"
         android:singleLine="true"
-        android:text="12"
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_details" />
 
@@ -69,7 +67,6 @@
         android:layout_toEndOf="@+id/imageView2"
         android:layout_toRightOf="@+id/imageView2"
         android:singleLine="true"
-        android:text="3.5"
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_details" />
 
@@ -77,11 +74,11 @@
         android:id="@+id/connect_mentor"
         android:layout_width="@dimen/connection_button"
         android:layout_height="@dimen/connection_button"
+        android:padding="@dimen/connection_button_padding"
+        android:src="@drawable/connect"
+        android:layout_alignBottom="@+id/imageView4"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="@dimen/textView_padding_margin"
-        android:padding="@dimen/days_margin"
-        android:src="@drawable/connect" />
+        android:layout_alignParentEnd="true" />
 
 
     <ImageView
@@ -103,7 +100,6 @@
         android:layout_toRightOf="@+id/imageView3"
         android:maxWidth="@dimen/distance_tv_max_width"
         android:singleLine="true"
-        android:text="12km"
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_heading" />
 
@@ -122,7 +118,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="true"
-        android:text="5yrs"
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_heading"
         android:layout_alignBottom="@+id/imageView4"
@@ -134,7 +129,6 @@
         android:layout_marginLeft="@dimen/back_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="$25"
         android:singleLine="true"
         android:layout_alignBottom="@+id/experience"
         android:layout_toRightOf="@+id/experience"
@@ -152,7 +146,6 @@
         android:paddingLeft="@dimen/back_margin"
         android:paddingRight="@dimen/back_margin"
         android:singleLine="true"
-        android:text="AGE"
         android:textColor="@color/purple"
         android:textSize="@dimen/profile_heading" />
 
