@@ -775,7 +775,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                                                 endTime.set(Calendar.MINUTE, Integer.parseInt(slot_stop_time.split(":", 3)[1]));
                                                 WeekViewEvent weekViewEvent;
                                                 weekViewEvent = new WeekViewEvent(Long.parseLong(slot_id), getSlotTitle(start_date, stop_date, slot_start_time, slot_stop_time, slot_type, slot_week_days, slot_max_users), startTime, endTime, new_slot, 432);  /* For making a free slot information on week view */
-                                                weekViewEvent.setColor(getResources().getColor(R.color.grey_light));
+                                                weekViewEvent.setColor(getResources().getColor(R.color.gray_light));
                                                 events.add(weekViewEvent);
                                             }
                                         }
@@ -1104,7 +1104,7 @@ public class SetScheduleActivity extends Activity implements WeekView.MonthChang
                         new_slot.getSlot_type(), new_slot.getSlot_week_days()),
                 startTime, endTime, new_slot, mentorInfo, mentor_id, mentor_availablity,
                 202, charges, arrayList_subcategory);
-        weekViewEvent.setColor(getResources().getColor(R.color.grey_light));
+        weekViewEvent.setColor(getResources().getColor(R.color.gray_light));
         events.add(weekViewEvent);
     }
 

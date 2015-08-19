@@ -101,23 +101,23 @@ public class Data {
 
     @SerializedName("section_1")
     @Expose
-    private String section1;
+    private String myQualification;
 
     @SerializedName("section_2")
     @Expose
-    private String section2;
+    private String myAccredition;
 
     @SerializedName("section_3")
     @Expose
-    private String section3;
+    private String myExperience;
 
     @SerializedName("section_4")
     @Expose
-    private String section4;
+    private String myTeachingMethodology;
 
     @SerializedName("section_5")
     @Expose
-    private String section5;
+    private String myAwards;
 
     @SerializedName("slot_type")
     @Expose
@@ -279,44 +279,44 @@ public class Data {
         this.slotType = slotType;
     }
 
-    public String getSection1() {
-        return section1;
+    public String getMyQualification() {
+        return myQualification;
     }
 
-    public void setSection1(String section1) {
-        this.section1 = section1;
+    public void setMyQualification(String myQualification) {
+        this.myQualification = myQualification;
     }
 
-    public String getSection2() {
-        return section2;
+    public String getMyAccredition() {
+        return myAccredition;
     }
 
-    public void setSection2(String section2) {
-        this.section2 = section2;
+    public void setMyAccredition(String myAccredition) {
+        this.myAccredition = myAccredition;
     }
 
-    public String getSection3() {
-        return section3;
+    public String getMyExperience() {
+        return myExperience;
     }
 
-    public void setSection3(String section3) {
-        this.section3 = section3;
+    public void setMyExperience(String myExperience) {
+        this.myExperience = myExperience;
     }
 
-    public String getSection4() {
-        return section4;
+    public String getMyTeachingMethodology() {
+        return myTeachingMethodology;
     }
 
-    public void setSection4(String section4) {
-        this.section4 = section4;
+    public void setMyTeachingMethodology(String myTeachingMethodology) {
+        this.myTeachingMethodology = myTeachingMethodology;
     }
 
-    public String getSection5() {
-        return section5;
+    public String getMyAwards() {
+        return myAwards;
     }
 
-    public void setSection5(String section5) {
-        this.section5 = section5;
+    public void setMyAwards(String myAwards) {
+        this.myAwards = myAwards;
     }
 
     public String getAgeGroupPreferences() {

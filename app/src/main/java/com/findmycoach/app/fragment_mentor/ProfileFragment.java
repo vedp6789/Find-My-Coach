@@ -313,21 +313,21 @@ public class ProfileFragment extends Fragment implements Callback {
             profileExperience.setText(ex > 1 ? ex + " " + getResources().getString(R.string.years) : ex + " " + getResources().getString(R.string.year));
         }
 
-        if (userInfo.getSection1() != null && !userInfo.getSection1().equalsIgnoreCase("")) {
-            myQualification.setText(userInfo.getSection1());
+        if (userInfo.getMyQualification() != null && !userInfo.getMyQualification().equalsIgnoreCase("")) {
+            myQualification.setText(userInfo.getMyQualification());
         }
 
-        if (userInfo.getSection2() != null && !userInfo.getSection2().equalsIgnoreCase("")) {
-            myAccreditions.setText(userInfo.getSection2());
+        if (userInfo.getMyAccredition() != null && !userInfo.getMyAccredition().equalsIgnoreCase("")) {
+            myAccreditions.setText(userInfo.getMyAccredition());
         }
-        if (userInfo.getSection3() != null && !userInfo.getSection3().equalsIgnoreCase("")) {
-            myExperience.setText(userInfo.getSection3());
+        if (userInfo.getMyExperience() != null && !userInfo.getMyExperience().equalsIgnoreCase("")) {
+            myExperience.setText(userInfo.getMyExperience());
         }
-        if (userInfo.getSection4() != null && !userInfo.getSection4().equalsIgnoreCase("")) {
-            myTeachingMethodology.setText(userInfo.getSection4());
+        if (userInfo.getMyTeachingMethodology() != null && !userInfo.getMyTeachingMethodology().equalsIgnoreCase("")) {
+            myTeachingMethodology.setText(userInfo.getMyTeachingMethodology());
         }
-        if (userInfo.getSection5() != null && !userInfo.getSection5().equalsIgnoreCase("")) {
-            myAwards.setText(userInfo.getSection5());
+        if (userInfo.getMyAwards() != null && !userInfo.getMyAwards().equalsIgnoreCase("")) {
+            myAwards.setText(userInfo.getMyAwards());
         }
 
 

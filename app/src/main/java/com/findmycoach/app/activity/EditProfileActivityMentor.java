@@ -1038,21 +1038,21 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
             });
 
 
-            if (!userInfo.getSection1().equalsIgnoreCase("")) {
-                myQualification.setText(userInfo.getSection1());
+            if (!userInfo.getMyQualification().equalsIgnoreCase("")) {
+                myQualification.setText(userInfo.getMyQualification());
             }
 
-            if (!userInfo.getSection2().equalsIgnoreCase("")) {
-                myAccredition.setText(userInfo.getSection2());
+            if (!userInfo.getMyAccredition().equalsIgnoreCase("")) {
+                myAccredition.setText(userInfo.getMyAccredition());
             }
-            if (!userInfo.getSection3().equalsIgnoreCase("")) {
-                myExperience.setText(userInfo.getSection3());
+            if (!userInfo.getMyExperience().equalsIgnoreCase("")) {
+                myExperience.setText(userInfo.getMyExperience());
             }
-            if (!userInfo.getSection4().equalsIgnoreCase("")) {
-                myTeachingMethodology.setText(userInfo.getSection4());
+            if (!userInfo.getMyTeachingMethodology().equalsIgnoreCase("")) {
+                myTeachingMethodology.setText(userInfo.getMyTeachingMethodology());
             }
-            if (!userInfo.getSection5().equalsIgnoreCase("")) {
-                myAwards.setText(userInfo.getSection5());
+            if (!userInfo.getMyAwards().equalsIgnoreCase("")) {
+                myAwards.setText(userInfo.getMyAwards());
             }
 
 

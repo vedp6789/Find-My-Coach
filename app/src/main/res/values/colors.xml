@@ -8,7 +8,7 @@
     <color name="today_highlight_color">#0033b5e5</color>
 
     <color name="white">#ffffff</color>
-    <color name="grey_light">#D4D4D4</color>
+    <color name="gray_light">#D4D4D4</color>
     <color name="purple">#23214C</color>
     <color name="purple_dark_light">#827191</color>
     <color name="purple_light">#B8B3C9</color>
@@ -20,6 +20,9 @@
     <color name="bg_center">#3A256B</color>
     <color name="bg_end">#212048</color>
     <color name="bg_start">#5D339F</color>
+
+
+    <color name="gray_light_mentor_details">#F2F2F2</color>
 
     <!-- The app wide background color -->
     <color name="background_color">#fafafa</color>

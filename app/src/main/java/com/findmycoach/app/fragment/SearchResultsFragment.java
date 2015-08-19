@@ -44,8 +44,9 @@ public class SearchResultsFragment extends Fragment implements Callback {
     private String searchFor, aroundTime, searchedAroundTime;
     private Datum datum;
     private String connection_status_for_Selected_mentor;
+    private int noOfSTudents;
     private static final int NEED_TO_REFRESH = 100;
-    private boolean showTimeNavigation;
+    private boolean showTimeNavigation, isGettingMentorDetails;
     private TextView currentTime;
     private int timeNavigationGap;
 
@@ -69,6 +70,7 @@ public class SearchResultsFragment extends Fragment implements Callback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isGettingMentorDetails = false;
         if (getArguments() != null) {
             position = getArguments().getInt("position");
             requestParams = new RequestParams(convert(getArguments().getString("request_params")));
@@ -93,10 +95,20 @@ public class SearchResultsFragment extends Fragment implements Callback {
         searchResultsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (isGettingMentorDetails) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.get_mentor_is_already_called), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 connection_status_for_Selected_mentor = null;
+                noOfSTudents = 0;
                 if (users != null) {
                     datum = users.get(position);
                     connection_status_for_Selected_mentor = datum.getConnectionStatus();
+                    try {
+                        noOfSTudents = Integer.parseInt(datum.getNumberOfStudents());
+                    } catch (Exception e) {
+                        noOfSTudents = 0;
+                    }
                     getMentorDetails(datum.getId());
                 }
             }
@@ -142,7 +154,7 @@ public class SearchResultsFragment extends Fragment implements Callback {
             e.printStackTrace();
         }
 
-        if(calendar.get(Calendar.HOUR) == 0 && calendar.get(Calendar.AM_PM) == 1)
+        if (calendar.get(Calendar.HOUR) == 0 && calendar.get(Calendar.AM_PM) == 1)
             searchedAroundTime = "12:" + calendar.get(Calendar.MINUTE) + " PM";
         else
             searchedAroundTime = (calendar.get(Calendar.HOUR) < 10 ? ("0" + calendar.get(Calendar.HOUR)) : calendar.get(Calendar.HOUR))
@@ -183,6 +195,7 @@ public class SearchResultsFragment extends Fragment implements Callback {
         if (user_group != null) {
             requestParams.add("user_group", StorageHelper.getUserGroup(getActivity(), "user_group"));
             NetworkClient.getMentorDetails(getActivity(), requestParams, authToken, this, 24);
+            isGettingMentorDetails = true;
         } else {
             Toast.makeText(getActivity(), getResources().getString(R.string.check_network_connection), Toast.LENGTH_SHORT).show();
         }
@@ -193,9 +206,11 @@ public class SearchResultsFragment extends Fragment implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         if (calledApiValue == 24) {
+            isGettingMentorDetails = false;
             Intent intent = new Intent(getActivity(), MentorDetailsActivity.class);
             intent.putExtra("mentorDetails", (String) object);
             intent.putExtra("connection_status", connection_status_for_Selected_mentor);
+            intent.putExtra("no_of_students", noOfSTudents);
             datum = null;
             startActivityForResult(intent, NEED_TO_REFRESH);
         } else if (calledApiValue == 6) {
@@ -212,6 +227,8 @@ public class SearchResultsFragment extends Fragment implements Callback {
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
+        if (calledApiValue == 24)
+            isGettingMentorDetails = false;
         Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
     }
 }

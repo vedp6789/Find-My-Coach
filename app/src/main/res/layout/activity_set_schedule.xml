@@ -56,7 +56,7 @@
                     android:layout_height="@dimen/indicator"
                     android:layout_marginLeft="@dimen/calender_margin"
                     android:layout_marginRight="@dimen/calender_margin"
-                    android:background="@color/grey_light"
+                    android:background="@color/gray_light"
                     android:gravity="center" />
 
                 <com.findmycoach.app.views.ChizzleTextView
@@ -64,7 +64,7 @@
                     android:layout_height="@dimen/connection_button"
                     android:gravity="center"
                     android:text="@string/free_slots"
-                    android:textColor="@color/grey_light" />
+                    android:textColor="@color/gray_light" />
             </LinearLayout>
 
 

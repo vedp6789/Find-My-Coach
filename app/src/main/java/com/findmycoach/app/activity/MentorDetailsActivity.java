@@ -2,18 +2,11 @@ package com.findmycoach.app.activity;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.text.Html;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,11 +35,9 @@ import com.findmycoach.app.beans.authentication.SubCategoryName;
 import com.findmycoach.app.fragment.DatePickerFragment;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.Callback;
-import com.findmycoach.app.util.MetaData;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.StorageHelper;
-import com.findmycoach.app.views.ChizzleButton;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
@@ -61,18 +53,16 @@ import java.util.Locale;
 
 public class MentorDetailsActivity extends FragmentActivity implements Callback {
 
-    private ImageView profileImage;
-    private TextView profileName;
-    private TextView profileAddress;
-    private RatingBar profileRatting;
-    private TextView profileCharges;
-    //    private TextView profileEmail;
-    private TextView profileExperience;
-    private TextView profileQualification;
-    private TextView profileTravelAvailable;
-    //    private TextView profilePhone;
-    private TextView profileDob;
-    private LinearLayout areaOfCoaching;
+    private ImageView profileImage, toggleReviewIconIV;
+    private TextView profileName, ratingTV, noOfStudentsTV, reviewTitleTV;
+    private LinearLayout chatWithMentorLL, chatWithStudentsLL, reviewLL;
+    private ListView reviewsListView;
+
+    private TextView professionTV, areaOfCoachingTV, experienceTV,
+            coachingLanguageTV, qualificationTV, accrediationsTV, myMethodologyTV, awardsTV;
+    private LinearLayout professionLL, areaOfCoachingLL, experienceLL,
+            coachingLanguageLL, qualificationLL, accrediationsLL, myMethodologyLL, awardsLL;
+
     private Data userInfo = null;
     private String connectionStatus;
 
@@ -422,28 +412,37 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         Response mentorDetails = new Gson().fromJson(jsonData, Response.class);
         userInfo = mentorDetails.getData();
 
-        //  String searchedKeyWord = getIntent().getStringExtra("searched_keyword");
-//        if (searchedKeyWord != null && !searchedKeyWord.equals("-1")) {
-//            searchedKeyWord = DataBase.singleton(this).getSubCategory(searchedKeyWord);
-//            List<String> newSubCategory = new ArrayList<String>();
-//            newSubCategory.add(searchedKeyWord);
-//            userInfo.setSubCategoryName(newSubCategory);
-//        }
-
         array_list_subCategory = userInfo.getSubCategoryName();
 
         profileImage = (ImageView) findViewById(R.id.profile_image);
         profileName = (TextView) findViewById(R.id.profile_name);
-        profileAddress = (TextView) findViewById(R.id.profile_address);
-        profileExperience = (TextView) findViewById(R.id.profile_experience);
-        profileRatting = (RatingBar) findViewById(R.id.profile_rating);
-        profileQualification = (TextView) findViewById(R.id.profile_accomplishment);
-        profileCharges = (TextView) findViewById(R.id.profile_charges);
-        profileTravelAvailable = (TextView) findViewById(R.id.profile_travel_available);
-        areaOfCoaching = (LinearLayout) findViewById(R.id.areas_of_coaching);
-//        profilePhone = (TextView) findViewById(R.id.profile_phone);
-//        profileEmail = (TextView) findViewById(R.id.profile_email);
-        profileDob = (TextView) findViewById(R.id.profile_dob);
+        ratingTV = (TextView) findViewById(R.id.rating);
+        noOfStudentsTV = (TextView) findViewById(R.id.number_of_students);
+        chatWithMentorLL = (LinearLayout) findViewById(R.id.chat_with_mentor);
+        chatWithStudentsLL = (LinearLayout) findViewById(R.id.chat_with_students);
+        reviewLL = (LinearLayout) findViewById(R.id.review_LL);
+        reviewTitleTV = (TextView) findViewById(R.id.review_title_TV);
+        toggleReviewIconIV = (ImageView) findViewById(R.id.toggle_review_icon_IV);
+        reviewsListView = (ListView) findViewById(R.id.reviews_list_view);
+
+        professionTV = (TextView) findViewById(R.id.professionTV);
+        areaOfCoachingTV = (TextView) findViewById(R.id.areaOfCoachingTV);
+        experienceTV = (TextView) findViewById(R.id.experienceTV);
+        coachingLanguageTV = (TextView) findViewById(R.id.coachingLanguageTV);
+        qualificationTV = (TextView) findViewById(R.id.qualificationTV);
+        accrediationsTV = (TextView) findViewById(R.id.accrediationsTV);
+        myMethodologyTV = (TextView) findViewById(R.id.myMethodologyTV);
+        awardsTV = (TextView) findViewById(R.id.awardsTV);
+
+        professionLL = (LinearLayout) findViewById(R.id.professionLL);
+        areaOfCoachingLL = (LinearLayout) findViewById(R.id.areaOfCoachingLL);
+        experienceLL = (LinearLayout) findViewById(R.id.experienceLL);
+        coachingLanguageLL = (LinearLayout) findViewById(R.id.coachingLanguageLL);
+        qualificationLL = (LinearLayout) findViewById(R.id.qualificationLL);
+        accrediationsLL = (LinearLayout) findViewById(R.id.accrediationsLL);
+        myMethodologyLL = (LinearLayout) findViewById(R.id.myMethodologyLL);
+        awardsLL = (LinearLayout) findViewById(R.id.awardsLL);
+
 
         tv_currentMonth = (TextView) findViewById(R.id.currentTimeTV);
         iv_nextMonth = (ImageView) findViewById(R.id.nextTimeIB);
@@ -514,131 +513,85 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
 
     private void populateFields() {
-        profileName.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
+        try {
+            profileName.setText(userInfo.getFirstName().trim().split(" ")[0]);
+        } catch (Exception e) {
+            profileName.setText(userInfo.getFirstName());
+        }
+
         profileName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calendarDialog.show();
             }
         });
-//        try {
-//            profileEmail.setText(userInfo.getEmail());
-//        } catch (Exception e) {
-//        }
-        String address = "";
-        if (userInfo.getMultipleAddress() != null && !userInfo.getMultipleAddress().isEmpty()) {
-            address = address + userInfo.getMultipleAddress().get(0).getLocale() + ", ";
-        }
-        if (userInfo.getCity() != null) {
-            address = address + userInfo.getCity() + ", ";
-        }
-        if (userInfo.getState() != null) {
-            address = address + userInfo.getState() + ", ";
-        }
-        if (userInfo.getZip() != null) {
-            address = address + userInfo.getZip();
-        }
-        try {
-            profileDob.setText((String) userInfo.getDob());
-        } catch (Exception e) {
-        }
-        if (userInfo.getExperience() != null) {
-            int ex = 0;
-            try {
-                ex = Integer.parseInt(userInfo.getExperience());
-            } catch (Exception e) {
-                ex = 0;
-            }
-            profileExperience.setText(ex > 1 ? ex + " " + getResources().getString(R.string.years) : ex + " " + getResources().getString(R.string.year));
-        }
-        if (userInfo.getAccomplishments() != null) {
-            profileQualification.setText(userInfo.getAccomplishments());
-        }
-        profileAddress.setText(address);
-        if (userInfo.getCharges() != null) {
-            charges = (userInfo.getCharges().equals("0") ? userInfo.getCharges() + " per hour" : userInfo.getCharges() + " per hour");
-            Log.d(TAG, "Charges amount : " + charges.split("per", 2)[0] + "charges unit : " + charges.split("per", 2)[1]);
-            String currency = MetaData.getCurrencySymbol(MetaData.countryCode(this), this);
-            if (currency.equals(""))
-                profileCharges.setText(charges);
-            else
-                profileCharges.setText(Html.fromHtml(currency + " " + charges));
-        }
 
-        try {
-            profileRatting.setRating(Float.parseFloat(userInfo.getRating()));
-        } catch (Exception e) {
-            profileRatting.setRating(0f);
-        }
-        LayerDrawable stars = (LayerDrawable) profileRatting.getProgressDrawable();
-        stars.getDrawable(2).setColorFilter(getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);
-        stars.getDrawable(1).setColorFilter(getResources().getColor(R.color.purple), PorterDuff.Mode.SRC_ATOP);
-        stars.getDrawable(0).setColorFilter(getResources().getColor(R.color.purple_light), PorterDuff.Mode.SRC_ATOP);
-        if (userInfo.getAvailabilityYn() != null && userInfo.getAvailabilityYn().equals("1")) {
-            profileTravelAvailable.setText(getResources().getString(R.string.yes));
-        } else {
-            profileTravelAvailable.setText(getResources().getString(R.string.no));
-        }
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
             ImageLoader imgLoader = new ImageLoader(profileImage);
             imgLoader.execute((String) userInfo.getPhotograph());
         }
 
-        if (array_list_subCategory != null && array_list_subCategory.size() > 0 && array_list_subCategory.get(0) != null && !array_list_subCategory.get(0).getSub_category_name().trim().equals("")) {
-            List<com.findmycoach.app.views.ChizzleButton> buttons = new ArrayList<>();
-            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            for (SubCategoryName areaOfInterest : array_list_subCategory) {
-                Button button = (Button) inflater.inflate(R.layout.button, null);
-                button.setText(areaOfInterest.getSub_category_name());
-                buttons.add((ChizzleButton) button);
-            }
-            populateViews(areaOfCoaching, buttons, this);
+        try {
+            int rating = Integer.parseInt(userInfo.getRating());
+            ratingTV.setText(String.valueOf(rating));
+        } catch (Exception e) {
+            ratingTV.setText("0");
         }
 
-//        profilePhone.setText(userInfo.getPhonenumber());
-    }
 
-    private void populateViews(LinearLayout linearLayout, List<com.findmycoach.app.views.ChizzleButton> views, Context context) {
-
-        Display display = getWindowManager().getDefaultDisplay();
-        linearLayout.invalidate();
-        int maxWidth = display.getWidth() - 40;
-
-        LinearLayout.LayoutParams params = null;
-        LinearLayout newLL = new LinearLayout(context);
-        newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        newLL.setOrientation(LinearLayout.VERTICAL);
-        newLL.setGravity(Gravity.CENTER_HORIZONTAL);
-
-        int widthSoFar = 0;
-
-        for (Button view : views) {
-            LinearLayout LL = new LinearLayout(context);
-            LL.setOrientation(LinearLayout.VERTICAL);
-            LL.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
-            LL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-            view.measure(0, 0);
-            params = new LinearLayout.LayoutParams(view.getMeasuredWidth(), profileDob.getHeight());
-            params.setMargins(2, 2, 2, 2);
-
-            LL.addView(view, params);
-            LL.measure(0, 0);
-            widthSoFar += view.getMeasuredWidth();
-            if (widthSoFar >= maxWidth) {
-                linearLayout.addView(newLL);
-                newLL = new LinearLayout(context);
-                newLL.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, profileDob.getHeight()));
-                newLL.setOrientation(LinearLayout.VERTICAL);
-                newLL.setGravity(Gravity.CENTER_HORIZONTAL);
-                params = new LinearLayout.LayoutParams(LL.getMeasuredWidth(), LL.getMeasuredHeight());
-                newLL.addView(LL, params);
-                widthSoFar = LL.getMeasuredWidth();
-            } else {
-                newLL.addView(LL);
-            }
+        try {
+            noOfStudentsTV.setText(getIntent().getIntExtra("no_of_students", 0) + "");
+        } catch (Exception e) {
+            noOfStudentsTV.setText("0");
         }
-        linearLayout.addView(newLL);
+
+        if (userInfo.getProfession() != null && !userInfo.getProfession().trim().isEmpty())
+            professionTV.setText(userInfo.getProfession().trim());
+        else
+            professionLL.setVisibility(View.GONE);
+
+        if (userInfo.getSubCategoryName() != null && userInfo.getSubCategoryName().size() > 0) {
+            String subCategory = "";
+            for (SubCategoryName subCategoryName : userInfo.getSubCategoryName())
+                subCategory = subCategory + ", " + subCategoryName.getSub_category_name();
+
+            subCategory = subCategory.replaceFirst(", ", "");
+            areaOfCoachingTV.setText(subCategory);
+        } else
+            areaOfCoachingLL.setVisibility(View.GONE);
+
+        try {
+            int experience = Integer.parseInt(userInfo.getExperience());
+            experienceTV.setText(experience + (experience > 1 ? getResources().getString(R.string.yrs) : getResources().getString(R.string.yr)));
+        } catch (Exception e) {
+            experienceTV.setText("0" + getResources().getString(R.string.yr));
+        }
+
+        if (userInfo.getMediumOfEducation() != null && !userInfo.getMediumOfEducation().trim().isEmpty())
+            coachingLanguageTV.setText(userInfo.getMediumOfEducation().trim());
+        else
+            coachingLanguageLL.setVisibility(View.GONE);
+
+        if (userInfo.getMyQualification() != null && !userInfo.getMyQualification().trim().isEmpty())
+            qualificationTV.setText(userInfo.getMyQualification().trim());
+        else
+            qualificationLL.setVisibility(View.GONE);
+
+        if (userInfo.getMyAccredition() != null && !userInfo.getMyAccredition().trim().isEmpty())
+            accrediationsTV.setText(userInfo.getMyAccredition().trim());
+        else
+            accrediationsLL.setVisibility(View.GONE);
+
+        if (userInfo.getMyTeachingMethodology() != null && !userInfo.getMyTeachingMethodology().trim().isEmpty())
+            myMethodologyTV.setText(userInfo.getMyTeachingMethodology().trim());
+        else
+            myMethodologyLL.setVisibility(View.GONE);
+
+        if (userInfo.getMyAwards() != null && !userInfo.getMyAwards().trim().isEmpty())
+            awardsTV.setText(userInfo.getMyAwards().trim());
+        else
+            awardsLL.setVisibility(View.GONE);
+
 
     }
 
