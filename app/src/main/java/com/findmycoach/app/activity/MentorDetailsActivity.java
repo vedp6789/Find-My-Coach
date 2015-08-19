@@ -519,7 +519,14 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             profileName.setText(userInfo.getFirstName());
         }
 
-        profileName.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.bookClass).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calendarDialog.show();
+            }
+        });
+
+        findViewById(R.id.bookTrialClass).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calendarDialog.show();

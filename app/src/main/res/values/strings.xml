@@ -597,6 +597,8 @@
     <string name="free_classes_promotion">Free class</string>
     <string name="chat_mentor">Chat with Mentor</string>
     <string name="chat_students">Chat with Students</string>
+    <string name="book_class">Book Class</string>
+    <string name="book_trial_class">Trial Class</string>
 
 
     <!-- Actions -->
