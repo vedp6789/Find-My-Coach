@@ -39,8 +39,8 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         this.context = context;
         this.users = users;
         defaultDrawable = context.getResources().getDrawable(R.drawable.user_icon);
-        qualified = context.getResources().getDrawable(R.drawable.radio_btn_selected);
-        notQualified = context.getResources().getDrawable(R.drawable.radio_btn_unselected);
+        qualified = context.getResources().getDrawable(R.drawable.qualified);
+        notQualified = context.getResources().getDrawable(R.drawable.qualified_not);
         year = context.getResources().getString(R.string.yr);
         years = context.getResources().getString(R.string.yrs);
     }
@@ -96,6 +96,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         }
 
         //Set Mentor name
+        holder.nameTV.setText("");
         try {
             holder.nameTV.setText(user.getFirstName().split(" ")[0]);
         } catch (Exception e) {
@@ -103,6 +104,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         }
 
         //Set Mentor age
+        holder.ageTV.setText("");
         try {
             int age = getAgeInyearsFromDOB(user.getDateOfBirth());
             if (age > 1)
@@ -114,14 +116,15 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         }
 
         //Set Mentor available days
+        String fontPurple = "<font color='#392366'>";
+        String fontPurpleLight = "<font color='#AFA4C4'>";
+        String fontEnd = "</font>";
+        holder.daysTV.setText(Html.fromHtml(fontPurpleLight + "M T W T F S Su" + fontEnd));
         try {
             ArrayList<String> days = new ArrayList<>();
             Collections.addAll(days, user.getAvailableDays().split(","));
             String daysAsString = "";
             String[] daysArray = {"M", "T", "W", "Th", "F", "S", "Su"};
-            String fontPurple = "<font color='#392366'>";
-            String fontPurpleLight = "<font color='#AFA4C4'>";
-            String fontEnd = "</font>";
             for (String d : daysArray) {
                 if (days.contains(d)) {
                     daysAsString = daysAsString + " " + fontPurple + d + fontEnd;
@@ -133,24 +136,28 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         }
 
         //Set Mentor current student count
+        holder.noOfStudentsTV.setText("");
         try {
             holder.noOfStudentsTV.setText(user.getNumberOfStudents());
         } catch (Exception e) {
         }
 
         //Set Mentor rating
+        holder.ratingTV.setText("");
         try {
             holder.ratingTV.setText(user.getRating());
         } catch (Exception e) {
         }
 
         //Set Mentor distance in KM
+        holder.distanceTV.setText("");
         try {
             holder.distanceTV.setText(String.format("%.1f", Double.parseDouble(user.getDistance())) + " km");
         } catch (Exception e) {
         }
 
         //Set Mentor Experience in years
+        holder.experienceTV.setText("");
         try {
             int experience = Integer.parseInt(user.getExperience());
             holder.experienceTV.setText(experience + (experience > 1 ? years : year));
@@ -168,9 +175,10 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         }
 
         //Set Mentor charges
+        holder.chargesTV.setText("");
         try {
             if (user.getPrice() != null)
-                holder.chargesTV.setText(user.getPrice() + user.getPriceFor());
+                holder.chargesTV.setText(Html.fromHtml(fontPurple + user.getPrice() + "/" + user.getPriceFor() + fontEnd));
         } catch (Exception ignored) {
         }
 
