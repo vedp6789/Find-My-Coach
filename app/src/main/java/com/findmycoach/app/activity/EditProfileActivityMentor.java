@@ -148,7 +148,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
     private ListView addressListViewMentor;
     private ArrayList<Address> addressArrayListMentor;
     private AddressAdapter addressAdapter;
-    private boolean removeProfilePicture;
+    private boolean removeProfilePicture, isFirstCallToCountryApi;
     private List<Country> countries;
     private ArrayList<String> country_names;
     public static int FLAG_FOR_EDIT_PROFILE_MENTOR = -11;
@@ -191,9 +191,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
             Log.e(TAG, "12");
             updateCountryByLocation();
             getAddress();
-
         }
-
 
         populateUserData();
         isGettingAddress = false;
@@ -264,6 +262,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
 
     private void initialize() {
         try {
+            isFirstCallToCountryApi = true;
             priceArrayList = new ArrayList<>();
             list_of_city = new ArrayList<>();
             mediumOfTeaching = new ArrayList<>();
@@ -371,7 +370,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
             sp_minimum_time.setAdapter(new ArrayAdapter<Integer>(this, R.layout.textview, min_time_selection));
             sp_time_window.setAdapter(new ArrayAdapter<Integer>(this, R.layout.textview, time_variance_window));
 
-
             max_time_selection = new ArrayList<>();
             max_time_selection.clear();
             if ((Integer) sp_minimum_time.getSelectedItem() == 15 && (Integer) sp_time_window.getSelectedItem() == 15) {
@@ -402,7 +400,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     updateMaxHourSpinner();
-
                 }
 
 
@@ -739,7 +736,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
                 } catch (Exception ignored) {
                 }
 
-                city_id = 0;
                 if (input.length() >= 2) {
                     if (city_with_states.isPerformingCompletion()) {
                         return;
@@ -1100,6 +1096,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
                             Country country = countries.get(i);
                             if (country_id == country.getId()) {
                                 profileCountry.setSelection(i + 1);  /* i+1 because first item of profileCountry is Select string */
+                                if(country_id != 199)
+                                    city_with_states.setVisibility(View.VISIBLE);
                                 city_id = 0;
                                 city_with_states.setText("");
                                 locale.setText("");
@@ -1971,13 +1969,23 @@ if(rb_individual.isChecked())
         } else if (calledApiValue == 54) {
             list_of_city = (ArrayList<CityDetails>) object;
 
-//            try {
-//                if (list_of_city.size() == 1) {
-//                    city_id = list_of_city.get(0).getCity_id();
-//                }
-//            } catch (Exception ignored) {
-//                llCity.setVisibility(View.VISIBLE);
-//            }
+            try {
+                if (list_of_city.size() == 1) {
+                    city_id = list_of_city.get(0).getCity_id();
+                    city_with_states.setText(list_of_city.get(0).getCity_name());
+                    llCity.setVisibility(View.GONE);
+                } else {
+                    if (!isFirstCallToCountryApi) {
+                        city_id = 0;
+                        city_with_states.setText("");
+                    }
+                    llCity.setVisibility(View.VISIBLE);
+                }
+            } catch (Exception ignored) {
+                llCity.setVisibility(View.VISIBLE);
+            }
+            isFirstCallToCountryApi = false;
+            city_with_states.setError(null);
 //
 //            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() == 0) {
 //                if (city_name != "" && list_of_city != null && list_of_city.size() > 0) {
