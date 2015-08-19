@@ -804,10 +804,14 @@
     <string name="class_duration1">Classes duration(min.):</string>
     <string name="max_class_week">Maximum number of classes for a student in week</string>
     <string name="max_class_week1">Maximum number of classes for a student in week:</string>
+<!--
     <string name="pricing_per_hour_individual">Pricing per hour for an individual class</string>
-    <string name="pricing_per_class_individual">Pricing per class for an individual class</string>
-    <string name="pricing_per_hour_group">Pricing per hour for a group class</string>
-    <string name="pricing_per_class_group">Pricing per class for a group class</string>
+-->
+    <string name="pricing_per_hour_individual">Pricing per hour for an Individual Lesson</string>
+    <string name="pricing_per_class_individual">Pricing per Individual Lesson</string>
+    <!--<string name="pricing_per_hour_group">Pricing per hour for a group class</string>-->
+    <string name="pricing_per_hour_group">Pricing per Group Lesson</string>
+    <string name="pricing_per_class_group">Pricing per Group Lesson</string>
     <string name="max_hour_in_a_day">Maximum class duration for a day(min.)</string>
     <string name="max_hour_in_a_day1">Maximum class duration for a day(min.):</string>
 

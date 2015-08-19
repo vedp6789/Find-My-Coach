@@ -1379,7 +1379,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint=""
-                                android:inputType="numberDecimal"
+                                android:inputType="number"
                                 android:singleLine="true"
                                 android:textCursorDrawable="@drawable/cursor_purple"
                                 android:textSize="@dimen/profile_details" />
@@ -1453,7 +1453,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint=""
-                                android:inputType="numberDecimal"
+                                android:inputType="number"
                                 android:singleLine="true"
                                 android:textCursorDrawable="@drawable/cursor_purple"
                                 android:textSize="@dimen/profile_details" />
