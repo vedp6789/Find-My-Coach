@@ -29,7 +29,7 @@
         <item>My connections</item>
         <item>My schedules</item>
         <item>Settings</item>
-        <item>Support and FAQ</item>
+        <item>Support and Feedback</item>
         <item>Logout</item>
     </string-array>
     <string-array name="gender">
@@ -61,22 +61,22 @@
         <item>9 PM</item>
         <item>10 PM</item>
         <item>11 PM</item>
-        <item>12 am</item>
+        <item>12 AM</item>
     </string-array>
     <string-array name="time1">
         <item>Select</item>
-        <item>1 am</item>
-        <item>2 am</item>
-        <item>3 am</item>
-        <item>4 am</item>
-        <item>5 am</item>
-        <item>6 am</item>
-        <item>7 am</item>
-        <item>8 am</item>
-        <item>9 am</item>
-        <item>10 am</item>
-        <item>11 am</item>
-        <item>12 am</item>
+        <item>1 AM</item>
+        <item>2 AM</item>
+        <item>3 AM</item>
+        <item>4 AM</item>
+        <item>5 AM</item>
+        <item>6 AM</item>
+        <item>7 AM</item>
+        <item>8 AM</item>
+        <item>9 AM</item>
+        <item>10 AM</item>
+        <item>11 AM</item>
+        <item>12 AM</item>
         <item>1 PM</item>
         <item>2 PM</item>
         <item>3 PM</item>
@@ -162,7 +162,7 @@
     <string name="children">My Children</string>
     <string name="child_dob">Child Dob</string>
     <string name="total_charges">Total charges:</string>
-    <string name="class_of_type">Lesson type</string>
+    <string name="class_of_type">Lesson Type(s)</string>
     <string name="individual">Individual</string>
     <string name="group">Group</string>
     <string name="start_time_of_class">Start time</string>
@@ -325,7 +325,7 @@
     <string name="verify_phone">Verify your Mobile Number</string>
     <string name="sending_code">Sending code</string>
     <string name="already_slot_found">Sorry, there is already a slot between\n</string>
-    <string name="otp_sent_to_registered_number">am Otp has been sent to your registered number,please wait</string>
+    <string name="otp_sent_to_registered_number">An Otp has been sent to your registered number,please wait</string>
     <string name="and">\tand\t</string>
     <string name="from1">\tfrom\t</string>
     <string name="to2">\tto\t</string>
@@ -381,7 +381,7 @@
     <string name="prompt_email_id">Email Id</string>
     <string name="prompt_email_id_col">Email Id :</string>
     <string name="prompt_password">Password</string>
-    <string name="prompt_password_minimum_5_characters">Password (min. 5 characters)</string>
+    <string name="prompt_password_minimum_5_characters">Create Password(min. 5 char.)</string>
     <string name="old_password">Old Password:</string>
     <string name="new_password">New Password:</string>
     <string name="new_password_re">Re Enter New Password:</string>
@@ -389,7 +389,7 @@
     <string name="prompt_confirm_password">Confirm New Password</string>
     <string name="prompt_commit">Commit</string>
     <string name="prompt_first_name">First name</string>
-    <string name="prompt_first_middle_name">First Name Middle Name</string>
+    <string name="prompt_first_middle_name">First Name &#160;&#160;&#160;&#160;&#160;&#160;Middle Name</string>
     <string name="prompt_middle_name">Middle name (optional)</string>
     <string name="prompt_last_name">Last name</string>
     <string name="prompt_date_of_birth">D.O.B.</string>
@@ -439,20 +439,20 @@
     <string name="prompt_passion">Passion</string>
     <string name="prompt_profession">Profession</string>
     <string name="prompt_accomplishment">Qualification</string>
-    <string name="enter_accomplishment">Enter qualification</string>
-    <string name="prompt_willing_to_travel">Teaching location preference </string>
+    <string name="enter_accomplishment">Enter Qualification</string>
+    <string name="prompt_willing_to_travel">Teaching Location Preference </string>
     <string name="prompt_charges">Coaching fee</string>
     <string name="prompt_experience">Experience</string>
     <string name="prompt_experience_col">Experience :</string>
-    <string name="prompt_experience_in_years">Experience in year</string>
+    <string name="prompt_experience_in_years">Experience in Year(s)</string>
     <string name="prompt_select_experience_in_years">Select experience in year</string>
-    <string name="students_preference">I like to teach</string>
-    <string name="about_me">About me</string>
+    <string name="students_preference">I Like to Teach</string>
+    <string name="about_me">About Me</string>
     <string name="other_address">My Other Address</string>
     <string name="other_addresses">My Other Addresses</string>
     <string name="change_photo">Change Photo</string>
     <string name="add_photo">Add Photo</string>
-    <string name="teaching_medium_preferences">Languages I can Communicate In</string>
+    <string name="teaching_medium_preferences">Languages I Communicate in</string>
     <string name="prompt_facebook">Facebook</string>
     <string name="prompt_google_plus">Google +</string>
     <string name="days">Days</string>
@@ -464,15 +464,15 @@
     <string name="all">All</string>
     <string name="timing">Timing</string>
     <string name="class_timing">Timing:</string>
-    <string name="to">to :</string>
+    <string name="to">To :</string>
     <string name="to1">to</string>
     <string name="done">Done</string>
     <string name="starting_from">Starting From:</string>
     <string name="from_date">From:</string>
-    <string name="to_date">to:</string>
-    <string name="start_date1">Start Date</string>
-    <string name="class_start_date">Sart Date:</string>
-    <string name="class_stop_date">Stop Date:</string>
+    <string name="to_date">To:</string>
+    <string name="start_date1">Start date</string>
+    <string name="class_start_date">Start date:</string>
+    <string name="class_stop_date">Stop date:</string>
     <string name="till">Until:</string>
     <string name="select">Select</string>
     <string name="select_leave_blank">Select/Leave Blank</string>
@@ -480,7 +480,7 @@
     <string name="forever">Forever</string>
     <string name="how_long">How long?</string>
     <string name="date_picker_from">From</string>
-    <string name="date_picker_to">to</string>
+    <string name="date_picker_to">To</string>
     <string name="no_search_result_found">No result found</string>
     <string name="prompt_category">Category</string>
     <string name="prompt_sub_category">Subcategory</string>

@@ -120,7 +120,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private RadioGroup radioGroup;
     private RelativeLayout addChildLayout;
     private CheckBox multipleAddress;
-    private boolean removeProfilePicture;
+    private boolean removeProfilePicture, isFirstCallToCountryApi;
     private List<Country> countries;
     private ArrayList<String> country_names;
     public static int FLAG_FOR_EDIT_PROFILE_MENTEE = -5;
@@ -212,6 +212,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     }
 
     private void initialize() {
+        isFirstCallToCountryApi = true;
         list_of_city = new ArrayList<>();
         city_with_states = (AutoCompleteTextView) findViewById(R.id.city_with_state);
         ll_physical_address = (RelativeLayout) findViewById(R.id.ll_physical_address);
@@ -519,7 +520,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             @Override
             public void afterTextChanged(Editable s) {
                 selected_city = null;/* making selected_city null because if user do changes in city and does not select city from suggested city then this selected_city string should be null which is used to validate the city */
-                city_id = 0;
                 String input = city_with_states.getText().toString().trim();
                 try {
                     if (input.contains("("))
@@ -717,7 +717,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         });
 
 
-
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -740,7 +739,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                         Toast.makeText(EditProfileActivityMentee.this, "Please select a city from suggestions", Toast.LENGTH_LONG).show();
                 }
             }
-        
+
         });
 
         /*pinCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -974,6 +973,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                         Country country = countries.get(i);
                         if (country_id == country.getId()) {
                             profileCountry.setSelection(i + 1);  /* i+1 because first item of profileCountry is Select string */
+                            if(country_id != 199)
+                                city_with_states.setVisibility(View.VISIBLE);
                             city_id = 0;
                             city_with_states.setText("");
                             locale.setText("");
@@ -991,15 +992,15 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
 
             try {
-                if(address.getStateName()!=null && !address.getStateName().isEmpty())
-                    city_with_states.setText(address.getCityName()+" ("+address.getStateName()+")");
+                if (address.getStateName() != null && !address.getStateName().isEmpty())
+                    city_with_states.setText(address.getCityName() + " (" + address.getStateName() + ")");
                 else {
                     city_with_states.setText(address.getCityName());
                 }
             } catch (Exception ignored) {
             }
             try {
-              
+
                 city_id = address.getCity_id();
             } catch (Exception ignored) {
             }
@@ -1147,7 +1148,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             isValid = false;
         }
 
-        if(profileCountry.getSelectedItemPosition() == 0){
+        if (profileCountry.getSelectedItemPosition() == 0) {
             TextView errorText = (TextView) profileCountry.getSelectedView();
             errorText.setError(getResources().getString(R.string.error_not_selected));
             errorText.setTextColor(Color.RED);//just to highlight that this is an error
@@ -1165,7 +1166,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         }
 
         if (city_with_states.getText().toString().trim().isEmpty()) {
-            if(isValid){
+            if (isValid) {
                 city_with_states.setError(getResources().getString(R.string.enter_city));
                 city_with_states.requestFocus();
             }
@@ -1459,13 +1460,24 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             updateAutoSuggestion(suggestion);
         } else if (calledApiValue == 54) {
             list_of_city = (ArrayList<CityDetails>) object;
-//            try {
-//                if (list_of_city.size() == 1) {
-//                    city_id = list_of_city.get(0).getCity_id();
-//                }
-//            } catch (Exception ignored) {
-//                llCity.setVisibility(View.VISIBLE);
-//            }
+
+            try {
+                if (list_of_city.size() == 1) {
+                    city_id = list_of_city.get(0).getCity_id();
+                    city_with_states.setText(list_of_city.get(0).getCity_name());
+                    llCity.setVisibility(View.GONE);
+                } else {
+                    if (!isFirstCallToCountryApi) {
+                        city_id = 0;
+                        city_with_states.setText("");
+                    }
+                    llCity.setVisibility(View.VISIBLE);
+                }
+            } catch (Exception ignored) {
+                llCity.setVisibility(View.VISIBLE);
+            }
+            isFirstCallToCountryApi = false;
+            city_with_states.setError(null);
 //
 //            if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() == 0) {
 //                if (city_name != "" && list_of_city != null && list_of_city.size() > 0) {
