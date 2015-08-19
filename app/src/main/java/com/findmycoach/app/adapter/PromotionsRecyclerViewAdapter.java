@@ -118,6 +118,10 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
                 }
             }
 
+            if (active_promotions)
+                holder.iv_delete_promotion.setText(context.getResources().getStringArray(R.array.promotions_pager_titles)[1]);
+            else
+                holder.iv_delete_promotion.setText(context.getResources().getStringArray(R.array.promotions_pager_titles)[0]);
             holder.iv_delete_promotion.setOnClickListener(null);
             holder.iv_delete_promotion.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -158,7 +162,7 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
                                     e.printStackTrace();
                                 }
                                 if (activeInactivePromotions != null) {
-                                    activeInactivePromotions.deletePromotion(requestParams, position, holder.dialog,jsonArray);
+                                    activeInactivePromotions.deletePromotion(requestParams, position, holder.dialog, jsonArray);
                                 } else {
                                     Log.e("FMC", "ActiveInactivePromotions instance null");
                                 }
@@ -251,7 +255,7 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
     public class ViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout rlPromotionDetails, rlPromotionTitle, rlPromotionType, rlPromotionDiscount, rlPromotionFreeClass, rlPromotionMandatoryClasses;
         TextView tv_no_promotions_message, tv_promotions_title, tv_promotions_type, tv_promotions_discount, tv_promotions_free_classes, tv_promotions_mandatory_classes;
-        ImageView iv_delete_promotion;
+        Button iv_delete_promotion;
         Dialog dialog;
         TextView tv_message, tv_title;
         Button b1, b2;
@@ -271,7 +275,7 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
             tv_promotions_discount = (TextView) itemView.findViewById(R.id.tvDiscountPercentageVal);
             tv_promotions_free_classes = (TextView) itemView.findViewById(R.id.tvFreeClassesVal);
             tv_promotions_mandatory_classes = (TextView) itemView.findViewById(R.id.tvMandatoryClassesVal);
-            iv_delete_promotion = (ImageView) itemView.findViewById(R.id.iv_cancel);
+            iv_delete_promotion = (Button) itemView.findViewById(R.id.iv_cancel);
 
             dialog = new Dialog(context);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

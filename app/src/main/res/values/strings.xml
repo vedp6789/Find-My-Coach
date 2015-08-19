@@ -37,18 +37,18 @@
         <item>Female</item>
     </string-array>
     <string-array name="time">
-        <item>12 AM</item>
-        <item>1 AM</item>
-        <item>2 AM</item>
-        <item>3 AM</item>
-        <item>4 AM</item>
-        <item>5 AM</item>
-        <item>6 AM</item>
-        <item>7 AM</item>
-        <item>8 AM</item>
-        <item>9 AM</item>
-        <item>10 AM</item>
-        <item>11 AM</item>
+        <item>12 am</item>
+        <item>1 am</item>
+        <item>2 am</item>
+        <item>3 am</item>
+        <item>4 am</item>
+        <item>5 am</item>
+        <item>6 am</item>
+        <item>7 am</item>
+        <item>8 am</item>
+        <item>9 am</item>
+        <item>10 am</item>
+        <item>11 am</item>
         <item>12 PM</item>
         <item>1 PM</item>
         <item>2 PM</item>
@@ -61,22 +61,22 @@
         <item>9 PM</item>
         <item>10 PM</item>
         <item>11 PM</item>
-        <item>12 AM</item>
+        <item>12 am</item>
     </string-array>
     <string-array name="time1">
         <item>Select</item>
-        <item>1 AM</item>
-        <item>2 AM</item>
-        <item>3 AM</item>
-        <item>4 AM</item>
-        <item>5 AM</item>
-        <item>6 AM</item>
-        <item>7 AM</item>
-        <item>8 AM</item>
-        <item>9 AM</item>
-        <item>10 AM</item>
-        <item>11 AM</item>
-        <item>12 AM</item>
+        <item>1 am</item>
+        <item>2 am</item>
+        <item>3 am</item>
+        <item>4 am</item>
+        <item>5 am</item>
+        <item>6 am</item>
+        <item>7 am</item>
+        <item>8 am</item>
+        <item>9 am</item>
+        <item>10 am</item>
+        <item>11 am</item>
+        <item>12 am</item>
         <item>1 PM</item>
         <item>2 PM</item>
         <item>3 PM</item>
@@ -106,7 +106,7 @@
     <string name="resend_code">Resend Verification Code</string>
     <string name="find_mentor">Find mentor</string>
     <string name="trainee">Trainees</string>
-    <string name="coinciding_vacation">Class coming with the vacation</string>
+    <string name="coinciding_vacation">Lesson coming with the vacation</string>
     <string name="change_location">Change</string>
     <string name="preferred_time">Preferred Time and Day</string>
     <string name="search">Search</string>
@@ -144,12 +144,12 @@
     <string name="class_location">Location</string>
     <string name="possible_max_users">Maximum number of students</string>
     <string name="max_students">Places remaining to get scheduled</string>
-    <string name="max_students_mentee">Class size</string>
+    <string name="max_students_mentee">Lesson size</string>
     <string name="tutorial_location">Tutorial location</string>
     <string name="fmc_service">FMC Service</string>
     <string name="fmc_service_description">FMC running in service to allow push notification.</string>
-    <string name="class_schedule">Class schedule</string>
-    <string name="your_class_schedule">Your class schedule</string>
+    <string name="class_schedule">Lesson schedule</string>
+    <string name="your_class_schedule">Your Lesson schedule</string>
     <string name="vacation_today">There is vacation on this day</string>
     <string name="payment_details">Payment details</string>
     <string name="payment_details_method">Add payment method</string>
@@ -162,7 +162,7 @@
     <string name="children">My Children</string>
     <string name="child_dob">Child Dob</string>
     <string name="total_charges">Total charges:</string>
-    <string name="class_of_type">Class type</string>
+    <string name="class_of_type">Lesson type</string>
     <string name="individual">Individual</string>
     <string name="group">Group</string>
     <string name="start_time_of_class">Start time</string>
@@ -170,14 +170,14 @@
     <string name="class_type">Type</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
-    <string name="class_info">Class details</string>
-    <string name="class_slot_info">Class slot details</string>
+    <string name="class_info">Lesson details</string>
+    <string name="class_slot_info">Lesson slot details</string>
     <string name="vacation_details">Vacation details</string>
     <string name="free_class">Availability</string>
     <string name="active_slot">Free slot</string>
     <string name="vacation_time">Vacation time</string>
-    <string name="coinciding_vac">Vacation over class</string>
-    <string name="class_time">Class time</string>
+    <string name="coinciding_vac">Vacation over Lesson</string>
+    <string name="class_time">Lesson time</string>
     <string name="scheduled_event_of">Scheduled event of</string>
     <string name="vacation_schedule">Vacations</string>
 
@@ -185,7 +185,7 @@
     <string name="children_details">Children Details</string>
     <string name="address_preference">Address Preferences</string>
     <string name="mentor_details">Mentor\'s information</string>
-    <string name="tutorial_preference_by_mentee">You will attend this class at the mentor\'s location.</string>
+    <string name="tutorial_preference_by_mentee">You will attend this Lesson at the mentor\'s location.</string>
 
 
     <!-- end of unique strings block-->
@@ -196,7 +196,7 @@
     <string name="attach_video_clicked">Attach video is clicked</string>
     <string name="too_big_image">Image is too big, Please choose smaller one</string>
     <string name="image_not_picked">You have not picked image</string>
-    <string name="pick_local_image">Select an image from your phone</string>
+    <string name="pick_local_image">Select am image from your phone</string>
     <string name="pick_current_location">Pick current location</string>
     <string name="choose_suggested_copy">Choose a suggested city</string>
     <string name="enter_necessary_details">Please enter necessary details</string>
@@ -232,16 +232,16 @@
     <string name="are_out_of_duration"> are not coming in the selected duration!</string>
     <string name="is_out_of_duration"> is not coming in the selected duration!</string>
     <string name="stop_time_should_be_grater">Completion time should be greater than start time !</string>
-    <string name="class_is_available">Class is available</string>
+    <string name="class_is_available">Lesson is available</string>
     <string name="select_suggested_location"> Select one of the suggested locations</string>
     <string name="quantized_timing">Minute is selected as per your selected start time!</string>
-    <string name="single_student_can_schedule_class">Only an individual will be able to schedule class!</string>
-    <string name="multiple_student_can_schedule_class">Multiple students will be able to schedule class!</string>
+    <string name="single_student_can_schedule_class">Only am individual will be able to schedule Lesson!</string>
+    <string name="multiple_student_can_schedule_class">Multiple students will be able to schedule Lesson!</string>
     <string name="maximum_students">Please provide maximum students for this group.</string>
     <string name="end_date_required">Please provide completion date of this slot.</string>
     <string name="mentor_is_not_free">Mentor is not free on this day.</string>
     <string name="you_are_not_connected">You are not connected with the mentor yet.</string>
-    <string name="no_slot_from_mentor">Mentor has not scheduled any class slot for this day.</string>
+    <string name="no_slot_from_mentor">Mentor has not scheduled any Lesson slot for this day.</string>
     <string name="past_day">This day already past</string>
     <string name="child_date_of_birth_please">please provide child date of birth.</string>
     <string name="date_of_birth_please">please provide date of birth.</string>
@@ -249,7 +249,7 @@
     <string name="response_message">Please give a reason why you are rejecting this request.</string>
     <string name="connection_request_message"> has requested to connect</string>
     <string name="connection_request_title">has sent a connection request</string>
-    <string name="schedule_request_title">has sent a class schedule request</string>
+    <string name="schedule_request_title">has sent a Lesson schedule request</string>
     <string name="schedule_request_message"> has requested a schedule</string>
     <string name="days_ago"> days ago</string>
     <string name="no_connection_request">No connection request</string>
@@ -257,8 +257,8 @@
     <string name="no_notification_found">No notification</string>
     <string name="connection_request_accepted"> has accepted your connection request</string>
     <string name="connection_request_rejected"> has rejected your connection request</string>
-    <string name="schedule_request_accepted"> has approved your class</string>
-    <string name="schedule_request_rejected"> has declined your class schedule</string>
+    <string name="schedule_request_accepted"> has approved your Lesson</string>
+    <string name="schedule_request_rejected"> has declined your Lesson schedule</string>
     <string name="is_in_connection"> is in connection</string>
     <string name="request_declined">\'s request get declined</string>
     <string name="schedule_accepted"> schedule get confirmed</string>
@@ -279,16 +279,16 @@
     <string name="mentor_non_availability_message">Mentor cannot be available to your location!</string>
     <string name="class_not_possible_as_vacation_found">You have vacation on this day</string>
     <string name="out_of">places free out of</string>
-    <string name="mentor_class_availability">Class availability</string>
+    <string name="mentor_class_availability">Lesson availability</string>
     <string name="my_schedule">My schedules</string>
     <string name="conn_request_accepted">Hi, your connection request is accepted by</string>
     <string name="conn_request_rejected">Hi, your connection request is rejected by</string>
     <string name="schedule_confirmation">Hi, your schedule request get confirmed by</string>
     <string name="schedule_rejection">Your schedule request get rejected by</string>
     <string name="push_text_message">Hi you got a text message</string>
-    <string name="push_image_message">Hi you got an image message</string>
+    <string name="push_image_message">Hi you got am image message</string>
     <string name="push_video_message">Hi you got a video message</string>
-    <string name="schedule_request_push_notification">Hi, you have a new class schedule request from </string>
+    <string name="schedule_request_push_notification">Hi, you have a new Lesson schedule request from </string>
     <string name="conn_req_push">"Hi, connection request from "</string>
     <string name="up_to">Up to</string>
     <string name="above">above</string>
@@ -325,7 +325,7 @@
     <string name="verify_phone">Verify your Mobile Number</string>
     <string name="sending_code">Sending code</string>
     <string name="already_slot_found">Sorry, there is already a slot between\n</string>
-    <string name="otp_sent_to_registered_number">An Otp has been sent to your registered number,please wait</string>
+    <string name="otp_sent_to_registered_number">am Otp has been sent to your registered number,please wait</string>
     <string name="and">\tand\t</string>
     <string name="from1">\tfrom\t</string>
     <string name="to2">\tto\t</string>
@@ -333,7 +333,7 @@
     <string name="forrr">for</string>
     <string name="cannot_placed">\nSo this slot cannot be placed!</string>
     <string name="new_slot_with_vacation">Hi, you have placed a new slot with a vacation between \n</string>
-    <string name="vacation_similar_to_slot_request">Sorry, there is a vacation which does not allow this class slot.\nVacation duration:\t</string>
+    <string name="vacation_similar_to_slot_request">Sorry, there is a vacation which does not allow this Lesson slot.\nVacation duration:\t</string>
     <string name="slot_summary">Slot summary</string>
 
 
@@ -370,14 +370,14 @@
     <!-- Strings related to login -->
 
     <!-- String s related to Prompting -->
-    <string name="promotionTitle">Promotion title</string>
-    <string name="promotionType">Promotion type</string>
-    <string name="discountPercentage">Discount percentage</string>
-    <string name="freeClasses">Free classes</string>
-    <string name="mandatoryClasses">Mandatory classes</string>
+    <string name="promotionTitle">Promotion Title</string>
+    <string name="promotionType">Promotion Type</string>
+    <string name="discountPercentage">Discount Percentage</string>
+    <string name="freeClasses">Free Lessons</string>
+    <string name="mandatoryClasses">Mandatory Lessons</string>
     <string name="prompt_email">User Id</string>
-    <string name="prompt_update_profile">Please update your profile</string>
-    <string name="prompt_enter_phone">Enter phone number</string>
+    <string name="prompt_update_profile">Please Update Your Profile</string>
+    <string name="prompt_enter_phone">Enter Phone Number</string>
     <string name="prompt_email_id">Email Id</string>
     <string name="prompt_email_id_col">Email Id :</string>
     <string name="prompt_password">Password</string>
@@ -402,11 +402,11 @@
     <string name="prompt_language_3">Language 3</string>
     <string name="prompt_language_4">Language 4</string>
     <string name="prompt_grade">Grade</string>
-    <string name="prompt_area_of_interest">Area of interests</string>
+    <string name="prompt_area_of_interest">Area of Interests</string>
     <string name="prompt_area_of_coaching">Area of Coaching</string>
-    <string name="please_add_area_of_interest">Please add area of interest.</string>
-    <string name="please_add_area_of_coaching">Please add area of coaching.</string>
-    <string name="prompt_coaching_type">Class Type</string>
+    <string name="please_add_area_of_interest">Please Add Area of Interest.</string>
+    <string name="please_add_area_of_coaching">Please Add Area of Coaching.</string>
+    <string name="prompt_coaching_type">Lesson Type</string>
     <string name="prompt_training_location">Preferred Trainer Location</string>
     <string name="prompt_male">Male</string>
     <string name="prompt_female">Female</string>
@@ -414,23 +414,23 @@
     <string name="prompt_phone_col">Mobile Number :</string>
     <string name="prompt_qualified">I have Professional Qualifications in</string>
     <string name="prompt_submit">Submit</string>
-    <string name="prompt_address">Physical address</string>
+    <string name="prompt_address">Physical Address</string>
     <string name="prompt_complete_address">Complete Street Address</string>
     <string name="profile_address">Address</string>
     <string name="prompt_address_line_1">City</string>
-    <string name="prompt_group_class_location">Group class location</string>
+    <string name="prompt_group_class_location">Group Lesson Location</string>
 
     <string name="prompt_address1">City, state, country</string>
     <string name="prompt_city">City</string>
     <string name="prompt_locality">Locality</string>
     <string name="enter_city">Enter city</string>
-    <string name="enter_city_from_suggestion">Please select city from suggestions</string>
-    <string name="enter_physical_address">Enter physical address</string>
-    <string name="enter_locale">Enter locale</string>
-    <string name="enter_address">Enter address</string>
-    <string name="enter_dob">Enter date of birth</string>
-    <string name="select_dob">Select date of birth</string>
-    <string name="enter_pin">Enter zip/post code</string>
+    <string name="enter_city_from_suggestion">Please Select City From Suggestions</string>
+    <string name="enter_physical_address">Enter Physical Address</string>
+    <string name="enter_locale">Enter Locale</string>
+    <string name="enter_address">Enter Address</string>
+    <string name="enter_dob">Enter Date of Birth</string>
+    <string name="select_dob">Select Date of Birth</string>
+    <string name="enter_pin">Enter Zip/Post Code</string>
     <string name="prompt_state">State</string>
     <string name="prompt_country">Country of Residence</string>
     <string name="prompt_pin">Zip/Post Code</string>
@@ -448,39 +448,39 @@
     <string name="prompt_select_experience_in_years">Select experience in year</string>
     <string name="students_preference">I like to teach</string>
     <string name="about_me">About me</string>
-    <string name="other_address">My other address</string>
-    <string name="other_addresses">My other addresses</string>
-    <string name="change_photo">Change photo</string>
-    <string name="add_photo">Add photo</string>
-    <string name="teaching_medium_preferences">Languages I can communicate in</string>
+    <string name="other_address">My Other Address</string>
+    <string name="other_addresses">My Other Addresses</string>
+    <string name="change_photo">Change Photo</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="teaching_medium_preferences">Languages I can Communicate In</string>
     <string name="prompt_facebook">Facebook</string>
     <string name="prompt_google_plus">Google +</string>
     <string name="days">Days</string>
     <string name="class_days">days</string>
     <string name="class_day">day</string>
-    <string name="select_days">Select days</string>
+    <string name="select_days">Select Days</string>
     <string name="from">From :</string>
     <string name="around">Around :</string>
     <string name="all">All</string>
     <string name="timing">Timing</string>
     <string name="class_timing">Timing:</string>
-    <string name="to">To :</string>
+    <string name="to">to :</string>
     <string name="to1">to</string>
     <string name="done">Done</string>
-    <string name="starting_from">Starting from:</string>
+    <string name="starting_from">Starting From:</string>
     <string name="from_date">From:</string>
-    <string name="to_date">To:</string>
-    <string name="start_date1">Start date</string>
-    <string name="class_start_date">Start date:</string>
-    <string name="class_stop_date">Stop date:</string>
+    <string name="to_date">to:</string>
+    <string name="start_date1">Start Date</string>
+    <string name="class_start_date">Sart Date:</string>
+    <string name="class_stop_date">Stop Date:</string>
     <string name="till">Until:</string>
     <string name="select">Select</string>
-    <string name="select_leave_blank">Select/Leave blank</string>
-    <string name="selected">selected</string>
+    <string name="select_leave_blank">Select/Leave Blank</string>
+    <string name="selected">Selected</string>
     <string name="forever">Forever</string>
     <string name="how_long">How long?</string>
     <string name="date_picker_from">From</string>
-    <string name="date_picker_to">To</string>
+    <string name="date_picker_to">to</string>
     <string name="no_search_result_found">No result found</string>
     <string name="prompt_category">Category</string>
     <string name="prompt_sub_category">Subcategory</string>
@@ -510,11 +510,11 @@
     <string name="event_time">Time:</string>
     <string name="mentee_add">Mentee\'s address:</string>
     <string name="mentor_add">Mentor\'s address:</string>
-    <string name="requested_class_details">Requested class detail</string>
+    <string name="requested_class_details">Requested Lesson detail</string>
     <string name="prompt_hosting_yes">I can host group classes at My location</string>
     <string name="prompt_mutiple_address">Add more  Locations  for my search</string>
     <string name="prompt_addressline1">House no/street no</string>
-    <string name="prompt_fellow_student_location">I can go for a group class to a nearby students location</string>
+    <string name="prompt_fellow_student_location">I can go for a group Lesson to a nearby students location</string>
     <string name="prompt_multiple_address_mentor">I am available at Other Locations also</string>
     <string name="prompt_location_preference">Teaching Location Preference</string>
     <string name="prompt_select_locality_for_search">Select locality to start search</string>
@@ -575,7 +575,7 @@
     <string name="free_slots">Free Slots</string>
     <string name="vacation_event">Event with vacation</string>
     <string name="vacation">Vacation</string>
-    <string name="schedule_class">Schedule a class</string>
+    <string name="schedule_class">Schedule a Lesson</string>
     <string name="schedule_vacation">Vacation Schedule</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -589,7 +589,7 @@
     <string name="intermediate">Intermediate</string>
     <string name="advance">Advance</string>
     <string name="discount_type_promotion">Discount</string>
-    <string name="free_classes_promotion">Free class</string>
+    <string name="free_classes_promotion">Free Lesson</string>
 
 
     <!-- Actions -->
@@ -628,7 +628,7 @@
     <string name="alert_disconnect">Are you sure want to disconnect?</string>
     <string name="action_pending">Disconnect (Request already sent)</string>
     <string name="set_time">Set time</string>
-    <string name="schedule_vacation_note">Out of class</string>
+    <string name="schedule_vacation_note">Out of Lession</string>
     <string name="classes_availability">Mentor\'s availability</string>
     <string name="subject">Subject</string>
     <string name="class_subject">Subject:</string>
@@ -639,7 +639,7 @@
     <string name="duration">Duration</string>
     <string name="payment_option">Payment option</string>
     <string name="location">Location</string>
-    <string name="number_of_classes">Total class</string>
+    <string name="number_of_classes">Total Lessons</string>
     <string name="vacations">Vacation</string>
     <string name="address">Address please</string>
     <string name="mentor_for">Mentor for</string>
@@ -762,15 +762,15 @@
 
 
     <string-array name="teaching_preferences">
-        <item>I teach at my own location</item>
-        <item>I travel to student location</item>
-        <item>I am fine with either</item>
+        <item>I Teach at My Own Location</item>
+        <item>I Travel to Student Location</item>
+        <item>I am Fine With Either Location</item>
     </string-array>
 
     <string-array name="mentor_class_type">
         <item>Individual</item>
         <item>Group</item>
-        <item>I am fine with either</item>
+        <item>I am Fine With Either</item>
     </string-array>
 
 
@@ -780,44 +780,48 @@
         <item>Either</item>
     </string-array>
     <string name="title_activity_my_promotions">MyPromotions</string>
-    <string name="no_active_promotions">No active promotions!</string>
-    <string name="no_inactive_promotions">No inactive promotions!</string>
+    <string name="no_active_promotions">No Active Promotion!</string>
+    <string name="no_inactive_promotions">No Inactive Promotion!</string>
     <string name="add_promotion">Add</string>
-    <string name="create_promotion">Add new promotion</string>
-    <string name="noOfMandatoryClasses">No. of mandatory classes</string>
-    <string name="noOfFreeClasses">No. of free classes</string>
-    <string name="add_promotion_title">Add promotion title!</string>
-    <string name="add_dicount_percentage">Add discount percentage!</string>
-    <string name="add_free_classes">Add number of free class you will provide to mentee!</string>
-    <string name="add_mandatory_classes">Add number of mandatory classes for mentee!</string>
+    <string name="create_promotion">Add New Promotion</string>
+    <string name="noOfMandatoryClasses">No. of Mandatory Lessons</string>
+    <string name="noOfFreeClasses">No. of Free Lessons</string>
+    <string name="add_promotion_title">Add Promotion Title!</string>
+    <string name="add_dicount_percentage">Add Discount Percentage!</string>
+    <string name="add_free_classes">Add Number of Free Lessons You Will Provide to Mentee!</string>
+    <string name="add_mandatory_classes">Add Number of Mandatory Lessons For Mentee!</string>
     <string name="promotion">Promotion</string>
-    <string name="either_inactivate_or_delete">You can make your promotion inactive!</string>
-    <string name="inactivate">Make it inactive</string>
-    <string name="either_activate_or_delete">You can make your promotion active!</string>
-    <string name="activate">Make it active</string>
-    <string name="flexibility_on_class_duration">I am flexible on class duration?</string>
-    <string name="min_class_time">Minimum class duration(min.)</string>
-    <string name="min_class_time_label">Minimum class duration(min.):</string>
-    <string name="class_time_variance">Classes can vary in the duration of(min.)</string>
-    <string name="class_time_variance1">Classes can vary in the duration of(min.):</string>
-    <string name="class_duration">Classes duration(min.)</string>
-    <string name="class_duration1">Classes duration(min.):</string>
-    <string name="max_class_week">Maximum number of classes for a student in week</string>
-    <string name="max_class_week1">Maximum number of classes for a student in week:</string>
+    <string name="either_inactivate_or_delete">You can Make Your Promotion Inactive!</string>
+    <string name="inactivate">Make It Inactive</string>
+    <string name="either_activate_or_delete">You can Make Your Promotion Active!</string>
+    <string name="activate">Make It Active</string>
+    <string name="flexibility_on_class_duration">I am Flexible On Lesson duration?</string>
+    <string name="min_class_time">Minimum Lesson Duration(Min.)</string>
+    <string name="min_class_time_label">Minimum Lesson Duration(Min.):</string>
+    <string name="class_time_variance">Lessons can Vary In The Duration of(Min.)</string>
+    <string name="class_time_variance1">Lessons can Vary In The Duration of(Min.):</string>
+    <string name="class_duration">Lessons Duration(Min.)</string>
+    <string name="class_duration1">Lessons Duration(Min.):</string>
+    <string name="max_class_week">Max. No. of Lessons for a Student in a Week</string>
+    <string name="max_class_week1">Max. No. of Lessons for a Student in a Week:</string>
 <!--
-    <string name="pricing_per_hour_individual">Pricing per hour for an individual class</string>
+    <string name="pricing_per_hour_individual">Pricing per hour for am individual Lesson</string>
 -->
-    <string name="pricing_per_hour_individual">Pricing per hour for an Individual Lesson</string>
+    <string name="pricing_per_hour_individual">Pricing per Hour of Individual Lesson</string>
     <string name="pricing_per_class_individual">Pricing per Individual Lesson</string>
-    <!--<string name="pricing_per_hour_group">Pricing per hour for a group class</string>-->
+    <!--<string name="pricing_per_hour_group">Pricing per hour for a group Lesson</string>-->
     <string name="pricing_per_hour_group">Pricing per Group Lesson</string>
     <string name="pricing_per_class_group">Pricing per Group Lesson</string>
-    <string name="max_hour_in_a_day">Maximum class duration for a day(min.)</string>
-    <string name="max_hour_in_a_day1">Maximum class duration for a day(min.):</string>
+    <string name="max_hour_in_a_day">Maximum Lesson Duration For a Day(Min.)</string>
+    <string name="max_hour_in_a_day1">Maximum Lesson Duration For a Day(Min.):</string>
 
     <string name="price">Price</string>
-    <string name="individual_class_price">Individual class price:</string>
-    <string name="group_class_price">Group class price:</string>
+    <string name="individual_class_price">Individual Lesson Price:</string>
+    <string name="group_class_price">Group Lesson Price:</string>
+    <string name="add_sign">+</string>
+    <string name="trial_class_message">Willing to Provide Trial Lessons to a New Student</string>
+    <string name="individual_class_time_flexibility">Duration of Individual Lessons</string>
+    <string name="group_class_time_flexibility">Duration of Group Lessons</string>
 
 
 </resources>

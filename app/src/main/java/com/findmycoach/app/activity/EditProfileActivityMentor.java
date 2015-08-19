@@ -109,7 +109,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
     private TextView experienceInput;
     private EditText profileFirstName;
     private EditText profileLastName;
-    private Spinner profileGender, profileCountry;
+    private Spinner profileGender, profileCountry, sp_trial_classes;
     private TextView profileDOB;
     private EditText physicalAddress;
     private AutoCompleteTextView city_with_states;
@@ -144,7 +144,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
     private JSONArray selectedAreaOfCoachingJson;
     private Category category;
     private CheckBox multipleAddressMentor;
-    private Button addMoreAddress;
+    private ImageButton addMoreAddress;
     private ListView addressListViewMentor;
     private ArrayList<Address> addressArrayListMentor;
     private AddressAdapter addressAdapter;
@@ -171,7 +171,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
     private RadioButton rb_individual, rb_group, rb_both_class_type, rb_flexible, rb_not_flexible;
     private LinearLayout ll_when_flexible, ll_fix_class_duration, ll_individual_pricing, ll_group_pricing, ll_max_hour_a_day;
     private Spinner sp_minimum_time, sp_time_window, sp_max_hour_of_day, sp_fixed_duration, sp_max_class_in_week;
-    private TextView tv_individual_pricing_text, tv_group_pricing_text, tv_price_currency_individual, tv_price_currency_group;
+    private TextView tv_individual_pricing_text, tv_group_pricing_text, tv_price_currency_individual, tv_price_currency_group, tv_group_class_duration, tv_flexibility_on_class_duration;
     private EditText et_individual_class_price, et_group_class_price;
     private ArrayList<Integer> min_time_selection, time_variance_window, max_time_selection, fixed_class_duration;
     private int start_of_min_time, stop_of_min_time;
@@ -306,7 +306,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
             myExperienceLimit = (ChizzleTextView) findViewById(R.id.myExperienceLimit);
             myTeachingMethodologyLimit = (ChizzleTextView) findViewById(R.id.myTeachingMethodologyLimit);
             myAwardsLimit = (ChizzleTextView) findViewById(R.id.myAwardsLimit);
-            addMoreAddress = (Button) findViewById(R.id.addAddressMentor);
+            addMoreAddress = (ImageButton) findViewById(R.id.addAddressMentor);
             addressListViewMentor = (ListView) findViewById(R.id.addressesListViewMentor);
             addressArrayListMentor = new ArrayList<>();
             addressAdapter = new AddressAdapter(this, R.layout.muti_address_list_item, addressArrayListMentor, addressListViewMentor, false);
@@ -345,11 +345,17 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
             tv_group_pricing_text = (TextView) findViewById(R.id.tv_pricing_group);
             tv_price_currency_individual = (TextView) findViewById(R.id.tv_individual_price_and_currency_suggestion);
             tv_price_currency_group = (TextView) findViewById(R.id.tv_group_price_and_currency_suggestion);
+            tv_group_class_duration = (TextView) findViewById(R.id.tv_group_class_duration);
+            tv_flexibility_on_class_duration = (TextView) findViewById(R.id.tv_flexibility_on_class_duration);
             et_individual_class_price = (EditText) findViewById(R.id.et_price_individual);
             et_group_class_price = (EditText) findViewById(R.id.et_price_group);
+            sp_trial_classes = (Spinner) findViewById(R.id.sp_trial_classes);
 
             radioGroup_class_type.setOnCheckedChangeListener(this);
             radioGroup_flexibility.setOnCheckedChangeListener(this);
+
+            Integer trial_classes[] = {1, 2, 3, 4, 5};
+            sp_trial_classes.setAdapter(new ArrayAdapter<Integer>(this, R.layout.textview, trial_classes));
 
             start_of_min_time = getResources().getInteger(R.integer.start_time);
             stop_of_min_time = getResources().getInteger(R.integer.stop_time);
@@ -374,7 +380,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
 
             max_time_selection = new ArrayList<>();
             max_time_selection.clear();
-            if ((Integer) sp_minimum_time.getSelectedItem() == 15 && (Integer) sp_time_window.getSelectedItem() == 15) {
+            if ((Integer) sp_minimum_time.getSelectedItem() == 30 && (Integer) sp_time_window.getSelectedItem() == 15) {
                 int start_of_maximum_time_selection = (Integer) sp_minimum_time.getSelectedItem() + (Integer) sp_time_window.getSelectedItem();
                 int stop_of_max_time_selection = (Integer) sp_minimum_time.getSelectedItem() + getResources().getInteger(R.integer.maximum_hour_of_class_in_a_day);
 
@@ -591,7 +597,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
     }
 
     private void updateMaxHourSpinner() {
-
         max_time_selection.clear();
         int start_of_maximum_time_selection = (Integer) sp_minimum_time.getSelectedItem() + (Integer) sp_time_window.getSelectedItem();
         int stop_of_max_time_selection = (Integer) sp_minimum_time.getSelectedItem() + getResources().getInteger(R.integer.maximum_hour_of_class_in_a_day);
@@ -602,14 +607,12 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
         }
         arrayAdapter_max_hour.notifyDataSetChanged();
 
-
         if (max_hour_from_server > 0) {
 
             if (max_time_selection.contains(max_hour_from_server))
                 sp_max_hour_of_day.setSelection(max_time_selection.indexOf(max_hour_from_server));
             max_hour_from_server = -1;
         }
-
     }
 
     public void populateSubjectPreference(ArrayList<Integer> arrayList, List<AgeGroupPreferences> allAgeGroupPreferences) {
@@ -2190,6 +2193,13 @@ if(rb_individual.isChecked())
                 case R.id.radio_button_individual:
                     ll_group_pricing.setVisibility(View.GONE);
                     ll_individual_pricing.setVisibility(View.VISIBLE);
+                    tv_flexibility_on_class_duration.setVisibility(View.VISIBLE);
+                    radioGroup_flexibility.setVisibility(View.VISIBLE);
+                    tv_group_class_duration.setVisibility(View.GONE);
+                    ll_when_flexible.setVisibility(View.VISIBLE);
+                    ll_fix_class_duration.setVisibility(View.GONE);
+
+
                     if (rb_flexible.isChecked()) {
                         tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_individual));
                     } else {
@@ -2199,6 +2209,14 @@ if(rb_individual.isChecked())
                 case R.id.radio_button_group:
                     ll_individual_pricing.setVisibility(View.GONE);
                     ll_group_pricing.setVisibility(View.VISIBLE);
+
+                    tv_flexibility_on_class_duration.setVisibility(View.GONE);
+                    radioGroup_flexibility.setVisibility(View.GONE);
+                    tv_group_class_duration.setVisibility(View.VISIBLE);
+                    tv_group_class_duration.setText(getResources().getString(R.string.group_class_time_flexibility));
+                    ll_fix_class_duration.setVisibility(View.VISIBLE);
+                    ll_when_flexible.setVisibility(View.GONE);
+
                     if (rb_flexible.isChecked()) {
                         tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_group));
                     } else {
@@ -2208,10 +2226,19 @@ if(rb_individual.isChecked())
                 case R.id.radio_button_both_class:
                     ll_individual_pricing.setVisibility(View.VISIBLE);
                     ll_group_pricing.setVisibility(View.VISIBLE);
+                    tv_flexibility_on_class_duration.setVisibility(View.VISIBLE);
+                    radioGroup_flexibility.setVisibility(View.VISIBLE);
+                    tv_group_class_duration.setVisibility(View.VISIBLE);
+                    tv_group_class_duration.setText(getResources().getString(R.string.group_class_time_flexibility));
+                    ll_fix_class_duration.setVisibility(View.VISIBLE);
+                    ll_when_flexible.setVisibility(View.VISIBLE);
+
+
                     if (rb_flexible.isChecked()) {
                         tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_individual));
                         tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_group));
                     } else {
+
                         tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_class_individual));
                         tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_class_group));
                     }
@@ -2220,13 +2247,18 @@ if(rb_individual.isChecked())
         } else if (group == radioGroup_flexibility) {
             switch (checkedId) {
                 case R.id.radio_button_flexible:
-                    ll_fix_class_duration.setVisibility(View.GONE);
+                    ll_fix_class_duration.setVisibility(View.VISIBLE);
                     ll_when_flexible.setVisibility(View.VISIBLE);
                     if (rb_individual.isChecked()) {
                         tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_individual));
                     } else if (rb_group.isChecked()) {
+                        ll_fix_class_duration.setVisibility(View.VISIBLE);
+                        tv_group_class_duration.setVisibility(View.VISIBLE);
+                        tv_group_class_duration.setText(getResources().getString(R.string.group_class_time_flexibility));
                         tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_group));
                     } else if (rb_both_class_type.isChecked()) {
+                        ll_fix_class_duration.setVisibility(View.VISIBLE);
+                        tv_group_class_duration.setText(getResources().getString(R.string.group_class_time_flexibility));
                         tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_individual));
                         tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_group));
                     }
@@ -2234,6 +2266,8 @@ if(rb_individual.isChecked())
                 case R.id.radio_button_not_flexible:
                     ll_when_flexible.setVisibility(View.GONE);
                     ll_fix_class_duration.setVisibility(View.VISIBLE);
+                    tv_group_class_duration.setText("");  /* Removing the Group class duration
+                    message only as not the time will be fixed i.e both for group and individual class*/
                     if (rb_individual.isChecked()) {
                         tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_class_individual));
                     } else if (rb_group.isChecked()) {

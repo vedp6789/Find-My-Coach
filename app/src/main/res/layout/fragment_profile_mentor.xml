@@ -296,6 +296,24 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/back_margin"
+                android:text="@string/trial_class_message"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_heading"
+                android:textStyle="bold" />
+
+            <com.findmycoach.app.views.ChizzleTextViewBold
+                android:id="@+id/tv_number_trial_lessons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_heading" />
+
+            <com.findmycoach.app.views.ChizzleTextViewBold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/back_margin"
                 android:text="@string/class_of_type"
                 android:textColor="@color/purple"
                 android:textSize="@dimen/profile_heading"

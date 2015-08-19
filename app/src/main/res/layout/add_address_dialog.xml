@@ -60,14 +60,14 @@
 
 
             <ImageButton
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:id="@+id/deleteAddressButton"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/close_icon"
+                android:src="@drawable/close_icon2"
                 android:background="@drawable/circular_border_purple"
-                android:padding="12dp"
+                android:padding="8dp"
                 android:scaleType="fitCenter" />
             <!--<com.findmycoach.app.views.ChizzleEditText
                 android:id="@+id/zip"
