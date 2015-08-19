@@ -29,7 +29,7 @@
         <item>My connections</item>
         <item>My schedules</item>
         <item>Settings</item>
-        <item>Support and FAQ</item>
+        <item>Support and Feedback</item>
         <item>Logout</item>
     </string-array>
     <string-array name="gender">
@@ -162,7 +162,7 @@
     <string name="children">My Children</string>
     <string name="child_dob">Child Dob</string>
     <string name="total_charges">Total charges:</string>
-    <string name="class_of_type">Class type</string>
+    <string name="class_of_type">Lesson Type(s)</string>
     <string name="individual">Individual</string>
     <string name="group">Group</string>
     <string name="start_time_of_class">Start time</string>
@@ -381,7 +381,7 @@
     <string name="prompt_email_id">Email Id</string>
     <string name="prompt_email_id_col">Email Id :</string>
     <string name="prompt_password">Password</string>
-    <string name="prompt_password_minimum_5_characters">Password (min. 5 characters)</string>
+    <string name="prompt_password_minimum_5_characters">Create Password(min. 5 char.)</string>
     <string name="old_password">Old Password:</string>
     <string name="new_password">New Password:</string>
     <string name="new_password_re">Re Enter New Password:</string>
@@ -389,7 +389,7 @@
     <string name="prompt_confirm_password">Confirm New Password</string>
     <string name="prompt_commit">Commit</string>
     <string name="prompt_first_name">First name</string>
-    <string name="prompt_first_middle_name">First Name Middle Name</string>
+    <string name="prompt_first_middle_name">First Name &#160;&#160;&#160;&#160;&#160;&#160;Middle Name</string>
     <string name="prompt_middle_name">Middle name (optional)</string>
     <string name="prompt_last_name">Last name</string>
     <string name="prompt_date_of_birth">D.O.B.</string>
@@ -439,20 +439,20 @@
     <string name="prompt_passion">Passion</string>
     <string name="prompt_profession">Profession</string>
     <string name="prompt_accomplishment">Qualification</string>
-    <string name="enter_accomplishment">Enter qualification</string>
-    <string name="prompt_willing_to_travel">Teaching location preference </string>
+    <string name="enter_accomplishment">Enter Qualification</string>
+    <string name="prompt_willing_to_travel">Teaching Location Preference </string>
     <string name="prompt_charges">Coaching fee</string>
     <string name="prompt_experience">Experience</string>
     <string name="prompt_experience_col">Experience :</string>
-    <string name="prompt_experience_in_years">Experience in year</string>
+    <string name="prompt_experience_in_years">Experience in Year(s)</string>
     <string name="prompt_select_experience_in_years">Select experience in year</string>
-    <string name="students_preference">I like to teach</string>
-    <string name="about_me">About me</string>
-    <string name="other_address">My other address</string>
-    <string name="other_addresses">My other addresses</string>
-    <string name="change_photo">Change photo</string>
-    <string name="add_photo">Add photo</string>
-    <string name="teaching_medium_preferences">Languages I can communicate in</string>
+    <string name="students_preference">I Like to Teach</string>
+    <string name="about_me">About Me</string>
+    <string name="other_address">My Other Address</string>
+    <string name="other_addresses">My Other Addresses</string>
+    <string name="change_photo">Change Photo</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="teaching_medium_preferences">Languages I Communicate in</string>
     <string name="prompt_facebook">Facebook</string>
     <string name="prompt_google_plus">Google +</string>
     <string name="days">Days</string>
@@ -783,11 +783,11 @@
     <string name="no_active_promotions">No active promotions!</string>
     <string name="no_inactive_promotions">No inactive promotions!</string>
     <string name="add_promotion">Add</string>
-    <string name="create_promotion">Add new promotion</string>
+    <string name="create_promotion">Add New Promotion</string>
     <string name="noOfMandatoryClasses">No. of mandatory classes</string>
-    <string name="noOfFreeClasses">No. of free classes</string>
-    <string name="add_promotion_title">Add promotion title!</string>
-    <string name="add_dicount_percentage">Add discount percentage!</string>
+    <string name="noOfFreeClasses">No. of Free Classes</string>
+    <string name="add_promotion_title">Add Promotion Title!</string>
+    <string name="add_dicount_percentage">Add Discount Percentage!</string>
     <string name="add_free_classes">Add number of free class you will provide to mentee!</string>
     <string name="add_mandatory_classes">Add number of mandatory classes for mentee!</string>
     <string name="promotion">Promotion</string>
