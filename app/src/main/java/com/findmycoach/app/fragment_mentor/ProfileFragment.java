@@ -378,7 +378,7 @@ public class ProfileFragment extends Fragment implements Callback {
         }
 
         if(userInfo.getMin_number_of_classes() > 0){
-            tv_min_lessons_val.setText(userInfo.getMin_number_of_classes());
+            tv_min_lessons_val.setText(""+userInfo.getMin_number_of_classes());
         }
 
 

@@ -1741,7 +1741,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
 
             requestParams.add("max_classes_per_week", String.valueOf(sp_max_class_in_week.getSelectedItem()));
             requestParams.add("number_of_trial_classes", String.valueOf(sp_trial_classes.getSelectedItem()));
-            requestParams.add("min_number_of_classes", String.valueOf(sp_minimum_number_of_lessons.getSelectedItem()));
+            requestParams.add("minimum_number_of_classes", String.valueOf(sp_minimum_number_of_lessons.getSelectedItem()));
             JSONArray jsonArray_prices = new JSONArray();
             if (selected_class_type == 0) {
                 JSONObject jsonObject = new JSONObject();

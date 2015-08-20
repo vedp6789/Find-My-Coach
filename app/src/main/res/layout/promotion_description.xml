@@ -82,12 +82,39 @@
                 android:textSize="@dimen/profile_details" />
 
         </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rlDiscountOnClasses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlPromotionType">
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tvDiscountClasses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/discountOverNumberOfClasses"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details"
+                android:textStyle="bold" />
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tvDiscountClassesVal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tvDiscountClasses"
+                android:textColor="@color/purple"
+                android:paddingLeft="@dimen/back_margin"
+                android:layout_centerHorizontal="true"
+                android:textSize="@dimen/profile_details" />
+
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rlDiscountPercentage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/rlPromotionType">
+            android:layout_below="@+id/rlDiscountOnClasses">
 
             <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/tvDiscountPercentage"
@@ -112,10 +139,39 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rlFreeClasses"
+            android:id="@+id/rlMandatoryClasses"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/rlDiscountPercentage">
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tvMandatoryClasses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/mandatoryClasses"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details"
+                android:textStyle="bold" />
+
+            <com.findmycoach.app.views.ChizzleTextView
+                android:id="@+id/tvMandatoryClassesVal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:paddingLeft="@dimen/back_margin"
+                android:layout_toRightOf="@+id/tvMandatoryClasses"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_details" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rlFreeClasses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlMandatoryClasses">
 
             <com.findmycoach.app.views.ChizzleTextView
                 android:id="@+id/tvFreeClasses"
@@ -139,33 +195,6 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/rlMandatoryClasses"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rlFreeClasses">
-
-            <com.findmycoach.app.views.ChizzleTextView
-                android:id="@+id/tvMandatoryClasses"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/mandatoryClasses"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_details"
-                android:textStyle="bold" />
-
-            <com.findmycoach.app.views.ChizzleTextView
-                android:id="@+id/tvMandatoryClassesVal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:paddingLeft="@dimen/back_margin"
-                android:layout_toRightOf="@+id/tvMandatoryClasses"
-                android:textColor="@color/purple"
-                android:textSize="@dimen/profile_details" />
-
-        </RelativeLayout>
 
     </RelativeLayout>
 

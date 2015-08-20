@@ -374,7 +374,7 @@
     <string name="promotionType">Promotion Type</string>
     <string name="discountPercentage">Discount Percentage</string>
     <string name="freeClasses">Free Lessons</string>
-    <string name="mandatoryClasses">Mandatory Lessons</string>
+    <string name="mandatoryClasses">No. of Mandatory Lessons</string>
     <string name="prompt_email">User Id</string>
     <string name="prompt_update_profile">Please Update Your Profile</string>
     <string name="prompt_enter_phone">Enter Phone Number</string>
@@ -827,6 +827,11 @@
     <string name="trial_class_message">Willing to Provide Trial Lessons to a New Student</string>
     <string name="minimum_classes_to_book">Min. Number of Lessons To Get Booked</string>
     <string name="collon">:</string>
+    <string name="discountOverNumberOfClasses">Discount over No. of Lessons</string>
+    <string name="number_of_classes_over_discount">Number of Lessons Over  Discount Applied</string>
+    <string name="free_class_cannot_bigger_than_mandatory">No. of Free Lesson Cannot Bigger Than Mandatory Lessons</string>
+    <string name="discount_type_promotion_note">Discount of X % on Y Lesson(s)</string>
+    <string name="free_class_type_promotion_note">X Lesson(s) Free of Y Lesson(s)</string>
 
 
 </resources>

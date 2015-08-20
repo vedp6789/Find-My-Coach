@@ -139,6 +139,9 @@ public class Data {
 
     private int number_of_trial_classes;
 
+
+    @SerializedName("minimum_number_of_classes")
+    @Expose
     private int min_number_of_classes;
 
     public int getMin_number_of_classes() {
