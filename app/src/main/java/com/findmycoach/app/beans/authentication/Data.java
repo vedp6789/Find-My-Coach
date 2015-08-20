@@ -170,6 +170,29 @@ public class Data {
         this.reviews = reviews;
     }
 
+    private int number_of_trial_classes;
+
+
+    @SerializedName("minimum_number_of_classes")
+    @Expose
+    private int min_number_of_classes;
+
+    public int getMin_number_of_classes() {
+        return min_number_of_classes;
+    }
+
+    public void setMin_number_of_classes(int min_number_of_classes) {
+        this.min_number_of_classes = min_number_of_classes;
+    }
+
+    public int getNumber_of_trial_classes() {
+        return number_of_trial_classes;
+    }
+
+    public void setNumber_of_trial_classes(int number_of_trial_classes) {
+        this.number_of_trial_classes = number_of_trial_classes;
+    }
+
     public String getConnectionStatus() {
         return connectionStatus;
     }

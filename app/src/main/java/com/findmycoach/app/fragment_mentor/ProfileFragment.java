@@ -58,7 +58,8 @@ public class ProfileFragment extends Fragment implements Callback {
     private ImageView profileImage;
     private TextView profileName, tv_flexibility_on_class_duration, tv_min_class_time, tv_flexibility_window,
             tv_max_class_time, tv_fixed_class_duration, tv_max_classes_in_week,
-            tv_individual_class_price, tv_group_class_price, tv_individual_class_price_label, tv_group_class_price_label;
+            tv_individual_class_price, tv_group_class_price, tv_individual_class_price_label, tv_group_class_price_label,
+            tv_fixed_class_duration_label, tv_number_trial_lessons,tv_min_lessons_val;
     private TextView profileEmail;
     private TextView profileDob;
     private TextView profileAddress;
@@ -169,10 +170,14 @@ public class ProfileFragment extends Fragment implements Callback {
         rl_fixed_class_duration = (RelativeLayout) view.findViewById(R.id.rl_fixed_class_duration);
         rl_individual_class_price = (RelativeLayout) view.findViewById(R.id.rl_individual_class_price);
         rl_group_class_price = (RelativeLayout) view.findViewById(R.id.rl_group_class_price);
-        tv_individual_class_price= (TextView) view.findViewById(R.id.tv_individual_class_price);
-        tv_group_class_price= (TextView) view.findViewById(R.id.tv_group_class_price);
-        tv_individual_class_price_label= (TextView) view.findViewById(R.id.individual_class_price);
-        tv_group_class_price_label= (TextView) view.findViewById(R.id.group_class_price);
+        tv_individual_class_price = (TextView) view.findViewById(R.id.tv_individual_class_price);
+        tv_group_class_price = (TextView) view.findViewById(R.id.tv_group_class_price);
+        tv_individual_class_price_label = (TextView) view.findViewById(R.id.individual_class_price);
+        tv_group_class_price_label = (TextView) view.findViewById(R.id.group_class_price);
+        tv_fixed_class_duration_label = (TextView) view.findViewById(R.id.fixed_class_duration);
+        tv_number_trial_lessons = (TextView) view.findViewById(R.id.tv_number_trial_lessons);
+        tv_min_lessons_val= (TextView) view.findViewById(R.id.tv_min_lessons_val);
+
 
         view.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -330,7 +335,6 @@ public class ProfileFragment extends Fragment implements Callback {
             myAwards.setText(userInfo.getMyAwards());
         }
 
-
         profilePhone.setText(userInfo.getPhonenumber());
 
         try {
@@ -366,6 +370,15 @@ public class ProfileFragment extends Fragment implements Callback {
             populateViews(loveToTeachLL, views, getActivity(), 50);
         } else {
             loveToTeachLL.removeAllViews();
+        }
+
+
+        if (userInfo.getNumber_of_trial_classes() > 0) {
+            tv_number_trial_lessons.setText(getResources().getString(R.string.trial_class_message1).trim()+" "+ userInfo.getNumber_of_trial_classes()+" "+getResources().getString(R.string.trial_class_message2));
+        }
+
+        if(userInfo.getMin_number_of_classes() > 0){
+            tv_min_lessons_val.setText(""+userInfo.getMin_number_of_classes());
         }
 
 
@@ -418,6 +431,7 @@ public class ProfileFragment extends Fragment implements Callback {
                     rl_individual_class_price.setVisibility(View.GONE);
                     rl_group_class_price.setVisibility(View.VISIBLE);
                     tv_group_class_price_label.setText(getResources().getString(R.string.pricing_per_class_group) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
+                    tv_fixed_class_duration_label.setText(getResources().getString(R.string.group_class_time_flexibility));
                     for (int price = 0; price < userInfo.getPrices().size(); price++) {
                         Price price1 = userInfo.getPrices().get(price);
                         if (price1.getType().equals("group")) {
@@ -430,12 +444,14 @@ public class ProfileFragment extends Fragment implements Callback {
                     rl_group_class_price.setVisibility(View.VISIBLE);
                     tv_individual_class_price_label.setText(getResources().getString(R.string.pricing_per_class_individual) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
                     tv_group_class_price_label.setText(getResources().getString(R.string.pricing_per_class_group) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
+
+
                     for (int price = 0; price < userInfo.getPrices().size(); price++) {
                         Price price1 = userInfo.getPrices().get(price);
                         if (price1.getType().equals("individual")) {
                             tv_individual_class_price.setText("" + price1.getPrice());
-                        }else if(price1.getType().equals("group")){
-                            tv_group_class_price.setText(""+price1.getPrice());
+                        } else if (price1.getType().equals("group")) {
+                            tv_group_class_price.setText("" + price1.getPrice());
                         }
                     }
 
@@ -451,6 +467,13 @@ public class ProfileFragment extends Fragment implements Callback {
                 tv_max_class_time.setText("" + userInfo.getMax_class_duration());
 
                 if (userInfo.getSlotType().equals("0")) {
+                    ll_flexible_class_duration.setVisibility(View.VISIBLE);
+                    rl_fixed_class_duration.setVisibility(View.GONE);
+                    tv_min_class_time.setText("" + userInfo.getMin_class_duration());
+                    tv_flexibility_window.setText("" + userInfo.getFlexibility_window());
+                    tv_max_class_time.setText("" + userInfo.getMax_class_duration());
+
+
                     rl_individual_class_price.setVisibility(View.VISIBLE);
                     rl_group_class_price.setVisibility(View.GONE);
                     tv_individual_class_price_label.setText(getResources().getString(R.string.pricing_per_hour_individual) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
@@ -462,6 +485,11 @@ public class ProfileFragment extends Fragment implements Callback {
                     }
 
                 } else if (userInfo.getSlotType().equals("1")) {
+                    ll_flexible_class_duration.setVisibility(View.GONE);
+                    rl_fixed_class_duration.setVisibility(View.VISIBLE);
+                    tv_fixed_class_duration_label.setText(getResources().getString(R.string.group_class_time_flexibility));
+                    tv_fixed_class_duration.setText("" + userInfo.getFixed_class_duration());
+
                     rl_individual_class_price.setVisibility(View.GONE);
                     rl_group_class_price.setVisibility(View.VISIBLE);
                     tv_group_class_price_label.setText(getResources().getString(R.string.pricing_per_hour_group) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
@@ -472,6 +500,19 @@ public class ProfileFragment extends Fragment implements Callback {
                         }
                     }
                 } else if (userInfo.getSlotType().equals("2")) {
+                    ll_flexible_class_duration.setVisibility(View.VISIBLE);
+                    rl_fixed_class_duration.setVisibility(View.VISIBLE);
+
+                    tv_min_class_time.setText("" + userInfo.getMin_class_duration());
+                    tv_flexibility_window.setText("" + userInfo.getFlexibility_window());
+                    tv_max_class_time.setText("" + userInfo.getMax_class_duration());
+
+
+                    tv_fixed_class_duration_label.setText(getResources().getString(R.string.group_class_time_flexibility));
+                    tv_fixed_class_duration.setText("" + userInfo.getFixed_class_duration());
+
+
+
                     rl_individual_class_price.setVisibility(View.VISIBLE);
                     rl_group_class_price.setVisibility(View.VISIBLE);
                     tv_individual_class_price_label.setText(getResources().getString(R.string.pricing_per_hour_individual) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
@@ -480,8 +521,8 @@ public class ProfileFragment extends Fragment implements Callback {
                         Price price1 = userInfo.getPrices().get(price);
                         if (price1.getType().equals("individual")) {
                             tv_individual_class_price.setText("" + price1.getPrice());
-                        }else if(price1.getType().equals("group")){
-                            tv_group_class_price.setText(""+price1.getPrice());
+                        } else if (price1.getType().equals("group")) {
+                            tv_group_class_price.setText("" + price1.getPrice());
                         }
                     }
                 }

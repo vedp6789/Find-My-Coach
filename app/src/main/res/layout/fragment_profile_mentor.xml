@@ -292,6 +292,68 @@
                 android:orientation="vertical" />
 
             <com.findmycoach.app.views.ChizzleTextViewBold
+                android:id="@+id/tv_number_trial_lessons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/back_margin"
+                android:text="@string/trial_class_message"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_heading"
+                android:textStyle="bold" />
+
+            <!--<com.findmycoach.app.views.ChizzleTextViewBold
+                android:id="@+id/tv_number_trial_lessons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/purple"
+                android:textSize="@dimen/profile_heading" />
+-->
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/back_margin"
+                android:layout_gravity="center_horizontal">
+
+                <com.findmycoach.app.views.ChizzleTextViewBold
+                    android:id="@+id/tv_min_lessons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/minimum_classes_to_book"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold" />
+                <com.findmycoach.app.views.ChizzleTextViewBold
+                    android:id="@+id/tv_collon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/collon"
+                    android:layout_toRightOf="@id/tv_min_lessons"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold" />
+                <com.findmycoach.app.views.ChizzleTextViewBold
+                    android:id="@+id/tv_min_lessons_val"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingLeft="@dimen/days_margin"
+                    android:layout_toRightOf="@+id/tv_collon"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold" />
+
+
+            </RelativeLayout>
+
+
+
+
+            <com.findmycoach.app.views.ChizzleTextViewBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

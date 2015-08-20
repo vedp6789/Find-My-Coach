@@ -102,9 +102,11 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
             if (promotion_type.equals("discount")) {
                 holder.rlPromotionFreeClass.setVisibility(View.GONE);
                 holder.rlPromotionMandatoryClasses.setVisibility(View.GONE);
+                holder.rlDiscountOnClasses.setVisibility(View.VISIBLE);
                 holder.rlPromotionDiscount.setVisibility(View.VISIBLE);
                 holder.tv_promotions_type.setText(context.getResources().getString(R.string.discount_type_promotion));
                 holder.tv_promotions_discount.setText(offer.getDiscount_percentage());
+                holder.tvDiscountClassesVal.setText(offer.getDiscount_over_classes());
 
             } else {
                 if (promotion_type.equals("trial")) {
@@ -114,10 +116,14 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
                     holder.tv_promotions_type.setText(context.getResources().getString(R.string.free_classes_promotion));
                     holder.tv_promotions_free_classes.setText(offer.getFree_classes());   /* This is the number of classes mentor will give as free to mentee*/
                     holder.tv_promotions_mandatory_classes.setText(offer.getFree_min_classes());  /* This is number of mandatory classes which mentee have to join to get free classes */
-
+                    holder.rlDiscountOnClasses.setVisibility(View.GONE);
                 }
             }
 
+            if (active_promotions)
+                holder.iv_delete_promotion.setText(context.getResources().getStringArray(R.array.promotions_pager_titles)[1]);
+            else
+                holder.iv_delete_promotion.setText(context.getResources().getStringArray(R.array.promotions_pager_titles)[0]);
             holder.iv_delete_promotion.setOnClickListener(null);
             holder.iv_delete_promotion.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -158,7 +164,7 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
                                     e.printStackTrace();
                                 }
                                 if (activeInactivePromotions != null) {
-                                    activeInactivePromotions.deletePromotion(requestParams, position, holder.dialog,jsonArray);
+                                    activeInactivePromotions.deletePromotion(requestParams, position, holder.dialog, jsonArray);
                                 } else {
                                     Log.e("FMC", "ActiveInactivePromotions instance null");
                                 }
@@ -249,9 +255,9 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        RelativeLayout rlPromotionDetails, rlPromotionTitle, rlPromotionType, rlPromotionDiscount, rlPromotionFreeClass, rlPromotionMandatoryClasses;
-        TextView tv_no_promotions_message, tv_promotions_title, tv_promotions_type, tv_promotions_discount, tv_promotions_free_classes, tv_promotions_mandatory_classes;
-        ImageView iv_delete_promotion;
+        RelativeLayout rlPromotionDetails, rlPromotionTitle, rlPromotionType, rlPromotionDiscount, rlPromotionFreeClass, rlPromotionMandatoryClasses, rlDiscountOnClasses;
+        TextView tv_no_promotions_message, tv_promotions_title, tv_promotions_type, tv_promotions_discount, tv_promotions_free_classes, tv_promotions_mandatory_classes, tvDiscountClasses, tvDiscountClassesVal;
+        Button iv_delete_promotion;
         Dialog dialog;
         TextView tv_message, tv_title;
         Button b1, b2;
@@ -265,13 +271,16 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
             rlPromotionDiscount = (RelativeLayout) itemView.findViewById(R.id.rlDiscountPercentage);
             rlPromotionFreeClass = (RelativeLayout) itemView.findViewById(R.id.rlFreeClasses);
             rlPromotionMandatoryClasses = (RelativeLayout) itemView.findViewById(R.id.rlMandatoryClasses);
+            rlDiscountOnClasses = (RelativeLayout) itemView.findViewById(R.id.rlDiscountOnClasses);
+            tvDiscountClasses = (TextView) itemView.findViewById(R.id.tvDiscountClasses);
+            tvDiscountClassesVal = (TextView) itemView.findViewById(R.id.tvDiscountClassesVal);
             tv_no_promotions_message = (TextView) itemView.findViewById(R.id.tv_no_promotion_val);
             tv_promotions_title = (TextView) itemView.findViewById(R.id.tv_promotion_title_val);
             tv_promotions_type = (TextView) itemView.findViewById(R.id.tv_promotion_type_val);
             tv_promotions_discount = (TextView) itemView.findViewById(R.id.tvDiscountPercentageVal);
             tv_promotions_free_classes = (TextView) itemView.findViewById(R.id.tvFreeClassesVal);
             tv_promotions_mandatory_classes = (TextView) itemView.findViewById(R.id.tvMandatoryClassesVal);
-            iv_delete_promotion = (ImageView) itemView.findViewById(R.id.iv_cancel);
+            iv_delete_promotion = (Button) itemView.findViewById(R.id.iv_cancel);
 
             dialog = new Dialog(context);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

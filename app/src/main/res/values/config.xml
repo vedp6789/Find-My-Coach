@@ -73,14 +73,14 @@
 
 
     <!-- Time bounds for classes in minutes-->
-    <integer name="start_time">15</integer>
+    <integer name="start_time">30</integer>
     <!-- Assuming lower bound of minimum time in minute-->
     <integer name="stop_time">180</integer>
     <!-- Assuming upper bound of maximum time -->
     <integer name="maximum_hour_of_class_in_a_day">180</integer>
     <!-- Assuming max time can vary upto 180 min from minimum time selected for a class by mentor-->
     <integer name="maximum_time_window">60</integer>
-    <integer name="fixed_duration_minimum_class">15</integer>
+    <integer name="fixed_duration_minimum_class">30</integer>
     <!-- Fixed duration class minimum time-->
     <integer name="fixed_duration_max_time">180</integer>
     <!-- Fixed duration class maximum time-->
@@ -93,6 +93,10 @@
         <item>6</item>
         <item>7</item>
     </string-array>
+
+    <integer name="start_of_min_class">1</integer>
+    <integer name="stop_of_min_class">10</integer>
+
     <integer name="max_number_of_week">26</integer>
 
 

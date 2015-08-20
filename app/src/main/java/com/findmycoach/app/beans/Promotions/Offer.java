@@ -3,6 +3,9 @@ package com.findmycoach.app.beans.Promotions;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by ved on 11/8/15.
  */
@@ -21,6 +24,10 @@ public class Offer implements Parcelable {
     private String user_id;
     private String is_active;
 
+    @SerializedName("discount_number_of_classes")
+    @Expose
+    private String discount_over_classes;
+
     public Offer(Parcel parcel) {
         id = parcel.readString();
         promotion_title = parcel.readString();
@@ -30,6 +37,15 @@ public class Offer implements Parcelable {
         free_min_classes = parcel.readString();
         user_id = parcel.readString();
         is_active = parcel.readString();
+        discount_over_classes = parcel.readString();
+    }
+
+    public String getDiscount_over_classes() {
+        return discount_over_classes;
+    }
+
+    public void setDiscount_over_classes(String discount_over_classes) {
+        this.discount_over_classes = discount_over_classes;
     }
 
     public String getId() {
@@ -111,6 +127,7 @@ public class Offer implements Parcelable {
         dest.writeString(this.free_min_classes);
         dest.writeString(this.user_id);
         dest.writeString(this.is_active);
+        dest.writeString(this.discount_over_classes);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
