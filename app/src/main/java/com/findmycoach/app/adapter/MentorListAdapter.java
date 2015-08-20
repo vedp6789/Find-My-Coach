@@ -90,10 +90,11 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         if (user.getPhotograph() != null && !(user.getPhotograph()).equals("")) {
             Picasso.with(context)
                     .load((String) user.getPhotograph())
-                    .placeholder(R.drawable.user_icon)
-                    .error(R.drawable.user_icon)
+                    .placeholder(defaultDrawable)
+                    .error(defaultDrawable)
                     .into(holder.userIV);
-        }
+        } else
+            holder.userIV.setImageDrawable(defaultDrawable);
 
         //Set Mentor name
         holder.nameTV.setText("");
