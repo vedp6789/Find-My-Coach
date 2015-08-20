@@ -3,6 +3,8 @@ package com.findmycoach.app.activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -38,10 +40,12 @@ import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.authentication.SubCategoryName;
 import com.findmycoach.app.fragment.DatePickerFragment;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
+import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.StorageHelper;
+import com.findmycoach.app.views.ChizzleButton;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
@@ -495,6 +499,14 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
     }
 
+    private void startChat(String receiverId, String receiverName, Bitmap receiverBitmap) {
+        Intent chatWidgetIntent = new Intent(this, ChatWidgetActivity.class);
+        chatWidgetIntent.putExtra("receiver_id", receiverId);
+        chatWidgetIntent.putExtra("receiver_name", receiverName);
+        chatWidgetIntent.putExtra("receiver_image", BinaryForImage.getBinaryStringFromBitmap(receiverBitmap));
+        startActivity(chatWidgetIntent);
+    }
+
     private void showDisconnectDialog(final String connectionId, final String id) {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -526,19 +538,38 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             profileName.setText(userInfo.getFirstName());
         }
 
-        findViewById(R.id.bookClass).setOnClickListener(new View.OnClickListener() {
+        ChizzleButton bookClass = (ChizzleButton) findViewById(R.id.bookClass);
+        bookClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calendarDialog.show();
             }
         });
 
-        findViewById(R.id.bookTrialClass).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                calendarDialog.show();
+        try {
+            int trialClassCount = Integer.parseInt(userInfo.getNumberOfTrialClasses());
+            if (trialClassCount > 0) {
+                findViewById(R.id.bookTrialClass).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        calendarDialog.show();
+                    }
+                });
+            } else {
+                findViewById(R.id.bookTrialClass).setVisibility(View.GONE);
+                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT, 2f);
+                bookClass.setLayoutParams(param);
             }
-        });
+        } catch (Exception e) {
+            findViewById(R.id.bookTrialClass).setVisibility(View.GONE);
+            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT, 2f);
+            bookClass.setLayoutParams(param);
+        }
+
 
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
             ImageLoader imgLoader = new ImageLoader(profileImage);
@@ -637,6 +668,13 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             reviewLL.setVisibility(View.GONE);
 
 
+        chatWithMentorLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BitmapDrawable drawable = (BitmapDrawable) profileImage.getDrawable();
+                startChat(userInfo.getId(), profileName.getText().toString().trim(), drawable.getBitmap());
+            }
+        });
     }
 
     @Override

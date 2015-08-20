@@ -273,8 +273,8 @@ public class ChatWidgetActivity extends Activity implements View.OnClickListener
         if (id == R.id.sendButton) {
             sendMsg();
         } else if (id == R.id.title) {
-//            getProfile();
-            Toast.makeText(this, "Mentor Profile is under construction.", Toast.LENGTH_LONG).show();
+            getProfile();
+//            Toast.makeText(this, "Mentor Profile is under construction.", Toast.LENGTH_LONG).show();
         } else if (id == R.id.attachment) {
             showAttachmentDialog();
         } else if (id == R.id.backButton) {

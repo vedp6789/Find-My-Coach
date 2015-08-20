@@ -1204,9 +1204,9 @@ Log.d(TAG,"date: "+Integer.parseInt(theyear)+"/"+the_current_month+"/"+ Integer.
                     } else {
                         if (mentorDetailsActivity != null) {
                             Log.d(TAG, "connection status on mentor details activity calendar grid click " + connection_status);
-                            if (connection_status.equalsIgnoreCase("pending") || connection_status.equalsIgnoreCase("not connected") || connection_status.equalsIgnoreCase("rejected")) {
-                                Toast.makeText(context, context.getResources().getString(R.string.you_are_not_connected), Toast.LENGTH_SHORT).show();
-                            } else {
+//                            if (connection_status.equalsIgnoreCase("pending") || connection_status.equalsIgnoreCase("not connected") || connection_status.equalsIgnoreCase("rejected")) {
+//                                Toast.makeText(context, context.getResources().getString(R.string.you_are_not_connected), Toast.LENGTH_SHORT).show();
+//                            } else {
                                 if (no_of_free_slots <= 0) {
                                     if (no_of_free_slots == 0) {
                                         Toast.makeText(context, context.getResources().getString(R.string.mentor_is_not_free), Toast.LENGTH_SHORT).show();
@@ -1227,7 +1227,7 @@ Log.d(TAG,"date: "+Integer.parseInt(theyear)+"/"+the_current_month+"/"+ Integer.
                                     context.startActivity(intent);
 
                                 }
-                            }
+//                            }
 
                         }
                     }

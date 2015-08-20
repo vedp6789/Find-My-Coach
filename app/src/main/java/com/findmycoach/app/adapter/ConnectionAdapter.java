@@ -77,8 +77,8 @@ public class ConnectionAdapter extends BaseAdapter implements Callback {
         singleRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(status.equals("pending") || status.equals("broken"))
-                    return;
+//                if(status.equals("pending") || status.equals("broken"))
+//                    return;
                 Bitmap userBitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
 
                 Intent chatWidgetIntent = new Intent(context, ChatWidgetActivity.class);

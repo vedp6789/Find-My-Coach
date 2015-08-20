@@ -1062,12 +1062,12 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
         Log.d(TAG, "sub category id: " + getSubCategoryId());
         requestParams1.add("sub_category_id", getSubCategoryId());
 
-        if (selected_mentor_for.equalsIgnoreCase("child")) {
-            String date_of_birth_kid = tv_child_dob.getText().toString().split("-", 3)[2] + "-" +
-                    tv_child_dob.getText().toString().split("-", 3)[1] + "-" +
-                    tv_child_dob.getText().toString().split("-", 3)[0];
-            requestParams1.add("date_of_birth_kid", date_of_birth_kid);
-        }
+//        if (selected_mentor_for.equalsIgnoreCase("child")) {
+//            String date_of_birth_kid = tv_child_dob.getText().toString().split("-", 3)[2] + "-" +
+//                    tv_child_dob.getText().toString().split("-", 3)[1] + "-" +
+//                    tv_child_dob.getText().toString().split("-", 3)[0];
+//            requestParams1.add("date_of_birth_kid", date_of_birth_kid);
+//        }
         requestParams1.add("total_price", tv_total_charges.getText().toString());
         return requestParams1;
     }
@@ -1181,13 +1181,13 @@ public class ScheduleNewClass extends Activity implements Button.OnClickListener
             }
 
         }
-        if (selected_mentor_for.equalsIgnoreCase("child")) {
-            if (tv_child_dob.getText().toString().trim().length() <= 0) {
-                Toast.makeText(this, getResources().getString(R.string.child_date_of_birth_please), Toast.LENGTH_SHORT).show();
-                showErrorMessage(tv_child_dob, getResources().getString(R.string.child_date_of_birth_please));
-                return false;
-            }
-        }
+//        if (selected_mentor_for.equalsIgnoreCase("child")) {
+//            if (tv_child_dob.getText().toString().trim().length() <= 0) {
+//                Toast.makeText(this, getResources().getString(R.string.child_date_of_birth_please), Toast.LENGTH_SHORT).show();
+//                showErrorMessage(tv_child_dob, getResources().getString(R.string.child_date_of_birth_please));
+//                return false;
+//            }
+//        }
         return true;
 
     }

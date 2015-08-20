@@ -562,19 +562,19 @@
     </ScrollView>
 
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/bookClassRL"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_button_height"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="2">
 
         <com.findmycoach.app.views.ChizzleButton
             android:id="@+id/bookClass"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/textView2"
+            android:layout_weight="1"
             android:background="@drawable/custom_button_click_white_bg"
             android:gravity="center"
             android:text="@string/book_class"
@@ -582,23 +582,12 @@
             android:textSize="@dimen/button_text_size"
             android:textStyle="bold" />
 
-        <com.findmycoach.app.views.ChizzleTextView
-            android:id="@+id/textView2"
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:background="@color/white" />
-
         <com.findmycoach.app.views.ChizzleButton
+            android:layout_marginLeft="@dimen/underline"
             android:id="@+id/bookTrialClass"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/textView2"
-            android:layout_toRightOf="@+id/textView2"
+            android:layout_weight="1"
             android:background="@drawable/custom_button_click_white_bg"
             android:gravity="center"
             android:text="@string/book_trial_class"
@@ -606,7 +595,7 @@
             android:textSize="@dimen/button_text_size"
             android:textStyle="bold" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 
 </RelativeLayout>

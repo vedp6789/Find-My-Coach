@@ -357,7 +357,7 @@
     <string name="title_edit_profile_menu">Update Profile</string>
     <string name="title_validate_phone">Verify phone number</string>
     <string name="title_activity_user_list">Mentors</string>
-    <string name="title_mentor_details">Mentor detail</string>
+    <string name="title_mentor_details">Mentor Details</string>
     <string name="title_student_details">Student detail</string>
     <string name="new_connection">Connection request</string>
     <string name="new_schedule">Schedule request</string>
