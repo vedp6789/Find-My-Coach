@@ -177,8 +177,10 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         //Set Mentor charges
         holder.chargesTV.setText("");
         try {
-            if (user.getPrice() != null)
-                holder.chargesTV.setText(Html.fromHtml(fontPurple + user.getPrice() + "/" + user.getPriceFor() + fontEnd));
+            if (user.getPrice() != null && user.getCurrencyCode() != null)
+                holder.chargesTV.setText(Html.fromHtml(fontPurple + user.getCurrencyCode() + " " + user.getPrice() + "/" + user.getPriceFor() + fontEnd));
+            else
+                holder.chargesTV.setText("---");
         } catch (Exception ignored) {
         }
 

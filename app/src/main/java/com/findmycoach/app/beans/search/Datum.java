@@ -55,8 +55,19 @@ public class Datum {
     @SerializedName("price_for")
     @Expose
     private String priceFor;
+    @SerializedName("currency_code")
+    @Expose
+    private String currencyCode;
     @Expose
     private boolean qualified;
+
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
+    }
 
     public String getNumberOfStudents() {
         return numberOfStudents;

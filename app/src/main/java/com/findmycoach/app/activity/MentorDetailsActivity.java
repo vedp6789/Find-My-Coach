@@ -3,6 +3,7 @@ package com.findmycoach.app.activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
@@ -17,11 +18,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.CalendarGridAdapter;
+import com.findmycoach.app.adapter.ReviewAdapter;
 import com.findmycoach.app.beans.CalendarSchedule.Event;
 import com.findmycoach.app.beans.CalendarSchedule.EventDuration;
 import com.findmycoach.app.beans.CalendarSchedule.Mentee;
@@ -57,6 +61,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
     private TextView profileName, ratingTV, noOfStudentsTV, reviewTitleTV;
     private LinearLayout chatWithMentorLL, chatWithStudentsLL, reviewLL;
     private ListView reviewsListView;
+    private RelativeLayout toggleReviewRL;
+    private ScrollView scrollView;
 
     private TextView professionTV, areaOfCoachingTV, experienceTV,
             coachingLanguageTV, qualificationTV, accrediationsTV, myMethodologyTV, awardsTV;
@@ -118,7 +124,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         Log.d(TAG, "inside mentor details acitivity");
         initialize();
         mentorDetailsActivity = this;
-        Log.d(TAG, "connection status : " + connectionStatus);
         populateFields();
 
         month_from_dialog = 0;
@@ -402,15 +407,15 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         String jsonData = getIntent().getStringExtra("mentorDetails");
-        connectionStatus = getIntent().getStringExtra("connection_status");
+        Response mentorDetails = new Gson().fromJson(jsonData, Response.class);
+        userInfo = mentorDetails.getData();
+        connectionStatus = userInfo.getConnectionStatus();
         if (connectionStatus == null || connectionStatus.trim().equals("null"))
             connectionStatus = "not connected";
         if (connectionStatus.equals("broken"))
             connectionStatus = "not connected";
         Log.d(TAG, "connection status : 2 " + connectionStatus);
         Log.d(TAG, "json data :" + jsonData);
-        Response mentorDetails = new Gson().fromJson(jsonData, Response.class);
-        userInfo = mentorDetails.getData();
 
         array_list_subCategory = userInfo.getSubCategoryName();
 
@@ -424,6 +429,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         reviewTitleTV = (TextView) findViewById(R.id.review_title_TV);
         toggleReviewIconIV = (ImageView) findViewById(R.id.toggle_review_icon_IV);
         reviewsListView = (ListView) findViewById(R.id.reviews_list_view);
+        toggleReviewRL = (RelativeLayout) findViewById(R.id.toggle_review_RL);
+        scrollView = (ScrollView) findViewById(R.id.sv_profile);
 
         professionTV = (TextView) findViewById(R.id.professionTV);
         areaOfCoachingTV = (TextView) findViewById(R.id.areaOfCoachingTV);
@@ -547,7 +554,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
 
 
         try {
-            noOfStudentsTV.setText(getIntent().getIntExtra("no_of_students", 0) + "");
+            int noOfStud = Integer.parseInt(userInfo.getNumberOfStudents());
+            noOfStudentsTV.setText(String.valueOf(noOfStud));
         } catch (Exception e) {
             noOfStudentsTV.setText("0");
         }
@@ -598,6 +606,35 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             awardsTV.setText(userInfo.getMyAwards().trim());
         else
             awardsLL.setVisibility(View.GONE);
+
+
+        if (userInfo.getReviews() != null && userInfo.getReviews().size() > 0) {
+            reviewTitleTV.setText(getResources().getString(R.string.reviews) + " (" + userInfo.getReviews().size() + ")");
+            reviewsListView.setAdapter(new ReviewAdapter(userInfo.getReviews(), this));
+            EditProfileActivityMentee.setHeight(reviewsListView);
+
+            final Drawable upIcon = getResources().getDrawable(R.drawable.up_arrow);
+            final Drawable downIcon = getResources().getDrawable(R.drawable.down_arrow);
+            //0 for listVIew closed, 1 for listVIew expanded
+            toggleReviewIconIV.setTag(toggleReviewIconIV.getId(), 0);
+
+            toggleReviewRL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (((int) toggleReviewIconIV.getTag(toggleReviewIconIV.getId())) == 0) {
+                        toggleReviewIconIV.setTag(toggleReviewIconIV.getId(), 1);
+                        reviewsListView.setVisibility(View.VISIBLE);
+                        toggleReviewIconIV.setImageDrawable(upIcon);
+                        scrollView.fullScroll(View.FOCUS_DOWN);
+                    } else {
+                        toggleReviewIconIV.setTag(toggleReviewIconIV.getId(), 0);
+                        reviewsListView.setVisibility(View.GONE);
+                        toggleReviewIconIV.setImageDrawable(downIcon);
+                    }
+                }
+            });
+        } else
+            reviewLL.setVisibility(View.GONE);
 
 
     }

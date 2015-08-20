@@ -97,6 +97,9 @@ public class UserListActivity extends FragmentActivity {
         searchViewPager.setAdapter(searchPagerAdapter);
         pagerSlidingTabStrip.setViewPager(searchViewPager);
 
+        if(noOfTabs == 1)
+            pagerSlidingTabStrip.setVisibility(View.GONE);
+
         TextView title = (TextView) findViewById(R.id.title);
         String titleName = getResources().getString(R.string.mentor);
         title.setText(titleName + " " + getResources().getString(R.string.forrr) + " " + getIntent().getStringExtra("search_for").split("-")[0]);

@@ -136,6 +136,28 @@ public class Data {
     @SerializedName("connection_id")
     @Expose
     private String connectionId;
+    @SerializedName("number_of_students")
+    @Expose
+    private String numberOfStudents;
+    @SerializedName("review")
+    @Expose
+    private List<Review> reviews;
+
+    public String getNumberOfStudents() {
+        return numberOfStudents;
+    }
+
+    public void setNumberOfStudents(String numberOfStudents) {
+        this.numberOfStudents = numberOfStudents;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
 
     public String getConnectionStatus() {
         return connectionStatus;
