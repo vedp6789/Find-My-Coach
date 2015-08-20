@@ -796,32 +796,37 @@
     <string name="either_activate_or_delete">You can Make Your Promotion Active!</string>
     <string name="activate">Make It Active</string>
     <string name="flexibility_on_class_duration">I am Flexible On Lesson duration?</string>
-    <string name="min_class_time">Minimum Lesson Duration(Min.)</string>
-    <string name="min_class_time_label">Minimum Lesson Duration(Min.):</string>
-    <string name="class_time_variance">Lessons can Vary In The Duration of(Min.)</string>
-    <string name="class_time_variance1">Lessons can Vary In The Duration of(Min.):</string>
-    <string name="class_duration">Lessons Duration(Min.)</string>
-    <string name="class_duration1">Lessons Duration(Min.):</string>
+    <string name="min_class_time">Min. Lesson Duration (min.)</string>
+    <string name="min_class_time_label">Min. Lesson Duration (min.):</string>
+    <string name="class_time_variance">Lessons can Vary In The Duration of (min.)</string>
+    <string name="class_time_variance1">Lessons can Vary In The Duration of (min.):</string>
+    <string name="class_duration">Lesson Duration (min.)</string>
+    <string name="class_duration1">Lesson Duration (min.):</string>
     <string name="max_class_week">Max. No. of Lessons for a Student in a Week</string>
     <string name="max_class_week1">Max. No. of Lessons for a Student in a Week:</string>
 <!--
     <string name="pricing_per_hour_individual">Pricing per hour for am individual Lesson</string>
 -->
-    <string name="pricing_per_hour_individual">Pricing per Hour of Individual Lesson</string>
+    <string name="pricing_per_hour_individual">Pricing per Hour Lesson in Individual</string>
     <string name="pricing_per_class_individual">Pricing per Individual Lesson</string>
     <!--<string name="pricing_per_hour_group">Pricing per hour for a group Lesson</string>-->
-    <string name="pricing_per_hour_group">Pricing per Group Lesson</string>
-    <string name="pricing_per_class_group">Pricing per Group Lesson</string>
-    <string name="max_hour_in_a_day">Maximum Lesson Duration For a Day(Min.)</string>
-    <string name="max_hour_in_a_day1">Maximum Lesson Duration For a Day(Min.):</string>
+    <string name="pricing_per_hour_group">Pricing per Lesson in Group</string>
+    <string name="pricing_per_class_group">Pricing per  Lesson in Group</string>
+    <string name="max_hour_in_a_day">Max. Lesson Duration for Day (min.)</string>
+    <string name="max_hour_in_a_day1">Max. Lesson Duration for Day (min.):</string>
 
     <string name="price">Price</string>
     <string name="individual_class_price">Individual Lesson Price:</string>
     <string name="group_class_price">Group Lesson Price:</string>
     <string name="add_sign">+</string>
+    <string name="trial_class_message1">Willing to Provide</string>
+    <string name="trial_class_message2">Trial Lessons to a New Student</string>
+
+    <string name="individual_class_time_flexibility">Duration of Individual Lesson</string>
+    <string name="group_class_time_flexibility">Duration of Group Lesson</string>
     <string name="trial_class_message">Willing to Provide Trial Lessons to a New Student</string>
-    <string name="individual_class_time_flexibility">Duration of Individual Lessons</string>
-    <string name="group_class_time_flexibility">Duration of Group Lessons</string>
+    <string name="minimum_classes_to_book">Min. Number of Lessons To Get Booked</string>
+    <string name="collon">:</string>
 
 
 </resources>
