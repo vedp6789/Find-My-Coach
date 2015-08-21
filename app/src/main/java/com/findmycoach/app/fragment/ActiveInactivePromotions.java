@@ -128,8 +128,14 @@ public class ActiveInactivePromotions extends Fragment implements Callback {
         }
     }
 
-    public void updatePromotion(RequestParams requestParams, int position, Dialog dialog) {
+    /*public void updatePromotion(RequestParams requestParams, int position, Dialog dialog) {
         this.dialog = dialog;
+        progressDialog.show();
+        position_which_got_deleted_or_updated = position;
+        NetworkClient.addPromotion(getActivity(), requestParams, StorageHelper.getUserGroup(getActivity(), "auth_token"), this, 59);
+    }*/
+
+    public void updatePromotion(RequestParams requestParams, int position) {
         progressDialog.show();
         position_which_got_deleted_or_updated = position;
         NetworkClient.addPromotion(getActivity(), requestParams, StorageHelper.getUserGroup(getActivity(), "auth_token"), this, 59);
@@ -139,10 +145,10 @@ public class ActiveInactivePromotions extends Fragment implements Callback {
     @Override
     public void successOperation(Object object, int statusCode, int calledApiValue) {
         try {
-            if (dialog != null) {
+           /* if (dialog != null) {
                 dialog.dismiss();
                 dialog = null;
-            }
+            }*/
             progressDialog.dismiss();
             if (calledApiValue == 60) {
                 JSONObject jsonObject = (JSONObject) object;

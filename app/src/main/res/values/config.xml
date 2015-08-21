@@ -95,7 +95,7 @@
     </string-array>
 
     <integer name="start_of_min_class">1</integer>
-    <integer name="stop_of_min_class">10</integer>
+    <integer name="stop_of_min_class">26</integer>
 
     <integer name="max_number_of_week">26</integer>
 

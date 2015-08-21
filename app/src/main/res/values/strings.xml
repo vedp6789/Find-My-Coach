@@ -162,7 +162,7 @@
     <string name="children">My Children</string>
     <string name="child_dob">Child Dob</string>
     <string name="total_charges">Total charges:</string>
-    <string name="class_of_type">Lesson Type(s)</string>
+    <string name="class_of_type"> Lesson Type(s) I Take</string>
     <string name="individual">Individual</string>
     <string name="group">Group</string>
     <string name="start_time_of_class">Start time</string>
@@ -375,23 +375,24 @@
     <string name="discountPercentage">Discount Percentage</string>
     <string name="freeClasses">Free Lessons</string>
     <string name="mandatoryClasses">No. of Mandatory Lessons</string>
+    <string name="offer_classes">No. of Classes To avail offer</string>
     <string name="prompt_email">User Id</string>
     <string name="prompt_update_profile">Please Update Your Profile</string>
     <string name="prompt_enter_phone">Enter Phone Number</string>
     <string name="prompt_email_id">Email Id</string>
     <string name="prompt_email_id_col">Email Id :</string>
     <string name="prompt_password">Password</string>
-    <string name="prompt_password_minimum_5_characters">Create Password(min. 5 char.)</string>
+    <string name="prompt_password_minimum_5_characters">Create Password (Min. 5 char.)</string>
     <string name="old_password">Old Password:</string>
     <string name="new_password">New Password:</string>
     <string name="new_password_re">Re Enter New Password:</string>
     <string name="new_phone_no">Mobile number:</string>
-    <string name="prompt_confirm_password">Confirm New Password</string>
+    <string name="prompt_confirm_password">Confirm Password</string>
     <string name="prompt_commit">Commit</string>
     <string name="prompt_first_name">First name</string>
     <string name="prompt_first_middle_name">First Name &#160;&#160;&#160;&#160;&#160;&#160;Middle Name</string>
     <string name="prompt_middle_name">Middle name (optional)</string>
-    <string name="prompt_last_name">Last name</string>
+    <string name="prompt_last_name">Last Name</string>
     <string name="prompt_date_of_birth">D.O.B.</string>
     <string name="prompt_date_of_birth_col">D.O.B. :</string>
     <string name="prompt_date_of_birth_hint">DD-MM-YYYY</string>
@@ -545,6 +546,8 @@
     </string-array>
 
     <!-- String s related to Actions -->
+    <string name="activate_promotion">Activate</string>
+    <string name="deactivate_promotion">Deactivate</string>
     <string name="action_sign_in">Login</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="plus_sign_out">SignOut Google+</string>
@@ -805,25 +808,25 @@
     <string name="inactivate">Make It Inactive</string>
     <string name="either_activate_or_delete">You can Make Your Promotion Active!</string>
     <string name="activate">Make It Active</string>
-    <string name="flexibility_on_class_duration">I am Flexible On Lesson duration?</string>
-    <string name="min_class_time">Min. Lesson Duration (min.)</string>
-    <string name="min_class_time_label">Min. Lesson Duration (min.):</string>
-    <string name="class_time_variance">Lessons can Vary In The Duration of (min.)</string>
-    <string name="class_time_variance1">Lessons can Vary In The Duration of (min.):</string>
-    <string name="class_duration">Lesson Duration (min.)</string>
-    <string name="class_duration1">Lesson Duration (min.):</string>
+    <string name="flexibility_on_class_duration">Flexible on Lesson Duration</string>
+    <string name="min_class_time">Minimum Minutes Per Lesson</string>
+    <string name="min_class_time_label">Minimum Minutes Per Lesson:</string>
+    <string name="class_time_variance">Lessons Can Vary In Steps Of Minute</string>
+    <string name="class_time_variance1">Lessons Can Vary In Steps Of Minute:</string>
+    <string name="class_duration">Minutes Per Lesson</string>
+    <string name="class_duration1">Minutes Per Lesson:</string>
     <string name="max_class_week">Max. No. of Lessons for a Student in a Week</string>
     <string name="max_class_week1">Max. No. of Lessons for a Student in a Week:</string>
 <!--
     <string name="pricing_per_hour_individual">Pricing per hour for am individual Lesson</string>
 -->
-    <string name="pricing_per_hour_individual">Pricing per Hour Lesson in Individual</string>
-    <string name="pricing_per_class_individual">Pricing per Individual Lesson</string>
+    <string name="pricing_per_hour_individual">Pricing per Hour of Lesson</string>
+    <string name="pricing_per_class_individual">Pricing per Lesson</string>
     <!--<string name="pricing_per_hour_group">Pricing per hour for a group Lesson</string>-->
-    <string name="pricing_per_hour_group">Pricing per Lesson in Group</string>
-    <string name="pricing_per_class_group">Pricing per  Lesson in Group</string>
-    <string name="max_hour_in_a_day">Max. Lesson Duration for Day (min.)</string>
-    <string name="max_hour_in_a_day1">Max. Lesson Duration for Day (min.):</string>
+    <string name="pricing_per_hour_group">Pricing per Student for Group Lesson</string>
+    <string name="pricing_per_class_group">Pricing per Student for Group Lesson</string>
+    <string name="max_hour_in_a_day">Maximum Minutes Per Lesson</string>
+    <string name="max_hour_in_a_day1">Maximum Minutes Per Lesson:</string>
 
     <string name="price">Price</string>
     <string name="individual_class_price">Individual Lesson Price:</string>
@@ -832,16 +835,20 @@
     <string name="trial_class_message1">Willing to Provide</string>
     <string name="trial_class_message2">Trial Lessons to a New Student</string>
 
-    <string name="individual_class_time_flexibility">Duration of Individual Lesson</string>
-    <string name="group_class_time_flexibility">Duration of Group Lesson</string>
-    <string name="trial_class_message">Willing to Provide Trial Lessons to a New Student</string>
-    <string name="minimum_classes_to_book">Min. Number of Lessons To Get Booked</string>
+    <string name="individual_class_time_flexibility">Individual Lessons</string>
+    <string name="group_class_time_flexibility">Group Lessons</string>
+    <string name="trial_class_message">Free Trial Lessons/New Student</string>
+    <string name="minimum_classes_to_book">Min. No. of Lessons that a Student Must Book</string>
     <string name="collon">:</string>
     <string name="discountOverNumberOfClasses">Discount over No. of Lessons</string>
     <string name="number_of_classes_over_discount">Number of Lessons Over  Discount Applied</string>
-    <string name="free_class_cannot_bigger_than_mandatory">No. of Free Lesson Cannot Bigger Than Mandatory Lessons</string>
-    <string name="discount_type_promotion_note">Discount of X % on Y Lesson(s)</string>
-    <string name="free_class_type_promotion_note">X Lesson(s) Free of Y Lesson(s)</string>
+    <string name="free_class_cannot_bigger_than_mandatory">No. of Free Lessons Cannot be Bigger Than The No. of Lessons to Avail Offer</string>
+    <string name="discount_type_promotion_note">Eg. 20% Discount on Booking 10 Lessons</string>
+    <string name="free_class_type_promotion_note">Eg. 2 Lessons Free for Every 10 Paid Lessons</string>
+    <string name="no_trial_classes">I Am Not Giving Any Trial Class</string>
+    <string name="nil">NIL</string>
+    <string name="minutesPerGroupLesson">Minutes Per Group Lesson</string>
+    <string name="noOfClasses">No. of Lessons to Avail Offer</string>
 
 
 </resources>

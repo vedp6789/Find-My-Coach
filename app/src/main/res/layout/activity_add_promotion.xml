@@ -121,37 +121,92 @@
 
 
             <RelativeLayout
-                android:id="@+id/rlDiscountPercentageOverLessons"
+                android:id="@+id/rlMinClasses"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/back_margin">
 
                 <com.findmycoach.app.views.ChizzleTextView
-                    android:id="@+id/tv_discount_percentage_over_lessons"
+                    android:id="@+id/tv_min_classes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="@string/discountOverNumberOfClasses"
+                    android:text="@string/noOfMandatoryClasses"
                     android:textColor="@color/purple_light"
                     android:textSize="@dimen/profile_heading"
                     android:textStyle="bold" />
 
-                <com.findmycoach.app.views.ChizzleEditText
-                    android:id="@+id/et_discount_percentage_over_lessons"
-                    style="@style/EditTextCustomHoloPurple"
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:id="@+id/tv_min_classes_val"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/tv_discount_percentage_over_lessons"
+                    android:layout_toRightOf="@+id/tv_min_classes"
                     android:focusable="true"
+                    android:layout_marginLeft="@dimen/back_margin"
+                    android:text="gkjhkjhkjhkjhkjhkjhkjhkj"
                     android:focusableInTouchMode="true"
                     android:inputType="numberDecimal"
-                    android:maxLength="3"
                     android:singleLine="true"
+                    android:textColor="@color/purple"
                     android:textCursorDrawable="@drawable/cursor_purple"
                     android:textSize="@dimen/profile_details" />
 
 
             </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlNumberOfClasses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/back_margin">
+
+                <com.findmycoach.app.views.ChizzleTextView
+                    android:id="@+id/tvNumberOfClasses"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/noOfClasses"
+                    android:textColor="@color/purple_light"
+                    android:textSize="@dimen/profile_heading"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/back_margin"
+                    android:layout_toRightOf="@+id/tvNumberOfClasses"
+                    android:orientation="vertical">
+
+                    <Spinner
+                        android:id="@+id/spNumberOfClasses"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_button_height"
+                        android:background="@android:color/transparent"
+                        android:spinnerMode="dropdown" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-10dp"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginBottom="-1dp"
+                            android:src="@drawable/drop_down_arrow_purple_small" />
+
+                        <com.findmycoach.app.views.ChizzleTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/purple_light" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
+
 
 
             <RelativeLayout
@@ -187,36 +242,6 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/rlMandatoryClasses"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/back_margin">
-
-                <com.findmycoach.app.views.ChizzleTextView
-                    android:id="@+id/tv_mandatory_classes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="@string/noOfMandatoryClasses"
-                    android:textColor="@color/purple_light"
-                    android:textSize="@dimen/profile_heading"
-                    android:textStyle="bold" />
-
-                <com.findmycoach.app.views.ChizzleEditText
-                    android:id="@+id/et_mandatory_classes"
-                    style="@style/EditTextCustomHoloPurple"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/tv_mandatory_classes"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:singleLine="true"
-                    android:textCursorDrawable="@drawable/cursor_purple"
-                    android:textSize="@dimen/profile_details" />
-            </RelativeLayout>
 
 
             <RelativeLayout

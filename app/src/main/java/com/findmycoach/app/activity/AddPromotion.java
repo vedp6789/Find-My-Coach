@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,13 +30,16 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Created by ved on 11/8/15.
  */
 public class AddPromotion extends Activity implements Callback {
-    RelativeLayout rl_discount_percentage, rl_free_classes, rl_mandatory_classes, rlDiscountPercentageOverLessons;
-    TextView tv_title,tv_note;
-    EditText et_promotion_title, et_promotion_discount, et_free_classes, et_mandatory_classes, et_discount_percentage_over_lessons;
+    RelativeLayout rl_discount_percentage, rl_free_classes, rlNumberOfClasses;
+    TextView tv_title, tv_note, tv_min_classes_val;
+    Spinner spNumberOfClasses;
+    EditText et_promotion_title, et_promotion_discount, et_free_classes;
     Button b_add_promotion;
     ImageView b_back_button;
     RadioGroup rg_promotion_type;
@@ -43,6 +47,7 @@ public class AddPromotion extends Activity implements Callback {
     ProgressDialog progressDialog;
     private Data userInfo;
     private String TAG = "FMC";
+    private ArrayList<String> number_of_lessons;
 
 
     @Override
@@ -56,7 +61,7 @@ public class AddPromotion extends Activity implements Callback {
         String profile_details = StorageHelper.getUserProfile(this);
         Log.e(TAG, "profile details: " + profile_details);
         try {
-            JSONObject jsonObject=new JSONObject(profile_details);
+            JSONObject jsonObject = new JSONObject(profile_details);
             if (profile_details != null) {
                 userInfo = new Gson().fromJson(jsonObject.getString("data"), Data.class);
             }
@@ -70,18 +75,27 @@ public class AddPromotion extends Activity implements Callback {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         rl_discount_percentage = (RelativeLayout) findViewById(R.id.rlDiscountPercentage);
-        rlDiscountPercentageOverLessons = (RelativeLayout) findViewById(R.id.rlDiscountPercentageOverLessons);
         rl_free_classes = (RelativeLayout) findViewById(R.id.rlFreeClasses);
-        rl_mandatory_classes = (RelativeLayout) findViewById(R.id.rlMandatoryClasses);
+        rlNumberOfClasses = (RelativeLayout) findViewById(R.id.rlNumberOfClasses);
         tv_title = (TextView) findViewById(R.id.title);
-        tv_note= (TextView) findViewById(R.id.tv_note);
+        tv_note = (TextView) findViewById(R.id.tv_note);
         tv_title.setText(getResources().getString(R.string.create_promotion));
+        tv_min_classes_val = (TextView) findViewById(R.id.tv_min_classes_val);
+        number_of_lessons = new ArrayList<>();
+        spNumberOfClasses = (Spinner) findViewById(R.id.spNumberOfClasses);
+        if (userInfo.getMin_number_of_classes() >= 0) {
+            for (int i = userInfo.getMin_number_of_classes(); i <= 156; i++) {
+                number_of_lessons.add("" + i);
+            }
+
+        }
+
+        spNumberOfClasses.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, number_of_lessons));
+
         b_back_button = (ImageView) findViewById(R.id.backButton);
         et_promotion_title = (EditText) findViewById(R.id.et_title_val);
         et_promotion_discount = (EditText) findViewById(R.id.et_discount_percentage);
         et_free_classes = (EditText) findViewById(R.id.et_free_classes);
-        et_mandatory_classes = (EditText) findViewById(R.id.et_mandatory_classes);
-        et_discount_percentage_over_lessons = (EditText) findViewById(R.id.et_discount_percentage_over_lessons);
         b_add_promotion = (Button) findViewById(R.id.b_add_promotion);
         rg_promotion_type = (RadioGroup) findViewById(R.id.rg_promotion_type);
         rb_discount_type = (RadioButton) findViewById(R.id.rb_discount);
@@ -95,12 +109,12 @@ public class AddPromotion extends Activity implements Callback {
                     requestParams.add("is_active", "1");
                     if (rb_discount_type.isChecked()) {
                         requestParams.add("promotion_type", "discount");
-                        requestParams.add("discount_number_of_classes", et_discount_percentage_over_lessons.getText().toString());
+                        requestParams.add("discount_number_of_classes", String.valueOf(spNumberOfClasses.getSelectedItem()));
                         requestParams.add("discount_percentage", et_promotion_discount.getText().toString());
                     } else {
                         requestParams.add("promotion_type", "trial");
                         requestParams.add("free_classes", et_free_classes.getText().toString());
-                        requestParams.add("free_min_classes", et_mandatory_classes.getText().toString());
+                        requestParams.add("free_min_classes", String.valueOf(spNumberOfClasses.getSelectedItem()));
                     }
                     progressDialog.show();
                     NetworkClient.addPromotion(AddPromotion.this, requestParams, StorageHelper.getUserGroup(AddPromotion.this, "auth_token"), AddPromotion.this, 59);
@@ -109,14 +123,13 @@ public class AddPromotion extends Activity implements Callback {
             }
         });
         rl_free_classes.setVisibility(View.GONE);
-        rl_mandatory_classes.setVisibility(View.GONE);
         rl_discount_percentage.setVisibility(View.VISIBLE);
         if (userInfo != null && userInfo.getMin_number_of_classes() != 0) {
             et_promotion_discount.setText("");
-            et_discount_percentage_over_lessons.setText("" + userInfo.getMin_number_of_classes());
+            tv_min_classes_val.setText(""+userInfo.getMin_number_of_classes());
         } else {
             et_promotion_discount.setText("");
-            et_discount_percentage_over_lessons.setText("");
+            tv_min_classes_val.setText("");
 
         }
         b_back_button.setOnClickListener(new View.OnClickListener() {
@@ -132,25 +145,21 @@ public class AddPromotion extends Activity implements Callback {
                 if (checkedId == R.id.rb_discount) {
                     tv_note.setText(getResources().getString(R.string.discount_type_promotion_note));
                     rl_free_classes.setVisibility(View.GONE);
-                    rl_mandatory_classes.setVisibility(View.GONE);
                     rl_discount_percentage.setVisibility(View.VISIBLE);
-                    rlDiscountPercentageOverLessons.setVisibility(View.VISIBLE);
                     et_promotion_discount.setText("");
                     if (userInfo != null && userInfo.getMin_number_of_classes() != 0) {
-                        et_discount_percentage_over_lessons.setText("" + userInfo.getMin_number_of_classes());
+                        tv_min_classes_val.setText("" + userInfo.getMin_number_of_classes());
                     }
 
                 } else if (checkedId == R.id.rb_free_Class) {
                     tv_note.setText(getResources().getString(R.string.free_class_type_promotion_note));
                     rl_free_classes.setVisibility(View.VISIBLE);
-                    rl_mandatory_classes.setVisibility(View.VISIBLE);
                     rl_discount_percentage.setVisibility(View.GONE);
-                    rlDiscountPercentageOverLessons.setVisibility(View.GONE);
                     et_free_classes.setText("");
                     if (userInfo != null && userInfo.getMin_number_of_classes() != 0) {
-                        et_mandatory_classes.setText("" + userInfo.getMin_number_of_classes());
+                        tv_min_classes_val.setText("" + userInfo.getMin_number_of_classes());
                     } else {
-                        et_mandatory_classes.setText("");
+                        tv_min_classes_val.setText("");
                     }
                 }
             }
@@ -172,12 +181,7 @@ public class AddPromotion extends Activity implements Callback {
         int selectedRadioGroupChild = rg_promotion_type.indexOfChild(findViewById(rg_promotion_type.getCheckedRadioButtonId()));
         if (selectedRadioGroupChild == 0) {
             Log.e(TAG, "Radio button discount selection");
-            if (et_discount_percentage_over_lessons.getText().toString().trim().isEmpty()) {
-                et_discount_percentage_over_lessons.setError(getResources().getString(R.string.number_of_classes_over_discount));
-                if (isValid)
-                    et_discount_percentage_over_lessons.requestFocus();
-                isValid = false;
-            }
+
 
             if (et_promotion_discount.getText().toString().trim().isEmpty()) {
                 et_promotion_discount.setError(getResources().getString(R.string.add_dicount_percentage));
@@ -195,21 +199,14 @@ public class AddPromotion extends Activity implements Callback {
                 isValid = false;
             }
 
-            if (et_mandatory_classes.getText().toString().trim().isEmpty()) {
-                et_mandatory_classes.setError(getResources().getString(R.string.add_mandatory_classes));
-                if (isValid)
-                    et_mandatory_classes.requestFocus();
+            if(Integer.parseInt(et_free_classes.getText().toString()) > Integer.parseInt(String.valueOf(spNumberOfClasses.getSelectedItem()))){
+             et_free_classes.setError(getResources().getString(R.string.free_class_cannot_bigger_than_mandatory));
+                if(isValid)
+                    et_free_classes.requestFocus();
                 isValid = false;
             }
 
-            if (!et_mandatory_classes.getText().toString().trim().isEmpty() && !et_free_classes.getText().toString().trim().isEmpty()) {
-                if (Integer.parseInt(et_free_classes.getText().toString()) > Integer.parseInt(et_mandatory_classes.getText().toString())) {
-                    et_free_classes.setError(getResources().getString(R.string.free_class_cannot_bigger_than_mandatory));
-                    if (isValid)
-                        et_free_classes.requestFocus();
-                    isValid = false;
-                }
-            }
+
 
         }
         return isValid;

@@ -337,11 +337,11 @@
 
                 <LinearLayout
                     android:id="@+id/llCity"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/back_margin"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <com.findmycoach.app.views.ChizzleTextView
                         android:layout_width="wrap_content"
@@ -425,11 +425,11 @@
                         android:layout_centerVertical="true"
                         android:layout_marginBottom="4dp"
                         android:background="@drawable/circular_border_purple"
-                        android:padding="8dp"
+                        android:padding="6dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/close_icon2"
 
-                        android:visibility="gone" />
+                        android:visibility="visible" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -595,7 +595,7 @@
                     android:background="@drawable/circular_border_purple"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
-                    android:padding="8dp"
+                    android:padding="6dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/add_icon1"
                     android:visibility="visible" />
@@ -798,8 +798,6 @@
                 </LinearLayout>
 
 
-
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -861,62 +859,17 @@
 
 
                 <!--  *******************************************************************-->
-
-                <com.findmycoach.app.views.ChizzleTextView
-                    android:id="@+id/tv_trial_classes"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/back_margin"
-                    android:text="@string/trial_class_message"
-                    android:textColor="@color/purple_light"
-                    android:textSize="@dimen/profile_heading"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <Spinner
-                        android:id="@+id/sp_trial_classes"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/login_button_height"
-                        android:background="@android:color/transparent"
-                        android:spinnerMode="dropdown" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="-10dp"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginBottom="-1dp"
-                            android:src="@drawable/drop_down_arrow_purple_small" />
-
-                        <com.findmycoach.app.views.ChizzleTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/purple_light" />
-
-                    </LinearLayout>
-                </LinearLayout>
-
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/back_margin"
-                    >
+                    android:layout_marginTop="@dimen/back_margin">
+
                     <com.findmycoach.app.views.ChizzleTextView
-                        android:id="@+id/tv_minimum_classes"
+                        android:id="@+id/tv_trial_classes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/back_margin"
-                        android:text="@string/minimum_classes_to_book"
+                        android:text="@string/trial_class_message"
                         android:textColor="@color/purple_light"
                         android:textSize="@dimen/profile_heading"
                         android:textStyle="bold" />
@@ -924,12 +877,12 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_toRightOf="@id/tv_minimum_classes"
-                        >
+                        android:layout_marginLeft="@dimen/back_margin"
+                        android:layout_toRightOf="@+id/tv_trial_classes"
+                        android:orientation="vertical">
 
                         <Spinner
-                            android:id="@+id/sp_minimum_number_of_lessons"
+                            android:id="@+id/sp_trial_classes"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/login_button_height"
                             android:background="@android:color/transparent"
@@ -955,8 +908,6 @@
 
                         </LinearLayout>
                     </LinearLayout>
-
-
 
                 </RelativeLayout>
 
@@ -1016,51 +967,61 @@
                         android:textColor="@color/custom_button_text_color_click_purple" />
                 </RadioGroup>
 
-                <com.findmycoach.app.views.ChizzleTextView
-                    android:id="@+id/tv_flexibility_on_class_duration"
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/back_margin"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:text="@string/flexibility_on_class_duration"
-                    android:textColor="@color/purple_light"
-                    android:textSize="@dimen/profile_heading"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="@dimen/back_margin">
 
-                <RadioGroup
-                    android:id="@+id/radioGroupClassFlexibility"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_weight="1"
-                    android:checkedButton="@+id/radio_button_mentor_signup"
-                    android:gravity="center"
-                    android:minHeight="@dimen/abc_action_bar_stacked_max_height"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/radio_button_not_flexible"
-                        android:layout_width="0dp"
+                    <com.findmycoach.app.views.ChizzleTextView
+                        android:id="@+id/tv_flexibility_on_class_duration"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.4"
-                        android:button="@drawable/custom_check_box"
-                        android:paddingLeft="@dimen/radio_button_padding_mentor_for"
-                        android:text="@string/no"
-                        android:textColor="@color/custom_button_text_color_click_purple" />
+                        android:focusable="true"
+                        android:layout_centerVertical="true"
+                        android:focusableInTouchMode="true"
+                        android:text="@string/flexibility_on_class_duration"
+                        android:textColor="@color/purple_light"
+                        android:textSize="@dimen/profile_heading"
+                        android:textStyle="bold" />
 
-                    <RadioButton
-                        android:id="@+id/radio_button_flexible"
-                        android:layout_width="0dp"
+                    <RadioGroup
+                        android:id="@+id/radioGroupClassFlexibility"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.3"
-                        android:button="@drawable/custom_check_box"
-                        android:checked="true"
-                        android:paddingLeft="@dimen/radio_button_padding_mentor_for"
-                        android:text="@string/yes"
-                        android:textColor="@color/custom_button_text_color_click_purple" />
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="@dimen/days_margin"
+                        android:layout_toRightOf="@id/tv_flexibility_on_class_duration"
+                        android:checkedButton="@+id/radio_button_mentor_signup"
+                        android:gravity="center"
+                        android:minHeight="@dimen/abc_action_bar_stacked_max_height"
+                        android:orientation="horizontal">
 
-                </RadioGroup>
+                        <RadioButton
+                            android:id="@+id/radio_button_not_flexible"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:button="@drawable/custom_check_box"
+                            android:paddingLeft="@dimen/radio_button_padding_mentor_for"
+                            android:text="@string/no"
+                            android:textColor="@color/custom_button_text_color_click_purple" />
+
+                        <RadioButton
+                            android:id="@+id/radio_button_flexible"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:button="@drawable/custom_check_box"
+                            android:checked="true"
+                            android:paddingLeft="@dimen/radio_button_padding_mentor_for"
+                            android:text="@string/yes"
+                            android:textColor="@color/custom_button_text_color_click_purple" />
+
+                    </RadioGroup>
+
+
+                </RelativeLayout>
 
 
                 <com.findmycoach.app.views.ChizzleTextView
@@ -1111,6 +1072,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/back_margin"
                         android:orientation="vertical">
 
                         <Spinner
@@ -1146,6 +1108,7 @@
                     android:id="@+id/ll_when_flexible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/back_margin"
                     android:orientation="vertical">
 
 
@@ -1193,6 +1156,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/back_margin"
                             android:orientation="vertical">
 
                             <Spinner
@@ -1264,6 +1228,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/back_margin"
                             android:orientation="vertical">
 
                             <Spinner
@@ -1334,6 +1299,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/back_margin"
                             android:orientation="vertical">
 
                             <Spinner
@@ -1441,6 +1407,58 @@
 -->
 
 
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/back_margin">
+
+                    <com.findmycoach.app.views.ChizzleTextView
+                        android:id="@+id/tv_minimum_classes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/back_margin"
+                        android:text="@string/minimum_classes_to_book"
+                        android:textColor="@color/purple_light"
+                        android:textSize="@dimen/profile_heading"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Spinner
+                        android:id="@+id/sp_minimum_number_of_lessons"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/login_button_height"
+                        android:background="@android:color/transparent"
+                        android:spinnerMode="dropdown" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-10dp"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginBottom="-1dp"
+                            android:src="@drawable/drop_down_arrow_purple_small" />
+
+                        <com.findmycoach.app.views.ChizzleTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/purple_light" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+
                 <LinearLayout
                     android:id="@+id/ll_max_class_in_week"
                     android:layout_width="match_parent"
@@ -1509,77 +1527,6 @@
 
                     </LinearLayout>
 
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_individual_pricing"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <com.findmycoach.app.views.ChizzleTextView
-                        android:id="@+id/tv_pricing_individual"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/back_margin"
-                        android:text="@string/pricing_per_hour_individual"
-                        android:textColor="@color/purple_light"
-                        android:textSize="@dimen/profile_heading"
-                        android:textStyle="bold" />
-
-
-                    <LinearLayout
-                        android:id="@+id/ll_pricing_individual"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/time_stamp"
-                        android:orientation="horizontal">
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent">
-
-                            <com.findmycoach.app.views.ChizzleTextView
-                                android:id="@+id/tv_individual_price_and_currency_suggestion"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:text="@string/price"
-                                android:textColor="@color/purple_light"
-                                android:textSize="@dimen/profile_heading"
-                                android:textStyle="bold" />
-
-                            <com.findmycoach.app.views.ChizzleTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_toRightOf="@id/tv_individual_price_and_currency_suggestion"
-                                android:text=" *"
-                                android:textColor="@color/purple"
-                                android:textSize="@dimen/profile_heading"
-                                android:textStyle="bold" />
-
-                        </RelativeLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/back_margin"
-                            android:orientation="vertical">
-
-                            <com.findmycoach.app.views.ChizzleEditText
-                                android:id="@+id/et_price_individual"
-                                style="@style/EditTextCustomHoloPurple"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint=""
-                                android:inputType="number"
-                                android:singleLine="true"
-                                android:textCursorDrawable="@drawable/cursor_purple"
-                                android:textSize="@dimen/profile_details" />
-                        </LinearLayout>
-
-                    </LinearLayout>
                 </LinearLayout>
 
 
@@ -1656,6 +1603,81 @@
                     </LinearLayout>
 
                 </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_individual_pricing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.findmycoach.app.views.ChizzleTextView
+                        android:id="@+id/tv_pricing_individual"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/back_margin"
+                        android:text="@string/pricing_per_hour_individual"
+                        android:textColor="@color/purple_light"
+                        android:textSize="@dimen/profile_heading"
+                        android:textStyle="bold" />
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_pricing_individual"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/time_stamp"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                            <com.findmycoach.app.views.ChizzleTextView
+                                android:id="@+id/tv_individual_price_and_currency_suggestion"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="@string/price"
+                                android:textColor="@color/purple_light"
+                                android:textSize="@dimen/profile_heading"
+                                android:textStyle="bold" />
+
+                            <com.findmycoach.app.views.ChizzleTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@id/tv_individual_price_and_currency_suggestion"
+                                android:text=" *"
+                                android:textColor="@color/purple"
+                                android:textSize="@dimen/profile_heading"
+                                android:textStyle="bold" />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/back_margin"
+                            android:orientation="vertical">
+
+                            <com.findmycoach.app.views.ChizzleEditText
+                                android:id="@+id/et_price_individual"
+                                style="@style/EditTextCustomHoloPurple"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint=""
+                                android:inputType="number"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@drawable/cursor_purple"
+                                android:textSize="@dimen/profile_details" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+
 
 
                 <!--**************************************************************-->

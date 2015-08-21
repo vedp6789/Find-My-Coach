@@ -59,7 +59,7 @@ public class ProfileFragment extends Fragment implements Callback {
     private TextView profileName, tv_flexibility_on_class_duration, tv_min_class_time, tv_flexibility_window,
             tv_max_class_time, tv_fixed_class_duration, tv_max_classes_in_week,
             tv_individual_class_price, tv_group_class_price, tv_individual_class_price_label, tv_group_class_price_label,
-            tv_fixed_class_duration_label, tv_number_trial_lessons,tv_min_lessons_val;
+            tv_fixed_class_duration_label, tv_number_trial_lessons, tv_min_lessons_val;
     private TextView profileEmail;
     private TextView profileDob;
     private TextView profileAddress;
@@ -176,7 +176,7 @@ public class ProfileFragment extends Fragment implements Callback {
         tv_group_class_price_label = (TextView) view.findViewById(R.id.group_class_price);
         tv_fixed_class_duration_label = (TextView) view.findViewById(R.id.fixed_class_duration);
         tv_number_trial_lessons = (TextView) view.findViewById(R.id.tv_number_trial_lessons);
-        tv_min_lessons_val= (TextView) view.findViewById(R.id.tv_min_lessons_val);
+        tv_min_lessons_val = (TextView) view.findViewById(R.id.tv_min_lessons_val);
 
 
         view.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
@@ -373,12 +373,15 @@ public class ProfileFragment extends Fragment implements Callback {
         }
 
 
-        if (userInfo.getNumber_of_trial_classes() > 0) {
-            tv_number_trial_lessons.setText(getResources().getString(R.string.trial_class_message1).trim()+" "+ userInfo.getNumber_of_trial_classes()+" "+getResources().getString(R.string.trial_class_message2));
+        if (userInfo.getNumber_of_trial_classes() >= 0) {
+            if (userInfo.getNumber_of_trial_classes() == 0)
+                tv_number_trial_lessons.setText(getResources().getString(R.string.no_trial_classes));
+            else
+                tv_number_trial_lessons.setText(getResources().getString(R.string.trial_class_message1).trim() + " " + userInfo.getNumber_of_trial_classes() + " " + getResources().getString(R.string.trial_class_message2));
         }
 
-        if(userInfo.getMin_number_of_classes() > 0){
-            tv_min_lessons_val.setText(""+userInfo.getMin_number_of_classes());
+        if (userInfo.getMin_number_of_classes() > 0) {
+            tv_min_lessons_val.setText("" + userInfo.getMin_number_of_classes());
         }
 
 
@@ -510,7 +513,6 @@ public class ProfileFragment extends Fragment implements Callback {
 
                     tv_fixed_class_duration_label.setText(getResources().getString(R.string.group_class_time_flexibility));
                     tv_fixed_class_duration.setText("" + userInfo.getFixed_class_duration());
-
 
 
                     rl_individual_class_price.setVisibility(View.VISIBLE);

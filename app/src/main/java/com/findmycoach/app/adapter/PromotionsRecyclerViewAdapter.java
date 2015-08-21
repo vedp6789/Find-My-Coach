@@ -121,17 +121,36 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
             }
 
             if (active_promotions)
-                holder.iv_delete_promotion.setText(context.getResources().getStringArray(R.array.promotions_pager_titles)[1]);
+                holder.iv_delete_promotion.setText(context.getResources().getString(R.string.deactivate_promotion));
             else
-                holder.iv_delete_promotion.setText(context.getResources().getStringArray(R.array.promotions_pager_titles)[0]);
+                holder.iv_delete_promotion.setText(context.getResources().getString(R.string.activate_promotion));
             holder.iv_delete_promotion.setOnClickListener(null);
             holder.iv_delete_promotion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (active_promotions) {
-                        showDialog(offer_id, true);
+                        RequestParams requestParams = new RequestParams();
+                        requestParams.add("promotion_id", offer_id);
+                        requestParams.add("promotion_type", promotion_type);
+                        requestParams.add("is_active", "0");  /* activate to inactive*/
+                        if (activeInactivePromotions != null) {
+                            activeInactivePromotions.updatePromotion(requestParams, position);
+                        } else {
+                            Log.e("FMC", "ActiveInactivePromotions instance null");
+                        }
+                      //  showDialog(offer_id, true);
                     } else {
-                        showDialog(offer_id, false);
+                        RequestParams requestParams = new RequestParams();
+                        requestParams.add("promotion_id", offer_id);
+                        requestParams.add("promotion_type", promotion_type);
+                        requestParams.add("is_active", "1");  /* Inactivate to activate*/
+                        if (activeInactivePromotions != null) {
+                            activeInactivePromotions.updatePromotion(requestParams, position);
+                        } else {
+                            Log.e("FMC", "ActiveInactivePromotions instance null");
+                        }
+
+                      //  showDialog(offer_id, false);
 
                     }
 
@@ -180,7 +199,7 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
                                 requestParams.add("promotion_type", promotion_type);
                                 requestParams.add("is_active", "0");  /* activate to inactive*/
                                 if (activeInactivePromotions != null) {
-                                    activeInactivePromotions.updatePromotion(requestParams, position, holder.dialog);
+                                    //activeInactivePromotions.updatePromotion(requestParams, position, holder.dialog);
                                 } else {
                                     Log.e("FMC", "ActiveInactivePromotions instance null");
                                 }
@@ -228,7 +247,7 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
                                 requestParams.add("promotion_type", promotion_type);
                                 requestParams.add("is_active", "1");  /* Inactivate to activate*/
                                 if (activeInactivePromotions != null) {
-                                    activeInactivePromotions.updatePromotion(requestParams, position, holder.dialog);
+                                   // activeInactivePromotions.updatePromotion(requestParams, position, holder.dialog);
                                 } else {
                                     Log.e("FMC", "ActiveInactivePromotions instance null");
                                 }

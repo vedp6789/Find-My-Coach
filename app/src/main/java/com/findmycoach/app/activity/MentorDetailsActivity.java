@@ -547,8 +547,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         });
 
         try {
-            int trialClassCount = Integer.parseInt(userInfo.getNumberOfTrialClasses());
-            if (trialClassCount > 0) {
+            int trialClassCount = userInfo.getNumber_of_trial_classes();
+            if (trialClassCount >= 0) {
                 findViewById(R.id.bookTrialClass).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

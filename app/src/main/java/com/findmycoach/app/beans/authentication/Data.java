@@ -139,20 +139,20 @@ public class Data {
     @SerializedName("number_of_students")
     @Expose
     private String numberOfStudents;
-    @SerializedName("number_of_trial_classes")
+    /*@SerializedName("number_of_trial_classes")
     @Expose
     private String numberOfTrialClasses;
-    @SerializedName("review")
+*/    @SerializedName("review")
     @Expose
     private List<Review> reviews;
 
-    public String getNumberOfTrialClasses() {
+    /*public String getNumberOfTrialClasses() {
         return numberOfTrialClasses;
     }
 
     public void setNumberOfTrialClasses(String numberOfTrialClasses) {
         this.numberOfTrialClasses = numberOfTrialClasses;
-    }
+    }*/
 
     public String getNumberOfStudents() {
         return numberOfStudents;

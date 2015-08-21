@@ -114,7 +114,8 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private ArrayList<ChildDetails> childDetailsArrayList;
     private ListView childDetailsListView, addressListView;
     private ChildDetailsAdapter childDetailsAdapter;
-    private Button addMore, addAddress;
+    private Button addMore;
+    private ImageButton addAddress;
     private ArrayList<Address> addressArrayList;
     private AddressAdapter addressAdapter;
     private RadioGroup radioGroup;
@@ -272,7 +273,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         llCity = (RelativeLayout) findViewById(R.id.llCity);
         childDetailsListView = (ListView) findViewById(R.id.childDetailsListView);
         addMore = (Button) findViewById(R.id.addMoreButton);
-        addAddress = (Button) findViewById(R.id.addAddress);
+        addAddress = (ImageButton) findViewById(R.id.addAddress);
         multipleAddress = (CheckBox) findViewById(R.id.inputMutipleAddresses);
         addressListView = (ListView) findViewById(R.id.addressesListView);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroupDetails);
