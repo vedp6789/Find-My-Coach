@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -63,14 +64,27 @@ import com.findmycoach.app.util.DateAsPerChizzle;
 import com.findmycoach.app.util.MetaData;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
+import com.findmycoach.app.util.PlaceAutocompleteAdapter;
 import com.findmycoach.app.util.PreferredTrainerLocationDialog;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.util.TermsAndCondition;
 import com.findmycoach.app.views.ChizzleTextView;
 import com.findmycoach.app.views.ChizzleTextViewBold;
 import com.findmycoach.app.views.DobPicker;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
@@ -78,7 +92,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class EditProfileActivityMentee extends Activity implements Callback, ChildDetailsDialog.ChildDetailsAddedListener, AddAddressDialog.AddressAddedListener, PreferredTrainerLocationDialog.PreferredAddressSelectedListener {
+public class EditProfileActivityMentee extends FragmentActivity implements Callback, ChildDetailsDialog.ChildDetailsAddedListener, AddAddressDialog.AddressAddedListener, PreferredTrainerLocationDialog.PreferredAddressSelectedListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
 
 
     int REQUEST_CODE = 100;
@@ -138,6 +152,10 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
     private PreferredTrainerLocationDialog dialog = null;
     private String previousValue = "";
     private int index = -1;
+
+    protected GoogleApiClient mGoogleApiClient;
+    private PlaceAutocompleteAdapter mAdapter;
+    private LocationRequest mLocationRequest;
 
 
     @Override
@@ -572,52 +590,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         });
 
 
-        locale.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String input = locale.getText().toString().trim();
-                if (!input.isEmpty())
-                    deleteLocaleButton.setVisibility(View.VISIBLE);
-                else
-                    deleteLocaleButton.setVisibility(View.GONE);
-                if (input.length() >= 2) {
-                    getAutoSuggestions(input);
-                }
-            }
-        });
-
-        locale.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (userInfo != null && userInfo.getMultipleAddress() != null) {
-                    if (user_info_multiple_address == 0 || user_info_multiple_address == 1 ||
-                            training_location_similar_to_profile_locale) {
-                    }
-                    if (addressList.size() > 0) {
-                        addressList.remove(0);
-                        addressList.add(0, locale.getText().toString());
-                    } else {
-                        addressList.add(0, locale.getText().toString());
-
-                    }
-                    if (dialog != null) {
-                        dialog.changeAddresses(addressList);
-                    }
-                    trainingLocation.setText(locale.getText().toString());
-
-                }
-            }
-        });
 
         if (userInfo.getTrainingLocation() != null) {
             previousValue = (String) userInfo.getTrainingLocation();
@@ -635,16 +608,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                 }
             }
         });
-        locale.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
-                        || (actionId == EditorInfo.IME_ACTION_DONE) || (actionId == EditorInfo.IME_ACTION_NEXT)) {
-                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                }
-                return false;
-            }
-        });
+
 
 
         locationPreferenceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -672,42 +636,55 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             }
         });
 
-        /*profileAddress1.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                city = null;
-                String input = profileAddress1.getText().toString().trim();
-                if (input.length() >= 2) {
-                    getAutoSuggestions(input);
-                }
-            }
-        });
-
-        profileAddress1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*locale.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                city = arrayAdapter.getItem(position);
-//                getPostalFromCity(city);
-                try {
-                    NetworkManager.countryName = predictions.get(position).getCountry();
-                    isGettingAddress = true;
-                } catch (Exception e) {
-                    NetworkManager.countryName = "";
+                Log.e(TAG,"inside locale setOnItemClick Listener");
+                if (userInfo != null && userInfo.getMultipleAddress() != null) {
+                    if (user_info_multiple_address == 0 || user_info_multiple_address == 1 ||
+                            training_location_similar_to_profile_locale) {
+                    }
+                    if (addressList.size() > 0) {
+                        addressList.remove(0);
+                        addressList.add(0, locale.getText().toString());
+                    } else {
+                        addressList.add(0, locale.getText().toString());
+
+                    }
+                    if (dialog != null) {
+                        dialog.changeAddresses(addressList);
+                    }
+                    trainingLocation.setText(locale.getText().toString());
+
                 }
             }
         });
-
-
-
 */
+
+        locale.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
+                        || (actionId == EditorInfo.IME_ACTION_DONE) || (actionId == EditorInfo.IME_ACTION_NEXT)) {
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
+                return false;
+            }
+        });
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .enableAutoManage(this, 0 /* clientId */, this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(LocationServices.API)
+                .build();
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_LOW_POWER)
+                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
+                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+        locale.setOnItemClickListener(mAutocompleteClickListener);
+
 
         findViewById(R.id.physicalAddressInfoMentee).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -743,115 +720,88 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
 
         });
 
-        /*pinCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
-                        || (actionId == EditorInfo.IME_ACTION_DONE)
-                        || actionId == EditorInfo.IME_ACTION_NEXT) {
-                    try {
-                        new AddressFromZip(EditProfileActivityMentee.this, EditProfileActivityMentee.this, profileAddress1, profileAddress, true, FLAG_FOR_EDIT_PROFILE_MENTEE).execute(pinCode.getText().toString());
-                        isGettingAddress = true;
-                    } catch (Exception ignored) {
-                    }
-                    hideKeyboard();
-                    pinCode.clearFocus();
-                    mentorForHeader.requestFocus();
-                    return true;
-                }
-                return false;
-            }
-        });
-*/
-        /*profileAddress.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
-                    profileAddress1.setFocusable(true);
-                }
-                return false;
-            }
-        });
-
-        profileAddress1.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
-                    pinCode.setFocusable(true);
-                }
-                return false;
-            }
-        });*/
 
     }
 
-//    private void getPostalFromCity(String city) {
-//        Geocoder geocoder = new Geocoder(EditProfileActivityMentee.this, Locale.getDefault());
-//        try {
-//            ArrayList<Address> addresses = (ArrayList<Address>) geocoder.getFromLocationName(city.toString(), 1);
-//            Address address = addresses.get(0);
-//            Log.i(TAG, "address according to Geo coder : " + "\n postal code : " + address.getPostalCode() + "\n country name : " + address.getCountryName() + "\n address line 0 : " + address.getAddressLine(0) + "\n address line 1 : " + address.getAddressLine(1));
-//            for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-//                Log.i(TAG, "address line " + i + " : " + address.getAddressLine(i));
-//            }
-//            Log.i(TAG, "address locality " + address.getLocality() + "latitude : " + address.getLatitude() + "longitude : " + address.getLongitude());
-//
-//            double latitude = address.getLatitude();
-//            double longitude = address.getLongitude();
-//
-//            final ArrayList<Double> doubles = new ArrayList<Double>();
-//            doubles.add(latitude);
-//            doubles.add(longitude);
-//
-//
-//            new AsyncTask<ArrayList, Void, String>() {
-//
-//                @Override
-//                protected String doInBackground(ArrayList... params) {
-//                    ArrayList<Double> doubles1 = params[0];
-//                    XPath xpath = XPathFactory.newInstance().newXPath();
-//                    String expression = "//GeocodeResponse/result/address_component[type=\"postal_code\"]/long_name/text()";
-//                    Log.d(TAG, "lat in async " + doubles1.get(0));
-//                    Log.d(TAG, "long in async " + doubles1.get(1));
-//
-//                    InputSource inputSource = new InputSource("https://maps.googleapis.com/maps/api/geocode/xml?latlng=" + doubles1.get(0) + "," + doubles1.get(1) + "&sensor=true");
-//                    String zipcode = null;
-//                    try {
-//                        zipcode = (String) xpath.evaluate(expression, inputSource, XPathConstants.STRING);
-//                    } catch (XPathExpressionException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//
-//                    Log.i(TAG, "zip code 1 : " + zipcode);
-//
-//
-//                    return zipcode;
-//                }
-//
-//
-//                @Override
-//                protected void onPostExecute(String s) {
-//                    super.onPostExecute(s);
-//                    if (s != null) {
-//                        try {
-//                            pinCode.setText(s);
-//                        } catch (Exception ignored) {
-//                        }
-//                    } else {
-//                        try {
-//                            pinCode.setText("");
-//                        } catch (Exception ignored) {
-//                        }
-//                    }
-//
-//
-//                }
-//            }.execute(doubles);
-//
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void setBounds(Location location, int mDistanceInMeters) {
+        Log.e(TAG, "inside setBounds method");
+        double latRadian = Math.toRadians(location.getLatitude());
+
+        double degLatKm = 110.574235;
+        double degLongKm = 110.572833 * Math.cos(latRadian);
+        double deltaLat = mDistanceInMeters / 1000.0 / degLatKm;
+        double deltaLong = mDistanceInMeters / 1000.0 / degLongKm;
+
+        double minLat = location.getLatitude() - deltaLat;
+        double minLong = location.getLongitude() - deltaLong;
+        double maxLat = location.getLatitude() + deltaLat;
+        double maxLong = location.getLongitude() + deltaLong;
+
+        Log.d(TAG, "Min: " + Double.toString(minLat) + "," + Double.toString(minLong));
+        Log.d(TAG, "Max: " + Double.toString(maxLat) + "," + Double.toString(maxLong));
+
+        // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
+        // the entire world.
+        mAdapter = new PlaceAutocompleteAdapter(this, R.layout.textview,
+                mGoogleApiClient, new LatLngBounds(new LatLng(minLat, minLong), new LatLng(maxLat, maxLong)), null);
+        locale.setAdapter(mAdapter);
+    }
+
+    private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            final PlaceAutocompleteAdapter.PlaceAutocomplete item = mAdapter.getItem(position);
+            final String placeId = String.valueOf(item.placeId);
+            Log.i(TAG, "Autocomplete item selected: " + item.description);
+
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+
+            Log.i(TAG, "Called getPlaceById to get Place details for " + item.placeId);
+
+            if (userInfo != null && userInfo.getMultipleAddress() != null) {
+                if (user_info_multiple_address == 0 || user_info_multiple_address == 1 ||
+                        training_location_similar_to_profile_locale) {
+                }
+                if (addressList.size() > 0) {
+                    addressList.remove(0);
+                    addressList.add(0, locale.getText().toString());
+                } else {
+                    addressList.add(0, locale.getText().toString());
+
+                }
+                if (dialog != null) {
+                    dialog.changeAddresses(addressList);
+                }
+                trainingLocation.setText(locale.getText().toString());
+
+            }
+
+        }
+    };
+
+
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+            = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                // Request did not complete successfully
+                Log.e(TAG, "Place query did not complete. Error: " + places.getStatus().toString());
+                places.release();
+                return;
+            }
+            // Get the Place object from the buffer.
+            final Place place = places.get(0);
+
+            Log.i(TAG, "Place details received: " + place.getName());
+
+            places.release();
+        }
+    };
+
 
     private void hideKeyboard() {
         InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -878,10 +828,6 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
             profileFirstName.setText(userInfo.getFirstName());
         } catch (Exception ignored) {
         }
-//        try {
-//            profileMiddleName.setText(userInfo.getMiddleName());
-//        } catch (Exception ignored) {
-//        }
         try {
             profileLastName.setText(userInfo.getLastName());
         } catch (Exception ignored) {
@@ -974,7 +920,7 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
                         Country country = countries.get(i);
                         if (country_id == country.getId()) {
                             profileCountry.setSelection(i + 1);  /* i+1 because first item of profileCountry is Select string */
-                            if(country_id != 199)
+                            if (country_id != 199)
                                 city_with_states.setVisibility(View.VISIBLE);
                             city_id = 0;
                             city_with_states.setText("");
@@ -1692,4 +1638,56 @@ public class EditProfileActivityMentee extends Activity implements Callback, Chi
         this.index = index;
         trainingLocation.setText(address);
     }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.e(TAG, "on GoogleApIclient connected");
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        if (location == null) {
+            Log.e(TAG, "location null");
+
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        } else {
+            Log.e(TAG, "location not null");
+
+            setBounds(location, 5500);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.e(TAG, "on GoogleApIclient connection suspend");
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.e(TAG, "location changed");
+        setBounds(location, 5500);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = " + connectionResult.getErrorCode());
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, "Trying to connect with GoogleAPIclient");
+        mGoogleApiClient.connect();
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+        }
+    }
+
 }

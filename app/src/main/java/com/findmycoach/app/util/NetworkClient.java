@@ -844,6 +844,21 @@ public class NetworkClient {
         });
     }
 
+    public boolean isJSONValid(String test) {
+        try {
+            new JSONObject(test);
+        } catch (JSONException ex) {
+            // edited, to include @Arthur's comment
+            // e.g. in case JSONArray is valid as well...
+            try {
+                new JSONArray(test);
+            } catch (JSONException ex1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void autoComplete(final Context context, RequestParams requestParams, final Callback callback, final int calledApiValue) {
         client.get(context, "https://maps.googleapis.com/maps/api/place/autocomplete/json", requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -852,6 +867,7 @@ public class NetworkClient {
                     String responseJson = new String(responseBody);
                     Log.d(TAG, "Success: Response:" + responseJson);
                     Log.d(TAG, "Success: Response Code:" + statusCode);
+
                     Suggestion suggestion = new Gson().fromJson(responseJson, Suggestion.class);
 
                     callback.successOperation(suggestion, statusCode, calledApiValue);

@@ -1,10 +1,19 @@
 package com.findmycoach.app.activity;
 
+import com.findmycoach.app.util.PlaceAutocompleteAdapter;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.*;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.Html;
@@ -82,8 +92,11 @@ import com.findmycoach.app.views.ChizzleEditText;
 import com.findmycoach.app.views.ChizzleTextView;
 import com.findmycoach.app.views.ChizzleTextViewBold;
 import com.findmycoach.app.views.DobPicker;
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.RequestParams;
@@ -100,7 +113,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class EditProfileActivityMentor extends Activity implements Callback, AddAddressDialog.AddressAddedListener, RadioGroup.OnCheckedChangeListener {
+
+public class EditProfileActivityMentor extends FragmentActivity implements Callback, AddAddressDialog.AddressAddedListener, RadioGroup.OnCheckedChangeListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks,LocationListener {
 
     int REQUEST_CODE = 100;
     private ImageView profilePicture;
@@ -181,6 +195,11 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
     private ArrayList<String> trial_classes;
     private ArrayList<Integer> minimum_number_of_classes;
 
+
+    protected GoogleApiClient mGoogleApiClient;
+    private PlaceAutocompleteAdapter mAdapter;
+    private LocationRequest mLocationRequest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -201,6 +220,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
         needToCheckOnDestroy = false;
         integerArrayList_Of_UpdatedStudentPreference = new ArrayList<>();
         editProfileActivityMentor = this;
+
+
 
     }
 
@@ -464,6 +485,8 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
 
                             tv_price_currency_individual.setText(getResources().getString(R.string.price) + " " + Html.fromHtml(currency_unicode));
                             tv_price_currency_group.setText(getResources().getString(R.string.price) + " " + Html.fromHtml(currency_unicode));
+                            et_group_class_price.setText("");
+                            et_individual_class_price.setText("");
 
                             RequestParams requestParams = new RequestParams();
                             requestParams.add("country_id", String.valueOf(country_id));
@@ -740,95 +763,6 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
             }
         });
 
-        city_with_states.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                selected_city = null;/* making selected_city null because if user do changes in city and does not select city from suggested city then this selected_city string should be null which is used to validate the city */
-                String input = city_with_states.getText().toString().trim();
-
-                try {
-                    if (input.contains("("))
-                        input = input.split("\\(")[0].trim();
-                } catch (Exception ignored) {
-                }
-
-                if (input.length() >= 2) {
-                    if (city_with_states.isPerformingCompletion()) {
-                        return;
-                    } else {
-                        if (list_of_city != null && list_of_city.size() > 0) {
-                            updateAutoSuggestionForCity(list_of_city, input);
-                        }
-                    }
-                }
-            }
-        });
-
-
-        city_with_states.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                if (city_id_from_suggestion != null && city_id_from_suggestion.size() > 0) {
-                    city_id = city_id_from_suggestion.get(position);
-                }
-            }
-        });
-
-        city_with_states.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
-                        || (actionId == EditorInfo.IME_ACTION_DONE)) {
-                    locale.requestFocus();
-                }
-                return false;
-            }
-        });
-
-        locale.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String input = locale.getText().toString().trim();
-                if (!input.isEmpty())
-                    deleteLocaleButton.setVisibility(View.VISIBLE);
-                else
-                    deleteLocaleButton.setVisibility(View.GONE);
-                if (input.length() >= 2) {
-                    getAutoSuggestions(input);
-                }
-            }
-        });
-
-        locale.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
-                        || (actionId == EditorInfo.IME_ACTION_DONE) || (actionId == EditorInfo.IME_ACTION_NEXT)) {
-                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                }
-                return false;
-            }
-        });
 
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -939,8 +873,212 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
             }
         });
 
+        city_with_states.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                selected_city = null;/* making selected_city null because if user do changes in city and does not select city from suggested city then this selected_city string should be null which is used to validate the city */
+                String input = city_with_states.getText().toString().trim();
+
+                try {
+                    if (input.contains("("))
+                        input = input.split("\\(")[0].trim();
+                } catch (Exception ignored) {
+                }
+
+                if (input.length() >= 2) {
+                    if (city_with_states.isPerformingCompletion()) {
+                        return;
+                    } else {
+                        if (list_of_city != null && list_of_city.size() > 0) {
+                            updateAutoSuggestionForCity(list_of_city, input);
+                        }
+                    }
+                }
+            }
+        });
+
+
+        city_with_states.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                if (city_id_from_suggestion != null && city_id_from_suggestion.size() > 0) {
+                    city_id = city_id_from_suggestion.get(position);
+                }
+            }
+        });
+
+        city_with_states.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
+                        || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    locale.requestFocus();
+                }
+                return false;
+            }
+        });
+
+        /*locale.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String input = locale.getText().toString().trim();
+                if (!input.isEmpty())
+                    deleteLocaleButton.setVisibility(View.VISIBLE);
+                else
+                    deleteLocaleButton.setVisibility(View.GONE);
+                if (input.length() >= 2) {
+                    getAutoSuggestions(input);
+
+                   *//* PendingResult result =
+                            Places.GeoDataApi.getAutocompletePredictions(mGoogleApiClient, query,mBounds, mAutocompleteFilter);
+*//*
+                }
+            }
+        });
+
+        locale.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
+                        || (actionId == EditorInfo.IME_ACTION_DONE) || (actionId == EditorInfo.IME_ACTION_NEXT)) {
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
+                return false;
+            }
+        });*/
+
+
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .enableAutoManage(this, 0 /* clientId */, this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(LocationServices.API)
+                .build();
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_LOW_POWER)
+                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
+                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+        locale.setOnItemClickListener(mAutocompleteClickListener);
+
+        locale.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))
+                        || (actionId == EditorInfo.IME_ACTION_DONE) || (actionId == EditorInfo.IME_ACTION_NEXT)) {
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
+                return false;
+            }
+        });
 
     }
+
+
+    private void setBounds(Location location, int mDistanceInMeters ){
+        Log.e(TAG,"inside setBounds method");
+        double latRadian = Math.toRadians(location.getLatitude());
+
+        double degLatKm = 110.574235;
+        double degLongKm = 110.572833 * Math.cos(latRadian);
+        double deltaLat = mDistanceInMeters / 1000.0 / degLatKm;
+        double deltaLong = mDistanceInMeters / 1000.0 / degLongKm;
+
+        double minLat = location.getLatitude() - deltaLat;
+        double minLong = location.getLongitude() - deltaLong;
+        double maxLat = location.getLatitude() + deltaLat;
+        double maxLong = location.getLongitude() + deltaLong;
+
+        Log.d(TAG,"Min: "+Double.toString(minLat)+","+Double.toString(minLong));
+        Log.d(TAG,"Max: "+Double.toString(maxLat)+","+Double.toString(maxLong));
+
+        // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
+        // the entire world.
+        mAdapter = new PlaceAutocompleteAdapter(this, R.layout.textview,
+                mGoogleApiClient, new LatLngBounds(new LatLng(minLat, minLong), new LatLng(maxLat, maxLong)), null);
+        locale.setAdapter(mAdapter);
+    }
+
+    /**
+     * Listener that handles selections from suggestions from the AutoCompleteTextView that
+     * displays Place suggestions.
+     * Gets the place id of the selected item and issues a request to the Places Geo Data API
+     * to retrieve more details about the place.
+     *
+     * @see com.google.android.gms.location.places.GeoDataApi#getPlaceById(com.google.android.gms.common.api.GoogleApiClient,
+     * String...)
+     */
+    private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            /*
+             Retrieve the place ID of the selected item from the Adapter.
+             The adapter stores each Place suggestion in a PlaceAutocomplete object from which we
+             read the place ID.
+              */
+            final PlaceAutocompleteAdapter.PlaceAutocomplete item = mAdapter.getItem(position);
+            final String placeId = String.valueOf(item.placeId);
+            Log.i(TAG, "Autocomplete item selected: " + item.description);
+
+            /*
+             Issue a request to the Places Geo Data API to retrieve a Place object with additional
+              details about the place.
+              */
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+
+            /*Toast.makeText(getApplicationContext(), "Clicked: " + item.description,
+                    Toast.LENGTH_SHORT).show();*/
+            Log.i(TAG, "Called getPlaceById to get Place details for " + item.placeId);
+        }
+    };
+
+    /**
+     * Callback for results from a Places Geo Data API query that shows the first place result in
+     * the details view on screen.
+     */
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+            = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                // Request did not complete successfully
+                Log.e(TAG, "Place query did not complete. Error: " + places.getStatus().toString());
+                places.release();
+                return;
+            }
+            // Get the Place object from the buffer.
+            final Place place = places.get(0);
+
+            Log.i(TAG, "Place details received: " + place.getName());
+
+            places.release();
+        }
+    };
+
+
 
     private void showMediumOfTeachingDialog(List<String> mediumOfTeaching) {
 
@@ -1558,7 +1696,7 @@ public class EditProfileActivityMentor extends Activity implements Callback, Add
         RequestParams requestParams = new RequestParams();
         requestParams.add("input", input);
         requestParams.add("key", getResources().getString(R.string.google_location_api_key));
-        requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
+        //requestParams.add("user_group", StorageHelper.getUserGroup(this, "user_group"));
         NetworkClient.autoComplete(getApplicationContext(), requestParams, this, 32);
     }
 
@@ -2343,4 +2481,58 @@ if(rb_individual.isChecked())
     }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG,"Trying to connect with GoogleAPIclient");
+        mGoogleApiClient.connect();
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mGoogleApiClient.isConnected()){
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = " + connectionResult.getErrorCode());
+
+        // TODO(Developer): Check error code and notify the user of error state and resolution.
+     //   Toast.makeText(this,"Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.e(TAG,"on GoogleApIclient connected");
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        if (location == null) {
+            Log.e(TAG,"location null");
+
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        } else {
+            Log.e(TAG,"location not null");
+
+            setBounds(location,5500);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.e(TAG,"on GoogleApIclient connection suspend");
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.e(TAG,"location changed");
+
+        setBounds(location,5500);
+    }
 }

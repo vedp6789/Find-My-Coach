@@ -6,7 +6,8 @@
     <string name="facebook_app_id">835344249849377</string>
 
     <!-- Google Location Api Key -->
-    <string name="google_location_api_key">AIzaSyBEXECi4hIR7axoaQiJQiRHvJN_ZIK3ORM</string>
+    <string name="google_location_api_key">AIzaSyBCVu4friv7mubljLWi7e8eRdzP9G_UObc</string>
+
 
     <!-- FMC API KEY HEADER KEY AND VALUES -->
     <string name="api_key">FMC-API-KEY</string>
@@ -42,7 +43,6 @@
     <string name="BASE_URL">http://52.74.155.74/api/v1/</string>-->
     <!--WEB SOCKET URL-->
     <!--<string name="CHAT_SOCKET_URL">ws://52.74.155.74:9302</string>-->
-
 
 
     <!--Root path of media storage Folder-->

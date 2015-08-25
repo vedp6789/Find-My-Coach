@@ -46,16 +46,39 @@
                     android:textSize="@dimen/button_text_size"
                     android:visibility="visible" />
 
-                <com.findmycoach.app.views.ChizzleAutoCompleteTextView
-                    android:id="@+id/input_location"
-                    style="@style/EditTextCustomHolo"
+                <RelativeLayout
+                    android:id="@+id/rlAutoSuggestionAddress"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="@string/prompt_location"
-                    android:inputType="textNoSuggestions"
-                    android:maxLines="2"
-                    android:textCursorDrawable="@drawable/cursor_white"
-                    android:visibility="gone" />
+                    android:layout_height="wrap_content"
+                    >
+                    <com.findmycoach.app.views.ChizzleAutoCompleteTextView
+                        android:id="@+id/input_location"
+                        style="@style/EditTextCustomHolo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/prompt_location"
+                        android:inputType="textNoSuggestions"
+                        android:maxLines="2"
+                        android:layout_toLeftOf="@+id/ibDeleteAddressImageButton"
+                        android:textCursorDrawable="@drawable/cursor_white" />
+
+                    <ImageButton
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/ibDeleteAddressImageButton"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/close_icon2"
+                        android:background="@drawable/circular_border_purple"
+                        android:padding="6dp"
+                        android:scaleType="fitCenter"
+
+                        />
+
+                </RelativeLayout>
+
+
 
             </RelativeLayout>
 

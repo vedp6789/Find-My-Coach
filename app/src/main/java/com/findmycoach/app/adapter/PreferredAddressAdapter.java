@@ -24,15 +24,16 @@ import java.util.ArrayList;
 public class PreferredAddressAdapter extends ArrayAdapter<String> {
 
     private final LayoutInflater inflater;
-    private  int resourceId;
+    private int resourceId;
     private ArrayList<String> multipleAddressList;
     public int selectedIndex;
-    public PreferredAddressAdapter(Context context, int resource,ArrayList<String> multipleAddressList) {
+
+    public PreferredAddressAdapter(Context context, int resource, ArrayList<String> multipleAddressList) {
         super(context, resource);
         resourceId = resource;
         inflater = LayoutInflater.from(context);
-        this.multipleAddressList=multipleAddressList;
-        selectedIndex=-1;
+        this.multipleAddressList = multipleAddressList;
+        selectedIndex = -1;
     }
 
     @Override
@@ -56,16 +57,22 @@ public class PreferredAddressAdapter extends ArrayAdapter<String> {
         viewHolder.address.setOnCheckedChangeListener(null);
 
         viewHolder.address.setText(multipleAddressList.get(position));
-        if(position==selectedIndex) {
+        if (position == selectedIndex) {
             viewHolder.address.setChecked(true);
-        }
-        else
+
+        } else
             viewHolder.address.setChecked(false);
+
+
+        if (multipleAddressList.size() == 1) {
+            viewHolder.address.setChecked(true);
+            viewHolder.address.setEnabled(false);
+        }
 
         viewHolder.address.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                selectedIndex=position;
+                selectedIndex = position;
                 notifyDataSetChanged();
             }
         });

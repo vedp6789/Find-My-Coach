@@ -54,29 +54,32 @@ public class Settings extends FragmentActivity implements View.OnClickListener, 
     }
 
     private void initView() {
-        String loginWith = StorageHelper.getUserDetails(this, "login_with");
-        Log.e("LOGIN", loginWith);
-        ll_calendar_preferences = (LinearLayout) findViewById(R.id.ll_calendarPreferences);
+        try {
+            String loginWith = StorageHelper.getUserDetails(this, "login_with");
+            Log.e("LOGIN", loginWith);
+            ll_calendar_preferences = (LinearLayout) findViewById(R.id.ll_calendarPreferences);
 
 
-        if (!loginWith.equalsIgnoreCase("Login"))
-            findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
-        if (DashboardActivity.dashboardActivity.user_group == 2) {
-            findViewById(R.id.paymentOption).setVisibility(View.VISIBLE);
-            ll_calendar_preferences.setVisibility(View.GONE);
-            findViewById(R.id.ll_my_promotions).setVisibility(View.GONE);
+            if (!loginWith.equalsIgnoreCase("Login"))
+                findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
+            if (DashboardActivity.dashboardActivity.user_group == 2) {
+                findViewById(R.id.paymentOption).setVisibility(View.VISIBLE);
+                ll_calendar_preferences.setVisibility(View.GONE);
+                findViewById(R.id.ll_my_promotions).setVisibility(View.GONE);
+            }
+
+            findViewById(R.id.profileSettings).setOnClickListener(this);
+            findViewById(R.id.change_password).setOnClickListener(this);
+            findViewById(R.id.change_phone_no).setOnClickListener(this);
+            findViewById(R.id.paymentMethods).setOnClickListener(this);
+            findViewById(R.id.backButton).setOnClickListener(this);
+            findViewById(R.id.tv_calendar_preferences).setOnClickListener(this);
+            findViewById(R.id.tv_my_promotions).setOnClickListener(this);
+            TextView textView = (TextView) findViewById(R.id.title);
+            textView.setText(getResources().getString(R.string.action_settings));
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
-        findViewById(R.id.profileSettings).setOnClickListener(this);
-        findViewById(R.id.change_password).setOnClickListener(this);
-        findViewById(R.id.change_phone_no).setOnClickListener(this);
-        findViewById(R.id.paymentMethods).setOnClickListener(this);
-        findViewById(R.id.backButton).setOnClickListener(this);
-        findViewById(R.id.tv_calendar_preferences).setOnClickListener(this);
-        findViewById(R.id.tv_my_promotions).setOnClickListener(this);
-        TextView textView = (TextView) findViewById(R.id.title);
-        textView.setText(getResources().getString(R.string.action_settings));
-
     }
 
 

@@ -263,7 +263,7 @@
     <string name="request_declined">\'s request get declined</string>
     <string name="schedule_accepted"> schedule get confirmed</string>
     <string name="schedule_rejected"> schedule get rejected</string>
-    <string name="no_class_possible">There is no free classes now.</string>
+    <string name="no_class_possible">There are no free lessons now.</string>
     <string name="no_days_free_to_schedule">Please select other slot of mentor as this slot is not free now.</string>
     <string name="language_already_selected">This language is already selected.</string>
     <string name="start_date_and_end_date_please">Please fill start date and end date of this vacation.</string>
@@ -375,7 +375,7 @@
     <string name="discountPercentage">Discount Percentage</string>
     <string name="freeClasses">Free Lessons</string>
     <string name="mandatoryClasses">No. of Mandatory Lessons</string>
-    <string name="offer_classes">No. of Classes To avail offer</string>
+    <string name="offer_classes">No. of Lessons to Avail Offer</string>
     <string name="prompt_email">User Id</string>
     <string name="prompt_update_profile">Please Update Your Profile</string>
     <string name="prompt_enter_phone">Enter Phone Number</string>
@@ -513,7 +513,7 @@
     <string name="mentor_add">Mentor\'s address:</string>
     <string name="requested_class_details">Requested Lesson detail</string>
     <string name="prompt_hosting_yes">I can host group classes at My location</string>
-    <string name="prompt_mutiple_address">Add more  Locations  for my search</string>
+    <string name="prompt_mutiple_address">Add More  Locations  for My Search</string>
     <string name="prompt_addressline1">House no/street no</string>
     <string name="prompt_fellow_student_location">I can go for a group Lesson to a nearby students location</string>
     <string name="prompt_multiple_address_mentor">I am available at Other Locations also</string>
@@ -599,8 +599,8 @@
     <string name="discount_type_promotion">Discount</string>
     <string name="chat_mentor">Chat with Mentor</string>
     <string name="chat_students">Chat with Students</string>
-    <string name="book_class">Book Class</string>
-    <string name="book_trial_class">Trial Class</string>
+    <string name="book_class">Book Lesson</string>
+    <string name="book_trial_class">Trial Lesson</string>
     <string name="free_classes_promotion">Free Lesson</string>
 
 
@@ -678,8 +678,8 @@
     <string name="account_blocked">Your profile has been locked , please logout and we wil be in touch with you on the email ID/phone number provided by you.</string>
     <string name="dob_info_mentor">This is needed as some students may prefer a certain age group of teacher</string>
     <string name="dob_info_mentee">This is needed to ensure we provide you relevant teachers</string>
-    <string name="physical_address_mentor_info">We would need to inform to students where to come for classes</string>
-    <string name="physical_address_mentee_info">We would need to inform to mentors where to come for classes</string>
+    <string name="physical_address_mentor_info">We would need to inform to students where to come for lessons</string>
+    <string name="physical_address_mentee_info">We would need to inform to mentors where to come for lessons</string>
     <string name="view_calendar_by">View schedule calendar by</string>
     <string name="max_four_medium_of_education">You can select at most 4 languages</string>
     <string name="mentor_response_for_schedule_request_message">Your reply to mentee!</string>
@@ -845,10 +845,12 @@
     <string name="free_class_cannot_bigger_than_mandatory">No. of Free Lessons Cannot be Bigger Than The No. of Lessons to Avail Offer</string>
     <string name="discount_type_promotion_note">Eg. 20% Discount on Booking 10 Lessons</string>
     <string name="free_class_type_promotion_note">Eg. 2 Lessons Free for Every 10 Paid Lessons</string>
-    <string name="no_trial_classes">I Am Not Giving Any Trial Class</string>
+    <string name="no_trial_classes">I Am Not Giving Any Trial Lesson</string>
     <string name="nil">NIL</string>
     <string name="minutesPerGroupLesson">Minutes Per Group Lesson</string>
     <string name="noOfClasses">No. of Lessons to Avail Offer</string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
 
 
 </resources>

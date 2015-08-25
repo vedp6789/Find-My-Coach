@@ -1027,7 +1027,7 @@ public class ScheduleYourVacation extends Activity implements SetDate, SetTime, 
         start_hour = 0;
         start_min = 0;
         tv_stop_time = (TextView) findViewById(R.id.tv_slot_stop_time);
-        tv_stop_time.setText("12:59 PM");
+        tv_stop_time.setText("11:59 PM");
         stop_hour = 23;
         stop_min = 59;
 
