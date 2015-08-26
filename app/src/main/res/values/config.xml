@@ -71,7 +71,8 @@
     <!--Minimum length of digits for mobile number-->
     <integer name="min_phone_length">7</integer>
 
-
+    <!-- Minimum Time variance for classes in minutes-->
+    <integer name="variance_start_time">15</integer>
     <!-- Time bounds for classes in minutes-->
     <integer name="start_time">30</integer>
     <!-- Assuming lower bound of minimum time in minute-->

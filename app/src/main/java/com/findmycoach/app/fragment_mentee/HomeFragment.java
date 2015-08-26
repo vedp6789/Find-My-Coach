@@ -80,7 +80,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements View.OnClickListener, Callback, TimePickerDialog.OnTimeSetListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks,LocationListener {
+public class HomeFragment extends Fragment implements View.OnClickListener, Callback, TimePickerDialog.OnTimeSetListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
 
     private AutoCompleteTextView locationInput;
     private Button searchButton;
@@ -106,11 +106,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private String type;
     private ProfileResponse profileResponse;
     public int mentorFor, coachingType, numberOfTabsToBeShown;
+    private List<String> addressList = new ArrayList<>();
+
 
 
     protected GoogleApiClient mGoogleApiClient;
     private PlaceAutocompleteAdapter mAdapter;
     private LocationRequest mLocationRequest;
+    private int selectedLocationIndex = -1;
 
 
     public HomeFragment() {
@@ -361,17 +364,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     public void onStart() {
         super.onStart();
         Log.i(TAG, "Trying to connect with GoogleAPIclient");
-        if(mGoogleApiClient != null)
-        mGoogleApiClient.connect();
+        if (mGoogleApiClient != null)
+            mGoogleApiClient.connect();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if(mGoogleApiClient != null || mGoogleApiClient.isConnected()){
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
+        if (mGoogleApiClient != null || mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        selectedLocationIndex = -1;
 
     }
 
@@ -531,8 +541,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         });
     }
 
-    private void setBounds(Location location, int mDistanceInMeters ){
-        Log.e(TAG,"inside setBounds method");
+    private void setBounds(Location location, int mDistanceInMeters) {
+        Log.e(TAG, "inside setBounds method");
         double latRadian = Math.toRadians(location.getLatitude());
 
         double degLatKm = 110.574235;
@@ -545,8 +555,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         double maxLat = location.getLatitude() + deltaLat;
         double maxLong = location.getLongitude() + deltaLong;
 
-        Log.d(TAG,"Min: "+Double.toString(minLat)+","+Double.toString(minLong));
-        Log.d(TAG,"Max: "+Double.toString(maxLat)+","+Double.toString(maxLong));
+        Log.d(TAG, "Min: " + Double.toString(minLat) + "," + Double.toString(minLong));
+        Log.d(TAG, "Max: " + Double.toString(maxLat) + "," + Double.toString(maxLong));
 
         // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
         // the entire world.
@@ -700,10 +710,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             e.printStackTrace();
         }
 
-        if (location == null)
-            location = "";
+        try {
 
-        updateLocationUI();
+            if (location == null)
+                location = "";
+
+
+            if (selectedLocationIndex == -1 )
+                updateLocationUI();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initialize(View view) {
@@ -778,11 +795,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         } else if (id == R.id.edit_location) {
             isEditLocationEnabled = true;
             rlAutoSuggestionAddress.setVisibility(View.VISIBLE);
-            //locationInput.setVisibility(View.VISIBLE);
             editLocation.setVisibility(View.GONE);
             currentLocationText.setVisibility(View.GONE);
+            Log.e(TAG, "location input from auto suggestion");
+            locationInput.requestFocus();
+            ((InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         } else if (id == R.id.select_location) {
             isEditLocationEnabled = false;
+            ((InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(locationInput.getWindowToken(), 0);
+            locationInput.clearFocus();
             rlAutoSuggestionAddress.setVisibility(View.GONE);
             //locationInput.setVisibility(View.GONE);
             currentLocationText.setVisibility(View.VISIBLE);
@@ -792,7 +813,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     }
 
     private void showLocationPickerDialog() {
-        final List<String> addressList = new ArrayList<>();
+        addressList.clear();
         addressList.add(getResources().getString(R.string.pick_current_location));
         for (Address address : profileResponse.getData().getMultipleAddress()) {
             addressList.add(address.getLocale());
@@ -803,14 +824,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         dialog.setContentView(R.layout.select_address_for_search);
         ListView listView = (ListView) dialog.findViewById(R.id.localityListView);
         listView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.textview, addressList));
+
         dialog.show();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                selectedLocationIndex = position;
+
                 if (position == 0) {
                     if (DashboardActivity.dashboardActivity.userCurrentAddressFromGPS.trim().isEmpty())
                         DashboardActivity.dashboardActivity.getAddress();
+
                     else {
                         currentLocationText.setText(DashboardActivity.dashboardActivity.userCurrentAddressFromGPS.trim());
                         locationInput.setText(DashboardActivity.dashboardActivity.userCurrentAddressFromGPS.trim());
@@ -993,31 +1019,31 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.e(TAG,"on GoogleApIclient connected");
+        Log.e(TAG, "on GoogleApIclient connected");
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (location == null) {
-            Log.e(TAG,"location null");
+            Log.e(TAG, "location null");
 
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         } else {
-            Log.e(TAG,"location not null");
+            Log.e(TAG, "location not null");
 
-            setBounds(location,5500);
+            setBounds(location, 5500);
         }
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.e(TAG,"on GoogleApIclient connection suspend");
+        Log.e(TAG, "on GoogleApIclient connection suspend");
 
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.e(TAG,"location changed");
+        Log.e(TAG, "location changed");
 
-        setBounds(location,5500);
+        setBounds(location, 5500);
     }
 
     @Override
@@ -1025,7 +1051,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = " + connectionResult.getErrorCode());
 
     }
-
 
 
 }

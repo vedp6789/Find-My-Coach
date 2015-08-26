@@ -325,7 +325,7 @@
     <string name="verify_phone">Verify your Mobile Number</string>
     <string name="sending_code">Sending code</string>
     <string name="already_slot_found">Sorry, there is already a slot between\n</string>
-    <string name="otp_sent_to_registered_number">An Otp has been sent to your registered number,please wait</string>
+    <string name="otp_sent_to_registered_number">An OTP has been sent to your registered number,please wait</string>
     <string name="and">\tand\t</string>
     <string name="from1">\tfrom\t</string>
     <string name="to2">\tto\t</string>
@@ -815,16 +815,29 @@
     <string name="class_time_variance1">Lessons Can Vary In Steps Of Minute:</string>
     <string name="class_duration">Minutes Per Lesson</string>
     <string name="class_duration1">Minutes Per Lesson:</string>
-    <string name="max_class_week">Max. No. of Lessons for a Student in a Week</string>
-    <string name="max_class_week1">Max. No. of Lessons for a Student in a Week:</string>
+
+    <string name="max_class_week">Max. No. of Lessons/Student/Week</string>
+    <string name="max_class_week1">Max. No. of Lessons/Student/Week:</string>
+
+
+    <!--<string name="max_class_week">Max. No. of Lessons for a Student in a Week</string>
+    <string name="max_class_week1">Max. No. of Lessons for a Student in a Week:</string>-->
 <!--
     <string name="pricing_per_hour_individual">Pricing per hour for am individual Lesson</string>
 -->
-    <string name="pricing_per_hour_individual">Pricing per Hour of Lesson</string>
-    <string name="pricing_per_class_individual">Pricing per Lesson</string>
+
+
+    <string name="pricing_per_hour_individual">Pricing/Hour (Individual Lesson)</string>
+    <string name="pricing_per_class_individual">Pricing/Lesson</string>
+    <!--<string name="pricing_per_hour_individual">Pricing per Hour of Lesson</string>
+    <string name="pricing_per_class_individual">Pricing per Lesson</string>-->
+
     <!--<string name="pricing_per_hour_group">Pricing per hour for a group Lesson</string>-->
-    <string name="pricing_per_hour_group">Pricing per Student for Group Lesson</string>
-    <string name="pricing_per_class_group">Pricing per Student for Group Lesson</string>
+
+    <string name="pricing_per_hour_group">Pricing/Student (Group Lesson)</string>
+    <string name="pricing_per_class_group">Pricing/Student (Group Lesson)</string>
+    <!--<string name="pricing_per_hour_group">Pricing per Student for Group Lesson</string>
+    <string name="pricing_per_class_group">Pricing per Student for Group Lesson</string>-->
     <string name="max_hour_in_a_day">Maximum Minutes Per Lesson</string>
     <string name="max_hour_in_a_day1">Maximum Minutes Per Lesson:</string>
 
@@ -836,9 +849,13 @@
     <string name="trial_class_message2">Trial Lessons to a New Student</string>
 
     <string name="individual_class_time_flexibility">Individual Lessons</string>
-    <string name="group_class_time_flexibility">Group Lessons</string>
+    <string name="group_class_time_flexibility">Group Lessons (Fixed Duration)</string>
     <string name="trial_class_message">Free Trial Lessons/New Student</string>
+    <string name="minimum_classes_to_book">Min. No. of Lessons a Student Must Book</string>
+
+    <!--
     <string name="minimum_classes_to_book">Min. No. of Lessons that a Student Must Book</string>
+-->
     <string name="collon">:</string>
     <string name="discountOverNumberOfClasses">Discount over No. of Lessons</string>
     <string name="number_of_classes_over_discount">Number of Lessons Over  Discount Applied</string>

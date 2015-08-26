@@ -141,13 +141,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/tv_min_classes"
-                    android:focusable="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/back_margin"
-                    android:text="gkjhkjhkjhkjhkjhkjhkjhkj"
-                    android:focusableInTouchMode="true"
-                    android:inputType="numberDecimal"
                     android:singleLine="true"
-                    android:textColor="@color/purple"
+                    android:textColor="@color/purple_light"
                     android:textCursorDrawable="@drawable/cursor_purple"
                     android:textSize="@dimen/profile_details" />
 

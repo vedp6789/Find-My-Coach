@@ -61,7 +61,9 @@
                         android:inputType="textNoSuggestions"
                         android:maxLines="2"
                         android:layout_toLeftOf="@+id/ibDeleteAddressImageButton"
-                        android:textCursorDrawable="@drawable/cursor_white" />
+                        android:textCursorDrawable="@drawable/cursor_white"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"/>
 
                     <ImageButton
                         android:layout_width="30dp"

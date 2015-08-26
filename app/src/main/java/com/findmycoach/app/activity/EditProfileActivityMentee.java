@@ -1053,15 +1053,18 @@ public class EditProfileActivityMentee extends FragmentActivity implements Callb
 
     public boolean updateAddress() {   //TODO
         StringBuilder locale_string = new StringBuilder();
-        if (NetworkManager.localityName != "") {
+        if (!NetworkManager.localityName.trim().isEmpty()) {
             locale_string.append(NetworkManager.localityName);
         }
-        if (NetworkManager.cityName != "") {
+        if (!NetworkManager.cityName.trim().isEmpty()) {
             city_name = NetworkManager.cityName;
-            state_name = NetworkManager.stateName;
             locale_string.append(", " + NetworkManager.cityName);
         }
-        if (NetworkManager.postalCodeName != "") {
+
+        if(!NetworkManager.stateName.trim().isEmpty()){
+            state_name = NetworkManager.stateName;  /* state_name is not getting added to locale suggestion*/
+        }
+        if (!NetworkManager.postalCodeName.trim().isEmpty()) {
             locale_string.append(", " + NetworkManager.postalCodeName);
         }
         locale.setText(locale_string);

@@ -194,6 +194,7 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
     private ArrayList<Price> priceArrayList;
     private ArrayList<String> trial_classes;
     private ArrayList<Integer> minimum_number_of_classes;
+    private boolean populatingCountry;  /* Using it as flag to populate country related values in populateUserData method. */
 
 
     protected GoogleApiClient mGoogleApiClient;
@@ -285,6 +286,7 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
 
     private void initialize() {
         try {
+            populatingCountry=false;
             isFirstCallToCountryApi = true;
             priceArrayList = new ArrayList<>();
             list_of_city = new ArrayList<>();
@@ -412,7 +414,7 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
 
             time_variance_window = new ArrayList<>();
             int max_time_variance_window = getResources().getInteger(R.integer.maximum_time_window);
-            int start_time_window = start_of_min_time;
+            int start_time_window =getResources().getInteger(R.integer.variance_start_time);
             while (start_time_window <= max_time_variance_window) {
                 time_variance_window.add(start_time_window);
                 start_time_window += 15;
@@ -485,9 +487,13 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
 
                             tv_price_currency_individual.setText(getResources().getString(R.string.price) + " " + Html.fromHtml(currency_unicode));
                             tv_price_currency_group.setText(getResources().getString(R.string.price) + " " + Html.fromHtml(currency_unicode));
-                            et_group_class_price.setText("");
-                            et_individual_class_price.setText("");
 
+                            if(!populatingCountry) {
+                                et_group_class_price.setText("");
+                                et_individual_class_price.setText("");
+                            }else{
+                                populatingCountry=false;
+                            }
                             RequestParams requestParams = new RequestParams();
                             requestParams.add("country_id", String.valueOf(country_id));
                             Log.e(TAG, "country_id: " + country_id);
@@ -500,6 +506,8 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
                             NetworkClient.getCountryConfig(EditProfileActivityMentor.this, requestParams, StorageHelper.getUserDetails(EditProfileActivityMentor.this, "auth_token"), EditProfileActivityMentor.this, 55);
                         } else
                             Toast.makeText(EditProfileActivityMentor.this, EditProfileActivityMentor.this.getString(R.string.check_network_connection), Toast.LENGTH_LONG).show();
+
+
                     }
                 }
 
@@ -1095,6 +1103,7 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
 
 
     public void populateUserData() {
+        populatingCountry=true;
         try {
             if (userInfo == null) {
                 return;
@@ -1467,17 +1476,19 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
     public boolean updateAddress() {   // TODO
         StringBuilder locale_string = new StringBuilder();
 
-        if (NetworkManager.localityName != "") {
+        if (!NetworkManager.localityName.trim().isEmpty()) {
             locale_string.append(NetworkManager.localityName);
         }
 
-        if (NetworkManager.cityName != "") {
+        if (!NetworkManager.cityName.trim().isEmpty()) {
             city_name = NetworkManager.cityName;
-            state_name = NetworkManager.stateName;
             locale_string.append(", " + NetworkManager.cityName);
         }
 
-        if (NetworkManager.postalCodeName != "") {
+        if(!NetworkManager.stateName.trim().isEmpty())
+            state_name = NetworkManager.stateName;
+
+        if (!NetworkManager.postalCodeName.trim().isEmpty()) {
             locale_string.append(", " + NetworkManager.postalCodeName);
         }
 
