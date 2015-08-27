@@ -109,7 +109,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private List<String> addressList = new ArrayList<>();
 
 
-
     protected GoogleApiClient mGoogleApiClient;
     private PlaceAutocompleteAdapter mAdapter;
     private LocationRequest mLocationRequest;
@@ -716,7 +715,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 location = "";
 
 
-            if (selectedLocationIndex == -1 )
+            if (selectedLocationIndex == -1)
                 updateLocationUI();
         } catch (Exception e) {
             e.printStackTrace();
@@ -799,10 +798,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             currentLocationText.setVisibility(View.GONE);
             Log.e(TAG, "location input from auto suggestion");
             locationInput.requestFocus();
-            ((InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         } else if (id == R.id.select_location) {
             isEditLocationEnabled = false;
-            ((InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(locationInput.getWindowToken(), 0);
+            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(locationInput.getWindowToken(), 0);
             locationInput.clearFocus();
             rlAutoSuggestionAddress.setVisibility(View.GONE);
             //locationInput.setVisibility(View.GONE);
@@ -814,9 +813,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     private void showLocationPickerDialog() {
         addressList.clear();
-        addressList.add(getResources().getString(R.string.pick_current_location));
-        for (Address address : profileResponse.getData().getMultipleAddress()) {
-            addressList.add(address.getLocale());
+        if (profileResponse.getData().getMultipleAddress() != null && profileResponse.getData().getMultipleAddress().size() > 0) {
+            if (profileResponse.getData().getMultipleAddress().size() > 1) {
+                int second_last_index= profileResponse.getData().getMultipleAddress().size()-2;
+                for (int index=0;index < profileResponse.getData().getMultipleAddress().size();index++) {
+                    Address address = profileResponse.getData().getMultipleAddress().get(index);
+                    addressList.add(address.getLocale());
+                    if(index == second_last_index){
+                        addressList.add(getResources().getString(R.string.pick_current_location));
+                    }
+                }
+            } else {
+                addressList.add(getResources().getString(R.string.pick_current_location));
+                for (Address address : profileResponse.getData().getMultipleAddress()) {
+                    addressList.add(address.getLocale());
+                }
+            }
         }
 
         final Dialog dialog = new Dialog(getActivity());
@@ -832,8 +844,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 selectedLocationIndex = position;
+                int second_last_position=0;
+                if(addressList != null && addressList.size() > 0){
+                    if(addressList.size() > 2){
+                        second_last_position=addressList.size()-2;
 
-                if (position == 0) {
+                    }else{
+                        second_last_position = 0;
+                    }
+                }
+
+                if (position == second_last_position) {
                     if (DashboardActivity.dashboardActivity.userCurrentAddressFromGPS.trim().isEmpty())
                         DashboardActivity.dashboardActivity.getAddress();
 

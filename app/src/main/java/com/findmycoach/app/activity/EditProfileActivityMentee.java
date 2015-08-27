@@ -184,13 +184,13 @@ public class EditProfileActivityMentee extends FragmentActivity implements Callb
             TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
             //getNetworkCountryIso
             country_code = manager.getSimCountryIso().toUpperCase();
-            if (country_code != "") {
+            if (!country_code.trim().isEmpty()) {
                 Log.e(TAG, "country code from SIM: " + country_code);
                 populateCountry(country_code);
             } else {
                 country_code = NetworkManager.countryCode;
                 Log.e(TAG, "country code 1: " + country_code);
-                if (country_code != null && country_code != "") {
+                if (country_code != null && !country_code.trim().isEmpty()) {
                     populateCountry(country_code);
                 }
             }
@@ -1067,8 +1067,18 @@ public class EditProfileActivityMentee extends FragmentActivity implements Callb
         if (!NetworkManager.postalCodeName.trim().isEmpty()) {
             locale_string.append(", " + NetworkManager.postalCodeName);
         }
-        locale.setText(locale_string);
-        trainingLocation.setText(locale_string);
+
+
+        if (NetworkManager.completeAddressForLocale != null && NetworkManager.completeAddressForLocale != "null" && !NetworkManager.completeAddressForLocale.trim().isEmpty()) {
+            locale.setText(NetworkManager.completeAddressForLocale);
+            trainingLocation.setText(NetworkManager.completeAddressForLocale);
+            updateCountryByLocation();
+        } else {
+            updateCountryByLocation();
+        }
+
+        //locale.setText(locale_string);
+        //trainingLocation.setText(locale_string);
         if (addressList.size() >= 0) {
             addressList.remove(0);
             addressList.add(0, locale.getText().toString());

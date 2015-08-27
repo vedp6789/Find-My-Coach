@@ -30,6 +30,7 @@ public class NetworkManager {
     public static String postalCodeName = "";
     public static String countryCode = "";
     private static String TAG="FMC";
+    public static String completeAddressForLocale="";
 
     public static boolean isNetworkConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -191,7 +192,7 @@ public class NetworkManager {
 
             }
         }
-
+Log.e(TAG,"Country_code from GPS: "+returnedAddress.getCountryCode());
 
         try {
             if(returnedAddress.getCountryCode() != null && !returnedAddress.getCountryCode().equals("null") && !returnedAddress.getCountryCode().trim().isEmpty()) {
@@ -218,6 +219,7 @@ public class NetworkManager {
         }
 
 Log.e(TAG,"GPS address:::::"+strAdd);
+        completeAddressForLocale = strAdd;
 
 
         return strAdd;

@@ -8,6 +8,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.*;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -114,7 +115,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 
-public class EditProfileActivityMentor extends FragmentActivity implements Callback, AddAddressDialog.AddressAddedListener, RadioGroup.OnCheckedChangeListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks,LocationListener {
+public class EditProfileActivityMentor extends FragmentActivity implements Callback, AddAddressDialog.AddressAddedListener, RadioGroup.OnCheckedChangeListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
 
     int REQUEST_CODE = 100;
     private ImageView profilePicture;
@@ -223,7 +224,6 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
         editProfileActivityMentor = this;
 
 
-
     }
 
     public void updateCountryByLocation() {
@@ -234,13 +234,13 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
             TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
             //getNetworkCountryIso
             country_code = manager.getSimCountryIso().toUpperCase();
-            if (country_code != "") {
+            if (!country_code.trim().isEmpty()) {
                 Log.e(TAG, "country code from SIM: " + country_code);
                 populateCountry(country_code);
             } else {
                 country_code = NetworkManager.countryCode;
                 Log.e(TAG, "country code 1: " + country_code);
-                if (country_code != null && country_code != "") {
+                if (country_code != null && !country_code.trim().isEmpty()) {
                     populateCountry(country_code);
                 }
             }
@@ -286,7 +286,7 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
 
     private void initialize() {
         try {
-            populatingCountry=false;
+            populatingCountry = false;
             isFirstCallToCountryApi = true;
             priceArrayList = new ArrayList<>();
             list_of_city = new ArrayList<>();
@@ -414,7 +414,7 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
 
             time_variance_window = new ArrayList<>();
             int max_time_variance_window = getResources().getInteger(R.integer.maximum_time_window);
-            int start_time_window =getResources().getInteger(R.integer.variance_start_time);
+            int start_time_window = getResources().getInteger(R.integer.variance_start_time);
             while (start_time_window <= max_time_variance_window) {
                 time_variance_window.add(start_time_window);
                 start_time_window += 15;
@@ -488,11 +488,11 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
                             tv_price_currency_individual.setText(getResources().getString(R.string.price) + " " + Html.fromHtml(currency_unicode));
                             tv_price_currency_group.setText(getResources().getString(R.string.price) + " " + Html.fromHtml(currency_unicode));
 
-                            if(!populatingCountry) {
+                            if (!populatingCountry) {
                                 et_group_class_price.setText("");
                                 et_individual_class_price.setText("");
-                            }else{
-                                populatingCountry=false;
+                            } else {
+                                populatingCountry = false;
                             }
                             RequestParams requestParams = new RequestParams();
                             requestParams.add("country_id", String.valueOf(country_id));
@@ -976,7 +976,6 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
         });*/
 
 
-
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -1004,8 +1003,8 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
     }
 
 
-    private void setBounds(Location location, int mDistanceInMeters ){
-        Log.e(TAG,"inside setBounds method");
+    private void setBounds(Location location, int mDistanceInMeters) {
+        Log.e(TAG, "inside setBounds method");
         double latRadian = Math.toRadians(location.getLatitude());
 
         double degLatKm = 110.574235;
@@ -1018,8 +1017,8 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
         double maxLat = location.getLatitude() + deltaLat;
         double maxLong = location.getLongitude() + deltaLong;
 
-        Log.d(TAG,"Min: "+Double.toString(minLat)+","+Double.toString(minLong));
-        Log.d(TAG,"Max: "+Double.toString(maxLat)+","+Double.toString(maxLong));
+        Log.d(TAG, "Min: " + Double.toString(minLat) + "," + Double.toString(minLong));
+        Log.d(TAG, "Max: " + Double.toString(maxLat) + "," + Double.toString(maxLong));
 
         // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
         // the entire world.
@@ -1087,7 +1086,6 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
     };
 
 
-
     private void showMediumOfTeachingDialog(List<String> mediumOfTeaching) {
 
         TeachingMediumPreferenceDialog dialog = new TeachingMediumPreferenceDialog(EditProfileActivityMentor.this, mediumOfTeaching, teachingMediumPreference.getText().toString().trim());
@@ -1103,7 +1101,7 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
 
 
     public void populateUserData() {
-        populatingCountry=true;
+        populatingCountry = true;
         try {
             if (userInfo == null) {
                 return;
@@ -1456,7 +1454,6 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
                         if (!userCurrentAddress.equals("")) {
                             map.setOnMyLocationChangeListener(null);
                             if (updateAddress()) ;
-
                         }
 
                     } else if (!userCurrentAddress.equals("")) {
@@ -1485,15 +1482,23 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
             locale_string.append(", " + NetworkManager.cityName);
         }
 
-        if(!NetworkManager.stateName.trim().isEmpty())
+        if (!NetworkManager.stateName.trim().isEmpty())
             state_name = NetworkManager.stateName;
 
         if (!NetworkManager.postalCodeName.trim().isEmpty()) {
             locale_string.append(", " + NetworkManager.postalCodeName);
         }
 
-        locale.setText(locale_string);
-        updateCountryByLocation();
+
+        // locale.setText(locale_string);
+
+
+        if (NetworkManager.completeAddressForLocale != null && NetworkManager.completeAddressForLocale != "null" && !NetworkManager.completeAddressForLocale.trim().isEmpty()) {
+            locale.setText(NetworkManager.completeAddressForLocale);
+            updateCountryByLocation();
+        } else {
+            updateCountryByLocation();
+        }
         return true;
     }
 
@@ -1501,198 +1506,202 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
     // Validate user first name, last name and address
     private boolean validateUserUpdate() {
 
+
         boolean isValid = true;
+        try {
+            if (country_id == 0) {
+                TextView errorText = (TextView) profileCountry.getSelectedView();
+                errorText.setError(getResources().getString(R.string.error_not_selected));
+                errorText.setTextColor(Color.RED);//just to highlight that this is an error
+                isValid = false;
 
-        if (country_id == 0) {
-            TextView errorText = (TextView) profileCountry.getSelectedView();
-            errorText.setError(getResources().getString(R.string.error_not_selected));
-            errorText.setTextColor(Color.RED);//just to highlight that this is an error
-            isValid = false;
-
-        }
-
-        if (profileCountry.getSelectedItemPosition() == 0) {
-            TextView errorText = (TextView) profileCountry.getSelectedView();
-            errorText.setError(getResources().getString(R.string.error_not_selected));
-            errorText.setTextColor(Color.RED);//just to highlight that this is an error
-            isValid = false;
-
-        }
-
-        if (city_id == 0) {
-            city_with_states.setError(getResources().getString(R.string.enter_city_from_suggestion));
-            if (city_with_states.hasFocus()) {
-                city_with_states.clearFocus();
             }
-            city_with_states.requestFocus();
-            isValid = false;
-        }
 
-        if (city_with_states.getText().toString().trim().equals("")) {
-            if (isValid) {
-                city_with_states.setError(getResources().getString(R.string.enter_city));
+            if (profileCountry.getSelectedItemPosition() == 0) {
+                TextView errorText = (TextView) profileCountry.getSelectedView();
+                errorText.setError(getResources().getString(R.string.error_not_selected));
+                errorText.setTextColor(Color.RED);//just to highlight that this is an error
+                isValid = false;
+
+            }
+
+            if (city_id == 0) {
+                city_with_states.setError(getResources().getString(R.string.enter_city_from_suggestion));
+                if (city_with_states.hasFocus()) {
+                    city_with_states.clearFocus();
+                }
                 city_with_states.requestFocus();
+                isValid = false;
             }
 
-            isValid = false;
-        }
+            if (city_with_states.getText().toString().trim().equals("")) {
+                if (isValid) {
+                    city_with_states.setError(getResources().getString(R.string.enter_city));
+                    city_with_states.requestFocus();
+                }
+
+                isValid = false;
+            }
 
 
-        if (teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2) {
-            if (physicalAddress.getText().toString().trim().isEmpty()) {
-                physicalAddress.setError(getResources().getString(R.string.enter_physical_address));
+            if (teachingPreference.getSelectedItemPosition() == 0 || teachingPreference.getSelectedItemPosition() == 2) {
+                if (physicalAddress.getText().toString().trim().isEmpty()) {
+                    physicalAddress.setError(getResources().getString(R.string.enter_physical_address));
+                    if (isValid)
+                        physicalAddress.requestFocus();
+
+                    isValid = false;
+                }
+            }
+
+
+            if (locale.getText().toString().trim().equals("")) {
+                locale.setError(getResources().getString(R.string.enter_locale));
                 if (isValid)
-                    physicalAddress.requestFocus();
+                    locale.requestFocus();
 
                 isValid = false;
             }
-        }
 
 
-        if (locale.getText().toString().trim().equals("")) {
-            locale.setError(getResources().getString(R.string.enter_locale));
-            if (isValid)
-                locale.requestFocus();
+            if (profileDOB.getText().toString().trim().equals("")) {
+                profileDOB.setError(getResources().getString(R.string.enter_dob));
+                scrollView.fullScroll(ScrollView.FOCUS_UP);
+                if (isValid)
+                    profileDOB.requestFocus();
 
-            isValid = false;
-        }
+                isValid = false;
+            }
+
+            String firstName = profileFirstName.getText().toString().trim().replaceAll(" ", "");
+            if (firstName.equals("")) {
+                showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
+                if (isValid)
+                    profileFirstName.requestFocus();
+                isValid = false;
+            } else {
+                for (int i = 0; i < firstName.length(); i++) {
+                    if (!Character.isLetter(firstName.charAt(i))) {
+                        showErrorMessage(profileFirstName, getResources().getString(R.string.error_not_a_name));
+                        if (isValid)
+                            profileFirstName.requestFocus();
+                        isValid = false;
+                    }
+                }
+            }
+
+            String lastName = profileLastName.getText().toString().trim().replaceAll(" ", "");
+            if (lastName.equals("")) {
+                showErrorMessage(profileLastName, getResources().getString(R.string.error_field_required));
+                if (isValid)
+                    profileLastName.requestFocus();
+                isValid = false;
+            } else {
+                for (int i = 0; i < lastName.length(); i++) {
+                    if (!Character.isLetter(lastName.charAt(i))) {
+                        showErrorMessage(profileLastName, getResources().getString(R.string.error_not_a_name));
+                        if (isValid)
+                            profileLastName.requestFocus();
+                        isValid = false;
+                    }
+                }
+            }
+
+            if (areaOfCoaching.getText().toString().trim().equals("")) {
+                showErrorMessage(areaOfCoaching, getResources().getString(R.string.error_field_required));
+                if (isValid)
+                    areaOfCoaching.requestFocus();
+                isValid = false;
+            }
+
+            if (students_preference.getText().toString().trim().equals(getResources().getString(R.string.select))) {
+                showErrorMessage(students_preference, getResources().getString(R.string.error_field_required));
+                if (isValid) {
+                    students_preference.requestFocus();
+                }
+                isValid = false;
+            }
 
 
-        if (profileDOB.getText().toString().trim().equals("")) {
-            profileDOB.setError(getResources().getString(R.string.enter_dob));
-            scrollView.fullScroll(ScrollView.FOCUS_UP);
-            if (isValid)
-                profileDOB.requestFocus();
+            if (rb_both_class_type.isChecked()) {
+                if (et_individual_class_price.getText().toString().trim().isEmpty()) {
+                    showErrorMessage(et_individual_class_price, getResources().getString(R.string.error_field_required));
+                    if (isValid) {
+                        et_individual_class_price.requestFocus();
+                    }
+                    isValid = false;
+                }
+                if (et_group_class_price.getText().toString().trim().isEmpty()) {
+                    showErrorMessage(et_group_class_price, getResources().getString(R.string.error_field_required));
+                    if (isValid) {
+                        et_group_class_price.requestFocus();
+                    }
+                    isValid = false;
+                }
 
-            isValid = false;
-        }
-
-        String firstName = profileFirstName.getText().toString().trim().replaceAll(" ", "");
-        if (firstName.equals("")) {
-            showErrorMessage(profileFirstName, getResources().getString(R.string.error_field_required));
-            if (isValid)
-                profileFirstName.requestFocus();
-            isValid = false;
-        } else {
-            for (int i = 0; i < firstName.length(); i++) {
-                if (!Character.isLetter(firstName.charAt(i))) {
-                    showErrorMessage(profileFirstName, getResources().getString(R.string.error_not_a_name));
-                    if (isValid)
-                        profileFirstName.requestFocus();
+            } else if (rb_individual.isChecked()) {
+                if (et_individual_class_price.getText().toString().trim().isEmpty()) {
+                    showErrorMessage(et_individual_class_price, getResources().getString(R.string.error_field_required));
+                    if (isValid) {
+                        et_individual_class_price.requestFocus();
+                    }
+                    isValid = false;
+                }
+            } else if (rb_group.isChecked()) {
+                if (et_group_class_price.getText().toString().trim().isEmpty()) {
+                    showErrorMessage(et_group_class_price, getResources().getString(R.string.error_field_required));
+                    if (isValid) {
+                        et_group_class_price.requestFocus();
+                    }
                     isValid = false;
                 }
             }
-        }
 
-        String lastName = profileLastName.getText().toString().trim().replaceAll(" ", "");
-        if (lastName.equals("")) {
-            showErrorMessage(profileLastName, getResources().getString(R.string.error_field_required));
-            if (isValid)
-                profileLastName.requestFocus();
-            isValid = false;
-        } else {
-            for (int i = 0; i < lastName.length(); i++) {
-                if (!Character.isLetter(lastName.charAt(i))) {
-                    showErrorMessage(profileLastName, getResources().getString(R.string.error_not_a_name));
-                    if (isValid)
-                        profileLastName.requestFocus();
-                    isValid = false;
-                }
-            }
-        }
 
-        if (areaOfCoaching.getText().toString().trim().equals("")) {
-            showErrorMessage(areaOfCoaching, getResources().getString(R.string.error_field_required));
-            if (isValid)
-                areaOfCoaching.requestFocus();
-            isValid = false;
-        }
-
-        if (students_preference.getText().toString().trim().equals(getResources().getString(R.string.select))) {
-            showErrorMessage(students_preference, getResources().getString(R.string.error_field_required));
             if (isValid) {
-                students_preference.requestFocus();
-            }
-            isValid = false;
-        }
-
-
-        if (rb_both_class_type.isChecked()) {
-            if (et_individual_class_price.getText().toString().trim().isEmpty()) {
-                showErrorMessage(et_individual_class_price, getResources().getString(R.string.error_field_required));
-                if (isValid) {
-                    et_individual_class_price.requestFocus();
+                int dobYear = 0;
+                try {
+                    dobYear = Integer.parseInt(profileDOB.getText().toString().split("-")[2]);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    dobYear = 0;
                 }
-                isValid = false;
-            }
-            if (et_group_class_price.getText().toString().trim().isEmpty()) {
-                showErrorMessage(et_group_class_price, getResources().getString(R.string.error_field_required));
-                if (isValid) {
-                    et_group_class_price.requestFocus();
+
+
+                int yearsOfExperience = 0;
+                try {
+                    yearsOfExperience = Integer.parseInt(experienceInput.getText().toString());
+                } catch (Exception e) {
+                    yearsOfExperience = 0;
                 }
-                isValid = false;
-            }
+                int age = Calendar.getInstance().get(Calendar.YEAR) - dobYear;
+                int minExperience = getResources().getInteger(R.integer.mentor_min_age_experience_difference);
 
-        } else if (rb_individual.isChecked()) {
-            if (et_individual_class_price.getText().toString().trim().isEmpty()) {
-                showErrorMessage(et_individual_class_price, getResources().getString(R.string.error_field_required));
-                if (isValid) {
-                    et_individual_class_price.requestFocus();
+                Log.e(TAG, yearsOfExperience + " : " + age + " : " + minExperience);
+                if (dobYear > 0 && age - yearsOfExperience < minExperience) {
+                    Toast.makeText(this, getResources().getString(R.string.age_experience_message), Toast.LENGTH_LONG).show();
+                    ageAndExperienceErrorCounter++;
+                    isValid = false;
+                } else if (dobYear > 0 && (Calendar.getInstance().get(Calendar.YEAR) - (dobYear) < 19)) {
+                    Toast.makeText(this, getResources().getString(R.string.age_review_message), Toast.LENGTH_LONG).show();
+                    isDobForReview = true;
                 }
-                isValid = false;
-            }
-        } else if (rb_group.isChecked()) {
-            if (et_group_class_price.getText().toString().trim().isEmpty()) {
-                showErrorMessage(et_group_class_price, getResources().getString(R.string.error_field_required));
-                if (isValid) {
-                    et_group_class_price.requestFocus();
+
+                if (ageAndExperienceErrorCounter > 2) {
+                    needToCheckOnDestroy = true;
+                    logout();
+                    startActivity(new Intent(EditProfileActivityMentor.this, LoginActivity.class));
+                    if (Settings.settings != null)
+                        Settings.settings.finish();
+                    if (DashboardActivity.dashboardActivity != null)
+                        DashboardActivity.dashboardActivity.finish();
+
+                    Toast.makeText(this, getResources().getString(R.string.account_blocked), Toast.LENGTH_LONG).show();
+                    finish();
                 }
-                isValid = false;
             }
-        }
-
-
-        if (isValid) {
-            int dobYear = 0;
-            try {
-                dobYear = Integer.parseInt(profileDOB.getText().toString().split("-")[2]);
-            } catch (Exception e) {
-                e.printStackTrace();
-                dobYear = 0;
-            }
-
-
-            int yearsOfExperience = 0;
-            try {
-                yearsOfExperience = Integer.parseInt(experienceInput.getText().toString());
-            } catch (Exception e) {
-                yearsOfExperience = 0;
-            }
-            int age = Calendar.getInstance().get(Calendar.YEAR) - dobYear;
-            int minExperience = getResources().getInteger(R.integer.mentor_min_age_experience_difference);
-
-            Log.e(TAG, yearsOfExperience + " : " + age + " : " + minExperience);
-            if (dobYear > 0 && age - yearsOfExperience < minExperience) {
-                Toast.makeText(this, getResources().getString(R.string.age_experience_message), Toast.LENGTH_LONG).show();
-                ageAndExperienceErrorCounter++;
-                isValid = false;
-            } else if (dobYear > 0 && (Calendar.getInstance().get(Calendar.YEAR) - (dobYear) < 19)) {
-                Toast.makeText(this, getResources().getString(R.string.age_review_message), Toast.LENGTH_LONG).show();
-                isDobForReview = true;
-            }
-
-            if (ageAndExperienceErrorCounter > 2) {
-                needToCheckOnDestroy = true;
-                logout();
-                startActivity(new Intent(EditProfileActivityMentor.this, LoginActivity.class));
-                if (Settings.settings != null)
-                    Settings.settings.finish();
-                if (DashboardActivity.dashboardActivity != null)
-                    DashboardActivity.dashboardActivity.finish();
-
-                Toast.makeText(this, getResources().getString(R.string.account_blocked), Toast.LENGTH_LONG).show();
-                finish();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return isValid;
@@ -2495,7 +2504,7 @@ if(rb_individual.isChecked())
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i(TAG,"Trying to connect with GoogleAPIclient");
+        Log.i(TAG, "Trying to connect with GoogleAPIclient");
         mGoogleApiClient.connect();
     }
 
@@ -2503,8 +2512,8 @@ if(rb_individual.isChecked())
     @Override
     protected void onStop() {
         super.onStop();
-        if(mGoogleApiClient.isConnected()){
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
     }
@@ -2514,36 +2523,36 @@ if(rb_individual.isChecked())
         Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = " + connectionResult.getErrorCode());
 
         // TODO(Developer): Check error code and notify the user of error state and resolution.
-     //   Toast.makeText(this,"Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),Toast.LENGTH_SHORT).show();
+        //   Toast.makeText(this,"Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.e(TAG,"on GoogleApIclient connected");
+        Log.e(TAG, "on GoogleApIclient connected");
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (location == null) {
-            Log.e(TAG,"location null");
+            Log.e(TAG, "location null");
 
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         } else {
-            Log.e(TAG,"location not null");
+            Log.e(TAG, "location not null");
 
-            setBounds(location,5500);
+            setBounds(location, 5500);
         }
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.e(TAG,"on GoogleApIclient connection suspend");
+        Log.e(TAG, "on GoogleApIclient connection suspend");
 
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.e(TAG,"location changed");
+        Log.e(TAG, "location changed");
 
-        setBounds(location,5500);
+        setBounds(location, 5500);
     }
 }

@@ -92,18 +92,23 @@ public class PreferredTrainerLocationDialog {
     }
 
     public static void changeDeletedAddress(ArrayList<Address> preferredAddressList) {
-        if (addressList != null) {
-            for (int i = 1; i < addressList.size(); i++) {
-                addressList.remove(i);
-                i--;
+        try {
+            if (addressList != null) {
+                for (int i = 1; i < addressList.size(); i++) {
+                    addressList.remove(i);
+                    i--;
+                }
+
+                for (int i = 0; i < preferredAddressList.size(); i++) {
+                    if(preferredAddressList != null && preferredAddressList.get(i).getLocale() != null)
+                    addressList.add(i + 1, preferredAddressList.get(i).getLocale());
+                }
+                preferredAddressAdapter.notifyDataSetChanged();
             }
-            for (int i = 0; i < preferredAddressList.size(); i++) {
-                addressList.add(i + 1, preferredAddressList.get(i).getLocale());
-            }
-            preferredAddressAdapter.notifyDataSetChanged();
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
-
     }
 
     public void setAddressSelectedListener(
