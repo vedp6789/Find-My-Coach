@@ -32,11 +32,11 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="@dimen/search_icons"
-        android:layout_height="@dimen/search_icons"
+        android:layout_height="@dimen/mentor_description"
         android:layout_alignBottom="@+id/mentor_image"
         android:layout_toEndOf="@+id/mentor_image"
         android:layout_toRightOf="@+id/mentor_image"
-        android:src="@drawable/students" />
+        android:src="@drawable/student_icon_1" />
 
     <com.findmycoach.app.views.ChizzleTextViewBold
         android:id="@+id/numberOfStudents"
@@ -52,7 +52,7 @@
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="@dimen/search_icons"
-        android:layout_height="@dimen/search_icons"
+        android:layout_height="@dimen/mentor_description"
         android:layout_alignBottom="@+id/numberOfStudents"
         android:layout_marginLeft="@dimen/search_icon_margin_left"
         android:layout_toEndOf="@+id/numberOfStudents"
@@ -84,7 +84,7 @@
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="@dimen/search_icons"
-        android:layout_height="@dimen/search_icons"
+        android:layout_height="@dimen/mentor_description"
         android:layout_alignBottom="@+id/rating"
         android:layout_marginLeft="@dimen/search_icon_margin_left"
         android:layout_toEndOf="@+id/rating"
@@ -106,7 +106,7 @@
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="@dimen/search_icons"
-        android:layout_height="@dimen/search_icons"
+        android:layout_height="@dimen/mentor_description"
         android:layout_alignBottom="@+id/distanceTV"
         android:layout_marginLeft="@dimen/search_icon_margin_left"
         android:layout_toRightOf="@+id/distanceTV"

@@ -1826,7 +1826,7 @@
                     <com.findmycoach.app.views.ChizzleEditText
                         android:id="@+id/myExperience"
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
+                        android:layout_height="60dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/border_text_area"
                         android:ems="10"
@@ -1865,7 +1865,7 @@
                     <com.findmycoach.app.views.ChizzleEditText
                         android:id="@+id/myTeachingMethodology"
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
+                        android:layout_height="60dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/border_text_area"
                         android:ems="10"

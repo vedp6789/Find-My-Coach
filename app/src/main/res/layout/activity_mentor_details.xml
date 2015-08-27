@@ -568,10 +568,12 @@
         android:layout_height="@dimen/login_button_height"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:weightSum="2">
+        android:weightSum="2"
+        android:layout_marginBottom="@dimen/underline">
 
         <com.findmycoach.app.views.ChizzleButton
             android:id="@+id/bookClass"
+            android:layout_marginLeft="@dimen/underline"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -586,6 +588,7 @@
             android:layout_marginLeft="@dimen/underline"
             android:id="@+id/bookTrialClass"
             android:layout_width="0dp"
+            android:layout_marginRight="@dimen/underline"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/custom_button_click_white_bg"

@@ -357,7 +357,7 @@
     <string name="title_edit_profile_menu">Update Profile</string>
     <string name="title_validate_phone">Verify phone number</string>
     <string name="title_activity_user_list">Mentors</string>
-    <string name="title_mentor_details">Mentor Details</string>
+    <string name="title_mentor_details">Detailed Profile</string>
     <string name="title_student_details">Student detail</string>
     <string name="new_connection">Connection request</string>
     <string name="new_schedule">Schedule request</string>
@@ -667,8 +667,8 @@
     <string name="month">Month</string>
     <string name="year">Year</string>
     <string name="years">Years</string>
-    <string name="yr">yr</string>
-    <string name="yrs">yrs</string>
+    <string name="yr">Yr</string>
+    <string name="yrs">Yrs</string>
     <string name="calendar_by_loc">Calendar by location</string>
     <string name="loc">Location</string>
     <string name="reviews">Reviews</string>
@@ -868,6 +868,7 @@
     <string name="noOfClasses">No. of Lessons to Avail Offer</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
+    <string name="km">Km</string>
 
 
 </resources>

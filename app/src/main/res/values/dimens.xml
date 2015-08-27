@@ -35,6 +35,7 @@
     <dimen name="days_margin">4dp</dimen>
     <dimen name="cross_margin">6dp</dimen>
     <dimen name="underline">2dp</dimen>
+    <dimen name="mentor_description">14dp</dimen>
 
 
     <dimen name="profile_title">16sp</dimen>

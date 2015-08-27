@@ -33,14 +33,17 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     private List<Datum> users;
     private String year, years;
     private int clickedPosition = -1;
-    private Drawable defaultDrawable, qualified, notQualified;
+    private Drawable defaultDrawable, qualified, notQualified,rated,unrated;
+    
 
     public MentorListAdapter(Context context, List<Datum> users, String searchFor) {
         this.context = context;
         this.users = users;
         defaultDrawable = context.getResources().getDrawable(R.drawable.user_icon);
-        qualified = context.getResources().getDrawable(R.drawable.qualified);
-        notQualified = context.getResources().getDrawable(R.drawable.qualified_not);
+        qualified = context.getResources().getDrawable(R.drawable.experience_1);
+        notQualified = context.getResources().getDrawable(R.drawable.not_experienced_1);
+        rated=context.getResources().getDrawable(R.drawable.rating);
+        unrated=context.getResources().getDrawable(R.drawable.unrated_icon_1);
         year = context.getResources().getString(R.string.yr);
         years = context.getResources().getString(R.string.yrs);
     }
@@ -78,6 +81,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
             holder.experienceTV = (TextView) view.findViewById(R.id.experience);
             holder.chargesTV = (TextView) view.findViewById(R.id.charges);
             holder.qualifiedIV = (ImageView) view.findViewById(R.id.imageView4);
+            holder.ratingIV= (ImageView) view.findViewById(R.id.imageView2);
 //            holder.connectionIV = (ImageView) view.findViewById(R.id.connect_mentor);
             view.setTag(holder);
         }
@@ -86,6 +90,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         final Datum user = users.get(position);
 
         //Set Mentor image
+        holder.userIV.setImageDrawable(null);
         holder.userIV.setImageDrawable(defaultDrawable);
         if (user.getPhotograph() != null && !(user.getPhotograph()).equals("")) {
             Picasso.with(context)
@@ -109,9 +114,9 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         try {
             int age = getAgeInyearsFromDOB(user.getDateOfBirth());
             if (age > 1)
-                holder.ageTV.setText(age + years);
+                holder.ageTV.setText(age +" "+ years);
             else if (age == 0)
-                holder.ageTV.setText(age + years);
+                holder.ageTV.setText(age +" "+ years);
         } catch (Exception e) {
             holder.ageTV.setText("");
         }
@@ -145,15 +150,22 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
 
         //Set Mentor rating
         holder.ratingTV.setText("");
+        holder.ratingIV.setImageDrawable(null);
+        holder.ratingIV.setImageDrawable(rated);
         try {
-            holder.ratingTV.setText(user.getRating());
+            if(user.getRating() != null && user.getRating().equals("0")){
+                holder.ratingIV.setImageDrawable(unrated);
+                holder.ratingTV.setText("");
+            }else{
+                holder.ratingTV.setText(user.getRating());
+            }
         } catch (Exception e) {
         }
 
         //Set Mentor distance in KM
         holder.distanceTV.setText("");
         try {
-            holder.distanceTV.setText(String.format("%.1f", Double.parseDouble(user.getDistance())) + " km");
+            holder.distanceTV.setText(String.format("%.1f", Double.parseDouble(user.getDistance())) +" "+context.getResources().getString(R.string.km));
         } catch (Exception e) {
         }
 
@@ -161,9 +173,9 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         holder.experienceTV.setText("");
         try {
             int experience = Integer.parseInt(user.getExperience());
-            holder.experienceTV.setText(experience + (experience > 1 ? years : year));
+            holder.experienceTV.setText(experience +" "+ (experience > 1 ? years : year));
         } catch (Exception e) {
-            holder.experienceTV.setText("0" + year);
+            holder.experienceTV.setText("0 " + year);
         }
 
         //Set Mentor is qualified or not in current subject
@@ -323,6 +335,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         TextView experienceTV;
         TextView chargesTV;
         ImageView qualifiedIV;
+        ImageView ratingIV;
 //        ImageView connectionIV;
     }
 

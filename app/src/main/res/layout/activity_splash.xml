@@ -1,10 +1,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg"
+    android:background="#4d1b4e"
     tools:context="inmobi.inmobisamsung.SplashActivity">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
-    <com.findmycoach.app.views.ChizzleTextView
+    <!--<com.findmycoach.app.views.ChizzleTextView
         android:id="@+id/banner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,5 +17,5 @@
         android:textStyle="bold"
         android:textColor="@color/white"
         android:textSize="@dimen/header"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"/>-->
 </RelativeLayout>
