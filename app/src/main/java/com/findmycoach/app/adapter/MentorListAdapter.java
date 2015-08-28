@@ -68,7 +68,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.user_list_item, null);
+            view = inflater.inflate(R.layout.user_list_item_2, null);
 
             ViewHolder holder = new ViewHolder();
             holder.userIV = (ImageView) view.findViewById(R.id.mentor_image);
@@ -90,18 +90,13 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         final Datum user = users.get(position);
 
         //Set Mentor image
-        holder.userIV.setImageDrawable(null);
-        holder.userIV.setImageDrawable(defaultDrawable);
         if (user.getPhotograph() != null && !(user.getPhotograph()).equals("")) {
             Picasso.with(context)
                     .load((String) user.getPhotograph())
                     .placeholder(defaultDrawable)
                     .error(defaultDrawable)
                     .into(holder.userIV);
-        } else
-            holder.userIV.setImageDrawable(defaultDrawable);
-
-        //Set Mentor name
+        }
         holder.nameTV.setText("");
         try {
             holder.nameTV.setText(user.getFirstName().split(" ")[0]);

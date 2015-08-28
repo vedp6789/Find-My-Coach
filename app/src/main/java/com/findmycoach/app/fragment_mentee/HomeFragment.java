@@ -135,29 +135,34 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        initialize(fragmentView);
-        updateLocationUI();
-        applyActions();
-
-        DataBase dataBase = DataBase.singleton(getActivity());
-
-        String categoryData = dataBase.getAll();
-        Category categoryFromDb = new Gson().fromJson(categoryData, Category.class);
-        if (categoryFromDb.getData() == null || categoryFromDb.getData().size() < 1) {
-            getCategories();
-            Log.d(TAG, "sub category api called");
-        } else {
-            setTabForCategory(categoryFromDb);
-            Log.d(TAG, "sub category api not called");
-        }
-
         try {
-            Log.e(TAG, categoryFromDb.getOtpLength() + " : " + categoryFromDb.getOtpPosition());
-        } catch (Exception ignored) {
-        }
 
-        homeFragmentMentee = this;
+            initialize(fragmentView);
+            updateLocationUI();
+            applyActions();
+
+            DataBase dataBase = DataBase.singleton(getActivity());
+
+            String categoryData = dataBase.getAll();
+            Log.e(TAG, "category Date" + categoryData);
+            Category categoryFromDb = new Gson().fromJson(categoryData, Category.class);
+            if (categoryFromDb.getData() == null || categoryFromDb.getData().size() < 1) {
+                getCategories();
+                Log.d(TAG, "sub category api called");
+            } else {
+                setTabForCategory(categoryFromDb);
+                Log.d(TAG, "sub category api not called");
+            }
+
+            try {
+                Log.e(TAG, categoryFromDb.getOtpLength() + " : " + categoryFromDb.getOtpPosition());
+            } catch (Exception ignored) {
+            }
+
+            homeFragmentMentee = this;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 

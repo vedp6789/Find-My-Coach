@@ -9,6 +9,7 @@ import android.util.Log;
 import com.findmycoach.app.R;
 import com.findmycoach.app.util.AppFonts;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.ChizzleConstants;
 import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
 import com.loopj.android.http.RequestParams;
@@ -20,6 +21,7 @@ public class SplashActivity extends Activity implements Callback {
 
     private DataBase dataBase;
     private boolean isStart;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +81,9 @@ public class SplashActivity extends Activity implements Callback {
         /** Caching subcategories into database */
         dataBase.clearDatabase();
         dataBase.insertData((String) object);
+
+        Log.e(ChizzleConstants.TAG,"saved metadata :"+dataBase.getAll());
+
         runHoldThread();
     }
 

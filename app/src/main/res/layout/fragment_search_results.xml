@@ -8,11 +8,13 @@
         android:id="@+id/timeLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/calender_header_height"
-        android:layout_below="@+id/search_tabs"
         android:layout_marginTop="@dimen/underline"
         android:background="@color/purple"
         android:orientation="horizontal"
         android:visibility="gone">
+        <!--
+                android:layout_below="@+id/search_tabs"
+        -->
 
         <ImageButton
             android:id="@+id/prevTimeIB"
@@ -59,7 +61,7 @@
         android:divider="@color/purple"
         android:id="@+id/user_list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/timeLayout"
         android:padding="@dimen/textView_padding_margin" />
 

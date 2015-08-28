@@ -641,6 +641,19 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
                             getResources().getText(R.string.physical_address_mentor_info), Toast.LENGTH_LONG).show();
                 }
             });
+
+
+
+            if (multipleAddressMentor.isChecked()) {
+                addMoreAddress.setVisibility(View.VISIBLE);
+                addressListViewMentor.setVisibility(View.VISIBLE);
+            } else {
+                addressListViewMentor.setVisibility(View.GONE);
+                addMoreAddress.setVisibility(View.GONE);
+            }
+
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1306,7 +1319,7 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
                 addressAdapter.notifyDataSetChanged();
                 setHeight(addressListViewMentor);
 
-                if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 0) {
+                if (userInfo.getMultipleAddress() != null && userInfo.getMultipleAddress().size() > 1) {
                     // multipleAddressMentor.setChecked(true);
                     addressListViewMentor.setVisibility(View.VISIBLE);
                     addMoreAddress.setVisibility(View.VISIBLE);
@@ -2468,7 +2481,7 @@ if(rb_individual.isChecked())
                     if (rb_individual.isChecked()) {
                         ll_when_flexible.setVisibility(View.VISIBLE);
                         tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_individual));
-                        tv_fix_class_time.setText(getResources().getString(R.string.class_duration));
+                        ll_fix_class_duration.setVisibility(View.GONE);
                     } else if (rb_both_class_type.isChecked()) {
                         tv_fix_class_time.setText(getResources().getString(R.string.minutesPerGroupLesson));
                         ll_fix_class_duration.setVisibility(View.VISIBLE);
