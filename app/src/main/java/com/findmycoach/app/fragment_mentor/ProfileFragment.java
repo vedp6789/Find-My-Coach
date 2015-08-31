@@ -56,9 +56,10 @@ public class ProfileFragment extends Fragment implements Callback {
     private final int REQUEST_CODE = 102;
     private ProgressDialog progressDialog;
     private ImageView profileImage;
-    private TextView profileName, tv_flexibility_on_class_duration, tv_min_class_time, tv_flexibility_window,
-            tv_max_class_time, tv_fixed_class_duration, tv_max_classes_in_week,
-            tv_individual_class_price, tv_group_class_price, tv_individual_class_price_label, tv_group_class_price_label,
+    private TextView profileName, tv_flexibility_on_class_duration, tv_min_class_time,
+            tv_flexibility_window, tv_max_class_time, tv_fixed_class_duration, tv_max_classes_in_week,
+            tv_individual_class_price, tv_group_class_price, tv_individual_class_price_label,
+            tv_group_class_price_label, tvFixedDurationIndividualVal,
             tv_fixed_class_duration_label, tv_number_trial_lessons, tv_min_lessons_val;
     private TextView profileEmail;
     private TextView profileDob;
@@ -76,7 +77,8 @@ public class ProfileFragment extends Fragment implements Callback {
     private RelativeLayout summaryHeader;
     private LinearLayout aboutMeLL, teachingMediumText;
     private boolean hiddenFlag;
-    private RelativeLayout multipleAddressRL, rl_fixed_class_duration, rl_individual_class_price, rl_group_class_price;
+    private RelativeLayout multipleAddressRL, rl_fixed_class_duration, rl_individual_class_price,
+            rl_group_class_price, rlFixedDurationIndividual;
     private LinearLayout multipleAddressValRL;
     private ListView multipleAddressLV;
     private ArrayList<com.findmycoach.app.beans.student.Address> addressArrayListMentor;
@@ -165,11 +167,14 @@ public class ProfileFragment extends Fragment implements Callback {
         tv_max_class_time = (TextView) view.findViewById(R.id.tv_max_class_time);
         tv_fixed_class_duration = (TextView) view.findViewById(R.id.tv_fixed_class_duration);
         tv_max_classes_in_week = (TextView) view.findViewById(R.id.tv_max_classes_in_week);
+        tvFixedDurationIndividualVal = (TextView) view.findViewById(R.id.tvFixedDurationIndividualVal);
         tv_flexibility_on_class_duration = (TextView) view.findViewById(R.id.tv_flexibility_on_class_duration);
         ll_flexible_class_duration = (LinearLayout) view.findViewById(R.id.ll_flexible_class_duration);
         rl_fixed_class_duration = (RelativeLayout) view.findViewById(R.id.rl_fixed_class_duration);
         rl_individual_class_price = (RelativeLayout) view.findViewById(R.id.rl_individual_class_price);
         rl_group_class_price = (RelativeLayout) view.findViewById(R.id.rl_group_class_price);
+        rlFixedDurationIndividual = (RelativeLayout) view.findViewById(R.id.rlFixedDurationIndividual);
+        rlFixedDurationIndividual.setVisibility(View.GONE);
         tv_individual_class_price = (TextView) view.findViewById(R.id.tv_individual_class_price);
         tv_group_class_price = (TextView) view.findViewById(R.id.tv_group_class_price);
         tv_individual_class_price_label = (TextView) view.findViewById(R.id.individual_class_price);
@@ -416,11 +421,14 @@ public class ProfileFragment extends Fragment implements Callback {
                 tv_flexibility_on_class_duration.setText(getResources().getString(R.string.no));
                 ll_flexible_class_duration.setVisibility(View.GONE);
                 rl_fixed_class_duration.setVisibility(View.VISIBLE);
+                rlFixedDurationIndividual.setVisibility(View.VISIBLE);
                 tv_fixed_class_duration.setText("" + userInfo.getFixed_class_duration());
 
                 if (userInfo.getSlotType().equals("0")) {
                     rl_individual_class_price.setVisibility(View.VISIBLE);
                     rl_group_class_price.setVisibility(View.GONE);
+                    rl_fixed_class_duration.setVisibility(View.GONE);
+                    tvFixedDurationIndividualVal.setText("" + userInfo.getFixed_class_duration());
                     tv_individual_class_price_label.setText(getResources().getString(R.string.pricing_per_class_individual) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
                     for (int price = 0; price < userInfo.getPrices().size(); price++) {
                         Price price1 = userInfo.getPrices().get(price);
@@ -433,6 +441,8 @@ public class ProfileFragment extends Fragment implements Callback {
                 } else if (userInfo.getSlotType().equals("1")) {
                     rl_individual_class_price.setVisibility(View.GONE);
                     rl_group_class_price.setVisibility(View.VISIBLE);
+                    rlFixedDurationIndividual.setVisibility(View.GONE);
+                    tv_fixed_class_duration.setText("" + userInfo.getFixed_class_duration());
                     tv_group_class_price_label.setText(getResources().getString(R.string.pricing_per_class_group) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
                     tv_fixed_class_duration_label.setText(getResources().getString(R.string.group_class_time_flexibility));
                     for (int price = 0; price < userInfo.getPrices().size(); price++) {
@@ -447,7 +457,8 @@ public class ProfileFragment extends Fragment implements Callback {
                     rl_group_class_price.setVisibility(View.VISIBLE);
                     tv_individual_class_price_label.setText(getResources().getString(R.string.pricing_per_class_individual) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
                     tv_group_class_price_label.setText(getResources().getString(R.string.pricing_per_class_group) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
-
+                    tv_fixed_class_duration.setText("" + userInfo.getFixed_class_duration());
+                    tvFixedDurationIndividualVal.setText("" + userInfo.getFixed_class_duration_individual());
 
                     for (int price = 0; price < userInfo.getPrices().size(); price++) {
                         Price price1 = userInfo.getPrices().get(price);

@@ -850,6 +850,7 @@
 
     <string name="individual_class_time_flexibility">Individual Lessons</string>
     <string name="group_class_time_flexibility">Group Lessons (Fixed Duration)</string>
+    <string name="individual_class_fixed_duration">Individual Lessons (Fixed Duration)</string>
     <string name="trial_class_message">Free Trial Lessons/New Student</string>
     <string name="minimum_classes_to_book">Min. No. of Lessons a Student Must Book</string>
 
@@ -873,5 +874,7 @@
 <string name="discount_for">discount for</string>
     <string name="percentage">%</string>
     <string name="classes_booked">classes booked</string>
+    <string name="class_booked">class booked</string>
+
 
 </resources>

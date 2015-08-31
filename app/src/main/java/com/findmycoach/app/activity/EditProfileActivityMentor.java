@@ -184,11 +184,16 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
     private List<String> mediumOfTeaching;
     private RadioGroup radioGroup_class_type, radioGroup_flexibility;
     private RadioButton rb_individual, rb_group, rb_both_class_type, rb_flexible, rb_not_flexible;
-    private LinearLayout ll_when_flexible, ll_fix_class_duration, ll_individual_pricing, ll_group_pricing, ll_max_hour_a_day;
-    private Spinner sp_minimum_time, sp_time_window, sp_max_hour_of_day, sp_fixed_duration, sp_max_class_in_week, sp_minimum_number_of_lessons;
-    private TextView tv_individual_pricing_text, tv_group_pricing_text, tv_price_currency_individual, tv_price_currency_group, tv_group_class_duration, tv_flexibility_on_class_duration, tv_fix_class_time;
+    private LinearLayout ll_when_flexible, ll_fix_class_duration, ll_individual_pricing,
+            ll_group_pricing, ll_max_hour_a_day, ll_fix_class_duration_individual;
+    private Spinner sp_minimum_time, sp_time_window, sp_max_hour_of_day, sp_fixed_duration,
+            sp_max_class_in_week, sp_minimum_number_of_lessons, sp_fixed_class_duration_individual;
+    private TextView tv_individual_pricing_text, tv_group_pricing_text,
+            tv_price_currency_individual, tv_price_currency_group, tv_group_class_duration,
+            tv_flexibility_on_class_duration, tv_fix_class_time, tv_individual_class_fixed_duration;
     private EditText et_individual_class_price, et_group_class_price;
-    private ArrayList<Integer> min_time_selection, time_variance_window, max_time_selection, fixed_class_duration;
+    private ArrayList<Integer> min_time_selection, time_variance_window, max_time_selection,
+            fixed_class_duration;
     private int start_of_min_time, stop_of_min_time;
     private ArrayAdapter arrayAdapter_max_hour;
     private int max_hour_from_server;
@@ -347,7 +352,7 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
             ll_physical_address = (RelativeLayout) findViewById(R.id.ll_physical_address);
             multipleAddressLayout = (RelativeLayout) findViewById(R.id.mutipleAddressCheckBoxLayout);
             llCity = (LinearLayout) findViewById(R.id.llCity);
-
+            ll_fix_class_duration_individual = (LinearLayout) findViewById(R.id.ll_fix_class_duration_individual);
             radioGroup_class_type = (RadioGroup) findViewById(R.id.radioGroupClassType);
             radioGroup_flexibility = (RadioGroup) findViewById(R.id.radioGroupClassFlexibility);
             rb_individual = (RadioButton) findViewById(R.id.radio_button_individual);
@@ -365,6 +370,7 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
             sp_max_hour_of_day = (Spinner) findViewById(R.id.sp_max_hour_in_a_day);
             sp_fixed_duration = (Spinner) findViewById(R.id.sp_fixed_class_duration);
             sp_max_class_in_week = (Spinner) findViewById(R.id.sp_max_class_week);
+            sp_fixed_class_duration_individual = (Spinner) findViewById(R.id.sp_fixed_class_duration_individual);
             tv_individual_pricing_text = (TextView) findViewById(R.id.tv_pricing_individual);
             tv_group_pricing_text = (TextView) findViewById(R.id.tv_pricing_group);
             tv_price_currency_individual = (TextView) findViewById(R.id.tv_individual_price_and_currency_suggestion);
@@ -372,6 +378,7 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
             tv_group_class_duration = (TextView) findViewById(R.id.tv_group_class_duration);
             tv_fix_class_time = (TextView) findViewById(R.id.tv_fix_class_time);
             tv_flexibility_on_class_duration = (TextView) findViewById(R.id.tv_flexibility_on_class_duration);
+            tv_individual_class_fixed_duration = (TextView) findViewById(R.id.tv_individual_class_fixed_duration);
             et_individual_class_price = (EditText) findViewById(R.id.et_price_individual);
             et_group_class_price = (EditText) findViewById(R.id.et_price_group);
             sp_trial_classes = (Spinner) findViewById(R.id.sp_trial_classes);
@@ -445,6 +452,8 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
                 fixed_min_class += 15;
             }
             sp_fixed_duration.setAdapter(new ArrayAdapter<Integer>(this, R.layout.textview, fixed_class_duration));
+
+            sp_fixed_class_duration_individual.setAdapter(new ArrayAdapter<Integer>(this, R.layout.textview, fixed_class_duration));
 
             sp_max_class_in_week.setAdapter(new ArrayAdapter<>(this, R.layout.textview, getResources().getStringArray(R.array.max_number_of_classes_week)));
 
@@ -643,7 +652,6 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
             });
 
 
-
             if (multipleAddressMentor.isChecked()) {
                 addMoreAddress.setVisibility(View.VISIBLE);
                 addressListViewMentor.setVisibility(View.VISIBLE);
@@ -651,7 +659,6 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
                 addressListViewMentor.setVisibility(View.GONE);
                 addMoreAddress.setVisibility(View.GONE);
             }
-
 
 
         } catch (Exception e) {
@@ -800,6 +807,7 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
         updateAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e(TAG,"validation and update profile api call");
                 if (validateUserUpdate()) {
                     if (city_id != 0)
                         callUpdateService();
@@ -1338,7 +1346,15 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
                     }
 
                     if (userInfo.getFlexible_yn() >= 0 && userInfo.getFlexible_yn() == 0) {
-                        sp_fixed_duration.setSelection(fixed_class_duration.indexOf(userInfo.getFixed_class_duration()));
+
+                        if(userInfo.getSlotType() != null && userInfo.getSlotType().equals("2")){
+                            sp_fixed_duration.setSelection(fixed_class_duration.indexOf(userInfo.getFixed_class_duration()));
+                            sp_fixed_class_duration_individual.setSelection(fixed_class_duration.indexOf(userInfo.getFixed_class_duration_individual()));
+                        }else {
+                            sp_fixed_duration.setSelection(fixed_class_duration.indexOf(userInfo.getFixed_class_duration()));
+
+                        }
+
 
                     } else {
 
@@ -1907,6 +1923,10 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
             String unit = null;
             if (flexible_yn == 0) {
                 requestParams.add("fixed_class_duration", String.valueOf(sp_fixed_duration.getSelectedItem()));
+                if(rb_both_class_type.isChecked()){
+                    requestParams.add("fixed_class_duration_individual",String.valueOf(sp_fixed_class_duration_individual.getSelectedItem()));
+                }
+
                 //requestParams.add("fixed_class_duration",String.valueOf());
                 unit = "class";
             } else if (flexible_yn == 1) {
@@ -2428,7 +2448,8 @@ if(rb_individual.isChecked())
                     tv_group_class_duration.setVisibility(View.GONE);
                     ll_when_flexible.setVisibility(View.VISIBLE);
                     ll_fix_class_duration.setVisibility(View.GONE);
-
+                    tv_individual_class_fixed_duration.setVisibility(View.GONE);
+                    ll_fix_class_duration_individual.setVisibility(View.GONE);
 
                     if (rb_flexible.isChecked()) {
                         tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_individual));
@@ -2449,6 +2470,8 @@ if(rb_individual.isChecked())
                     tv_fix_class_time.setText(getResources().getString(R.string.minutesPerGroupLesson));
                     ll_fix_class_duration.setVisibility(View.VISIBLE);
                     ll_when_flexible.setVisibility(View.GONE);
+                    tv_individual_class_fixed_duration.setVisibility(View.GONE);
+                    ll_fix_class_duration_individual.setVisibility(View.GONE);
 
                     tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_class_group));
 
@@ -2468,21 +2491,31 @@ if(rb_individual.isChecked())
                         tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_individual));
                         tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_group));
                     } else {
-                        tv_group_class_duration.setVisibility(View.GONE);
+                        tv_group_class_duration.setVisibility(View.VISIBLE);
+                        tv_group_class_duration.setText(getResources().getString(R.string.group_class_time_flexibility));
                         tv_fix_class_time.setText(getResources().getString(R.string.class_duration));
                         ll_when_flexible.setVisibility(View.GONE);
                         tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_class_individual));
                         tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_class_group));
+                        tv_individual_class_fixed_duration.setVisibility(View.VISIBLE);
+                        ll_fix_class_duration_individual.setVisibility(View.VISIBLE);
                     }
                     break;
             }
         } else if (group == radioGroup_flexibility) {
             switch (checkedId) {
                 case R.id.radio_button_flexible:
+
+                    tv_individual_class_fixed_duration.setVisibility(View.GONE);
+                    ll_fix_class_duration_individual.setVisibility(View.GONE);
+
+
                     if (rb_individual.isChecked()) {
                         ll_when_flexible.setVisibility(View.VISIBLE);
                         tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_individual));
                         ll_fix_class_duration.setVisibility(View.GONE);
+
+
                     } else if (rb_both_class_type.isChecked()) {
                         tv_fix_class_time.setText(getResources().getString(R.string.minutesPerGroupLesson));
                         ll_fix_class_duration.setVisibility(View.VISIBLE);
@@ -2491,6 +2524,8 @@ if(rb_individual.isChecked())
                         ll_when_flexible.setVisibility(View.VISIBLE);
                         tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_individual));
                         tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_hour_group));
+
+
                     }
                     break;
                 case R.id.radio_button_not_flexible:
@@ -2499,6 +2534,9 @@ if(rb_individual.isChecked())
                     tv_group_class_duration.setVisibility(View.GONE);
 //                    tv_group_class_duration.setText("");  /* Removing the Group class duration
 //                    message only as not the time will be fixed i.e both for group and individual class*/
+
+
+
                     if (rb_individual.isChecked()) {
                         tv_fix_class_time.setText(getResources().getString(R.string.class_duration));
                         tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_class_individual));
@@ -2506,6 +2544,11 @@ if(rb_individual.isChecked())
                         tv_fix_class_time.setText(getResources().getString(R.string.class_duration));
                         tv_individual_pricing_text.setText(getResources().getString(R.string.pricing_per_class_individual));
                         tv_group_pricing_text.setText(getResources().getString(R.string.pricing_per_class_group));
+                        tv_individual_class_fixed_duration.setVisibility(View.VISIBLE);
+                        ll_fix_class_duration_individual.setVisibility(View.VISIBLE);
+                        tv_group_class_duration.setVisibility(View.VISIBLE);
+                        tv_group_class_duration.setText(getResources().getString(R.string.group_class_time_flexibility));
+
                     }
                     break;
             }

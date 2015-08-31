@@ -38,7 +38,7 @@ import java.util.ArrayList;
 /**
  * Created by ved on 11/8/15.
  */
-public class AddPromotion extends Activity implements Callback , View.OnClickListener{
+public class AddPromotion extends Activity implements Callback, View.OnClickListener {
     RelativeLayout rl_discount_percentage, rl_free_classes, rlNumberOfClasses;
     TextView tv_title, tv_note, tv_min_classes_val;
     Spinner spNumberOfClasses;
@@ -52,7 +52,7 @@ public class AddPromotion extends Activity implements Callback , View.OnClickLis
     private String TAG = "FMC";
     private ArrayList<String> number_of_lessons;
     private Dialog dialog;
-    private TextView tvDialogMessage,tvDialogTitle;
+    private TextView tvDialogMessage, tvDialogTitle;
     private Button bDialog1, bDialog2;
     private ImageView bDialogBack;
 
@@ -77,10 +77,11 @@ public class AddPromotion extends Activity implements Callback , View.OnClickLis
         bDialogBack = (ImageView) dialog.findViewById(R.id.backButton);
         bDialog1 = (Button) dialog.findViewById(R.id.b1);
         bDialog2 = (Button) dialog.findViewById(R.id.b2);
-        bDialogBack.setOnClickListener(this);
         bDialogBack.setVisibility(View.GONE);
         bDialog1.setText(getResources().getString(R.string.yes));
         bDialog2.setText(getResources().getString(R.string.no));
+        bDialog1.setVisibility(View.VISIBLE);
+        bDialog2.setVisibility(View.VISIBLE);
         bDialog1.setOnClickListener(this);
         bDialog2.setOnClickListener(this);
 
@@ -139,7 +140,7 @@ public class AddPromotion extends Activity implements Callback , View.OnClickLis
         rl_discount_percentage.setVisibility(View.VISIBLE);
         if (userInfo != null && userInfo.getMin_number_of_classes() != 0) {
             et_promotion_discount.setText("");
-            tv_min_classes_val.setText(""+userInfo.getMin_number_of_classes());
+            tv_min_classes_val.setText("" + userInfo.getMin_number_of_classes());
         } else {
             et_promotion_discount.setText("");
             tv_min_classes_val.setText("");
@@ -221,21 +222,16 @@ public class AddPromotion extends Activity implements Callback , View.OnClickLis
                 isValid = false;
             }
 
-            if (!et_promotion_discount.getText().toString().trim().isEmpty()) {
-                if(Integer.parseInt(et_promotion_discount.getText().toString()) > 50){
-
-                    tvDialogMessage.setText(getResources().getString(R.string.confirmation_msg1)+" "+et_promotion_discount.getText().toString()+getResources().getString(R.string.percentage)+" "+getResources().getString(R.string.discount_for)+" "+spNumberOfClasses.getSelectedItem().toString().trim()+" "+getResources().getString(R.string.classes_booked));
+            if (isValid && !et_promotion_discount.getText().toString().trim().isEmpty()) {
+                if (Integer.parseInt(et_promotion_discount.getText().toString()) > 50) {
+                    isValid = false;
+                    if (Integer.parseInt(spNumberOfClasses.getSelectedItem().toString()) == 1)
+                        tvDialogMessage.setText(getResources().getString(R.string.confirmation_msg1) + " " + et_promotion_discount.getText().toString() + getResources().getString(R.string.percentage) + " " + getResources().getString(R.string.discount_for) + " " + spNumberOfClasses.getSelectedItem().toString().trim() + " " + getResources().getString(R.string.classes_booked));
+                    else
+                        tvDialogMessage.setText(getResources().getString(R.string.confirmation_msg1) + " " + et_promotion_discount.getText().toString() + getResources().getString(R.string.percentage) + " " + getResources().getString(R.string.discount_for) + " " + spNumberOfClasses.getSelectedItem().toString().trim() + " " + getResources().getString(R.string.classes_booked));
                     dialog.show();
                 }
-                et_promotion_discount.setError(getResources().getString(R.string.add_dicount_percentage));
-                if (isValid)
-                    et_promotion_discount.requestFocus();
-                isValid = false;
             }
-
-
-
-
 
 
         } else if (selectedRadioGroupChild == 1) {
@@ -248,13 +244,12 @@ public class AddPromotion extends Activity implements Callback , View.OnClickLis
                 isValid = false;
             }
 
-            if(Integer.parseInt(et_free_classes.getText().toString()) > Integer.parseInt(String.valueOf(spNumberOfClasses.getSelectedItem()))){
-             et_free_classes.setError(getResources().getString(R.string.free_class_cannot_bigger_than_mandatory));
-                if(isValid)
+            if (Integer.parseInt(et_free_classes.getText().toString()) > Integer.parseInt(String.valueOf(spNumberOfClasses.getSelectedItem()))) {
+                et_free_classes.setError(getResources().getString(R.string.free_class_cannot_bigger_than_mandatory));
+                if (isValid)
                     et_free_classes.requestFocus();
                 isValid = false;
             }
-
 
 
         }
@@ -290,7 +285,7 @@ public class AddPromotion extends Activity implements Callback , View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.b1:
                 addPromotion();
                 dialog.dismiss();

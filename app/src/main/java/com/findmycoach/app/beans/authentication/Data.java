@@ -252,6 +252,16 @@ public class Data {
     private int max_class_duration;
     private int max_classes_per_week;
     private int fixed_class_duration;
+    private int fixed_class_duration_individual;
+
+    public int getFixed_class_duration_individual() {
+        return fixed_class_duration_individual;
+    }
+
+    public void setFixed_class_duration_individual(int fixed_class_duration_individual) {
+        this.fixed_class_duration_individual = fixed_class_duration_individual;
+    }
+
     private List<Price> prices;
 
 
