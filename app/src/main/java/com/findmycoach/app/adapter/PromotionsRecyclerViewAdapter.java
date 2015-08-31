@@ -105,7 +105,7 @@ public class PromotionsRecyclerViewAdapter extends RecyclerView.Adapter<Promotio
                 holder.rlDiscountOnClasses.setVisibility(View.VISIBLE);
                 holder.rlPromotionDiscount.setVisibility(View.VISIBLE);
                 holder.tv_promotions_type.setText(context.getResources().getString(R.string.discount_type_promotion));
-                holder.tv_promotions_discount.setText(offer.getDiscount_percentage());
+                holder.tv_promotions_discount.setText(offer.getDiscount_percentage()+context.getResources().getString(R.string.percentage));
                 holder.tvDiscountClassesVal.setText(offer.getDiscount_over_classes());
 
             } else {

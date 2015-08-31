@@ -231,7 +231,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:inputType="numberDecimal"
-                    android:maxLength="3"
+                    android:maxLength="2"
                     android:singleLine="true"
                     android:textCursorDrawable="@drawable/cursor_purple"
                     android:textSize="@dimen/profile_details" />

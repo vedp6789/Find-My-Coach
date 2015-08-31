@@ -1907,6 +1907,7 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
             String unit = null;
             if (flexible_yn == 0) {
                 requestParams.add("fixed_class_duration", String.valueOf(sp_fixed_duration.getSelectedItem()));
+                //requestParams.add("fixed_class_duration",String.valueOf());
                 unit = "class";
             } else if (flexible_yn == 1) {
 

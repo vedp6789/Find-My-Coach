@@ -869,6 +869,9 @@
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
     <string name="km">Km</string>
-
+    <string name="confirmation_msg1">Are you sure you want to apply</string>
+<string name="discount_for">discount for</string>
+    <string name="percentage">%</string>
+    <string name="classes_booked">classes booked</string>
 
 </resources>

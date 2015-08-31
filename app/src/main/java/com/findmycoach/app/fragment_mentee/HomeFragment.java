@@ -408,6 +408,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             }
         });
 
+
         final Drawable clearInputField = getActivity().getResources().getDrawable(android.R.drawable.ic_menu_close_clear_cancel);
         clearInputField.setBounds(0, 0, 50, 50);
 
