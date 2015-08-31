@@ -2,13 +2,6 @@
 <items version="2" >
 
     <item
-        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/21.0.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="efeda77c808750cb670ee9c48d8a1835d89dbcb2">
-        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-d4757647954ce2cebf2c32f897512121e10991b7.jar" />
-    </item>
-    <item
         jar="/home/ved/fmcmentor/app/libs/paypal.jar"
         jumboMode="false"
         revision="21.1.1"
@@ -30,25 +23,11 @@
         <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/Java-WebSocket-1.3.0-91f10bcd72af697ae5a28863f03681e7a7dda2d9.jar" />
     </item>
     <item
-        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/libs/internal_impl-22.0.0.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
-        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-745bbd2f3f0bd3dc64d4f8f7640d8f86d2e2bba3.jar" />
-    </item>
-    <item
         jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/fmcmentor/library/unspecified/classes.jar"
         jumboMode="false"
         revision="21.1.1"
-        sha1="488a1d168263e45eb48c9a9040ce95c763bb8049">
+        sha1="6975f0b4c0b6d473220d240d6fc03777b594a39e">
         <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-26403c3e1592ddee8dd0619ef687ea19c40b1063.jar" />
-    </item>
-    <item
-        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.0.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="c976518693e89ad44fbfccfc654941eaec198d08">
-        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-b547b16a3ad908c1843331c3967f11c0926c7af9.jar" />
     </item>
     <item
         jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/7.0.0/classes.jar"
@@ -65,6 +44,97 @@
         <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-51a7ccaa62ab144af134412b3d9c8e8982fc9818.jar" />
     </item>
     <item
+        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/fmcmentor/cropper/unspecified/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="9cf4e4d06f2c68b49bc64acb3dffe2cbc0aebf2f">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-b77c45d47075260d7e79ecca619a16c50e6b34b6.jar" />
+    </item>
+    <item
+        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.facebook.android/facebook/3.21.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="0b91a0b1e0becf66d1557762c171426c6b22419c">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-e66e55c261d290c68cb324e23db9ba701701a635.jar" />
+    </item>
+    <item
+        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="3c0b099f9de16b265ecd6122fcb603e7d0d29f90">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-62a73a0df5ce9e53e1591c90515f5e8bc2bdfb02.jar" />
+    </item>
+    <item
+        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="0e8228b4bc69c6a2c8d7c18498a77e53417d2574">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-ba8651b9227e77af98879fa9997ce25991a40fb3.jar" />
+    </item>
+    <item
+        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="29fd6d3794b71491c2789708cd8d03c71feb8954">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-57648cf39858ae92e7101f84f425a16f250eb6d3.jar" />
+    </item>
+    <item
+        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-c4c1dd6caef0d4340f06de611abc6f4d3a09c50e.jar" />
+    </item>
+    <item
+        jar="/home/ved/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/support-annotations-22.0.0-23f0b6ac9041fe8b895e7fceac1375c42e3ae767.jar" />
+    </item>
+    <item
+        jar="/home/ved/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/library-2.4.0-4592a1dc6c9f14d93fd7527e5296b8604e96a097.jar" />
+    </item>
+    <item
+        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="055783146ba9654a725442563be78cad303aad1f">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-7c5ea4ce9e09b6842c5c61c8f9d6ab534af9cdd4.jar" />
+    </item>
+    <item
+        jar="/home/ved/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3.1/ecb6e1f8e4b0e84c4b886c2f14a1500caf309757/gson-2.3.1.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/gson-2.3.1-0b53138368889ebb6cf36a234558d6ae1191bd29.jar" />
+    </item>
+    <item
+        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/21.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="efeda77c808750cb670ee9c48d8a1835d89dbcb2">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-d4757647954ce2cebf2c32f897512121e10991b7.jar" />
+    </item>
+    <item
+        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/libs/internal_impl-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-745bbd2f3f0bd3dc64d4f8f7640d8f86d2e2bba3.jar" />
+    </item>
+    <item
+        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="c976518693e89ad44fbfccfc654941eaec198d08">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-b547b16a3ad908c1843331c3967f11c0926c7af9.jar" />
+    </item>
+    <item
         jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/7.0.0/classes.jar"
         jumboMode="false"
         revision="21.1.1"
@@ -79,25 +149,18 @@
         <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-8a845ac0b85ff43914ff7982495a97f7b4f71e77.jar" />
     </item>
     <item
-        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/fmcmentor/cropper/unspecified/classes.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="3ba38ecc7e30698b96421dd4babd20ebaaa9b208">
-        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-b77c45d47075260d7e79ecca619a16c50e6b34b6.jar" />
-    </item>
-    <item
-        jar="/home/ved/fmcmentor/app/libs/nineoldandroids-library-2.4.0.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
-        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/nineoldandroids-library-2.4.0-b2a64acc15553d65f07866a0a17d83bd22e7d90b.jar" />
-    </item>
-    <item
         jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.0.0/classes.jar"
         jumboMode="false"
         revision="21.1.1"
         sha1="e3d791b42eaa90416cd0b2d2e608092794a3baa4">
         <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-d61595ca8538a128b19c23c75714aa2523064382.jar" />
+    </item>
+    <item
+        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/pl.droidsonroids.gif/android-gif-drawable/1.1.7/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="d6825a79ca6c134dd6f26fc15eff443b5215dbdc">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-5c73239c24b5786a696b50142cec431317dd746c.jar" />
     </item>
     <item
         jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/7.0.0/classes.jar"
@@ -112,20 +175,6 @@
         revision="21.1.1"
         sha1="a08d65794b844d8e7540bf9a33859bf3b2482d7f">
         <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-bdc50bc32300c9056955bd29732a185e30a1aa0b.jar" />
-    </item>
-    <item
-        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.facebook.android/facebook/3.21.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="7e43adcac7678b469a36dc3b1037d10e9d5dbcff">
-        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-e66e55c261d290c68cb324e23db9ba701701a635.jar" />
-    </item>
-    <item
-        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/7.0.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="3c0b099f9de16b265ecd6122fcb603e7d0d29f90">
-        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-62a73a0df5ce9e53e1591c90515f5e8bc2bdfb02.jar" />
     </item>
     <item
         jar="/home/ved/.gradle/caches/modules-2/files-2.1/com.darwinsys/hirondelle-date4j/1.5.1/7b52de513f87ae4d9ff5d17518def0a1e9bc3df0/hirondelle-date4j-1.5.1.jar"
@@ -177,20 +226,6 @@
         <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-e1e6ad82818a59bcad619e50308e78d0de0f5e14.jar" />
     </item>
     <item
-        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/7.0.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="0e8228b4bc69c6a2c8d7c18498a77e53417d2574">
-        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-ba8651b9227e77af98879fa9997ce25991a40fb3.jar" />
-    </item>
-    <item
-        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.0.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="29fd6d3794b71491c2789708cd8d03c71feb8954">
-        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-57648cf39858ae92e7101f84f425a16f250eb6d3.jar" />
-    </item>
-    <item
         jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/io.card/android-sdk/5.0.1/classes.jar"
         jumboMode="false"
         revision="21.1.1"
@@ -212,27 +247,6 @@
         <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-1a0af7e5631dc1f18650dc1cd505650eda0a9269.jar" />
     </item>
     <item
-        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
-        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-c4c1dd6caef0d4340f06de611abc6f4d3a09c50e.jar" />
-    </item>
-    <item
-        jar="/home/ved/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
-        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/support-annotations-22.0.0-23f0b6ac9041fe8b895e7fceac1375c42e3ae767.jar" />
-    </item>
-    <item
-        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/7.0.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="055783146ba9654a725442563be78cad303aad1f">
-        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-7c5ea4ce9e09b6842c5c61c8f9d6ab534af9cdd4.jar" />
-    </item>
-    <item
         jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.github.alamkanak/android-week-view/1.2.1/classes.jar"
         jumboMode="false"
         revision="21.1.1"
@@ -252,13 +266,6 @@
         revision="21.1.1"
         sha1="77bf7cacf9cefe19dc105e5425d2eb1bb5285881">
         <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/android-async-http-1.4.5-d4989a0d29ba4991d86e119652cb4f1f2e252566.jar" />
-    </item>
-    <item
-        jar="/home/ved/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3.1/ecb6e1f8e4b0e84c4b886c2f14a1500caf309757/gson-2.3.1.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
-        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/gson-2.3.1-0b53138368889ebb6cf36a234558d6ae1191bd29.jar" />
     </item>
     <item
         jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.0.0/classes.jar"

@@ -8,8 +8,8 @@
         android:endColor="#5e4d1b4e"
         android:gradientRadius="100%"
         android:angle="360"
-        android:centerX="50%"
-        android:centerY="50%"/>
+        android:centerX="50%p"
+        android:centerY="50%p"/>
 
     <corners android:radius="1dp" />
 </shape>

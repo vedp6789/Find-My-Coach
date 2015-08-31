@@ -14,6 +14,11 @@ import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
 import com.loopj.android.http.RequestParams;
 
+import java.io.IOException;
+
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifImageView;
+
 /**
  * Created by prem on 11/3/15.
  */
@@ -21,6 +26,7 @@ public class SplashActivity extends Activity implements Callback {
 
     private DataBase dataBase;
     private boolean isStart;
+    private GifImageView gifImageView;
 
 
     @Override
@@ -32,6 +38,17 @@ public class SplashActivity extends Activity implements Callback {
         AppFonts.HelveticaNeueMedium = Typeface.createFromAsset(getAssets(), "HelveticaNeue-Medium.otf");
 
         setContentView(R.layout.activity_splash);
+        gifImageView=(GifImageView) findViewById(R.id.app_logo_anim);
+        GifDrawable gifFromResource = null;
+        try {
+            gifFromResource = new GifDrawable(getResources(), R.drawable.animated_logo1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        gifImageView.setImageDrawable(gifFromResource);
+        
+
 
         isStart = true;
         getDataFromServer();
