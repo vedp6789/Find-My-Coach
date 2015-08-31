@@ -6,16 +6,15 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        android:background="@drawable/splash_radial_gradient">
 
-    <!--<com.findmycoach.app.views.ChizzleTextView
-        android:id="@+id/banner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="@string/find_my_coach"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:textSize="@dimen/header"
-        android:layout_centerVertical="true"/>-->
+        <ImageView
+            android:id="@+id/app_logo_anim"
+            android:layout_width="150dp"
+            android:layout_height="160dp"
+            android:layout_gravity="center"
+            android:src="@drawable/animated_logo"/>
+
+    </FrameLayout>
+
 </RelativeLayout>
