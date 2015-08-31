@@ -251,7 +251,7 @@ public class Data {
     private int flexibility_window;
     private int max_class_duration;
     private int max_classes_per_week;
-    private int fixed_class_duration;
+    private int fixed_class_duration_group;
     private int fixed_class_duration_individual;
 
     public int getFixed_class_duration_individual() {
@@ -305,12 +305,12 @@ public class Data {
         this.max_classes_per_week = max_classes_per_week;
     }
 
-    public int getFixed_class_duration() {
-        return fixed_class_duration;
+    public int getFixed_class_durationGroup() {
+        return fixed_class_duration_group;
     }
 
-    public void setFixed_class_duration(int fixed_class_duration) {
-        this.fixed_class_duration = fixed_class_duration;
+    public void setFixed_class_durationGroup(int fixed_class_duration) {
+        this.fixed_class_duration_group = fixed_class_duration;
     }
 
     public List<Price> getPrices() {

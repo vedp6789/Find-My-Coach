@@ -422,13 +422,12 @@ public class ProfileFragment extends Fragment implements Callback {
                 ll_flexible_class_duration.setVisibility(View.GONE);
                 rl_fixed_class_duration.setVisibility(View.VISIBLE);
                 rlFixedDurationIndividual.setVisibility(View.VISIBLE);
-                tv_fixed_class_duration.setText("" + userInfo.getFixed_class_duration());
 
                 if (userInfo.getSlotType().equals("0")) {
                     rl_individual_class_price.setVisibility(View.VISIBLE);
                     rl_group_class_price.setVisibility(View.GONE);
                     rl_fixed_class_duration.setVisibility(View.GONE);
-                    tvFixedDurationIndividualVal.setText("" + userInfo.getFixed_class_duration());
+                    tvFixedDurationIndividualVal.setText("" + userInfo.getFixed_class_duration_individual());
                     tv_individual_class_price_label.setText(getResources().getString(R.string.pricing_per_class_individual) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
                     for (int price = 0; price < userInfo.getPrices().size(); price++) {
                         Price price1 = userInfo.getPrices().get(price);
@@ -436,13 +435,11 @@ public class ProfileFragment extends Fragment implements Callback {
                             tv_individual_class_price.setText("" + price1.getPrice());
                         }
                     }
-
-
                 } else if (userInfo.getSlotType().equals("1")) {
                     rl_individual_class_price.setVisibility(View.GONE);
                     rl_group_class_price.setVisibility(View.VISIBLE);
                     rlFixedDurationIndividual.setVisibility(View.GONE);
-                    tv_fixed_class_duration.setText("" + userInfo.getFixed_class_duration());
+                    tv_fixed_class_duration.setText("" + userInfo.getFixed_class_durationGroup());
                     tv_group_class_price_label.setText(getResources().getString(R.string.pricing_per_class_group) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
                     tv_fixed_class_duration_label.setText(getResources().getString(R.string.group_class_time_flexibility));
                     for (int price = 0; price < userInfo.getPrices().size(); price++) {
@@ -451,13 +448,12 @@ public class ProfileFragment extends Fragment implements Callback {
                             tv_group_class_price.setText("" + price1.getPrice());
                         }
                     }
-
                 } else if (userInfo.getSlotType().equals("2")) {
                     rl_individual_class_price.setVisibility(View.VISIBLE);
                     rl_group_class_price.setVisibility(View.VISIBLE);
                     tv_individual_class_price_label.setText(getResources().getString(R.string.pricing_per_class_individual) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
                     tv_group_class_price_label.setText(getResources().getString(R.string.pricing_per_class_group) + " " + Html.fromHtml(userInfo.getCurrencyOfUpdatedProfile().getUnicode()));
-                    tv_fixed_class_duration.setText("" + userInfo.getFixed_class_duration());
+                    tv_fixed_class_duration.setText("" + userInfo.getFixed_class_durationGroup());
                     tvFixedDurationIndividualVal.setText("" + userInfo.getFixed_class_duration_individual());
 
                     for (int price = 0; price < userInfo.getPrices().size(); price++) {
@@ -475,7 +471,8 @@ public class ProfileFragment extends Fragment implements Callback {
             } else if (userInfo.getFlexible_yn() == 1) {
                 tv_flexibility_on_class_duration.setText(getResources().getString(R.string.yes));
                 ll_flexible_class_duration.setVisibility(View.VISIBLE);
-                rl_fixed_class_duration.setVisibility(View.GONE);
+                rl_fixed_class_duration.setVisibility(View.VISIBLE);
+                rlFixedDurationIndividual.setVisibility(View.VISIBLE);
                 tv_min_class_time.setText("" + userInfo.getMin_class_duration());
                 tv_flexibility_window.setText("" + userInfo.getFlexibility_window());
                 tv_max_class_time.setText("" + userInfo.getMax_class_duration());
@@ -483,6 +480,7 @@ public class ProfileFragment extends Fragment implements Callback {
                 if (userInfo.getSlotType().equals("0")) {
                     ll_flexible_class_duration.setVisibility(View.VISIBLE);
                     rl_fixed_class_duration.setVisibility(View.GONE);
+                    rlFixedDurationIndividual.setVisibility(View.GONE);
                     tv_min_class_time.setText("" + userInfo.getMin_class_duration());
                     tv_flexibility_window.setText("" + userInfo.getFlexibility_window());
                     tv_max_class_time.setText("" + userInfo.getMax_class_duration());
@@ -500,9 +498,8 @@ public class ProfileFragment extends Fragment implements Callback {
 
                 } else if (userInfo.getSlotType().equals("1")) {
                     ll_flexible_class_duration.setVisibility(View.GONE);
-                    rl_fixed_class_duration.setVisibility(View.VISIBLE);
                     tv_fixed_class_duration_label.setText(getResources().getString(R.string.group_class_time_flexibility));
-                    tv_fixed_class_duration.setText("" + userInfo.getFixed_class_duration());
+                    tv_fixed_class_duration.setText("" + userInfo.getFixed_class_durationGroup());
 
                     rl_individual_class_price.setVisibility(View.GONE);
                     rl_group_class_price.setVisibility(View.VISIBLE);
@@ -515,7 +512,6 @@ public class ProfileFragment extends Fragment implements Callback {
                     }
                 } else if (userInfo.getSlotType().equals("2")) {
                     ll_flexible_class_duration.setVisibility(View.VISIBLE);
-                    rl_fixed_class_duration.setVisibility(View.VISIBLE);
 
                     tv_min_class_time.setText("" + userInfo.getMin_class_duration());
                     tv_flexibility_window.setText("" + userInfo.getFlexibility_window());
@@ -523,8 +519,8 @@ public class ProfileFragment extends Fragment implements Callback {
 
 
                     tv_fixed_class_duration_label.setText(getResources().getString(R.string.group_class_time_flexibility));
-                    tv_fixed_class_duration.setText("" + userInfo.getFixed_class_duration());
-
+                    tv_fixed_class_duration.setText("" + userInfo.getFixed_class_durationGroup());
+                    tvFixedDurationIndividualVal.setText("" + userInfo.getFixed_class_duration_individual());
 
                     rl_individual_class_price.setVisibility(View.VISIBLE);
                     rl_group_class_price.setVisibility(View.VISIBLE);
