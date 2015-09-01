@@ -160,7 +160,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             }
 
             homeFragmentMentee = this;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -821,11 +821,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         addressList.clear();
         if (profileResponse.getData().getMultipleAddress() != null && profileResponse.getData().getMultipleAddress().size() > 0) {
             if (profileResponse.getData().getMultipleAddress().size() > 1) {
-                int second_last_index= profileResponse.getData().getMultipleAddress().size()-2;
-                for (int index=0;index < profileResponse.getData().getMultipleAddress().size();index++) {
+                int second_last_index = profileResponse.getData().getMultipleAddress().size() - 2;
+                for (int index = 0; index < profileResponse.getData().getMultipleAddress().size(); index++) {
                     Address address = profileResponse.getData().getMultipleAddress().get(index);
                     addressList.add(address.getLocale());
-                    if(index == second_last_index){
+                    if (index == second_last_index) {
                         addressList.add(getResources().getString(R.string.pick_current_location));
                     }
                 }
@@ -850,12 +850,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 selectedLocationIndex = position;
-                int second_last_position=0;
-                if(addressList != null && addressList.size() > 0){
-                    if(addressList.size() > 2){
-                        second_last_position=addressList.size()-2;
+                int second_last_position = 0;
+                if (addressList != null && addressList.size() > 0) {
+                    if (addressList.size() > 2) {
+                        second_last_position = addressList.size() - 2;
 
-                    }else{
+                    } else {
                         second_last_position = 0;
                     }
                 }
@@ -914,7 +914,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
         if (timeBarrier) {
             String fromTiming = (String) fromTimingInput.getTag(fromTimingInput.getId());
-
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = null;

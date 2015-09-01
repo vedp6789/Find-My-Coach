@@ -33,17 +33,17 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     private List<Datum> users;
     private String year, years;
     private int clickedPosition = -1;
-    private Drawable defaultDrawable, qualified, notQualified,rated,unrated;
-    
+    private Drawable defaultDrawable, experienced, notExperienced, rated, unrated;
+
 
     public MentorListAdapter(Context context, List<Datum> users, String searchFor) {
         this.context = context;
         this.users = users;
         defaultDrawable = context.getResources().getDrawable(R.drawable.user_icon);
-        qualified = context.getResources().getDrawable(R.drawable.experience_1);
-        notQualified = context.getResources().getDrawable(R.drawable.not_experienced_1);
-        rated=context.getResources().getDrawable(R.drawable.rating);
-        unrated=context.getResources().getDrawable(R.drawable.unrated_icon_1);
+        experienced = context.getResources().getDrawable(R.drawable.experience_1);
+        notExperienced = context.getResources().getDrawable(R.drawable.not_experienced_1);
+        rated = context.getResources().getDrawable(R.drawable.rating);
+        unrated = context.getResources().getDrawable(R.drawable.unrated_icon_1);
         year = context.getResources().getString(R.string.yr);
         years = context.getResources().getString(R.string.yrs);
     }
@@ -81,7 +81,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
             holder.experienceTV = (TextView) view.findViewById(R.id.experience);
             holder.chargesTV = (TextView) view.findViewById(R.id.charges);
             holder.qualifiedIV = (ImageView) view.findViewById(R.id.imageView4);
-            holder.ratingIV= (ImageView) view.findViewById(R.id.imageView2);
+            holder.ratingIV = (ImageView) view.findViewById(R.id.imageView2);
 //            holder.connectionIV = (ImageView) view.findViewById(R.id.connect_mentor);
             view.setTag(holder);
         }
@@ -109,9 +109,9 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         try {
             int age = getAgeInyearsFromDOB(user.getDateOfBirth());
             if (age > 1)
-                holder.ageTV.setText(age +" "+ years);
+                holder.ageTV.setText(age + " " + years);
             else if (age == 0)
-                holder.ageTV.setText(age +" "+ years);
+                holder.ageTV.setText(age + " " + years);
         } catch (Exception e) {
             holder.ageTV.setText("");
         }
@@ -148,10 +148,10 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         holder.ratingIV.setImageDrawable(null);
         holder.ratingIV.setImageDrawable(rated);
         try {
-            if(user.getRating() != null && user.getRating().equals("0")){
+            if (user.getRating() != null && user.getRating().equals("0")) {
                 holder.ratingIV.setImageDrawable(unrated);
                 holder.ratingTV.setText("");
-            }else{
+            } else {
                 holder.ratingTV.setText(user.getRating());
             }
         } catch (Exception e) {
@@ -160,7 +160,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         //Set Mentor distance in KM
         holder.distanceTV.setText("");
         try {
-            holder.distanceTV.setText(String.format("%.1f", Double.parseDouble(user.getDistance())) +" "+context.getResources().getString(R.string.km));
+            holder.distanceTV.setText(String.format("%.1f", Double.parseDouble(user.getDistance())) + " " + context.getResources().getString(R.string.km));
         } catch (Exception e) {
         }
 
@@ -168,26 +168,38 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         holder.experienceTV.setText("");
         try {
             int experience = Integer.parseInt(user.getExperience());
-            holder.experienceTV.setText(experience +" "+ (experience > 1 ? years : year));
+            holder.experienceTV.setText(experience + " " + (experience > 1 ? years : year));
+            if (experience > 0)
+                holder.qualifiedIV.setImageDrawable(experienced);
+            else
+                holder.qualifiedIV.setImageDrawable(notExperienced);
+
         } catch (Exception e) {
             holder.experienceTV.setText("0 " + year);
+            holder.qualifiedIV.setImageDrawable(notExperienced);
+
         }
 
-        //Set Mentor is qualified or not in current subject
-        try {
+
+        //Set Mentor is qualified or not in current subject   (Qualifed status is not needed to show here as per Ankit conversation on 28 Aug 15)
+        /*try {
             if (user.isQualified())
                 holder.qualifiedIV.setImageDrawable(qualified);
             else
                 holder.qualifiedIV.setImageDrawable(notQualified);
         } catch (Exception e) {
         }
-
+*/
         //Set Mentor charges
         holder.chargesTV.setText("");
         try {
-            if (user.getPrice() != null && user.getCurrencyCode() != null)
-                holder.chargesTV.setText(Html.fromHtml(fontPurple + user.getCurrencyCode() + " " + user.getPrice() + "/" + user.getPriceFor() + fontEnd));
+            if (user.getPrice() != null && user.getCurrencyCode() != null) {
+                if (user.getPriceFor().equalsIgnoreCase("cl"))
+                    holder.chargesTV.setText(Html.fromHtml(fontPurple + user.getCurrencyCode() + " " + user.getPrice() + "/" + context.getResources().getString(R.string.flexibility_in_class) + fontEnd));
             else
+                    holder.chargesTV.setText(Html.fromHtml(fontPurple + user.getCurrencyCode() + " " + user.getPrice() + "/" + context.getResources().getString(R.string.flexibility_in_hour) + fontEnd));
+
+            }else
                 holder.chargesTV.setText("---");
         } catch (Exception ignored) {
         }

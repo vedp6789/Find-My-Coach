@@ -521,7 +521,7 @@
     <string name="prompt_select_locality_for_search">Select Locality to start search</string>
     <string name="prompt_qualification">Qualification</string>
     <string name="prompt_accreditions">Accreditions</string>
-    <string name="prompt_methodology">My Methodology</string>
+    <string name="prompt_methodology">Teaching Methodology</string>
     <string name="prompt_awards">Awards</string>
     <string name="prompt_coaching_language">Coaching Lang.</string>
 
@@ -875,6 +875,10 @@
     <string name="percentage">%</string>
     <string name="classes_booked">classes booked</string>
     <string name="class_booked">class booked</string>
+    <string name="flexibility_in_class">class</string>
+    <string name="flexibility_in_hour">hour</string>
+    <string name="teachingPlace">Teaching Place</string>
+    <string name="teachingClassType">Teaching Type</string>
 
 
 </resources>

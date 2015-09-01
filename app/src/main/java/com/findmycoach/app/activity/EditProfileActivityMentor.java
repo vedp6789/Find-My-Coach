@@ -1986,7 +1986,7 @@ public class EditProfileActivityMentor extends FragmentActivity implements Callb
             JSONArray jsonArray_prices = new JSONArray();
             if (selected_class_type == 0) {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("price", Integer.parseInt(et_individual_class_price.getText().toString()));
+                jsonObject.put("price", (et_individual_class_price.getText().toString()));
                 if (unit != null)
                     jsonObject.put("unit", unit);
                 Log.e(TAG, "currency_id: " + currency_id);

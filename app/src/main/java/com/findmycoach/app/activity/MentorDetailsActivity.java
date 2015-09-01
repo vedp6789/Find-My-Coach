@@ -59,18 +59,21 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
+import static com.findmycoach.app.R.id.imageView2;
+
 public class MentorDetailsActivity extends FragmentActivity implements Callback {
 
-    private ImageView profileImage, toggleReviewIconIV;
-    private TextView profileName, ratingTV, noOfStudentsTV, reviewTitleTV;
-    private LinearLayout chatWithMentorLL, chatWithStudentsLL, reviewLL;
+    private ImageView profileImage, toggleReviewIconIV, ratingIV, studentsUnderMentorIV,
+            experienceIV, genderIV, teachingPlaceIV1, teachingPlaceIV2, teachingTypeIV1, teachingTypeIV2;
+    private TextView profileName, ratingTV, noOfStudentsTV, reviewTitleTV, experienceTV, languageTV;
+    private LinearLayout chatWithMentorLL, chatWithStudentsLL, reviewLL, genderLL, teachingPlaceLL,
+            teachingTypeLL, promotionLL;
     private ListView reviewsListView;
     private RelativeLayout toggleReviewRL;
     private ScrollView scrollView;
 
-    private TextView professionTV, areaOfCoachingTV, experienceTV,
-            coachingLanguageTV, qualificationTV, accrediationsTV, myMethodologyTV, awardsTV;
-    private LinearLayout professionLL, areaOfCoachingLL, experienceLL,
+    private TextView qualificationTV, accrediationsTV, myMethodologyTV, awardsTV;
+    private LinearLayout
             coachingLanguageLL, qualificationLL, accrediationsLL, myMethodologyLL, awardsLL;
 
     private Data userInfo = null;
@@ -426,6 +429,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         profileImage = (ImageView) findViewById(R.id.profile_image);
         profileName = (TextView) findViewById(R.id.profile_name);
         ratingTV = (TextView) findViewById(R.id.rating);
+        ratingIV = (ImageView) findViewById(R.id.imageView2);
+        studentsUnderMentorIV = (ImageView) findViewById(R.id.imageView);
         noOfStudentsTV = (TextView) findViewById(R.id.number_of_students);
         chatWithMentorLL = (LinearLayout) findViewById(R.id.chat_with_mentor);
         chatWithStudentsLL = (LinearLayout) findViewById(R.id.chat_with_students);
@@ -435,25 +440,32 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         reviewsListView = (ListView) findViewById(R.id.reviews_list_view);
         toggleReviewRL = (RelativeLayout) findViewById(R.id.toggle_review_RL);
         scrollView = (ScrollView) findViewById(R.id.sv_profile);
-
-        professionTV = (TextView) findViewById(R.id.professionTV);
-        areaOfCoachingTV = (TextView) findViewById(R.id.areaOfCoachingTV);
-        experienceTV = (TextView) findViewById(R.id.experienceTV);
-        coachingLanguageTV = (TextView) findViewById(R.id.coachingLanguageTV);
+        // professionTV = (TextView) findViewById(R.id.professionTV);
+        // areaOfCoachingTV = (TextView) findViewById(R.id.areaOfCoachingTV);
+        experienceTV = (TextView) findViewById(R.id.experience);
+        experienceIV = (ImageView) findViewById(R.id.imageView3);
+        genderIV = (ImageView) findViewById(R.id.genderIV);
+        teachingPlaceIV1 = (ImageView) findViewById(R.id.teachingPlaceIV1);
+        teachingPlaceIV2 = (ImageView) findViewById(R.id.teachingPlaceIV2);
+        teachingTypeIV1 = (ImageView) findViewById(R.id.teachingTypeIV1);
+        teachingTypeIV2 = (ImageView) findViewById(R.id.teachingTypeIV2);
+        languageTV = (TextView) findViewById(R.id.languageTV);
         qualificationTV = (TextView) findViewById(R.id.qualificationTV);
         accrediationsTV = (TextView) findViewById(R.id.accrediationsTV);
         myMethodologyTV = (TextView) findViewById(R.id.myMethodologyTV);
         awardsTV = (TextView) findViewById(R.id.awardsTV);
-
-        professionLL = (LinearLayout) findViewById(R.id.professionLL);
-        areaOfCoachingLL = (LinearLayout) findViewById(R.id.areaOfCoachingLL);
-        experienceLL = (LinearLayout) findViewById(R.id.experienceLL);
+        // professionLL = (LinearLayout) findViewById(R.id.professionLL);
+        // areaOfCoachingLL = (LinearLayout) findViewById(R.id.areaOfCoachingLL);
+        //experienceLL = (LinearLayout) findViewById(R.id.experienceLL);
         coachingLanguageLL = (LinearLayout) findViewById(R.id.coachingLanguageLL);
         qualificationLL = (LinearLayout) findViewById(R.id.qualificationLL);
         accrediationsLL = (LinearLayout) findViewById(R.id.accrediationsLL);
         myMethodologyLL = (LinearLayout) findViewById(R.id.myMethodologyLL);
         awardsLL = (LinearLayout) findViewById(R.id.awardsLL);
-
+        genderLL = (LinearLayout) findViewById(R.id.genderLL);
+        teachingPlaceLL = (LinearLayout) findViewById(R.id.teachingPlaceLL);
+        teachingTypeLL = (LinearLayout) findViewById(R.id.teachingTypeLL);
+        promotionLL = (LinearLayout) findViewById(R.id.promotionLL);
 
         tv_currentMonth = (TextView) findViewById(R.id.currentTimeTV);
         iv_nextMonth = (ImageView) findViewById(R.id.nextTimeIB);
@@ -577,21 +589,95 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         }
 
         try {
-            int rating = Integer.parseInt(userInfo.getRating());
-            ratingTV.setText(String.valueOf(rating));
+            if (userInfo.getGender() != null && !userInfo.getGender().isEmpty()) {
+                if (userInfo.getGender().equals("M")) {
+                    genderIV.setImageDrawable(getResources().getDrawable(R.drawable.male));
+                } else if (userInfo.getGender().equals("F")) {
+                    genderIV.setImageDrawable(getResources().getDrawable(R.drawable.female));
+                }
+            } else {
+                genderLL.setVisibility(View.GONE);
+            }
+
+
         } catch (Exception e) {
-            ratingTV.setText("0");
+            genderLL.setVisibility(View.GONE);
+            e.printStackTrace();
+        }
+
+
+        try {
+            if (userInfo.getAvailabilityYn() != null && !userInfo.getAvailabilityYn().isEmpty()) {
+                if (userInfo.getAvailabilityYn().equals("0")) {
+                    teachingPlaceIV1.setImageDrawable(getResources().getDrawable(R.drawable.institute));  // Mentor's home is acting as institute as
+                    teachingPlaceIV2.setImageDrawable(getResources().getDrawable(R.drawable.home_2));
+                } else if (userInfo.getAvailabilityYn().equals("1")) {
+                    teachingPlaceIV2.setImageDrawable(getResources().getDrawable(R.drawable.home));    // Mentee's home is shown as teaching place
+                    teachingPlaceIV1.setImageDrawable(getResources().getDrawable(R.drawable.institute_2));
+                } else if (userInfo.getAvailabilityYn().equals("2")) {
+                    teachingPlaceIV2.setImageDrawable(getResources().getDrawable(R.drawable.home));    // Both address can be opted for teaching
+                    teachingPlaceIV1.setImageDrawable(getResources().getDrawable(R.drawable.institute));
+                }
+            } else {
+                teachingPlaceLL.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            teachingPlaceLL.setVisibility(View.GONE);
+        }
+
+
+        try {
+            if (userInfo.getSlotType() != null && !userInfo.getSlotType().isEmpty()) {
+                if (userInfo.getSlotType().equals("0")) {
+                    teachingTypeIV1.setImageDrawable(getResources().getDrawable(R.drawable.individual));  // individual calss
+                    teachingTypeIV2.setImageDrawable(getResources().getDrawable(R.drawable.group_class_2));
+                } else if (userInfo.getSlotType().equals("1")) {
+                    teachingTypeIV2.setImageDrawable(getResources().getDrawable(R.drawable.group_class));    // group class
+                    teachingTypeIV1.setImageDrawable(getResources().getDrawable(R.drawable.individual_2));
+                } else if (userInfo.getAvailabilityYn().equals("2")) {
+                    teachingTypeIV2.setImageDrawable(getResources().getDrawable(R.drawable.group_class));    // Both class is active
+                    teachingTypeIV1.setImageDrawable(getResources().getDrawable(R.drawable.individual));
+                }
+            } else {
+                teachingTypeLL.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            teachingTypeLL.setVisibility(View.GONE);
+        }
+
+
+        try {
+            int rating = Integer.parseInt(userInfo.getRating());
+            if (rating > 0)
+                ratingTV.setText(String.valueOf(rating));
+            else {
+                ratingIV.setImageDrawable(getResources().getDrawable(R.drawable.unrated_icon_1));
+                ratingTV.setText("");
+            }
+        } catch (Exception e) {
+            ratingTV.setText("");
+            ratingIV.setImageDrawable(getResources().getDrawable(R.drawable.unrated_icon_1));
         }
 
 
         try {
             int noOfStud = Integer.parseInt(userInfo.getNumberOfStudents());
-            noOfStudentsTV.setText(String.valueOf(noOfStud));
+            if (noOfStud > 0) {
+                noOfStudentsTV.setText(String.valueOf(noOfStud));
+            } else {
+                noOfStudentsTV.setVisibility(View.GONE);
+                studentsUnderMentorIV.setVisibility(View.GONE);
+            }
+
+
         } catch (Exception e) {
             noOfStudentsTV.setText("0");
+
         }
 
-        if (userInfo.getProfession() != null && !userInfo.getProfession().trim().isEmpty())
+        /*if (userInfo.getProfession() != null && !userInfo.getProfession().trim().isEmpty())
             professionTV.setText(userInfo.getProfession().trim());
         else
             professionLL.setVisibility(View.GONE);
@@ -605,16 +691,27 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             areaOfCoachingTV.setText(subCategory);
         } else
             areaOfCoachingLL.setVisibility(View.GONE);
-
+*/
         try {
             int experience = Integer.parseInt(userInfo.getExperience());
-            experienceTV.setText(experience + (experience > 1 ? getResources().getString(R.string.yrs) : getResources().getString(R.string.yr)));
+            if (experience > 0) {
+                experienceTV.setText(experience + (experience > 1 ? getResources().getString(R.string.yrs) : getResources().getString(R.string.yr)));
+                experienceIV.setImageDrawable(getResources().getDrawable(R.drawable.experience_1));
+
+            } else {
+                experienceTV.setText(experience + (experience > 1 ? getResources().getString(R.string.yrs) : getResources().getString(R.string.yr)));
+                experienceIV.setImageDrawable(getResources().getDrawable(R.drawable.not_experienced_1));
+
+            }
+
+
         } catch (Exception e) {
             experienceTV.setText("0" + getResources().getString(R.string.yr));
+            experienceIV.setImageDrawable(getResources().getDrawable(R.drawable.not_experienced_1));
         }
 
         if (userInfo.getMediumOfEducation() != null && !userInfo.getMediumOfEducation().trim().isEmpty())
-            coachingLanguageTV.setText(userInfo.getMediumOfEducation().trim());
+            languageTV.setText(userInfo.getMediumOfEducation().trim());
         else
             coachingLanguageLL.setVisibility(View.GONE);
 
