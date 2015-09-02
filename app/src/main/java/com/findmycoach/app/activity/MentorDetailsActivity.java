@@ -1,6 +1,7 @@
 package com.findmycoach.app.activity;
 
 import android.app.Dialog;
+import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,6 +29,7 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.CalendarGridAdapter;
+import com.findmycoach.app.adapter.ActiveOfferExpandableListViewAdapter;
 import com.findmycoach.app.adapter.ReviewAdapter;
 import com.findmycoach.app.beans.CalendarSchedule.Event;
 import com.findmycoach.app.beans.CalendarSchedule.EventDuration;
@@ -35,6 +38,7 @@ import com.findmycoach.app.beans.CalendarSchedule.MentorInfo;
 import com.findmycoach.app.beans.CalendarSchedule.MonthYearInfo;
 import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.beans.CalendarSchedule.Vacation;
+import com.findmycoach.app.beans.Promotions.Promotions;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.authentication.SubCategoryName;
@@ -58,11 +62,12 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-
-import static com.findmycoach.app.R.id.imageView2;
+import com.findmycoach.app.beans.Promotions.Offer;
 
 public class MentorDetailsActivity extends FragmentActivity implements Callback {
-
+private ExpandableListView activePromotionsELV;
+    private ArrayList<Offer>  activeOffers;
+    ActiveOfferExpandableListViewAdapter expandableListViewAdapter;
     private ImageView profileImage, toggleReviewIconIV, ratingIV, studentsUnderMentorIV,
             experienceIV, genderIV, teachingPlaceIV1, teachingPlaceIV2, teachingTypeIV1, teachingTypeIV2;
     private TextView profileName, ratingTV, noOfStudentsTV, reviewTitleTV, experienceTV, languageTV;
@@ -415,6 +420,11 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         String jsonData = getIntent().getStringExtra("mentorDetails");
         Response mentorDetails = new Gson().fromJson(jsonData, Response.class);
+
+
+
+
+
         userInfo = mentorDetails.getData();
         connectionStatus = userInfo.getConnectionStatus();
         if (connectionStatus == null || connectionStatus.trim().equals("null"))
@@ -425,6 +435,48 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
         Log.d(TAG, "json data :" + jsonData);
 
         array_list_subCategory = userInfo.getSubCategoryName();
+
+        activePromotionsELV= (ExpandableListView) findViewById(R.id.promotionsELV);
+        activeOffers=new ArrayList<Offer>();
+        expandableListViewAdapter=new ActiveOfferExpandableListViewAdapter(this,activeOffers);
+
+
+        Log.e(TAG,"expandable lv height: "+activePromotionsELV.getHeight());
+        Log.e(TAG,"expandable lv width: "+activePromotionsELV.getWidth());
+
+        if(userInfo.getAuthToken() != null && !userInfo.getAuthToken().trim().isEmpty()){
+            RequestParams requestParams=new RequestParams();
+            requestParams.add("is_active","1");
+            progressDialog.show();
+            Log.e(TAG,"token of mento_____:"+userInfo.getAuthToken());
+            NetworkClient.getAllPromotions(this,requestParams,userInfo.getAuthToken(),this,58);
+        }else{
+            Log.e(TAG,"token of mento_____:"+userInfo.getAuthToken());
+
+        }
+
+
+
+        activePromotionsELV.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                Toast.makeText(MentorDetailsActivity.this,"onExpand",Toast.LENGTH_SHORT).show();;
+            }
+        });
+
+
+        activePromotionsELV.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                Log.d("onGroupClick:", "worked");
+                parent.expandGroup(groupPosition);
+                return false;
+            }
+        });
+
+
+
+
 
         profileImage = (ImageView) findViewById(R.id.profile_image);
         profileName = (TextView) findViewById(R.id.profile_name);
@@ -635,7 +687,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
                 } else if (userInfo.getSlotType().equals("1")) {
                     teachingTypeIV2.setImageDrawable(getResources().getDrawable(R.drawable.group_class));    // group class
                     teachingTypeIV1.setImageDrawable(getResources().getDrawable(R.drawable.individual_2));
-                } else if (userInfo.getAvailabilityYn().equals("2")) {
+                } else if (userInfo.getSlotType().equals("2")) {
                     teachingTypeIV2.setImageDrawable(getResources().getDrawable(R.drawable.group_class));    // Both class is active
                     teachingTypeIV1.setImageDrawable(getResources().getDrawable(R.drawable.individual));
                 }
@@ -897,6 +949,27 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback 
             finish();
             Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
         }
+
+        if(calledApiValue == 58){
+            progressDialog.dismiss();
+            try{
+                Promotions promotions= (Promotions) object;
+                activeOffers= (ArrayList<Offer>) promotions.getPromotions();
+                expandableListViewAdapter=new ActiveOfferExpandableListViewAdapter(this,activeOffers);
+                activePromotionsELV.setAdapter(expandableListViewAdapter);
+
+                Log.e(TAG,"expandable lv height after call: "+activePromotionsELV.getHeight());
+                Log.e(TAG, "expandable lv width after api call: " + activePromotionsELV.getWidth());
+
+
+
+
+            }catch(Exception e ){
+                e.printStackTrace();
+            }
+
+        }
+
 
         ArrayList<String> tempAreaOfCategory = new ArrayList<>();
         for (SubCategoryName subCategoryName : array_list_subCategory)
