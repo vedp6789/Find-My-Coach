@@ -26,7 +26,7 @@
         jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/fmcmentor/library/unspecified/classes.jar"
         jumboMode="false"
         revision="21.1.1"
-        sha1="6975f0b4c0b6d473220d240d6fc03777b594a39e">
+        sha1="8afe1a7720a216bdf074fb69f8e56d7d4685545f">
         <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-26403c3e1592ddee8dd0619ef687ea19c40b1063.jar" />
     </item>
     <item
@@ -47,14 +47,14 @@
         jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/fmcmentor/cropper/unspecified/classes.jar"
         jumboMode="false"
         revision="21.1.1"
-        sha1="9cf4e4d06f2c68b49bc64acb3dffe2cbc0aebf2f">
+        sha1="93ced1717bdf165f1ea47e64e6340ef609b8742d">
         <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-b77c45d47075260d7e79ecca619a16c50e6b34b6.jar" />
     </item>
     <item
         jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.facebook.android/facebook/3.21.0/classes.jar"
         jumboMode="false"
         revision="21.1.1"
-        sha1="0b91a0b1e0becf66d1557762c171426c6b22419c">
+        sha1="9d67dde92187b49925c05ac5a9919ebdb01b68ec">
         <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-e66e55c261d290c68cb324e23db9ba701701a635.jar" />
     </item>
     <item

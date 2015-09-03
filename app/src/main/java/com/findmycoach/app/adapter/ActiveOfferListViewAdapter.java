@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -26,12 +27,12 @@ import java.util.ArrayList;
 /**
  * Created by ved on 2/9/15.
  */
-public class ActiveOfferExpandableListViewAdapter implements ExpandableListAdapter {
+public class ActiveOfferListViewAdapter extends BaseAdapter {
     ArrayList<Offer> activeOffers;
     Context context;
 
 
-    public ActiveOfferExpandableListViewAdapter(Context context, ArrayList<Offer> activeOffers) {
+    public ActiveOfferListViewAdapter(Context context, ArrayList<Offer> activeOffers) {
         this.activeOffers = activeOffers;
         this.context = context;
     }
@@ -48,35 +49,20 @@ public class ActiveOfferExpandableListViewAdapter implements ExpandableListAdapt
     }
 
     @Override
-    public int getGroupCount() {
-        return 1;
+    public int getCount() {
+        return  activeOffers.size();
     }
 
     @Override
-    public int getChildrenCount(int groupPosition) {
-        return activeOffers.size();
+    public Object getItem(int position) {
+        return activeOffers.get(position);
     }
 
     @Override
-    public Object getGroup(int groupPosition) {
-        //return context.getResources().getString(R.string.my_promotions);
-        return "Active Promotions";
+    public long getItemId(int position) {
+        return position;
     }
 
-    @Override
-    public Object getChild(int groupPosition, int childPosition) {
-        return activeOffers.get(childPosition);
-    }
-
-    @Override
-    public long getGroupId(int groupPosition) {
-        return groupPosition;
-    }
-
-    @Override
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
-    }
 
     @Override
     public boolean hasStableIds() {
@@ -84,23 +70,7 @@ public class ActiveOfferExpandableListViewAdapter implements ExpandableListAdapt
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        String headerTitle = (String) getGroup(groupPosition);
-        if(convertView == null){
-            LayoutInflater layoutInflater= (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = layoutInflater.inflate(R.layout.expandable_list_group_view,null);
-        }
-
-        TextView textView= (TextView) convertView.findViewById(R.id.tv_expandable_group);
-        textView.setTypeface(null, Typeface.BOLD);
-        textView.setText(headerTitle);
-
-        return convertView;
-
-    }
-
-    @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.promotion_description, parent, false);
@@ -126,15 +96,11 @@ public class ActiveOfferExpandableListViewAdapter implements ExpandableListAdapt
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        if (activeOffers != null && activeOffers.size() > 0) {
-
-
-        }
 
         if (activeOffers != null && activeOffers.size() > 0) {
             viewHolder.tv_no_promotions_message.setVisibility(View.GONE);
             viewHolder.rlPromotionDetails.setVisibility(View.VISIBLE);
-            populatePromotions(viewHolder, childPosition, true);
+            populatePromotions(viewHolder, position, true);
         } else {
        /*
        * when there is no promotions
@@ -150,6 +116,7 @@ public class ActiveOfferExpandableListViewAdapter implements ExpandableListAdapt
         return convertView;
 
     }
+
 
     private void populatePromotions(final ViewHolder holder, final int position, final boolean active_promotions) {
         try {
@@ -186,10 +153,6 @@ public class ActiveOfferExpandableListViewAdapter implements ExpandableListAdapt
         }
     }
 
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
-    }
 
     @Override
     public boolean areAllItemsEnabled() {
@@ -201,25 +164,6 @@ public class ActiveOfferExpandableListViewAdapter implements ExpandableListAdapt
         return false;
     }
 
-    @Override
-    public void onGroupExpanded(int groupPosition) {
-
-    }
-
-    @Override
-    public void onGroupCollapsed(int groupPosition) {
-
-    }
-
-    @Override
-    public long getCombinedChildId(long groupId, long childId) {
-        return 0;
-    }
-
-    @Override
-    public long getCombinedGroupId(long groupId) {
-        return 0;
-    }
 
     private class ViewHolder {
         RelativeLayout rlPromotionDetails, rlPromotionTitle, rlPromotionType, rlPromotionDiscount,

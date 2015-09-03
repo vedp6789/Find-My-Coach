@@ -1,7 +1,6 @@
 package com.findmycoach.app.activity;
 
 import android.app.Dialog;
-import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -29,7 +28,7 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.CalendarGridAdapter;
-import com.findmycoach.app.adapter.ActiveOfferExpandableListViewAdapter;
+import com.findmycoach.app.adapter.ActiveOfferListViewAdapter;
 import com.findmycoach.app.adapter.ReviewAdapter;
 import com.findmycoach.app.beans.CalendarSchedule.Event;
 import com.findmycoach.app.beans.CalendarSchedule.EventDuration;
@@ -46,6 +45,7 @@ import com.findmycoach.app.fragment.DatePickerFragment;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
+import com.findmycoach.app.util.ListViewInsideScrollViewHelper;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.StorageHelper;
@@ -62,14 +62,15 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+
 import com.findmycoach.app.beans.Promotions.Offer;
 
-public class MentorDetailsActivity extends FragmentActivity implements Callback {
-private ExpandableListView activePromotionsELV;
-    private ArrayList<Offer>  activeOffers;
-    ActiveOfferExpandableListViewAdapter expandableListViewAdapter;
+public class MentorDetailsActivity extends FragmentActivity implements Callback, View.OnClickListener {
+    private ListView activePromotionsLV;
+    private ArrayList<Offer> activeOffers;
+    ActiveOfferListViewAdapter listViewAdapter;
     private ImageView profileImage, toggleReviewIconIV, ratingIV, studentsUnderMentorIV,
-            experienceIV, genderIV, teachingPlaceIV1, teachingPlaceIV2, teachingTypeIV1, teachingTypeIV2;
+            experienceIV, genderIV, teachingPlaceIV1, teachingPlaceIV2, teachingTypeIV1, teachingTypeIV2, arrowQualificationIV, arrowAccrediationsIV, arrowMethodologyIV, arrowAwardsIV;
     private TextView profileName, ratingTV, noOfStudentsTV, reviewTitleTV, experienceTV, languageTV;
     private LinearLayout chatWithMentorLL, chatWithStudentsLL, reviewLL, genderLL, teachingPlaceLL,
             teachingTypeLL, promotionLL;
@@ -80,6 +81,8 @@ private ExpandableListView activePromotionsELV;
     private TextView qualificationTV, accrediationsTV, myMethodologyTV, awardsTV;
     private LinearLayout
             coachingLanguageLL, qualificationLL, accrediationsLL, myMethodologyLL, awardsLL;
+
+    private RelativeLayout rlArrowQualification, rlArrowAccrediations, rlArrowMethodology, rlArrowAwards;
 
     private Data userInfo = null;
     private String connectionStatus;
@@ -115,6 +118,7 @@ private ExpandableListView activePromotionsELV;
     public static int month_from_dialog, year_from_dialog;
     private String charges;
     public boolean populate_calendar_from_adapter;
+    private boolean bArrowQualification, bArrowAccrediation, bArrowMethodlogy, bArrowAwards;
 
     private static final String TAG = "MentorDetailsActivity";
     private List<SubCategoryName> array_list_subCategory;
@@ -232,8 +236,6 @@ private ExpandableListView activePromotionsELV;
         }
 
 
-        progressDialog = new ProgressDialog(MentorDetailsActivity.this);
-        progressDialog.setMessage(getResources().getString(R.string.please_wait));
 
         RequestParams requestParams = new RequestParams();
         requestParams.add("user_group", String.valueOf("3"));
@@ -420,11 +422,6 @@ private ExpandableListView activePromotionsELV;
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         String jsonData = getIntent().getStringExtra("mentorDetails");
         Response mentorDetails = new Gson().fromJson(jsonData, Response.class);
-
-
-
-
-
         userInfo = mentorDetails.getData();
         connectionStatus = userInfo.getConnectionStatus();
         if (connectionStatus == null || connectionStatus.trim().equals("null"))
@@ -435,47 +432,6 @@ private ExpandableListView activePromotionsELV;
         Log.d(TAG, "json data :" + jsonData);
 
         array_list_subCategory = userInfo.getSubCategoryName();
-
-        activePromotionsELV= (ExpandableListView) findViewById(R.id.promotionsELV);
-        activeOffers=new ArrayList<Offer>();
-        expandableListViewAdapter=new ActiveOfferExpandableListViewAdapter(this,activeOffers);
-
-
-        Log.e(TAG,"expandable lv height: "+activePromotionsELV.getHeight());
-        Log.e(TAG,"expandable lv width: "+activePromotionsELV.getWidth());
-
-        if(userInfo.getAuthToken() != null && !userInfo.getAuthToken().trim().isEmpty()){
-            RequestParams requestParams=new RequestParams();
-            requestParams.add("is_active","1");
-            progressDialog.show();
-            Log.e(TAG,"token of mento_____:"+userInfo.getAuthToken());
-            NetworkClient.getAllPromotions(this,requestParams,userInfo.getAuthToken(),this,58);
-        }else{
-            Log.e(TAG,"token of mento_____:"+userInfo.getAuthToken());
-
-        }
-
-
-
-        activePromotionsELV.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                Toast.makeText(MentorDetailsActivity.this,"onExpand",Toast.LENGTH_SHORT).show();;
-            }
-        });
-
-
-        activePromotionsELV.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                Log.d("onGroupClick:", "worked");
-                parent.expandGroup(groupPosition);
-                return false;
-            }
-        });
-
-
-
 
 
         profileImage = (ImageView) findViewById(R.id.profile_image);
@@ -530,6 +486,41 @@ private ExpandableListView activePromotionsELV;
             }
         });
 
+        rlArrowQualification = (RelativeLayout) findViewById(R.id.rlArrowQualification);
+        rlArrowAccrediations = (RelativeLayout) findViewById(R.id.rlArrowAccrediations);
+        rlArrowMethodology = (RelativeLayout) findViewById(R.id.rlArrowMethodology);
+        rlArrowAwards = (RelativeLayout) findViewById(R.id.rlArrowAwards);
+
+        rlArrowQualification.setOnClickListener(this);
+        rlArrowAccrediations.setOnClickListener(this);
+        rlArrowMethodology.setOnClickListener(this);
+        rlArrowAwards.setOnClickListener(this);
+
+        arrowQualificationIV = (ImageView) findViewById(R.id.arrowQualificationIV);
+        arrowAccrediationsIV = (ImageView) findViewById(R.id.arrowAccrediationsIV);
+        arrowMethodologyIV = (ImageView) findViewById(R.id.arrowMethodologyIV);
+        arrowAwardsIV = (ImageView) findViewById(R.id.arrowAwardsIV);
+
+        arrowQualificationIV.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
+        arrowAccrediationsIV.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
+        arrowMethodologyIV.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
+        arrowAwardsIV.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
+
+        qualificationTV.setSingleLine(true);
+        accrediationsTV.setSingleLine(true);
+        myMethodologyTV.setSingleLine(true);
+        awardsTV.setSingleLine(true);
+
+        bArrowQualification = false;
+        bArrowAccrediation = false;
+        bArrowMethodlogy = false;
+        bArrowAwards = false;
+
+        arrowQualificationIV.setOnClickListener(this);
+        arrowAccrediationsIV.setOnClickListener(this);
+        arrowMethodologyIV.setOnClickListener(this);
+        arrowAwardsIV.setOnClickListener(this);
+
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(getResources().getString(R.string.title_mentor_details));
 
@@ -560,6 +551,36 @@ private ExpandableListView activePromotionsELV;
                 }
             });
         }
+
+        activePromotionsLV = (ListView) findViewById(R.id.promotionsLV);
+        activeOffers = new ArrayList<Offer>();
+        listViewAdapter = new ActiveOfferListViewAdapter(this, activeOffers);
+        activePromotionsLV.setAdapter(listViewAdapter);
+        //ListViewInsideScrollViewHelper.getListViewSize(activePromotionsLV);
+        EditProfileActivityMentee.setListViewHeightBasedOnChildren(activePromotionsLV);
+
+
+        Log.e(TAG, "expandable lv height: " + activePromotionsLV.getHeight());
+        Log.e(TAG, "expandable lv width: " + activePromotionsLV.getWidth());
+
+        if (userInfo.getAuthToken() != null && !userInfo.getAuthToken().trim().isEmpty()) {
+            RequestParams requestParams = new RequestParams();
+            requestParams.add("is_active", "1");
+            progressDialog.show();
+            Log.e(TAG, "token of mento_____:" + userInfo.getAuthToken());
+            NetworkClient.getAllPromotions(this, requestParams, userInfo.getAuthToken(), this, 58);
+        } else {
+            Log.e(TAG, "token of mento_____:" + userInfo.getAuthToken());
+
+        }
+
+
+
+
+
+
+
+
 
     }
 
@@ -950,21 +971,22 @@ private ExpandableListView activePromotionsELV;
             Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
         }
 
-        if(calledApiValue == 58){
+        if (calledApiValue == 58) {
             progressDialog.dismiss();
-            try{
-                Promotions promotions= (Promotions) object;
-                activeOffers= (ArrayList<Offer>) promotions.getPromotions();
-                expandableListViewAdapter=new ActiveOfferExpandableListViewAdapter(this,activeOffers);
-                activePromotionsELV.setAdapter(expandableListViewAdapter);
+            try {
+                Promotions promotions = (Promotions) object;
+                activeOffers = (ArrayList<Offer>) promotions.getPromotions();
+                //listViewAdapter.notifyDataSetChanged();
+                listViewAdapter = new ActiveOfferListViewAdapter(this, activeOffers);
+                activePromotionsLV.setAdapter(listViewAdapter);
+                EditProfileActivityMentee.setListViewHeightBasedOnChildren(activePromotionsLV);
+              //  ListViewInsideScrollViewHelper.getListViewSize(activePromotionsLV);
 
-                Log.e(TAG,"expandable lv height after call: "+activePromotionsELV.getHeight());
-                Log.e(TAG, "expandable lv width after api call: " + activePromotionsELV.getWidth());
+                Log.e(TAG, "expandable lv height after call: " + activePromotionsLV.getHeight());
+                Log.e(TAG, "expandable lv width after api call: " + activePromotionsLV.getWidth());
 
 
-
-
-            }catch(Exception e ){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -1018,6 +1040,11 @@ private ExpandableListView activePromotionsELV;
                 Toast.makeText(MentorDetailsActivity.this, (String) object, Toast.LENGTH_SHORT).show();
                 updateCalendarOnFailure();
                 break;
+            case 58:
+                progressDialog.dismiss();
+                Log.e(TAG,(String)object);
+                break;
+
         }
 
         //Toast.makeText(getApplicationContext(), (String) object, Toast.LENGTH_LONG).show();
@@ -1627,4 +1654,59 @@ private ExpandableListView activePromotionsELV;
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.arrowQualificationIV:
+            case R.id.rlArrowQualification:
+                if (!bArrowQualification) {
+                    qualificationTV.setSingleLine(false);
+                    arrowQualificationIV.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
+                    bArrowQualification = true;
+                } else if (bArrowQualification) {
+                    bArrowQualification = false;
+                    qualificationTV.setSingleLine(true);
+                    arrowQualificationIV.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
+                }
+                break;
+            case R.id.arrowAccrediationsIV:
+            case R.id.rlArrowAccrediations:
+                if (!bArrowAccrediation) {
+                    accrediationsTV.setSingleLine(false);
+                    arrowAccrediationsIV.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
+                    bArrowAccrediation = true;
+                } else if (bArrowAccrediation) {
+                    bArrowAccrediation = false;
+                    accrediationsTV.setSingleLine(true);
+                    arrowAccrediationsIV.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
+                }
+                break;
+            case R.id.arrowMethodologyIV:
+            case R.id.rlArrowMethodology:
+                if (!bArrowMethodlogy) {
+                    myMethodologyTV.setSingleLine(false);
+                    arrowMethodologyIV.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
+                    bArrowMethodlogy = true;
+                } else if (bArrowMethodlogy) {
+                    bArrowMethodlogy = false;
+                    myMethodologyTV.setSingleLine(true);
+                    arrowMethodologyIV.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
+                }
+                break;
+            case R.id.arrowAwardsIV:
+            case R.id.rlArrowAwards:
+                if (!bArrowAwards) {
+                    awardsTV.setSingleLine(false);
+                    arrowAwardsIV.setImageDrawable(getResources().getDrawable(R.drawable.arrow_up));
+                    bArrowAwards = true;
+                } else if (bArrowAwards) {
+                    bArrowAwards = false;
+                    awardsTV.setSingleLine(true);
+                    arrowAwardsIV.setImageDrawable(getResources().getDrawable(R.drawable.arrow_down));
+                }
+                break;
+
+
+        }
+    }
 }
