@@ -73,7 +73,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
             view = inflater.inflate(R.layout.user_list_item_2, null);
 
             ViewHolder holder = new ViewHolder();
-            holder.userIV = (CircleImageView) view.findViewById(R.id.mentor_image);
+            holder.userIV = (CircleImageView) view.findViewById(R.id.mentor_image2);
             holder.nameTV = (TextView) view.findViewById(R.id.mentor_name);
             holder.ageTV = (TextView) view.findViewById(R.id.age);
             holder.daysTV = (TextView) view.findViewById(R.id.daysTV);
@@ -124,18 +124,20 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
         String fontPurple = "<font color='#392366'>";
         String fontPurpleLight = "<font color='#AFA4C4'>";
         String fontEnd = "</font>";
-        holder.daysTV.setText(Html.fromHtml(fontPurpleLight + "M T W T F S Su" + fontEnd));
+        holder.daysTV.setText(Html.fromHtml(fontPurpleLight + "S M T W T F S" + fontEnd));
         try {
             ArrayList<String> days = new ArrayList<>();
             Collections.addAll(days, user.getAvailableDays().split(","));
             String daysAsString = "";
-            String[] daysArray = {"M", "T", "W", "Th", "F", "S", "Su"};
+            String[] daysArray = {"Su", "M", "T", "W", "Th", "F", "S"};
             for (String d : daysArray) {
                 if (days.contains(d)) {
                     daysAsString = daysAsString + " " + fontPurple + d + fontEnd;
                 } else
                     daysAsString = daysAsString + " " + fontPurpleLight + d + fontEnd;
             }
+            daysAsString = daysAsString.replace("Su", "S");
+            daysAsString = daysAsString.replace("Th", "T");
             holder.daysTV.setText(Html.fromHtml(daysAsString));
         } catch (Exception ignored) {
         }
