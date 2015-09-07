@@ -44,6 +44,7 @@ public class SearchResultsFragment extends Fragment implements Callback {
     private String searchFor, aroundTime, searchedAroundTime;
     private Datum datum;
     private String connection_status_for_Selected_mentor, distance, charges;
+    private boolean isQualified;
     private int noOfStudents;
     private static final int NEED_TO_REFRESH = 100;
     private boolean showTimeNavigation, isGettingMentorDetails;
@@ -104,6 +105,7 @@ public class SearchResultsFragment extends Fragment implements Callback {
                 if (users != null) {
                     datum = users.get(position);
                     connection_status_for_Selected_mentor = datum.getConnectionStatus();
+                    isQualified = datum.isQualified();
                     distance = String.format("%.1f", Double.parseDouble(datum.getDistance())) + " " + getActivity().getResources().getString(R.string.km);
                     try {
                         if (datum.getPrice() != null && datum.getCurrencyCode() != null) {
@@ -226,6 +228,7 @@ public class SearchResultsFragment extends Fragment implements Callback {
             intent.putExtra("no_of_students", noOfStudents);
             intent.putExtra("distance", distance );
             intent.putExtra("charges", charges);
+            intent.putExtra("qualified", isQualified);
             datum = null;
             startActivityForResult(intent, NEED_TO_REFRESH);
         } else if (calledApiValue == 6) {

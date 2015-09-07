@@ -69,12 +69,19 @@
                             android:layout_marginLeft="@dimen/search_icon_margin_left"
                             android:layout_toRightOf="@+id/age" />
 
+                        <ImageView
+                            android:id="@+id/qualifiedIV"
+                            android:layout_width="@dimen/search_icons"
+                            android:layout_height="@dimen/search_icons"
+                            android:layout_marginLeft="@dimen/search_icon_margin_left"
+                            android:layout_toRightOf="@+id/genderIV" />
+
                         <com.findmycoach.app.views.ChizzleTextView
                             android:id="@+id/charges"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/search_icon_margin_left"
-                            android:layout_toRightOf="@+id/genderIV"
+                            android:layout_toRightOf="@+id/qualifiedIV"
                             android:singleLine="true"
                             android:textColor="@color/purple"
                             android:textSize="@dimen/profile_heading" />

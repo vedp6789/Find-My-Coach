@@ -72,7 +72,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
     private ListView activePromotionsLV;
     private ArrayList<Offer> activeOffers = new ArrayList<Offer>();
     private CircleImageView profileImage;
-    private ImageView toggleReviewIconIV, ratingIV, studentsUnderMentorIV,
+    private ImageView toggleReviewIconIV, ratingIV, studentsUnderMentorIV, qualifiedIV,
             experienceIV, genderIV, teachingPlaceIV1, teachingPlaceIV2, teachingTypeIV1, teachingTypeIV2, arrowQualificationIV, arrowAccrediationsIV, arrowMethodologyIV, arrowAwardsIV;
     private TextView profileName, ratingTV, noOfStudentsTV, reviewTitleTV, experienceTV, languageTV, distanceTV, chargesTV, ageTV;
     private LinearLayout chatWithMentorLL, chatWithStudentsLL, reviewLL, teachingPlaceLL,
@@ -140,7 +140,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mentor_details);
-        Log.d(TAG, "inside mentor details acitivity");
+        Log.d(TAG, "inside mentor details activity");
         initialize();
         mentorDetailsActivity = this;
         populateFields();
@@ -440,6 +440,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         profileName = (TextView) findViewById(R.id.title);
         ratingTV = (TextView) findViewById(R.id.rating);
         ratingIV = (ImageView) findViewById(R.id.imageView2);
+        qualifiedIV = (ImageView) findViewById(R.id.qualifiedIV);
         studentsUnderMentorIV = (ImageView) findViewById(R.id.imageView);
         noOfStudentsTV = (TextView) findViewById(R.id.numberOfStudents);
         distanceTV = (TextView) findViewById(R.id.distanceTV);
@@ -658,6 +659,15 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
             chargesTV.setText(Html.fromHtml(getIntent().getStringExtra("charges")));
         } catch (Exception e) {
             chargesTV.setText("");
+        }
+
+        try {
+            if (getIntent().getBooleanExtra("qualified", false))
+                qualifiedIV.setImageDrawable(getResources().getDrawable(R.drawable.qualified));
+            else
+                qualifiedIV.setImageDrawable(getResources().getDrawable(R.drawable.qualified_not));
+        } catch (Exception e) {
+            qualifiedIV.setImageDrawable(getResources().getDrawable(R.drawable.qualified_not));
         }
 
         try {
