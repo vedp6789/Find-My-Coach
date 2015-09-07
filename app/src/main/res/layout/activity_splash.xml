@@ -14,7 +14,7 @@
             android:layout_width="150dp"
             android:layout_height="160dp"
             android:layout_gravity="center"
-            android:src="@drawable/animated_logo"/>
+            android:src="@drawable/animated_logo2"/>
 
     </FrameLayout>
 

@@ -2,25 +2,25 @@
 <items version="2" >
 
     <item
-        jar="/home/prem/Prem/Workspace/FindMyCoach/app/build/intermediates/exploded-aar/FindMyCoach/cropper/unspecified/classes.jar"
+        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/fmcmentor/library/unspecified/classes.jar"
         jumboMode="false"
         revision="21.1.1"
-        sha1="de85ccbfe9ed2ec6cde5147059b1b803b164c459">
-        <dex dex="/home/prem/Prem/Workspace/FindMyCoach/app/build/intermediates/pre-dexed/debug/classes-9b5dc59bbcb7827c82bcddbb06b30361354248b3.jar" />
+        sha1="ef1c727558a605560888a0e954ca87f70e561d49">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-26403c3e1592ddee8dd0619ef687ea19c40b1063.jar" />
     </item>
     <item
-        jar="/home/prem/Prem/Workspace/FindMyCoach/app/build/intermediates/exploded-aar/com.facebook.android/facebook/3.21.0/classes.jar"
+        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.facebook.android/facebook/3.21.0/classes.jar"
         jumboMode="false"
         revision="21.1.1"
-        sha1="203656fd750bb10920a220c51fd8b11ecf56d3ab">
-        <dex dex="/home/prem/Prem/Workspace/FindMyCoach/app/build/intermediates/pre-dexed/debug/classes-376dd8478443003f28504932db27e118a13d6eae.jar" />
+        sha1="e0151dce2f7b046077cad7bd3df7889d2277723c">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-e66e55c261d290c68cb324e23db9ba701701a635.jar" />
     </item>
     <item
-        jar="/home/prem/Prem/Workspace/FindMyCoach/app/build/intermediates/exploded-aar/FindMyCoach/library/unspecified/classes.jar"
+        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/fmcmentor/cropper/unspecified/classes.jar"
         jumboMode="false"
         revision="21.1.1"
-        sha1="b08bb11e27d3993d0b4331e4d563b78b15b93ba5">
-        <dex dex="/home/prem/Prem/Workspace/FindMyCoach/app/build/intermediates/pre-dexed/debug/classes-e6976a9bfbdb86dbbe661892a42279a56c86575d.jar" />
+        sha1="954adc366974556fdd18d686a969be38d16494e8">
+        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-b77c45d47075260d7e79ecca619a16c50e6b34b6.jar" />
     </item>
 
 </items>
