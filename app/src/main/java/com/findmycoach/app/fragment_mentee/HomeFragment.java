@@ -786,7 +786,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         preferredDateForSearchTV = (TextView) fragmentView.findViewById(R.id.preferredDateForSearchTV);
 
         calendar = Calendar.getInstance();
-        String date = String.format(" %02d-%02d-%d", calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH) + 1,calendar.get(Calendar.YEAR));
+        String date = String.format(" %02d-%02d-%d", calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
         preferredDateForSearchTV.setText(date);
         fromTimingInput = (TextView) fragmentView.findViewById(R.id.from_timing);
 
@@ -963,6 +963,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
             }
             requestParams.add("days_of_week", week);
             Log.d(TAG, "Selected weekdays : " + week);
+
+            if(!preferredDateForSearchTV.getText().toString().trim().isEmpty()){
+                String []dateString=preferredDateForSearchTV.getText().toString().split("-");
+                StringBuilder stringBuilder= new StringBuilder();
+                stringBuilder.append(dateString[2].trim()+"-"+dateString[1].trim()+"-"+dateString[0].trim());
+                requestParams.add("preferred_date",stringBuilder.toString());
+            }
+
+
         }
         requestParams.add("id", StorageHelper.getUserDetails(getActivity(), "user_id"));
         requestParams.add("user_group", DashboardActivity.dashboardActivity.user_group + "");
