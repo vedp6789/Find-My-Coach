@@ -54,6 +54,38 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/back_margin">
 
+                        <com.findmycoach.app.views.ChizzleTextView
+                            android:id="@+id/age"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:textColor="@color/purple"
+                            android:textSize="@dimen/profile_heading" />
+
+                        <ImageView
+                            android:id="@+id/genderIV"
+                            android:layout_width="@dimen/search_icons"
+                            android:layout_height="@dimen/search_icons"
+                            android:layout_marginLeft="@dimen/search_icon_margin_left"
+                            android:layout_toRightOf="@+id/age" />
+
+                        <com.findmycoach.app.views.ChizzleTextView
+                            android:id="@+id/charges"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/search_icon_margin_left"
+                            android:layout_toRightOf="@+id/genderIV"
+                            android:singleLine="true"
+                            android:textColor="@color/purple"
+                            android:textSize="@dimen/profile_heading" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/back_margin">
+
                         <ImageView
                             android:id="@+id/imageView"
                             android:layout_width="@dimen/search_icons"
@@ -70,7 +102,7 @@
                             android:layout_toRightOf="@+id/imageView"
                             android:singleLine="true"
                             android:textColor="@color/purple"
-                            android:textSize="@dimen/profile_title" />
+                            android:textSize="@dimen/profile_heading" />
 
                         <ImageView
                             android:id="@+id/imageView2"
@@ -90,7 +122,7 @@
                             android:layout_toRightOf="@+id/imageView2"
                             android:singleLine="true"
                             android:textColor="@color/purple"
-                            android:textSize="@dimen/profile_title" />
+                            android:textSize="@dimen/profile_heading" />
 
 
                         <ImageView
@@ -113,7 +145,7 @@
                             android:maxWidth="@dimen/distance_tv_max_width"
                             android:singleLine="true"
                             android:textColor="@color/purple"
-                            android:textSize="@dimen/profile_title" />
+                            android:textSize="@dimen/profile_heading" />
 
                         <ImageView
                             android:id="@+id/imageView4"
@@ -130,29 +162,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
-                            android:layout_marginLeft="@dimen/calender_header_margin_arrow"
                             android:layout_toRightOf="@+id/imageView4"
                             android:singleLine="true"
                             android:textColor="@color/purple"
-                            android:textSize="@dimen/profile_title" />
+                            android:textSize="@dimen/profile_heading" />
 
                     </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/back_margin">
-
-                        <com.findmycoach.app.views.ChizzleTextView
-                            android:id="@+id/charges"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:singleLine="true"
-                            android:textColor="@color/purple"
-                            android:textSize="@dimen/profile_title" />
-
-                    </RelativeLayout>
-
 
                     <LinearLayout
                         android:id="@+id/chat_with_mentor"
@@ -216,57 +231,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/genderLL"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="5.01">
-
-                    <com.findmycoach.app.views.ChizzleTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_weight="2"
-                        android:paddingBottom="@dimen/mentor_details_padding"
-                        android:paddingLeft="@dimen/textView_padding_margin"
-                        android:paddingRight="@dimen/textView_padding_margin"
-                        android:paddingTop="@dimen/mentor_details_padding"
-                        android:text="@string/prompt_gender"
-                        android:textColor="@color/purple"
-                        android:textSize="@dimen/profile_heading" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.01"
-                        android:background="@color/purple_light" />
-
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="start"
-                        android:layout_weight="3"
-                        android:orientation="horizontal"
-                        android:paddingBottom="@dimen/mentor_details_padding"
-                        android:paddingLeft="@dimen/textView_padding_margin"
-                        android:paddingRight="@dimen/textView_padding_margin"
-                        android:paddingTop="@dimen/mentor_details_padding">
-
-                        <ImageView
-                            android:id="@+id/genderIV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentLeft="true"
-                            android:paddingLeft="22dp" />
-
-
-                    </RelativeLayout>
-
-
-                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/coachingLanguageLL"

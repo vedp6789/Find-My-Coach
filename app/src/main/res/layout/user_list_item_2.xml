@@ -6,11 +6,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/underline"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="2dp"
-        android:layout_marginRight="8dp">
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:padding="@dimen/underline">
 
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -26,17 +26,16 @@
 
 
         <RelativeLayout
-            android:layout_toRightOf="@+id/mentor_image2"
             android:layout_width="match_parent"
-            android:layout_marginLeft="4dp"
             android:layout_height="@dimen/list_view_image_height"
-            >
+            android:layout_marginLeft="4dp"
+            android:layout_toRightOf="@+id/mentor_image2">
+
             <RelativeLayout
                 android:id="@+id/rl_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                >
+                android:layout_alignParentTop="true">
 
                 <com.findmycoach.app.views.ChizzleTextViewBold
                     android:id="@+id/mentor_name"
@@ -45,7 +44,7 @@
                     android:layout_gravity="center"
                     android:singleLine="true"
                     android:textColor="@color/purple"
-                    android:textSize="@dimen/profile_title"
+                    android:textSize="@dimen/profile_heading"
                     android:textStyle="bold" />
 
 
@@ -59,7 +58,7 @@
                     android:paddingRight="@dimen/back_margin"
                     android:singleLine="true"
                     android:textColor="@color/purple"
-                    android:textSize="@dimen/profile_title" />
+                    android:textSize="@dimen/profile_heading" />
 
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/daysTV"
@@ -70,63 +69,63 @@
                     android:singleLine="true"
                     android:text="S M T W T F S"
                     android:textColor="@color/purple_light"
-                    android:textSize="@dimen/profile_title"
+                    android:textSize="@dimen/profile_heading"
                     android:textStyle="bold" />
 
             </RelativeLayout>
 
 
             <RelativeLayout
-                android:layout_below="@+id/rl_name"
-                android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/rl_name">
 
 
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="@dimen/search_icons"
                     android:layout_height="@dimen/search_icons"
+                    android:layout_alignParentBottom="true"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/student_icon_1"
-                    android:layout_alignParentBottom="true"/>
+                    android:src="@drawable/student_icon_1" />
 
                 <com.findmycoach.app.views.ChizzleTextViewBold
                     android:id="@+id/numberOfStudents"
-                    android:layout_alignParentBottom="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
                     android:layout_toRightOf="@+id/imageView"
                     android:singleLine="true"
                     android:textColor="@color/purple"
-                    android:textSize="@dimen/profile_title" />
+                    android:textSize="@dimen/profile_heading" />
 
                 <ImageView
                     android:id="@+id/imageView2"
                     android:layout_width="@dimen/search_icons"
                     android:layout_height="@dimen/search_icons"
+                    android:layout_alignParentBottom="true"
                     android:layout_marginLeft="@dimen/search_icon_margin_left"
                     android:layout_toRightOf="@+id/numberOfStudents"
-                    android:layout_alignParentBottom="true"
                     android:scaleType="fitCenter"
                     android:src="@drawable/rating" />
 
                 <com.findmycoach.app.views.ChizzleTextViewBold
                     android:id="@+id/rating"
-                    android:layout_alignParentBottom="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
                     android:layout_toRightOf="@+id/imageView2"
                     android:singleLine="true"
                     android:textColor="@color/purple"
-                    android:textSize="@dimen/profile_title" />
+                    android:textSize="@dimen/profile_heading" />
 
 
                 <ImageView
                     android:id="@+id/imageView3"
-                    android:layout_alignParentBottom="true"
                     android:layout_width="@dimen/search_icons"
                     android:layout_height="@dimen/search_icons"
+                    android:layout_alignParentBottom="true"
                     android:layout_marginLeft="@dimen/search_icon_margin_left"
                     android:layout_toEndOf="@+id/rating"
                     android:layout_toRightOf="@+id/rating"
@@ -134,15 +133,15 @@
                     android:src="@drawable/location" />
 
                 <com.findmycoach.app.views.ChizzleTextView
-                    android:layout_alignParentBottom="true"
                     android:id="@+id/distanceTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
                     android:layout_toRightOf="@+id/imageView3"
                     android:maxWidth="@dimen/distance_tv_max_width"
                     android:singleLine="true"
                     android:textColor="@color/purple"
-                    android:textSize="@dimen/profile_title" />
+                    android:textSize="@dimen/profile_heading" />
 
                 <ImageView
                     android:id="@+id/imageView4"
@@ -159,11 +158,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="@dimen/calender_header_margin_arrow"
                     android:layout_toRightOf="@+id/imageView4"
                     android:singleLine="true"
                     android:textColor="@color/purple"
-                    android:textSize="@dimen/profile_title" />
+                    android:textSize="@dimen/profile_heading" />
 
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/charges"
@@ -173,14 +171,13 @@
                     android:layout_marginLeft="@dimen/back_margin"
                     android:layout_toEndOf="@+id/experience"
                     android:layout_toRightOf="@+id/experience"
-                    android:singleLine="true" />
-
-
-
+                    android:singleLine="true"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/profile_heading" />
 
             </RelativeLayout>
         </RelativeLayout>
-</RelativeLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>
