@@ -57,8 +57,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -69,10 +72,10 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
     private ListView activePromotionsLV;
     private ArrayList<Offer> activeOffers = new ArrayList<Offer>();
     private CircleImageView profileImage;
-    private ImageView toggleReviewIconIV, ratingIV, studentsUnderMentorIV,
+    private ImageView toggleReviewIconIV, ratingIV, studentsUnderMentorIV, qualifiedIV,
             experienceIV, genderIV, teachingPlaceIV1, teachingPlaceIV2, teachingTypeIV1, teachingTypeIV2, arrowQualificationIV, arrowAccrediationsIV, arrowMethodologyIV, arrowAwardsIV;
-    private TextView profileName, ratingTV, noOfStudentsTV, reviewTitleTV, experienceTV, languageTV, distanceTV, chargesTV;
-    private LinearLayout chatWithMentorLL, chatWithStudentsLL, reviewLL, genderLL, teachingPlaceLL,
+    private TextView profileName, ratingTV, noOfStudentsTV, reviewTitleTV, experienceTV, languageTV, distanceTV, chargesTV, ageTV;
+    private LinearLayout chatWithMentorLL, chatWithStudentsLL, reviewLL, teachingPlaceLL,
             teachingTypeLL, promotionLL;
     private ListView reviewsListView;
     private RelativeLayout toggleReviewRL;
@@ -137,7 +140,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mentor_details);
-        Log.d(TAG, "inside mentor details acitivity");
+        Log.d(TAG, "inside mentor details activity");
         initialize();
         mentorDetailsActivity = this;
         populateFields();
@@ -437,10 +440,12 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         profileName = (TextView) findViewById(R.id.title);
         ratingTV = (TextView) findViewById(R.id.rating);
         ratingIV = (ImageView) findViewById(R.id.imageView2);
+        qualifiedIV = (ImageView) findViewById(R.id.qualifiedIV);
         studentsUnderMentorIV = (ImageView) findViewById(R.id.imageView);
         noOfStudentsTV = (TextView) findViewById(R.id.numberOfStudents);
         distanceTV = (TextView) findViewById(R.id.distanceTV);
         chargesTV = (TextView) findViewById(R.id.charges);
+        ageTV = (TextView) findViewById(R.id.age);
         chatWithMentorLL = (LinearLayout) findViewById(R.id.chat_with_mentor);
         chatWithStudentsLL = (LinearLayout) findViewById(R.id.chat_with_students);
         reviewLL = (LinearLayout) findViewById(R.id.review_LL);
@@ -471,7 +476,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         accrediationsLL = (LinearLayout) findViewById(R.id.accrediationsLL);
         myMethodologyLL = (LinearLayout) findViewById(R.id.myMethodologyLL);
         awardsLL = (LinearLayout) findViewById(R.id.awardsLL);
-        genderLL = (LinearLayout) findViewById(R.id.genderLL);
+//        genderLL = (LinearLayout) findViewById(R.id.genderLL);
         teachingPlaceLL = (LinearLayout) findViewById(R.id.teachingPlaceLL);
         teachingTypeLL = (LinearLayout) findViewById(R.id.teachingTypeLL);
         promotionLL = (LinearLayout) findViewById(R.id.promotionLL);
@@ -657,19 +662,33 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         }
 
         try {
+            if (getIntent().getBooleanExtra("qualified", false))
+                qualifiedIV.setImageDrawable(getResources().getDrawable(R.drawable.qualified));
+            else
+                qualifiedIV.setImageDrawable(getResources().getDrawable(R.drawable.qualified_not));
+        } catch (Exception e) {
+            qualifiedIV.setImageDrawable(getResources().getDrawable(R.drawable.qualified_not));
+        }
+
+        try {
+            int age = getAgeInyearsFromDOB((String) userInfo.getDob());
+            if (age > 1)
+                ageTV.setText(age + " " + getResources().getString(R.string.yrs));
+            else if (age == 0)
+                ageTV.setText(age + " " + getResources().getString(R.string.yr));
+        } catch (Exception e) {
+            ageTV.setText("");
+        }
+
+        try {
             if (userInfo.getGender() != null && !userInfo.getGender().isEmpty()) {
                 if (userInfo.getGender().equals("M")) {
                     genderIV.setImageDrawable(getResources().getDrawable(R.drawable.male));
                 } else if (userInfo.getGender().equals("F")) {
                     genderIV.setImageDrawable(getResources().getDrawable(R.drawable.female));
                 }
-            } else {
-                genderLL.setVisibility(View.GONE);
             }
-
-
         } catch (Exception e) {
-            genderLL.setVisibility(View.GONE);
             e.printStackTrace();
         }
 
@@ -1720,5 +1739,27 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
 
 
         }
+    }
+
+    private int getAgeInyearsFromDOB(String dobString) {
+        java.text.DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = format.parse(dobString);
+            Calendar dob = Calendar.getInstance();
+            dob.setTime(date);
+
+            Calendar today = Calendar.getInstance();
+            int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+            if (today.get(Calendar.MONTH) < dob.get(Calendar.MONTH)) {
+                age--;
+            } else if (today.get(Calendar.MONTH) == dob.get(Calendar.MONTH)
+                    && today.get(Calendar.DAY_OF_MONTH) < dob.get(Calendar.DAY_OF_MONTH)) {
+                age--;
+            }
+            return age;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }

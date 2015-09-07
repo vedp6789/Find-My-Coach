@@ -2,25 +2,25 @@
 <items version="2" >
 
     <item
-        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/fmcmentor/library/unspecified/classes.jar"
+        jar="/home/prem/Prem/Workspace/FindMyCoach/app/build/intermediates/exploded-aar/FindMyCoach/cropper/unspecified/classes.jar"
         jumboMode="false"
         revision="21.1.1"
-        sha1="932e11c3f10f2bebbb257a87bf5f8e56e66225bb">
-        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-26403c3e1592ddee8dd0619ef687ea19c40b1063.jar" />
+        sha1="de85ccbfe9ed2ec6cde5147059b1b803b164c459">
+        <dex dex="/home/prem/Prem/Workspace/FindMyCoach/app/build/intermediates/pre-dexed/debug/classes-9b5dc59bbcb7827c82bcddbb06b30361354248b3.jar" />
     </item>
     <item
-        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/fmcmentor/cropper/unspecified/classes.jar"
+        jar="/home/prem/Prem/Workspace/FindMyCoach/app/build/intermediates/exploded-aar/com.facebook.android/facebook/3.21.0/classes.jar"
         jumboMode="false"
         revision="21.1.1"
-        sha1="a8f287821205e148fd5792c84d67e13f2349edd8">
-        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-b77c45d47075260d7e79ecca619a16c50e6b34b6.jar" />
+        sha1="203656fd750bb10920a220c51fd8b11ecf56d3ab">
+        <dex dex="/home/prem/Prem/Workspace/FindMyCoach/app/build/intermediates/pre-dexed/debug/classes-376dd8478443003f28504932db27e118a13d6eae.jar" />
     </item>
     <item
-        jar="/home/ved/fmcmentor/app/build/intermediates/exploded-aar/com.facebook.android/facebook/3.21.0/classes.jar"
+        jar="/home/prem/Prem/Workspace/FindMyCoach/app/build/intermediates/exploded-aar/FindMyCoach/library/unspecified/classes.jar"
         jumboMode="false"
         revision="21.1.1"
-        sha1="80d82275819099f8608f53b6a37fc40cf9ed610b">
-        <dex dex="/home/ved/fmcmentor/app/build/intermediates/pre-dexed/debug/classes-e66e55c261d290c68cb324e23db9ba701701a635.jar" />
+        sha1="b08bb11e27d3993d0b4331e4d563b78b15b93ba5">
+        <dex dex="/home/prem/Prem/Workspace/FindMyCoach/app/build/intermediates/pre-dexed/debug/classes-e6976a9bfbdb86dbbe661892a42279a56c86575d.jar" />
     </item>
 
 </items>
