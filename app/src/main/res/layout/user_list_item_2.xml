@@ -152,7 +152,7 @@
                     android:layout_marginLeft="@dimen/search_icon_margin_left"
                     android:layout_toRightOf="@+id/distanceTV"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/radio_btn_selected" />
+                    android:src="@drawable/experience_1" />
 
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/experience"

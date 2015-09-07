@@ -43,8 +43,8 @@ public class SearchResultsFragment extends Fragment implements Callback {
     private MentorListAdapter mentorListAdapter;
     private String searchFor, aroundTime, searchedAroundTime;
     private Datum datum;
-    private String connection_status_for_Selected_mentor;
-    private int noOfSTudents;
+    private String connection_status_for_Selected_mentor, distance, charges;
+    private int noOfStudents;
     private static final int NEED_TO_REFRESH = 100;
     private boolean showTimeNavigation, isGettingMentorDetails;
     private TextView currentTime;
@@ -100,14 +100,27 @@ public class SearchResultsFragment extends Fragment implements Callback {
                     return;
                 }
                 connection_status_for_Selected_mentor = null;
-                noOfSTudents = 0;
+                noOfStudents = 0;
                 if (users != null) {
                     datum = users.get(position);
                     connection_status_for_Selected_mentor = datum.getConnectionStatus();
+                    distance = String.format("%.1f", Double.parseDouble(datum.getDistance())) + " " + getActivity().getResources().getString(R.string.km);
                     try {
-                        noOfSTudents = Integer.parseInt(datum.getNumberOfStudents());
+                        if (datum.getPrice() != null && datum.getCurrencyCode() != null) {
+                            if (datum.getPriceFor().equalsIgnoreCase("cl"))
+                                charges = datum.getCurrencyCode() + " " + datum.getPrice() + "/" + getActivity().getResources().getString(R.string.flexibility_in_class);
+                            else
+                                charges = datum.getCurrencyCode() + " " + datum.getPrice() + "/" + getActivity().getResources().getString(R.string.flexibility_in_hour);
+
+                        }else
+                            charges = "---";
+                    } catch (Exception ignored) {
+                        charges = "---";
+                    }
+                    try {
+                        noOfStudents = Integer.parseInt(datum.getNumberOfStudents());
                     } catch (Exception e) {
-                        noOfSTudents = 0;
+                        noOfStudents = 0;
                     }
                     getMentorDetails(datum.getId());
                 }
@@ -210,7 +223,9 @@ public class SearchResultsFragment extends Fragment implements Callback {
             Intent intent = new Intent(getActivity(), MentorDetailsActivity.class);
             intent.putExtra("mentorDetails", (String) object);
             intent.putExtra("connection_status", connection_status_for_Selected_mentor);
-            intent.putExtra("no_of_students", noOfSTudents);
+            intent.putExtra("no_of_students", noOfStudents);
+            intent.putExtra("distance", distance );
+            intent.putExtra("charges", charges);
             datum = null;
             startActivityForResult(intent, NEED_TO_REFRESH);
         } else if (calledApiValue == 6) {
@@ -227,8 +242,11 @@ public class SearchResultsFragment extends Fragment implements Callback {
 
     @Override
     public void failureOperation(Object object, int statusCode, int calledApiValue) {
-        if (calledApiValue == 24)
+        if (calledApiValue == 24){
             isGettingMentorDetails = false;
+            distance = "";
+            charges = "";
+        }
         Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
     }
 }
