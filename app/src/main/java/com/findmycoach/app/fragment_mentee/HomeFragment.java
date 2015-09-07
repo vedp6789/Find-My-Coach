@@ -1,6 +1,7 @@
 package com.findmycoach.app.fragment_mentee;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
@@ -28,6 +29,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,12 +50,14 @@ import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.beans.student.ProfileResponse;
 import com.findmycoach.app.beans.suggestion.Prediction;
 import com.findmycoach.app.beans.suggestion.Suggestion;
+import com.findmycoach.app.fragment.DatePickerFragment;
 import com.findmycoach.app.fragment.TimePickerFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.DataBase;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
 import com.findmycoach.app.util.PlaceAutocompleteAdapter;
+import com.findmycoach.app.util.SetDate;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.views.ChizzleButton;
 import com.google.android.gms.common.ConnectionResult;
@@ -80,14 +84,14 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements View.OnClickListener, Callback, TimePickerDialog.OnTimeSetListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
+public class HomeFragment extends Fragment implements View.OnClickListener, Callback, SetDate, TimePickerDialog.OnTimeSetListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
 
     private AutoCompleteTextView locationInput;
     private Button searchButton;
     private ImageButton ibDeleteAddressImageButton;
     private ProgressDialog progressDialog;
     public TextView currentLocationText;
-    private TextView fromTimingInput;
+    private TextView fromTimingInput, preferredDateForSearchTV;
     private RelativeLayout editLocation, selectLocation, rlAutoSuggestionAddress;
     private LinearLayout timeBarrierLayout;
     public static String[] subCategoryIds;
@@ -98,7 +102,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private boolean timeBarrier;
     private boolean isSearching = false;
     private static final String TAG = "FMC";
-    private LinearLayout subCategoryLayout;
+    private LinearLayout subCategoryLayout, preferredDateLL;
     private TextView subCategoryTextView;
     private ArrayAdapter<String> arrayAdapter;
     private List<com.findmycoach.app.views.ChizzleButton> daysButton;
@@ -107,12 +111,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
     private ProfileResponse profileResponse;
     public int mentorFor, coachingType, numberOfTabsToBeShown;
     private List<String> addressList = new ArrayList<>();
-
+    private String preferredDateForSearch;
 
     protected GoogleApiClient mGoogleApiClient;
     private PlaceAutocompleteAdapter mAdapter;
     private LocationRequest mLocationRequest;
     private int selectedLocationIndex = -1;
+    private Calendar calendar;
+
+    DatePickerDialog.OnDateSetListener myDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                setSelectedStartDate(day, month + 1, year);
+        }
+    };
 
 
     public HomeFragment() {
@@ -522,6 +534,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         });
 
 
+        fragmentView.findViewById(R.id.preferredDateLL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calendar = Calendar.getInstance();
+                DatePickerDialog dpd = new DatePickerDialog(getActivity(),
+                        myDateSetListener, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+
+                dpd.getDatePicker().setMinDate(calendar.getTimeInMillis());
+                dpd.show();
+            }
+        });
+
+
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -757,6 +782,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         subCategoryLayout = (LinearLayout) fragmentView.findViewById(R.id.subCategoryLayout);
         subCategoryTextView = (TextView) fragmentView.findViewById(R.id.subCategoryTextView);
 
+        preferredDateLL = (LinearLayout) fragmentView.findViewById(R.id.preferredDateLL);
+        preferredDateForSearchTV = (TextView) fragmentView.findViewById(R.id.preferredDateForSearchTV);
+
+        calendar = Calendar.getInstance();
+        String date = String.format(" %02d-%02d-%d", calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH) + 1,calendar.get(Calendar.YEAR));
+        preferredDateForSearchTV.setText(date);
         fromTimingInput = (TextView) fragmentView.findViewById(R.id.from_timing);
 
         if (view instanceof ViewGroup) {
@@ -771,16 +802,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         if (location.trim().equals("")) {
             isEditLocationEnabled = true;
             rlAutoSuggestionAddress.setVisibility(View.VISIBLE);
-            //locationInput.setVisibility(View.VISIBLE);
             currentLocationText.setVisibility(View.GONE);
-            editLocation.setVisibility(View.GONE);
+            //editLocation.setVisibility(View.GONE);
         } else {
             currentLocationText.setText(location);
             locationInput.setText(location);
             isEditLocationEnabled = false;
             rlAutoSuggestionAddress.setVisibility(View.GONE);
-            //locationInput.setVisibility(View.GONE);
-            editLocation.setVisibility(View.VISIBLE);
+            //editLocation.setVisibility(View.VISIBLE);
             currentLocationText.setVisibility(View.VISIBLE);
         }
     }
@@ -797,45 +826,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         int id = v.getId();
         if (id == R.id.action_search) {
             callSearchApi();
-        } else if (id == R.id.edit_location) {
-            isEditLocationEnabled = true;
-            rlAutoSuggestionAddress.setVisibility(View.VISIBLE);
-            editLocation.setVisibility(View.GONE);
-            currentLocationText.setVisibility(View.GONE);
-            Log.e(TAG, "location input from auto suggestion");
-            locationInput.requestFocus();
-            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         } else if (id == R.id.select_location) {
-            isEditLocationEnabled = false;
+
             ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(locationInput.getWindowToken(), 0);
-            locationInput.clearFocus();
-            rlAutoSuggestionAddress.setVisibility(View.GONE);
-            //locationInput.setVisibility(View.GONE);
-            currentLocationText.setVisibility(View.VISIBLE);
-            editLocation.setVisibility(View.VISIBLE);
             showLocationPickerDialog();
         }
     }
 
     private void showLocationPickerDialog() {
         addressList.clear();
-        if (profileResponse.getData().getMultipleAddress() != null && profileResponse.getData().getMultipleAddress().size() > 0) {
-            if (profileResponse.getData().getMultipleAddress().size() > 1) {
-                int second_last_index = profileResponse.getData().getMultipleAddress().size() - 2;
-                for (int index = 0; index < profileResponse.getData().getMultipleAddress().size(); index++) {
-                    Address address = profileResponse.getData().getMultipleAddress().get(index);
-                    addressList.add(address.getLocale());
-                    if (index == second_last_index) {
-                        addressList.add(getResources().getString(R.string.pick_current_location));
-                    }
-                }
-            } else {
-                addressList.add(getResources().getString(R.string.pick_current_location));
-                for (Address address : profileResponse.getData().getMultipleAddress()) {
-                    addressList.add(address.getLocale());
-                }
-            }
-        }
+
+        for (Address address : profileResponse.getData().getMultipleAddress())
+            addressList.add(address.getLocale());
+
+        addressList.add(addressList.size(), getResources().getString(R.string.pick_current_location));
+        addressList.add(getResources().getString(R.string.other));
 
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -844,6 +849,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
         listView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.textview, addressList));
 
         dialog.show();
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -854,7 +860,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 if (addressList != null && addressList.size() > 0) {
                     if (addressList.size() > 2) {
                         second_last_position = addressList.size() - 2;
-
                     } else {
                         second_last_position = 0;
                     }
@@ -863,12 +868,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
                 if (position == second_last_position) {
                     if (DashboardActivity.dashboardActivity.userCurrentAddressFromGPS.trim().isEmpty())
                         DashboardActivity.dashboardActivity.getAddress();
-
                     else {
+                        currentLocationText.setVisibility(View.VISIBLE);
                         currentLocationText.setText(DashboardActivity.dashboardActivity.userCurrentAddressFromGPS.trim());
                         locationInput.setText(DashboardActivity.dashboardActivity.userCurrentAddressFromGPS.trim());
+                        rlAutoSuggestionAddress.setVisibility(View.GONE);
                     }
+                } else if (position == addressList.lastIndexOf(getResources().getString(R.string.other))) {
+                    rlAutoSuggestionAddress.setVisibility(View.VISIBLE);
+                    currentLocationText.setVisibility(View.GONE);
+                    Log.e(TAG, "location input from auto suggestion");
+                    locationInput.requestFocus();
+                    ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
                 } else {
+                    currentLocationText.setVisibility(View.VISIBLE);
+                    rlAutoSuggestionAddress.setVisibility(View.GONE);
                     currentLocationText.setText(addressList.get(position));
                     locationInput.setText(addressList.get(position));
                 }
@@ -1078,5 +1093,54 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Call
 
     }
 
+    /* Getting used to set preferred date */
+    @Override
+    public void setSelectedStartDate(Object o1, Object o2, Object o3) {
+        int day = Integer.parseInt(o1.toString());
+        int month = Integer.parseInt(o2.toString());
+        int year = Integer.parseInt(o3.toString());
+        String date = String.format(" %02d-%02d-%d", day, month, year);
+        StringBuilder stringBuilder = new StringBuilder();
+        if ((day / 10) > 0) {
+            stringBuilder.append(day);
+        } else {
+            stringBuilder.append("" + 0 + day);
+        }
+        if ((month / 10) > 0) {
+            stringBuilder.append("-" + month);
+        } else {
+            stringBuilder.append("-" + 0 + month);
+        }
+        stringBuilder.append("-" + year);
+        Log.d(TAG, "start date:" + stringBuilder.toString());
+        preferredDateForSearchTV.setText(date);
+        preferredDateForSearch = String.valueOf(stringBuilder);
 
+
+    }
+
+    @Override
+    public void setSelectedTillDate(Object o1, Object o2, Object o3, boolean b) {
+
+    }
+
+    @Override
+    public void setStartInitialLimit(Object o1, Object o2, Object o3) {
+
+    }
+
+    @Override
+    public void setStartUpperLimit(Object o1, Object o2, Object o3) {
+
+    }
+
+    @Override
+    public int[] getTillInitialLimit() {
+        return new int[0];
+    }
+
+    @Override
+    public void setTillUpperLimit(Object o1, Object o2, Object o3) {
+
+    }
 }

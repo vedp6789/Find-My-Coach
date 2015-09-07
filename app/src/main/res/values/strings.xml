@@ -450,6 +450,7 @@
     <string name="students_preference">I Like to Teach</string>
     <string name="about_me">About Me</string>
     <string name="other_address">My Other Address</string>
+    <string name="other">Other</string>
     <string name="other_addresses">My Other Addresses</string>
     <string name="change_photo">Change Photo</string>
     <string name="add_photo">Add Photo</string>
@@ -462,6 +463,7 @@
     <string name="select_days">Select Days</string>
     <string name="from">From :</string>
     <string name="around">Around :</string>
+    <string name="searchPreferredDate">Preferred Date :</string>
     <string name="all">All</string>
     <string name="timing">Timing</string>
     <string name="class_timing">Timing:</string>
