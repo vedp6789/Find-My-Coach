@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.beans.Promotions.Offer;
+import com.findmycoach.app.util.ChizzleConstants;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
@@ -33,6 +34,7 @@ public class ActiveOfferListViewAdapter extends BaseAdapter {
 
 
     public ActiveOfferListViewAdapter(Context context, ArrayList<Offer> activeOffers) {
+        Log.e(ChizzleConstants.TAG,"ActiveOfferListViewAdapter: "+activeOffers);
         this.activeOffers = activeOffers;
         this.context = context;
     }

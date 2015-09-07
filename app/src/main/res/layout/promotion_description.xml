@@ -31,17 +31,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:weightSum="3">
+
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/tv_promotion_title"
                     android:layout_width="0dp"
-                    android:layout_weight="1.5"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="start"
+                    android:layout_weight="1.5"
                     android:text="@string/promotionTitle"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_details"
@@ -50,10 +52,10 @@
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/tv_promotion_title_val"
                     android:layout_width="0dp"
-                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
                     android:layout_weight="1"
                     android:paddingLeft="@dimen/time_stamp"
-                    android:layout_height="wrap_content"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_details" />
 
@@ -68,8 +70,8 @@
             android:id="@+id/rlPromotionType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/time_stamp"
-            android:layout_below="@+id/rlPromotionTitle">
+            android:layout_below="@+id/rlPromotionTitle"
+            android:layout_marginTop="@dimen/time_stamp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -80,9 +82,9 @@
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/tv_promotion_type"
                     android:layout_width="0dp"
-android:layout_weight="1.5"
-                    android:layout_gravity="center"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_weight="1.5"
                     android:text="@string/promotionType"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_details"
@@ -91,9 +93,9 @@ android:layout_weight="1.5"
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/tv_promotion_type_val"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1.5"
                     android:paddingLeft="@dimen/time_stamp"
-                    android:layout_height="wrap_content"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_details" />
 
@@ -106,8 +108,8 @@ android:layout_weight="1.5"
             android:id="@+id/rlDiscountOnClasses"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/time_stamp"
-            android:layout_below="@+id/rlPromotionType">
+            android:layout_below="@+id/rlPromotionType"
+            android:layout_marginTop="@dimen/time_stamp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -120,6 +122,7 @@ android:layout_weight="1.5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
+                android:layout_gravity="start"
                     android:text="@string/discountOverNumberOfClasses"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_details"
@@ -127,11 +130,11 @@ android:layout_weight="1.5"
 
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/tvDiscountClassesVal"
-                    android:paddingLeft="@dimen/time_stamp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="start"
                     android:layout_weight="1.5"
+                    android:paddingLeft="@dimen/time_stamp"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_details" />
 
@@ -145,8 +148,8 @@ android:layout_weight="1.5"
             android:id="@+id/rlDiscountPercentage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/time_stamp"
-            android:layout_below="@+id/rlDiscountOnClasses">
+            android:layout_below="@+id/rlDiscountOnClasses"
+            android:layout_marginTop="@dimen/time_stamp">
 
 
             <LinearLayout
@@ -154,12 +157,13 @@ android:layout_weight="1.5"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:weightSum="3">
+
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/tvDiscountPercentage"
                     android:layout_width="0dp"
-                    android:layout_weight="1.5"
-                    android:layout_gravity="center"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_weight="1.5"
                     android:text="@string/discountPercentage"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_details"
@@ -168,10 +172,10 @@ android:layout_weight="1.5"
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/tvDiscountPercentageVal"
                     android:layout_width="0dp"
-                    android:layout_weight="1.5"
-                    android:layout_gravity="center"
-                    android:paddingLeft="@dimen/time_stamp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_weight="1.5"
+                    android:paddingLeft="@dimen/time_stamp"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_details" />
 
@@ -184,8 +188,8 @@ android:layout_weight="1.5"
             android:id="@+id/rlMandatoryClasses"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/time_stamp"
-            android:layout_below="@+id/rlDiscountPercentage">
+            android:layout_below="@+id/rlDiscountPercentage"
+            android:layout_marginTop="@dimen/time_stamp">
 
 
             <LinearLayout
@@ -193,12 +197,13 @@ android:layout_weight="1.5"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:weightSum="3">
+
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/tvMandatoryClasses"
                     android:layout_width="0dp"
-                    android:layout_weight="1.5"
-                    android:layout_gravity="center"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_weight="1.5"
                     android:text="@string/offer_classes"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_details"
@@ -207,10 +212,10 @@ android:layout_weight="1.5"
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/tvMandatoryClassesVal"
                     android:layout_width="0dp"
-                    android:paddingLeft="@dimen/time_stamp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1.5"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_weight="1.5"
+                    android:paddingLeft="@dimen/time_stamp"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_details" />
 
@@ -223,8 +228,8 @@ android:layout_weight="1.5"
             android:id="@+id/rlFreeClasses"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/time_stamp"
-            android:layout_below="@+id/rlMandatoryClasses">
+            android:layout_below="@+id/rlMandatoryClasses"
+            android:layout_marginTop="@dimen/time_stamp">
 
 
             <LinearLayout
@@ -236,9 +241,9 @@ android:layout_weight="1.5"
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/tvFreeClasses"
                     android:layout_width="0dp"
-                    android:layout_weight="1.5"
-                    android:layout_gravity="center"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_weight="1.5"
                     android:text="@string/freeClasses"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_details"
@@ -247,10 +252,10 @@ android:layout_weight="1.5"
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/tvFreeClassesVal"
                     android:layout_width="0dp"
-                    android:paddingLeft="@dimen/time_stamp"
-                    android:layout_weight="1.5"
-                    android:layout_gravity="center"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_weight="1.5"
+                    android:paddingLeft="@dimen/time_stamp"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_details" />
 

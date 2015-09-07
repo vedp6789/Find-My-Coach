@@ -6,9 +6,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/underline">
+        android:padding="@dimen/underline"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="8dp">
 
-        <ImageView
+
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/mentor_image"
             android:layout_width="@dimen/list_view_image_height"
             android:layout_height="@dimen/list_view_image_height"
@@ -17,13 +22,13 @@
             android:layout_alignParentStart="false"
             android:layout_alignParentTop="false"
             android:layout_centerVertical="true"
-            android:scaleType="fitCenter"
             android:src="@drawable/user_icon" />
 
 
         <RelativeLayout
             android:layout_toRightOf="@+id/mentor_image"
             android:layout_width="match_parent"
+            android:layout_marginLeft="4dp"
             android:layout_height="@dimen/list_view_image_height"
             >
             <RelativeLayout

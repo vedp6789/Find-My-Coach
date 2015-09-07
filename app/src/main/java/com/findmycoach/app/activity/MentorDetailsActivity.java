@@ -13,7 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -65,11 +67,14 @@ import java.util.Locale;
 
 import com.findmycoach.app.beans.Promotions.Offer;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MentorDetailsActivity extends FragmentActivity implements Callback, View.OnClickListener {
     private ListView activePromotionsLV;
-    private ArrayList<Offer> activeOffers;
+    private ArrayList<Offer> activeOffers = new ArrayList<Offer>();
     ActiveOfferListViewAdapter listViewAdapter;
-    private ImageView profileImage, toggleReviewIconIV, ratingIV, studentsUnderMentorIV,
+    private CircleImageView profileImage;
+    private ImageView toggleReviewIconIV, ratingIV, studentsUnderMentorIV,
             experienceIV, genderIV, teachingPlaceIV1, teachingPlaceIV2, teachingTypeIV1, teachingTypeIV2, arrowQualificationIV, arrowAccrediationsIV, arrowMethodologyIV, arrowAwardsIV;
     private TextView profileName, ratingTV, noOfStudentsTV, reviewTitleTV, experienceTV, languageTV;
     private LinearLayout chatWithMentorLL, chatWithStudentsLL, reviewLL, genderLL, teachingPlaceLL,
@@ -234,7 +239,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
             year = year_from_dialog;
             tv_currentMonth.setText(getResources().getStringArray(R.array.months)[month - 1] + " " + year);
         }
-
 
 
         RequestParams requestParams = new RequestParams();
@@ -434,7 +438,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         array_list_subCategory = userInfo.getSubCategoryName();
 
 
-        profileImage = (ImageView) findViewById(R.id.profile_image);
+        profileImage = (CircleImageView) findViewById(R.id.profile_image);
         profileName = (TextView) findViewById(R.id.profile_name);
         ratingTV = (TextView) findViewById(R.id.rating);
         ratingIV = (ImageView) findViewById(R.id.imageView2);
@@ -474,6 +478,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         teachingPlaceLL = (LinearLayout) findViewById(R.id.teachingPlaceLL);
         teachingTypeLL = (LinearLayout) findViewById(R.id.teachingTypeLL);
         promotionLL = (LinearLayout) findViewById(R.id.promotionLL);
+        promotionLL.setVisibility(View.GONE);
 
         tv_currentMonth = (TextView) findViewById(R.id.currentTimeTV);
         iv_nextMonth = (ImageView) findViewById(R.id.nextTimeIB);
@@ -553,7 +558,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         }
 
         activePromotionsLV = (ListView) findViewById(R.id.promotionsLV);
-        activeOffers = new ArrayList<Offer>();
         listViewAdapter = new ActiveOfferListViewAdapter(this, activeOffers);
         activePromotionsLV.setAdapter(listViewAdapter);
         //ListViewInsideScrollViewHelper.getListViewSize(activePromotionsLV);
@@ -573,13 +577,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
             Log.e(TAG, "token of mento_____:" + userInfo.getAuthToken());
 
         }
-
-
-
-
-
-
-
 
 
     }
@@ -975,12 +972,33 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
             progressDialog.dismiss();
             try {
                 Promotions promotions = (Promotions) object;
+
+                activeOffers.clear();
                 activeOffers = (ArrayList<Offer>) promotions.getPromotions();
-                //listViewAdapter.notifyDataSetChanged();
+//                listViewAdapter.notifyDataSetChanged();
+
                 listViewAdapter = new ActiveOfferListViewAdapter(this, activeOffers);
+
                 activePromotionsLV.setAdapter(listViewAdapter);
-                EditProfileActivityMentee.setListViewHeightBasedOnChildren(activePromotionsLV);
-              //  ListViewInsideScrollViewHelper.getListViewSize(activePromotionsLV);
+
+                /*if(listViewAdapter.getCount() > 5){
+                    View item = listViewAdapter.getView(0, null, activePromotionsLV);
+                    item.measure(0, 0);
+                    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, (int) (5.5 * item.getMeasuredHeight()));
+                    activePromotionsLV.setLayoutParams(params);
+                }
+*/
+
+               // EditProfileActivityMentee.setListViewHeightBasedOnChildren(activePromotionsLV);
+                //  ListViewInsideScrollViewHelper.getListViewSize(activePromotionsLV);
+
+                if (activeOffers.size() > 0) {
+                    promotionLL.setVisibility(View.VISIBLE);
+                }
+
+
+
+
 
                 Log.e(TAG, "expandable lv height after call: " + activePromotionsLV.getHeight());
                 Log.e(TAG, "expandable lv width after api call: " + activePromotionsLV.getWidth());
@@ -1042,7 +1060,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
                 break;
             case 58:
                 progressDialog.dismiss();
-                Log.e(TAG,(String)object);
+                Log.e(TAG, (String) object);
                 break;
 
         }

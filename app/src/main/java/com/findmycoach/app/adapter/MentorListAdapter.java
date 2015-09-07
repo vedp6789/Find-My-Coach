@@ -25,6 +25,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Created by prem on 21/1/15.
  */
@@ -71,7 +73,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
             view = inflater.inflate(R.layout.user_list_item_2, null);
 
             ViewHolder holder = new ViewHolder();
-            holder.userIV = (ImageView) view.findViewById(R.id.mentor_image);
+            holder.userIV = (CircleImageView) view.findViewById(R.id.mentor_image);
             holder.nameTV = (TextView) view.findViewById(R.id.mentor_name);
             holder.ageTV = (TextView) view.findViewById(R.id.age);
             holder.daysTV = (TextView) view.findViewById(R.id.daysTV);
@@ -96,6 +98,8 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
                     .placeholder(defaultDrawable)
                     .error(defaultDrawable)
                     .into(holder.userIV);
+        }else{
+            holder.userIV.setImageDrawable(context.getResources().getDrawable(R.drawable.user_icon));
         }
         holder.nameTV.setText("");
         try {
@@ -332,7 +336,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
     }
 
     private class ViewHolder {
-        ImageView userIV;
+        CircleImageView userIV;
         TextView nameTV;
         TextView ageTV;
         TextView daysTV;
