@@ -8,17 +8,16 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.Html;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -30,7 +29,6 @@ import android.widget.Toast;
 
 import com.findmycoach.app.R;
 import com.findmycoach.app.adapter.CalendarGridAdapter;
-import com.findmycoach.app.adapter.ActiveOfferListViewAdapter;
 import com.findmycoach.app.adapter.ReviewAdapter;
 import com.findmycoach.app.beans.CalendarSchedule.Event;
 import com.findmycoach.app.beans.CalendarSchedule.EventDuration;
@@ -39,6 +37,7 @@ import com.findmycoach.app.beans.CalendarSchedule.MentorInfo;
 import com.findmycoach.app.beans.CalendarSchedule.MonthYearInfo;
 import com.findmycoach.app.beans.CalendarSchedule.Slot;
 import com.findmycoach.app.beans.CalendarSchedule.Vacation;
+import com.findmycoach.app.beans.Promotions.Offer;
 import com.findmycoach.app.beans.Promotions.Promotions;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
@@ -47,7 +46,6 @@ import com.findmycoach.app.fragment.DatePickerFragment;
 import com.findmycoach.app.load_image_from_url.ImageLoader;
 import com.findmycoach.app.util.BinaryForImage;
 import com.findmycoach.app.util.Callback;
-import com.findmycoach.app.util.ListViewInsideScrollViewHelper;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.ScrollableGridView;
 import com.findmycoach.app.util.StorageHelper;
@@ -65,18 +63,15 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-import com.findmycoach.app.beans.Promotions.Offer;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MentorDetailsActivity extends FragmentActivity implements Callback, View.OnClickListener {
     private ListView activePromotionsLV;
     private ArrayList<Offer> activeOffers = new ArrayList<Offer>();
-    ActiveOfferListViewAdapter listViewAdapter;
     private CircleImageView profileImage;
     private ImageView toggleReviewIconIV, ratingIV, studentsUnderMentorIV,
             experienceIV, genderIV, teachingPlaceIV1, teachingPlaceIV2, teachingTypeIV1, teachingTypeIV2, arrowQualificationIV, arrowAccrediationsIV, arrowMethodologyIV, arrowAwardsIV;
-    private TextView profileName, ratingTV, noOfStudentsTV, reviewTitleTV, experienceTV, languageTV;
+    private TextView profileName, ratingTV, noOfStudentsTV, reviewTitleTV, experienceTV, languageTV, distanceTV, chargesTV;
     private LinearLayout chatWithMentorLL, chatWithStudentsLL, reviewLL, genderLL, teachingPlaceLL,
             teachingTypeLL, promotionLL;
     private ListView reviewsListView;
@@ -439,11 +434,13 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
 
 
         profileImage = (CircleImageView) findViewById(R.id.profile_image);
-        profileName = (TextView) findViewById(R.id.profile_name);
+        profileName = (TextView) findViewById(R.id.title);
         ratingTV = (TextView) findViewById(R.id.rating);
         ratingIV = (ImageView) findViewById(R.id.imageView2);
         studentsUnderMentorIV = (ImageView) findViewById(R.id.imageView);
-        noOfStudentsTV = (TextView) findViewById(R.id.number_of_students);
+        noOfStudentsTV = (TextView) findViewById(R.id.numberOfStudents);
+        distanceTV = (TextView) findViewById(R.id.distanceTV);
+        chargesTV = (TextView) findViewById(R.id.charges);
         chatWithMentorLL = (LinearLayout) findViewById(R.id.chat_with_mentor);
         chatWithStudentsLL = (LinearLayout) findViewById(R.id.chat_with_students);
         reviewLL = (LinearLayout) findViewById(R.id.review_LL);
@@ -455,7 +452,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         // professionTV = (TextView) findViewById(R.id.professionTV);
         // areaOfCoachingTV = (TextView) findViewById(R.id.areaOfCoachingTV);
         experienceTV = (TextView) findViewById(R.id.experience);
-        experienceIV = (ImageView) findViewById(R.id.imageView3);
+        experienceIV = (ImageView) findViewById(R.id.imageView4);
         genderIV = (ImageView) findViewById(R.id.genderIV);
         teachingPlaceIV1 = (ImageView) findViewById(R.id.teachingPlaceIV1);
         teachingPlaceIV2 = (ImageView) findViewById(R.id.teachingPlaceIV2);
@@ -526,9 +523,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         arrowMethodologyIV.setOnClickListener(this);
         arrowAwardsIV.setOnClickListener(this);
 
-        TextView title = (TextView) findViewById(R.id.title);
-        title.setText(getResources().getString(R.string.title_mentor_details));
-
         ImageView connectionButton = (ImageView) findViewById(R.id.menuItem);
 
         if (connectionStatus.equals("not connected")) {
@@ -558,14 +552,6 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         }
 
         activePromotionsLV = (ListView) findViewById(R.id.promotionsLV);
-        listViewAdapter = new ActiveOfferListViewAdapter(this, activeOffers);
-        activePromotionsLV.setAdapter(listViewAdapter);
-        //ListViewInsideScrollViewHelper.getListViewSize(activePromotionsLV);
-        EditProfileActivityMentee.setListViewHeightBasedOnChildren(activePromotionsLV);
-
-
-        Log.e(TAG, "expandable lv height: " + activePromotionsLV.getHeight());
-        Log.e(TAG, "expandable lv width: " + activePromotionsLV.getWidth());
 
         if (userInfo.getAuthToken() != null && !userInfo.getAuthToken().trim().isEmpty()) {
             RequestParams requestParams = new RequestParams();
@@ -656,6 +642,18 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         if (userInfo.getPhotograph() != null && !userInfo.getPhotograph().equals("")) {
             ImageLoader imgLoader = new ImageLoader(profileImage);
             imgLoader.execute((String) userInfo.getPhotograph());
+        }
+
+        try {
+            distanceTV.setText(getIntent().getStringExtra("distance"));
+        } catch (Exception e) {
+            distanceTV.setText("");
+        }
+
+        try {
+            chargesTV.setText(Html.fromHtml(getIntent().getStringExtra("charges")));
+        } catch (Exception e) {
+            chargesTV.setText("");
         }
 
         try {
@@ -765,11 +763,11 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         try {
             int experience = Integer.parseInt(userInfo.getExperience());
             if (experience > 0) {
-                experienceTV.setText(experience + (experience > 1 ? getResources().getString(R.string.yrs) : getResources().getString(R.string.yr)));
+                experienceTV.setText(experience + (experience > 1 ? " " + getResources().getString(R.string.yrs) : " " + getResources().getString(R.string.yr)));
                 experienceIV.setImageDrawable(getResources().getDrawable(R.drawable.experience_1));
 
             } else {
-                experienceTV.setText(experience + (experience > 1 ? getResources().getString(R.string.yrs) : getResources().getString(R.string.yr)));
+                experienceTV.setText(experience + (experience > 1 ? " " + getResources().getString(R.string.yrs) : " " + getResources().getString(R.string.yr)));
                 experienceIV.setImageDrawable(getResources().getDrawable(R.drawable.not_experienced_1));
 
             }
@@ -975,33 +973,29 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
 
                 activeOffers.clear();
                 activeOffers = (ArrayList<Offer>) promotions.getPromotions();
-//                listViewAdapter.notifyDataSetChanged();
 
-                listViewAdapter = new ActiveOfferListViewAdapter(this, activeOffers);
-
-                activePromotionsLV.setAdapter(listViewAdapter);
-
-                /*if(listViewAdapter.getCount() > 5){
-                    View item = listViewAdapter.getView(0, null, activePromotionsLV);
-                    item.measure(0, 0);
-                    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, (int) (5.5 * item.getMeasuredHeight()));
-                    activePromotionsLV.setLayoutParams(params);
-                }
-*/
-
-               // EditProfileActivityMentee.setListViewHeightBasedOnChildren(activePromotionsLV);
-                //  ListViewInsideScrollViewHelper.getListViewSize(activePromotionsLV);
-
+                List<String> offersList = new ArrayList<>();
+                String lesson = getResources().getString(R.string.lesson);
+                String lessons = getResources().getString(R.string.lessons);
                 if (activeOffers.size() > 0) {
+                    for (Offer offer : activeOffers) {
+                        if (offer.getPromotion_type().equals("discount"))
+                            offersList.add(offer.getDiscount_percentage() + getResources().getString(R.string.percentage)
+                                    + " " + getResources().getString(R.string.discount_on) + " " + offer.getDiscount_over_classes()
+                                    + " " + (Integer.parseInt(offer.getDiscount_over_classes()) > 1 ? lessons : lesson));
+                        else
+                            offersList.add(offer.getFree_classes() + " " + getResources().getString(R.string.free)
+                                    + " " + (Integer.parseInt(offer.getFree_classes()) > 1 ? lessons : lesson)
+                                    + " " + getResources().getString(R.string.on) + " " + offer.getFree_min_classes()
+                                    + " " + (Integer.parseInt(offer.getFree_min_classes()) > 1 ? lessons : lesson));
+
+                    }
                     promotionLL.setVisibility(View.VISIBLE);
+                    activePromotionsLV.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, offersList));
+                    EditProfileActivityMentee.setHeight(activePromotionsLV);
+                    Log.e(TAG, "expandable lv height: " + activePromotionsLV.getHeight());
+                    Log.e(TAG, "expandable lv width: " + activePromotionsLV.getWidth());
                 }
-
-
-
-
-
-                Log.e(TAG, "expandable lv height after call: " + activePromotionsLV.getHeight());
-                Log.e(TAG, "expandable lv width after api call: " + activePromotionsLV.getWidth());
 
 
             } catch (Exception e) {

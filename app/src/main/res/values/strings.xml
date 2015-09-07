@@ -597,6 +597,8 @@
     <string name="intermediate">Intermediate</string>
     <string name="advance">Advance</string>
     <string name="discount_type_promotion">Discount</string>
+    <string name="discount_on">discount on</string>
+    <string name="on">on</string>
     <string name="chat_mentor">Chat with Mentor</string>
     <string name="chat_students">Chat with Students</string>
     <string name="book_class">Book Lesson</string>
@@ -669,6 +671,8 @@
     <string name="years">Years</string>
     <string name="yr">Yr</string>
     <string name="yrs">Yrs</string>
+    <string name="lesson">lesson</string>
+    <string name="lessons">lessons</string>
     <string name="calendar_by_loc">Calendar by location</string>
     <string name="loc">Location</string>
     <string name="reviews">Reviews</string>
@@ -873,6 +877,7 @@
     <string name="confirmation_msg1">Are you sure you want to apply</string>
 <string name="discount_for">discount for</string>
     <string name="percentage">%</string>
+    <string name="free">free</string>
     <string name="classes_booked">classes booked</string>
     <string name="class_booked">class booked</string>
     <string name="flexibility_in_class">class</string>

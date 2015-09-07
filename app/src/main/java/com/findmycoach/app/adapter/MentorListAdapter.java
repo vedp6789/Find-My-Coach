@@ -115,7 +115,7 @@ public class MentorListAdapter extends BaseAdapter implements Callback {
             if (age > 1)
                 holder.ageTV.setText(age + " " + years);
             else if (age == 0)
-                holder.ageTV.setText(age + " " + years);
+                holder.ageTV.setText(age + " " + year);
         } catch (Exception e) {
             holder.ageTV.setText("");
         }
