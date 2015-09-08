@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -28,16 +30,19 @@ public class TermsAndCondition {
         Log.e("TnC", "Dialog");
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         alertDialog.setTitle(context.getResources().getString(R.string.t_and_c));
-        ScrollView scrollView = new ScrollView(context);
-        final TextView contentView = new TextView(context);
-        contentView.setText(context.getResources().getString(R.string.terms));
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(18, 18, 18, 18);
-        scrollView.addView(contentView);
-        scrollView.setLayoutParams(params);
-        alertDialog.setView(scrollView);
+//        ScrollView scrollView = new ScrollView(context);
+//        final TextView contentView = new TextView(context);
+//        contentView.setText(context.getResources().getString(R.string.terms));
+//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.MATCH_PARENT);
+//        params.setMargins(18, 18, 18, 18);
+//        scrollView.addView(contentView);
+//        scrollView.setLayoutParams(params);
+
+        LayoutInflater inflater= LayoutInflater.from(context);
+        View view=inflater.inflate(R.layout.dialog_terms_conditions, null);
+        alertDialog.setView(view);
         alertDialog.setCancelable(false);
         alertDialog.setPositiveButton("Accept",
                 new DialogInterface.OnClickListener() {

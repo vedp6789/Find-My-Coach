@@ -76,7 +76,7 @@ public class SearchResultsFragment extends Fragment implements Callback {
         isGettingMentorDetails = false;
         if(progressDialog==null){
             progressDialog= new ProgressDialog(getActivity());
-            progressDialog.setMessage("Please Wait...");
+            progressDialog.setMessage(getActivity().getResources().getString(R.string.please_wait));
         }
         if (getArguments() != null) {
             position = getArguments().getInt("position");
