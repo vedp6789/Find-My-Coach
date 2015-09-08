@@ -1,6 +1,7 @@
 package com.findmycoach.app.fragment;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -50,6 +51,7 @@ public class SearchResultsFragment extends Fragment implements Callback {
     private boolean showTimeNavigation, isGettingMentorDetails;
     private TextView currentTime;
     private int timeNavigationGap;
+    public static ProgressDialog progressDialog;
 
     public static SearchResultsFragment newInstance(int position, String requestParams, String searchFor, int age, boolean showTimeNavigation, String aroundTime) {
         SearchResultsFragment fragment = new SearchResultsFragment();
@@ -72,6 +74,10 @@ public class SearchResultsFragment extends Fragment implements Callback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isGettingMentorDetails = false;
+        if(progressDialog==null){
+            progressDialog= new ProgressDialog(getActivity());
+            progressDialog.setMessage(getActivity().getResources().getString(R.string.please_wait));
+        }
         if (getArguments() != null) {
             position = getArguments().getInt("position");
             requestParams = new RequestParams(convert(getArguments().getString("request_params")));
@@ -90,9 +96,6 @@ public class SearchResultsFragment extends Fragment implements Callback {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_search_results, container, false);
         searchResultsListView = (ListView) v.findViewById(R.id.user_list);
-        if (NetworkManager.isNetworkConnected(getActivity())) {
-            NetworkClient.search(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 6);
-        }
         searchResultsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -135,6 +138,17 @@ public class SearchResultsFragment extends Fragment implements Callback {
         }
 
         return v;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (NetworkManager.isNetworkConnected(getActivity())) {
+            if(progressDialog!=null && !progressDialog.isShowing()){
+                progressDialog.show();
+            }
+            NetworkClient.search(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 6);
+        }
     }
 
     private void applyListener(View v) {
@@ -209,6 +223,9 @@ public class SearchResultsFragment extends Fragment implements Callback {
         String user_group = StorageHelper.getUserGroup(getActivity(), "user_group");
         if (user_group != null) {
             requestParams.add("user_group", StorageHelper.getUserGroup(getActivity(), "user_group"));
+            if(progressDialog!=null && !progressDialog.isShowing()){
+                progressDialog.show();
+            }
             NetworkClient.getMentorDetails(getActivity(), requestParams, authToken, this, 24);
             isGettingMentorDetails = true;
         } else {
@@ -240,6 +257,7 @@ public class SearchResultsFragment extends Fragment implements Callback {
             if (currentTime != null && searchedAroundTime != null)
                 currentTime.setText(getActivity().getResources().getString(R.string.around) + " " + searchedAroundTime);
         }
+        hideDialog();
 
     }
 
@@ -250,6 +268,13 @@ public class SearchResultsFragment extends Fragment implements Callback {
             distance = "";
             charges = "";
         }
+        hideDialog();
         Toast.makeText(getActivity(), (String) object, Toast.LENGTH_SHORT).show();
+    }
+
+    private void hideDialog(){
+        if(progressDialog!=null){
+            progressDialog.dismiss();
+        }
     }
 }
