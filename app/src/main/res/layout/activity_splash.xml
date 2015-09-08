@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#4d1b4e"
-    tools:context="inmobi.inmobisamsung.SplashActivity"
-    >
+    tools:context="inmobi.inmobisamsung.SplashActivity">
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
