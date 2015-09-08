@@ -8,7 +8,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
 import android.text.Html;
+import android.text.Layout;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
@@ -73,8 +76,10 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
     private ArrayList<Offer> activeOffers = new ArrayList<Offer>();
     private CircleImageView profileImage;
     private ImageView toggleReviewIconIV, ratingIV, studentsUnderMentorIV, qualifiedIV,
-            experienceIV, genderIV, teachingPlaceIV1, teachingPlaceIV2, teachingTypeIV1, teachingTypeIV2, arrowQualificationIV, arrowAccrediationsIV, arrowMethodologyIV, arrowAwardsIV;
-    private TextView profileName, ratingTV, noOfStudentsTV, reviewTitleTV, experienceTV, languageTV, distanceTV, chargesTV, ageTV, promotionsTitleTV;
+            experienceIV, genderIV, teachingPlaceIV1, teachingPlaceIV2, teachingTypeIV1,
+            teachingTypeIV2, arrowQualificationIV, arrowAccrediationsIV, arrowMethodologyIV, arrowAwardsIV;
+    private TextView profileName, ratingTV, noOfStudentsTV, reviewTitleTV, experienceTV,
+            languageTV, distanceTV, chargesTV, ageTV, promotionsTitleTV;
     private LinearLayout chatWithMentorLL, chatWithStudentsLL, reviewLL, promotionLL;
     private ListView reviewsListView;
     private RelativeLayout toggleReviewRL;
@@ -93,6 +98,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
     private ImageView iv_nextMonth;
     private ScrollableGridView calendarView;
     private Dialog calendarDialog;
+    Layout layout;
 
 
     private CalendarGridAdapter adapter1;
@@ -132,6 +138,13 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
     protected void onDestroy() {
         super.onDestroy();
         mentorDetailsActivity = null;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
     }
 
     @Override
@@ -803,20 +816,25 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         else
             languageTV.setVisibility(View.GONE);
 
-        if (userInfo.getMyQualification() != null && !userInfo.getMyQualification().trim().isEmpty())
+
+        if (userInfo.getMyQualification() != null && !userInfo.getMyQualification().trim().isEmpty()) {
             qualificationTV.setText(userInfo.getMyQualification().trim());
-        else
+            Log.e(TAG, "qulification text line: " + qualificationTV.getText().toString() + qualificationTV.getLineCount());
+        } else
             qualificationLL.setVisibility(View.GONE);
+
 
         if (userInfo.getMyAccredition() != null && !userInfo.getMyAccredition().trim().isEmpty())
             accrediationsTV.setText(userInfo.getMyAccredition().trim());
         else
             accrediationsLL.setVisibility(View.GONE);
 
+
         if (userInfo.getMyTeachingMethodology() != null && !userInfo.getMyTeachingMethodology().trim().isEmpty())
             myMethodologyTV.setText(userInfo.getMyTeachingMethodology().trim());
         else
             myMethodologyLL.setVisibility(View.GONE);
+
 
         if (userInfo.getMyAwards() != null && !userInfo.getMyAwards().trim().isEmpty())
             awardsTV.setText(userInfo.getMyAwards().trim());
@@ -869,8 +887,61 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
                 startChat(userInfo.getId(), profileName.getText().toString().trim(), drawable.getBitmap());
             }
         });
+
+
     }
 
+
+   /* @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        layout = qualificationTV.getLayout();
+
+        qualificationTV.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                Log.e(TAG, "qual tv:" + qualificationTV.getText().toString() + " " + qualificationTV.getLineCount() + "layout" + layout);
+                if (!checkForEllipsized(qualificationTV.getLineCount())) {
+                    rlArrowQualification.setVisibility(View.GONE);
+                }
+
+            }
+        }, 2000);
+
+
+        if (!checkForEllipsized(accrediationsTV)) {
+            rlArrowAccrediations.setVisibility(View.GONE);
+        }
+
+        if (!checkForEllipsized(myMethodologyTV)) {
+            rlArrowMethodology.setVisibility(View.GONE);
+        }
+
+
+        if (!checkForEllipsized(awardsTV)) {
+            rlArrowAwards.setVisibility(View.GONE);
+        }
+
+    }*/
+
+   /* private boolean checkForEllipsized(int line_count) {
+        if (line_count > -1) {
+
+            if (line_count > 0) {
+                int ellipsisCount = layout.getEllipsisCount(0);
+                Log.e(TAG, "ellipsis count: " + ellipsisCount);
+
+                if (ellipsisCount > 0) {
+                    Log.d(TAG, "Text is ellipsized");
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (connectionStatus.equals("not connected")) {
