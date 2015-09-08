@@ -387,7 +387,7 @@
     <string name="new_password">New Password:</string>
     <string name="new_password_re">Re Enter New Password:</string>
     <string name="new_phone_no">Mobile number:</string>
-    <string name="prompt_confirm_password">Confirm Password</string>
+    <string name="prompt_confirm_password">Confirm New Password</string>
     <string name="prompt_commit">Commit</string>
     <string name="prompt_first_name">First name</string>
     <string name="prompt_first_middle_name">First Name &#160;&#160;&#160;&#160;&#160;&#160;Middle Name</string>

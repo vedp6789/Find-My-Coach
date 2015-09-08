@@ -1,20 +1,10 @@
 package com.findmycoach.app.activity;
 
-import com.findmycoach.app.util.PlaceAutocompleteAdapter;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.*;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -85,6 +75,7 @@ import com.findmycoach.app.util.DateAsPerChizzle;
 import com.findmycoach.app.util.MetaData;
 import com.findmycoach.app.util.NetworkClient;
 import com.findmycoach.app.util.NetworkManager;
+import com.findmycoach.app.util.PlaceAutocompleteAdapter;
 import com.findmycoach.app.util.StorageHelper;
 import com.findmycoach.app.util.StudentsPreference;
 import com.findmycoach.app.util.TeachingMediumPreferenceDialog;
@@ -93,7 +84,16 @@ import com.findmycoach.app.views.ChizzleEditText;
 import com.findmycoach.app.views.ChizzleTextView;
 import com.findmycoach.app.views.ChizzleTextViewBold;
 import com.findmycoach.app.views.DobPicker;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -2259,6 +2259,7 @@ if(rb_individual.isChecked())
                     if (!isFirstCallToCountryApi) {
                         city_id = 0;
                         city_with_states.setText("");
+                        locale.setText("");
                     }
                     llCity.setVisibility(View.VISIBLE);
                 }

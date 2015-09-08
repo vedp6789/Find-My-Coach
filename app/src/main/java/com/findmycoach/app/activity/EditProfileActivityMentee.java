@@ -590,8 +590,6 @@ public class EditProfileActivityMentee extends FragmentActivity implements Callb
         });
 
 
-
-
         if (userInfo.getTrainingLocation() != null) {
             previousValue = (String) userInfo.getTrainingLocation();
         }
@@ -608,7 +606,6 @@ public class EditProfileActivityMentee extends FragmentActivity implements Callb
                 }
             }
         });
-
 
 
         locationPreferenceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1061,7 +1058,7 @@ public class EditProfileActivityMentee extends FragmentActivity implements Callb
             locale_string.append(", " + NetworkManager.cityName);
         }
 
-        if(!NetworkManager.stateName.trim().isEmpty()){
+        if (!NetworkManager.stateName.trim().isEmpty()) {
             state_name = NetworkManager.stateName;  /* state_name is not getting added to locale suggestion*/
         }
         if (!NetworkManager.postalCodeName.trim().isEmpty()) {
@@ -1430,6 +1427,7 @@ public class EditProfileActivityMentee extends FragmentActivity implements Callb
                     if (!isFirstCallToCountryApi) {
                         city_id = 0;
                         city_with_states.setText("");
+                        locale.setText("");
                     }
                     llCity.setVisibility(View.VISIBLE);
                 }
