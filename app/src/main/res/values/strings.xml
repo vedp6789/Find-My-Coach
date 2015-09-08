@@ -810,6 +810,7 @@
     <string name="add_free_classes">Add Number of Free Lessons You Will Provide to Mentee!</string>
     <string name="add_mandatory_classes">Add Number of Mandatory Lessons For Mentee!</string>
     <string name="promotion">Promotion</string>
+    <string name="promotions">Promotions</string>
     <string name="either_inactivate_or_delete">You can Make Your Promotion Inactive!</string>
     <string name="inactivate">Make It Inactive</string>
     <string name="either_activate_or_delete">You can Make Your Promotion Active!</string>
