@@ -800,8 +800,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
 
         if (userInfo.getMediumOfEducation() != null && !userInfo.getMediumOfEducation().trim().isEmpty())
             languageTV.setText(userInfo.getMediumOfEducation().trim());
-//        else
-//            coachingLanguageLL.setVisibility(View.GONE);
+        else
+            languageTV.setVisibility(View.GONE);
 
         if (userInfo.getMyQualification() != null && !userInfo.getMyQualification().trim().isEmpty())
             qualificationTV.setText(userInfo.getMyQualification().trim());
@@ -823,6 +823,15 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         else
             awardsLL.setVisibility(View.GONE);
 
+        /**Uncomment for dummy reviews*/
+//        List<Review> reviewList = new ArrayList<>();
+//        for (int i = 0; i < 10; i++) {
+//            Review review = new Review();
+//            review.setCommentedBy("Mentee " + (i + 1));
+//            review.setComment("Mentor teaches good " + (i + 1));
+//            reviewList.add(review);
+//        }
+//        userInfo.setReviews(reviewList);
 
         if (userInfo.getReviews() != null && userInfo.getReviews().size() > 0) {
             reviewTitleTV.setText(getResources().getString(R.string.reviews) + " (" + userInfo.getReviews().size() + ")");
@@ -1011,7 +1020,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
 
                     }
                     promotionLL.setVisibility(View.VISIBLE);
-                    if(activeOffers.size() > 1)
+                    if (activeOffers.size() > 1)
                         promotionsTitleTV.setText(getResources().getString(R.string.promotions));
                     activePromotionsLV.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, offersList));
                     EditProfileActivityMentee.setHeight(activePromotionsLV);
