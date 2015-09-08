@@ -62,7 +62,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_below="@+id/timeLayout"
-        android:padding="@dimen/textView_padding_margin" />
+        android:paddingLeft="@dimen/textView_padding_margin"
+        android:paddingRight="@dimen/textView_padding_margin" />
 
 
 </RelativeLayout>
