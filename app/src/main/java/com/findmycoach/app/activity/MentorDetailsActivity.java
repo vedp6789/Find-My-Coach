@@ -74,16 +74,14 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
     private CircleImageView profileImage;
     private ImageView toggleReviewIconIV, ratingIV, studentsUnderMentorIV, qualifiedIV,
             experienceIV, genderIV, teachingPlaceIV1, teachingPlaceIV2, teachingTypeIV1, teachingTypeIV2, arrowQualificationIV, arrowAccrediationsIV, arrowMethodologyIV, arrowAwardsIV;
-    private TextView profileName, ratingTV, noOfStudentsTV, reviewTitleTV, experienceTV, languageTV, distanceTV, chargesTV, ageTV;
-    private LinearLayout chatWithMentorLL, chatWithStudentsLL, reviewLL, teachingPlaceLL,
-            teachingTypeLL, promotionLL;
+    private TextView profileName, ratingTV, noOfStudentsTV, reviewTitleTV, experienceTV, languageTV, distanceTV, chargesTV, ageTV, promotionsTitleTV;
+    private LinearLayout chatWithMentorLL, chatWithStudentsLL, reviewLL, promotionLL;
     private ListView reviewsListView;
     private RelativeLayout toggleReviewRL;
     private ScrollView scrollView;
 
     private TextView qualificationTV, accrediationsTV, myMethodologyTV, awardsTV;
-    private LinearLayout
-            coachingLanguageLL, qualificationLL, accrediationsLL, myMethodologyLL, awardsLL;
+    private LinearLayout qualificationLL, accrediationsLL, myMethodologyLL, awardsLL;
 
     private RelativeLayout rlArrowQualification, rlArrowAccrediations, rlArrowMethodology, rlArrowAwards;
 
@@ -446,6 +444,7 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         distanceTV = (TextView) findViewById(R.id.distanceTV);
         chargesTV = (TextView) findViewById(R.id.charges);
         ageTV = (TextView) findViewById(R.id.age);
+        promotionsTitleTV = (TextView) findViewById(R.id.promotionsTitleTV);
         chatWithMentorLL = (LinearLayout) findViewById(R.id.chat_with_mentor);
         chatWithStudentsLL = (LinearLayout) findViewById(R.id.chat_with_students);
         reviewLL = (LinearLayout) findViewById(R.id.review_LL);
@@ -471,14 +470,14 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         // professionLL = (LinearLayout) findViewById(R.id.professionLL);
         // areaOfCoachingLL = (LinearLayout) findViewById(R.id.areaOfCoachingLL);
         //experienceLL = (LinearLayout) findViewById(R.id.experienceLL);
-        coachingLanguageLL = (LinearLayout) findViewById(R.id.coachingLanguageLL);
+//        coachingLanguageLL = (LinearLayout) findViewById(R.id.coachingLanguageLL);
         qualificationLL = (LinearLayout) findViewById(R.id.qualificationLL);
         accrediationsLL = (LinearLayout) findViewById(R.id.accrediationsLL);
         myMethodologyLL = (LinearLayout) findViewById(R.id.myMethodologyLL);
         awardsLL = (LinearLayout) findViewById(R.id.awardsLL);
 //        genderLL = (LinearLayout) findViewById(R.id.genderLL);
-        teachingPlaceLL = (LinearLayout) findViewById(R.id.teachingPlaceLL);
-        teachingTypeLL = (LinearLayout) findViewById(R.id.teachingTypeLL);
+//        teachingPlaceLL = (LinearLayout) findViewById(R.id.teachingPlaceLL);
+//        teachingTypeLL = (LinearLayout) findViewById(R.id.teachingTypeLL);
         promotionLL = (LinearLayout) findViewById(R.id.promotionLL);
         promotionLL.setVisibility(View.GONE);
 
@@ -705,12 +704,13 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
                     teachingPlaceIV2.setImageDrawable(getResources().getDrawable(R.drawable.home));    // Both address can be opted for teaching
                     teachingPlaceIV1.setImageDrawable(getResources().getDrawable(R.drawable.institute));
                 }
-            } else {
-                teachingPlaceLL.setVisibility(View.GONE);
             }
+//            else {
+//                teachingPlaceLL.setVisibility(View.GONE);
+//            }
         } catch (Exception e) {
             e.printStackTrace();
-            teachingPlaceLL.setVisibility(View.GONE);
+//            teachingPlaceLL.setVisibility(View.GONE);
         }
 
 
@@ -726,12 +726,13 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
                     teachingTypeIV2.setImageDrawable(getResources().getDrawable(R.drawable.group_class));    // Both class is active
                     teachingTypeIV1.setImageDrawable(getResources().getDrawable(R.drawable.individual));
                 }
-            } else {
-                teachingTypeLL.setVisibility(View.GONE);
             }
+//            else {
+//                teachingTypeLL.setVisibility(View.GONE);
+//            }
         } catch (Exception e) {
             e.printStackTrace();
-            teachingTypeLL.setVisibility(View.GONE);
+//            teachingTypeLL.setVisibility(View.GONE);
         }
 
 
@@ -799,8 +800,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
 
         if (userInfo.getMediumOfEducation() != null && !userInfo.getMediumOfEducation().trim().isEmpty())
             languageTV.setText(userInfo.getMediumOfEducation().trim());
-        else
-            coachingLanguageLL.setVisibility(View.GONE);
+//        else
+//            coachingLanguageLL.setVisibility(View.GONE);
 
         if (userInfo.getMyQualification() != null && !userInfo.getMyQualification().trim().isEmpty())
             qualificationTV.setText(userInfo.getMyQualification().trim());
@@ -1010,6 +1011,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
 
                     }
                     promotionLL.setVisibility(View.VISIBLE);
+                    if(activeOffers.size() > 1)
+                        promotionsTitleTV.setText(getResources().getString(R.string.promotions));
                     activePromotionsLV.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, offersList));
                     EditProfileActivityMentee.setHeight(activePromotionsLV);
                     Log.e(TAG, "expandable lv height: " + activePromotionsLV.getHeight());
