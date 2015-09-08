@@ -96,12 +96,6 @@ public class SearchResultsFragment extends Fragment implements Callback {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_search_results, container, false);
         searchResultsListView = (ListView) v.findViewById(R.id.user_list);
-        if (NetworkManager.isNetworkConnected(getActivity())) {
-            if(progressDialog!=null && !progressDialog.isShowing()){
-                progressDialog.show();
-            }
-            NetworkClient.search(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 6);
-        }
         searchResultsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -144,6 +138,17 @@ public class SearchResultsFragment extends Fragment implements Callback {
         }
 
         return v;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (NetworkManager.isNetworkConnected(getActivity())) {
+            if(progressDialog!=null && !progressDialog.isShowing()){
+                progressDialog.show();
+            }
+            NetworkClient.search(getActivity(), requestParams, StorageHelper.getUserDetails(getActivity(), "auth_token"), this, 6);
+        }
     }
 
     private void applyListener(View v) {

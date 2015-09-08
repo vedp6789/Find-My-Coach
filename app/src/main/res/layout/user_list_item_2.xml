@@ -39,13 +39,14 @@
 
                 <com.findmycoach.app.views.ChizzleTextViewBold
                     android:id="@+id/mentor_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:singleLine="true"
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_heading"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_toLeftOf="@+id/age" />
 
 
                 <com.findmycoach.app.views.ChizzleTextView
