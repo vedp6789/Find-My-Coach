@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/textView_padding_margin"
-    android:gravity="center_vertical"
+    android:gravity="right"
     android:textSize="@dimen/profile_details"
     android:background="@color/white"
     android:paddingStart="?android:attr/listPreferredItemPaddingStart"
