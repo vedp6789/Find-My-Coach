@@ -50,7 +50,7 @@
                     android:textColor="@color/purple"
                     android:textSize="@dimen/profile_heading"
                     android:textStyle="bold"
-                    android:layout_toLeftOf="@+id/age" />
+                     />
 
 
                 <com.findmycoach.app.views.ChizzleTextView
