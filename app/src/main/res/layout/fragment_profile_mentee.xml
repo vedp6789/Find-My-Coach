@@ -24,7 +24,7 @@
             android:paddingBottom="@dimen/back_margin">
 
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_gravity="center"
                 android:id="@+id/profile_image"
                 android:layout_width="@dimen/user_image_height_width"

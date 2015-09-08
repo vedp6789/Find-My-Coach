@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="7dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/studentImageView"
         android:layout_width="60dp"
         android:layout_height="60dp"
