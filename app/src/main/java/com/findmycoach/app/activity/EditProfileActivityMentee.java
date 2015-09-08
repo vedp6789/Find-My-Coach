@@ -124,7 +124,8 @@ public class EditProfileActivityMentee extends FragmentActivity implements Callb
     private String userCurrentAddress = "";
     private ScrollView scroll_view;
     private Spinner locationPreferenceSpinner;
-    private RelativeLayout groupDetailsLayout, llCity;
+    private RelativeLayout groupDetailsLayout;
+        private LinearLayout    llCity;
     private ArrayList<ChildDetails> childDetailsArrayList;
     private ListView childDetailsListView, addressListView;
     private ChildDetailsAdapter childDetailsAdapter;
@@ -288,7 +289,7 @@ public class EditProfileActivityMentee extends FragmentActivity implements Callb
         addPhoto = (ChizzleTextView) findViewById(R.id.addPhotoMentee);
         scroll_view = (ScrollView) findViewById(R.id.main_scroll_view);
         groupDetailsLayout = (RelativeLayout) findViewById(R.id.groupClassesDetails);
-        llCity = (RelativeLayout) findViewById(R.id.llCity);
+        llCity = (LinearLayout) findViewById(R.id.llCity);
         childDetailsListView = (ListView) findViewById(R.id.childDetailsListView);
         addMore = (Button) findViewById(R.id.addMoreButton);
         addAddress = (ImageButton) findViewById(R.id.addAddress);
