@@ -22,15 +22,69 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <LinearLayout
+                    android:id="@+id/ll_slot_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/back_margin"
+                    android:orientation="vertical">
+
+                    <com.findmycoach.app.views.ChizzleTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/slot_type"
+                        android:textColor="@color/purple_light"
+                        android:textSize="@dimen/profile_title" />
+
+
+                    <RadioGroup
+                        android:id="@+id/radioGroupClassType"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:checkedButton="@+id/radio_button_mentor_signup"
+                        android:gravity="center"
+                        android:minHeight="@dimen/abc_action_bar_stacked_max_height"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radio_button_individual"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.2"
+                            android:button="@drawable/custom_check_box"
+                            android:clickable="false"
+                            android:paddingLeft="@dimen/radio_button_padding_mentor_for"
+                            android:text="@string/individual"
+                            android:textColor="@color/custom_button_text_color_click_purple" />
+
+                        <RadioButton
+                            android:id="@+id/radio_button_group"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:button="@drawable/custom_check_box"
+                            android:clickable="false"
+                            android:paddingLeft="@dimen/radio_button_padding_mentor_for"
+                            android:text="@string/group"
+                            android:textColor="@color/custom_button_text_color_click_purple" />
+
+                    </RadioGroup>
+
+
+                </LinearLayout>
+
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/chooseDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/back_margin"
-                    android:gravity="center"
+                    android:layout_below="@+id/ll_slot_type"
+                    android:layout_marginLeft="@dimen/back_margin"
+                    android:layout_marginRight="@dimen/back_margin"
                     android:text="@string/choose_date"
-                    android:textColor="@color/purple"
-                    android:textSize="@dimen/profile_name" />
+                    android:textColor="@color/purple_light"
+                    android:textSize="@dimen/profile_title" />
 
                 <LinearLayout
                     android:id="@+id/date"
@@ -113,11 +167,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/date"
-                    android:layout_margin="@dimen/back_margin"
-                    android:gravity="center"
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:layout_marginLeft="@dimen/back_margin"
+                    android:layout_marginRight="@dimen/back_margin"
                     android:text="@string/choose_time"
-                    android:textColor="@color/purple"
-                    android:textSize="@dimen/profile_name" />
+                    android:textColor="@color/purple_light"
+                    android:textSize="@dimen/profile_title" />
 
                 <LinearLayout
                     android:id="@+id/time"
@@ -209,11 +264,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/time"
-                    android:layout_margin="@dimen/back_margin"
-                    android:gravity="center"
+                    android:layout_marginTop="@dimen/back_margin"
+                    android:layout_marginLeft="@dimen/back_margin"
+                    android:layout_marginRight="@dimen/back_margin"
                     android:text="@string/select_days"
-                    android:textColor="@color/purple"
-                    android:textSize="@dimen/profile_name" />
+                    android:textColor="@color/purple_light"
+                    android:textSize="@dimen/profile_title" />
 
                 <com.findmycoach.app.views.ChizzleTextView
                     android:id="@+id/upperLine"
@@ -246,9 +302,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/lowerLine"
-                    android:layout_marginLeft="@dimen/back_margin"
-                    android:layout_marginRight="@dimen/back_margin"
-                    android:layout_marginTop="@dimen/back_margin"
+                    android:layout_margin="@dimen/back_margin"
                     android:orientation="horizontal">
 
                     <com.findmycoach.app.views.ChizzleTextView
@@ -257,8 +311,8 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="@string/coaching_subject"
-                        android:textColor="@color/purple"
-                        android:textSize="@dimen/profile_details" />
+                        android:textColor="@color/purple_light"
+                        android:textSize="@dimen/profile_title" />
 
                     <LinearLayout
                         android:id="@+id/ll_coaching_subjects"
@@ -319,64 +373,10 @@
 
 
                 <LinearLayout
-                    android:id="@+id/ll_slot_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/ll_subject"
-                    android:layout_margin="@dimen/back_margin"
-                    android:orientation="vertical">
-
-                    <com.findmycoach.app.views.ChizzleTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:text="@string/slot_type"
-                        android:textColor="@color/purple"
-                        android:textSize="@dimen/profile_details" />
-
-
-                    <RadioGroup
-                        android:id="@+id/radioGroupClassType"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="2"
-                        android:checkedButton="@+id/radio_button_mentor_signup"
-                        android:gravity="center"
-                        android:minHeight="@dimen/abc_action_bar_stacked_max_height"
-                        android:orientation="horizontal">
-
-                        <RadioButton
-                            android:clickable="false"
-                            android:id="@+id/radio_button_individual"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1.2"
-                            android:button="@drawable/custom_check_box"
-                            android:paddingLeft="@dimen/radio_button_padding_mentor_for"
-                            android:text="@string/individual"
-                            android:textColor="@color/custom_button_text_color_click_purple" />
-
-                        <RadioButton
-                            android:clickable="false"
-                            android:id="@+id/radio_button_group"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:button="@drawable/custom_check_box"
-                            android:paddingLeft="@dimen/radio_button_padding_mentor_for"
-                            android:text="@string/group"
-                            android:textColor="@color/custom_button_text_color_click_purple" />
-
-                    </RadioGroup>
-
-
-                </LinearLayout>
-
-                <LinearLayout
                     android:id="@+id/ll_max_students"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ll_slot_type"
+                    android:layout_below="@+id/ll_subject"
                     android:layout_marginLeft="@dimen/back_margin"
                     android:layout_marginRight="@dimen/back_margin"
                     android:orientation="horizontal">
@@ -387,8 +387,8 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="@string/possible_max_users"
-                        android:textColor="@color/purple"
-                        android:textSize="@dimen/profile_details" />
+                        android:textColor="@color/purple_light"
+                        android:textSize="@dimen/profile_title" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -429,8 +429,8 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="@string/tutorial_location"
-                        android:textColor="@color/purple"
-                        android:textSize="@dimen/profile_details" />
+                        android:textColor="@color/purple_light"
+                        android:textSize="@dimen/profile_title" />
 
                     <LinearLayout
                         android:layout_width="0dp"

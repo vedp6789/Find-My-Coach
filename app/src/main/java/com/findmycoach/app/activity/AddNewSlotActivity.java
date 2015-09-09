@@ -227,9 +227,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         tv_start_date.setText(date_from);
         date_to = getResources().getString(R.string.end_date);
 
-
         allListeners();
-
         slot_type = Integer.parseInt(userInfo.getSlotType());
 
         if (slot_type == 0)
@@ -239,6 +237,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         else if (slot_type == 2) {
             rbIndividual.setClickable(true);
             rbGroup.setClickable(true);
+            slot_type = 0;
             individualSelected();
 
             rbIndividual.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -284,7 +283,6 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
     }
 
     private void allListeners() {
-
 
         findViewById(R.id.fromDate).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -420,7 +418,7 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         findViewById(R.id.toTime).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (tv_start_time.getText().length() > 0) {
+                if (tv_start_time.getText().length() > 0 && slot_type != 1) {
                     Log.d(TAG, "start_hour" + start_hour + "start_min: " + start_min);
                     if (start_hour == 23 && start_min == 45) {
                         Log.d(TAG, "start_hour" + start_hour + "start_min: " + start_min);
