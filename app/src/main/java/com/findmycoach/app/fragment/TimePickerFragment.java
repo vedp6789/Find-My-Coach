@@ -27,9 +27,13 @@ public class TimePickerFragment extends TimePickerDialog implements TimePicker.O
 
     @Override
     public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-        if(isMinTimeEnabled){
-            if (hourOfDay < minHour || (hourOfDay == minHour && minute < minMinute)){
+        if (isMinTimeEnabled) {
+            if (hourOfDay < minHour || (hourOfDay == minHour && minute < minMinute)) {
                 updateTime(minHour, minMinute);
+            }
+        } else {
+            if (hourOfDay == 23 && minute > 2) {
+                updateTime(23, 2);
             }
         }
     }

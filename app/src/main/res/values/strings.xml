@@ -140,7 +140,7 @@
     <string name="problem_in_url">Not updated by mentor yet.</string>
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
-    <string name="slot_type">Slot type:</string>
+    <string name="slot_type">Slot type</string>
     <string name="class_location">Location</string>
     <string name="possible_max_users">Maximum number of students</string>
     <string name="max_students">Places remaining to get scheduled</string>
@@ -235,7 +235,7 @@
     <string name="class_is_available">Lesson is available</string>
     <string name="select_suggested_location"> Select one of the suggested locations</string>
     <string name="quantized_timing">Minute is selected as per your selected start time!</string>
-    <string name="single_student_can_schedule_class">Only am individual will be able to schedule Lesson!</string>
+    <string name="single_student_can_schedule_class">Only an individual will be able to schedule Lesson!</string>
     <string name="multiple_student_can_schedule_class">Multiple students will be able to schedule Lesson!</string>
     <string name="maximum_students">Please provide maximum students for this group.</string>
     <string name="end_date_required">Please provide completion date of this slot.</string>
@@ -461,13 +461,13 @@
     <string name="class_days">days</string>
     <string name="class_day">day</string>
     <string name="select_days">Select Days</string>
-    <string name="from">From :</string>
+    <string name="from">From :&#160;</string>
     <string name="around">Around :</string>
     <string name="searchPreferredDate">Preferred Date :</string>
     <string name="all">All</string>
     <string name="timing">Timing</string>
     <string name="class_timing">Timing:</string>
-    <string name="to">To :</string>
+    <string name="to">To :&#160;</string>
     <string name="to1">to</string>
     <string name="done">Done</string>
     <string name="starting_from">Starting From:</string>
@@ -497,7 +497,7 @@
     <string name="enter_msg">Enter message</string>
     <string name="send">Send</string>
     <string name="request_sent_successfully">Request sent successfully.</string>
-    <string name="created_on">  Created on : </string>
+    <string name="created_on">Created on :</string>
     <string name="not_connected_to_anyone">Not connected to anyone.</string>
     <string name="choose_suggested_city">Choose a suggested city</string>
     <string name="choose_time">Choose time</string>
@@ -829,9 +829,9 @@
 
     <!--<string name="max_class_week">Max. No. of Lessons for a Student in a Week</string>
     <string name="max_class_week1">Max. No. of Lessons for a Student in a Week:</string>-->
-<!--
-    <string name="pricing_per_hour_individual">Pricing per hour for am individual Lesson</string>
--->
+    <!--
+        <string name="pricing_per_hour_individual">Pricing per hour for am individual Lesson</string>
+    -->
 
 
     <string name="pricing_per_hour_individual">Pricing/Hour (Individual Lesson)</string>
@@ -878,7 +878,7 @@
     <string name="decline">Decline</string>
     <string name="km">Km</string>
     <string name="confirmation_msg1">Are you sure you want to apply</string>
-<string name="discount_for">discount for</string>
+    <string name="discount_for">discount for</string>
     <string name="percentage">%</string>
     <string name="free">free</string>
     <string name="classes_booked">classes booked</string>
