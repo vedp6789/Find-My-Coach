@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -71,7 +72,7 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MentorDetailsActivity extends FragmentActivity implements Callback, View.OnClickListener {
+public class MentorDetailsActivity extends FragmentActivity implements Callback, View.OnClickListener, ViewTreeObserver.OnDrawListener, ViewTreeObserver.OnGlobalLayoutListener {
     private ListView activePromotionsLV;
     private ArrayList<Offer> activeOffers = new ArrayList<Offer>();
     private CircleImageView profileImage;
@@ -480,6 +481,8 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         accrediationsTV = (TextView) findViewById(R.id.accrediationsTV);
         myMethodologyTV = (TextView) findViewById(R.id.myMethodologyTV);
         awardsTV = (TextView) findViewById(R.id.awardsTV);
+
+
         // professionLL = (LinearLayout) findViewById(R.id.professionLL);
         // areaOfCoachingLL = (LinearLayout) findViewById(R.id.areaOfCoachingLL);
         //experienceLL = (LinearLayout) findViewById(R.id.experienceLL);
@@ -892,25 +895,65 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
     }
 
 
-   /* @Override
+    @Override
     protected void onPostResume() {
         super.onPostResume();
-        layout = qualificationTV.getLayout();
+
 
         qualificationTV.postDelayed(new Runnable() {
             @Override
             public void run() {
-
+                layout = qualificationTV.getLayout();
                 Log.e(TAG, "qual tv:" + qualificationTV.getText().toString() + " " + qualificationTV.getLineCount() + "layout" + layout);
-                if (!checkForEllipsized(qualificationTV.getLineCount())) {
+                if (!checkForEllipsized(qualificationTV)) {
                     rlArrowQualification.setVisibility(View.GONE);
                 }
 
             }
-        }, 2000);
+        }, 10);
 
 
-        if (!checkForEllipsized(accrediationsTV)) {
+        accrediationsTV.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                layout = accrediationsTV.getLayout();
+                Log.e(TAG, "accrediation tv:" + accrediationsTV.getText().toString() + " " + accrediationsTV.getLineCount() + "layout" + layout);
+                if (!checkForEllipsized(accrediationsTV)) {
+                    rlArrowAccrediations.setVisibility(View.GONE);
+                }
+
+            }
+        },10);
+
+
+        myMethodologyTV.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                layout = myMethodologyTV.getLayout();
+                Log.e(TAG, "myMethodology tv:" + myMethodologyTV.getText().toString() + " " + myMethodologyTV.getLineCount() + "layout" + layout);
+                if (!checkForEllipsized(myMethodologyTV)) {
+                    rlArrowMethodology.setVisibility(View.GONE);
+                }
+
+            }
+        }, 10);
+
+        awardsTV.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                layout = awardsTV.getLayout();
+                Log.e(TAG, "awards tv:" + awardsTV.getText().toString() + " " + awardsTV.getLineCount() + "layout" + layout);
+                if (!checkForEllipsized(awardsTV)) {
+                    rlArrowAwards.setVisibility(View.GONE);
+                }
+
+            }
+        },10);
+
+
+
+
+        /*if (!checkForEllipsized(accrediationsTV)) {
             rlArrowAccrediations.setVisibility(View.GONE);
         }
 
@@ -922,26 +965,32 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
         if (!checkForEllipsized(awardsTV)) {
             rlArrowAwards.setVisibility(View.GONE);
         }
+*/
+    }
 
-    }*/
+    private boolean checkForEllipsized(TextView textView) {
 
-   /* private boolean checkForEllipsized(int line_count) {
-        if (line_count > -1) {
+        Layout layout = textView.getLayout();
+        if (layout != null) {
+            int lines = layout.getLineCount();
+            Log.e(TAG,"line count: "+lines);
 
-            if (line_count > 0) {
-                int ellipsisCount = layout.getEllipsisCount(0);
-                Log.e(TAG, "ellipsis count: " + ellipsisCount);
-
+            if (lines > 0) {
+                int ellipsisCount = layout.getEllipsisCount(lines - 1);
+                Log.e(TAG,"ellipsiscount: "+ellipsisCount);
                 if (ellipsisCount > 0) {
                     Log.d(TAG, "Text is ellipsized");
                     return true;
+                } else {
+                    return false;
                 }
             }
         }
 
-        return false;
+
+        return true;  /* returning true so that if ellipsis count is not possible then expand and collapse icon is visible*/
     }
-*/
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (connectionStatus.equals("not connected")) {
@@ -1844,5 +1893,18 @@ public class MentorDetailsActivity extends FragmentActivity implements Callback,
             e.printStackTrace();
         }
         return -1;
+    }
+
+    @Override
+    public void onDraw() {
+        Layout layout = qualificationTV.getLayout();
+        Log.e(TAG, "onDraw ViewTreeObserver: " + layout);
+
+    }
+
+    @Override
+    public void onGlobalLayout() {
+        Layout layout = qualificationTV.getLayout();
+        Log.e(TAG, "onGlobalLayout ViewTreeObserver: " + layout);
     }
 }
