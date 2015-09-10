@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -34,6 +35,7 @@ import com.findmycoach.app.adapter.AddSlotAdapter;
 import com.findmycoach.app.beans.authentication.Data;
 import com.findmycoach.app.beans.authentication.Response;
 import com.findmycoach.app.beans.authentication.SubCategoryName;
+import com.findmycoach.app.beans.student.Address;
 import com.findmycoach.app.fragment.TimePickerFragment;
 import com.findmycoach.app.util.Callback;
 import com.findmycoach.app.util.NetworkClient;
@@ -63,9 +65,11 @@ import java.util.TreeSet;
  */
 public class AddNewSlotActivity extends Activity implements SetDate, SetTime, TimePickerDialog.OnTimeSetListener {
     ScrollView scrollView;
-    Spinner sp_coaching_subjects;
-    EditText et_maximum_students, et_tutorial_location;
-    LinearLayout ll_slot_maximum_students, ll_coaching_subjects, ll_single_subject;
+    Spinner sp_coaching_subjects, tutorialLocationSp;
+    EditText et_maximum_students;
+    TextView et_tutorial_location;
+    private CheckBox cbTrialClass;
+    LinearLayout ll_slot_maximum_students, ll_coaching_subjects, ll_single_subject, tutorialLocationLL;
     public static TextView tv_start_date, tv_till_date, tv_start_time, tv_stop_time, tv_coaching_subject;
     public boolean boo_mon_checked, boo_tue_checked,
             boo_wed_checked, boo_thurs_checked,
@@ -152,23 +156,24 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         boo_sun_checked = true;
 
         initialize();
-        et_tutorial_location.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == 66) {
-                    InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-
-                }
-
-                return false;
-            }
-        });
+//        et_tutorial_location.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                if (keyCode == 66) {
+//                    InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+//                }
+//
+//                return false;
+//            }
+//        });
 
 
         List<String> subCategoryNames = new ArrayList<>();
         for (SubCategoryName s : userInfo.getSubCategoryName())
             subCategoryNames.add(s.getSub_category_name());
+
+        subCategoryNames.add(getResources().getString(R.string.any));
 
         Log.d(TAG, "set of sub size: " + subCategoryNames.size());
         if (subCategoryNames.size() != 0) {
@@ -485,6 +490,11 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
                         Log.d(TAG, "mentor_id" + StorageHelper.getUserDetails(AddNewSlotActivity.this, "user_id"));
                         Log.d(TAG, "From date" + tv_start_date.getText().toString());
                         Log.d(TAG, "Till date" + tillDate);
+
+                        if (cbTrialClass.isChecked())
+                            requestParams.add("is_trial_class", "1");
+                        else
+                            requestParams.add("is_trial_class", "0");
 
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append(String.valueOf(from_year));
@@ -1458,18 +1468,54 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
         tv_stop_time = (TextView) findViewById(R.id.tv_slot_stop_time);
         tv_coaching_subject = (TextView) findViewById(R.id.tv_coaching_subject);
         sp_coaching_subjects = (Spinner) findViewById(R.id.sp_coaching_subjects);
+        tutorialLocationSp = (Spinner) findViewById(R.id.tutorialLocationSp);
         ll_slot_maximum_students = (LinearLayout) findViewById(R.id.ll_max_students);
+        tutorialLocationLL = (LinearLayout) findViewById(R.id.tutorialLocationLL);
         ll_slot_maximum_students.setVisibility(View.GONE);
         ll_coaching_subjects = (LinearLayout) findViewById(R.id.ll_coaching_subjects);
         ll_single_subject = (LinearLayout) findViewById(R.id.ll_single_subject);
         et_maximum_students = (EditText) findViewById(R.id.et_maximum_students);
-        et_tutorial_location = (EditText) findViewById(R.id.et_tutorial_location);
-        et_tutorial_location.setOnTouchListener(onTouchListener);
-        et_tutorial_location.setOnFocusChangeListener(onFocusChangeListener);
-        et_tutorial_location.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        et_tutorial_location = (TextView) findViewById(R.id.et_tutorial_location);
+        cbTrialClass = (CheckBox) findViewById(R.id.cbTrialClass);
+//        et_tutorial_location.setOnTouchListener(onTouchListener);
+//        et_tutorial_location.setOnFocusChangeListener(onFocusChangeListener);
+        if (Integer.parseInt(userInfo.getAvailabilityYn()) == 0) {
+            Address address = null;
+            for (Address add : userInfo.getMultipleAddress())
+                if (add.getDefault_yn() == 1)
+                    address = add;
+
+            if (address == null)
+                address = userInfo.getMultipleAddress().get(0);
+
+            et_tutorial_location.setText(userInfo.getPhysical_address() + ", " + address.getLocale());
+        } else {
+            et_tutorial_location.setVisibility(View.GONE);
+            tutorialLocationLL.setVisibility(View.VISIBLE);
+            final List<String> localeList = new ArrayList<>();
+            for (Address address : userInfo.getMultipleAddress())
+                localeList.add(address.getLocale());
+
+            tutorialLocationSp.setAdapter(new ArrayAdapter<String>(this, R.layout.textview, localeList));
+
+            tutorialLocationSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    et_tutorial_location.setText(localeList.get(position));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        }
+
+        et_maximum_students.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
-                    scrollView.fullScroll(View.FOCUS_DOWN);
+                    InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
                 return false;
             }

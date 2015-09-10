@@ -466,6 +466,7 @@
     <string name="around">Around :</string>
     <string name="searchPreferredDate">Preferred Date :</string>
     <string name="all">All</string>
+    <string name="any">Any</string>
     <string name="timing">Timing</string>
     <string name="class_timing">Timing:</string>
     <string name="to">To :&#160;</string>
@@ -520,6 +521,7 @@
     <string name="prompt_addressline1">House no/street no</string>
     <string name="prompt_fellow_student_location">I can go for a group Lesson to a nearby students location</string>
     <string name="prompt_multiple_address_mentor">I am available at Other Locations also</string>
+    <string name="prompt_trial_class">Use for Trial Lesson also</string>
     <string name="prompt_location_preference">Teaching Location Preference</string>
     <string name="prompt_select_locality_for_search">Select Locality to start search</string>
     <string name="prompt_qualification">Qualification</string>
