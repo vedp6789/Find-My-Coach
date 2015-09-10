@@ -428,11 +428,11 @@ public class AddNewSlotActivity extends Activity implements SetDate, SetTime, Ti
                     Log.d(TAG, "stop_hour" + stop_hour + "stop_min: " + stop_min);
                     isFromTimeSet = false;
 
-                    if (userInfo.getFlexible_yn() == 0)
+                    if (userInfo.getFlexible_yn() == 0 || slot_type == 1)
                         Toast.makeText(AddNewSlotActivity.this, getResources().getString(R.string.fixed_duration_class), Toast.LENGTH_LONG).show();
                     else {
                         TimePickerFragment timePicker = new TimePickerFragment(AddNewSlotActivity.this,
-                                AddNewSlotActivity.this, stop_hour, stop_min, false);
+                                AddNewSlotActivity.this, stop_hour, getSettingMinute(stop_min), false);
                         timePicker.isMinTimeEnabled = true;
                         timePicker.show();
                     }

@@ -2,7 +2,6 @@ package com.findmycoach.app.fragment;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.util.Log;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
@@ -31,19 +30,11 @@ public class TimePickerFragment extends TimePickerDialog implements TimePicker.O
     public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
         if (isMinTimeEnabled) {
             if (hourOfDay < minHour || (hourOfDay == minHour && minute < minMinute)) {
-                try {
-                    updateTime(minHour, minMinute);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            if (hourOfDay == 23 && minute > 2) {
+                updateTime(minHour, minMinute);
+            } else if (hourOfDay == 23 && minute > 2) {
                 updateTime(23, 2);
             }
         }
-
-        Log.e("FMC", maxHour + " : " + hourOfDay + ", " + maxMinute + " : " + minute);
 
         if (maxHour > -1) {
             if (hourOfDay > maxHour || (hourOfDay == maxHour && minute > maxMinute)) {
@@ -56,11 +47,11 @@ public class TimePickerFragment extends TimePickerDialog implements TimePicker.O
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         try {
-            Class<?> classForid = Class.forName("com.android.internal.R$id");
-            Field timePickerField = classForid.getField("timePicker");
+            Class<?> classForId = Class.forName("com.android.internal.R$id");
+            Field timePickerField = classForId.getField("timePicker");
             TimePicker timePicker = (TimePicker) findViewById(timePickerField
                     .getInt(null));
-            Field field = classForid.getField("minute");
+            Field field = classForId.getField("minute");
 
             NumberPicker mMinuteSpinner = (NumberPicker) timePicker
                     .findViewById(field.getInt(null));
