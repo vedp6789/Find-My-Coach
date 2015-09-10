@@ -271,7 +271,8 @@
     <string name="end_date_please">Please fill end date of this vacation.</string>
     <string name="class_not_possible">Not possible to schedule as slot expires today!</string>
     <string name="slot_cannot_be_possible">Not possible to create a slot because the selected day is about to complete.</string>
-    <string name="end_time_cannot_be_grater_the_24">There can be only 15 minutes slot time from 11:45 PM.</string>
+    <string name="end_time_cannot_be_grater_the_24">There can be only 30 minutes slot time from 11:30 PM.</string>
+    <string name="fixed_duration_class">Stop time cannot be changed for FIXED duration lesson.</string>
     <string name="select_time">Provide start time and end time for the vacation</string>
     <string name="select_start_time_vacation">Please provide start time</string>
     <string name="select_stop_time_vacation">Please provide end time</string>

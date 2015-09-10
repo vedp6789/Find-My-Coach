@@ -2,6 +2,7 @@ package com.findmycoach.app.fragment;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.util.Log;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
@@ -16,7 +17,7 @@ public class TimePickerFragment extends TimePickerDialog implements TimePicker.O
 
     private final static int TIME_PICKER_INTERVAL = 15;
     public boolean isMinTimeEnabled;
-    private int minHour, minMinute;
+    public int minHour, minMinute, maxHour = -1, maxMinute = -1;
 
     public TimePickerFragment(Context context, OnTimeSetListener callBack, int hourOfDay, int minute, boolean is24HourView) {
         super(context, callBack, hourOfDay, minute, is24HourView);
@@ -25,15 +26,28 @@ public class TimePickerFragment extends TimePickerDialog implements TimePicker.O
         this.minMinute = minute;
     }
 
+
     @Override
     public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
         if (isMinTimeEnabled) {
             if (hourOfDay < minHour || (hourOfDay == minHour && minute < minMinute)) {
-                updateTime(minHour, minMinute);
+                try {
+                    updateTime(minHour, minMinute);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             if (hourOfDay == 23 && minute > 2) {
                 updateTime(23, 2);
+            }
+        }
+
+        Log.e("FMC", maxHour + " : " + hourOfDay + ", " + maxMinute + " : " + minute);
+
+        if (maxHour > -1) {
+            if (hourOfDay > maxHour || (hourOfDay == maxHour && minute > maxMinute)) {
+                updateTime(maxHour, maxMinute);
             }
         }
     }
